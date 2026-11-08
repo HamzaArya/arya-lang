@@ -1,0 +1,4 @@
+fn fail() {
+  return len(42)
+}
+fail()

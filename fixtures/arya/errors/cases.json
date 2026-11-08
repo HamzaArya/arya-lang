@@ -1,0 +1,8 @@
+[
+  { "file": "runtime-error.arya", "line": 3, "column": 15, "error": "TypeError", "callerLine": 5 },
+  { "file": "errors/multiline.arya", "line": 4, "column": 5, "error": "TypeError", "callerLine": 6 },
+  { "file": "errors/async.arya", "line": 4, "column": 15, "error": "TypeError", "callerLine": 6 },
+  { "file": "errors/python.arya", "line": 3, "column": 15, "error": "Python: ValueError", "callerLine": 5 },
+  { "file": "errors/builtin.arya", "line": 2, "column": 10, "error": "len expects", "callerLine": 4 },
+  { "file": "errors/unicode.arya", "line": 1, "column": 57, "error": "TypeError", "callerLine": 2 }
+]

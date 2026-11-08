@@ -2,7 +2,7 @@
 
 Arya compiles `.arya` programs to JavaScript ES modules, imports JavaScript/npm libraries, and calls Python functions through a JSON bridge. This repository owns the language independently of the AryaCode IDE.
 
-Requires Node.js 22.15 or later. Python is optional unless a program uses `use python`.
+Requires Node.js 22.15 or later. Python is optional unless a program uses `use python`. The full integration suite and clean-package tests require Python (`ARYA_PYTHON`, or `python3`/`python` on PATH).
 
 ```sh
 npm ci

@@ -1,10 +1,10 @@
-# Arya 0.1 — readable code, connected ecosystems
+# Arya 0.2 preview — readable code, connected ecosystems
 
 New to Arya? Start with the [beginner tutorial and nine runnable lessons](arya-tutorial.md). This document is the language reference.
 
 For VS Code-compatible editors, Sublime, JetBrains, Vim/Neovim, Emacs, and other clients, use the [editor setup guide](arya-editors.md). The portable kit includes a local VSIX, an installable compiler, a standard LSP server, and syntax adapters; compatibility and verification vary by editor.
 
-Arya is an experimental programming language built into AryaCode. Its `.arya` files compile to JavaScript ES modules and run on the bundled Node.js runtime. The first version supports ordinary scripts, Node web applications, JavaScript/npm libraries, and Python function calls. It uses its own lexer and parser; opening a file and checking its syntax do not execute imports or user code.
+Arya is an experimental programming language developed in its own repository and integrated into AryaCode through a versioned package. Its `.arya` files compile to JavaScript ES modules and run on the bundled Node.js runtime. The first version supports ordinary scripts, Node web applications, JavaScript/npm libraries, and Python function calls. It uses its own lexer and parser; opening a file and checking its syntax do not execute imports or user code.
 
 The longer-term direction is one readable language for scripts, applications, and access to multiple ecosystems. Version 0.1 establishes the JavaScript and Python paths. It does not yet compile to native machine code or directly import arbitrary C, C++, Rust, Go, Java, or .NET libraries. Native libraries already exposed through a compatible Node addon or Python package can be used through that ecosystem, subject to the bridge limits below.
 
@@ -24,7 +24,7 @@ npm run arya -- check fixtures/arya/hello.arya
 npm run arya -- build fixtures/arya/hello.arya
 ```
 
-The CLI bootstrap builds the compiler locally. After `npm run build`, the standalone CLI is also available as `node extensions/arya-workbench/dist/arya.cjs`. `run` accepts program arguments after the file, optionally separated by `--`; access them through `args`.
+The CLI bootstrap builds the compiler locally. After `npm run build`, the standalone CLI is also available as `node dist/cli.cjs`. `run` accepts program arguments after the file, optionally separated by `--`; access them through `args`.
 
 CLI build artifacts go into `.arya/build` beside the source. Editor artifacts go into `.arya/run` beside the source. These locations preserve npm dependency discovery in nested packages. Local JavaScript/Python import paths are resolved relative to the original source. Generated files embed those local paths; rebuild after moving a project. A syntax failure never launches a previous build. Generated directories are ignored by Git.
 
@@ -126,4 +126,4 @@ Each call starts a fresh Python process, sends one JSON request, and returns one
 
 `npm run check` covers the compiler, execution, Node ESM/CommonJS interoperability, Python bridge, syntax errors, trust, output containment, and existing IDE services. `ARYACODE_TEST_WORKBENCH=/path/to/AryaCode npm run test:arya` exercises editor services, compile/run, both bridges, a live HTTP server, duplicate prevention, and stopping the server in a disposable desktop profile.
 
-The next language milestones are source maps and debugging, first-class Arya modules, richer library-aware completion, a persistent Python bridge, and explicit native/process bridge designs. Native compilation, ownership/type-system design, package distribution, and compatibility across all language frameworks remain open work; this prototype makes no native-performance claim.
+Source maps are available in the 0.2 preview: CLI and AryaCode runs map runtime stacks to original Arya locations. Standalone generated modules require `node --enable-source-maps generated.mjs`. Interactive debugging remains future work. The next language milestones are the specification, lexical name checks, first-class Arya modules, and interop hardening; see [the roadmap](arya-roadmap.md). Native compilation, ownership/type-system design, package distribution, and compatibility across all language frameworks remain open work; this prototype makes no native-performance claim.

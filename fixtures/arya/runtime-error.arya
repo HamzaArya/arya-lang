@@ -1,0 +1,5 @@
+fn fail() {
+  const item = null
+  return item.name
+}
+fail()

@@ -12,22 +12,25 @@ async function main(): Promise<void> {
   }
   if (!['run', 'check', 'build'].includes(command) || !file || !file.toLowerCase().endsWith('.arya') || (command !== 'run' && rest.length)) throw new Error('Use arya run, check, or build followed by a .arya file. See --help.');
   const source = resolve(file);
+  const directory = join(dirname(source), '.arya/build');
+  const intendedOutput = join(directory, `${basename(source)}.mjs`);
   let result;
-  try { result = compile(await readBounded(source), source); }
+  try { result = compile(await readBounded(source), { filename: source, outputFilename: intendedOutput }); }
   catch (error) {
     if (error instanceof AryaError) throw new Error(`${source}:${error.token.line + 1}:${error.token.column + 1}: ${error.message}`);
     throw error;
   }
   if (command === 'check') { console.log(`Syntax OK: ${file}`); return; }
-  const directory = join(dirname(source), '.arya/build');
   // Build artifacts live beside their source so npm resolves that package's dependencies.
   const { containedPath } = await import('./files.js');
   const { realpath } = await import('node:fs/promises');
   const root = await realpath(dirname(source));
-  const output = await containedPath(root, join(directory, `${basename(source)}.mjs`));
-  await mkdir(dirname(output), { recursive: true }); await writeFile(output, result.code);
+  const output = await containedPath(root, intendedOutput);
+  const mapOutput = await containedPath(root, join(directory, result.mapFilename));
+  await mkdir(dirname(output), { recursive: true });
+  await writeFile(mapOutput, result.map); await writeFile(output, result.code);
   if (command === 'build') { console.log(output); return; }
-  const child = spawn(process.execPath, [output, ...(rest[0] === '--' ? rest.slice(1) : rest)], { stdio: 'inherit', env: process.env });
+  const child = spawn(process.execPath, ['--enable-source-maps', output, ...(rest[0] === '--' ? rest.slice(1) : rest)], { stdio: 'inherit', env: process.env });
   // Forward interruption when the CLI is used outside AryaCode's task terminal.
   const interrupt = () => child.kill('SIGINT'), terminate = () => child.kill('SIGTERM');
   process.on('SIGINT', interrupt); process.on('SIGTERM', terminate);

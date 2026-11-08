@@ -1,0 +1,6 @@
+async fn fail() {
+  await Promise.resolve(1)
+  const item = null
+  return item.name
+}
+await fail()

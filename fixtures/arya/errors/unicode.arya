@@ -1,0 +1,2 @@
+fn fail() { print("🌉"); const item = null; return item.name }
+fail()

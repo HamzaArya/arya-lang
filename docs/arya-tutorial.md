@@ -1,6 +1,6 @@
 # Learn Arya: your first programs
 
-This tutorial teaches the Arya 0.1 language included in this repository. Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
+This tutorial teaches the current Arya language, developed in this standalone repository. Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
 
 Arya is the language. AryaCode is the editor. Save your code in a file ending in `.arya`. The current compiler turns that code into JavaScript and runs it with Node.js. Later lessons show how the same Arya program can use JavaScript libraries and call Python functions.
 
@@ -19,7 +19,7 @@ Keep the folder open: the current Run action expects a saved file inside the fir
 
 For a new program, use Explorer's **New File** button, name it `practice.arya`, and save it inside this folder. Edit `.arya` source files; files under `.arya/build` or `.arya/run` are generated output.
 
-Prefer a terminal? From the **arya-ide repository root**, run:
+Prefer a terminal? From the **arya-lang repository root**, run:
 
 ```sh
 npm run arya -- run fixtures/arya/learn/01-hello.arya
@@ -202,7 +202,7 @@ npm init -y
 npm install express
 ```
 
-Open `my-arya-app` as a folder in AryaCode, copy the existing [express.arya](../fixtures/arya/express.arya) example into it, and use **Run Current File**. Visit `http://localhost:3000`, then use **AryaCode: Stop Current File** when finished. The package's `package.json` keeps this installation inside your new project. Do not use `npm run arya` in this new project unless you configure that script; the repository-specific script lives in `arya-ide`.
+Open `my-arya-app` as a folder in AryaCode, copy the existing [express.arya](../fixtures/arya/express.arya) example into it, and use **Run Current File**. Visit `http://localhost:3000`, then use **AryaCode: Stop Current File** when finished. The package's `package.json` keeps this installation inside your new project. Do not use `npm run arya` in this new project unless you configure that script; the repository-specific script lives in `arya-lang`.
 
 ## Lesson 6: call Python from Arya
 
@@ -285,7 +285,7 @@ if len(args) > 0 {
 print("Hello, " + name)
 ```
 
-The editor's ordinary Run button supplies no extra arguments, so it prints `Hello, friend`. From the **arya-ide repository root**, try:
+The editor's ordinary Run button supplies no extra arguments, so it prints `Hello, friend`. From the **arya-lang repository root**, try:
 
 ```sh
 npm run arya -- run fixtures/arya/learn/08-arguments.arya -- Hamza
@@ -361,7 +361,7 @@ From the repository root:
 | `npm run arya -- check fixtures/arya/learn/01-hello.arya` | Parses the source and reports syntax errors without running it |
 | `npm run arya -- build fixtures/arya/learn/01-hello.arya` | Writes a JavaScript `.mjs` file without running it |
 
-The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `build` writes to `.arya/build`. A successful check does not prove that your imports are installed, that every variable exists, or that the program produces the right result. Those are things to verify when you run it. Runtime error stacks currently point to generated JavaScript; source maps and Arya debugging are not available yet.
+The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `build` writes to `.arya/build`. A successful check does not prove that your imports are installed, that every variable exists, or that the program produces the right result. Those are things to verify when you run it. Runtime stacks now map to the original `.arya` source in `arya run` and AryaCode. For standalone generated modules, enable Node source maps with `node --enable-source-maps generated.mjs`. Interactive Arya debugging is not available yet.
 
 ## When something goes wrong
 

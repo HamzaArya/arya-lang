@@ -2,7 +2,8 @@
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current language version:** Arya 0.1.0  
+**Current language version:** Arya 0.2.0-alpha.1 (local preview)
+**Implementation status:** [source maps](source-maps.md); [draft specification](arya-specification.md); [local release notes](releases/0.2.0-alpha.1.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
 ## Purpose
@@ -71,7 +72,8 @@ Every milestone follows these rules:
 
 | ID | Milestone | Target | Depends on | Status |
 | --- | --- | --- | --- | --- |
-| M1 | Arya source maps and readable runtime traces | 0.2 | — | `[ ]` |
+| M0 | Standalone repository and versioned IDE package integration | 0.2 | — | `[x]` |
+| M1 | Arya source maps and readable runtime traces | 0.2 | M0 | Local and minimum-Node acceptance complete; Linux/Windows qualification pending |
 | M2 | Normative 0.2 language specification | 0.2 | M1 can proceed in parallel; must finish before release | `[ ]` |
 | M3 | Lexical name resolution and stronger `check` | 0.2 | M2 scope decisions | `[ ]` |
 | M4 | Arya-to-Arya modules and build graph | 0.2 | M1, M3 | `[ ]` |
@@ -91,7 +93,7 @@ Runtime stack traces identify the original Arya source location instead of only 
 
 ### M1.1 · Add the failing acceptance fixture
 
-- [ ] Add `fixtures/arya/runtime-error.arya`:
+- [x] Add `fixtures/arya/runtime-error.arya`:
 
   ```arya
   fn fail() {
@@ -101,28 +103,29 @@ Runtime stack traces identify the original Arya source location instead of only 
   fail()
   ```
 
-- [ ] Add a CLI-level integration test that runs this source through the real Arya run path.
-- [ ] Assert a nonzero exit status.
-- [ ] Assert that stderr contains `TypeError`.
-- [ ] Assert a mapped frame for `runtime-error.arya:3` and a caller frame for `runtime-error.arya:5`.
-- [ ] Add the exact column assertion only after expression mappings exist. `name` begins at one-based column 15.
-- [ ] Normalize path separators or match only stable path suffixes so the test runs on Windows, macOS, and Linux.
+- [x] Add a CLI-level integration test that runs this source through the real Arya run path.
+- [x] Assert a nonzero exit status.
+- [x] Assert that stderr contains `TypeError`.
+- [x] Assert a mapped frame for `runtime-error.arya:3` and a caller frame for `runtime-error.arya:5`.
+- [x] Add the exact column assertion only after expression mappings exist. `name` begins at one-based column 15.
+- [x] Normalize path separators or match only stable path suffixes so the test runs on Windows, macOS, and Linux.
 
 The first red test should require only correct lines. Column precision becomes a second red test, preventing the implementation from trying to solve every mapping detail at once.
 
 ### M1.2 · Define the compiler output contract
 
-Extend the compile contract in [`packages/arya/src/compiler.ts`](../packages/arya/src/compiler.ts) so compilation receives the original source filename and intended generated filename, then returns source-map data with the generated code. The intended shape is conceptually:
+Extend the compile contract in [`packages/arya/src/compiler.ts`](../src/compiler.ts) so compilation receives the original source filename and intended generated filename, then returns source-map data with the generated code. The intended shape is conceptually:
 
 ```ts
 interface CompileOptions {
-  sourceFilename: string;
-  generatedFilename: string;
+  filename: string;
+  outputFilename: string;
 }
 
 interface Compilation {
   code: string;
   map: string;
+  mapFilename: string;
   symbols: AryaSymbol[];
   usesPython: boolean;
 }
@@ -132,13 +135,13 @@ The exact API can preserve a compatibility overload for existing callers. The im
 
 These rules must hold:
 
-- [ ] The compiler produces the map; CLI and AryaCode only write it.
-- [ ] `compile()` remains side-effect free and never writes files.
-- [ ] The map names the generated file and the original `.arya` source.
-- [ ] The source path is relative to the map when practical and uses URL-style `/` separators.
-- [ ] `sourcesContent` contains the Arya source so the map remains inspectable if generated output is moved.
-- [ ] Injected runtime and Python bridge regions remain unmapped to Arya source. Their caller frames may map to Arya, but runtime implementation lines must not be falsely attributed to user code.
-- [ ] Generated code ends with a relative `sourceMappingURL` comment.
+- [x] The compiler produces the map; CLI and AryaCode only write it.
+- [x] `compile()` remains side-effect free and never writes files.
+- [x] The map names the generated file and the original `.arya` source.
+- [x] The source path is relative to the map when practical and uses URL-style `/` separators.
+- [x] `sourcesContent` contains the Arya source so the map remains inspectable if generated output is moved.
+- [x] Injected runtime and Python bridge regions remain unmapped to Arya source. Their caller frames may map to Arya, but runtime implementation lines must not be falsely attributed to user code.
+- [x] Generated code ends with a relative `sourceMappingURL` comment.
 
 Before adding a dependency, record the selected source-map encoder and why it was chosen in the decision log. Prefer a maintained encoder over a handwritten Base64 VLQ implementation.
 
@@ -146,23 +149,13 @@ Before adding a dependency, record the selected source-map encoder and why it wa
 
 The current parser returns nested JavaScript strings before their final generated positions are known. Do not attempt to recover mappings by searching the final string: repeated identifiers and formatting changes make that unreliable.
 
-Introduce a small source-preserving emission model. A practical first design is:
+Implemented a source-preserving emission layer using explicit token-origin annotations in composed strings. The final emitter consumes the annotations and records generated line/UTF-16 columns after all runtime prefixes. This avoids searching generated identifiers or guessing offsets. See [the implemented design](source-maps.md).
 
-```ts
-interface GeneratedFragment {
-  text: string;
-  mappings: RelativeMapping[];
-}
-```
-
-Fragments carry mappings relative to their own generated text. Composition helpers wrap, join, and rebase fragments. The final emitter adds the runtime prefix and converts relative mappings to final generated positions.
-
-- [ ] Add a generated-position tracker for line and UTF-16 column.
-- [ ] Add helpers for literal generated text, token-origin text, joining fragments, and wrapping expressions.
-- [ ] Change `Expression.code` into a source-preserving fragment.
-- [ ] Preserve mappings when expressions are nested, wrapped in parentheses, or joined by generated operators.
-- [ ] Preserve mappings when statements are placed inside blocks.
-- [ ] Add statement mappings first, then expression mappings.
+- [x] Add generated-position tracking.
+- [x] Record statement and expression origins as fragments are created.
+- [x] Preserve origins through nested expressions and blocks.
+- [x] Remove all internal annotations before writing generated output.
+- [x] Verify marker-like literal data cannot inject source origins.
 
 Minimum expression-level mapping targets:
 
@@ -178,21 +171,21 @@ If fragment composition begins reproducing a parser tree indirectly or becomes d
 
 ### M1.4 · Write map artifacts in every build path
 
-- [ ] Determine and validate the output path before compilation, then pass its generated filename into the compile contract.
-- [ ] In [`packages/arya/src/cli.ts`](../packages/arya/src/cli.ts), write `<output>.map` beside the generated `.mjs` for both `build` and `run`.
-- [ ] In [`packages/services/src/language-runner.ts`](../packages/services/src/language-runner.ts), write the map inside the same fingerprinted `.arya/run` directory as `program.mjs`.
-- [ ] Apply existing `containedPath` checks separately to the map path in AryaCode.
-- [ ] Write code and map only after compilation succeeds so a syntax failure cannot create a partially updated pair.
-- [ ] Decide whether two-file replacement needs temporary files and rename. Record the decision; at minimum, never write a new module referring to a missing new map.
-- [ ] Keep `.map` artifacts covered by the existing `.arya/build` and `.arya/run` ignores.
+- [x] Determine and validate the output path before compilation, then pass its generated filename into the compile contract.
+- [x] In [`packages/arya/src/cli.ts`](../src/cli.ts), write `<output>.map` beside the generated `.mjs` for both `build` and `run`.
+- [x] In [`packages/services/src/language-runner.ts`](../../arya-ide/packages/services/src/language-runner.ts), write the map inside the same fingerprinted `.arya/run` directory as `program.mjs`.
+- [x] Apply existing `containedPath` checks separately to the map path in AryaCode.
+- [x] Write code and map only after compilation succeeds so a syntax failure cannot create a partially updated pair.
+- [x] Decide whether two-file replacement needs temporary files and rename. Record the decision; at minimum, never write a new module referring to a missing new map.
+- [x] Keep `.map` artifacts covered by the existing `.arya/build` and `.arya/run` ignores.
 
 ### M1.5 · Enable source maps in runners
 
-- [ ] Change CLI execution to `node --enable-source-maps <generated.mjs> [...programArgs]`.
-- [ ] Change AryaCode execution to put `--enable-source-maps` before the generated module path.
-- [ ] Preserve all program arguments literally after the module path.
-- [ ] Document standalone execution as `node --enable-source-maps path/to/program.mjs`.
-- [ ] Verify behavior on the minimum supported Node version, not only the developer's current Node version.
+- [x] Change CLI execution to `node --enable-source-maps <generated.mjs> [...programArgs]`.
+- [x] Change AryaCode execution to put `--enable-source-maps` before the generated module path.
+- [x] Preserve all program arguments literally after the module path.
+- [x] Document standalone execution as `node --enable-source-maps path/to/program.mjs`.
+- [x] Verify behavior on the minimum supported Node version, not only the developer's current Node version. Node 22.15.0 passes compiler/CLI, clean-package, and AryaCode runner acceptance on macOS arm64.
 
 Plain `node program.mjs` is not part of the mapped-stack acceptance contract unless supported Node versions enable source maps without a flag.
 
@@ -202,28 +195,29 @@ Add focused fixtures or generated temporary sources for each case:
 
 | Case | Required observation | Status |
 | --- | --- | --- |
-| Simple property access | failing line and property column map to `.arya` | `[ ]` |
-| Caller frame | caller maps to the Arya call site | `[ ]` |
-| Two expressions on one line | each failure can map to a distinct column | `[ ]` |
-| Multiline expression | failing nested expression maps to its actual source line | `[ ]` |
-| Failure after `await` | async stack contains the mapped Arya frame | `[ ]` |
-| Path with spaces | original path is readable and correct | `[ ]` |
-| Unicode before error | UTF-16 column agrees with LSP/editor positions | `[ ]` |
-| Built-in failure | runtime frame may be generated; Arya caller is mapped | `[ ]` |
-| Python bridge failure | bridge frame may be generated; Arya caller is mapped | `[ ]` |
-| CLI run | mapped trace appears | `[ ]` |
-| AryaCode run | mapped trace appears | `[ ]` |
-| Standalone build | mapped trace appears with `--enable-source-maps` | `[ ]` |
-| Existing JS import | imported-library frames are not falsely mapped to Arya | `[ ]` |
+| Simple property access | failing line and property column map to `.arya` | `[x]` (macOS arm64) |
+| Caller frame | caller maps to the Arya call site | `[x]` (macOS arm64) |
+| Two expressions on one line | each failure can map to a distinct column | `[x]` (macOS arm64) |
+| Multiline expression | failing nested expression maps to its actual source line | `[x]` (macOS arm64) |
+| Failure after `await` | async stack contains the mapped Arya frame | `[x]` (macOS arm64) |
+| Path with spaces | original path is readable and correct | `[x]` (macOS arm64) |
+| Unicode before error | UTF-16 column agrees with LSP/editor positions | `[x]` (macOS arm64) |
+| Built-in failure | runtime frame may be generated; Arya caller is mapped | `[x]` (macOS arm64) |
+| Python bridge failure | bridge frame may be generated; Arya caller is mapped | `[x]` (macOS arm64) |
+| CLI run | mapped trace appears | `[x]` (macOS arm64) |
+| AryaCode run | mapped trace appears | `[x]` (macOS arm64) |
+| Standalone build | mapped trace appears with `--enable-source-maps` | `[x]` (macOS arm64) |
+| Existing JS import | imported-library frames are not falsely mapped to Arya | `[x]` (macOS arm64) |
 
 ### M1 definition of done
 
-- [ ] The acceptance fixture reports `runtime-error.arya:3:15` and a caller at line 5.
-- [ ] All matrix cases above pass on supported test platforms.
-- [ ] Generated runtime regions are not falsely mapped to the user source.
-- [ ] `arya run`, AryaCode Run, and standalone mapped execution behave consistently.
-- [ ] Existing tests pass.
-- [ ] The language reference and tutorial no longer say runtime stacks point only to generated JavaScript.
+- [x] The acceptance fixture reports `runtime-error.arya:3:15` and a caller at line 5.
+- [x] Qualify the passing local matrix on minimum Node 22.15.0 (macOS arm64).
+- [ ] Qualify the passing local matrix on Linux and Windows. The [CI workflow](../.github/workflows/check.yml) covers the compiler, CLI, and installed package on Node 22.15.0 and 24; AryaCode runner qualification remains in the IDE repository.
+- [x] Generated runtime regions are not falsely mapped to the user source.
+- [x] `arya run`, AryaCode Run, and standalone mapped execution behave consistently.
+- [x] Existing tests pass.
+- [x] The language reference and tutorial no longer say runtime stacks point only to generated JavaScript.
 
 ---
 
@@ -235,7 +229,7 @@ Arya behavior is explicit enough that a program's result can be predicted withou
 
 ### Work
 
-- [ ] Create `docs/arya-specification.md` with versioned status and terminology.
+- [ ] Complete `docs/arya-specification.md`; its draft baseline and pending decisions are already recorded.
 - [ ] Specify lexical grammar: identifiers, keywords, comments, strings, escapes, numbers, and limits.
 - [ ] Specify statement grammar and newline/semicolon behavior.
 - [ ] Specify operator precedence and associativity in one normative table.
@@ -651,7 +645,7 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 | --- | --- | --- | --- | --- |
 | D-001 | 2026-11-08 | Keep JavaScript-compatible values as the default 0.2 direction | Preserves direct ecosystem interoperability and limits release scope | M2–M6 |
 | D-002 | 2026-11-08 | Separate readable stack traces from interactive debugging | Source maps deliver immediate value without committing to a debugger architecture | M1 |
-| D-003 | — | Source-map encoder | Pending | M1 |
+| D-003 | 2026-11-08 | Pin and bundle @jridgewell/gen-mapping 0.3.13 | Maintained standard v3 encoder; notices included | M1 |
 | D-004 | — | Unary minus versus exponentiation semantics | Pending | M2 |
 | D-005 | — | Guaranteed host globals | Pending | M2–M3 |
 | D-006 | — | Arya module syntax and project boundary | Pending | M2, M4 |
@@ -660,23 +654,20 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 
 ## Current workboard
 
-Keep this section short. Move completed details into milestone checklists and select the next smallest verifiable slice.
-
 ### Now
 
-- [ ] M1.1: add the failing runtime-error fixture and line-level CLI acceptance test.
-- [ ] M1.2: choose the source-map encoder and finalize the `Compilation` map contract.
+- [ ] Run the source-map CI matrix on Linux/Windows and qualify AryaCode on those hosts. Minimum Node 22.15.0 is verified locally.
+- [ ] M2: review the draft specification and settle precedence, globals, and declaration timing.
 
 ### Next
 
-- [ ] M1.3: build the mapped-fragment emitter and reach statement-level mapping.
-- [ ] M1.3: add expression mappings for property access and calls.
-- [ ] M1.4–M1.5: write map artifacts and enable them in both runners.
+- [ ] M3: lexical name resolution and const-write diagnostics, with passive editor analysis.
+- [ ] M4: relative Arya namespace imports and a contained, non-executing build graph.
 
 ### Later
 
-- [ ] Complete the M1 acceptance matrix.
-- [ ] Start M2 specification decisions while M1 edge cases are being tested.
+- [ ] M5: interop edge cases and batching examples.
+- [ ] M6: clean-install qualification, license/distribution decision, and final 0.2 release.
 
 ## Progress notes
 
@@ -684,3 +675,7 @@ Add dated notes here when work changes direction, reveals a constraint, or close
 
 - **2026-11-08:** Roadmap created from the initial source-map-first plan and the Arya language audit. No implementation milestone has started yet.
 
+
+- **2026-11-08:** Extracted the standalone repository and pinned archive integration in separate commits. Implemented source maps for the CLI and IDE runner as the first 0.2 preview feature. All remaining language milestones retain their completion tests above.
+
+- **2026-11-08:** Extended M1 acceptance with real CLI Build/standalone execution, passive Check, syntax-failure preservation of code/map artifacts, and literal arguments including Node flags. `npm run check` passes all 16 tests on Node 22.15.0 and 24.16.0 on macOS arm64; clean-install acceptance and five AryaCode package/runner tests also pass on Node 22.15.0 with Python 3.13.15. Added Linux/Windows/macOS CI on Node 22.15.0 and 24, including packed installation and mapped traces. Linux/Windows results remain pending; no working local Docker daemon or remote CI run was available.

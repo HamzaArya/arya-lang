@@ -1,0 +1,5 @@
+use python "math" as math
+fn fail() {
+  return math.sqrt(-1)
+}
+fail()

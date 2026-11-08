@@ -4,20 +4,20 @@ Arya source files use **`.arya`**, language ID **`arya`**, and TextMate scope **
 
 ## Get the local editor kit
 
-In the `arya-ide` source checkout, run:
+In the standalone `arya-lang` source checkout, run:
 
 ```sh
 npm ci
-npm run arya:package
+npm run package:editors
 ```
 
-The build writes these files under `.build/arya-distribution`:
+The build writes these files under `artifacts/`:
 
 | Artifact | Purpose |
 | --- | --- |
-| `arya-editor-kit-0.1.0.zip` | All editor configuration files, the VSIX, CLI package, logo variants, and this guide |
-| `arya-language-0.1.0.vsix` | Standalone extension for VS Code-compatible desktop editors |
-| `arya-lang-0.1.0.tgz` | Node package containing `arya` and `arya-lsp` commands |
+| `arya-editor-kit-0.2.0-alpha.1.zip` | All editor configuration files, the VSIX, CLI package, logo variants, and this guide |
+| `arya-language-0.2.0-alpha.1.vsix` | Standalone extension for VS Code-compatible desktop editors |
+| `arya-lang-0.2.0-alpha.1.tgz` | Node package containing `arya` and `arya-lsp` commands |
 | `SHA256SUMS` | SHA-256 checksums of the three artifacts |
 
 The kit is a local development distribution. It has not been published to npm, Open VSX, the VS Code Marketplace, editor registries, or operating-system file-association databases. No ownership of a public package name is implied. Repository licensing remains UNLICENSED.
@@ -29,16 +29,16 @@ Extract the ZIP into a stable location. Paths such as `editors/vim` below refer 
 Node.js 22.15+ is required. To make the commands available to other editors:
 
 ```sh
-npm install -g /absolute/path/to/arya-lang-0.1.0.tgz
+npm install -g /absolute/path/to/arya-lang-0.2.0-alpha.1.tgz
 arya --version
 ```
 
-Use the actual path to your downloaded or built package. Your npm executable directory must be on PATH. A project-local alternative is `npm install /absolute/path/to/arya-lang-0.1.0.tgz`, followed by `npx --no-install arya run main.arya`; point the editor at that installation's executable or its absolute `bin/arya-lsp.cjs` path.
+Use the actual path to your downloaded or built package. Your npm executable directory must be on PATH. A project-local alternative is `npm install /absolute/path/to/arya-lang-0.2.0-alpha.1.tgz`, followed by `npx --no-install arya run main.arya`; point the editor at that installation's executable or its absolute `dist/lsp.cjs` path.
 
-Editors start the server with `arya-lsp --stdio`. It waits for protocol messages, so starting it interactively in a terminal does not display a prompt. From the source checkout, an equivalent server command after `npm run arya:build` is:
+Editors start the server with `arya-lsp --stdio`. It waits for protocol messages, so starting it interactively in a terminal does not display a prompt. From the source checkout, an equivalent server command after `npm run build` is:
 
 ```sh
-node /absolute/path/to/arya-ide/.build/arya-language/bin/arya-lsp.cjs --stdio
+node /absolute/path/to/arya-lang/dist/lsp.cjs --stdio
 ```
 
 The server provides incremental document synchronization, syntax diagnostics with source ranges, completion for keywords/builtins/top-level declarations, builtin hover, and top-level document symbols. It uses the same parser and analysis code as AryaCode. It never imports or executes project code during analysis. LSP standardizes the connection between a language tool and its editor; each editor still needs its language/file-type configuration. [LSP specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)
@@ -65,7 +65,7 @@ There is no guarantee that every editor or version accepts these integrations. Z
 
 ## VS Code-compatible editors
 
-Run **Extensions: Install from VSIX**, select `arya-language-0.1.0.vsix`, and reopen an `.arya` file. VS Code's CLI can also install it with `code --install-extension /absolute/path/to/arya-language-0.1.0.vsix`. Forks may use a different CLI name. [VS Code VSIX installation](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix)
+Run **Extensions: Install from VSIX**, select `arya-language-0.2.0-alpha.1.vsix`, and reopen an `.arya` file. VS Code's CLI can also install it with `code --install-extension /absolute/path/to/arya-language-0.2.0-alpha.1.vsix`. Forks may use a different CLI name. [VS Code VSIX installation](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix)
 
 The extension includes its compiler and does not need the global Arya package. Node must be available for execution. Set `aryaLanguage.nodePath` if needed; set `aryaLanguage.pythonPath` for an optional Python bridge interpreter. Syntax/editor features work without an installed system Node runtime because they run in the editor's extension host. Running/checking source files requires a trusted local workspace. Use **Arya: Run File**, **Arya: Check Syntax**, and **Arya: Stop File**.
 

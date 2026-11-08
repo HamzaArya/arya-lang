@@ -1,8 +1,9 @@
 import { dirname, isAbsolute, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { javascriptRuntime, pythonRuntime } from './runtime.js';
+import { origin, finalize } from './source-map.js';
 
-export const ARYA_VERSION = '0.1.0';
+export const ARYA_VERSION = '0.2.0-alpha.1';
 export interface Token { kind: 'word' | 'number' | 'string' | 'symbol' | 'newline' | 'eof'; text: string; start: number; end: number; line: number; column: number }
 export interface AryaSymbol { name: string; kind: 'function' | 'variable' | 'module'; token: Token }
 export class AryaError extends Error {
@@ -69,7 +70,8 @@ export function tokenize(source: string): Token[] {
 }
 
 interface Expression { code: string; assignable?: boolean }
-export interface Compilation { code: string; symbols: AryaSymbol[]; usesPython: boolean }
+export interface Compilation { code: string; map: string; mapFilename: string; symbols: AryaSymbol[]; usesPython: boolean }
+export interface CompileOptions { filename: string; outputFilename: string }
 const precedence: Record<string, number> = { or: 1, and: 2, '==': 3, '!=': 3, '<': 4, '<=': 4, '>': 4, '>=': 4, '+': 5, '-': 5, '*': 6, '/': 6, '%': 6, '**': 7 };
 class Parser {
   private index = 0;
@@ -137,16 +139,20 @@ class Parser {
   }
   private statement(): string {
     const token = this.current;
+    return origin(token, this.statementBody());
+  }
+  private statementBody(): string {
+    const token = this.current;
     const exported = this.match('export');
     if (exported && (this.scopes.length !== 1 || !['let', 'const', 'fn', 'async'].some(word => this.is(word)))) throw new AryaError('Export a top-level variable or function.', token);
     const prefix = exported ? 'export ' : '';
     if (this.is('let') || this.is('const')) {
       const keyword = this.take().text, name = this.identifier(); this.declare(name, 'variable');
-      this.expect('='); this.lines(); const value = this.expression().code; this.end(); return `${prefix}${keyword} ${name.text} = ${value};`;
+      this.expect('='); this.lines(); const value = this.expression().code; this.end(); return `${prefix}${keyword} ${origin(name, name.text)} = ${value};`;
     }
     if (this.is('fn') || this.is('async')) {
       const async = this.match('async'); this.expect('fn'); const name = this.identifier(); this.declare(name, 'function');
-      return `${prefix}${async ? 'async ' : ''}function ${name.text}${this.functionBody(async)}`;
+      return `${prefix}${async ? 'async ' : ''}function ${origin(name, name.text)}${this.functionBody(async)}`;
     }
     if (this.match('use')) {
       if (this.scopes.length !== 1) throw new AryaError('Put library imports at the top level.', token);
@@ -176,7 +182,7 @@ class Parser {
     if (this.match('for')) {
       const name = this.identifier(); this.expect('in'); const iterable = this.expression().code;
       this.loopDepth++; const body = this.block([name]); this.loopDepth--;
-      return `for (let ${name.text} of ${iterable}) ${body}`;
+      return `for (let ${origin(name, name.text)} of ${iterable}) ${body}`;
     }
     if (this.match('return')) {
       if (!this.functionDepth) throw new AryaError('Use return inside a function.', token);
@@ -195,7 +201,7 @@ class Parser {
     const expression = this.expression();
     if (['=', '+=', '-=', '*=', '/='].some(operator => this.is(operator))) {
       if (!expression.assignable) throw new AryaError('Assign to a variable, property, or list item.', token);
-      const operator = this.take().text; this.lines(); const value = this.expression().code; this.end(); return `${expression.code} ${operator} ${value};`;
+      const operator = this.take(); this.lines(); const value = this.expression().code; this.end(); return `${expression.code} ${origin(operator, operator.text)} ${value};`;
     }
     this.end(); return `${expression.code};`;
   }
@@ -203,10 +209,10 @@ class Parser {
     return this.nested(() => {
       let left = this.unary();
       while (this.current.kind !== 'string' && (precedence[this.current.text] ?? -1) >= minimum) {
-        const operator = this.take().text, rank = precedence[operator]!; this.lines();
+        const token = this.take(), operator = token.text, rank = precedence[operator]!; this.lines();
         const right = this.expression(operator === '**' ? rank : rank + 1);
         const js = ({ and: '&&', or: '||', '==': '===', '!=': '!==' } as Record<string, string>)[operator] ?? operator;
-        left = { code: `(${left.code} ${js} ${right.code})` };
+        left = { code: `(${left.code} ${origin(token, js)} ${right.code})` };
       }
       return left;
     });
@@ -215,11 +221,11 @@ class Parser {
     if (['not', '!', '-', '+', 'await'].some(word => this.is(word))) {
       const operator = this.take();
       if (operator.text === 'await' && !this.asyncAllowed) throw new AryaError('Use await at the top level or inside an async fn.', operator);
-      const value = this.nested(() => this.unary()); return { code: `(${operator.text === 'not' ? '!' : operator.text} ${value.code})` };
+      const value = this.nested(() => this.unary()); return { code: `(${origin(operator, operator.text === 'not' ? '!' : operator.text)} ${value.code})` };
     }
     if (this.match('new')) {
-      let name = this.identifier().text;
-      while (this.match('.')) { if (this.current.kind !== 'word') throw new AryaError('Expected a constructor name.', this.current); name += '.' + this.take().text; }
+      const token = this.identifier(); let name = origin(token, token.text);
+      while (this.match('.')) { if (this.current.kind !== 'word') throw new AryaError('Expected a constructor name.', this.current); const member = this.take(); name += '.' + origin(member, member.text); }
       this.expect('('); return this.postfix({ code: `new ${name}(${this.arguments(')')})` });
     }
     return this.postfix(this.primary());
@@ -235,7 +241,7 @@ class Parser {
       if (this.match('(')) value = { code: `${value.code}(${this.arguments(')')})` };
       else if (this.match('.')) {
         if (this.current.kind !== 'word') throw new AryaError('Expected a property name after the dot.', this.current);
-        value = { code: `${value.code}.${this.take().text}`, assignable: true };
+        const member = this.take(); value = { code: `${value.code}.${origin(member, member.text)}`, assignable: true };
       } else if (this.match('[')) { this.lines(); const index = this.expression().code; this.lines(); this.expect(']'); value = { code: `${value.code}[${index}]`, assignable: true }; }
       else break;
     }
@@ -257,17 +263,20 @@ class Parser {
     if (this.is('fn') || this.is('async')) {
       const async = this.match('async'); this.expect('fn'); return { code: `(${async ? 'async ' : ''}function${this.functionBody(async)})` };
     }
-    if (token.kind === 'string') { this.take(); return { code: JSON.stringify(token.text) }; }
-    if (token.kind === 'number') { this.take(); return { code: String(Number(token.text)) }; }
-    if (['true', 'false', 'null'].some(word => this.is(word))) { this.take(); return { code: token.text }; }
-    if (token.kind === 'word' && !reserved.has(token.text)) { this.take(); return { code: token.text, assignable: true }; }
+    if (token.kind === 'string') { this.take(); return { code: origin(token, JSON.stringify(token.text)) }; }
+    if (token.kind === 'number') { this.take(); return { code: origin(token, String(Number(token.text))) }; }
+    if (['true', 'false', 'null'].some(word => this.is(word))) { this.take(); return { code: origin(token, token.text) }; }
+    if (token.kind === 'word' && !reserved.has(token.text)) { this.take(); return { code: origin(token, token.text), assignable: true }; }
     throw new AryaError('Expected a value, name, or function call.', token);
   }
 }
 
 /** Parse only: no imports, project code, or Python processes execute here. */
-export function compile(source: string, filename = 'main.arya'): Compilation {
+export function compile(source: string, filenameOrOptions: string | CompileOptions = 'main.arya'): Compilation {
+  const filename = typeof filenameOrOptions === 'string' ? filenameOrOptions : filenameOrOptions.filename;
+  const outputFilename = typeof filenameOrOptions === 'string' ? resolve(filename) + '.mjs' : filenameOrOptions.outputFilename;
   const parser = new Parser(tokenize(source), filename);
   const body = parser.parse();
-  return { code: `// Generated by Arya ${ARYA_VERSION} from ${JSON.stringify(filename)}\n${javascriptRuntime}\n${parser.usesPython ? `const __arya_source = ${JSON.stringify(pathToFileURL(resolve(filename)).href)};\n${pythonRuntime}` : ''}\n${body}\n`, symbols: parser.symbols, usesPython: parser.usesPython };
+  const annotated = `// Generated by Arya ${ARYA_VERSION} from ${JSON.stringify(filename)}\n${javascriptRuntime}\n${parser.usesPython ? `const __arya_source = ${JSON.stringify(pathToFileURL(resolve(filename)).href)};\n${pythonRuntime}` : ''}\n${body}\n`;
+  return { ...finalize(annotated, source, filename, outputFilename), symbols: parser.symbols, usesPython: parser.usesPython };
 }

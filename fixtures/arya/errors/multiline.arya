@@ -1,0 +1,6 @@
+fn fail() {
+  return (
+    null
+  ).name
+}
+fail()

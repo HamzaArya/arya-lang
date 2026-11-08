@@ -2,7 +2,7 @@
   "name": "arya-language",
   "displayName": "Arya Language",
   "description": "Arya language support: syntax highlighting, diagnostics, completion, snippets, and run/check commands.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "aryacode",
   "license": "UNLICENSED",
   "engines": {
@@ -122,5 +122,7 @@
         }
       }
     }
-  }
+  },
+  "preview": true,
+  "aryaLanguageVersion": "0.2.0-alpha.1"
 }
