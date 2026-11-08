@@ -1,0 +1,24 @@
+let tasks = [
+  {title: "Learn variables", done: true},
+  {title: "Write a function", done: true},
+  {title: "Build a web app", done: false},
+]
+
+fn countDone(items) {
+  let count = 0
+  for item in items {
+    if item.done {
+      count += 1
+    }
+  }
+  return count
+}
+
+for task in tasks {
+  let marker = "[ ]"
+  if task.done {
+    marker = "[x]"
+  }
+  print(marker + " " + task.title)
+}
+print("Completed:", countDone(tasks), "of", len(tasks))

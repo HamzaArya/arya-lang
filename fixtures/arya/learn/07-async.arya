@@ -1,0 +1,10 @@
+use js "node:timers/promises" as timers
+
+async fn greetLater(name) {
+  await timers.setTimeout(100)
+  return "Hello, " + name
+}
+
+print("Waiting...")
+let greeting = await greetLater("Hamza")
+print(greeting)

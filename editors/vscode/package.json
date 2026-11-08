@@ -1,0 +1,126 @@
+{
+  "name": "arya-language",
+  "displayName": "Arya Language",
+  "description": "Arya language support: syntax highlighting, diagnostics, completion, snippets, and run/check commands.",
+  "version": "0.1.0",
+  "publisher": "aryacode",
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "arya",
+    "language",
+    "python",
+    "javascript"
+  ],
+  "icon": "media/arya-logo.png",
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onLanguage:arya"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Editing and syntax diagnostics work; running and checking files require trust."
+    },
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Editor features work; execution requires a local file."
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "arya",
+        "aliases": [
+          "Arya",
+          "arya"
+        ],
+        "extensions": [
+          ".arya"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./media/arya-mark.svg",
+          "dark": "./media/arya-mark-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "arya",
+        "scopeName": "source.arya",
+        "path": "./syntaxes/arya.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "arya",
+        "path": "./snippets/arya.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[arya]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+      }
+    },
+    "commands": [
+      {
+        "command": "aryaLanguage.run",
+        "title": "Arya: Run File",
+        "icon": "$(play)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "aryaLanguage.check",
+        "title": "Arya: Check Syntax",
+        "icon": "$(check)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "aryaLanguage.stop",
+        "title": "Arya: Stop File",
+        "icon": "$(debug-stop)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "aryaLanguage.run",
+          "when": "aryaLanguage.standalone && resourceLangId == arya && resourceScheme == file",
+          "group": "navigation@2"
+        },
+        {
+          "command": "aryaLanguage.check",
+          "when": "aryaLanguage.standalone && resourceLangId == arya && resourceScheme == file",
+          "group": "navigation@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Arya Language",
+      "properties": {
+        "aryaLanguage.nodePath": {
+          "type": "string",
+          "default": "node",
+          "scope": "machine-overridable",
+          "restricted": true,
+          "description": "Node.js 22.15+ executable used to run Arya programs."
+        },
+        "aryaLanguage.pythonPath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine-overridable",
+          "restricted": true,
+          "description": "Optional Python executable for bridge calls. Empty uses ARYA_PYTHON or python3 (python on Windows)."
+        }
+      }
+    }
+  }
+}

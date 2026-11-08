@@ -1,0 +1,46 @@
+{
+  "Function": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}(${2:values}) {",
+      "  ${0:return values}",
+      "}"
+    ]
+  },
+  "Async function": {
+    "prefix": "async",
+    "body": [
+      "async fn ${1:name}(${2:values}) {",
+      "  ${0:return values}",
+      "}"
+    ]
+  },
+  "For each": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:items} {",
+      "  $0",
+      "}"
+    ]
+  },
+  "Condition": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "  $0",
+      "}"
+    ]
+  },
+  "JavaScript library": {
+    "prefix": "usejs",
+    "body": "use js \"${1:node:path}\" as ${2:path}"
+  },
+  "Python library": {
+    "prefix": "usepy",
+    "body": "use python \"${1:math}\" as ${2:math}"
+  },
+  "Print": {
+    "prefix": "print",
+    "body": "print($0)"
+  }
+}

@@ -1,0 +1,10 @@
+# Node libraries and Python libraries, together in one program.
+use js "node:path" as path
+use python "math" as math
+use python "./statistics_helper.py" as statistics
+
+let report = statistics.summarize([10, 20, 30, 40])
+print("Report:", path.join("results", "summary.json"))
+print("Mean:", report.mean)
+print("Square root of 81:", math.sqrt(81))
+print("Rounded mean:", statistics.round_mean.with([[1, 2, 4]], {digits: 2}))

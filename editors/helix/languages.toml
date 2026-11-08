@@ -1,0 +1,15 @@
+# Merge into your Helix languages.toml after installing the Arya CLI package.
+# Recognition and LSP only: a dedicated Tree-sitter grammar is not shipped yet.
+[language-server.arya]
+command = "arya-lsp"
+args = ["--stdio"]
+
+[[language]]
+name = "arya"
+language-id = "arya"
+scope = "source.arya"
+file-types = ["arya"]
+roots = ["package.json", ".git"]
+comment-tokens = ["#", "//"]
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["arya"]

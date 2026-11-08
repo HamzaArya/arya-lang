@@ -1,0 +1,15 @@
+let score = 82
+const passingScore = 60
+
+if score >= 90 {
+  print("Excellent")
+} else if score >= passingScore {
+  print("Passed")
+} else {
+  print("Try again")
+}
+
+let submitted = true
+if submitted and score >= passingScore {
+  print("Lesson complete")
+}

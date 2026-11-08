@@ -1,0 +1,44 @@
+{
+  "name": "arya-lang",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "Arya programming language: compiler API, CLI, language server, and editor support.",
+  "engines": { "node": ">=22.15" },
+  "main": "./dist/compiler.cjs",
+  "types": "./dist/types/compiler.d.ts",
+  "exports": {
+    ".": { "types": "./dist/types/compiler.d.ts", "default": "./dist/compiler.cjs" },
+    "./compiler": { "types": "./dist/types/compiler.d.ts", "default": "./dist/compiler.cjs" },
+    "./language-service": { "types": "./dist/types/language-service.d.ts", "default": "./dist/language-service.cjs" },
+    "./cli": "./dist/cli.cjs",
+    "./lsp": "./dist/lsp.cjs",
+    "./package.json": "./package.json"
+  },
+  "bin": { "arya": "dist/cli.cjs", "arya-lsp": "dist/lsp.cjs" },
+  "files": ["dist", "docs", "fixtures", "brand", "editors", "README.md", "THIRD-PARTY-NOTICES.txt"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node scripts/test.mjs",
+    "check": "npm run typecheck && npm test",
+    "arya": "node dist/cli.cjs",
+    "package": "npm run check && npm pack --pack-destination artifacts",
+    "package:editors": "node scripts/package-editors.mjs",
+    "test:package": "node scripts/test-package.mjs",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "@types/vscode": "1.145.0",
+    "@vscode/vsce": "3.6.2",
+    "esbuild": "0.28.2",
+    "fflate": "0.8.2",
+    "typescript": "7.0.2",
+    "vscode-languageserver": "9.0.1",
+    "vscode-languageserver-textdocument": "1.0.12",
+    "vscode-oniguruma": "2.0.1",
+    "vscode-textmate": "9.2.0"
+  }
+}

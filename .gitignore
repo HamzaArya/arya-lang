@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.build/
+artifacts/
+editors/vscode/dist/
+editors/vscode/media/
+*.vsix
+.DS_Store
+**/.arya/
+**/__pycache__/

@@ -1,0 +1,116 @@
+{
+  "name": "Arya",
+  "scopeName": "source.arya",
+  "fileTypes": [
+    "arya"
+  ],
+  "patterns": [
+    {
+      "name": "comment.line.arya",
+      "match": "(#|\\/\\/).*$"
+    },
+    {
+      "name": "string.quoted.double.arya",
+      "begin": "\"",
+      "end": "\"|$",
+      "patterns": [
+        {
+          "name": "constant.character.escape.arya",
+          "match": "\\\\[nrt\\\\\"']"
+        },
+        {
+          "name": "invalid.illegal.escape.arya",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single.arya",
+      "begin": "'",
+      "end": "'|$",
+      "patterns": [
+        {
+          "name": "constant.character.escape.arya",
+          "match": "\\\\[nrt\\\\\"']"
+        },
+        {
+          "name": "invalid.illegal.escape.arya",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "match": "\\b(fn)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": {
+        "1": {
+          "name": "storage.type.function.arya"
+        },
+        "2": {
+          "name": "entity.name.function.arya"
+        }
+      }
+    },
+    {
+      "match": "\\b(let|const)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": {
+        "1": {
+          "name": "storage.type.arya"
+        },
+        "2": {
+          "name": "variable.other.definition.arya"
+        }
+      }
+    },
+    {
+      "match": "\\b(use)\\s+(js|python)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.control.import.arya"
+        },
+        "2": {
+          "name": "storage.type.bridge.arya"
+        }
+      }
+    },
+    {
+      "name": "keyword.control.arya",
+      "match": "\\b(let|const|fn|async|await|return|if|else|for|in|while|break|continue|use|as|export|new|try|catch|throw)\\b"
+    },
+    {
+      "name": "keyword.operator.logical.arya",
+      "match": "\\b(and|or|not)\\b"
+    },
+    {
+      "name": "constant.language.arya",
+      "match": "\\b(true|false|null)\\b"
+    },
+    {
+      "name": "constant.numeric.arya",
+      "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
+    },
+    {
+      "name": "support.function.arya",
+      "match": "\\b(print|len|range|str|number)\\b"
+    },
+    {
+      "name": "variable.language.arya",
+      "match": "\\bargs\\b"
+    },
+    {
+      "name": "entity.name.function.arya",
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+    },
+    {
+      "name": "keyword.operator.arya",
+      "match": "==|!=|<=|>=|\\+=|-=|\\*=|\\/=|\\*\\*|[+*/%=<>!-]"
+    },
+    {
+      "name": "punctuation.section.arya",
+      "match": "[{}()\\[\\]]"
+    },
+    {
+      "name": "punctuation.separator.arya",
+      "match": "[,;:.]"
+    }
+  ]
+}

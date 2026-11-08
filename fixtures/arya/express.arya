@@ -1,0 +1,11 @@
+# Optional framework example. Install express in this folder before running:
+# npm install express
+use js "express" as express
+
+let app = express()
+app.get("/", fn(request, response) {
+  response.send("Hello from Arya and Express!")
+})
+app.listen(3000, "127.0.0.1", fn() {
+  print("Express is running at http://localhost:3000")
+})

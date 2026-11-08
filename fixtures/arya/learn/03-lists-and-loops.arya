@@ -1,0 +1,13 @@
+let names = ["Hamza", "Arya", "Python"]
+print("First name:", names[0])
+print("Names:", len(names))
+
+for name in names {
+  print("Hello, " + name)
+}
+
+let total = 0
+for value in range(1, 6) {
+  total += value
+}
+print("Total:", total)

@@ -1,0 +1,17 @@
+# A small web app using Node's existing HTTP library.
+# Run this file, then open http://localhost:3000. Use Stop Current File to stop.
+use js "node:http" as http
+
+let page = "<!doctype html><html><meta charset='utf-8'><title>Hello from Arya</title><style>body{font:20px system-ui;background:#15191f;color:#edf2f7;max-width:700px;margin:15vh auto;padding:24px}h1{font-size:64px}button{font:inherit;padding:12px;border-radius:8px;cursor:pointer}</style><h1>Hello from Arya.</h1><p>A readable language, connected to existing libraries.</p><button onclick='fetch(\"/api/hello\").then(r=>r.json()).then(data=>document.querySelector(\"p\").textContent=data.message)'>Say hello</button></html>"
+let server = http.createServer(fn(request, response) {
+  if request.url == "/api/hello" {
+    response.writeHead(200, {"Content-Type": "application/json"})
+    response.end(JSON.stringify({message: "Arya + Node.js, working together."}))
+  } else {
+    response.writeHead(200, {"Content-Type": "text/html; charset=utf-8"})
+    response.end(page)
+  }
+})
+server.listen(3000, "127.0.0.1", fn() {
+  print("Arya web app: http://localhost:3000")
+})

@@ -1,0 +1,7 @@
+# Change the name, save, and run again.
+let name = "Hamza"
+print("Hello, " + name + "!")
+
+let lessons = 1
+lessons += 1
+print("Lessons completed:", lessons)

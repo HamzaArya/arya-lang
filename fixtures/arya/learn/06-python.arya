@@ -1,0 +1,15 @@
+# math is part of Python's standard library.
+use python "math" as math
+# This ordinary Python file is included beside the parent examples.
+use python "../statistics_helper.py" as statistics
+
+print("Square root:", math.sqrt(81))
+let report = statistics.summarize([10, 20, 30])
+print("Count:", report.count)
+print("Mean:", report.mean)
+
+try {
+  math.sqrt(-1)
+} catch error {
+  print("Caught:", error.message)
+}

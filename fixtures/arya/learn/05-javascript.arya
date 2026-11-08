@@ -1,0 +1,10 @@
+# node:path comes with Node. No npm install is needed.
+use js "node:path" as path
+
+print("File:", path.basename("/projects/hello.arya"))
+
+# JavaScript libraries can call Arya functions.
+let doubled = [1, 2, 3].map(fn(value) {
+  return value * 2
+})
+print("Doubled:", JSON.stringify(doubled))

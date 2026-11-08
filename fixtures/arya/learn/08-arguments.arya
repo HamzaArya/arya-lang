@@ -1,0 +1,6 @@
+# Try passing your name as a program argument in the CLI.
+let name = "friend"
+if len(args) > 0 {
+  name = args[0]
+}
+print("Hello, " + name)
