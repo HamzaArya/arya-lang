@@ -1,0 +1,11 @@
+fn counter(start) {
+  let value = start
+  return fn() { value += 1; return value }
+}
+let next = counter(1)
+print(next(), next())
+if true {
+  const item = {count: 0}
+  item.count += 1
+  print(item.count)
+}

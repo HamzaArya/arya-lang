@@ -2,9 +2,11 @@
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current language version:** Arya 0.2.0-alpha.1 (local preview)
-**Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [local release notes](releases/0.2.0-alpha.1.md)
+**Current language version:** Arya 0.2.0-alpha.3 (public-release preparation)
+**Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [candidate release notes](releases/0.2.0-alpha.3.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
+
+**Proposed post-1.0 work:** [Arya 1.1.0 native compilation plan](arya-1.1-native-plan.md) adds an optional native CLI execution profile using the user-selected C backend. Remaining architecture and scope are proposed; the plan does not change the current release status and retains the existing 0.2/1.0 completion gates.
 
 ## Purpose
 
@@ -75,13 +77,13 @@ Every milestone follows these rules:
 | M0 | Standalone repository and versioned IDE package integration | 0.2 | — | `[x]` |
 | M1 | Arya source maps and readable runtime traces | 0.2 | M0 | Local and minimum-Node acceptance complete; Linux/Windows qualification pending |
 | M2 | Normative 0.2 language specification | 0.2 | M1 can proceed in parallel; must finish before release | `[x]` |
-| M3 | Lexical name resolution and stronger `check` | 0.2 | M2 scope decisions | `[ ]` |
-| M4 | Arya-to-Arya modules and build graph | 0.2 | M1, M3 | `[ ]` |
-| M5 | Interoperability hardening and examples | 0.2 | M2 | `[ ]` |
-| M6 | Package, compatibility test, and release Arya 0.2 | 0.2 | M1–M5 | `[ ]` |
-| M7 | Learning path and community review | pre-1.0 | M6 | `[ ]` |
-| M8 | Tooling investments chosen from user evidence | pre-1.0 | M7 | `[ ]` |
-| M9 | Specification, compatibility, and stable release | 1.0 | M7–M8 | `[ ]` |
+| M3 | Lexical name resolution and stronger `check` | 0.2 | M2 scope decisions | `[x]` |
+| M4 | Arya-to-Arya modules and build graph | 0.2 | M1, M3 | `[x]` (local CLI, IDE, standalone extension) |
+| M5 | Interoperability hardening and examples | 0.2 | M2 | `[x]` (Node 22.15/24, Python 3.13, macOS arm64) |
+| M6 | Package, compatibility test, and release Arya 0.2 | 0.2 | M1–M5 | `[~]` (Apache-2.0 alpha publication selected; live publication/full platform qualification pending) |
+| M7 | Learning path and community review | pre-1.0 | M6 | `[~]` (runnable path/protocol ready; external sessions pending) |
+| M8 | Tooling investments chosen from user evidence | pre-1.0 | M7 | `[~]` (engineering evidence/defer record prepared; learner evidence pending) |
+| M9 | Specification, compatibility, and stable release | 1.0 | M7–M8 | `[~]` (policy/security/readiness prepared; stable release not qualified) |
 
 ---
 
@@ -281,37 +283,39 @@ Property names after `.` are not lexical references. Object literal keys are not
 
 ### Work
 
-- [ ] Represent declaration kind: `let`, `const`, function, parameter, loop variable, catch variable, or import alias.
-- [ ] Represent lexical references and assignment targets with source tokens.
-- [ ] Build scopes in a pass that supports the M2 declaration-timing decisions.
-- [ ] Resolve closures and legal nested shadowing.
-- [ ] Diagnose unknown names with a precise range and, when reliable, a close-name suggestion.
-- [ ] Diagnose direct and compound assignment to `const`.
-- [ ] Include Arya built-ins and the approved host-global allowlist.
-- [ ] Preserve non-executing analysis for missing JavaScript/Python packages.
-- [ ] Return multiple independent diagnostics where parser recovery permits it; keep parser recovery itself outside M3 if it would delay the release.
-- [ ] Reuse resolved symbols for go-to-definition if the core work makes it small and reliable. Do not make navigation a release blocker.
+- [x] Represent declaration kind: `let`, `const`, function, parameter, loop variable, catch variable, or import alias.
+- [x] Represent lexical references and assignment targets with source tokens.
+- [x] Build scopes in a pass that supports the M2 declaration-timing decisions.
+- [x] Resolve closures and legal nested shadowing.
+- [x] Diagnose unknown names with a precise range and, when reliable, a close-name suggestion.
+- [x] Diagnose direct and compound assignment to `const`.
+- [x] Include Arya built-ins and the approved host-global allowlist.
+- [x] Preserve non-executing analysis for missing JavaScript/Python packages.
+- [x] Return multiple independent diagnostics where parser recovery permits it; keep parser recovery itself outside M3 if it would delay the release.
+- [x] Reuse resolved symbols for go-to-definition if the core work makes it small and reliable. Do not make navigation a release blocker.
+
+The parser records source tokens and lexical scope facts; `src/resolver.ts` resolves the completed scopes in a separate pass. For headers have a loop scope distinct from the body, so body declarations cannot incorrectly capture iterable references. The loop binding is also seeded into the body to preserve Arya's duplicate-loop-name rule. Resolution metadata feeds same-file definition lookup in the portable extension, LSP, and AryaCode. Syntax recovery remains outside M3; complete parses return all independent semantic diagnostics.
 
 ### Required tests
 
-- [ ] misspelled local, parameter, import alias, and outer closure name;
-- [ ] direct and compound write to `const`;
-- [ ] valid nested shadowing;
-- [ ] closure reading an outer binding;
-- [ ] loop and catch variables inside and outside their scopes;
-- [ ] properties that match no lexical name;
-- [ ] approved host globals;
-- [ ] duplicate declarations and parameters continue to fail;
-- [ ] imports remain passive during analysis;
-- [ ] diagnostics have correct UTF-16 ranges.
+- [x] misspelled local, parameter, import alias, and outer closure name;
+- [x] direct and compound write to `const`;
+- [x] valid nested shadowing;
+- [x] closure reading an outer binding;
+- [x] loop and catch variables inside and outside their scopes;
+- [x] properties that match no lexical name;
+- [x] approved host globals;
+- [x] duplicate declarations and parameters continue to fail;
+- [x] imports remain passive during analysis;
+- [x] diagnostics have correct UTF-16 ranges.
 
 ### M3 definition of done
 
-- [ ] A misspelled variable fails `arya check` before execution.
-- [ ] Assignment to `const` fails `arya check` before execution.
-- [ ] Valid shadowing, recursion, closures, imports, and host globals pass.
-- [ ] CLI, embedded AryaCode analysis, and portable LSP use the same resolver.
-- [ ] Existing completion and Outline behavior does not regress.
+- [x] A misspelled variable fails `arya check` before execution.
+- [x] Assignment to `const` fails `arya check` before execution.
+- [x] Valid shadowing, recursion, closures, imports, and host globals pass.
+- [x] CLI, embedded AryaCode analysis, portable extension, and portable LSP use the same resolver, including registered-provider desktop acceptance.
+- [x] Existing completion and Outline behavior does not regress.
 
 ---
 
@@ -321,7 +325,7 @@ Property names after `.` are not lexical references. Object literal keys are not
 
 One entry command compiles and runs a multi-file Arya program. Every module receives its own source map, and a failure in a dependency points to that dependency's `.arya` source.
 
-### Proposed 0.2 module surface
+### Implemented 0.2 module surface
 
 Use the existing bridge-shaped syntax for namespace imports:
 
@@ -347,21 +351,21 @@ For 0.2, keep the surface deliberately small:
 - no re-exports, wildcard syntax, package imports, or dynamic imports;
 - cycles rejected with a readable import chain.
 
-Confirm this syntax in M2 before implementation.
+Approved by M2 and implemented in alpha.3; see specification section 11 and `arya-language/project`.
 
 ### Graph and output design
 
-- [ ] Resolve every Arya import relative to its importing source file.
-- [ ] Canonicalize file identities so aliases and symlinks do not compile the same module twice.
-- [ ] In AryaCode, enforce workspace containment on every source and output.
-- [ ] Define the CLI project boundary. Recommended 0.2 rule: the entry file's directory is the module root, and imports cannot escape it. If a broader project-root rule is chosen, specify it before coding.
-- [ ] Build the dependency graph without executing modules.
-- [ ] Produce deterministic topological order.
-- [ ] Reject cycles with the complete shortest discovered chain, for example `a.arya → b.arya → a.arya`.
-- [ ] Compile each source once per build.
-- [ ] Mirror module paths under the generated output directory and rewrite Arya imports to generated relative `.mjs` specifiers.
-- [ ] Emit a map beside every generated module.
-- [ ] Prevent stale generated dependencies from being executed after any graph compile failure.
+- [x] Resolve every Arya import relative to its importing source file.
+- [x] Canonicalize file identities so aliases and symlinks do not compile the same module twice.
+- [x] In AryaCode, enforce workspace containment on every source and output.
+- [x] Define the CLI project boundary: the canonical entry file's directory is the module root; lexical/canonical Arya imports and generated output cannot escape it. The project API can take an explicit containing root; the CLI and IDE defaults agree.
+- [x] Build the dependency graph without executing modules.
+- [x] Produce deterministic topological order.
+- [x] Reject cycles with the complete shortest discovered chain, for example `a.arya → b.arya → a.arya`.
+- [x] Compile each source once per build.
+- [x] Mirror module paths under the generated output directory and rewrite Arya imports to generated relative `.mjs` specifiers.
+- [x] Emit a map beside every generated module.
+- [x] Prevent stale generated dependencies from being executed after any graph compile failure.
 
 Recommended CLI layout for an entry directory:
 
@@ -380,26 +384,26 @@ AryaCode may keep its fingerprinted `.arya/run/<id>/` root but should mirror the
 
 ### Required tests
 
-- [ ] entry imports and calls one dependency;
-- [ ] transitive dependency;
-- [ ] two modules share one dependency, compiled once;
-- [ ] nested directories and `../` normalization within the project boundary;
-- [ ] missing module with importer location;
-- [ ] cycle with full import chain;
-- [ ] dependency syntax failure with dependency source location;
-- [ ] dependency runtime failure mapped to dependency `.arya` location;
-- [ ] duplicate alias and symlink identity behavior;
-- [ ] attempted workspace/project escape;
-- [ ] JavaScript and Python imports continue to work inside dependencies;
-- [ ] exports preserve live JavaScript module behavior as specified.
+- [x] entry imports and calls one dependency;
+- [x] transitive dependency;
+- [x] two modules share one dependency, compiled once;
+- [x] nested directories and `../` normalization within the project boundary;
+- [x] missing module with importer location;
+- [x] cycle with full import chain;
+- [x] dependency syntax failure with dependency source location;
+- [x] dependency runtime failure mapped to dependency `.arya` location;
+- [x] duplicate alias and symlink identity behavior;
+- [x] attempted workspace/project escape;
+- [x] JavaScript and Python imports continue to work inside dependencies;
+- [x] exports preserve live JavaScript module behavior as specified.
 
 ### M4 definition of done
 
-- [ ] A multi-file program builds and runs with one command.
-- [ ] CLI and AryaCode resolve the same graph for equivalent project boundaries.
-- [ ] Source maps work for every module.
-- [ ] Missing files, invalid exports, and cycles produce source-positioned diagnostics.
-- [ ] A failed graph build cannot launch stale output.
+- [x] A multi-file program builds and runs with one command.
+- [x] CLI and AryaCode resolve the same graph for equivalent project boundaries, including real desktop Build/Run of the multi-file project.
+- [x] Source maps work for every module.
+- [x] Missing files, invalid exports, and cycles produce source-positioned diagnostics.
+- [x] A failed graph build cannot launch stale output.
 
 ---
 
@@ -411,46 +415,46 @@ Common JavaScript and Python failures explain what happened, where it happened, 
 
 ### Python bridge matrix
 
-- [ ] missing Python executable;
-- [ ] missing installed module;
-- [ ] missing local `.py` file;
-- [ ] private member access;
-- [ ] `then` and `with` proxy-name limitations documented and tested;
-- [ ] unsupported input: function, symbol, bigint, `undefined`, non-finite number, and cyclic object;
-- [ ] unsupported Python return value;
-- [ ] Python exception type and message;
-- [ ] worker timeout;
-- [ ] oversized stdout/stderr/response;
-- [ ] malformed or truncated protocol response;
-- [ ] Python logging forwarded without corrupting the response;
-- [ ] path with spaces and Unicode;
-- [ ] batch processing in one call.
+- [x] missing Python executable;
+- [x] missing installed module;
+- [x] missing local `.py` file;
+- [x] private member access;
+- [x] `then` and `with` proxy-name limitations documented and tested;
+- [x] unsupported input: function, symbol, bigint, `undefined`, non-finite number, and cyclic object;
+- [x] unsupported Python return value;
+- [x] Python exception type and message;
+- [x] worker timeout;
+- [x] oversized stdout/stderr/response;
+- [x] malformed or truncated protocol response;
+- [x] Python logging forwarded without corrupting the response;
+- [x] path with spaces and Unicode;
+- [x] batch processing in one call.
 
 ### JavaScript interop matrix
 
-- [ ] namespace-only ES module;
-- [ ] ordinary default export;
-- [ ] intentional `null`/`undefined` default behavior from M2;
-- [ ] CommonJS package;
-- [ ] callback and method receiver preservation;
-- [ ] constructor and async function;
-- [ ] missing package and missing export behavior;
-- [ ] mapped Arya caller frame when library code throws.
+- [x] namespace-only ES module;
+- [x] ordinary default export;
+- [x] intentional `null`/`undefined` default behavior from M2;
+- [x] CommonJS package;
+- [x] callback and method receiver preservation;
+- [x] constructor and async function;
+- [x] missing package and missing export behavior;
+- [x] mapped Arya caller frame when library code throws.
 
 ### Examples and messages
 
-- [ ] Add one small npm project example with explicit installation steps.
-- [ ] Add one Python batch example that avoids a process launch inside an Arya loop.
-- [ ] Give bridge errors stable Arya-facing prefixes or codes where that improves supportability.
-- [ ] Keep underlying exceptions useful without exposing an uncontrolled traceback as structured protocol data.
-- [ ] Update tutorial troubleshooting for interpreter selection, JSON limits, timeouts, and batching.
+- [x] Add one small npm project example with explicit installation steps.
+- [x] Add one Python batch example that avoids a process launch inside an Arya loop.
+- [x] Give bridge errors stable Arya-facing prefixes or codes where that improves supportability.
+- [x] Keep underlying exceptions useful without exposing an uncontrolled traceback as structured protocol data.
+- [x] Update tutorial troubleshooting for interpreter selection, JSON limits, timeouts, and batching.
 
 ### M5 definition of done
 
-- [ ] Every matrix case has a test or an explicit documented limitation.
-- [ ] Common bridge failures give actionable messages.
-- [ ] A new user can run both examples from the published instructions.
-- [ ] Interop errors retain mapped Arya caller frames.
+- [x] Every matrix case has a test or an explicit documented limitation.
+- [x] Common bridge failures give actionable messages.
+- [x] A new user can run both examples from the published instructions.
+- [x] Interop errors retain mapped Arya caller frames.
 
 ---
 
@@ -462,27 +466,27 @@ Arya 0.2 is installable and testable independently of the repository checkout.
 
 ### Release gates
 
-- [ ] Settle the license and distribution terms. Public distribution is blocked while the package remains `UNLICENSED` and private unless that is an intentional private-release policy.
-- [ ] Update `ARYA_VERSION`, extension version, documentation, and package metadata together.
-- [ ] Keep Arya language version 0.2 separate from the AryaCode product version in all UI and release text.
-- [ ] Publish supported Node versions and the Python versions/platforms actually tested.
-- [ ] Document installation, upgrade, uninstall, and local-project use.
-- [ ] Write release notes with behavior changes and migration guidance.
-- [ ] Build the tarball and editor artifacts from a clean checkout.
-- [ ] Install the tarball into a temporary project with no repository-relative dependency access.
-- [ ] Run `arya --version`, `check`, `build`, and `run` from that clean install.
-- [ ] Run the multi-file example and intentional runtime-error example.
-- [ ] Verify packaged maps contain correct sources and no accidental repository-only paths.
-- [ ] Verify the portable LSP and editor extension still match compiler 0.2 semantics.
+- [x] Adopt Apache-2.0 and Copyright 2026 Hamza Arya, retain LICENSE/NOTICE/third-party notices, and prepare public `arya-language` alpha metadata. The owner selected npm `next` plus a GitHub prerelease; live authentication/publication remains separate.
+- [x] Update `ARYA_VERSION`, extension version, documentation, and package metadata together for alpha.3; final 0.2 public version awaits release qualification.
+- [x] Keep Arya language version 0.2 separate from the AryaCode product version in all UI and release text.
+- [x] Publish supported Node versions and the Python versions/platforms actually tested.
+- [x] Document installation, upgrade, uninstall, and local-project use.
+- [x] Write release notes with behavior changes and migration guidance.
+- [~] Clean isolated source-snapshot verification builds the tarball/VSIX/editor kit after fresh dependency installation; a clean committed release revision is still pending owner review.
+- [x] Install the tarball into a temporary project with no repository-relative dependency access.
+- [x] Run `arya --version`, `check`, `build`, and `run` from that clean install.
+- [x] Run the multi-file example and intentional runtime-error example.
+- [x] Verify packaged maps contain correct sources and no accidental repository-only paths.
+- [x] Verify the portable LSP and editor extension still match compiler 0.2 semantics, including separate embedded/portable desktop profiles.
 - [ ] Run the supported-platform test matrix before making platform claims.
 
 ### M6 definition of done
 
 - [ ] All M1–M5 definitions of done are satisfied.
-- [ ] `npm run check` passes from a clean dependency install.
-- [ ] Clean-install acceptance passes without the source repository.
+- [x] `npm run check` passes from a clean dependency install in the recorded isolated source snapshot.
+- [x] Clean-install acceptance passes without source-repository-relative dependencies, including the real installed command, lessons, modules, npm and Python examples.
 - [ ] Release artifacts, checksums, notices, license, and version labels are complete.
-- [ ] Arya 0.2 release notes link to the versioned specification and tutorial.
+- [x] Alpha.3 candidate release notes link to the versioned specification, tutorial/learning material, API, migration, and readiness records.
 
 ---
 
@@ -494,9 +498,9 @@ People who did not build Arya can learn it, complete a small project, and report
 
 ### Work
 
-- [ ] Write a short learning path that starts with one file and ends with a multi-file project using one interop feature.
-- [ ] Include exercises, expected output, common errors, and a completed reference project.
-- [ ] Test every command in the tutorial from a clean install.
+- [x] Write a short learning path that starts with one file and ends with a multi-file project using one interop feature.
+- [x] Include exercises, expected output, common errors, and a completed reference project.
+- [~] Automated installed-package acceptance runs the nine shipped lessons, multi-file learning reference, offline npm example, and Python batch example; an external-registry Express install is not qualified by the offline run.
 - [ ] Recruit a small group of learners and developers who were not involved in implementation.
 - [ ] Include Afghan programmers and learners where possible so Arya's intended identity is reflected by real participation.
 - [ ] Observe installation, first run, rule comprehension, error diagnosis, modules, and interop.
@@ -511,7 +515,7 @@ Before using “the first Afghan programming language” publicly, define the qu
 
 ### M7 definition of done
 
-- [ ] At least one complete beginner path works from clean installation.
+- [x] The completed task-report learning reference checks/builds/runs from the installed package without third-party fetches; actual beginner observations remain the separate external gate.
 - [ ] External participants complete or attempt the project.
 - [ ] Findings produce a prioritized evidence log rather than anecdotal feature requests.
 - [ ] Any translated material has fluent review.
@@ -552,9 +556,10 @@ Do not put every candidate into 1.0. Select the smallest set required for depend
 
 ### M8 definition of done
 
-- [ ] Selected tooling work traces back to M7 evidence or a release-critical engineering risk.
-- [ ] Each selected item has its own acceptance criteria and compatibility assessment.
-- [ ] Deferred items remain visible in the backlog without blocking 1.0.
+- [x] Selected engineering mitigations trace to reproduced graph ownership/FIFO/export and UTF-8 byte-bound risks; no external learner evidence is claimed.
+- [x] Each selected engineering item has its own acceptance tests and compatibility/maintenance assessment in docs/tooling-evidence.md.
+- [x] Deferred tooling remains visible with evidence-based revisit triggers; final learner-driven selection remains pending M7.
+- [ ] Review real M7 findings before finalizing the learner-driven 1.0 tooling selection. The checked items above close the engineering-risk portion only.
 
 ---
 
@@ -566,12 +571,12 @@ Arya has a documented stable core that users can install, learn, use for small r
 
 ### Stability and governance
 
-- [ ] Publish the Arya 1.0 specification.
-- [ ] Define semantic versioning rules for syntax, runtime behavior, built-ins, modules, and bridges.
-- [ ] Define deprecation periods and migration-note requirements.
-- [ ] Mark experimental APIs and exclude them from the 1.0 compatibility promise.
-- [ ] Settle license, contribution terms, package ownership, and release authority.
-- [ ] Define a security-reporting path and supported-release policy.
+- [ ] Publish the Arya 1.0 specification after owner/platform/community qualification; the implemented 0.2 core contract and compatibility policy are prepared.
+- [x] Define semantic versioning rules for syntax, runtime behavior, built-ins, modules, and bridges.
+- [x] Define deprecation periods and migration-note requirements.
+- [x] Mark experimental APIs and exclude them from the 1.0 compatibility promise.
+- [~] Apache-2.0, owner/release authority Hamza Arya, and the npm/GitHub destinations are selected. Account permissions/publication must be verified; a stable contribution/governance process remains open.
+- [~] SECURITY.md now names Hamza Arya, hamzaarya123@gmail.com, and best-effort active-preview handling without an invented SLA. Stable support lines and periods remain future qualification work.
 
 ### Distribution and compatibility
 
@@ -589,7 +594,7 @@ Arya has a documented stable core that users can install, learn, use for small r
 - [ ] A new user can build the reference project without repository knowledge.
 - [ ] Runtime and compile failures point to actionable source locations.
 - [ ] Upgrade instructions cover every supported pre-1.0 version.
-- [ ] Known limitations are specific and current.
+- [x] Known limitations are specific and current.
 
 ### M9 definition of done
 
@@ -634,7 +639,7 @@ Until 1.0, behavior may change, but changes still require discipline:
 | Module roots differ between CLI and AryaCode | Programs behave differently by runner | Define one project-boundary rule before M4 | Open |
 | Partial graph build runs stale files | Incorrect execution | Stage graph output and publish only after all modules compile | Open |
 | Python one-process-per-call is too slow | Poor performance | Teach batching in 0.2; evaluate persistent worker after user evidence | Open |
-| Public release blocked by licensing | Cannot distribute clearly | Resolve license and package policy before M6 | Open |
+| Prerelease publication and stable qualification differ | An alpha could be mistaken for a fully qualified stable release | Apache-2.0 adopted; verify actual account permissions/publication, use npm next/GitHub prerelease, and retain platform/community limits | Public alpha operation pending; stable gates open |
 | Product and language versions are confused | Support and upgrade errors | Label Arya and AryaCode versions separately everywhere | Open |
 | 1.0 scope grows without evidence | Delayed stable release | Use M7 findings and M8 selection gate | Open |
 
@@ -651,10 +656,12 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 | D-005 | 2026-11-09 | Use the explicit Node-profile allowlist in specification section 7 and `src/host-globals.ts` | Resolver behavior must not depend on analysis-host globals; declarations may shadow host names; runtime isolation limitation is documented | M2–M3 |
 | D-006 | 2026-11-09 | Approve relative `use arya "./file.arya" as name`, explicit extension, namespace-only live exports, entry directory as project root, canonical containment, and cycle rejection | A small deterministic graph contract shared by CLI and IDE; still unimplemented until M4 | M2, M4 |
 | D-007 | 2026-11-09 | Preserve `namespace.default ?? namespace`; null/undefined defaults remain accessible as `alias.default` on the namespace | Avoid an interop migration; false/zero/empty defaults still select the default | M2, M5 |
-| D-008 | — | License and public distribution policy | Pending | M6, M9 |
+| D-008 | 2026-11-09 | Adopt Apache-2.0, Copyright 2026 Hamza Arya, npm `arya-language`/`next`, GitHub `HamzaArya/arya-lang` prerelease, homepage/contact supplied by owner | Owner selected public alpha distribution; actual authentication/publication and stable qualification remain distinct gates | M6, M9 |
 | D-009 | 2026-11-09 | Functions are hoisted within their lexical block; let/const and aliases have runtime TDZ; closures may refer to later bindings; loop header self-reference has TDZ | Preserve strict ES-module execution semantics; M3 resolves whole scopes and leaves known-name initialization timing to runtime | M2–M3 |
 | D-010 | 2026-11-09 | `and`/`or` return operands; retain JS numeric edge values, reject nonfinite Python transport, document JSON negative-zero/large-integer behavior | Preserve runtime behavior and make bridge loss explicit; conformance tests cover each edge | M2, M5 |
 | D-011 | 2026-11-09 | Parenthesize emitted numeric literals before property chaining | Fix accepted `1.toString()` and normalized decimal forms that previously emitted invalid JavaScript; existing grouped syntax remains valid | M2 |
+| D-012 | 2026-11-09 | Record scope/declaration/reference facts during parsing; resolve the completed scope graph separately and share metadata with diagnostics/navigation | Preserve the mapped emitter, forward declarations, closures, and runtime TDZ without executing imports; all user-facing paths use one resolver | M3 |
+| D-013 | 2026-11-09 | Report all independent semantic diagnostics after a complete parse; retain one syntax diagnostic until parser recovery is implemented | Better editor/CLI feedback while keeping recovery out of M3; preserve the first-error API alias and bump the local preview to alpha.2 | M3 |
 
 ## Current workboard
 
@@ -664,13 +671,15 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 
 ### Next
 
-- [ ] M3: lexical name resolution and const-write diagnostics, with passive editor analysis.
-- [ ] M4: relative Arya namespace imports and a contained, non-executing build graph.
+- [x] Local alpha.3 engineering, clean-snapshot/editor packaging, and graph desktop qualification are complete.
+- [x] Owner selected Apache-2.0, Hamza Arya copyright/release authority, homepage/contact, npm `arya-language`/`next`, and the existing GitHub repository for an alpha prerelease.
+- [ ] Authenticate, review the exact licensed source/artifacts, and record successful npm/GitHub prerelease publication. Linux/Windows and learner evidence remain separate stable/platform gates.
 
 ### Later
 
-- [ ] M5: interop edge cases and batching examples.
-- [ ] M6: clean-install qualification, license/distribution decision, and final 0.2 release.
+- [x] M5: interop edge cases, actionable codes, UTF-8 protocol, and batching/npm examples.
+- [x] Owner supplied the public license, publishing destination/release authority, homepage, and private security contact; live publication is tracked separately.
+- [ ] Run real Linux/Windows qualification and external learner sessions before closing M6–M9.
 
 ## Progress notes
 
@@ -684,3 +693,17 @@ Add dated notes here when work changes direction, reveals a constraint, or close
 - **2026-11-08:** Extended M1 acceptance with real CLI Build/standalone execution, passive Check, syntax-failure preservation of code/map artifacts, and literal arguments including Node flags. `npm run check` passes all 16 tests on Node 22.15.0 and 24.16.0 on macOS arm64; clean-install acceptance and five AryaCode package/runner tests also pass on Node 22.15.0 with Python 3.13.15. Added Linux/Windows/macOS CI on Node 22.15.0 and 24, including packed installation and mapped traces. Linux/Windows results remain pending; no working local Docker daemon or remote CI run was available.
 
 - **2026-11-09:** Completed M2's normative core, decisions D-004–D-007/D-009–D-011, and reference/tutorial/release updates. Added 14 core conformance tests plus two shipped CLI fixtures, bringing `npm run check` to 30 passing tests on Node 22.15.0 and 24.16.0 (macOS arm64, Python 3.13.15). Clean-installed package acceptance also passes, including both conformance fixtures. Fixed numeric property emission after a failing regression test; preserved all selected 0.1 semantic rules. Documented and tested the existing generated-runtime host-shadowing limitation. M3/M4's approved behavior remains explicitly unimplemented, and M1 Linux/Windows qualification remains pending.
+
+- **2026-11-09:** Completed M3 in local preview `0.2.0-alpha.2`: source-positioned declaration/reference graph, deterministic lexical resolution, const/import/builtin write checks, conservative suggestions, all semantic diagnostics, and same-file definition lookup. All 43 language tests pass on Node 22.15.0 and 24.16.0 on macOS arm64; clean-installed package acceptance passes on both runtimes. AryaCode is repinned to the versioned archive; its 61-test suite and real desktop embedded/standalone-extension acceptance pass, including UTF-16 ranges, passive imports, semantic-error completion/Outline, navigation, diagnostic repair, mapped runtime errors, and Run/Stop. Updated the specification, tutorial, reference, API contract, editor guide, and migration notes. Known-name TDZ remains runtime behavior, parser recovery remains deferred, and M1 Linux/Windows qualification remains pending.
+
+- **2026-11-09:** Owner requested completion of the remaining roadmap and selected public-release preparation, with license/destination to be supplied. Owner confirmed no Linux/Windows results or external learner feedback yet. Implemented alpha.3 module graphs and interop hardening, created the multi-file learning project, installation/compatibility/security/community/tooling-readiness materials, and a read-only release audit. Independent graph review found orphan-map data loss, missing constructor-export checks, FIFO blocking, and publication cleanup risks; regression tests and fixes were added. Unicode failed-call stderr now uses an exact byte bound after a reproducing test. M7 external observations, final M8 selection, and stable/public release qualification remain genuinely pending.
+
+- **2026-11-09:** Alpha.3 local qualification passes 80 language tests on Node 22.15.0 and 24.16.0 with Python 3.13.15 (macOS arm64), 62 AryaCode tests, and both embedded/portable desktop acceptance suites. Real desktop Build/Run covers the shipped multi-file project; dependency Python selection, mapped failures, and stale-output prevention are tested. Clean snapshot/install/editor packaging is recorded separately by `npm run test:clean`; public/stable claims still require owner and external evidence.
+
+- **2026-11-09:** The clean verifier completed fresh offline `npm ci`, all checks, VSIX/editor-kit packaging, installed lessons/examples/graph acceptance, and mechanical release audit in a retained source snapshot with a SHA-256 manifest. This is evidence for the recorded snapshot, not a fabricated clean Git commit. Public/stable readiness remains false pending the already-confirmed owner/platform/community gates.
+
+- **2026-11-09:** Reproducibility review found current/file-time ZIP metadata and filesystem entry order in editor packaging. Added deterministic archive normalization with SOURCE_DATE_EPOCH, canonical modes, sorted entries, and timezone restoration; three focused tests pass on Node 22.15/24. Two actual identical-source builds now produce the same tarball, VSIX, and editor-kit hashes across timezones. The complete language/artifact suite contains 83 cases. Public/stable gates remain open.
+
+- **2026-11-09:** Owner selected Apache-2.0, Copyright 2026 Hamza Arya, https://hamzaarya.com, private security contact hamzaarya123@gmail.com, public npm name `arya-language` with the `next` tag, and a GitHub prerelease in `HamzaArya/arya-lang`. CLI/language/repository names remain `arya`/Arya/`arya-lang`. Metadata and legal-file auditing distinguish mechanically prepared alpha packages from account authentication, actual publication, and stable qualification. Publication remains pending until live operations succeed; no Linux/Windows or learner evidence is inferred.
+
+- **2026-11-09:** Read-only CI review found that earlier revision `6312372` passed Linux/macOS Node 22/24 jobs with 30 tests, while its Windows job failed on a Unicode Python path. Current M5 forces UTF-8 and includes local regressions, but alpha.3 has no completed cross-platform CI qualification yet; retain the current-candidate platform gate until fresh jobs run.

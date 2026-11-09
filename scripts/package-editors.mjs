@@ -5,7 +5,10 @@ import { promisify } from 'node:util';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { createVSIX } from '@vscode/vsce';
-import { zipSync } from 'fflate';
+import { archiveEpoch, deterministicZip, normalizeVsix } from './editor-archive.mjs';
+const epoch = archiveEpoch();
+// Give VSCE the same valid timestamp, then canonicalize its ZIP metadata below.
+process.env.SOURCE_DATE_EPOCH = String(epoch);
 await import('./build.mjs');
 const { ARYA_VERSION, keywords, builtins } = createRequire(import.meta.url)(resolve('dist/compiler.cjs'));
 const output = resolve('artifacts');
@@ -15,6 +18,21 @@ await mkdir(output, { recursive: true }); await mkdir(kit, { recursive: true });
 await cp('editors', join(kit, 'editors'), { recursive: true });
 await cp('brand', join(kit, 'brand'), { recursive: true });
 await cp('docs/arya-editors.md', join(kit, 'README.md'));
+const legalFiles = new Map();
+for (const filename of ['LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.txt']) {
+  const bytes = await readFile(filename);
+  if (!bytes.length) throw new Error(`Distribution legal file is empty: ${filename}`);
+  if (!(await readFile(join('editors/vscode', filename))).equals(bytes)) throw new Error(`Editor legal file differs from the root: ${filename}`);
+  legalFiles.set(filename, bytes);
+  await cp(filename, join(kit, filename));
+}
+const verifyLegalFiles = (files, prefix = '') => {
+  for (const [filename, expected] of legalFiles) {
+    // VSCE names its license asset LICENSE.txt even when the source is LICENSE.
+    const name = prefix + (prefix && filename === 'LICENSE' ? 'LICENSE.txt' : filename);
+    if (!files[name] || !Buffer.from(files[name]).equals(expected)) throw new Error(`Archive legal file is missing or differs from the root: ${name}`);
+  }
+};
 const xml = text => String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const plist = value => typeof value === 'string' ? `<string>${xml(value)}</string>` : Array.isArray(value) ? `<array>${value.map(plist).join('')}</array>` : `<dict>${Object.entries(value).map(([key, val]) => `<key>${xml(key)}</key>${plist(val)}`).join('')}</dict>`;
 const document = value => `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">${plist(value)}</plist>\n`;
@@ -51,7 +69,7 @@ ${Object.entries(lists).map(([name, words]) => `<list name="${name}">${words.map
 const keywordLists = {
   Comments: '00# 00// 01 02 03 04', 'Numbers, prefix1': '', 'Numbers, prefix2': '', 'Numbers, extras1': '', 'Numbers, extras2': '', 'Numbers, suffix1': '', 'Numbers, suffix2': '', 'Numbers, range': '',
   Operators1: '+ - * / % = ! < > ( ) [ ] , : ; .', Operators2: 'and or not', 'Folders in code1, open': '{', 'Folders in code1, middle': '', 'Folders in code1, close': '}', 'Folders in code2, open': '', 'Folders in code2, middle': '', 'Folders in code2, close': '', 'Folders in comment, open': '', 'Folders in comment, middle': '', 'Folders in comment, close': '',
-  Keywords1: keywords.join(' '), Keywords2: Object.keys(builtins).join(' '), Keywords3: 'true false null', Keywords4: 'js python', Keywords5: '', Keywords6: '', Keywords7: '', Keywords8: '',
+  Keywords1: keywords.join(' '), Keywords2: Object.keys(builtins).join(' '), Keywords3: 'true false null', Keywords4: 'js python arya', Keywords5: '', Keywords6: '', Keywords7: '', Keywords8: '',
   Delimiters: `00" 01\\ 02" 03' 04\\ 05' 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23`,
 };
 const styles = ['DEFAULT','COMMENTS','LINE COMMENTS','NUMBERS','KEYWORDS1','KEYWORDS2','KEYWORDS3','KEYWORDS4','KEYWORDS5','KEYWORDS6','KEYWORDS7','KEYWORDS8','OPERATORS','FOLDER IN CODE1','FOLDER IN CODE2','FOLDER IN COMMENT','DELIMITERS1','DELIMITERS2','DELIMITERS3','DELIMITERS4','DELIMITERS5','DELIMITERS6','DELIMITERS7','DELIMITERS8'];
@@ -63,11 +81,15 @@ if (!npmCli) throw new Error('Run this script through npm run arya:package so th
 const packed = await promisify(execFile)(process.execPath, [npmCli, 'pack', resolve('.'), '--pack-destination', output, '--json', '--ignore-scripts'], { maxBuffer: 4 * 1024 * 1024 });
 const filename = JSON.parse(packed.stdout)[0].filename;
 const vsix = `arya-language-${ARYA_VERSION}.vsix`;
-await createVSIX({ cwd: resolve('editors/vscode'), packagePath: join(output, vsix), dependencies: false, allowMissingRepository: true, skipLicense: true, rewriteRelativeLinks: false });
+await createVSIX({ cwd: resolve('editors/vscode'), packagePath: join(output, vsix), dependencies: false, allowMissingRepository: true, rewriteRelativeLinks: false });
+const normalizedVsix = normalizeVsix(await readFile(join(output, vsix)), epoch);
+const { unzipSync } = await import('fflate');
+verifyLegalFiles(unzipSync(normalizedVsix), 'extension/');
+await writeFile(join(output, vsix), normalizedVsix);
 await cp(join(output, filename), join(kit, filename)); await cp(join(output, vsix), join(kit, vsix));
 const files = {};
 async function collect(directory) {
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
+  for (const entry of (await readdir(directory, { withFileTypes: true })).sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0)) {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) await collect(path);
     else files[relative(kit, path).split('\\').join('/')] = new Uint8Array(await readFile(path));
@@ -75,7 +97,9 @@ async function collect(directory) {
 }
 await collect(kit);
 const zip = `arya-editor-kit-${ARYA_VERSION}.zip`;
-await writeFile(join(output, zip), zipSync(files, { level: 9 }));
+const kitArchive = deterministicZip(files, epoch);
+verifyLegalFiles(unzipSync(kitArchive));
+await writeFile(join(output, zip), kitArchive);
 const checksums = [];
 for (const file of [filename, vsix, zip]) checksums.push(`${createHash('sha256').update(await readFile(join(output, file))).digest('hex')}  ${file}`);
 await writeFile(join(output, 'SHA256SUMS'), checksums.join('\n') + '\n');

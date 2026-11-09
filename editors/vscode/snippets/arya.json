@@ -42,5 +42,12 @@
   "Print": {
     "prefix": "print",
     "body": "print($0)"
+  },
+  "Arya namespace import": {
+    "prefix": "usearya",
+    "body": [
+      "use arya \"${1:./module.arya}\" as ${2:module}"
+    ],
+    "description": "Import an Arya module namespace"
   }
 }

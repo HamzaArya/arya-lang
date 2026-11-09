@@ -1,8 +1,7 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import { basename, dirname, resolve, join } from 'node:path';
+import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
-import { compile, AryaError, ARYA_VERSION } from './compiler.js';
-import { readBounded } from './files.js';
+import { ARYA_VERSION } from './compiler.js';
+import { buildProject, checkProject, writeProject, ProjectError } from './project.js';
 
 async function main(): Promise<void> {
   const [command, file, ...rest] = process.argv.slice(2);
@@ -12,23 +11,14 @@ async function main(): Promise<void> {
   }
   if (!['run', 'check', 'build'].includes(command) || !file || !file.toLowerCase().endsWith('.arya') || (command !== 'run' && rest.length)) throw new Error('Use arya run, check, or build followed by a .arya file. See --help.');
   const source = resolve(file);
-  const directory = join(dirname(source), '.arya/build');
-  const intendedOutput = join(directory, `${basename(source)}.mjs`);
-  let result;
-  try { result = compile(await readBounded(source), { filename: source, outputFilename: intendedOutput }); }
+  let project;
+  try { project = command === 'check' ? await checkProject(source) : await buildProject(source); }
   catch (error) {
-    if (error instanceof AryaError) throw new Error(`${source}:${error.token.line + 1}:${error.token.column + 1}: ${error.message}`);
+    if (error instanceof ProjectError) throw new Error(error.diagnostics.map(item => `${error.filename}:${item.token.line + 1}:${item.token.column + 1}: ${item.message}`).join('\n'));
     throw error;
   }
-  if (command === 'check') { console.log(`Syntax OK: ${file}`); return; }
-  // Build artifacts live beside their source so npm resolves that package's dependencies.
-  const { containedPath } = await import('./files.js');
-  const { realpath } = await import('node:fs/promises');
-  const root = await realpath(dirname(source));
-  const output = await containedPath(root, intendedOutput);
-  const mapOutput = await containedPath(root, join(directory, result.mapFilename));
-  await mkdir(dirname(output), { recursive: true });
-  await writeFile(mapOutput, result.map); await writeFile(output, result.code);
+  if (command === 'check') { console.log(`Check OK: ${file}`); return; }
+  const output = await writeProject(project);
   if (command === 'build') { console.log(output); return; }
   const child = spawn(process.execPath, ['--enable-source-maps', output, ...(rest[0] === '--' ? rest.slice(1) : rest)], { stdio: 'inherit', env: process.env });
   // Forward interruption when the CLI is used outside AryaCode's task terminal.

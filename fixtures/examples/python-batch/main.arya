@@ -1,0 +1,5 @@
+use python "./statistics_helper.py" as statistics
+
+# One bridge call processes the entire list, rather than spawning Python in a loop.
+const report = statistics.summarize([10, 20, 30, 40])
+print(JSON.stringify(report))

@@ -4,7 +4,7 @@ import {
 } from 'vscode-languageserver/node.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ARYA_VERSION } from './compiler.js';
-import { analyze, completions, hoverAt, type Analysis } from './language-service.js';
+import { analyze, completions, definitionAt, hoverAt, type Analysis } from './language-service.js';
 
 // stdio is the portable transport. stdout contains protocol frames only.
 const connection = createConnection(process.stdin, process.stdout);
@@ -22,14 +22,13 @@ connection.onInitialize(() => ({
   serverInfo: { name: 'Arya Language Server', version: ARYA_VERSION },
   capabilities: {
     positionEncoding: 'utf-16', textDocumentSync: TextDocumentSyncKind.Incremental,
-    completionProvider: { resolveProvider: false }, hoverProvider: true, documentSymbolProvider: true,
+    completionProvider: { resolveProvider: false }, hoverProvider: true, documentSymbolProvider: true, definitionProvider: true,
   },
 }));
 
 function validate(document: TextDocument) {
   const diagnostics: Diagnostic[] = [];
-  const error = analysisFor(document).error;
-  if (error) diagnostics.push({ severity: DiagnosticSeverity.Error, source: 'Arya', message: error.message, range: range(document, error.token.start, Math.max(error.token.start + 1, error.token.end)) });
+  for (const error of analysisFor(document).diagnostics) diagnostics.push({ severity: DiagnosticSeverity.Error, source: 'Arya', code: error.code, message: error.message, range: range(document, error.token.start, Math.max(error.token.start + 1, error.token.end)) });
   void connection.sendDiagnostics({ uri: document.uri, version: document.version, diagnostics });
 }
 documents.onDidChangeContent(({ document }) => {
@@ -49,6 +48,11 @@ connection.onHover(({ textDocument, position }) => {
   const document = documents.get(textDocument.uri); if (!document) return null;
   const hover = hoverAt(document.getText(), document.offsetAt(position));
   return hover ? { contents: { kind: MarkupKind.PlainText, value: hover.text }, range: range(document, hover.start, hover.end) } : null;
+});
+connection.onDefinition(({ textDocument, position }) => {
+  const document = documents.get(textDocument.uri); if (!document) return null;
+  const token = definitionAt(analysisFor(document), document.offsetAt(position));
+  return token ? { uri: document.uri, range: range(document, token.start, token.end) } : null;
 });
 connection.onDocumentSymbol(({ textDocument }) => {
   const document = documents.get(textDocument.uri); if (!document) return [];

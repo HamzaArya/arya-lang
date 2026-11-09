@@ -1,8 +1,25 @@
 {
-  "name": "arya-lang",
-  "version": "0.2.0-alpha.1",
-  "private": true,
-  "license": "UNLICENSED",
+  "name": "arya-language",
+  "version": "0.2.0-alpha.3",
+  "private": false,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Hamza Arya",
+    "url": "https://hamzaarya.com"
+  },
+  "homepage": "https://hamzaarya.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamzaArya/arya-lang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HamzaArya/arya-lang/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "description": "Arya programming language: compiler API, CLI, language server, and editor support.",
   "engines": {
@@ -23,6 +40,10 @@
       "types": "./dist/types/language-service.d.ts",
       "default": "./dist/language-service.cjs"
     },
+    "./project": {
+      "types": "./dist/types/project.d.ts",
+      "default": "./dist/project.cjs"
+    },
     "./cli": "./dist/cli.cjs",
     "./lsp": "./dist/lsp.cjs",
     "./package.json": "./package.json"
@@ -38,7 +59,10 @@
     "brand",
     "editors",
     "README.md",
-    "THIRD-PARTY-NOTICES.txt"
+    "LICENSE",
+    "NOTICE",
+    "THIRD-PARTY-NOTICES.txt",
+    "SECURITY.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -49,7 +73,9 @@
     "package": "npm run check && npm pack --pack-destination artifacts",
     "package:editors": "node scripts/package-editors.mjs",
     "test:package": "node scripts/test-package.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "release:check": "node scripts/check-release.mjs",
+    "test:clean": "node scripts/verify-clean.mjs"
   },
   "devDependencies": {
     "@jridgewell/gen-mapping": "0.3.13",

@@ -1,0 +1,11 @@
+export fn countDone(items) {
+  let count = 0
+  for item in items {
+    if item.done { count += 1 }
+  }
+  return count
+}
+
+export fn countRemaining(items) {
+  return len(items) - countDone(items)
+}

@@ -16,12 +16,17 @@ const range = (start, end, step = 1) => {
 
 // A fresh Python process handles one JSON request. Library stdout goes to stderr,
 // leaving stdout exclusively for the protocol response. No shell is involved.
-const pythonWorker = `import contextlib, importlib, importlib.util, json, os, sys, traceback
-request = json.load(sys.stdin)
+const pythonWorker = `import contextlib, importlib, importlib.util, json, os, sys
+stage = 'request'
 try:
+    request = json.load(sys.stdin)
     with contextlib.redirect_stdout(sys.stderr):
         module_name = request['module']
+        stage = 'import'
         if module_name.endswith('.py') or os.path.isabs(module_name):
+            if not os.path.isfile(module_name):
+                stage = 'file'
+                raise FileNotFoundError('Cannot find Python file: ' + module_name)
             spec = importlib.util.spec_from_file_location('_arya_bridge', module_name)
             if spec is None or spec.loader is None:
                 raise ImportError('Cannot load Python file: ' + module_name)
@@ -30,47 +35,90 @@ try:
             spec.loader.exec_module(module)
         else:
             module = importlib.import_module(module_name)
+        stage = 'member'
         target = module
         for part in request['member']:
             if part.startswith('_'):
                 raise ValueError('Python bridge members must be public')
             target = getattr(target, part)
+        if not callable(target):
+            raise TypeError('Python bridge target must be a public callable')
+        stage = 'call'
         result = target(*request['args'], **request.get('kwargs', {}))
+    stage = 'return'
     response = json.dumps({'ok': True, 'value': result}, allow_nan=False)
 except Exception as error:
-    response = json.dumps({'ok': False, 'error': type(error).__name__ + ': ' + str(error)})
+    code = 'ARYA_PYTHON_EXCEPTION'
+    if stage == 'file':
+        code = 'ARYA_PYTHON_FILE_NOT_FOUND'
+    elif stage == 'import' and isinstance(error, ModuleNotFoundError):
+        code = 'ARYA_PYTHON_MODULE_NOT_FOUND'
+    elif stage == 'member':
+        code = 'ARYA_PYTHON_MEMBER'
+    elif stage == 'return':
+        code = 'ARYA_PYTHON_RETURN'
+    response = json.dumps({'ok': False, 'code': code, 'error': type(error).__name__ + ': ' + str(error)})
 sys.stdout.write(response)
 `;
 
 export const pythonRuntime = `import { spawnSync as __arya_spawnSync } from 'node:child_process';
 import { fileURLToPath as __arya_fileURLToPath } from 'node:url';
+import { Buffer as __arya_Buffer } from 'node:buffer';
+const __arya_bridgeError = (code, message, Type = Error, cause) => {
+  const error = new Type(message);
+  error.code = code;
+  if (cause !== undefined) error.cause = cause;
+  return error;
+};
 const __arya_python = module => {
   const call = (member, values, kwargs = {}) => {
-    const input = JSON.stringify({ module, member, args: values, kwargs }, (_key, value) => {
-      if (value === undefined || typeof value === 'function' || typeof value === 'symbol' || typeof value === 'bigint' || (typeof value === 'number' && !Number.isFinite(value))) throw new TypeError('Python bridge values must be JSON-compatible.');
-      return value;
-    });
+    let input;
+    try {
+      input = JSON.stringify({ module, member, args: values, kwargs }, (_key, value) => {
+        if (value === undefined || typeof value === 'function' || typeof value === 'symbol' || typeof value === 'bigint' || (typeof value === 'number' && !Number.isFinite(value))) throw __arya_bridgeError('ARYA_PYTHON_INPUT', 'Python bridge values must be JSON-compatible.', TypeError);
+        return value;
+      });
+    } catch (error) {
+      if (error?.code === 'ARYA_PYTHON_INPUT') throw error;
+      throw __arya_bridgeError('ARYA_PYTHON_INPUT', 'Python bridge values must be JSON-compatible. Remove cycles or convert custom values to JSON data. ' + (error?.message ?? String(error)), TypeError, error);
+    }
     const executable = process.env.ARYA_PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
     const result = __arya_spawnSync(executable, ['-c', ${JSON.stringify(pythonWorker)}], {
       input, encoding: 'utf8', timeout: 30000, maxBuffer: 8 * 1024 * 1024,
+      env: { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' },
       cwd: __arya_fileURLToPath(new URL('.', __arya_source)),
     });
-    if (result.stderr) process.stderr.write(result.stderr);
-    if (result.error) throw new Error('Python bridge failed: ' + result.error.message);
-    if (result.status !== 0) throw new Error('Python bridge exited with status ' + result.status + '.');
+    if (result.stderr) process.stderr.write(result.error ? __arya_Buffer.from(result.stderr, 'utf8').subarray(0, 65536) : result.stderr);
+    if (result.error) {
+      if (result.error.code === 'ENOENT') throw __arya_bridgeError('ARYA_PYTHON_NOT_FOUND', 'Python bridge failed: cannot start ' + executable + '. Install Python or set ARYA_PYTHON to its executable.', Error, result.error);
+      if (result.error.code === 'ETIMEDOUT') throw __arya_bridgeError('ARYA_PYTHON_TIMEOUT', 'Python bridge failed: call exceeded 30000 ms. Batch or reduce the work in this call.', Error, result.error);
+      if (result.error.code === 'ENOBUFS') throw __arya_bridgeError('ARYA_PYTHON_OUTPUT_LIMIT', 'Python bridge failed: output exceeds the 8 MiB buffer limit. Reduce logging or return a smaller result.', Error, result.error);
+      throw __arya_bridgeError('ARYA_PYTHON_START', 'Python bridge failed: ' + result.error.message + '. Check the selected interpreter and executable permissions.', Error, result.error);
+    }
+    if (result.status !== 0) throw __arya_bridgeError('ARYA_PYTHON_EXIT', 'Python bridge exited with status ' + result.status + '.' + (result.signal ? ' Signal: ' + result.signal + '.' : '') + ' Review Python stderr and the selected interpreter.');
     let response;
-    try { response = JSON.parse(result.stdout); } catch { throw new Error('Python bridge returned an invalid JSON response.'); }
-    if (!response.ok) throw new Error('Python: ' + response.error);
+    try { response = JSON.parse(result.stdout); } catch (error) { throw __arya_bridgeError('ARYA_PYTHON_PROTOCOL', 'Python bridge returned an invalid JSON response. Native writes to stdout must not bypass the bridge logging channel.', Error, error); }
+    if (response === null || typeof response !== 'object' || Array.isArray(response) || typeof response.ok !== 'boolean' || (response.ok ? !Object.hasOwn(response, 'value') : typeof response.error !== 'string')) throw __arya_bridgeError('ARYA_PYTHON_PROTOCOL', 'Python bridge returned an invalid JSON response. Expected a complete bridge response object.');
+    if (!response.ok) {
+      const hints = {
+        ARYA_PYTHON_FILE_NOT_FOUND: ' Check the .py path relative to the importing Arya source.',
+        ARYA_PYTHON_MODULE_NOT_FOUND: ' Install this module and its dependencies in the selected Python environment.',
+        ARYA_PYTHON_MEMBER: ' Choose an existing public callable; constants and persistent Python objects need a helper function.',
+        ARYA_PYTHON_RETURN: ' Convert the Python return value to finite numbers, strings, booleans, None, lists, or JSON objects.',
+      };
+      const code = typeof response.code === 'string' && Object.hasOwn(hints, response.code) ? response.code : 'ARYA_PYTHON_EXCEPTION';
+      throw __arya_bridgeError(code, 'Python: ' + response.error + (hints[code] || ''));
+    }
     return response.value;
   };
   const member = parts => new Proxy(function () {}, {
     get(_target, key) {
       if (key === 'then' || typeof key !== 'string') return undefined;
       if (key === 'with') return (values, kwargs) => {
-        if (!Array.isArray(values) || kwargs === null || typeof kwargs !== 'object' || Array.isArray(kwargs)) throw new TypeError('Use function.with([arguments], { keyword: value }).');
+        if (!Array.isArray(values) || kwargs === null || typeof kwargs !== 'object' || Array.isArray(kwargs)) throw __arya_bridgeError('ARYA_PYTHON_ARGUMENTS', 'Use function.with([arguments], { keyword: value }).', TypeError);
         return call(parts, values, kwargs);
       };
-      if (key.startsWith('_')) throw new Error('Python bridge members must be public.');
+      if (key.startsWith('_')) throw __arya_bridgeError('ARYA_PYTHON_PRIVATE', 'Python bridge members must be public.');
       return member([...parts, key]);
     },
     apply(_target, _this, values) { return call(parts, values); },

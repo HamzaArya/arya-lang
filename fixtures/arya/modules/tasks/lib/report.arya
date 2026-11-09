@@ -1,0 +1,10 @@
+use arya "./tasks.arya" as tasks
+use js "node:path" as path
+
+export fn summary(items) {
+  return "Completed: " + str(tasks.countDone(items)) + " of " + str(len(items))
+}
+
+export fn projectName(filename) {
+  return path.basename(filename)
+}

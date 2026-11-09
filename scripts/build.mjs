@@ -7,7 +7,7 @@ const manifest = JSON.parse(await readFile('package.json', 'utf8'));
 const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning' };
 await mkdir('dist', { recursive: true });
 await mkdir('artifacts', { recursive: true });
-for (const name of ['compiler', 'language-service', 'cli', 'lsp']) {
+for (const name of ['compiler', 'project', 'language-service', 'cli', 'lsp']) {
   await build({ ...common, entryPoints: [`src/${name}.ts`], outfile: `dist/${name}.cjs`, ...(['cli', 'lsp'].includes(name) ? { banner: { js: '#!/usr/bin/env node' } } : {}) });
 }
 for (const name of ['cli', 'lsp']) await chmod(`dist/${name}.cjs`, 0o755);
@@ -27,6 +27,7 @@ for (const name of ['vscode-languageserver', 'vscode-languageserver-protocol', '
 }
 await writeFile('THIRD-PARTY-NOTICES.txt', notices.join('\n\n-----\n\n'));
 await cp('THIRD-PARTY-NOTICES.txt', 'editors/vscode/THIRD-PARTY-NOTICES.txt');
+for (const filename of ['LICENSE', 'NOTICE']) await cp(filename, `editors/vscode/${filename}`);
 const { ARYA_VERSION } = require('../dist/compiler.cjs');
 if (ARYA_VERSION !== manifest.version) throw new Error('Compiler and package versions differ.');
 console.log(`Built Arya ${ARYA_VERSION}: compiler API, CLI, LSP, and portable extension.`);

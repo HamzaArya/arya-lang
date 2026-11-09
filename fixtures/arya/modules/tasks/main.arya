@@ -1,0 +1,12 @@
+use arya "./lib/tasks.arya" as tasks
+use arya "./lib/report.arya" as report
+
+const items = [
+  {title: "Learn variables", done: true},
+  {title: "Write a function", done: true},
+  {title: "Build a project", done: false},
+]
+
+print(report.summary(items))
+print("Remaining:", tasks.countRemaining(items))
+print("Project:", report.projectName("lessons/tasks.arya"))

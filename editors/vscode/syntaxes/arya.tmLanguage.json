@@ -62,7 +62,7 @@
       }
     },
     {
-      "match": "\\b(use)\\s+(js|python)\\b",
+      "match": "\\b(use)\\s+(js|python|arya)\\b",
       "captures": {
         "1": {
           "name": "keyword.control.import.arya"

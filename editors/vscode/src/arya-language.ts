@@ -1,18 +1,17 @@
 import * as vscode from 'vscode';
-import { analyze, completions, hoverAt } from '../../../src/language-service.js';
+import { analyze, completions, definitionAt, hoverAt } from '../../../src/language-service.js';
 
-/** Editor services only parse text; imports and Python calls execute through Run. */
+/** Editor services parse and resolve text; imports/Python execute only through Run. */
 export function registerAryaLanguage(context: vscode.ExtensionContext): void {
   const diagnostics = vscode.languages.createDiagnosticCollection('arya');
   const pending = new Map<string, ReturnType<typeof setTimeout>>();
   const validate = (document: vscode.TextDocument) => {
     if (document.languageId !== 'arya') { diagnostics.delete(document.uri); return; }
-    const error = analyze(document.getText(), document.uri.toString()).error;
-    if (error) {
+    diagnostics.set(document.uri, analyze(document.getText(), document.uri.toString()).diagnostics.map(error => {
       const start = document.positionAt(error.token.start), end = document.positionAt(Math.max(error.token.start + 1, error.token.end));
       const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message, vscode.DiagnosticSeverity.Error);
-      diagnostic.source = 'Arya'; diagnostics.set(document.uri, [diagnostic]);
-    } else diagnostics.set(document.uri, []);
+      diagnostic.source = 'Arya'; diagnostic.code = error.code; return diagnostic;
+    }));
   };
   const selector: vscode.DocumentSelector = { language: 'arya' };
   context.subscriptions.push(diagnostics,
@@ -37,6 +36,12 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       provideHover(document, position) {
         const hover = hoverAt(document.getText(), document.offsetAt(position));
         return hover ? new vscode.Hover(hover.text, new vscode.Range(document.positionAt(hover.start), document.positionAt(hover.end))) : undefined;
+      },
+    }),
+    vscode.languages.registerDefinitionProvider(selector, {
+      provideDefinition(document, position) {
+        const token = definitionAt(analyze(document.getText(), document.uri.toString()), document.offsetAt(position));
+        return token ? new vscode.Location(document.uri, new vscode.Range(document.positionAt(token.start), document.positionAt(token.end))) : undefined;
       },
     }),
     vscode.languages.registerDocumentSymbolProvider(selector, {

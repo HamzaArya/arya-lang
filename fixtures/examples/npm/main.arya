@@ -1,0 +1,3 @@
+use js "arya-sample-math" as math
+
+print(math.label, math.double(21), math.sum([1, 2, 3]))

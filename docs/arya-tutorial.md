@@ -366,10 +366,12 @@ From the repository root:
 | Command | What happens |
 | --- | --- |
 | `npm run arya -- run fixtures/arya/learn/01-hello.arya` | Compiles and runs the program |
-| `npm run arya -- check fixtures/arya/learn/01-hello.arya` | Parses the source and reports syntax errors without running it |
+| `npm run arya -- check fixtures/arya/learn/01-hello.arya` | Checks syntax, lexical names, and const writes without running code or imports |
 | `npm run arya -- build fixtures/arya/learn/01-hello.arya` | Writes a JavaScript `.mjs` file without running it |
 
-The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `build` writes to `.arya/build`. A successful check does not prove that your imports are installed, that every variable exists, or that the program produces the right result. Those are things to verify when you run it. Runtime stacks now map to the original `.arya` source in `arya run` and AryaCode. For standalone generated modules, enable Node source maps with `node --enable-source-maps generated.mjs`. Interactive Arya debugging is not available yet.
+The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `build` writes to `.arya/build`. Check now catches unknown lexical names and reassignment of const bindings, including import aliases. It reports independent errors together. A successful check does not prove that your dependencies are installed, that a property exists, or that a declared binding is initialized when you use it. Check/Build/Run also follow `use arya` dependencies without executing them during checking, reject cycles and missing direct namespace exports, and publish the complete generated graph only after validation. Runtime stacks map to original `.arya` locations in every module in `arya run` and AryaCode. For standalone generated modules, enable Node source maps with `node --enable-source-maps generated.mjs`. Interactive Arya debugging is not available yet.
+
+For example, `let greeting = "hello"; print(greetng)` fails Check with `Unknown name 'greetng'. Did you mean 'greeting'?`. Correct the spelling before running. `const count = 1; count += 1` also fails Check; use `let count = 1` if you intend to replace its value. Updating `const item = {count: 1}; item.count += 1` is allowed because it changes the object. In an editor, go-to-definition follows a local name to its declaration, including captured parameters and variables; library properties do not have lexical targets.
 
 ## When something goes wrong
 
@@ -380,8 +382,9 @@ The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `
 | Run says the workspace is untrusted | Use **Manage Workspace Trust** for your own lesson folder. |
 | A red underline says `Expected '}'` | Close the block opened by an earlier `{`. |
 | `Expected a name` | Write a variable name after `let` or a function name after `fn`. Avoid keywords as names. |
-| A name is “not defined” | Check spelling and capitalization. Declare the variable before using it. |
-| `Assignment to constant variable` | Use `let` if you intend to replace that binding's value. |
+| `Unknown name` | Check spelling, capitalization, and the scope of the declaration. Use an explicit import or `globalThis` for optional host extensions. |
+| `Cannot assign to const` | Use `let` if you intend to replace that binding's value. Const objects can still be mutated through properties. |
+| `ReferenceError` before a declaration initializes | Move execution after initialization; a closure may capture a later name but must read it after initialization. |
 | A library/module cannot be found | Check the import spelling, local file path, and selected interpreter or project dependencies. |
 | Python cannot start in the CLI | Install/select Python or use the bundled runtime through AryaCode's Run action. |
 | `EADDRINUSE` when starting a web example | Stop the other example on port 3000, or choose a different port and use it in your browser. |
@@ -390,3 +393,11 @@ The editor's **Build / Check Current File** compiles to `.arya/run`; the CLI's `
 To read an error such as `practice.arya:3:12`, open `practice.arya` at line 3, column 12. For syntax problems, start with the first reported error, fix it, save, and run again.
 
 When these lessons feel comfortable, use the [reference](arya-language.md) for `while`, `break`, `continue`, exports, additional operators, and bridge details. JavaScript/npm and JSON-compatible Python calls are the working bridges today. Other language bridges and native compilation are planned work, not syntax you can use yet.
+
+## Continue with a multi-file project
+
+Follow the [task-report learning path](learning-path.md) to split a working program into `main.arya`, `lib/tasks.arya`, and `lib/report.arya`. Use `use arya "./lib/tasks.arya" as tasks` and named `export fn`/`export const`/`export let` declarations. Run the entry once; Arya checks/builds every dependency and writes a map beside every generated module. Imports stay inside the canonical entry directory; use a root-level entry when modules live in sibling folders. Cycles are rejected with an import chain.
+
+The [interop guide](interop.md) lists stable Python error codes and two complete projects: a reproducible local npm dependency and one-call Python batching. Catch `error.code` for reliable categorization instead of matching platform-specific process messages. `ARYA_PYTHON_TIMEOUT` means reduce or split the work; `ARYA_PYTHON_OUTPUT_LIMIT` means reduce logging/results; `ARYA_PYTHON_PROTOCOL` means malformed or corrupted worker stdout. Regular Python logging goes to stderr. Exact large numbers should travel as strings.
+
+For release/install commands and an offline path, see [installation](installing.md). The [community review protocol](community-review.md) is ready for real learner sessions; external observations have not yet been collected.

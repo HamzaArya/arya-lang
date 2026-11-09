@@ -1,15 +1,26 @@
 import { fileURLToPath } from 'node:url';
-import { AryaError, builtins, compile, keywords, type AryaSymbol, type Token } from './compiler.js';
+import { AryaError, analyzeSource, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
 
-export interface Analysis { symbols: AryaSymbol[]; error?: { message: string; token: Token } }
+export interface Analysis extends SourceAnalysis { error?: AryaDiagnostic }
 export function analyze(source: string, uri: string): Analysis {
   let filename = 'document.arya';
   try { if (uri.startsWith('file:')) filename = fileURLToPath(uri); } catch { /* Unsaved documents do not need a filesystem path. */ }
-  try { return { symbols: compile(source, filename).symbols }; }
+  try {
+    const analysis = analyzeSource(source, filename), error = analysis.diagnostics[0];
+    return error ? { ...analysis, error } : analysis;
+  }
   catch (error) {
-    if (error instanceof AryaError) return { symbols: [], error: { message: error.message, token: error.token } };
+    if (error instanceof AryaError) return { symbols: [], bindings: [], references: [], imports: [], exports: [], moduleMembers: [], diagnostics: error.diagnostics, error: error.diagnostics[0]! };
     throw error;
   }
+}
+
+/** Same-file lexical navigation; properties and host/builtin names have no target. */
+export function definitionAt(analysis: Analysis, offset: number): Token | undefined {
+  const contains = (token: Token) => token.start <= offset && offset < token.end;
+  const reference = analysis.references.find(item => contains(item.token));
+  if (reference) return reference.binding?.token;
+  return analysis.bindings.find(binding => binding.token && contains(binding.token))?.token;
 }
 
 export function completions(analysis: Analysis): { label: string; kind: 'keyword' | 'function' | 'variable' | 'module'; detail?: string }[] {

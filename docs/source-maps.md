@@ -1,6 +1,6 @@
 # Source-map design and acceptance
 
-Implemented in Arya `0.2.0-alpha.1`. This is the first 0.2 feature; language semantics remain at the extracted 0.1 baseline.
+Implemented in Arya `0.2.0-alpha.1`. That first 0.2 preview retained the extracted 0.1 semantics. The later [alpha.2 preview](releases/0.2.0-alpha.2.md) adds lexical checks before emission; mapped runtime behavior remains unchanged for valid programs.
 
 The parser already owns zero-based line and UTF-16 column positions. It annotates emitted fragments with explicit token origins, which survive nested string composition. A final pass consumes those annotations and records final generated positions after the runtime and optional Python bridge prefixes. The annotations are internal raw-NUL-delimited numeric markers; user strings and filenames are JSON-escaped before emission and cannot inject them. No annotations remain in generated code. Tests cover repeated names, same-line failures, Unicode, and literal marker-like data.
 
@@ -10,7 +10,7 @@ The encoder is pinned `@jridgewell/gen-mapping` 0.3.13, bundled into the compile
 
 `compile(source, {filename, outputFilename})` returns JavaScript and a standard v3 map. The generated module has a relative, URL-encoded `sourceMappingURL`. `sources` is relative to the map (a file URL for cross-volume paths), and `sourcesContent` stores the exact source snapshot. Runtime prefixes have no user-source mappings; built-in/Python exceptions retain their generated implementation frames plus mapped Arya caller frames.
 
-CLI and IDE validate the module and map paths separately. They write the map before the module and launch only after both writes succeed. The pair is not an atomic transaction; a failed write can leave an unused old/new artifact pair, but Run aborts and never falls back to it. A future module graph should publish a staged build as a unit.
+CLI and IDE validate module and map paths separately. Since alpha.3, they stage the complete module graph and its maps before replacing the owned output directory, with rollback if the swap fails. Run launches only after publication succeeds and never falls back to stale output. This does not promise a transaction across unrelated processes or hostile filesystem races. See the [project API](compiler-api.md).
 
 Acceptance coverage:
 
@@ -23,7 +23,7 @@ Acceptance coverage:
 - IDE tests retain trust, selected runtimes, arguments, symlink containment, and non-executing Build.
 - Desktop tests observe real Build/Run tasks using an `uncaughtExceptionMonitor` that saves the thrown stack without handling it. A one-line instrumentation prefix preserves the first fixture's failure line and column.
 
-Local qualification on macOS arm64 with Python 3.13.15:
+Original M1 (alpha.1) qualification on macOS arm64 with Python 3.13.15 is retained below. Current alpha.3 results are recorded in the [release-readiness record](release-readiness.md).
 
 | Runtime | Verified |
 | --- | --- |

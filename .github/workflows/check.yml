@@ -1,4 +1,4 @@
-name: Compiler and source-map qualification
+name: Language, modules, interoperability, and package qualification
 
 on:
   push:
@@ -28,8 +28,25 @@ jobs:
         with:
           python-version: '3.13'
       - run: npm ci
-      - run: npm run check
+      - name: Run the complete language suite
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts/evidence
+          node --version > artifacts/evidence/runtime.txt
+          python --version >> artifacts/evidence/runtime.txt
+          npm run check 2>&1 | tee artifacts/evidence/check.log
       - name: Pack the checked compiler
         run: npm pack --ignore-scripts --pack-destination artifacts
       - name: Verify installation and mapped traces outside the checkout
-        run: npm run test:package
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run test:package 2>&1 | tee artifacts/evidence/package.log
+      - name: Preserve qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qualification-${{ matrix.os }}-node-${{ matrix.node }}
+          path: artifacts/evidence
+          if-no-files-found: warn

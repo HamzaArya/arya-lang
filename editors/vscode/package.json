@@ -4,7 +4,12 @@
   "description": "Arya language support: syntax highlighting, diagnostics, completion, snippets, and run/check commands.",
   "version": "0.2.0",
   "publisher": "aryacode",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
+  "homepage": "https://hamzaarya.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HamzaArya/arya-lang.git"
+  },
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -79,7 +84,7 @@
       },
       {
         "command": "aryaLanguage.check",
-        "title": "Arya: Check Syntax",
+        "title": "Arya: Check File",
         "icon": "$(check)",
         "enablement": "isWorkspaceTrusted"
       },
@@ -124,5 +129,5 @@
     }
   },
   "preview": true,
-  "aryaLanguageVersion": "0.2.0-alpha.1"
+  "aryaLanguageVersion": "0.2.0-alpha.3"
 }
