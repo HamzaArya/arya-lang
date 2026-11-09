@@ -75,12 +75,12 @@ Every milestone follows these rules:
 | ID | Milestone | Target | Depends on | Status |
 | --- | --- | --- | --- | --- |
 | M0 | Standalone repository and versioned IDE package integration | 0.2 | — | `[x]` |
-| M1 | Arya source maps and readable runtime traces | 0.2 | M0 | Local and minimum-Node acceptance complete; Linux/Windows qualification pending |
+| M1 | Arya source maps and readable runtime traces | 0.2 | M0 | CLI/compiler/package CI passes all three OS jobs; non-macOS desktop qualification pending |
 | M2 | Normative 0.2 language specification | 0.2 | M1 can proceed in parallel; must finish before release | `[x]` |
 | M3 | Lexical name resolution and stronger `check` | 0.2 | M2 scope decisions | `[x]` |
 | M4 | Arya-to-Arya modules and build graph | 0.2 | M1, M3 | `[x]` (local CLI, IDE, standalone extension) |
 | M5 | Interoperability hardening and examples | 0.2 | M2 | `[x]` (Node 22.15/24, Python 3.13, macOS arm64) |
-| M6 | Package, compatibility test, and release Arya 0.2 | 0.2 | M1–M5 | `[~]` (Apache-2.0 alpha publication selected; live publication/full platform qualification pending) |
+| M6 | Package, compatibility test, and release Arya 0.2 | 0.2 | M1–M5 | `[~]` (Apache-2.0 alpha.3 published; final 0.2 and remaining desktop/architecture qualification pending) |
 | M7 | Learning path and community review | pre-1.0 | M6 | `[~]` (runnable path/protocol ready; external sessions pending) |
 | M8 | Tooling investments chosen from user evidence | pre-1.0 | M7 | `[~]` (engineering evidence/defer record prepared; learner evidence pending) |
 | M9 | Specification, compatibility, and stable release | 1.0 | M7–M8 | `[~]` (policy/security/readiness prepared; stable release not qualified) |
@@ -215,7 +215,7 @@ Add focused fixtures or generated temporary sources for each case:
 
 - [x] The acceptance fixture reports `runtime-error.arya:3:15` and a caller at line 5.
 - [x] Qualify the passing local matrix on minimum Node 22.15.0 (macOS arm64).
-- [ ] Qualify the passing local matrix on Linux and Windows. The [CI workflow](../.github/workflows/check.yml) covers the compiler, CLI, and installed package on Node 22.15.0 and 24; AryaCode runner qualification remains in the IDE repository.
+- [~] [CI run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620) passes all six compiler/conformance/CLI/package jobs on Linux, Windows, and macOS with Node 22.15/24. Non-macOS AryaCode/desktop and additional architecture qualification remain separate.
 - [x] Generated runtime regions are not falsely mapped to the user source.
 - [x] `arya run`, AryaCode Run, and standalone mapped execution behave consistently.
 - [x] Existing tests pass.
@@ -466,26 +466,26 @@ Arya 0.2 is installable and testable independently of the repository checkout.
 
 ### Release gates
 
-- [x] Adopt Apache-2.0 and Copyright 2026 Hamza Arya, retain LICENSE/NOTICE/third-party notices, and prepare public `arya-language` alpha metadata. The owner selected npm `next` plus a GitHub prerelease; live authentication/publication remains separate.
+- [x] Adopt Apache-2.0 and Copyright 2026 Hamza Arya, retain LICENSE/NOTICE/third-party notices, and prepare public `arya-language` alpha metadata. The owner selected npm `next` plus a GitHub prerelease; alpha.3 live publication is now verified in the post-release record.
 - [x] Update `ARYA_VERSION`, extension version, documentation, and package metadata together for alpha.3; final 0.2 public version awaits release qualification.
 - [x] Keep Arya language version 0.2 separate from the AryaCode product version in all UI and release text.
 - [x] Publish supported Node versions and the Python versions/platforms actually tested.
 - [x] Document installation, upgrade, uninstall, and local-project use.
 - [x] Write release notes with behavior changes and migration guidance.
-- [~] Clean isolated source-snapshot verification builds the tarball/VSIX/editor kit after fresh dependency installation; a clean committed release revision is still pending owner review.
+- [x] Build the alpha.3 tarball/VSIX/editor kit from reviewed committed source `5a962385e1bdf35c8476748b992dc7efb0a01e2f` with fresh dependency installation and retained source-manifest/log evidence.
 - [x] Install the tarball into a temporary project with no repository-relative dependency access.
 - [x] Run `arya --version`, `check`, `build`, and `run` from that clean install.
 - [x] Run the multi-file example and intentional runtime-error example.
 - [x] Verify packaged maps contain correct sources and no accidental repository-only paths.
 - [x] Verify the portable LSP and editor extension still match compiler 0.2 semantics, including separate embedded/portable desktop profiles.
-- [ ] Run the supported-platform test matrix before making platform claims.
+- [~] All six configured compiler/conformance/CLI/package CI jobs pass for alpha.3. Editor archive builds and desktop acceptance are local macOS evidence; untested desktop/platform/architecture claims remain open.
 
 ### M6 definition of done
 
 - [ ] All M1–M5 definitions of done are satisfied.
 - [x] `npm run check` passes from a clean dependency install in the recorded isolated source snapshot.
 - [x] Clean-install acceptance passes without source-repository-relative dependencies, including the real installed command, lessons, modules, npm and Python examples.
-- [ ] Release artifacts, checksums, notices, license, and version labels are complete.
+- [x] The published alpha.3 artifact set includes verified checksums, notices, Apache-2.0 license, and matching version labels. This closes the prerelease artifact gate only; final 0.2 qualification remains open.
 - [x] Alpha.3 candidate release notes link to the versioned specification, tutorial/learning material, API, migration, and readiness records.
 
 ---
@@ -667,19 +667,19 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 
 ### Now
 
-- [ ] Run the source-map CI matrix on Linux/Windows and qualify AryaCode on those hosts. Minimum Node 22.15.0 is verified locally.
+- [~] Current compiler/CLI/package CI passes Linux/Windows/macOS on Node 22.15/24; qualify AryaCode/desktop paths on the remaining operating systems and architectures separately.
 
 ### Next
 
 - [x] Local alpha.3 engineering, clean-snapshot/editor packaging, and graph desktop qualification are complete.
 - [x] Owner selected Apache-2.0, Hamza Arya copyright/release authority, homepage/contact, npm `arya-language`/`next`, and the existing GitHub repository for an alpha prerelease.
-- [ ] Authenticate, review the exact licensed source/artifacts, and record successful npm/GitHub prerelease publication. Linux/Windows and learner evidence remain separate stable/platform gates.
+- [x] Authenticate and publish reviewed alpha.3 to npm and the GitHub prerelease; actual links, source, artifact hash, and CI scope are recorded below. Learner review and broader desktop/architecture qualification remain open.
 
 ### Later
 
 - [x] M5: interop edge cases, actionable codes, UTF-8 protocol, and batching/npm examples.
 - [x] Owner supplied the public license, publishing destination/release authority, homepage, and private security contact; live publication is tracked separately.
-- [ ] Run real Linux/Windows qualification and external learner sessions before closing M6–M9.
+- [ ] Complete remaining desktop/platform/architecture qualification and external learner sessions before closing final 0.2/stable 1.0 readiness.
 
 ## Progress notes
 
@@ -707,3 +707,6 @@ Add dated notes here when work changes direction, reveals a constraint, or close
 - **2026-11-09:** Owner selected Apache-2.0, Copyright 2026 Hamza Arya, https://hamzaarya.com, private security contact hamzaarya123@gmail.com, public npm name `arya-language` with the `next` tag, and a GitHub prerelease in `HamzaArya/arya-lang`. CLI/language/repository names remain `arya`/Arya/`arya-lang`. Metadata and legal-file auditing distinguish mechanically prepared alpha packages from account authentication, actual publication, and stable qualification. Publication remains pending until live operations succeed; no Linux/Windows or learner evidence is inferred.
 
 - **2026-11-09:** Read-only CI review found that earlier revision `6312372` passed Linux/macOS Node 22/24 jobs with 30 tests, while its Windows job failed on a Unicode Python path. Current M5 forces UTF-8 and includes local regressions, but alpha.3 has no completed cross-platform CI qualification yet; retain the current-candidate platform gate until fresh jobs run.
+
+- **2026-11-09, post-publication documentation:** Published Apache-2.0 [`arya-language@0.2.0-alpha.3`](https://www.npmjs.com/package/arya-language/v/0.2.0-alpha.3) to npm after owner 2FA and created the [`v0.2.0-alpha.3` GitHub prerelease](https://github.com/HamzaArya/arya-lang/releases/tag/v0.2.0-alpha.3). Anonymous registry/version/tarball retrieval succeeded; published tarball SHA-256 is `3ab98fe2b8745051a9b451fd3c4311a7805238226dfa163df37997560b07744b`, matching the reviewed artifact. All eight GitHub assets were downloaded and matched. The immutable tag/source is `5a962385e1bdf35c8476748b992dc7efb0a01e2f`; this later documentation record does not alter its packaged preparation-state documents or retag the release. `next` and `latest` both resolve to this alpha; the authenticated `latest` removal request returned HTTP 400. A fresh credential-free `arya-language@next` install passed the installed CLI and multi-file Check/Run example. The version and GitHub release remain prerelease.
+- **2026-11-09, current CI scope:** [Run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620) passes all six Linux/Windows/macOS × Node 22.15/24 compiler/conformance/CLI/npm-pack/installed-acceptance jobs for the release source. Actual editor archive builds and embedded/portable desktop suites remain local macOS evidence. Public alpha publication does not close final 0.2/1.0, external-community/tooling, or untested desktop/architecture gates.
