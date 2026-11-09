@@ -3,7 +3,7 @@ import { readdir, mkdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 await mkdir('.build/tests', { recursive: true });
 const files = (await readdir('tests')).filter(name => name.endsWith('.test.ts'));
-await build({ entryPoints: files.map(name => `tests/${name}`), outdir: '.build/tests', outExtension: { '.js': '.cjs' }, bundle: true, platform: 'node', format: 'cjs', target: 'node22' });
+await build({ entryPoints: files.map(name => `tests/${name}`), outdir: '.build/tests', outExtension: { '.js': '.cjs' }, bundle: true, platform: 'node', format: 'cjs', target: 'node22', loader: { '.c': 'text' } });
 const result = spawnSync(process.execPath, ['--test', ...files.map(name => `.build/tests/${name.replace(/\.ts$/, '.cjs')}`)], { stdio: 'inherit' });
 if (result.error) throw result.error;
 process.exitCode = result.status ?? 1;

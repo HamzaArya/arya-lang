@@ -3,7 +3,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { analyzeSource, AryaError, compile, type AryaDiagnostic, type AryaImport, type Compilation, type SourceAnalysis, type Token } from './compiler.js';
 import { containedPath, readBounded } from './files.js';
 
-export interface ProjectOptions { outputDirectory?: string; projectRoot?: string; workspaceRoot?: string; signal?: AbortSignal }
+export interface ProjectOptions { outputDirectory?: string; projectRoot?: string; workspaceRoot?: string; signal?: AbortSignal; target?: 'js' | 'native' }
 export interface ProjectModule { filename: string; outputFilename: string; compilation: Compilation; dependencies: string[] }
 export interface Project { entry: string; root: string; outputDirectory: string; entryOutput: string; modules: ProjectModule[]; workspaceRoot?: string; signal?: AbortSignal }
 export class ProjectError extends Error {
@@ -123,7 +123,7 @@ export async function buildProject(filename: string, options: ProjectOptions = {
     }
     if (exportErrors.length) throw new ProjectError(module.filename, exportErrors);
     let compilation: Compilation;
-    try { compilation = compile(module.source, { filename: module.filename, outputFilename, aryaImports: imports }); }
+    try { compilation = options.target === 'native' ? { ...module.analysis, code: '', map: '', mapFilename: '', usesPython: false } : compile(module.source, { filename: module.filename, outputFilename, aryaImports: imports }); }
     catch (error) { if (error instanceof AryaError) throw new ProjectError(module.filename, error.diagnostics); throw error; }
     modules.push({ filename: module.filename, outputFilename, compilation, dependencies: [...new Set(module.edges.map(edge => edge.filename))] });
   }

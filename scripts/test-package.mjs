@@ -62,5 +62,13 @@ try {
   assert.notEqual(standalone.status, 0);
   assert.match(standalone.stderr, /runtime-error\.arya:3:15/);
   assert.match(standalone.stderr, /runtime-error\.arya:5:1/);
+  if(process.platform!=='win32') {
+    await cp(join(root,'node_modules/arya-language/fixtures/native'),join(root,'native'),{recursive:true,filter:path=>basename(path)!=='.arya'});
+    assert.match(run('check','native/calculator.arya','--target','native'),/Check OK/);
+    const native=run('build','native/calculator.arya','--target','native').trim();
+    assert.equal(execFileSync(native,['7','*','6'],{cwd:root,encoding:'utf8',env:{PATH:'/nonexistent'}}),'42\n');
+    const nativeApi=execFileSync(process.execPath,['--input-type=module','-e','import {emitNative} from "arya-language/native"; console.log(emitNative([{filename:"x.arya",source:"print(1)"}]).code.includes("native C11"));'],{cwd:root,encoding:'utf8'});
+    assert.equal(nativeApi.trim(),'true');
+  }
   console.log(`Clean installed package ${pkg.version}: API, CLI check/build/run, conformance fixtures, mapped CLI/standalone traces, arguments, and Python bridge passed.`);
 } finally { await rm(root, { recursive: true, force: true }); }

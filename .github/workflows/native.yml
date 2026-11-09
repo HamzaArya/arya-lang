@@ -1,0 +1,50 @@
+name: Native compiler and self-hosting qualification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            compiler: clang
+          - os: ubuntu-latest
+            compiler: gcc
+          - os: ubuntu-latest
+            compiler: clang
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    env:
+      ARYA_CC: ${{ matrix.compiler }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: npm ci
+      - run: npm run check
+      - run: npm run bootstrap:native
+      - run: node scripts/benchmark-native.mjs
+      - name: Package the self-hosted compiler
+        shell: bash
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          platform=$(node -p 'process.platform')
+          arch=$(node -p 'process.arch')
+          tar -czf "artifacts/arya-native-$version-$platform-$arch.tar.gz" -C artifacts "arya-native-$version-$platform-$arch"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.os }}-${{ matrix.compiler }}
+          path: |
+            artifacts/arya-native-*.tar.gz
+            artifacts/evidence/native-benchmark.json
+            .build/bootstrap-native/evidence.json

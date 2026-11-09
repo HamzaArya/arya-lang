@@ -1,5 +1,7 @@
 # Arya language specification — 0.2
 
+The 1.1 preview retains this Node execution contract and adds a separate [native profile specification](arya-native-specification.md), including contextual use std imports. Native programs do not inherit the Node host-global surface.
+
 **Status:** normative core and approved 0.2 design, 9 November 2026. **Implementation baseline:** `0.2.0-alpha.3`, Node.js 22.15 or later. This is a pre-1.0 contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.

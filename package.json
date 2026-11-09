@@ -1,6 +1,6 @@
 {
   "name": "arya-language",
-  "version": "0.2.0-alpha.3",
+  "version": "1.1.0-alpha.1",
   "private": false,
   "license": "Apache-2.0",
   "author": {
@@ -46,7 +46,11 @@
     },
     "./cli": "./dist/cli.cjs",
     "./lsp": "./dist/lsp.cjs",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./native": {
+      "types": "./dist/types/native.d.ts",
+      "default": "./dist/native.cjs"
+    }
   },
   "bin": {
     "arya": "dist/cli.cjs",
@@ -62,7 +66,8 @@
     "LICENSE",
     "NOTICE",
     "THIRD-PARTY-NOTICES.txt",
-    "SECURITY.md"
+    "SECURITY.md",
+    "bootstrap"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -75,7 +80,8 @@
     "test:package": "node scripts/test-package.mjs",
     "prepack": "npm run build",
     "release:check": "node scripts/check-release.mjs",
-    "test:clean": "node scripts/verify-clean.mjs"
+    "test:clean": "node scripts/verify-clean.mjs",
+    "bootstrap:native": "npm run build && node scripts/bootstrap-native.mjs"
   },
   "devDependencies": {
     "@jridgewell/gen-mapping": "0.3.13",

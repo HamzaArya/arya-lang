@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext): void {
       const node = settings.get<string>('nodePath', 'node');
       const python = settings.get<string>('pythonPath', '');
       const folder = vscode.workspace.getWorkspaceFolder(selected);
-      const task = new vscode.Task({ type: 'arya-language-portable', path: key }, folder ?? vscode.TaskScope.Global, `${action === 'run' ? 'Run' : 'Check'} ${vscode.workspace.asRelativePath(selected)}`, 'Arya', new vscode.ProcessExecution(node, [join(context.extensionPath, 'dist/arya.cjs'), action, selected.fsPath], { cwd: folder?.uri.fsPath ?? dirname(selected.fsPath), ...(python ? { env: { ARYA_PYTHON: python } } : {}) }), []);
+      const task = new vscode.Task({ type: 'arya-language-portable', path: key }, folder ?? vscode.TaskScope.Global, `${action === 'run' ? 'Run' : 'Check'} ${vscode.workspace.asRelativePath(selected)}`, 'Arya', new vscode.ProcessExecution(node, [join(context.extensionPath, 'dist/arya.cjs'), action, selected.fsPath, '--target', settings.get<string>('target', 'js'), ...(settings.get<string>('target', 'js') === 'native' && settings.get<string>('ccPath', '') ? ['--cc', settings.get<string>('ccPath', '')] : [])], { cwd: folder?.uri.fsPath ?? dirname(selected.fsPath), ...(python ? { env: { ARYA_PYTHON: python } } : {}) }), []);
       task.presentationOptions = { reveal: vscode.TaskRevealKind.Always, panel: vscode.TaskPanelKind.Dedicated, clear: true };
       const execution = await vscode.tasks.executeTask(task);
       if (vscode.tasks.taskExecutions.includes(execution)) running.set(key, execution);

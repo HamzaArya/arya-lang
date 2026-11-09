@@ -8,6 +8,8 @@
 
 **Proposed post-1.0 work:** [Arya 1.1.0 native compilation plan](arya-1.1-native-plan.md) adds an optional native CLI execution profile using the user-selected C backend. Remaining architecture and scope are proposed; the plan does not change the current release status and retains the existing 0.2/1.0 completion gates.
 
+**Native 1.1 preview:** [C11 implementation and self-hosted compiler](arya-native.md), [native contract](arya-native-specification.md), and [implementation plan](arya-1.1-native-plan.md). Native qualification and experimental releases do not close the stable 1.0 gates below.
+
 ## Purpose
 
 This plan takes Arya from the current 0.1 prototype to a dependable 0.2 release, then toward a stable 1.0 language. It is written as a working document: tasks have IDs, dependencies, acceptance criteria, and checkboxes so progress and design decisions can be recorded here.

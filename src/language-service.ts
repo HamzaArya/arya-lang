@@ -1,12 +1,16 @@
 import { fileURLToPath } from 'node:url';
-import { AryaError, analyzeSource, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
+import { AryaError, analyzeSource, parseProgram, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
+import { nativeDiagnostics } from './native/emitter.js';
 
 export interface Analysis extends SourceAnalysis { error?: AryaDiagnostic }
-export function analyze(source: string, uri: string): Analysis {
+export function analyze(source: string, uri: string, options: { target?: 'js' | 'native' } = {}): Analysis {
   let filename = 'document.arya';
   try { if (uri.startsWith('file:')) filename = fileURLToPath(uri); } catch { /* Unsaved documents do not need a filesystem path. */ }
   try {
-    const analysis = analyzeSource(source, filename), error = analysis.diagnostics[0];
+    const analysis = analyzeSource(source, filename);
+    if(options.target==='native') analysis.diagnostics.push(...nativeDiagnostics(parseProgram(source,filename)));
+    else for(const statement of parseProgram(source,filename).ast.statements) if(statement.kind==='import' && statement.bridge==='std') analysis.diagnostics.push({code:'ARYA_NATIVE_UNSUPPORTED',token:statement.token,message:'use std requires the native execution profile.'});
+    const error = analysis.diagnostics[0];
     return error ? { ...analysis, error } : analysis;
   }
   catch (error) {

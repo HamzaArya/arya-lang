@@ -77,3 +77,7 @@ Repository-local implementation, meaningful automated tests, examples, installat
 The alpha's license/destination/contact, exact release source/artifact review, and successful npm/GitHub publication are now recorded above. Broader M6 desktop/architecture qualification and M7's external observations stay open. M8 retains its evidence-selection gate, and M9 stays unqualified until the stable conditions hold. Owner authorization can select a license and destination; it cannot fabricate a platform run or a learner's observations.
 
 The local `test:clean` run completed fresh dependency installation, checks, package/editor builds, installed lessons/examples, and audit in an isolated retained source snapshot. The exact source manifest, logs, runtime, and snapshot path are in `.build/clean-candidate-record.json`; built candidate artifacts and hashes are reviewable under `artifacts/`. A dirty parent checkout is still not a clean release commit, and these local results do not establish platform or participant outcomes.
+
+## Native 1.1 preview
+
+The 1.1.0-alpha.1 candidate adds the [native contract](arya-native-specification.md), C11 backend, explicit-root collector, native standard library, and an Arya-written compiler. Native platform qualification is recorded by the native workflow, three-generation bootstrap evidence, native conformance/sanitizer results, and benchmark samples for the exact revision. These alpha results do not close the earlier stable/community gates. Compiler and AryaCode product versions remain independent.

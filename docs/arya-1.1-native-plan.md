@@ -1,9 +1,9 @@
 # Arya 1.1.0 native compilation plan
 
-**Status:** Proposed architecture and implementation plan; no native implementation is claimed.  
-**Requested target:** Arya language/compiler 1.1.0, independently of AryaCode.  
-**Date:** 9 November 2026.  
-**Backend decision:** User-selected C11 backend, 9 November 2026; remaining architecture and scope are proposed.  
+**Status:** Native implementation and self-hosted compiler added in 1.1.0-alpha.1; platform/release qualification is tracked separately. See the [native guide](arya-native.md) and [contract](arya-native-specification.md).
+**Requested target:** Arya language/compiler 1.1.0, independently of AryaCode.
+**Date:** 9 November 2026.
+**Backend decision:** User-selected C11 backend, 9 November 2026. Self-hosting was additionally requested and implemented through an Arya-written compiler and three-generation bootstrap check.
 **Starting point:** The working repository identifies itself as 0.2.0-alpha.3. The existing [roadmap](arya-roadmap.md) and [stable-release gates](release-readiness.md) still apply.
 
 ## 1. Product goal
@@ -22,7 +22,7 @@ This plan assumes an additive native execution profile. Existing JavaScript exec
 
 | Included in the proposed 1.1.0 native profile | Deferred beyond this release |
 | --- | --- |
-| Native command-line executables | GUI toolkit, mobile apps, browser/Wasm target |
+| Native command-line executables and a self-hosted Arya compiler | GUI toolkit, mobile apps, browser/Wasm target |
 | Inferred types, specialized native operations, dynamic fallback, automatic memory management | User-visible static type syntax, ownership system, manual allocation syntax |
 | Functions, recursion, closures, conditions, loops | Async/await, promises, threads, event loop |
 | Strings, numbers, booleans, null/undefined, lists, plain records | JavaScript prototypes, proxies, getters/setters, BigInt, Symbol |
@@ -65,11 +65,11 @@ The C backend delegates instruction selection, register allocation, object gener
 | Compiler implementation | Retain TypeScript and the Node-based development tools | Native executable delivery is stable and compiler bootstrapping has a measured benefit |
 | Runtime implementation | Small C runtime with an explicit ABI, compiled and linked with generated program code | Benchmark or ABI evidence justifies a runtime implementation change |
 | Value representation | Unboxed binary64/boolean values where proven; tagged values at genuinely dynamic boundaries; ordinary traceable heap pointers | Benchmarks justify additional layouts or specialized collections |
-| Memory management | Evaluate BDWGC first; select and pin a version after platform and distribution checks | Collection stress or packaging evidence rules it out |
+| Memory management | Implemented precise nonmoving mark/sweep collector with explicit generated roots and iterative marking; no collector dependency | Profiling or collection stress exposes a reason to replace it |
 
-BDWGC is a conservative C/C++ garbage collector ([project documentation](https://www.hboehm.info/gc/)). Its selection is provisional. The N1 spike must verify roots and pointer liveness under C compiler optimization, target support, linking, and license notices. Define explicit rooting where necessary; do not assume a pointer survives optimization merely because it appears in source. Reference counting alone would need an additional answer for cyclic lists, records, and closure environments.
+The initial BDWGC option was replaced during implementation by a precise, nonmoving mark/sweep collector. Generated activation roots and managed environments make object reachability explicit, including cyclic lists, records, and closures. Iterative marking avoids recursive collector stack growth; sanitizer and forced-collection tests validate roots and reclamation. This keeps the runtime dependency-free beyond platform libraries.
 
-Developers initially need Node.js, the Arya compiler, a qualified C compiler and platform linker/SDK, and the selected runtime dependencies to **build**. People receiving the finished executable need only its documented runtime/OS dependencies to **run**; no C compiler is required there. A self-hosted compiler is a separate project.
+Developers initially need Node.js, the Arya compiler, a qualified C compiler and platform linker/SDK, and the selected runtime dependencies to **build**. People receiving the finished executable need only its documented runtime/OS dependencies to **run**; no C compiler is required there. The Arya-written compiler in bootstrap/compiler.arya is an additional native entry point and compiles its own source; the TypeScript compiler is retained for bootstrapping and JS tooling.
 
 ### Required performance work
 
@@ -214,3 +214,7 @@ All native milestones start unchecked. Feasibility work can begin before 1.0, bu
 Implement N0's native profile draft and N1's tiny C/runtime experiment first. The experiment must produce a genuine executable for print(2 + 3), run without Node, and record generated-C compilation, object generation, toolchain, collector, linking, and dependency findings. Then validate argument handling with a small calculator and measure a runtime-input numeric loop against equivalent handwritten optimized C and JS. Use those findings to refine the C emitter/runtime architecture before the AST migration and full implementation.
 
 No calendar estimate is committed until that experiment is measured and the team/available development time is known. Release gates determine completion; changing the package version alone does not.
+
+## Implementation evidence
+
+The shared AST/parser, native C emitter/runtime, CLI/API, native diagnostics, six standard libraries, sanitizer/GC tests, and AryaCode target integration are implemented for the alpha. The runtime collector is precise mark/sweep instead of the provisionally evaluated BDWGC. The Arya-written compiler includes numeric specialization and is verified with three generations, matching generation 2/3 C output, and native conformance programs. Native platform jobs and the existing release audit must pass for the exact release revision before publishing its platform claims. Stable 1.0 and external learner gates remain separate from an experimental alpha release.

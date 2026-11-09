@@ -5,7 +5,7 @@ export type BindingKind = 'let' | 'const' | 'function' | 'parameter' | 'loop' | 
 export type ScopeKind = 'module' | 'function' | 'block' | 'loop' | 'catch';
 export interface LexicalBinding { name: string; kind: BindingKind; scopeId: number; token?: Token }
 export interface LexicalReference { token: Token; access: 'read' | 'write' | 'readwrite'; binding?: LexicalBinding }
-export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT'; message: string; token: Token; suggestion?: string }
+export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_NATIVE_UNSUPPORTED'; message: string; token: Token; suggestion?: string }
 export interface Resolution { bindings: LexicalBinding[]; references: LexicalReference[]; diagnostics: AryaDiagnostic[] }
 interface Scope { id: number; kind: ScopeKind; parent?: Scope; declarations: Map<string, LexicalBinding> }
 
@@ -25,6 +25,7 @@ export class LexicalScopes {
     }
   }
   get isModule(): boolean { return this.current.kind === 'module'; }
+  get scopeId(): number { return this.current.id; }
   enter(kind: ScopeKind, aliases: LexicalBinding[] = []): void {
     this.current = { id: this.nextScope++, kind, parent: this.current, declarations: new Map(aliases.map(binding => [binding.name, binding])) };
   }

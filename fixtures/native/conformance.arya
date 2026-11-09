@@ -1,0 +1,35 @@
+use std "math" as math
+
+fn counter(start) {
+  let value = start
+  return fn() { value += 1; return value }
+}
+fn sum(n) {
+  let total = 0
+  let i = 0
+  while i < n { total += i; i += 1 }
+  return total
+}
+fn factorial(n) {
+  if n <= 1 { return 1 }
+  return n * factorial(n - 1)
+}
+let c = counter(10)
+print(c(), c(), factorial(6), sum(10000))
+let callbacks = []
+for item in range(3) { callbacks.push(fn() { return item }) }
+print(callbacks[0](), callbacks[1](), callbacks[2]())
+let record = {answer: 42}
+record.self = record
+record.answer += 1
+print(record.answer, record.self == record)
+print(-2 ** 2, 2 ** 3 ** 2, math.sqrt(81))
+print("" or "fallback", 0 and unavailable())
+fn unavailable() { throw "must not run" }
+print(len("🌉"))
+let count = 0
+for char in "a🌉b" { count += 1 }
+print(count)
+try { null.value } catch error { print(error.name) }
+try { print(later); let later = 1 } catch error { print(error.name) }
+try { throw "caught" } catch value { print(value) }

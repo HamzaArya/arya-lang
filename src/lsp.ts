@@ -11,20 +11,27 @@ const connection = createConnection(process.stdin, process.stdout);
 const documents = new TextDocuments(TextDocument);
 const cache = new Map<string, { version: number; analysis: Analysis }>();
 const timers = new Map<string, ReturnType<typeof setTimeout>>();
+let target: 'js' | 'native' = 'js';
 const analysisFor = (document: TextDocument) => {
   const previous = cache.get(document.uri);
   if (previous?.version === document.version) return previous.analysis;
-  const analysis = analyze(document.getText(), document.uri);
+  const analysis = analyze(document.getText(), document.uri, { target });
   cache.set(document.uri, { version: document.version, analysis }); return analysis;
 };
 const range = (document: TextDocument, start: number, end: number): Range => ({ start: document.positionAt(start), end: document.positionAt(end) });
-connection.onInitialize(() => ({
+connection.onInitialize(params => {
+  if(params.initializationOptions?.target==='native') target='native';
+  return ({
   serverInfo: { name: 'Arya Language Server', version: ARYA_VERSION },
   capabilities: {
     positionEncoding: 'utf-16', textDocumentSync: TextDocumentSyncKind.Incremental,
     completionProvider: { resolveProvider: false }, hoverProvider: true, documentSymbolProvider: true, definitionProvider: true,
   },
-}));
+}); });
+connection.onDidChangeConfiguration(params => {
+  target=params.settings?.arya?.target==='native'?'native':'js'; cache.clear();
+  for(const document of documents.all()) validate(document);
+});
 
 function validate(document: TextDocument) {
   const diagnostics: Diagnostic[] = [];
