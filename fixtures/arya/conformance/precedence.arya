@@ -1,0 +1,16 @@
+# Arya 0.2 keeps unary operators above exponentiation.
+print(JSON.stringify([
+  -2 ** 2,
+  -(2 ** 2),
+  2 ** 3 ** 2,
+  10 - 3 - 2,
+  1 + 2 * 3,
+  8 / 2 * 2,
+  7 % 4,
+  1 < 2 == true,
+  not false and 0 or "fallback",
+  3 < 2 < 1,
+]))
+let calls = 0
+fn touch() { calls += 1; return 9 }
+print("" and touch(), "kept" or touch(), calls)

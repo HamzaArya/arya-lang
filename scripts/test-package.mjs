@@ -22,6 +22,8 @@ try {
   assert.match(run('run', 'fixtures/hello.arya'), /Ready to build/);
   assert.match(run('run', 'fixtures/learn/08-arguments.arya', '--', 'literal; argument'), /literal; argument/);
   assert.match(run('run', 'fixtures/bridge.arya'), /Mean: 25/);
+  assert.equal(run('run', 'fixtures/conformance/numeric-members.arya'), '1 1.00 100 1\n');
+  assert.equal(run('run', 'fixtures/conformance/precedence.arya'), '[4,-4,512,5,7,8,3,true,"fallback",true]\n kept 0\n');
   const failure = spawnSync(process.execPath, [cli, 'run', 'fixtures/runtime-error.arya'], { cwd: root, encoding: 'utf8' });
   assert.notEqual(failure.status, 0);
   assert.match(failure.stderr, /runtime-error\.arya:3:15/);
@@ -34,5 +36,5 @@ try {
   assert.notEqual(standalone.status, 0);
   assert.match(standalone.stderr, /runtime-error\.arya:3:15/);
   assert.match(standalone.stderr, /runtime-error\.arya:5:1/);
-  console.log(`Clean installed package ${pkg.version}: API, CLI check/build/run, mapped CLI/standalone traces, arguments, and Python bridge passed.`);
+  console.log(`Clean installed package ${pkg.version}: API, CLI check/build/run, conformance fixtures, mapped CLI/standalone traces, arguments, and Python bridge passed.`);
 } finally { await rm(root, { recursive: true, force: true }); }

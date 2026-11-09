@@ -264,7 +264,7 @@ class Parser {
       const async = this.match('async'); this.expect('fn'); return { code: `(${async ? 'async ' : ''}function${this.functionBody(async)})` };
     }
     if (token.kind === 'string') { this.take(); return { code: origin(token, JSON.stringify(token.text)) }; }
-    if (token.kind === 'number') { this.take(); return { code: origin(token, String(Number(token.text))) }; }
+    if (token.kind === 'number') { this.take(); return { code: `(${origin(token, String(Number(token.text)))})` }; }
     if (['true', 'false', 'null'].some(word => this.is(word))) { this.take(); return { code: origin(token, token.text) }; }
     if (token.kind === 'word' && !reserved.has(token.text)) { this.take(); return { code: origin(token, token.text), assignable: true }; }
     throw new AryaError('Expected a value, name, or function call.', token);

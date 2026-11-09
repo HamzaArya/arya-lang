@@ -3,7 +3,7 @@
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
 **Current language version:** Arya 0.2.0-alpha.1 (local preview)
-**Implementation status:** [source maps](source-maps.md); [draft specification](arya-specification.md); [local release notes](releases/0.2.0-alpha.1.md)
+**Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [local release notes](releases/0.2.0-alpha.1.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
 ## Purpose
@@ -74,7 +74,7 @@ Every milestone follows these rules:
 | --- | --- | --- | --- | --- |
 | M0 | Standalone repository and versioned IDE package integration | 0.2 | — | `[x]` |
 | M1 | Arya source maps and readable runtime traces | 0.2 | M0 | Local and minimum-Node acceptance complete; Linux/Windows qualification pending |
-| M2 | Normative 0.2 language specification | 0.2 | M1 can proceed in parallel; must finish before release | `[ ]` |
+| M2 | Normative 0.2 language specification | 0.2 | M1 can proceed in parallel; must finish before release | `[x]` |
 | M3 | Lexical name resolution and stronger `check` | 0.2 | M2 scope decisions | `[ ]` |
 | M4 | Arya-to-Arya modules and build graph | 0.2 | M1, M3 | `[ ]` |
 | M5 | Interoperability hardening and examples | 0.2 | M2 | `[ ]` |
@@ -229,36 +229,36 @@ Arya behavior is explicit enough that a program's result can be predicted withou
 
 ### Work
 
-- [ ] Complete `docs/arya-specification.md`; its draft baseline and pending decisions are already recorded.
-- [ ] Specify lexical grammar: identifiers, keywords, comments, strings, escapes, numbers, and limits.
-- [ ] Specify statement grammar and newline/semicolon behavior.
-- [ ] Specify operator precedence and associativity in one normative table.
-- [ ] Specify scopes, shadowing, declarations, closures, and declaration timing.
-- [ ] Specify JavaScript-compatible values, mutation, truthiness, equality, arithmetic, and conversions.
-- [ ] Specify built-ins and exact error conditions.
-- [ ] Specify host globals as an explicit compatibility surface rather than an accidental Node detail.
-- [ ] Specify JavaScript imports, Arya imports, exports, and Python bridge behavior.
-- [ ] Label implementation limits separately from semantic rules.
-- [ ] Give every surprising rule a runnable example or conformance test.
+- [x] Complete the normative core specification, with approved M3/M4 design clearly separated from current features.
+- [x] Specify lexical grammar: identifiers, keywords, comments, strings, escapes, numbers, and limits.
+- [x] Specify statement grammar and newline/semicolon behavior.
+- [x] Specify operator precedence and associativity in one normative table.
+- [x] Specify scopes, shadowing, declarations, closures, and declaration timing.
+- [x] Specify JavaScript-compatible values, mutation, truthiness, equality, arithmetic, and conversions.
+- [x] Specify built-ins and exact error conditions.
+- [x] Specify host globals as an explicit compatibility surface rather than an accidental Node detail.
+- [x] Specify JavaScript imports, Arya imports, exports, and Python bridge behavior.
+- [x] Label implementation limits separately from semantic rules.
+- [x] Give every surprising rule a runnable example or conformance test.
 
 ### Required decisions
 
 Record each answer in the decision log before M3 relies on it:
 
-- [ ] Does `-2 ** 2` remain `4`, or change to the more common `-(2 ** 2)`, which is `-4`?
-- [ ] Which Node/ECMAScript globals are guaranteed by Arya 0.2?
-- [ ] Are function declarations visible throughout their scope?
-- [ ] Is use before a `let`/`const` declaration a compiler error, a runtime error, or allowed when execution occurs later through a closure?
-- [ ] Are `and` and `or` guaranteed to return operand values?
-- [ ] How are `NaN`, infinity, and negative zero documented and transported across bridges?
-- [ ] Is an intentional JavaScript default export of `null` allowed, and if so how is it distinguished from a namespace fallback?
+- [x] Does `-2 ** 2` remain `4`, or change to the more common `-(2 ** 2)`, which is `-4`?
+- [x] Which Node/ECMAScript globals are guaranteed by Arya 0.2?
+- [x] Are function declarations visible throughout their scope?
+- [x] Is use before a `let`/`const` declaration a compiler error, a runtime error, or allowed when execution occurs later through a closure?
+- [x] Are `and` and `or` guaranteed to return operand values?
+- [x] How are `NaN`, infinity, and negative zero documented and transported across bridges?
+- [x] Is an intentional JavaScript default export of `null` allowed, and if so how is it distinguished from a namespace fallback?
 
 ### M2 definition of done
 
-- [ ] The specification covers every construct accepted by the parser.
-- [ ] Parser/runtime behavior and documentation agree.
-- [ ] Every approved behavior change has a migration note and test.
-- [ ] The language reference points to the specification without duplicating conflicting rules.
+- [x] The specification covers every construct accepted by the parser.
+- [x] Parser/runtime behavior and documentation agree.
+- [x] Every approved behavior change has a migration note and test.
+- [x] The language reference points to the specification without duplicating conflicting rules.
 
 ---
 
@@ -630,6 +630,7 @@ Until 1.0, behavior may change, but changes still require discipline:
 | Direct string generation loses nested source positions | Incorrect stack locations | Use mapped fragments; move to a small AST if composition becomes fragile | Open |
 | Source-map tests vary across Node versions | Brittle CI | Match stable frames; test minimum supported Node | Open |
 | Name resolution breaks valid JS-global use | False diagnostics | Specify and test an explicit host-global surface first | Open |
+| Module host-name declarations share injected runtime scope | Shadowed intrinsics can alter built-ins or trigger early TDZ | Document and test the current limit; evaluate runtime isolation without reserving otherwise legal names | Open |
 | Module roots differ between CLI and AryaCode | Programs behave differently by runner | Define one project-boundary rule before M4 | Open |
 | Partial graph build runs stale files | Incorrect execution | Stage graph output and publish only after all modules compile | Open |
 | Python one-process-per-call is too slow | Poor performance | Teach batching in 0.2; evaluate persistent worker after user evidence | Open |
@@ -646,18 +647,20 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 | D-001 | 2026-11-08 | Keep JavaScript-compatible values as the default 0.2 direction | Preserves direct ecosystem interoperability and limits release scope | M2–M6 |
 | D-002 | 2026-11-08 | Separate readable stack traces from interactive debugging | Source maps deliver immediate value without committing to a debugger architecture | M1 |
 | D-003 | 2026-11-08 | Pin and bundle @jridgewell/gen-mapping 0.3.13 | Maintained standard v3 encoder; notices included | M1 |
-| D-004 | — | Unary minus versus exponentiation semantics | Pending | M2 |
-| D-005 | — | Guaranteed host globals | Pending | M2–M3 |
-| D-006 | — | Arya module syntax and project boundary | Pending | M2, M4 |
-| D-007 | — | JavaScript `null` default export behavior | Pending | M2, M5 |
+| D-004 | 2026-11-09 | Preserve unary-before-power precedence: `-2 ** 2` is `4` | Keep 0.1 semantics; explicit grouping gives `-4`; conformance fixture locks the rule | M2 |
+| D-005 | 2026-11-09 | Use the explicit Node-profile allowlist in specification section 7 and `src/host-globals.ts` | Resolver behavior must not depend on analysis-host globals; declarations may shadow host names; runtime isolation limitation is documented | M2–M3 |
+| D-006 | 2026-11-09 | Approve relative `use arya "./file.arya" as name`, explicit extension, namespace-only live exports, entry directory as project root, canonical containment, and cycle rejection | A small deterministic graph contract shared by CLI and IDE; still unimplemented until M4 | M2, M4 |
+| D-007 | 2026-11-09 | Preserve `namespace.default ?? namespace`; null/undefined defaults remain accessible as `alias.default` on the namespace | Avoid an interop migration; false/zero/empty defaults still select the default | M2, M5 |
 | D-008 | — | License and public distribution policy | Pending | M6, M9 |
+| D-009 | 2026-11-09 | Functions are hoisted within their lexical block; let/const and aliases have runtime TDZ; closures may refer to later bindings; loop header self-reference has TDZ | Preserve strict ES-module execution semantics; M3 resolves whole scopes and leaves known-name initialization timing to runtime | M2–M3 |
+| D-010 | 2026-11-09 | `and`/`or` return operands; retain JS numeric edge values, reject nonfinite Python transport, document JSON negative-zero/large-integer behavior | Preserve runtime behavior and make bridge loss explicit; conformance tests cover each edge | M2, M5 |
+| D-011 | 2026-11-09 | Parenthesize emitted numeric literals before property chaining | Fix accepted `1.toString()` and normalized decimal forms that previously emitted invalid JavaScript; existing grouped syntax remains valid | M2 |
 
 ## Current workboard
 
 ### Now
 
 - [ ] Run the source-map CI matrix on Linux/Windows and qualify AryaCode on those hosts. Minimum Node 22.15.0 is verified locally.
-- [ ] M2: review the draft specification and settle precedence, globals, and declaration timing.
 
 ### Next
 
@@ -679,3 +682,5 @@ Add dated notes here when work changes direction, reveals a constraint, or close
 - **2026-11-08:** Extracted the standalone repository and pinned archive integration in separate commits. Implemented source maps for the CLI and IDE runner as the first 0.2 preview feature. All remaining language milestones retain their completion tests above.
 
 - **2026-11-08:** Extended M1 acceptance with real CLI Build/standalone execution, passive Check, syntax-failure preservation of code/map artifacts, and literal arguments including Node flags. `npm run check` passes all 16 tests on Node 22.15.0 and 24.16.0 on macOS arm64; clean-install acceptance and five AryaCode package/runner tests also pass on Node 22.15.0 with Python 3.13.15. Added Linux/Windows/macOS CI on Node 22.15.0 and 24, including packed installation and mapped traces. Linux/Windows results remain pending; no working local Docker daemon or remote CI run was available.
+
+- **2026-11-09:** Completed M2's normative core, decisions D-004–D-007/D-009–D-011, and reference/tutorial/release updates. Added 14 core conformance tests plus two shipped CLI fixtures, bringing `npm run check` to 30 passing tests on Node 22.15.0 and 24.16.0 (macOS arm64, Python 3.13.15). Clean-installed package acceptance also passes, including both conformance fixtures. Fixed numeric property emission after a failing regression test; preserved all selected 0.1 semantic rules. Documented and tested the existing generated-runtime host-shadowing limitation. M3/M4's approved behavior remains explicitly unimplemented, and M1 Linux/Windows qualification remains pending.

@@ -1,6 +1,6 @@
 # Arya 0.2 preview — readable code, connected ecosystems
 
-New to Arya? Start with the [beginner tutorial and nine runnable lessons](arya-tutorial.md). This document is the language reference.
+New to Arya? Start with the [beginner tutorial and nine runnable lessons](arya-tutorial.md). This document is the practical reference; the [Arya 0.2 specification](arya-specification.md) defines the language rules, approved future scope, and implementation limits.
 
 For VS Code-compatible editors, Sublime, JetBrains, Vim/Neovim, Emacs, and other clients, use the [editor setup guide](arya-editors.md). The portable kit includes a local VSIX, an installable compiler, a standard LSP server, and syntax adapters; compatibility and verification vary by editor.
 
@@ -24,7 +24,7 @@ npm run arya -- check fixtures/arya/hello.arya
 npm run arya -- build fixtures/arya/hello.arya
 ```
 
-The CLI bootstrap builds the compiler locally. After `npm run build`, the standalone CLI is also available as `node dist/cli.cjs`. `run` accepts program arguments after the file, optionally separated by `--`; access them through `args`.
+Run `npm ci` and `npm run build` before using the repository CLI, which is also available as `node dist/cli.cjs`. `run` accepts program arguments after the file, optionally separated by `--`; access them through `args`.
 
 CLI build artifacts go into `.arya/build` beside the source. Editor artifacts go into `.arya/run` beside the source. These locations preserve npm dependency discovery in nested packages. Local JavaScript/Python import paths are resolved relative to the original source. Generated files embed those local paths; rebuild after moving a project. A syntax failure never launches a previous build. Generated directories are ignored by Git.
 
@@ -71,7 +71,9 @@ Statements use newlines or semicolons. Blocks use braces. `#` and `//` start lin
 
 Values and interoperability follow JavaScript semantics: numbers are IEEE-754 doubles, strings use UTF-16, lists are arrays, and objects and functions retain their identities. Conditions use JavaScript truthiness. `==` and `!=` compile to strict equality and inequality; `and`, `or`, and `not` become short-circuit JavaScript operators. `and`/`or` return operand values. `const` prevents reassignment of the binding; it does not freeze an object. Arithmetic supports `+ - * / % **`; mixing strings with `+` follows JavaScript concatenation. Exponentiation is right-associative, and Arya unary operators bind before exponentiation (`-2 ** 2` is `(-2) ** 2`).
 
-Builtins: `print(...values)`, `len(stringOrList)`, `str(value)`, `number(value)`, `range(end)`, `range(start, end, step)`, and `args`. `range` excludes the end and is limited to 100,000 items. Standard Node globals such as `JSON`, `Promise`, `Math`, `Date`, `fetch`, and `process` are available when running under Node. Source files are limited to 256 KiB, 50,000 tokens, and bounded nesting in this prototype.
+Builtins: `print(...values)`, `len(stringOrList)`, `str(value)`, `number(value)`, `range(end)`, `range(start, end, step)`, and `args`. See the [builtin and host-global contract](arya-specification.md#7-arya-built-ins-and-guaranteed-host-globals) for exact conditions and the complete guaranteed Node global list, including `JSON`, `Promise`, `Math`, `Date`, `fetch`, and `process`. Source size, token count, and nesting caps are [implementation limits](arya-specification.md#12-implementation-limits-and-conformance); the CLI counts UTF-8 bytes while the compiler API counts UTF-16 units.
+
+Functions are visible throughout their enclosing module or block. A `let`/`const` binding exists throughout its scope but cannot be used until its declaration runs. A closure can refer to a later declaration and use it after initialization. See [scope timing](arya-specification.md#4-bindings-and-scope-timing) for shadowing, loop capture, and import alias timing. `check` does not yet diagnose unknown names or const writes; M3 adds those checks.
 
 ## JavaScript libraries and frameworks
 
@@ -88,7 +90,7 @@ app.listen(3000)
 
 Install a package with npm in the source file's project before using it. Arya does not install libraries automatically. For the optional Express example, create a new project folder, run `npm init -y` followed by `npm install express` there, copy `fixtures/arya/express.arya` into it, and open that folder in AryaCode. The [tutorial](arya-tutorial.md#lesson-5-use-an-existing-javascript-library) walks through these steps. `web.arya` supplies a dependency-free HTTP app with a page and a JSON endpoint at `http://localhost:3000`.
 
-`use js` imports an ES module namespace and selects its default export when present; otherwise it binds the namespace. This also supports CommonJS libraries exposed through Node's ESM loader. Calls keep real JavaScript values, promises, constructors, callbacks, and method receivers. npm modules, `node:` builtins, and relative `.mjs`/`.cjs` helpers are supported. For a library with a default export and separate named exports, use a small `.mjs` wrapper to expose the named API you need.
+`use js` selects `namespace.default ?? namespace`: a non-nullish default becomes the alias, while an absent, null, or undefined default selects the namespace. An intentional null/undefined default remains accessible as `alias.default`. This also supports CommonJS libraries exposed through Node's ESM loader. Calls keep real JavaScript values, promises, constructors, callbacks, and method receivers. npm modules, `node:` builtins, and relative `.mjs`/`.cjs` helpers are supported. For a library with a non-nullish default and separate named exports, use a small `.mjs` wrapper to expose the named API you need. JavaScript dependencies execute before the Arya module body; the alias initializes at its `use` statement.
 
 Arya exports become ordinary ES module exports. Compile a shared `.arya` file with `build`, then import its generated `.mjs` module from JavaScript or with `use js`. Automatic multi-file Arya compilation is not implemented yet. Browser frameworks can consume generated JavaScript through their normal bundler, but this release supplies no JSX syntax, browser build pipeline, or framework-specific integration. Python imports require Node and cannot run in a browser.
 
@@ -124,6 +126,6 @@ Each call starts a fresh Python process, sends one JSON request, and returns one
 
 ## Verification and next steps
 
-`npm run check` covers the compiler, execution, Node ESM/CommonJS interoperability, Python bridge, syntax errors, trust, output containment, and existing IDE services. `ARYACODE_TEST_WORKBENCH=/path/to/AryaCode npm run test:arya` exercises editor services, compile/run, both bridges, a live HTTP server, duplicate prevention, and stopping the server in a disposable desktop profile.
+`npm run check` covers core conformance, execution, Node ESM/CommonJS interoperability, Python transport, syntax diagnostics, source maps, and portable editor/LSP services. AryaCode's separate repository owns workspace trust, IDE containment, and desktop acceptance; its `ARYACODE_TEST_WORKBENCH=/path/to/AryaCode npm run test:arya` exercises those editor workflows in a disposable desktop profile.
 
-Source maps are available in the 0.2 preview: CLI and AryaCode runs map runtime stacks to original Arya locations. Standalone generated modules require `node --enable-source-maps generated.mjs`. Interactive debugging remains future work. The next language milestones are the specification, lexical name checks, first-class Arya modules, and interop hardening; see [the roadmap](arya-roadmap.md). Native compilation, ownership/type-system design, package distribution, and compatibility across all language frameworks remain open work; this prototype makes no native-performance claim.
+Source maps are available in the 0.2 preview: CLI and AryaCode runs map runtime stacks to original Arya locations. Standalone generated modules require `node --enable-source-maps generated.mjs`. The specification now records core semantics and the approved M3/M4 design; lexical checks, first-class Arya modules, interop hardening, and interactive debugging remain future work as tracked in [the roadmap](arya-roadmap.md). Native compilation, ownership/type-system design, package distribution, and compatibility across all language frameworks remain open work; this prototype makes no native-performance claim.

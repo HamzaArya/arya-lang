@@ -1,0 +1,2 @@
+# Decimal normalization must not turn property access into invalid JavaScript.
+print(1.toString(), 1.0.toFixed(2), 1e2.toString(), 001.toString())

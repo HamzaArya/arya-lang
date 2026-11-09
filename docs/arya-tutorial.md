@@ -4,7 +4,7 @@ This tutorial teaches the current Arya language, developed in this standalone re
 
 Arya is the language. AryaCode is the editor. Save your code in a file ending in `.arya`. The current compiler turns that code into JavaScript and runs it with Node.js. Later lessons show how the same Arya program can use JavaScript libraries and call Python functions.
 
-The [language reference](arya-language.md) explains the complete current syntax and limitations. This tutorial gives you an order to learn it in.
+The [language reference](arya-language.md) explains usage; the [0.2 specification](arya-specification.md) defines precise rules and limitations. This tutorial gives you an order to learn them in.
 
 ## Set up your first lesson
 
@@ -97,6 +97,8 @@ Lesson complete
 
 `==` uses strict equality: `"82"` and `82` are different values. Use `number("82")` when you want to convert numeric text into a number.
 
+`and` and `or` return one of their operands. This makes `let title = "" or "Untitled"` a useful fallback: `title` becomes `"Untitled"`. An empty list or object counts as true. Unary operators bind before powers in Arya: `-2 ** 2` is `4`; write `-(2 ** 2)` for `-4`.
+
 **Your turn:** try scores `95`, `60`, and `40`. Then keep the score at `82` and change `submitted` to `false`. The final message should disappear, while `Passed` still prints.
 
 ## Lesson 3: work with a list and repeat an action
@@ -161,6 +163,8 @@ Updated area: 15
 
 `fn` defines a function. Its parameters, `width` and `height`, receive values when you call it. `return` sends a result back to the caller. `area(4, 3)` therefore produces `12`. Writing a function definition does not run its body; calling it does.
 
+Keep a returned value on the same line as `return`. A newline immediately after `return` returns no value (undefined). Function declarations can be called earlier in their enclosing scope; variables must finish initialization before a call reads them. A closure can refer to a variable declared later, provided you call it after that declaration runs.
+
 The `room` object groups related values under property names. The colon in `width: 4` associates the name with its value, and `room.width` reads it. Braces after `if` or `fn` enclose code; braces used as a value after `=` can create an object.
 
 **Your turn:** write a second function, `perimeter(width, height)`, which returns `2 * (width + height)`. Call it after the room's width changes to 5. Its result should be `16`.
@@ -188,6 +192,8 @@ Doubled: [2,4,6]
 ```
 
 Read the import as: “Use the JavaScript module named `node:path`, and call it `path` in this file.” `path.basename(...)` then calls one of its functions. `node:` libraries come with Node; they do not need an npm install.
+
+JavaScript libraries load before the program's statements execute. The alias is available after its `use js` statement. Arya selects a library's non-nullish default export, otherwise its namespace. For an intentional null default, read `alias.default`; the alias itself is the namespace.
 
 The list's JavaScript `.map(...)` method calls the Arya function once for each value and builds a new list from its results. A function passed to another function is called a **callback**. This is also how many JavaScript frameworks ask you to handle events or requests. `JSON.stringify(...)` turns a list or object into JSON text so its structure is easy to see.
 
@@ -249,6 +255,8 @@ print(statistics.round_mean.with([[1, 2, 4]], {digits: 2}))
 ```
 
 That prints `2.33`. Pass ordinary numbers, strings, booleans, null, lists, and JSON-compatible objects. Each call starts a fresh Python process: it does not preserve Python variables across calls or pass live Python objects and callbacks. In the CLI, Python must be available as `python3` (`python` on Windows), or selected through `ARYA_PYTHON`. See the reference for editor interpreter settings and bridge limits.
+
+NaN and infinities cannot cross this bridge. Negative zero sent to Python becomes zero; large Python integers can lose precision on return. Encode exact large integers or decimals as strings when that matters. Calls block for at most 30 seconds and have 8 MiB output buffers; batch repeated work into one helper call. The proxy reserves `then` and `with`, so Python members with those names require a helper under another public name.
 
 ## Lesson 7: wait for asynchronous work
 
