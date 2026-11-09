@@ -52,7 +52,7 @@ async function archive(root: string, pkg: object, overrides: Record<string, stri
   for (const [path, value] of Object.entries(overrides)) await writeFile(join(staging, path), value);
   await writeFile(join(staging, 'package.json'), JSON.stringify(pkg));
   await mkdir(join(root, 'artifacts'), { recursive: true });
-  const tar = spawnSync('tar', ['-czf', join(root, `artifacts/${name}-${version}.tgz`), '-C', join(root, 'staging'), 'package'], { encoding: 'utf8', timeout: 10_000 });
+  const tar = spawnSync('tar', ['-czf', join('artifacts', `${name}-${version}.tgz`), '-C', 'staging', 'package'], { cwd: root, encoding: 'utf8', timeout: 10_000 });
   assert.ifError(tar.error);
   assert.equal(tar.status, 0, tar.stderr);
 }

@@ -22,7 +22,7 @@ The publishing account must first authenticate and have permission to publish `a
 For the reviewed alpha.3 tarball, the intended npm command is:
 
 ```sh
-npm publish artifacts/arya-language-0.2.0-alpha.3.tgz --registry https://registry.npmjs.org/ --access public --tag next
+npm publish ./artifacts/arya-language-0.2.0-alpha.3.tgz --ignore-scripts --registry https://registry.npmjs.org/ --access public --tag next
 ```
 
 Use the explicit `next` tag; do not promote this alpha to `latest` or call it stable. Verify the published version and distribution metadata rather than treating a dry run as publication:
