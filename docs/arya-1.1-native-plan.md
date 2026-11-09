@@ -130,7 +130,7 @@ The first calculator can use the existing args and number built-ins; interactive
 
 ## 6. Implementation milestones
 
-All native milestones start unchecked. Feasibility work can begin before 1.0, but a stable 1.1.0 release follows a qualified stable 1.0 and a review of that actual contract.
+N0–N6 engineering work is implemented and qualified for the experimental alpha on the recorded native platforms. Checked items have implementation/test evidence. Stable 1.1 promotion still follows a qualified stable 1.0; publication of an alpha does not bypass that gate. See the [verified native release record](native-release-verification.md).
 
 | ID | Deliverable | Depends on | Completion evidence |
 | --- | --- | --- | --- |
@@ -145,55 +145,55 @@ All native milestones start unchecked. Feasibility work can begin before 1.0, bu
 
 ### N0 — decisions before a full implementation
 
-- [ ] Approve CLI applications as the initial native use case and the two-platform target matrix.
-- [ ] Write native semantics and the portable operation list; classify every Node-profile conformance fixture as shared, native-specific, or explicitly unsupported.
-- [ ] Validate the selected C backend and proposed runtime architecture in the N1 experiment; record collector and toolchain versions.
-- [ ] Define standard-library syntax without adding a globally reserved word.
-- [ ] Specify runtime error records, source-position conventions, stack limits, and allocation-failure behavior.
-- [ ] Define exact artifact dependencies and the meaning of “standalone” for each platform.
-- [ ] Specify inference, specialization budgets, unboxed/dynamic ABI boundaries, optimization settings, CPU baselines, and the benchmark protocol.
+- [x] Approve CLI applications as the initial native use case and the two-platform target matrix.
+- [x] Write native semantics and the portable operation list; classify every Node-profile conformance fixture as shared, native-specific, or explicitly unsupported.
+- [x] Validate the selected C backend and proposed runtime architecture in the N1 experiment; record collector and toolchain versions.
+- [x] Define standard-library syntax without adding a globally reserved word.
+- [x] Specify runtime error records, source-position conventions, stack limits, and allocation-failure behavior.
+- [x] Define exact artifact dependencies and the meaning of “standalone” for each platform.
+- [x] Specify inference, specialization budgets, unboxed/dynamic ABI boundaries, optimization settings, CPU baselines, and the benchmark protocol.
 
 ### N1–N2 — smallest useful proof and shared frontend
 
-- [ ] Emit C11 for a literal arithmetic/print program, compile it with the qualified native compiler, and link a working executable without an embedded JS engine.
-- [ ] Build a collector stress probe and inspect executable dependencies on both targets.
-- [ ] Separate syntax representation from JavaScript string emission in src/compiler.ts. Preserve token origins and UTF-16 positions in the AST and IR.
-- [ ] Adapt src/resolver.ts and src/project.ts to consume shared syntax/resolution data and an explicit execution profile.
-- [ ] Replace the JS emitter incrementally; compare behavior and source locations before removing the previous path. Avoid a second native-only parser.
+- [x] Emit C11 for a literal arithmetic/print program, compile it with the qualified native compiler, and link a working executable without an embedded JS engine.
+- [x] Build a collector stress probe and inspect executable dependencies on both targets.
+- [x] Separate syntax representation from JavaScript string emission in src/compiler.ts. Preserve token origins and UTF-16 positions in the AST and IR.
+- [x] Adapt src/resolver.ts and src/project.ts to consume shared syntax/resolution data and an explicit execution profile.
+- [x] Replace the JS emitter incrementally; compare behavior and source locations before removing the previous path. Avoid a second native-only parser.
 
 ### N3–N4 — correctness before optimization
 
-- [ ] Implement explicit numeric, conversion, string, indexing, identity, and short-circuit operations with evaluation-order tests.
-- [ ] Infer primitive types, specialize arithmetic/functions, and implement boxing/unboxing at dynamic boundaries with optimized-versus-unspecialized equivalence checks.
-- [ ] Implement managed lists/records, callable values, captured cells, initialization state, and collection roots.
-- [ ] Implement checked result/error propagation and source-aware runtime frames; cap recursive call depth before a native stack overflow.
-- [ ] Compile the full Arya module graph in dependency order with live exports and canonical path checks.
-- [ ] Test cyclic data, retained closures, repeated allocation, runtime faults, and failure during module initialization in debug and optimized builds.
+- [x] Implement explicit numeric, conversion, string, indexing, identity, and short-circuit operations with evaluation-order tests.
+- [x] Infer primitive types, specialize arithmetic/functions, and implement boxing/unboxing at dynamic boundaries with optimized-versus-unspecialized equivalence checks.
+- [x] Implement managed lists/records, callable values, captured cells, initialization state, and collection roots.
+- [x] Implement checked result/error propagation and source-aware runtime frames; cap recursive call depth before a native stack overflow.
+- [x] Compile the full Arya module graph in dependency order with live exports and canonical path checks.
+- [x] Test cyclic data, retained closures, repeated allocation, runtime faults, and failure during module initialization in debug and optimized builds.
 
 ### N5–N6 — usable tools and deployment
 
-- [ ] Specify and implement console, text-file, and math APIs with stable error and encoding behavior.
-- [ ] Extend src/cli.ts with explicit target/output handling while preserving all old invocation forms.
-- [ ] Invoke compiler/linker executables with argument arrays, deterministic configuration, and actionable missing-toolchain diagnostics.
-- [ ] Stage generated C, runtime objects, and executable; publish output only after successful compilation/linking. Invalidate builds by source, profile, runtime, toolchain, CPU, and flags.
-- [ ] Track .arya locations through C source mappings and explicit runtime frames. C line directives alone do not supply Arya column precision; retain an origin table for the promised columns. Toolchain failures must identify the failing stage/artifact and retain useful diagnostics. Full interactive debugging is deferred.
-- [ ] Establish debug/release pipelines and performance budgets; inspect optimized kernels for unboxed arithmetic and benchmark equivalent C and JS programs with retained raw results.
-- [ ] Carry profile configuration into the language service and LSP without changing existing default analysis.
-- [ ] Package runtime headers/libraries or a reproducible build recipe; include the chosen collector and other dependency notices.
-- [ ] Run the calculator and file utility after copying only the executable and declared redistributable files to a clean machine with no Arya, Node, Python, or compiler toolchain.
+- [x] Specify and implement console, text-file, and math APIs with stable error and encoding behavior.
+- [x] Extend src/cli.ts with explicit target/output handling while preserving all old invocation forms.
+- [x] Invoke compiler/linker executables with argument arrays, deterministic configuration, and actionable missing-toolchain diagnostics.
+- [x] Stage generated C, runtime objects, and executable; publish output only after successful compilation/linking. Invalidate builds by source, profile, runtime, toolchain, CPU, and flags.
+- [x] Track .arya locations through C source mappings and explicit runtime frames. C line directives alone do not supply Arya column precision; retain an origin table for the promised columns. Toolchain failures must identify the failing stage/artifact and retain useful diagnostics. Full interactive debugging is deferred.
+- [x] Establish debug/release pipelines and performance budgets; inspect optimized kernels for unboxed arithmetic and benchmark equivalent C and JS programs with retained raw results.
+- [x] Carry profile configuration into the language service and LSP without changing existing default analysis.
+- [x] Package runtime headers/libraries or a reproducible build recipe; include the chosen collector and other dependency notices.
+- [x] Run the calculator and file utility after copying only the executable and declared redistributable files to a clean machine with no Arya, Node, Python, or compiler toolchain.
 
 ### N7 — release gates
 
 - [ ] Stable 1.0 gates are complete; native additions pass a minor-version compatibility review.
-- [ ] Existing JS/compiler, LSP/editor, bridge, module, and installed-package checks pass. Run npm run check for the final integrated revision.
-- [ ] Both native platform jobs pass from clean installs with their qualified toolchain versions.
-- [ ] Shared-subset programs match declared Node-profile outcomes, including Unicode, numeric edge values, errors, and module behavior; compare normalized specified output rather than host stack wording.
-- [ ] Native feature rejection is tested in CLI and editor without executing source or invoking the C toolchain.
-- [ ] Memory-safety checks and collector stress pass with supported optimization settings. Long-running allocation tests show reclamation within a recorded tolerance rather than unbounded growth.
-- [ ] Copied executables run on the declared minimum OS/ABI environment without undeclared libraries or repository files.
-- [ ] Publish reproducible build instructions and artifact manifests/checksums, native profile specification, API/CLI reference, runnable examples, limitations, and migration notes.
+- [x] Existing JS/compiler, LSP/editor, bridge, module, and installed-package checks pass. Run npm run check for the final integrated revision.
+- [x] Both native platform jobs pass from clean installs with their qualified toolchain versions.
+- [x] Shared-subset programs match declared Node-profile outcomes, including Unicode, numeric edge values, errors, and module behavior; compare normalized specified output rather than host stack wording.
+- [x] Native feature rejection is tested in CLI and editor without executing source or invoking the C toolchain.
+- [x] Memory-safety checks and collector stress pass with supported optimization settings. Long-running allocation tests show reclamation within a recorded tolerance rather than unbounded growth.
+- [x] Copied executables run on the declared minimum OS/ABI environment without undeclared libraries or repository files.
+- [x] Publish reproducible build instructions and artifact manifests/checksums, native profile specification, API/CLI reference, runnable examples, limitations, and migration notes.
 - [ ] Record cold start, build time, executable size, peak memory, and representative throughput against equivalent optimized C and the JS target with toolchain/machine/input details. Meet the recorded per-workload budgets, explain material gaps, and demonstrate unboxed arithmetic in numeric kernels. Native status alone is not a promise of C/Rust performance.
-- [ ] Apply the existing licensing, security, release authority, and publication requirements to the actual native artifacts and bundled dependencies.
+- [x] Apply the existing licensing, security, release authority, and publication requirements to the actual native artifacts and bundled dependencies.
 
 ## 7. Principal risks and responses
 
@@ -218,3 +218,5 @@ No calendar estimate is committed until that experiment is measured and the team
 ## Implementation evidence
 
 The shared AST/parser, native C emitter/runtime, CLI/API, native diagnostics, six standard libraries, sanitizer/GC tests, and AryaCode target integration are implemented for the alpha. The runtime collector is precise mark/sweep instead of the provisionally evaluated BDWGC. The Arya-written compiler includes numeric specialization and is verified with three generations, matching generation 2/3 C output, and native conformance programs. Native platform jobs and the existing release audit must pass for the exact release revision before publishing its platform claims. Stable 1.0 and external learner gates remain separate from an experimental alpha release.
+
+The experimental native release is published as [1.1.0-alpha.1](https://github.com/HamzaArya/arya-lang/releases/tag/v1.1.0-alpha.1) and on npm under the next tag. Stable promotion and broader performance characterization remain distinct from this verified preview.
