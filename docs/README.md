@@ -1,13 +1,13 @@
 # Arya documentation
 
-These guides describe **Arya 1.2.0-alpha.4**, published on npm's `latest` tag. The compiler requires Node.js 22.15+. Python, a C11 toolchain, MySQL/mysql2, and Electron are required only for features that use them. See [release readiness](release-readiness.md) for the tested scope.
+These guides cover **Arya’s Node.js application runtime** and the **1.3.0-alpha.1 source candidate**. npm `latest` still identifies the published 1.2.0-alpha.4 baseline. See [runtime and migration](node-runtime.md) for candidate setup and retired native features. Node.js 22.15+ is required; Python, MySQL/mysql2, and Electron are optional feature dependencies.
 
 ## Start here
 
 | Guide | Use it to |
 | --- | --- |
 | [Install and upgrade](installing.md) | Install from npm or an archive, select a version, and troubleshoot setup |
-| [Create a project](project-creator.md) | Choose web, API, CLI, native, UI, or desktop starters |
+| [Create a project](project-creator.md) | Choose web, API, CLI, UI, or desktop starters |
 | [First programs](arya-tutorial.md) | Learn syntax through nine runnable lessons |
 | [Task-report project](learning-path.md) | Build an application with multiple Arya modules |
 | [Language reference](arya-language.md) | Look up syntax, values, imports, and execution behavior |
@@ -25,13 +25,12 @@ These guides describe **Arya 1.2.0-alpha.4**, published on npm's `latest` tag. T
 | [UI and desktop applications](ui-apps.md) | Declarative interfaces and Electron starters |
 | [UI and animation library](ui-library.md) | Components, state, forms, motion, and the preview/guide |
 | [Syntax and debugging](syntax-and-debugging.md) | Defaults, optional access, code frames, Quick Fixes, and debug helpers |
-| [Native applications](arya-native.md) | C11 compilation, native APIs, and self-hosting |
 
 Runnable projects are listed in the [examples index](../fixtures/README.md).
 
 ## Contracts and tooling
 
-- [Core/Node specification](arya-specification.md) and [native profile](arya-native-specification.md).
+- [Language specification](arya-specification.md) and [Node.js runtime/migration](node-runtime.md).
 - [Compiler, project, language-service, and editor APIs](compiler-api.md).
 - [Standard-library index](standard-library.md) for the libraries available in each execution profile.
 - [Source-map design](source-maps.md) and [other editor integrations](arya-editors.md).
@@ -39,7 +38,7 @@ Runnable projects are listed in the [examples index](../fixtures/README.md).
 
 ## Releases and decisions
 
-- [Changelog](../CHANGELOG.md), [current release](releases/1.2.0-alpha.4.md), and [verified npm publication](releases/1.2.0-alpha.4-publication.json).
+- [Changelog](../CHANGELOG.md), [candidate changes](releases/1.3.0-alpha.1.md), [published release](releases/1.2.0-alpha.4.md), and [verified npm publication](releases/1.2.0-alpha.4-publication.json).
 - [Release process](releasing.md) and [current qualification](release-readiness.md).
 - [Roadmap](arya-roadmap.md), [tooling decisions](tooling-evidence.md), and [external learner review](community-review.md).
 - Historical background: [initial 0.2 plan](arya-0.2-initial-plan.md), [0.1 audit](arya-language-logic-report.md), [repository extraction](repository-extraction.md), [native plan](arya-1.1-native-plan.md), and [1.1 native publication](native-release-verification.md).

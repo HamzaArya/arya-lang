@@ -1,5 +1,8 @@
 # Arya native profile contract
 
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+
+
 **Current implementation:** 1.2.0-alpha.4, retaining the 1.1.0-alpha.1 baseline and the 1.2 amendments below. Experimental and separate from the [Node profile](arya-specification.md). The native compiler and runtime implement this profile; future alpha changes require conformance tests and migration notes.
 
 ## Syntax and compilation

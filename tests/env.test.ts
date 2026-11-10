@@ -33,10 +33,9 @@ test('environment integers and booleans are strict, retain zero/false, and valid
   assert.throws(() => env.bool('MISSING', 2));
 });
 
-test('environment imports remain passive and are specific to the JavaScript profile', () => {
+test('environment imports remain passive', () => {
   const source = 'use std "env" as env\nkeep secret = env.require("ARYA_MISSING_CHECK_ONLY")';
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
-  assert.ok(analyze(source, 'file:///main.arya', { target: 'native' }).diagnostics.some(item => item.code === 'ARYA_NATIVE_UNSUPPORTED'));
   assert.doesNotThrow(() => compile(source + '\nuse python "math" as math\nsay(math.sqrt(4))'));
 });

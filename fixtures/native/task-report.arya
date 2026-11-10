@@ -1,9 +1,0 @@
-use std "fs" as fs
-if len(args) != 1 {
-  print("Usage: task-report input.txt")
-} else {
-  let lines = fs.readText(args[0]).split("\n")
-  let count = 0
-  for line in lines { if line.trim() != "" { count += 1 } }
-  print("Nonempty lines:", count)
-}

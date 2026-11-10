@@ -109,12 +109,11 @@ export keep closed = await db.close()
   assert.equal(module.closed, 'closed');
 });
 
-test('checking standard libraries is passive and editor profiles agree with compilation', () => {
+test('checking standard libraries is passive and editor analysis agrees with compilation', () => {
   const source = 'use std "mysql" as mysql\nuse std "web" as web\nkeep db = mysql.connect({})';
   assert.doesNotThrow(() => compile(source));
   assert.equal(analyze(source, 'file:///main.arya').diagnostics.length, 0);
-  assert.ok(analyze(source, 'file:///main.arya', { target: 'native' }).diagnostics.some(item => item.code === 'ARYA_NATIVE_UNSUPPORTED'));
-  assert.throws(() => compile('use std "missing" as library'), /unavailable in the JavaScript profile/);
+  assert.throws(() => compile('use std "missing" as library'), /Unknown Arya standard library/);
   assert.ok(analyze('use std "missing" as library', 'file:///main.arya').diagnostics.length > 0);
   const labels = completions(analyze('say(1)', 'file:///main.arya')).map(item => item.label);
   for (const label of ['fn', 'keep', 'if', 'else', 'each', 'return', 'say', 'view']) assert.ok(labels.includes(label), label);

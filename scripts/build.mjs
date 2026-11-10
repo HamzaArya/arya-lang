@@ -1,17 +1,16 @@
 import { build } from 'esbuild';
-import { cp, chmod, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, chmod, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import {buildEditorPackage, buildPortableEditors} from './build-editor-package.mjs';
 const require = createRequire(import.meta.url);
 const manifest = JSON.parse(await readFile('package.json', 'utf8'));
-await writeFile('bootstrap/runtime-source.arya', 'export const source = ' + JSON.stringify(await readFile('src/native/runtime.c','utf8')) + '\n');
-if(!(await readFile('bootstrap/compiler.arya','utf8')).includes('const VERSION = '+JSON.stringify(manifest.version))) throw new Error('Self-hosted compiler version differs from package version.');
-const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning', loader: { '.c': 'text' } };
+const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning' };
+await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
-await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, capabilities: ['arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
+await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, runtime: 'node', capabilities: ['arya.node.v1', 'arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
 await mkdir('artifacts', { recursive: true });
-for (const name of ['compiler', 'project', 'native', 'language-service', 'cli', 'lsp', 'create', 'editor']) {
+for (const name of ['compiler', 'project', 'language-service', 'cli', 'lsp', 'create', 'editor']) {
   await build({ ...common, entryPoints: [`src/${name}.ts`], outfile: `dist/${name}.cjs`, ...(['cli', 'lsp', 'create'].includes(name) ? { banner: { js: '#!/usr/bin/env node' } } : {}) });
 }
 for (const name of ['cli', 'lsp', 'create']) await chmod(`dist/${name}.cjs`, 0o755);

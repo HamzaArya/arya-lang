@@ -2,7 +2,7 @@
   "name": "arya-language",
   "displayName": "Arya Language",
   "description": "Arya language support: syntax highlighting, diagnostics, completion, snippets, and run/check commands.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "aryacode",
   "license": "Apache-2.0",
   "homepage": "https://hamzaarya.com",
@@ -146,20 +146,6 @@
           "scope": "machine-overridable",
           "restricted": true,
           "description": "Optional Python executable for bridge calls. Empty uses ARYA_PYTHON or python3 (python on Windows)."
-        },
-        "aryaLanguage.target": {
-          "type": "string",
-          "enum": [
-            "js",
-            "native"
-          ],
-          "default": "js",
-          "description": "Execution profile for Run, Check, and diagnostics."
-        },
-        "aryaLanguage.ccPath": {
-          "type": "string",
-          "default": "",
-          "description": "C compiler executable for native builds; empty uses ARYA_CC or cc."
         }
       }
     },
@@ -254,5 +240,5 @@
     ]
   },
   "preview": true,
-  "aryaLanguageVersion": "1.2.0-alpha.4"
+  "aryaLanguageVersion": "1.3.0-alpha.1"
 }

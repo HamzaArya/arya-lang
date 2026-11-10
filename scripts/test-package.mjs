@@ -30,6 +30,8 @@ try {
   for (const name of ['vsix', 'icon', 'darkIcon', 'grammar', 'guide']) assert.ok((await readFile(editorAssets[name])).length > 0, name);
   const features = JSON.parse(await readFile(join(root, 'node_modules/arya-language/dist/features.json'), 'utf8'));
   assert.ok(features.capabilities.includes('arya.ui.v1'));
+  assert.equal(features.runtime, 'node');
+  assert.ok(features.capabilities.includes('arya.node.v1'));
   assert.match(run('init', 'website', '--web'), /(?:created|initialized|ready)/i);
   for (const file of ['main.arya', 'index.html', 'package.json', 'public/styles.css', 'public/app.js', 'README.md', '.gitignore']) {
     assert.ok((await readFile(join(root, 'website', file))).length > 0, file);
@@ -111,13 +113,12 @@ say(view { div bg-dark { h1 "Arya 1.2" } })
   assert.notEqual(standalone.status, 0);
   assert.match(standalone.stderr, /runtime-error\.arya:3:15/);
   assert.match(standalone.stderr, /runtime-error\.arya:5:1/);
-  if(process.platform!=='win32') {
-    await cp(join(root,'node_modules/arya-language/fixtures/native'),join(root,'native'),{recursive:true,filter:path=>basename(path)!=='.arya'});
-    assert.match(run('check','native/calculator.arya','--target','native'),/Check OK/);
-    const native=run('build','native/calculator.arya','--target','native').trim();
-    assert.equal(execFileSync(native,['7','*','6'],{cwd:root,encoding:'utf8',env:{PATH:'/nonexistent'}}),'42\n');
-    const nativeApi=execFileSync(process.execPath,['--input-type=module','-e','import {emitNative} from "arya-language/native"; console.log(emitNative([{filename:"x.arya",source:"print(1)"}]).code.includes("native C11"));'],{cwd:root,encoding:'utf8'});
-    assert.equal(nativeApi.trim(),'true');
+  assert.equal(installed.exports['./native'], undefined);
+  for (const path of ['dist/native.cjs', 'dist/types/native.d.ts', 'bootstrap', 'fixtures/native']) {
+    await assert.rejects(readFile(join(root, 'node_modules/arya-language', path)), {code: 'ENOENT'});
   }
-  console.log(`Clean installed package ${pkg.version}: compiler/creator, bundled editor assets, UI/desktop starters and guide, npm create and npx entry points, portable project install/check/build, CLI/native conformance, source maps, arguments, and Python bridge passed.`);
+  const retired = spawnSync(process.execPath, [cli, 'check', 'fixtures/hello.arya', '--target', 'native', '--json'], {cwd: root, encoding: 'utf8'});
+  assert.equal(retired.status, 1);
+  assert.match(JSON.parse(retired.stdout).diagnostics[0].message, /Node.js runtime only/);
+  console.log(`Clean installed package ${pkg.version}: compiler/creator, bundled editor assets, UI/desktop starters and guide, npm create and npx entry points, portable project install/check/build, Node.js conformance, source maps, arguments, and Python bridge passed.`);
 } finally { await rm(root, { recursive: true, force: true }); }

@@ -1,6 +1,6 @@
 # Arya standard libraries
 
-**Version: 1.2.0-alpha.4.** Import a library with `use std "name" as alias`. Library selection depends on the execution target; an API with the same library name can have a different native contract.
+**Source candidate: 1.3.0-alpha.1.** Import a library with `use std "name" as alias`. All libraries below run on Node.js.
 
 ## JavaScript/Node profile
 
@@ -21,8 +21,6 @@
 
 Checking a standard import validates its library name without opening connections or executing dependency code. Install additional npm/Python packages normally. The libraries do not automatically load `.env` files or create databases. Source/environment examples show which configuration is required.
 
-## Native C11 profile
+## Runtime and migration
 
-Native libraries are `io`, `fs`, `math`, `path`, `process`, and `runtime`. They support the limited, synchronous signatures listed in the [native contract](arya-native-specification.md#standard-library). Node-only `web`, `mysql`, `json`, `env`, `validate`, `log`, `python`, `debug`, and `ui` APIs are outside that contract.
-
-Build with `arya build main.arya --target native`. Native programs do not inherit Node host globals, npm packages, or Python imports. See the [native guide](arya-native.md) for the C toolchain and deployment requirements.
+The native compiler and its libraries are retired from the 1.3 source line. Use `say`, `use std "fs"`, `use std "env"`, and explicit `use js "node:..."` imports for application and operating-system work. See [runtime and migration](node-runtime.md) for replacements and compatibility details.

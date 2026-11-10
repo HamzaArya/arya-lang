@@ -1,5 +1,8 @@
 # Verified native preview publication
 
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+
+
 > Historical publication evidence for 1.1.0-alpha.1. Its hashes, native binaries, and platform results remain specific to that release. See [current qualification](release-readiness.md) for 1.2.0-alpha.4.
 
 Arya **1.1.0-alpha.1** was published on 9 November 2026 as an experimental native/self-hosting preview. It is not a stable 1.1 qualification.

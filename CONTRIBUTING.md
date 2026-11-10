@@ -4,7 +4,7 @@ Arya is developed here. AryaCode is a separate editor product that consumes the 
 
 ## Set up
 
-Use Node.js 22.15 or newer and npm. The complete suite needs Python 3 and a C11 compiler such as Clang or GCC. Select Python with `ARYA_PYTHON` and a C compiler with `ARYA_CC` when the defaults are unsuitable.
+Use Node.js 22.15 or newer and npm. The complete suite needs Python 3. Select Python with `ARYA_PYTHON` when the default is unsuitable. A C compiler is not required.
 
 ```sh
 npm ci
@@ -21,7 +21,6 @@ npm run check
 | `src/project.ts`, `src/cli.ts`, `src/project-creator.ts` | Module graphs, commands, and project creation |
 | `src/standard.ts`, `src/std/`, `src/python-worker.ts` | Node standard libraries and Python execution |
 | `src/ui-*.ts` | UI components, client behavior, styles, and motion |
-| `src/native/`, `bootstrap/` | C11 target, runtime, and Arya-written compiler |
 | `src/language-service.ts`, `src/lsp.ts`, `src/semantic-tokens.ts` | Passive editor analysis and LSP |
 | `src/editor.ts`, `editors/`, `brand/` | Extension installation, adapters, themes, and icons |
 | `packages/create-arya-language/` | npm initializer; generated from the shared creator |
@@ -38,7 +37,6 @@ npm run check
 | `npm test` | Build and run automated tests |
 | `npm run arya -- check path/to/main.arya` | Check a project without executing it |
 | `npm run ui:preview` | Serve the UI gallery at http://127.0.0.1:3040 |
-| `node scripts/bootstrap-native.mjs --verify-only` | Verify native convergence after building |
 | `npm run test:editors` | Run VS Code/AryaCode hosts in temporary profiles |
 | `npm run test:clean` | Verify a fresh source snapshot and retain packaging evidence |
 
@@ -55,7 +53,7 @@ Report skipped optional tests explicitly.
 
 ## Make a change
 
-Document public behavior where users look for it. Grammar changes must agree across the JavaScript compiler, native emitter, and self-hosted compiler where supported. Keep Check/editor analysis free of dependency execution, database connections, and user-code evaluation.
+Document public behavior where users look for it. Grammar changes must agree across the compiler, language service, and editor integrations. Keep Check/editor analysis free of dependency execution, database connections, and user-code evaluation.
 
 Add meaningful regression or conformance tests for changed language/runtime behavior. Update examples and migration notes when syntax, reserved words, errors, or APIs change. Run relevant checks and describe results and skipped integrations in the pull request.
 

@@ -1,5 +1,8 @@
 # Arya 1.1.0 native compilation plan
 
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+
+
 > Historical native implementation plan. The backend and self-hosted compiler shipped experimentally in 1.1; current usage is in the [native guide](arya-native.md) and [alpha.4 release notes](releases/1.2.0-alpha.4.md). Stable gates remain open.
 
 **Status:** Native implementation and self-hosted compiler added in 1.1.0-alpha.1; platform/release qualification is tracked separately. See the [native guide](arya-native.md) and [contract](arya-native-specification.md).

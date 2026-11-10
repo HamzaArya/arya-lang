@@ -132,7 +132,7 @@ The desktop entry imports the compiled Arya module, starts its exported `start(0
 
 Closing the window quits the app on all platforms. The wrapper calls the exported `stop(server)`, which drains HTTP work using `web.shutdown` with a five-second deadline. Extend that function to close Python clients, database pools, or other resources through the shutdown cleanup hook as your app grows. The template uses no such resources by default.
 
-`npm run build` compiles Arya; it does **not** create a desktop installer. OS installers, icons, code signing, notarization, auto-updates, and cross-platform packaging require a separate distribution setup. Keep Electron current before distributing. The starter is a development GUI workflow, not a standalone native Arya UI backend. The native C11 target remains a separate command-line profile.
+`npm run build` compiles Arya; it does **not** create a desktop installer. OS installers, icons, code signing, notarization, auto-updates, and cross-platform packaging require a separate distribution setup. Keep Electron current before distributing. The starter runs the Arya backend on Node.js inside Electron. It is a desktop application workflow; operating-system installers remain a separate packaging step.
 
 Pages carry a nonce-based Content Security Policy for their included scripts and styles. Text, attributes, and embedded state are escaped. State/action JSON rejects cycles, functions, accessors, nonfinite numbers, and prototype keys, with depth/item/size limits. `$aryaBind` is reserved in action JSON templates. These guardrails do not replace application authorization, route validation, or review of custom CSS and content.
 

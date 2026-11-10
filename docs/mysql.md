@@ -28,7 +28,7 @@ each item in tasks {
 await db.close()
 ```
 
-Install `mysql2` in your application with `npm install mysql2`. Provide a running MySQL server and an existing database; importing the library does not install a driver, create a database, or load a `.env` file. `arya check`, editor diagnostics, and completion never connect or load the driver. The native profile does not support this library.
+Install `mysql2` in your application with `npm install mysql2`. Provide a running MySQL server and an existing database; importing the library does not install a driver, create a database, or load a `.env` file. `arya check`, editor diagnostics, and completion never connect or load the driver. Database access runs in the Node.js backend.
 
 ## Connections
 

@@ -94,7 +94,7 @@ node_modules/
 `
 };
 
-export const projectTemplates = ['web', 'api', 'cli', 'native', 'ui', 'desktop'] as const;
+export const projectTemplates = ['web', 'api', 'cli', 'ui', 'desktop'] as const;
 export type ProjectTemplate = typeof projectTemplates[number];
 export interface CreateProjectOptions { template?: ProjectTemplate; compilerArchive?: string }
 
@@ -124,10 +124,8 @@ function archiveInfo(bytes: Uint8Array): { version: string; ui: boolean } {
 
 async function projectFiles(target: string, options: CreateProjectOptions): Promise<Record<string, string | Uint8Array>> {
   const template = options.template ?? 'web';
-  if (!(projectTemplates as readonly string[]).includes(template)) throw new Error('Choose a project template: web, api, cli, native, ui, or desktop.');
+  if (!(projectTemplates as readonly string[]).includes(template)) throw new Error('Choose a project template: web, api, cli, ui, or desktop.');
   const ui = template === 'ui' || template === 'desktop';
-  const native = template === 'native';
-  const suffix = native ? ' --target native' : '';
   let dependency = ARYA_VERSION;
   const extra: Record<string, Uint8Array> = {};
   if (options.compilerArchive) {
@@ -145,9 +143,9 @@ async function projectFiles(target: string, options: CreateProjectOptions): Prom
   const manifest = {
     name, version: '0.0.0', private: true, type: 'module',
     scripts: {
-      dev: ui ? 'npm run build && ' + (template === 'desktop' ? 'electron .' : 'node serve.mjs') : 'arya run main.arya' + suffix,
-      start: ui ? 'npm run dev' : 'arya run main.arya' + suffix,
-      check: 'arya check main.arya' + suffix, build: 'arya build main.arya' + suffix,
+      dev: ui ? 'npm run build && ' + (template === 'desktop' ? 'electron .' : 'node serve.mjs') : 'arya run main.arya',
+      start: ui ? 'npm run dev' : 'arya run main.arya',
+      check: 'arya check main.arya', build: 'arya build main.arya',
       ...(template === 'desktop' ? { web: 'npm run build && node serve.mjs' } : {})
     },
     ...(template === 'desktop' ? { main: 'desktop.cjs' } : {}),
@@ -168,13 +166,12 @@ server.on("listening", fn() { say("Arya API: http://127.0.0.1:" + str(server.add
 const name = args[0] or "World"
 say(greet(name))
 `;
-  const description = ui ? (template === 'desktop' ? 'Desktop GUI and web application' : 'Declarative web UI application') : template === 'web' ? 'Web application' : template === 'api' ? 'API server' : native ? 'Native command-line application' : 'Command-line application';
+  const description = ui ? (template === 'desktop' ? 'Desktop GUI and web application' : 'Declarative web UI application') : template === 'web' ? 'Web application' : template === 'api' ? 'API server' : 'Command-line application';
   const readme = '# ' + name + '\n\n' + description + ' created with Arya ' + ARYA_VERSION + '.\n\n' +
     '    npm install\n    npm run dev\n\n' +
     'Use npm run check and npm run build to check or compile the application.\n' +
     (template === 'web' ? '\nindex.html contains the single div#root mount point. public/app.js renders the interface and data inside it; public/styles.css styles the app. main.arya defines server routes.\n\nOpen http://127.0.0.1:3000. Edit browser assets and refresh to see changes; restart after editing Arya source. This starter does not supply Vite or hot module replacement.\n' : '') +
     (template === 'api' ? '\nOpen http://127.0.0.1:3000/api/health. No HTML entry is needed for this API-only starter.\n' : '') +
-    (native ? '\nNative compilation requires an installed C11 toolchain. Built executables run without Node.js.\n' : '') +
     (ui ? '\nEdit main.arya to change components, state, animations, and API routes. serve.mjs starts the exported start(port) function. Restart npm run dev after editing. The UI library needs no frontend packages or bundler. Do not put secrets in page state: it is sent to the browser.\n' : '') +
     (template === 'ui' ? '\nOpen http://127.0.0.1:3000. The form calls the validated /api/estimate route.\n' : '') +
     (template === 'desktop' ? '\nnpm run dev opens an Electron window. npm run web opens the same application as a web server at http://127.0.0.1:3000. Electron downloads a platform binary during npm install. The renderer has no Node access; add privileged features through validated server routes. Closing the window stops the local server and quits. npm run build compiles Arya only; installers, signing, and updates need a separate distribution setup. Keep Electron updated before distributing.\n' : '') +

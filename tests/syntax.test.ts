@@ -5,7 +5,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { AryaError, analyzeSource, compile, keywords, parseProgram } from '../src/compiler.js';
-import { checkNativeProject, writeNativeProject } from '../src/native.js';
 
 async function project(t: { after(fn: () => Promise<unknown>): void }) {
   const root = await realpath(await mkdtemp(join(tmpdir(), 'arya branded syntax ')));
@@ -81,13 +80,13 @@ test('give preserves negative return values and newline return behavior', async 
   assert.equal(run.stdout, '-1 undefined\n');
 });
 
-test('native target runs the same branded syntax without Node', { skip: process.platform === 'win32' }, async t => {
+test('branded syntax conformance fixture runs on Node.js', async t => {
   const root = await project(t);
   const filename = join(root, 'main.arya');
-  await writeFile(filename, await readFile('fixtures/native/branded.arya', 'utf8'));
-  const native = await checkNativeProject(filename);
-  const build = await writeNativeProject(native);
-  const run = spawnSync(build.executable, [], { encoding: 'utf8', timeout: 10_000, env: { ...process.env, PATH: '/nonexistent', ARYA_GC_STRESS: '1' } });
+  await writeFile(filename, await readFile('fixtures/arya/conformance/branded.arya', 'utf8'));
+  const output = join(root, 'main.mjs');
+  await writeFile(output, compile(await readFile(filename, 'utf8'), filename).code);
+  const run = spawnSync(process.execPath, [output], { encoding: 'utf8', timeout: 10_000 });
   assert.equal(run.status, 0, run.stderr);
   assert.equal(run.stdout, 'Arya total: 15\nReady\n-1\n');
 });

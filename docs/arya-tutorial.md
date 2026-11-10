@@ -403,7 +403,7 @@ For example, `let greeting = "hello"; print(greetng)` fails Check with `Unknown 
 
 To read an error such as `practice.arya:3:12`, open `practice.arya` at line 3, column 12. For syntax problems, start with the first reported error, fix it, save, and run again.
 
-When these lessons feel comfortable, use the [reference](arya-language.md) for `while`, `break`, `continue`, exports, additional operators, and bridge details. JavaScript/npm and JSON-compatible Python calls are the working bridges today. A separate [native C11 profile](arya-native.md) is also implemented for command-line programs; it has its own libraries and does not include Node/Python imports. Other direct language bridges remain unsupported.
+When these lessons feel comfortable, use the [reference](arya-language.md) for `while`, `break`, `continue`, exports, additional operators, and bridge details. JavaScript/npm and JSON-compatible Python calls are the working bridges today. Command-line applications use the same Node.js runtime; see [runtime and migration](node-runtime.md). Other direct language bridges remain unsupported.
 
 ## Continue with a multi-file project
 

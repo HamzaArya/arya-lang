@@ -47,9 +47,8 @@ test('debug trace and assertion failures retain actual Arya call sites with sour
   assert.match(run.stderr, /Expected a negative total/);
 });
 
-test('debug checking is passive and native users receive a profile diagnostic', () => {
+test('debug checking is passive', () => {
   const source = 'use std "debug" as debug\ndebug.assert(false, "not executed")';
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
-  assert.ok(analyze(source, 'file:///main.arya', { target: 'native' }).diagnostics.length);
 });

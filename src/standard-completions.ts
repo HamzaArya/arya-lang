@@ -88,8 +88,8 @@ const members: Record<string, Record<string, string>> = {
 };
 
 /** Conservative, same-file API hints. No driver imports, filesystem reads, or execution. */
-export function standardCompletions(source: string, offset: number, target: 'js' | 'native' = 'js') {
-  if (target === 'native') return [];
+export function standardCompletions(source: string, offset: number, target: 'js' = 'js') {
+  if (target !== 'js') return [];
   const match = /([A-Za-z_][A-Za-z0-9_]*)\??\.([A-Za-z0-9_]*)$/.exec(source.slice(0, offset));
   if (!match) return [];
   const start = offset - match[0].length;

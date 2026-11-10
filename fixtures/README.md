@@ -1,6 +1,6 @@
 # Arya examples
 
-These examples target **1.2.0-alpha.4**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. Alternatively, use the sources with an installed `arya-language@1.2.0-alpha.4` compiler. Keep companion files together when copying an example.
+These examples target **1.3.0-alpha.1**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. The Node application examples also work with the published 1.2.0-alpha.4 compiler. Keep companion files together when copying an example.
 
 | Example | Entry / instructions | Additional requirements |
 | --- | --- | --- |
@@ -15,7 +15,6 @@ These examples target **1.2.0-alpha.4**. From the repository root, run `npm ci` 
 | UI and desktop | [Estimate calculator](examples/ui/README.md) | Electron for a desktop window |
 | UI library preview | [Components, motion, guide](examples/ui-library/README.md) | None |
 | Debugging | [Expressions and diagnostics](examples/debugging/README.md) | None |
-| Native calculator | [Source](native/calculator.arya) and [guide](../docs/arya-native.md) | C11 toolchain |
 
 Most servers default to port 3000; run one at a time or select another port as documented. Stop with Control+C. The UI library preview uses port 3040.
 

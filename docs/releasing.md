@@ -1,14 +1,14 @@
 # Build and publish an Arya prerelease
 
-**Published release: 1.2.0-alpha.4.** Both npm packages are available on `latest`; their [verified transaction record](releases/1.2.0-alpha.4-publication.json) identifies the exact archives. Follow this process for a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
+**Source candidate: 1.3.0-alpha.1. Published release: 1.2.0-alpha.4.** Both npm packages are available on `latest`; their [verified transaction record](releases/1.2.0-alpha.4-publication.json) identifies the exact archives. Follow this process for a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
 
 Hamza Arya is the release maintainer. The project uses Apache-2.0, npm packages `arya-language` and `create-arya-language`, and the existing [HamzaArya/arya-lang](https://github.com/HamzaArya/arya-lang) repository. Private security reporting is described in [SECURITY.md](../SECURITY.md).
 
 ## Prepare a new candidate
 
-1. Review intended source changes and choose a new prerelease version. Update root package/lockfile, `src/compiler.ts`, `bootstrap/compiler.arya`, and the creator package together. Build synchronizes the extension's numeric version, preview flag, and full `aryaLanguageVersion`.
+1. Review intended source changes and choose a new prerelease version. Update root package/lockfile, `src/compiler.ts`, and the creator package together. Build synchronizes the extension's numeric version, preview flag, and full `aryaLanguageVersion`.
 2. Update current guides, migration notes, and `docs/releases/<version>.md`. Describe optional dependencies and the actual qualification scope. Keep historical release hashes and records intact.
-3. Run `npm ci` and `npm run check`. Run appropriate optional database, browser, Electron, editor-host, and native bootstrap checks; report skips and failures accurately.
+3. Run `npm ci` and `npm run check`. Run appropriate optional database, browser, Electron, and editor-host checks; report skips and failures accurately.
 4. Run `npm run test:clean` to verify and package a fresh source snapshot. This inventories tracked/unignored source without changing the Git index, records SHA-256 provenance, installs dependencies, checks docs/types/tests, builds all distributions, tests installed packages, and runs the read-only audit.
 5. Review the retained snapshot path and logs in `.build/clean-candidate-record.json`. Preserve its `SOURCE-MANIFEST.json`, archive hashes, lockfile identity, and qualification results. Use the exact reviewed artifacts from that snapshot for publication.
 
@@ -56,7 +56,7 @@ Only then write the versioned publication record with URLs, actual tags, hashes,
 
 ## Other distribution targets
 
-Git commits/pushes, GitHub prereleases, native binary archives, editor marketplaces, and AryaCode's embedded compiler are distinct operations. Updating this repository or npm does not perform them automatically. For an authorized GitHub release, create its tag at the reviewed source, upload the exact frozen artifacts/legal/checksum/evidence set, and download them again to verify identity. Do not move old release tags.
+Git commits/pushes, GitHub prereleases, editor marketplaces, and AryaCode's embedded compiler are distinct operations. Updating this repository or npm does not perform them automatically. For an authorized GitHub release, create its tag at the reviewed source, upload the exact frozen artifacts/legal/checksum/evidence set, and download them again to verify identity. Do not move old release tags.
 
 Update AryaCode's compiler pin, archive integrity, lockfile, and integration metadata in its own repository when requested, then run its service and desktop acceptance checks.
 

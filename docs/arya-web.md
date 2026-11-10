@@ -4,7 +4,7 @@ Arya `1.2.0-alpha.4` supports HTML-first web applications with a real HTML entry
 
 ## Create a project
 
-Use the interactive creator to choose a web app, API server, CLI tool, native CLI, UI app, or desktop app. Use the published preview:
+Use the interactive creator to choose a web app, API server, CLI tool, UI app, or desktop app. Use the published preview:
 
 ```sh
 npm create arya-language@latest
@@ -72,7 +72,6 @@ The runnable [studio project](../fixtures/web/studio.arya) uses [index.html](../
 npm run arya -- run fixtures/web/studio.arya
 ```
 
-The native target supports the branded core syntax but rejects the web/MySQL libraries and inline web views. Node and native standard libraries are separate profiles; identical import spelling does not promise identical timing or APIs.
 
 ## Write the logic in Arya
 
@@ -241,7 +240,7 @@ say(await fs.exists("result.txt"))
 say(await fs.list("."))
 ```
 
-The file functions are asynchronous. `math` exposes JavaScript's `Math` API. Native `use std "fs"` and `use std "math"` retain their separately documented synchronous and limited APIs.
+The file functions are asynchronous. `math` exposes JavaScript's `Math` API.
 
 For MySQL, install `mysql2` in your application project and connect to an existing MySQL server. The MySQL library includes verified connections, transaction callbacks, result helpers, environment configuration, and stable database error codes; see the [MySQL application guide](mysql.md) and [task API example](../fixtures/examples/mysql/README.md):
 
@@ -278,4 +277,4 @@ The service library includes `web.route` with body/query/params schemas, named r
 
 Arya logic around the view runs on the server. JavaScript inside `script` runs in the visitor's browser and does not capture Arya variables, Python modules, database connections, or server secrets. A button communicates with server logic through an HTTP route, for example with browser `fetch`.
 
-Default HTML projects serve ordinary HTML, CSS, and browser JavaScript files. Optional inline views generate those browser formats. It does not add automatic reactive updates, JSX, arbitrary inline Python/JavaScript evaluation, client-side Arya compilation, native networking, or compatibility with every web framework. Builds remain generated JavaScript modules, not a separate static-site artifact pipeline. Keep the configured HTML entry and public assets at their source locations for execution; generated JavaScript does not bundle or relocate them. Rebuild after moving a project, because source-relative locations are embedded in generated output. Check validates Arya syntax and names; it does not execute imports, connect to MySQL, or validate the contents of embedded CSS/JavaScript.
+Default HTML projects serve ordinary HTML, CSS, and browser JavaScript files. Optional inline views generate those browser formats. It does not add automatic reactive updates, JSX, arbitrary inline Python/JavaScript evaluation, client-side Arya compilation, or compatibility with every web framework. Builds remain generated JavaScript modules, not a separate static-site artifact pipeline. Keep the configured HTML entry and public assets at their source locations for execution; generated JavaScript does not bundle or relocate them. Rebuild after moving a project, because source-relative locations are embedded in generated output. Check validates Arya syntax and names; it does not execute imports, connect to MySQL, or validate the contents of embedded CSS/JavaScript.

@@ -2,27 +2,26 @@
 
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current release: [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md)** — published on npm as `latest`. Arya remains an experimental alpha. The default target runs on Node.js; a separate C11 target builds native command-line executables.
+**Current source: [1.3.0-alpha.1](docs/releases/1.3.0-alpha.1.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
 
 ## Start a project
 
 Requires **Node.js 22.15 or newer** and npm:
 
 ```sh
-npm create arya-language@latest my-app
+npm create arya-language@latest my-app -- --template web
 cd my-app
 npm install
 npm run dev
 ```
 
-Choose a template in the wizard, or specify one:
+The commands above use the published npm baseline. To try the Node.js-only candidate from this checkout, follow [candidate setup](docs/node-runtime.md#try-the-candidate). Its creator offers these five templates:
 
 | Template | What you get |
 | --- | --- |
 | `web` | Arya server, `index.html`, and separate CSS/browser JavaScript |
 | `api` | JSON endpoints without an HTML entry |
 | `cli` | A command-line program with arguments |
-| `native` | A command-line program compiled through C11 |
 | `ui` | Arya components, forms, browser state, API actions, and animations |
 | `desktop` | The same UI application in an isolated Electron window |
 
@@ -54,7 +53,6 @@ Direct Python calls remain synchronous. The async library adds bound imports, ke
 | Connect a database | [MySQL pools, prepared queries, and transactions](docs/mysql.md) |
 | Build an interface | [UI and desktop apps](docs/ui-apps.md), [component and animation reference](docs/ui-library.md) |
 | Find and fix errors | [Safer expressions, code frames, Quick Fixes, and debug helpers](docs/syntax-and-debugging.md) |
-| Build a native CLI | [Native guide](docs/arya-native.md) and [profile contract](docs/arya-native-specification.md) |
 | Embed the compiler | [Compiler, language-service, project, and editor APIs](docs/compiler-api.md) |
 
 The UI library includes an interactive component gallery, motion playground, copyable examples, and an implementation guide. From a source checkout, run `npm run ui:preview` and open **http://127.0.0.1:3040**. Applications can serve the same pages with `ui.preview()`.
@@ -78,7 +76,7 @@ npm run check
 npm run ui:preview
 ```
 
-The full suite additionally needs Python and a C11 toolchain. MySQL, Chrome, Electron, and editor-host checks have separate setup. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the source layout, commands, and validation workflow. Release packaging must preserve already published archives; follow the [release process](docs/releasing.md).
+The full suite additionally needs Python. A C compiler is not required. MySQL, Chrome, Electron, and editor-host checks have separate setup. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the source layout, commands, and validation workflow. Release packaging must preserve already published archives; follow the [release process](docs/releasing.md).
 
 ## Documentation and release status
 

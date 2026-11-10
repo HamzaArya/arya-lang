@@ -23,7 +23,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
   const pending = new Map<string, ReturnType<typeof setTimeout>>();
   const validate = (document: vscode.TextDocument) => {
     if (document.languageId !== 'arya') { diagnostics.delete(document.uri); return; }
-    diagnostics.set(document.uri, analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') }).diagnostics.map(error => {
+    diagnostics.set(document.uri, analyze(document.getText(), document.uri.toString()).diagnostics.map(error => {
       const start = document.positionAt(error.token.start), end = document.positionAt(Math.max(error.token.start + 1, error.token.end));
       const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message + (error.hint ? '\nHelp: ' + error.hint : ''), vscode.DiagnosticSeverity.Error);
       diagnostic.source = 'Arya'; diagnostic.code = error.code; return diagnostic;
@@ -32,7 +32,6 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
   const selector: vscode.DocumentSelector = { language: 'arya' };
   context.subscriptions.push(diagnostics,
     vscode.workspace.onDidOpenTextDocument(validate),
-    vscode.workspace.onDidChangeConfiguration(event => { if(event.affectsConfiguration('aryaLanguage.target')) for(const document of vscode.workspace.textDocuments) validate(document); }),
     vscode.workspace.onDidChangeTextDocument(event => {
       if (event.document.languageId !== 'arya') return;
       const key = event.document.uri.toString(); clearTimeout(pending.get(key));
@@ -45,8 +44,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       provideCompletionItems(document, position) {
         const kinds = { keyword: vscode.CompletionItemKind.Keyword, function: vscode.CompletionItemKind.Function, variable: vscode.CompletionItemKind.Variable, module: vscode.CompletionItemKind.Module };
         const source = document.getText(), offset = document.offsetAt(position);
-        const target = vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js');
-        const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset, target) : completions(analyze(source, document.uri.toString(), { target }));
+        const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset) : completions(analyze(source, document.uri.toString()));
         return items.map(value => {
           const item = new vscode.CompletionItem(value.label, kinds[value.kind]); if (value.detail) item.detail = value.detail; return item;
         });
@@ -62,8 +60,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       provideCodeActions(document, range, context) {
         if (context.only && !context.only.contains(vscode.CodeActionKind.QuickFix)) return [];
         const source = document.getText();
-        const target = vscode.workspace.getConfiguration('aryaLanguage', document.uri).get<'js' | 'native'>('target', 'js');
-        return diagnosticFixes(source, analyze(source, document.uri.toString(), { target }).diagnostics, document.offsetAt(range.start), document.offsetAt(range.end)).map(fix => {
+        return diagnosticFixes(source, analyze(source, document.uri.toString()).diagnostics, document.offsetAt(range.start), document.offsetAt(range.end)).map(fix => {
           const action = new vscode.CodeAction(fix.title, vscode.CodeActionKind.QuickFix);
           action.isPreferred = true;
           action.edit = new vscode.WorkspaceEdit();
@@ -74,14 +71,14 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
     }, { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }),
     vscode.languages.registerDefinitionProvider(selector, {
       provideDefinition(document, position) {
-        const token = definitionAt(analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') }), document.offsetAt(position));
+        const token = definitionAt(analyze(document.getText(), document.uri.toString()), document.offsetAt(position));
         return token ? new vscode.Location(document.uri, new vscode.Range(document.positionAt(token.start), document.positionAt(token.end))) : undefined;
       },
     }),
     vscode.languages.registerDocumentSymbolProvider(selector, {
       provideDocumentSymbols(document) {
         try {
-          return analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') }).symbols.map(symbol => {
+          return analyze(document.getText(), document.uri.toString()).symbols.map(symbol => {
             const range = new vscode.Range(document.positionAt(symbol.token.start), document.positionAt(symbol.token.end));
             return new vscode.DocumentSymbol(symbol.name, symbol.kind, symbol.kind === 'function' ? vscode.SymbolKind.Function : symbol.kind === 'module' ? vscode.SymbolKind.Module : vscode.SymbolKind.Variable, range, range);
           });

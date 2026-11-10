@@ -1,10 +1,10 @@
 # Create an Arya project
 
-Arya 1.2.0-alpha.4 provides an interactive creator and six npm-managed starters. See the [release notes](releases/1.2.0-alpha.4.md).
+The Arya 1.3.0-alpha.1 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.1.md).
 
 ## Registry workflow
 
-Create a project with the matching compiler and creator on `latest`:
+The published 1.2.0-alpha.4 baseline remains available on `latest`. Its Node.js templates work as shown below; use [candidate setup](node-runtime.md#try-the-candidate) for the new source creator:
 
 ```sh
 npm create arya-language@latest
@@ -22,9 +22,8 @@ What do you want to build?
   1. Web app
   2. API server
   3. CLI tool
-  4. Native CLI
-  5. UI app
-  6. Desktop app
+  4. UI app
+  5. Desktop GUI
 
 Select a project type (1):
 ```
@@ -42,7 +41,6 @@ Generated projects pin the exact compiler version; later changes to registry tag
 | web | main.arya server, index.html shell, public CSS/module JavaScript, and health endpoint |
 | api | main.arya with health/echo JSON routes and explicit html:false; no HTML file |
 | cli | main.arya greeting function with a command-line argument |
-| native | CLI starter whose npm scripts select the native target; requires a C11 toolchain |
 | ui | Declarative components, forms, browser state, API actions, and animations |
 | desktop | The same UI application in an isolated Electron window |
 
@@ -53,7 +51,6 @@ For automation:
 ```sh
 arya create my-api --template api
 arya create my-tool --template cli
-arya create my-native-tool --template native
 arya create my-site --yes
 ```
 
@@ -86,17 +83,17 @@ This is a Vite-style project creation and mounting workflow. The starter uses va
 For offline use, retain the published archives. From a built checkout, create a project using the retained compiler archive:
 
 ```sh
-node dist/create.cjs my-site --compiler artifacts/arya-language-1.2.0-alpha.4.tgz
+node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.1.tgz
 ```
 
 Or install the creator archive without the repository:
 
 ```sh
-npm install --global ./create-arya-language-1.2.0-alpha.4.tgz
-create-arya-language my-site --compiler ./arya-language-1.2.0-alpha.4.tgz
+npm install --global ./create-arya-language-1.3.0-alpha.1.tgz
+create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.1.tgz
 ```
 
-Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.2.0-alpha.4.tgz`.
+Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.1.tgz`.
 
 Copy the entire created folder to another machine, then:
 
@@ -106,4 +103,4 @@ npm install
 npm run dev
 ```
 
-Node/npm are still required. Python, additional npm/Python libraries, and a native C toolchain are separate optional dependencies. Without --compiler, installation requires the exact pinned compiler version to be available on npm.
+Node/npm are still required. Python, additional npm/Python libraries, and Electron are separate optional dependencies. Without --compiler, installation requires the exact pinned compiler version to be available on npm.

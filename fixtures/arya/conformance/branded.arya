@@ -1,4 +1,4 @@
-# The branded syntax works in both native and JavaScript profiles.
+# Branded syntax and closures run on Node.js.
 keep title = "Arya"
 keep multiline = """Arya
 branded"""

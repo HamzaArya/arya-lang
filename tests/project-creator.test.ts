@@ -49,7 +49,6 @@ test('all templates generate pinned compiler dependencies and usable npm scripts
     const names = await readdir(folder);
     assert.equal(names.includes('index.html'), template === 'web');
     if (template === 'api') assert.match(source, /html: false, assets: false/);
-    if (template === 'native') assert.match(manifest.scripts.dev, /--target native/);
     if (template === 'cli') {
       const executed = spawnSync(process.execPath, [resolve('dist/cli.cjs'), 'run', join(folder, 'main.arya'), '--', 'Arya'], { encoding: 'utf8', timeout: 10000 });
       assert.equal(executed.status, 0, executed.stderr);
@@ -64,7 +63,7 @@ test('interactive creator asks for the directory and template, reprompting inval
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Project directory/);
   assert.match(result.stdout, /What do you want to build/);
-  for (const label of ['Web app', 'API server', 'CLI tool', 'Native CLI']) assert.ok(result.stdout.includes(label));
+  for (const label of ['Web app', 'API server', 'CLI tool', 'UI app', 'Desktop GUI']) assert.ok(result.stdout.includes(label));
   assert.match(await readFile(join(root, 'chosen-app', 'main.arya'), 'utf8'), /POST \/api\/echo/);
   assert.match(result.stdout, /npm install/);
   assert.match(result.stdout, /npm run dev/);
@@ -83,7 +82,7 @@ test('creator flags support automation and cancellation leaves no partial projec
   assert.notEqual(cancelled.status, 0);
   assert.match(cancelled.stderr, /cancelled/);
   assert.ok(!(await readdir(root)).includes('cancelled'));
-  for (const args of [['bad', '--template', 'unknown'], ['bad', '--template'], ['bad', '--web', '--template', 'web'], ['bad', '--compiler'], ['one', 'two']]) {
+  for (const args of [['bad', '--template', 'native'], ['bad', '--template', 'unknown'], ['bad', '--template'], ['bad', '--web', '--template', 'web'], ['bad', '--compiler'], ['one', 'two']]) {
     assert.notEqual(run(root, args).status, 0, args.join(' '));
   }
   assert.ok(!(await readdir(root)).includes('bad'));

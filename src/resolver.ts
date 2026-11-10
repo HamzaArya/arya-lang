@@ -5,7 +5,7 @@ export type BindingKind = 'let' | 'const' | 'function' | 'parameter' | 'loop' | 
 export type ScopeKind = 'module' | 'function' | 'block' | 'loop' | 'catch';
 export interface LexicalBinding { name: string; kind: BindingKind; scopeId: number; token?: Token }
 export interface LexicalReference { token: Token; access: 'read' | 'write' | 'readwrite'; binding?: LexicalBinding }
-export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_NATIVE_UNSUPPORTED'; message: string; token: Token; suggestion?: string; hint?: string }
+export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_UNKNOWN_LIBRARY' | 'ARYA_UNSUPPORTED_TARGET'; message: string; token: Token; suggestion?: string; hint?: string }
 export interface Resolution { bindings: LexicalBinding[]; references: LexicalReference[]; diagnostics: AryaDiagnostic[] }
 interface Scope { id: number; kind: ScopeKind; parent?: Scope; declarations: Map<string, LexicalBinding> }
 

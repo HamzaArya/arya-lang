@@ -1,6 +1,6 @@
 # Building dependable services with Arya
 
-These experimental APIs are included in Arya 1.2.0-alpha.4. They run on the JavaScript/Node profile. Checking and editor analysis remain passive; the native profile does not gain networking, logging, or validation libraries from this work.
+These experimental APIs are included in Arya 1.2.0-alpha.4. They run on the JavaScript/Node profile. Checking and editor analysis remain passive; applications use the same Node.js runtime for these libraries.
 
 Start with the [multi-file service example](../fixtures/examples/service/README.md), which has separate startup, handlers, and schemas. The [MySQL task API](../fixtures/examples/mysql/README.md) adds durable storage and transaction-backed audit records.
 

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { standardCompletions } from '../src/language-service.js';
 
-function complete(source: string, target: 'js' | 'native' = 'js') {
+function complete(source: string, target: 'js' = 'js') {
   const offset = source.indexOf('|');
   return standardCompletions(source.replace('|', ''), offset, target);
 }
@@ -24,10 +24,9 @@ test('MySQL pool and transaction completions follow lexical bindings', () => {
   assert.deepEqual(complete('use std "mysql" as mysql\nlet db = await mysql.connect({})\ndb.|'), [], 'mutable values are not inferred');
 });
 
-test('standard completion excludes comments, strings, unknown objects, and native profiles', () => {
+test('standard completion excludes comments, strings, unknown objects', () => {
   const prefix = 'use std "mysql" as mysql\n';
   for (const source of [prefix + '# mysql.|', prefix + '// mysql.|', prefix + 'say("mysql.|")', prefix + 'say("""mysql.|""")', prefix + 'keep other = {}\nother.|', prefix + 'keep object = {mysql: {}}\nobject.mysql.|']) assert.deepEqual(complete(source), [], source);
-  assert.deepEqual(complete(prefix + 'mysql.|', 'native'), []);
   assert.deepEqual(complete(prefix + 'mysql|'), []);
 });
 

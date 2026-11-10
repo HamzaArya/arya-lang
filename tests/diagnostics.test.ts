@@ -94,10 +94,11 @@ test('CLI code frames and JSON check reports remain passive and preserve diagnos
   assert.equal(await readFile(filename, 'utf8'), 'say(args[0])');
 });
 
-test('JSON checking also supports the native profile without invoking a C toolchain', async t => {
+test('JSON checking reports retired native target requests without executing source', async t => {
   const root = await fixture(t), filename = join(root, 'main.arya');
   await writeFile(filename, 'say(null?.value ?? 42)');
   const run = spawnSync(process.execPath, [resolve('dist/cli.cjs'), 'check', filename, '--target', 'native', '--json'], { encoding: 'utf8', env: { ...process.env, ARYA_CC: 'missing-compiler-for-passive-check' } });
-  assert.equal(run.status, 0, run.stderr);
-  assert.equal(JSON.parse(run.stdout).target, 'native');
+  assert.equal(run.status, 1, run.stderr);
+  assert.equal(JSON.parse(run.stdout).diagnostics[0].code, 'ARYA_CLI');
+  assert.match(JSON.parse(run.stdout).diagnostics[0].message, /Node.js runtime only/);
 });

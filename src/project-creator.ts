@@ -6,9 +6,9 @@ import { createProject, projectTemplates, type ProjectTemplate } from './web-pro
 interface Selection { directory?: string; template?: ProjectTemplate; compilerArchive?: string; yes: boolean }
 const help = `Arya project creator
 
-  arya create [directory] [--template web|api|cli|native|ui|desktop]
+  arya create [directory] [--template web|api|cli|ui|desktop]
   arya init [directory] --web
-  create-arya-language [directory] [--template web|api|cli|native|ui|desktop]
+  create-arya-language [directory] [--template web|api|cli|ui|desktop]
 
 Without a template, the creator asks what you want to build.
 Options: --yes (web defaults), --compiler /path/to/compiler.tgz, --help, --version
@@ -22,7 +22,7 @@ function options(args: string[]): Selection {
     else if (value === '--web' || value === '--template') {
       if (result.template) throw new Error('Specify one project template.');
       const template = value === '--web' ? 'web' : args[++index];
-      if (!template || !(projectTemplates as readonly string[]).includes(template)) throw new Error('Choose --template web, api, cli, native, ui, or desktop.');
+      if (!template || !(projectTemplates as readonly string[]).includes(template)) throw new Error('Choose --template web, api, cli, ui, or desktop.');
       result.template = template as ProjectTemplate;
     } else if (value === '--compiler') {
       const archive = args[++index];
@@ -47,7 +47,7 @@ function questions() {
     ask: async (label: string, fallback: string): Promise<string> => {
       process.stdout.write(label + ' (' + fallback + '): ');
       const answer = queued.length ? queued.shift() : closed ? undefined : await new Promise<string | undefined>(resolve => { waiting = resolve; });
-      if (answer === undefined || ['cancel', 'quit'].includes(answer.trim().toLowerCase())) throw new Error('Project creation cancelled. For noninteractive use, pass a directory and --template web|api|cli|native|ui|desktop.');
+      if (answer === undefined || ['cancel', 'quit'].includes(answer.trim().toLowerCase())) throw new Error('Project creation cancelled. For noninteractive use, pass a directory and --template web|api|cli|ui|desktop.');
       return answer.trim() || fallback;
     },
     close: () => reader.close()
@@ -67,12 +67,12 @@ export async function runProjectCreator(args: string[], mode: 'create' | 'init' 
     const prompt = questions();
     try {
       if (!selection.directory) selection.directory = await prompt.ask('Project directory', 'my-arya-app');
-      console.log('\nWhat do you want to build?\n  1. Web app — index.html + div#root + Arya server\n  2. API server — JSON routes without a page\n  3. CLI tool — a Node-based command-line program\n  4. Native CLI — a standalone executable (C toolchain required)\n  5. UI app — Arya components, forms, state, animations\n  6. Desktop GUI — the same UI in Electron\n');
+      console.log('\nWhat do you want to build?\n  1. Web app — index.html + div#root + Arya server\n  2. API server — JSON routes without a page\n  3. CLI tool — a Node-based command-line program\n  4. UI app — Arya components, forms, state, animations\n  5. Desktop GUI — the same UI in Electron\n');
       while (!selection.template) {
         const answer = (await prompt.ask('Select a project type', '1')).toLowerCase();
         const choice = projectTemplates[Number(answer) - 1] ?? answer;
         if ((projectTemplates as readonly string[]).includes(choice)) selection.template = choice as ProjectTemplate;
-        else console.log('Enter 1–6, or web, api, cli, native, ui, desktop.');
+        else console.log('Enter 1–5, or web, api, cli, ui, desktop.');
       }
     } finally { prompt.close(); }
   }

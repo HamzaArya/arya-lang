@@ -82,5 +82,4 @@ test('bad schema configuration fails immediately, while compiler/editor checking
   const source = 'use std "validate" as validate\nkeep body = validate.parse(validate.integer(), "invalid")';
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
-  assert.ok(analyze(source, 'file:///main.arya', { target: 'native' }).diagnostics.length);
 });

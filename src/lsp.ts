@@ -12,16 +12,14 @@ const connection = createConnection(process.stdin, process.stdout);
 const documents = new TextDocuments(TextDocument);
 const cache = new Map<string, { version: number; analysis: Analysis }>();
 const timers = new Map<string, ReturnType<typeof setTimeout>>();
-let target: 'js' | 'native' = 'js';
 const analysisFor = (document: TextDocument) => {
   const previous = cache.get(document.uri);
   if (previous?.version === document.version) return previous.analysis;
-  const analysis = analyze(document.getText(), document.uri, { target });
+  const analysis = analyze(document.getText(), document.uri);
   cache.set(document.uri, { version: document.version, analysis }); return analysis;
 };
 const range = (document: TextDocument, start: number, end: number): Range => ({ start: document.positionAt(start), end: document.positionAt(end) });
 connection.onInitialize(params => {
-  if(params.initializationOptions?.target==='native') target='native';
   return ({
   serverInfo: { name: 'Arya Language Server', version: ARYA_VERSION },
   capabilities: {
@@ -32,7 +30,7 @@ connection.onInitialize(params => {
   },
 }); });
 connection.onDidChangeConfiguration(params => {
-  target=params.settings?.arya?.target==='native'?'native':'js'; cache.clear();
+  cache.clear();
   for(const document of documents.all()) validate(document);
 });
 
@@ -53,7 +51,7 @@ connection.onCompletion(({ textDocument, position }) => {
   const document = documents.get(textDocument.uri); if (!document) return [];
   const kinds = { keyword: CompletionItemKind.Keyword, function: CompletionItemKind.Function, variable: CompletionItemKind.Variable, module: CompletionItemKind.Module };
   const source = document.getText(), offset = document.offsetAt(position);
-  const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset, target) : completions(analysisFor(document));
+  const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset) : completions(analysisFor(document));
   return items.map(item => ({ ...item, kind: kinds[item.kind] }));
 });
 connection.onHover(({ textDocument, position }) => {

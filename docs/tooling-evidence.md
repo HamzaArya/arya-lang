@@ -14,6 +14,10 @@ The owner subsequently requested asynchronous Python integration, easier UI/anim
 
 The tables below retain the original decision rationale. Current implementation supersedes the earlier worker deferral; external-user selection gates remain open.
 
+## Runtime focus decision — 10 November 2026
+
+The owner selected the recommendation to focus on Node.js application development. The 1.3 source candidate retires the second compiler/runtime and targets consistent Python/npm integration, application libraries, and editor behavior. [Migration](node-runtime.md) documents the compatibility cost. [Runtime tests](../tests/node-runtime.test.ts) cover retired request errors, passive standard-library validation, and the reduced public surface. Historical native evidence remains history rather than active roadmap scope.
+
 ## Admissible evidence
 
 A tooling investment may be justified by an actual M7 observation or a release-critical engineering risk with a reproducible trigger. Source review, automated tests, platform failures, and benchmarks are engineering evidence. They cannot substitute for observing a learner's understanding or establish how many users are affected.

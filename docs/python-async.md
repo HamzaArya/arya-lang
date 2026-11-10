@@ -163,4 +163,4 @@ The [reporting service](../fixtures/examples/python-web/README.md) combines JS c
 
 ## Existing code
 
-`use python` imports and direct `library.function(...)`/`.with(...)` calls retain their synchronous, fresh-process behavior. The new library is additive; it does not reserve Python member names such as `call`, `map`, or `info` on imported modules. No application code executes during Check, compilation, or editor analysis. The native profile does not support the Python bridge.
+`use python` imports and direct `library.function(...)`/`.with(...)` calls retain their synchronous, fresh-process behavior. The new library is additive; it does not reserve Python member names such as `call`, `map`, or `info` on imported modules. No application code executes during Check, compilation, or editor analysis. Python calls execute through Node.js-managed child processes.

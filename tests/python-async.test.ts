@@ -330,9 +330,8 @@ catch error { say(error.code) }
   assert.ok(Buffer.byteLength(result.stderr) <= 65536);
 });
 
-test('checking async Python use remains passive and rejects the library in native profiles', () => {
+test('checking async Python use remains passive', () => {
   const source = 'use std "python" as python\nuse python "not_installed" as library\nkeep client = python.client({interpreter: "missing"})\nkeep result = await client.call(library.run)';
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
-  assert.ok(analyze(source, 'file:///main.arya', { target: 'native' }).diagnostics.length);
 });

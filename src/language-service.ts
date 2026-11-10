@@ -1,20 +1,17 @@
 import { fileURLToPath } from 'node:url';
 import { AryaError, parseProgram, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
-import { nativeDiagnostics } from './native/emitter.js';
-import { standardLibraries } from './standard.js';
 export { standardCompletions } from './standard-completions.js';
 export { diagnosticFixes } from './diagnostics.js';
 export {semanticTokens, encodeSemanticTokens, semanticTokenTypes, semanticTokenModifiers} from './semantic-tokens.js';
 
 export interface Analysis extends SourceAnalysis { error?: AryaDiagnostic }
-export function analyze(source: string, uri: string, options: { target?: 'js' | 'native' } = {}): Analysis {
+export function analyze(source: string, uri: string, options: { target?: 'js' } = {}): Analysis {
   let filename = 'document.arya';
   try { if (uri.startsWith('file:')) filename = fileURLToPath(uri); } catch { /* Unsaved documents do not need a filesystem path. */ }
   try {
     const parsed = parseProgram(source, filename);
     const { ast: _ast, body: _body, usesPython: _python, usesViews: _views, ...analysis } = parsed;
-    if(options.target==='native') analysis.diagnostics.push(...nativeDiagnostics(parsed));
-    else for(const statement of parsed.ast.statements) if(statement.kind==='import' && statement.bridge==='std' && !(standardLibraries as readonly string[]).includes(statement.specifier)) analysis.diagnostics.push({code:'ARYA_NATIVE_UNSUPPORTED',token:statement.token,message:`Standard library '${statement.specifier}' is unavailable in the JavaScript profile; select native for native libraries.`});
+    if (options.target !== undefined && options.target !== 'js') analysis.diagnostics.unshift({code: 'ARYA_UNSUPPORTED_TARGET', token: {kind: 'eof', text: '', start: 0, end: Math.min(1, source.length), line: 0, column: 0}, message: 'Arya supports the Node.js runtime only. Remove the retired target option.'});
     const error = analysis.diagnostics[0];
     return error ? { ...analysis, error } : analysis;
   }

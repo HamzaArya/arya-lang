@@ -2,26 +2,15 @@
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current language version:** Arya 1.2.0-alpha.4 (published experimental preview)
+**Current source version:** Arya 1.3.0-alpha.1 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
 **Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [current release notes](releases/1.2.0-alpha.4.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
-## Current delivery — 10 November 2026
+## Current direction — 10 November 2026
 
-Arya's purpose is readable application code spanning JavaScript/npm and Python, with practical server, database, UI, and editor tools.
+Arya focuses on readable Node.js applications combining JavaScript/npm and Python. The 1.3.0-alpha.1 source candidate retires native compilation and concentrates on five application templates, services/databases, UI/motion, Electron desktop apps, and editor quality. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.1.md).
 
-| Area | Current state |
-| --- | --- |
-| npm distribution | Compiler and creator 1.2.0-alpha.4 published on `latest`; exact hashes and a fresh-install result are in the [publication record](releases/1.2.0-alpha.4-publication.json). |
-| Application creation | Web, API, CLI, native, UI, and Electron desktop starters with pinned compiler versions. |
-| Interoperability | JavaScript imports, synchronous Python bridge, and opt-in asynchronous bound calls/batches/managed clients. |
-| Services/data | MySQL pools/transactions, schemas, structured logs, request context, health checks, and shutdown. |
-| UI | Components, state/forms, JSON actions, reduced-motion-aware animations, and a preview/implementation guide. |
-| Editor tooling | Offline VSIX, themes/icons, semantic tokens, standard-library hints, spelling fixes, LSP, and adapters. |
-| Native profile | C11 backend and Arya-written compiler with three-generation bootstrap verification. |
-| Remaining work | Current cross-platform qualification, real learner observations, stable contract/support, formatter, safe rename, interactive debugger, and additional ecosystem integrations. |
-
-See [current qualification](release-readiness.md). The milestone plan below preserves the original 0.2-to-stable goals, original scope exclusions, and dated evidence. Later alpha implementations can add capabilities while stable/platform/learner gates remain open. The 1.x alpha labels do not declare the original stability goals complete.
+The published npm baseline remains 1.2.0-alpha.4; its exact archives and native-inclusive evidence are historical facts. No new npm publication is implied by the source refocus. The roadmap's original milestone plans and logs below remain history; native/compiler milestones are no longer active product work. Current qualification is tracked in [release readiness](release-readiness.md).
 
 ## Original milestone plan
 

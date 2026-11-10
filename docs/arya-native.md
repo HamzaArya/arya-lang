@@ -1,5 +1,8 @@
 # Native Arya 1.2 preview
 
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+
+
 Arya has a C11 native backend and an Arya-written native compiler. Native programs compile ahead of time to machine-code executables. They run without Node.js, Python, an Arya installation, a C compiler, or a JavaScript engine. OS libraries remain dependencies; the macOS arm64 artifact links to libSystem.
 
 The current npm compiler is **1.2.0-alpha.4**, an experimental preview with verified three-generation native bootstrap results. Standalone native archives from [1.1.0-alpha.1](native-release-verification.md) retain their original version; no new standalone native archive was published with alpha.4. Platform support is limited to environments recorded in the release's qualification evidence. See the [native contract](arya-native-specification.md) and [implementation plan](arya-1.1-native-plan.md).
@@ -14,7 +17,7 @@ npx --no-install arya build calculator.arya --target native -o build/calculator
 ./build/calculator 12 + 8
 ```
 
-For offline installation, use the retained matching npm archive. Registry `latest` selects alpha.4 at publication; generated projects and exact version pins are reproducible. The [complete calculator](../fixtures/native/calculator.arya) accepts arguments or prompts interactively. A minimal program is:
+For offline installation, use the retained matching npm archive. Registry `latest` selects alpha.4 at publication; generated projects and exact version pins are reproducible. The [complete calculator](https://github.com/HamzaArya/arya-lang/blob/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda/fixtures/native/calculator.arya) accepts arguments or prompts interactively. A minimal program is:
 
 ```arya
 use std "io" as io
@@ -53,7 +56,7 @@ When supplied for a qualified candidate, the native release archive contains `ar
 
 This compiler runs without Node.js. It still invokes an installed C11 compiler/linker to build executables. A compiler written in Arya does not replace the operating system's SDK, linker, or C toolchain.
 
-The [compiler source](../bootstrap/compiler.arya) implements lexing, parsing, lexical resolution, module loading, C emission, numeric specialization, and a CLI in Arya. It embeds the C runtime through a generated Arya module. It does not invoke the TypeScript compiler or Node at runtime. The bootstrap command uses the TypeScript compiler only for the initial generation:
+The [compiler source](https://github.com/HamzaArya/arya-lang/blob/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda/bootstrap/compiler.arya) implements lexing, parsing, lexical resolution, module loading, C emission, numeric specialization, and a CLI in Arya. It embeds the C runtime through a generated Arya module. It does not invoke the TypeScript compiler or Node at runtime. The bootstrap command uses the TypeScript compiler only for the initial generation:
 
 ```sh
 npm run bootstrap:native

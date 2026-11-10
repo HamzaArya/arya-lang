@@ -2,6 +2,15 @@
 
 Arya is experimental. Versioned release notes contain compatibility details; [release readiness](docs/release-readiness.md) records actual qualification.
 
+## 1.3.0-alpha.1 — Node.js-only source candidate
+
+- Retired native compilation, bootstrap, native project/API exports, editor settings, and CI.
+- Kept five Node.js application templates, Python/npm integration, databases, UI/motion, and Electron desktop apps.
+- Added shared unknown-library diagnostics, explicit errors for retired native requests, and a build that removes stale generated bundles.
+- Preserved native work in Git history and retained published release evidence.
+
+See [candidate notes](docs/releases/1.3.0-alpha.1.md) and [migration](docs/node-runtime.md). This entry does not claim npm publication.
+
 ## Repository updates after 1.2.0-alpha.4
 
 - Refreshed current guides, installation commands, examples, editor instructions, and security/compatibility status.

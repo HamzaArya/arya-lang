@@ -1,6 +1,6 @@
 # Compatibility and stabilization policy
 
-This policy covers the current 1.2.0-alpha.4 preview and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The owner-selected Apache-2.0 alpha publication policy is described below; publishing a preview does not qualify a stable release. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate.
+This policy covers the Node.js-only 1.3.0-alpha.1 source candidate and published 1.2.0-alpha.4 baseline and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The owner-selected Apache-2.0 alpha publication policy is described below; publishing a preview does not qualify a stable release. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate.
 
 ## Version labels
 
@@ -33,7 +33,7 @@ The following remain outside the future stable promise until explicitly promoted
 - unreleased proposals and roadmap checkboxes;
 - generated JavaScript formatting, internal helper names, parser annotations, scope ID values, and dependency-graph traversal implementation details;
 - private filesystem helpers and unexported compiler modules;
-- unqualified editor/platform combinations, interactive debugging, formatter/rename proposals, experimental managed Python clients, native execution, and Unicode identifier proposals;
+- unqualified editor/platform combinations, interactive debugging, formatter/rename proposals, experimental managed Python clients and Unicode identifier proposals;
 - undocumented host extensions accessed through `globalThis` or an explicit host import.
 
 The documented generated entry/map locations remain a user contract; internal text formatting does not. Analysis metadata's documented fields remain an API contract, while numeric scope IDs are local identifiers rather than stable cache or database keys.
@@ -59,3 +59,7 @@ On 9 November 2026, Hamza Arya selected Apache-2.0, copyright 2026 Hamza Arya, h
 Publish a versioned specification snapshot, migration notes, supported-platform evidence, checksums, notices, and provenance alongside a stable artifact. The [readiness record](release-readiness.md) distinguishes prepared policy from completed release gates.
 
 The first public preview was 0.2.0-alpha.3. On 10 November 2026 the owner selected `latest` for both published 1.2.0-alpha.4 packages so the documented npm installation and creator commands select the new features. `next` remains at 1.2.0-alpha.3 in the verified publication record. Tags are mutable registry pointers; pin exact versions for reproducibility. The `latest` tag does not remove the alpha compatibility limits. See the [verified record](releases/1.2.0-alpha.4-publication.json).
+
+## Node.js-only source line
+
+The 1.3.0-alpha.1 candidate intentionally removes the experimental native backend and public native APIs. This breaking prerelease change is documented in [the migration guide](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.1.md). Earlier published native artifacts remain immutable historical releases; they are not maintained targets of the new source line.

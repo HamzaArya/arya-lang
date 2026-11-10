@@ -1,6 +1,6 @@
 # Safer expressions and easier debugging
 
-Arya 1.2.0-alpha.4 includes the expression syntax below in both execution targets and the self-hosted compiler. The debug library and enriched Node-hosted CLI diagnostics have the profile limits described below. Install `arya-language@latest` or build this checkout with `npm run build`.
+The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.1 candidate.
 
 ## Read missing data without losing valid values
 
@@ -34,7 +34,7 @@ Parentheses end the continuous short-circuit region: `user?.profile.name` skips 
 
 Optional chains are not assignment targets. Check the object with `if`, then use ordinary assignment. Optional constructor paths such as `new Factory?.Item()` and nullish assignment `??=` are not provided.
 
-These expression features work in the JavaScript target, TypeScript-hosted native compiler, and Arya-written native compiler. Native host/library capabilities remain those of the native profile; optional access does not introduce unsupported methods or host APIs.
+These expression features follow the documented JavaScript/Node semantics. Optional access does not inspect library APIs or add missing methods.
 
 ## Keep chains readable
 
@@ -72,12 +72,11 @@ For CI and other tools:
 
 ```sh
 arya check main.arya --json
-arya check main.arya --target native --json
 ```
 
-Success writes one JSON object to stdout with `ok:true`, `command`, `file`, `target`, and an empty `diagnostics` list. Failure returns exit status 1, `ok:false`, and structured diagnostics. Each source diagnostic includes file, code, message, one-based line/column, UTF-16 start/end offsets, optional hint/suggestion, and available fixes. Fix edits use zero-based UTF-16 offsets. Early invocation errors use `ARYA_CLI` and may omit source/target fields. JSON mode does not execute code, inspect dependency APIs, connect to services, or require a C compiler for native checking.
+Success writes one JSON object to stdout with `ok:true`, `command`, `file`, `target`, and an empty `diagnostics` list. Failure returns exit status 1, `ok:false`, and structured diagnostics. Each source diagnostic includes file, code, message, one-based line/column, UTF-16 start/end offsets, optional hint/suggestion, and available fixes. Fix edits use zero-based UTF-16 offsets. Early invocation errors use `ARYA_CLI` and may omit source/target fields. JSON mode does not execute code, inspect dependency APIs, connect to services, or require a C compiler.
 
-`--json` is a reporting option for `arya check`; it does not intercept a program's `--json` argument passed through `arya run`. These reporting features belong to the Node-hosted `arya` CLI, including its native-target check. The standalone `arya-native` compiler retains its own diagnostic format.
+`--json` is a reporting option for `arya check`; it does not intercept a program's `--json` argument passed through `arya run`. These reporting features belong to the Node.js `arya` CLI.
 
 ## Inspect values and check assumptions
 
@@ -101,6 +100,6 @@ say(debug.inspect({first: first, values: totals}))
 
 Inspection options are `depth` (0–20, default 4), `maxArrayLength` (0–1000, default 50), and `colors` (boolean, default false). Long strings are limited to 10,000 characters by the inspector. Cyclic values can be inspected. Formatting follows the installed Node version and is not a serialization format. These explicit debugging helpers do not redact values; use structured logging's field redaction for application logs.
 
-The CLI enables source maps automatically. When running generated JavaScript yourself, use `node --enable-source-maps output.mjs` and retain the adjacent map. Without source maps, trace locations refer to generated JavaScript. The debug library is JavaScript-profile only; the native profile retains its own runtime error frames.
+The CLI enables source maps automatically. When running generated JavaScript yourself, use `node --enable-source-maps output.mjs` and retain the adjacent map. Without source maps, trace locations refer to generated JavaScript. The debug library uses Node.js inspection and source maps.
 
-The [safe-access fixture](../fixtures/native/safe-access.arya) runs through JavaScript/native conformance checks. The [debugging example](../fixtures/examples/debugging/main.arya) demonstrates the helpers. `node scripts/bootstrap-native.mjs --verify-only` also verifies the Arya-written compiler through three bootstrap stages and the new native fixture, writing verification outputs under `.build` while preserving installed native release artifacts.
+The [safe-access fixture](../fixtures/arya/conformance/safe-access.arya) runs through Node.js conformance checks. The [debugging example](../fixtures/examples/debugging/main.arya) demonstrates the helpers.

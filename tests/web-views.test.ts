@@ -8,7 +8,6 @@ import { promisify } from 'node:util';
 import { runInNewContext } from 'node:vm';
 import { SourceMap } from 'node:module';
 import { compile, analyzeSource, AryaError, tokenize } from '../src/compiler.js';
-import { emitNative } from '../src/native/emitter.js';
 import { analyze, definitionAt } from '../src/language-service.js';
 
 const execute = promisify(execFile);
@@ -126,9 +125,7 @@ test('dangerous URL schemes are rejected and normal URL text is escaped', async 
   assert.equal(await run('print(view { a(href="mailto:hello@example.com") "Mail" })'), '<a href="mailto:hello@example.com">Mail</a>');
 });
 
-test('native checking explains that web views require the JavaScript target', () => {
-  assert.throws(() => emitNative([{ filename: '/tmp/native-view.arya', source: 'print(view { p "Hello" })' }]), (error: unknown) => error instanceof AryaError && /view|web/i.test(error.message) && /JavaScript|js/.test(error.message));
-});
+
 
 test('checking views does not execute embedded expressions or load imports', () => {
   const source = 'use js "package-that-does-not-exist" as library\nprint(view { p (library.execute()) })';

@@ -159,12 +159,11 @@ test('motion honors initial and changed reduced-motion preferences', () => {
   context.reduce(); assert.equal(cancelled, true);
 });
 
-test('UI checking remains passive, editor hints describe APIs, and native gets a profile diagnostic', () => {
+test('UI checking remains passive, editor hints describe APIs', () => {
   const source = 'use std "ui" as ui\nkeep page = ui.page({state: {notExecuted: missingPackage()}})';
   assert.throws(() => compile(source), /missingPackage/);
   assert.doesNotThrow(() => compile('use std "ui" as ui\nui.page({state: {bad: Infinity}})'.replace('Infinity', '1 / 0')));
   const prefix = 'use std "ui" as ui\nui.';
   const labels = standardCompletions(prefix, prefix.length).map(item => item.label);
   for (const label of ['page', 'input', 'request', 'motion', 'bind']) assert.ok(labels.includes(label));
-  assert.ok(analyze('use std "ui" as ui', 'file:///main.arya', {target: 'native'}).diagnostics.some(item => item.code === 'ARYA_NATIVE_UNSUPPORTED'));
 });

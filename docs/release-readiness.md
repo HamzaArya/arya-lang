@@ -1,8 +1,21 @@
 # Release readiness and evidence
 
+## Current source candidate: 1.3.0-alpha.1
+
+The current source focuses on Node.js and retires native compilation. See [candidate notes](releases/1.3.0-alpha.1.md) and [migration](node-runtime.md). Candidate checks, packaging, and editor-host verification are recorded separately from the earlier npm transaction. No new publication is implied by the source change. A C compiler is no longer required for the current suite.
+
+Local candidate verification on macOS arm64 passed TypeScript, documentation checking (63 Markdown files and 382 local links), and 230 enabled tests; four optional integrations were skipped in the default suite. A fresh recorded source snapshot passed compiler/creator/editor packaging, installed-package acceptance, and the read-only audit. Installed-package acceptance also passed on Node 22.15.0; snapshot tests used Node 24.16.0.
+
+Separate Chrome UI/library and Electron tests passed. The first Chrome UI startup exceeded its 10-second launch budget; a focused retry passed. Real VS Code and AryaCode hosts passed with language version 1.3.0-alpha.1, including semantic roles, icons, themes, and the setup tour. Live MySQL was not rerun for this candidate. Published earlier archives were checked and remain unchanged.
+
+The source snapshot check now excludes tracked deletions while retaining new working files; a real Git-inventory regression verifies that behavior without staging changes. Candidate archives and source/check evidence remain local preparation artifacts until a separate publication is performed.
+
+
+## Latest published baseline
+
 **Current release: 1.2.0-alpha.4, published 10 November 2026.** Both `arya-language` and `create-arya-language` are published on npm's `latest` tag. The [publication record](releases/1.2.0-alpha.4-publication.json) contains registry URLs, SHA-256/SHA-512 identities, verified tags, and public-install results. This is an experimental alpha, with the scope below.
 
-## Current release evidence
+## Published alpha.4 baseline evidence
 
 | Area | Recorded alpha.4 result |
 | --- | --- |
