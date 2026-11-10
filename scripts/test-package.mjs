@@ -34,6 +34,7 @@ try {
   assert.ok(features.capabilities.includes('arya.node.v1'));
   assert.ok(features.capabilities.includes('arya.syntax.flow.v1'));
   assert.ok(features.capabilities.includes('arya.list.v1'));
+  assert.ok(features.capabilities.includes('arya.ui.patterns.v1'));
   assert.match(run('init', 'website', '--web'), /(?:created|initialized|ready)/i);
   for (const file of ['main.arya', 'index.html', 'package.json', 'public/styles.css', 'public/app.js', 'README.md', '.gitignore']) {
     assert.ok((await readFile(join(root, 'website', file))).length > 0, file);
@@ -70,6 +71,10 @@ try {
   const guide = run('run', 'ui-guide.arya');
   assert.match(guide, /npm create arya-language@latest/);
   assert.match(guide, /Implementation guide/);
+  await writeFile(join(root, 'ui-template.arya'), 'use std "ui" as ui\nsay(ui.template("dashboard", {brand: "Installed template", metrics: [{label: "Open tasks", value: 7}], rows: []}))\n');
+  const dashboard = run('run', 'ui-template.arya');
+  assert.match(dashboard, /Installed template/);
+  assert.match(dashboard, /Open tasks/);
   assert.match(run('check', 'fixtures/hello.arya'), /Check OK/);
   assert.match(run('build', 'fixtures/hello.arya'), /hello\.arya\.mjs/);
   assert.match(run('run', 'fixtures/hello.arya'), /Ready to build/);

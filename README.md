@@ -2,7 +2,7 @@
 
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current source: [1.3.0-alpha.2](docs/releases/1.3.0-alpha.2.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
+**Current source: [1.3.0-alpha.3](docs/releases/1.3.0-alpha.3.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
 
 ## Start a project
 
@@ -77,7 +77,7 @@ Direct Python calls remain synchronous. The async library adds bound imports, ke
 | Find and fix errors | [Safer expressions, code frames, Quick Fixes, and debug helpers](docs/syntax-and-debugging.md) |
 | Embed the compiler | [Compiler, language-service, project, and editor APIs](docs/compiler-api.md) |
 
-The UI library includes an interactive component gallery, motion playground, copyable examples, and an implementation guide. From a source checkout, run `npm run ui:preview` and open **http://127.0.0.1:3040**. Applications can serve the same pages with `ui.preview()`.
+The UI library includes an interactive component gallery, eight reusable page sections, four full-page templates, a motion playground, and an implementation guide. The [sections and templates guide](docs/ui-patterns.md) covers landing pages, dashboards, settings, and sign-in interfaces. From a source checkout, run `npm run ui:preview` and open **http://127.0.0.1:3040**. Applications can serve the same pages with `ui.preview()`.
 
 ## Enable editor support
 

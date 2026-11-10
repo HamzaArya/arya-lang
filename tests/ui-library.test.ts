@@ -89,7 +89,7 @@ test('component validation explains malformed configurations before serving HTML
 
 test('built-in component, motion, and implementation pages render without remote assets', async t => {
   const ui = await library(t);
-  for (const section of ['components', 'motion', 'guide']) {
+  for (const section of ['components', 'sections', 'templates', 'motion', 'guide']) {
     const html = ui.preview({section, basePath: '/kit', ...(section === 'components' ? {apiPath: '/api/preview'} : {})});
     assert.match(html, /^<!doctype html>/);
     assert.ok(html.includes('href="/kit/motion"'));
@@ -111,7 +111,8 @@ test('the checked-in preview serves all pages and a validated JSON form endpoint
   const {start, stop} = await import(pathToFileURL(await writeProject(await buildProject(filename))).href);
   const server = start(0); stopServer = () => stop(server); await once(server, 'listening');
   const origin = 'http://127.0.0.1:' + server.address().port;
-  for (const path of ['/', '/motion', '/guide']) { const response = await fetch(origin + path); assert.equal(response.status, 200); assert.equal(response.headers.get('cache-control'), 'no-store'); assert.match(await response.text(), /Arya UI/); }
+  for (const path of ['/', '/sections', '/templates', '/motion', '/guide']) { const response = await fetch(origin + path); assert.equal(response.status, 200); assert.equal(response.headers.get('cache-control'), 'no-store'); assert.match(await response.text(), /Arya UI/); }
+  for (const name of ['landing', 'dashboard', 'settings', 'sign-in']) { const response = await fetch(origin + '/templates/' + name); assert.equal(response.status, 200); assert.equal(response.headers.get('cache-control'), 'no-store'); assert.match(await response.text(), /Northstar/); }
   const post = (body: unknown) => fetch(origin + '/api/preview', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)});
   const result = await post({name: 'Arya', email: 'arya@example.com', plan: 'team', updates: true});
   assert.equal(result.status, 200); assert.deepEqual(await result.json(), {message: 'Preview saved for Arya.', plan: 'team'});

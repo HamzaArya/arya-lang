@@ -2,6 +2,8 @@
 
 Arya 1.2.0-alpha.4's JavaScript target includes a component library, browser state/actions, a motion engine, and a built-in preview with an implementation guide. No frontend packages, CDN assets, or browser source evaluation are required. These experimental APIs require compiler 1.2.0-alpha.4 or later.
 
+The **1.3.0-alpha.3 source candidate** adds ten components, eight reusable sections, and four complete templates. See [sections and templates](ui-patterns.md) for contracts and customization. The new APIs require this candidate compiler; the older npm archive does not include them.
+
 ## Open the live library
 
 From this repository:
@@ -15,8 +17,11 @@ Open **http://127.0.0.1:3040**:
 | Page | Contents |
 | --- | --- |
 | `/` | Live components, Preview/Arya tabs, copyable examples, forms, state, tables, dialogs, and feedback. |
+| `/sections` | Eight reusable page sections, with live examples and copyable Arya code. |
+| `/templates` | Four template cards linking to complete live pages and copyable calls. |
+| `/templates/landing`, `/templates/dashboard`, `/templates/settings`, `/templates/sign-in` | Full-page template previews. |
 | `/motion` | All 16 presets, replay, looping, pause/resume/cancel, stagger, sequences, parallel playback, and custom keyframes. |
-| `/guide` | Nine implementation steps and the complete API reference. |
+| `/guide` | Ten implementation steps and the complete API reference. |
 
 Stop with Control+C. After building, use `node fixtures/examples/ui-library/serve.mjs 4000` for another port. The preview is a local server; it does not publish a website. Its profile endpoint validates and echoes data without storing it.
 
@@ -306,3 +311,30 @@ The same catalog supplies the built-in guide and editor hints. All public functi
 | `ui.pause(componentId)` | Action: pause active animations for a target. |
 | `ui.resume(componentId)` | Action: resume paused animations. |
 | `ui.cancel(componentId)` | Action: cancel active/filled effects and restore underlying styles. |
+
+### Additional components, sections, and templates (source candidate)
+
+Requires 1.3.0-alpha.3. See [the complete contracts](ui-patterns.md).
+
+| API | Purpose |
+| --- | --- |
+| `ui.container(children, {size = "lg", ...props})` | Center content with sm, md, lg, or full width. |
+| `ui.buttonGroup(children, {label = "Actions", ...props})` | Group related actions with an accessible label. |
+| `ui.image(src, alt, {caption, width, height, ...props})` | Render a responsive lazy-loaded image and optional caption. |
+| `ui.descriptionList([{term, detail}], props = {})` | Render semantic labelled values. |
+| `ui.timeline([{title, body, time}], props = {})` | Render an ordered activity timeline. |
+| `ui.steps([{title, description}], {current = 0, label, ...props})` | Display a zero-based current step; navigation stays with the application. |
+| `ui.pagination([{label, href, current, disabled}], {label, ...props})` | Render page links with current-page and disabled semantics. |
+| `ui.segmented([{value, label, disabled}], {id, bind, label, ...props})` | Render a labelled native radio group bound to a state key. |
+| `ui.search({id, bind, label = "Search", placeholder, ...props})` | Render a labelled search input with an optional state-clearing action. |
+| `ui.meter(value, {min = 0, max = 100, low, high, optimum, label, ...props})` | Display a native measurement, optionally bound to state. |
+| `ui.navbar({brand, href, links, actions, label, ...props})` | Compose a responsive brand, navigation links, and actions. |
+| `ui.hero({eyebrow, title, description, actions, media, align, ...props})` | Create a landing introduction with optional media. |
+| `ui.features([{title, description, icon}], {title, description, ...props})` | Compose a responsive feature-card section. |
+| `ui.pricing([{title, price, interval, description, features, action, highlighted}], options = {})` | Compose pricing cards; checkout belongs to the application. |
+| `ui.testimonials([{quote, name, role, initials}], options = {})` | Compose attributed quotes and optional avatars. |
+| `ui.faq([{question, answer, open}], {title, description, id, multiple, ...props})` | Compose a heading and native disclosure answers. |
+| `ui.cta({title, description, actions, ...props})` | Compose a call-to-action surface. |
+| `ui.footer({brand, description, links, copyright, label, ...props})` | Compose footer navigation and attribution. |
+| `ui.templates()` | List the available full-page template names. |
+| `ui.template(name, options = {})` | Render a customizable landing, dashboard, settings, or sign-in page. |

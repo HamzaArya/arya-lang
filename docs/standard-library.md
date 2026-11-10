@@ -1,6 +1,6 @@
 # Arya standard libraries
 
-**Source candidate: 1.3.0-alpha.2.** Import a library with `use std "name" as alias`. All libraries below run on Node.js.
+**Source candidate: 1.3.0-alpha.3.** Import a library with `use std "name" as alias`. All libraries below run on Node.js.
 
 ## JavaScript/Node profile
 

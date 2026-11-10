@@ -1,7 +1,7 @@
 /** Public API reference shared by the preview and editor completions. */
 export const uiCatalog = [
   ['page', 'Layout', 'page({title, state, body, theme, css})', 'Render a complete interactive HTML document.'],
-  ['preview', 'Layout', 'preview({section, basePath, apiPath})', 'Render the component gallery, motion lab, or implementation guide.'],
+  ['preview', 'Layout', 'preview({section, basePath, apiPath})', 'Render component, section, and template galleries, the motion lab, or implementation guide.'],
   ['element', 'Layout', 'element(tag, props = {}, children = [])', 'Compose an escaped semantic HTML element.'],
   ['section', 'Layout', 'section(children, props = {})', 'Group a semantic section with vertical spacing.'],
   ['stack', 'Layout', 'stack(children, props = {})', 'Arrange components vertically.'],
@@ -60,4 +60,31 @@ export const uiCatalog = [
   ['pause', 'Motion', 'pause(componentId)', 'Action: pause active animations for a target.'],
   ['resume', 'Motion', 'resume(componentId)', 'Action: resume paused animations.'],
   ['cancel', 'Motion', 'cancel(componentId)', 'Action: cancel active/filled effects and restore underlying styles.'],
+  ['container', 'Layout', 'container(children, {size = "lg", ...props})', 'Center content with sm, md, lg, or full width.'],
+  ['buttonGroup', 'Forms', 'buttonGroup(children, {label = "Actions", ...props})', 'Group related actions with an accessible label.'],
+  ['image', 'Data', 'image(src, alt, {caption, width, height, ...props})', 'Render a responsive lazy-loaded image and optional caption.'],
+  ['descriptionList', 'Data', 'descriptionList([{term, detail}], props = {})', 'Render semantic labelled values.'],
+  ['timeline', 'Data', 'timeline([{title, body, time}], props = {})', 'Render an ordered activity timeline.'],
+  ['steps', 'Navigation', 'steps([{title, description}], {current = 0, label, ...props})', 'Display a zero-based current step; navigation stays with the application.'],
+  ['pagination', 'Navigation', 'pagination([{label, href, current, disabled}], {label, ...props})', 'Render page links with current-page and disabled semantics.'],
+  ['segmented', 'Forms', 'segmented([{value, label, disabled}], {id, bind, label, ...props})', 'Render a labelled native radio group bound to a state key.'],
+  ['search', 'Forms', 'search({id, bind, label = "Search", placeholder, ...props})', 'Render a labelled search input with an optional state-clearing action.'],
+  ['meter', 'Data', 'meter(value, {min = 0, max = 100, low, high, optimum, label, ...props})', 'Display a native measurement, optionally bound to state.'],
+  ['navbar', 'Sections', 'navbar({brand, href, links, actions, label, ...props})', 'Compose a responsive brand, navigation links, and actions.'],
+  ['hero', 'Sections', 'hero({eyebrow, title, description, actions, media, align, ...props})', 'Create a landing introduction with optional media.'],
+  ['features', 'Sections', 'features([{title, description, icon}], {title, description, ...props})', 'Compose a responsive feature-card section.'],
+  ['pricing', 'Sections', 'pricing([{title, price, interval, description, features, action, highlighted}], options = {})', 'Compose pricing cards; checkout belongs to the application.'],
+  ['testimonials', 'Sections', 'testimonials([{quote, name, role, initials}], options = {})', 'Compose attributed quotes and optional avatars.'],
+  ['faq', 'Sections', 'faq([{question, answer, open}], {title, description, id, multiple, ...props})', 'Compose a heading and native disclosure answers.'],
+  ['cta', 'Sections', 'cta({title, description, actions, ...props})', 'Compose a call-to-action surface.'],
+  ['footer', 'Sections', 'footer({brand, description, links, copyright, label, ...props})', 'Compose footer navigation and attribution.'],
+  ['templates', 'Templates', 'templates()', 'List the available full-page template names.'],
+  ['template', 'Templates', 'template(name, options = {})', 'Render a customizable landing, dashboard, settings, or sign-in page.'],
+] as const;
+
+export const uiTemplateCatalog = [
+  {name: 'landing', title: 'Product landing', description: 'A complete product page with a hero, features, pricing, FAQs, and footer.'},
+  {name: 'dashboard', title: 'Workspace dashboard', description: 'Navigation, metrics, a project table, and recent activity.'},
+  {name: 'settings', title: 'Account settings', description: 'Profile fields, notifications, and an explicit save action.'},
+  {name: 'sign-in', title: 'Sign in', description: 'A labelled sign-in form ready for your authentication endpoint.'},
 ] as const;

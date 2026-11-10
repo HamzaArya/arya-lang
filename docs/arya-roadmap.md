@@ -2,7 +2,7 @@
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current source version:** Arya 1.3.0-alpha.2 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
+**Current source version:** Arya 1.3.0-alpha.3 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
 **Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [current release notes](releases/1.2.0-alpha.4.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
@@ -13,6 +13,8 @@ Arya focuses on readable Node.js applications combining JavaScript/npm and Pytho
 The published npm baseline remains 1.2.0-alpha.4; its exact archives and native-inclusive evidence are historical facts. No new npm publication is implied by the source refocus. The roadmap's original milestone plans and logs below remain history; native/compiler milestones are no longer active product work. Current qualification is tracked in [release readiness](release-readiness.md).
 
 The current candidate also adds [readable application flow](flow-syntax.md): pipelines, concise/default/rest functions, spreads, guards, indexed loops, finally cleanup, and collection helpers. Older forms remain accepted with the documented guard-keyword migration.
+
+The 1.3.0-alpha.3 UI candidate adds ten components, eight [reusable sections and four full-page templates](ui-patterns.md), live galleries, and copyable examples. It retains the alpha.2 syntax contract.
 
 ## Original milestone plan
 

@@ -1,6 +1,14 @@
 # Release readiness and evidence
 
-## Current source candidate: 1.3.0-alpha.2
+## Current source candidate: 1.3.0-alpha.3
+
+This candidate extends the [UI components, sections, and templates](ui-patterns.md). Local macOS arm64 verification passed TypeScript/documentation checks and **251 tests with four optional skips** (255 total). A fresh recorded working-tree snapshot passed installation, checks, compiler/creator/editor packaging, installed-package acceptance, and the local release audit with no failures/pending checks. Installed-package acceptance also passed on Node 22.15.0; the snapshot suite used Node 24.16.0.
+
+Real Chrome checks passed for the controls, eight section demos, four full-page templates, preview submit actions, themes, existing forms/motion, source tabs, CSP, and 390px mobile layouts without page overflow. Desktop/mobile screenshots were inspected for spacing and readability. Live MySQL, Electron, and real editor hosts were not rerun locally for this UI candidate; previous results remain version-specific. GitHub platform results must be checked for the exact pushed revision.
+
+The recorded snapshot is identified by source manifest `76c8729929fbdcb6159539b68df12c6259626eb91a4b3c612f57404afef79581`; local evidence lives in `.build/evidence/clean-2026-11-10T12-05-04-939Z/`. Documentation-only version/evidence notes were refreshed after that snapshot. Retained candidate archives and hashes are recorded in `artifacts/QUALIFICATION.json`; earlier archive hashes remain unchanged. This is an unpublished candidate. The latest verified npm publication remains alpha.4.
+
+## Previous flow candidate: 1.3.0-alpha.2
 
 This candidate adds the [application-flow syntax](flow-syntax.md) and list helpers. Local macOS arm64 verification passed documentation checks, TypeScript, and **245 tests with four optional skips** (249 total). Coverage includes initializer environments/TDZ, rest/spread, evaluation order and receivers, explicit async stages, guards, indexed captures, cleanup, stable error codes, source maps, passive editor services, project exports, and collection behavior.
 

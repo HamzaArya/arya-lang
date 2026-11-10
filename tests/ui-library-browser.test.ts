@@ -95,9 +95,34 @@ test('library preview works with keyboard controls, form state, dialogs, clipboa
   if (process.env.ARYA_UI_MOTION_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_MOTION_SCREENSHOT);
   await page.navigate('/guide');
   assert.equal(await js('document.querySelectorAll("#api-reference tbody tr").length'), uiCatalog.length);
-  assert.equal(await js('document.querySelectorAll(".kit-guide-step").length'), 9);
+  assert.equal(await js('document.querySelectorAll(".kit-guide-step").length'), 10);
   if (process.env.ARYA_UI_GUIDE_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_GUIDE_SCREENSHOT);
+  await page.navigate('/');
+  await js('document.querySelector("#workspace-mode input[value=team]").click()');
+  assert.equal(await js('document.getElementById("demo-plan").value'), 'team');
+  await js('const search=document.getElementById("project-search"); search.value="Roadmap"; search.dispatchEvent(new Event("input", {bubbles:true})); search.closest(".arya-search").querySelector("button").click()');
+  assert.equal(await js('document.getElementById("project-search").value'), '');
+  await command('Emulation.setDeviceMetricsOverride', {width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false});
+  await page.navigate('/sections');
+  assert.equal(await js('document.querySelectorAll(".kit-demo").length'), 8);
+  if (process.env.ARYA_UI_SECTIONS_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_SECTIONS_SCREENSHOT);
+  await page.navigate('/templates');
+  assert.equal(await js('document.querySelectorAll(".kit-demo").length'), 4);
+  if (process.env.ARYA_UI_TEMPLATES_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_TEMPLATES_SCREENSHOT);
+  for (const name of ['landing', 'dashboard', 'settings', 'sign-in']) {
+    await page.navigate('/templates/' + name);
+    assert.equal(await js('document.querySelectorAll("h1").length'), 1);
+    if (name === 'landing' && process.env.ARYA_UI_LANDING_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_LANDING_SCREENSHOT);
+    if (name === 'dashboard' && process.env.ARYA_UI_DASHBOARD_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_DASHBOARD_SCREENSHOT);
+  }
+  await js('for (const [id,value] of [["signin-email","arya@example.com"],["signin-password","example-only"]]) {const input=document.getElementById(id);input.value=value;input.dispatchEvent(new Event("input", {bubbles:true}));} document.querySelector("button[type=submit]").click()');
+  await until('document.querySelector(".arya-toast")?.textContent.includes("Preview only")');
+  assert.equal(await js('location.search'), '');
   await command('Emulation.setDeviceMetricsOverride', {width: 390, height: 844, deviceScaleFactor: 1, mobile: true});
-  assert.equal(await js('document.documentElement.scrollWidth <= innerWidth'), true);
+  for (const path of ['/sections', '/templates', '/templates/landing', '/templates/dashboard', '/templates/settings', '/templates/sign-in']) {
+    await page.navigate(path);
+    assert.equal(await js('document.documentElement.scrollWidth <= innerWidth'), true, path);
+  }
+  if (process.env.ARYA_UI_TEMPLATE_MOBILE_SCREENSHOT) await page.screenshot(process.env.ARYA_UI_TEMPLATE_MOBILE_SCREENSHOT);
   assert.deepEqual(page.exceptions, []); assert.deepEqual(page.violations, []);
 });

@@ -2,6 +2,15 @@
 
 Arya is experimental. Versioned release notes contain compatibility details; [release readiness](docs/release-readiness.md) records actual qualification.
 
+## 1.3.0-alpha.3 — UI sections and templates candidate
+
+- Added ten components: container, buttonGroup, image, descriptionList, timeline, steps, pagination, segmented, search, and meter.
+- Added navbar, hero, features, pricing, testimonials, FAQ, CTA, and footer sections.
+- Added customizable landing, dashboard, settings, and sign-in templates with explicit server-action integration.
+- Expanded live previews, copyable examples, the implementation guide, completions, and snippets.
+
+See [candidate notes](docs/releases/1.3.0-alpha.3.md) and [sections/templates](docs/ui-patterns.md). This candidate is not published to npm.
+
 ## 1.3.0-alpha.2 — readable application flow candidate
 
 - Added input-first and explicitly awaited pipelines, concise/default/rest functions, iterable spreads, checked guards, indexed loops, and finally cleanup.

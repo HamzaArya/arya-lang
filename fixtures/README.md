@@ -1,6 +1,6 @@
 # Arya examples
 
-These examples target **1.3.0-alpha.2**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. The Node application examples also work with the published 1.2.0-alpha.4 compiler. Keep companion files together when copying an example.
+These examples target **1.3.0-alpha.3**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. Individual examples state their version requirements. Flow syntax requires alpha.2 or later; added UI sections/templates require alpha.3. The older npm baseline supports the earlier examples. Keep companion files together when copying an example.
 
 | Example | Entry / instructions | Additional requirements |
 | --- | --- | --- |

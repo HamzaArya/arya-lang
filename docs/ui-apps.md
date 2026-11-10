@@ -146,3 +146,5 @@ ARYA_TEST_ELECTRON=/path/to/electron node --test .build/tests/ui-desktop.test.cj
 ```
 
 Run `npm test` first to compile these test files. Neither opt-in test downloads a runtime. The browser check exercises the generated form and real Arya routes under CSP; the desktop check verifies renderer isolation, navigation/window restrictions, the form, and server shutdown.
+
+The 1.3.0-alpha.3 source candidate adds ten components, eight page sections, and four full-page templates. See [sections and templates](ui-patterns.md) for customization, server actions, and live preview routes. These additions require the matching candidate compiler.

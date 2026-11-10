@@ -2,7 +2,7 @@
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.3.0-alpha.2`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.3.0-alpha.3`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 

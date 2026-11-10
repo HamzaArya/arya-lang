@@ -410,5 +410,39 @@
     "prefix": "spreadlist",
     "body": "[...${1:items}, ${0:nextItem}]",
     "description": "Compose a list from iterable values"
+  },
+  "UI hero section": {
+    "prefix": "uihero",
+    "body": [
+      "ui.hero({",
+      "  title: \"${1:Your next chapter}\",",
+      "  description: \"${2:A clear place to begin.}\",",
+      "  actions: [ui.link(\"${3:Get started}\", \"${4:/start}\")]",
+      "})"
+    ],
+    "description": "Compose a spacious hero section"
+  },
+  "UI full-page template": {
+    "prefix": "uitemplate",
+    "body": "ui.template(\"${1|landing,dashboard,settings,sign-in|}\", {brand: \"${2:My workspace}\"})",
+    "description": "Render a complete customizable HTML document"
+  },
+  "UI settings request": {
+    "prefix": "uisettings",
+    "body": [
+      "ui.template(\"settings\", {",
+      "  submitAction: ui.request(\"${1:/api/profile}\", {",
+      "    method: \"POST\",",
+      "    body: {name: ui.bind(\"name\"), email: ui.bind(\"email\"), notifications: ui.bind(\"notifications\")},",
+      "    result: \"result\", error: \"problem\"",
+      "  })",
+      "})"
+    ],
+    "description": "Connect the settings template to your server route"
+  },
+  "UI segmented choices": {
+    "prefix": "uisegmented",
+    "body": "ui.segmented([{value: \"${1:personal}\", label: \"${2:Personal}\"}, {value: \"${3:team}\", label: \"${4:Team}\"}], {id: \"${5:plan}\", bind: \"${6:plan}\", label: \"${7:Choose a plan}\"})",
+    "description": "Bind a native radio segment group to page state"
   }
 }

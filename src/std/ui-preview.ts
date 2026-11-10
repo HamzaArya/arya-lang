@@ -1,3 +1,4 @@
+import {uiPatternPreviewRuntime} from './ui-pattern-preview.js';
 import { uiCatalog } from '../ui-catalog.js';
 
 /** These are executable Arya examples as well as the guide's copyable source. */
@@ -89,10 +90,11 @@ main.arya-page { width:100%; max-width:none; padding:0; } .kit-shell { display:g
 `;
 
 export const uiPreviewRuntime = String.raw`
+${uiPatternPreviewRuntime}
 const __arya_uiPreview = (options = {}) => {
   __arya_uiOptions(options, ['section', 'basePath', 'apiPath'], 'preview');
   const section = options.section ?? 'components';
-  if (!['components', 'motion', 'guide'].includes(section)) __arya_uiError('preview section must be components, motion, or guide.');
+  if (!['components', 'sections', 'templates', 'motion', 'guide'].includes(section)) __arya_uiError('preview section must be components, sections, templates, motion, or guide.');
   const base = options.basePath ?? '/';
   if (typeof base !== 'string' || !/^\/(?!\/)/.test(base) || /[\\\s?#\u0000-\u001f]/.test(base)) __arya_uiError('preview basePath must be an absolute local path.');
   const path = base === '/' ? '' : base.replace(/\/$/, '');
@@ -106,10 +108,14 @@ const __arya_uiPreview = (options = {}) => {
     ui.heading(title, {level: 3}), ui.text(description, {class: 'arya-muted'}),
     ui.tabs([{id: 'preview', label: 'Preview', body: ui.stack(children, {class: 'kit-live'})}, {id: 'code', label: 'Arya', body: code(id + '-source', source)}], {id: id + '-tabs', label: title + ' example'})
   ], {class: 'kit-demo', id});
+  const patternDemos = group => __arya_uiPatternExamples.filter(item => item.group === group).map(item => demo(item.id, item.title, item.description, [__arya_uiPatternSample(item.id)], item.code));
+  const sections = () => ui.stack([heading('02 / PAGE SECTIONS', 'Good pages start with good pieces.', 'Compose navigation, heroes, features, plans, quotes, FAQs, calls to action, and footers. Each section is ordinary Arya code.'), ...patternDemos('sections')]);
+  const templates = () => ui.stack([heading('03 / FULL-PAGE TEMPLATES', 'Start a few steps ahead.', 'Four complete pages you can make your own. Open a live template or copy its Arya call. Sample data and unconnected services stay explicit.'), ui.alert('Requires source candidate 1.3.0-alpha.3', 'Build this checkout or use a matching candidate archive. The older published npm package does not include these templates.'), __arya_uiTemplateGallery(path, demo)]);
   const heading = (label, title, description) => ui.stack([ui.text(label, {class: 'arya-eyebrow'}), ui.heading(title), ui.text(description, {class: 'arya-muted'})], {class: 'kit-hero'});
   const components = () => ui.stack([
     heading('01 / COMPONENT LIBRARY', 'Less setup. More possibility.', 'Thoughtful components, useful defaults, and clear Arya code. Explore the live examples, then take the parts your application needs.'),
     ui.grid([ui.stat('Component APIs', catalog.filter(item => ['Layout', 'Typography', 'Forms', 'Data', 'Feedback', 'Navigation'].includes(item[1]) && !['page', 'preview', 'element', 'toast'].includes(item[0])).length), ui.stat('Motion presets', ui.presets().length), ui.stat('Frontend packages', 0)], {class: 'kit-summary'}),
+    ...patternDemos('components'),
     ui.section([
       ui.heading('Make the everyday feel effortless.', {level: 2}),
       ui.grid([
@@ -163,16 +169,17 @@ const __arya_uiPreview = (options = {}) => {
   ]);
   const guide = () => ui.stack([
     heading('03 / IMPLEMENTATION GUIDE', 'From the first import to a working app.', 'Start small, compose your own components, then add state and server actions. Every example below uses the same library as this preview.'),
-    ui.alert('Start with the npm package.', 'Install arya-language@latest, then use arya create with the ui or desktop template. This guide describes Arya’s experimental Node.js UI APIs.', {tone: 'info'}),
+    ui.alert('Use a matching compiler.', 'This preview includes source candidate 1.3.0-alpha.3 additions. Build the checkout or use a matching archive. The older npm release includes the original component and motion APIs.', {tone: 'info'}),
     ui.element('nav', {'aria-label': 'Guide sections', class: 'kit-guide-nav'}, guides.map((item, index) => ui.link(item.title.split('. ')[0] + '. ' + item.title.split('. ').slice(1).join('. '), '#step-' + (index + 1)))),
     ...guides.map((item, index) => ui.card([ui.heading(item.title, {level: 2}), ui.text(item.text, {class: 'arya-muted'}), code('guide-source-' + index, item.code)], {class: 'kit-guide-step', id: 'step-' + (index + 1)})),
     ui.card([ui.heading('8. Run on the web or desktop', {level: 2}), ui.text('The generated ui project starts a Node server. The desktop project runs the same interface in an isolated Electron window. Restart after source changes. Installers, signing, and automatic updates need a separate distribution setup.', {class: 'arya-muted'}), ui.code('npm create arya-language@latest my-app -- --template ui\ncd my-app\nnpm install\nnpm run dev', {language: 'shell'}), ui.text('Choose --template desktop instead for a desktop window. Its npm run web script serves the same app in a browser.', {class: 'arya-muted'})], {class: 'kit-guide-step'}),
     ui.card([ui.heading('9. Make it your own', {level: 2}), ui.text('Use page theme: light, dark, or auto. Override --bg, --surface, --ink, --muted, --line, --accent, and --button-ink in page css. Component class attributes let you scope your styles. Keep keyboard focus visible and give inputs labels.', {class: 'arya-muted'}), code('theme-source', 'ui.page({\n  title: "My app", theme: "light",\n  css: ":root { --accent: #215c47; --button-ink: #fff; }",\n  body: ui.card([ui.heading("Make it yours.")])\n})')], {class: 'kit-guide-step'}),
+    ui.card([ui.heading('10. Start with sections or a full page', {level: 2}), ui.text('Compose ui.hero, ui.features, ui.pricing, and the other sections inside ui.page. ui.template returns a complete document, so serve it directly. Override sample content and connect submitAction to your own validated routes.'), code('patterns-guide-source', 'ui.template("dashboard", {\n  brand: "My workspace",\n  metrics: [{label: "Open tasks", value: 12}],\n  rows: []\n})'), ui.link('Explore sections', path + '/sections'), ui.link('Open the templates', path + '/templates')], {class: 'kit-guide-step'}),
     ui.section([ui.heading('The complete API at a glance.', {level: 2}), ui.text('Snippets assume use std "ui" as ui unless they show their own imports. Components render on the server; actions run in the browser. State is public JSON. No server closures or arbitrary source evaluation are sent to the client.', {class: 'arya-muted'}), ui.table([{key: 'group', label: 'Group'}, {key: 'signature', label: 'API'}, {key: 'description', label: 'Purpose'}], catalog.map(item => ({group: ui.badge(item[1]), signature: 'ui.' + item[2], description: item[3]})), {caption: catalog.length + ' documented APIs', class: 'kit-reference'})], {id: 'api-reference', class: 'kit-section'})
   ]);
-  return ui.page({title: 'Arya UI — ' + section, theme: 'light', css: ${JSON.stringify(previewStyles)}, state: {count: 0, details: false, name: '', email: '', plan: 'personal', updates: true, capacity: 65, notifications: true, notes: '', busy: false, result: null, problem: ''}, body: ui.element('div', {class: 'kit-shell'}, [
-    ui.element('aside', {class: 'kit-sidebar'}, [ui.element('a', {class: 'kit-brand', href: path + '/'}, ['arya', ui.element('span', {}, '.'), ui.element('small', {}, 'UI LIBRARY')]), ui.badge('ALPHA PREVIEW', {tone: 'success'}), ui.element('nav', {class: 'kit-nav', 'aria-label': 'Library'}, [['components', 'Components', '/'], ['motion', 'Motion library', '/motion'], ['guide', 'Implementation guide', '/guide']].map(([key, label, suffix]) => ui.element('a', {href: path + suffix, ...(section === key ? {'aria-current': 'page'} : {})}, label))), ui.text('Readable code. Useful interfaces. Made with Arya.', {class: 'kit-bottom'})]),
-    ui.element('div', {class: 'kit-content'}, [ui.row([ui.breadcrumbs([{label: 'Library', href: path + '/'}, {label: section === 'components' ? 'Components' : section === 'motion' ? 'Motion' : 'Guide'}]), ui.button('Switch theme', {id: 'switch-theme', variant: 'secondary', action: ui.theme('toggle')})], {class: 'kit-top'}), section === 'components' ? components() : section === 'motion' ? motion() : guide(), ui.row([ui.text('ARYA UI / A LIBRARY TO BUILD WITH'), ui.link('Read the implementation guide ↗', path + '/guide')], {class: 'kit-footer'})]),
+  return ui.page({title: 'Arya UI — ' + section, theme: 'light', css: ${JSON.stringify(previewStyles)}, state: {query: '', count: 0, details: false, name: '', email: '', plan: 'personal', updates: true, capacity: 65, notifications: true, notes: '', busy: false, result: null, problem: ''}, body: ui.element('div', {class: 'kit-shell'}, [
+    ui.element('aside', {class: 'kit-sidebar'}, [ui.element('a', {class: 'kit-brand', href: path + '/'}, ['arya', ui.element('span', {}, '.'), ui.element('small', {}, 'UI LIBRARY')]), ui.badge('ALPHA PREVIEW', {tone: 'success'}), ui.element('nav', {class: 'kit-nav', 'aria-label': 'Library'}, [['components', 'Components', '/'], ['sections', 'Page sections', '/sections'], ['templates', 'Templates', '/templates'], ['motion', 'Motion library', '/motion'], ['guide', 'Implementation guide', '/guide']].map(([key, label, suffix]) => ui.element('a', {href: path + suffix, ...(section === key ? {'aria-current': 'page'} : {})}, label))), ui.text('Readable code. Useful interfaces. Made with Arya.', {class: 'kit-bottom'})]),
+    ui.element('div', {class: 'kit-content'}, [ui.row([ui.breadcrumbs([{label: 'Library', href: path + '/'}, {label: ({components: 'Components', sections: 'Sections', templates: 'Templates', motion: 'Motion', guide: 'Guide'})[section]}]), ui.button('Switch theme', {id: 'switch-theme', variant: 'secondary', action: ui.theme('toggle')})], {class: 'kit-top'}), ({components, sections, templates, motion, guide})[section](), ui.row([ui.text('ARYA UI / A LIBRARY TO BUILD WITH'), ui.link('Read the implementation guide ↗', path + '/guide')], {class: 'kit-footer'})]),
     ui.dialog('welcome-dialog', 'A little space to focus.', [ui.text('Native dialogs keep focus inside, support Escape, and return focus when closed.'), ui.button('Continue', {action: [ui.close('welcome-dialog'), ui.toast('You are ready to continue.', {tone: 'success'})]})], {description: 'One clear step at a time.'}),
     ui.dialog('remove-dialog', 'Remove this draft?', [ui.text('This is a preview. No files or records will be removed.'), ui.row([ui.button('Keep draft', {variant: 'secondary', action: ui.close('remove-dialog')}), ui.button('Remove draft', {variant: 'danger', action: [ui.close('remove-dialog'), ui.toast('Demo draft removed.', {tone: 'success'})]})])])
   ])});

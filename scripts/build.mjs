@@ -8,7 +8,7 @@ const manifest = JSON.parse(await readFile('package.json', 'utf8'));
 const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning' };
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
-await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, runtime: 'node', capabilities: ['arya.node.v1', 'arya.syntax.flow.v1', 'arya.list.v1', 'arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
+await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, runtime: 'node', capabilities: ['arya.node.v1', 'arya.syntax.flow.v1', 'arya.list.v1', 'arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.patterns.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
 await mkdir('artifacts', { recursive: true });
 for (const name of ['compiler', 'project', 'language-service', 'cli', 'lsp', 'create', 'editor']) {
   await build({ ...common, entryPoints: [`src/${name}.ts`], outfile: `dist/${name}.cjs`, ...(['cli', 'lsp', 'create'].includes(name) ? { banner: { js: '#!/usr/bin/env node' } } : {}) });

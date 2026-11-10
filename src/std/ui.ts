@@ -3,6 +3,8 @@ import { uiStyles } from '../ui-styles.js';
 import { uiMotionRuntime } from './ui-motion.js';
 import { uiComponentsRuntime } from './ui-components.js';
 import { uiPreviewRuntime } from './ui-preview.js';
+import { uiPatternsRuntime } from './ui-patterns.js';
+import { uiTemplatesRuntime } from './ui-templates.js';
 
 /** Declarative components execute on the server; bindings and actions are serialized data. */
 export const uiRuntime = String.raw`
@@ -70,14 +72,18 @@ const __arya_uiActions = (value, depth = 0, budget = { count: 0 }) => {
   return Object.fromEntries(Object.entries(value));
 };
 const __arya_uiElement = (tag, props = {}, children = []) => {
-  if (!['main', 'section', 'article', 'header', 'footer', 'nav', 'aside', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'button', 'input', 'textarea', 'select', 'option', 'label', 'form', 'ul', 'ol', 'li', 'strong', 'em', 'small', 'pre', 'code', 'hr', 'br', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td', 'details', 'summary', 'output', 'progress', 'dialog', 'fieldset', 'legend'].includes(tag)) __arya_uiError('unsupported element: ' + tag);
+  if (!['main', 'section', 'article', 'header', 'footer', 'nav', 'aside', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'button', 'input', 'textarea', 'select', 'option', 'label', 'form', 'ul', 'ol', 'li', 'strong', 'em', 'small', 'pre', 'code', 'hr', 'br', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td', 'details', 'summary', 'output', 'progress', 'dialog', 'fieldset', 'legend', 'figure', 'figcaption', 'blockquote', 'dl', 'dt', 'dd', 'meter'].includes(tag)) __arya_uiError('unsupported element: ' + tag);
   if (!__arya_uiObject(props)) __arya_uiError('element properties must be an object.');
   return Object.freeze({ [__arya_uiNode]: true, tag, props: Object.freeze({ ...props }), children });
 };
 const __arya_uiComponent = (tag, className, children, options = {}) => __arya_uiElement(tag, { ...options, class: className + (options.class ? ' ' + options.class : '') }, children);
 ${uiComponentsRuntime}
+${uiPatternsRuntime}
 const __arya_ui = Object.freeze({
   ...__arya_uiComponents,
+  ...__arya_uiPatterns,
+  templates: () => __arya_uiTemplateCatalog.map(item => item.name),
+  template: (name, options = {}) => __arya_uiTemplate(name, options),
   bind: __arya_uiBind,
   motion: __arya_uiMotionSpec,
   element: __arya_uiElement,
@@ -201,5 +207,6 @@ const __arya_ui = Object.freeze({
     return '<!doctype html><html lang="' + __arya_uiEscape(lang) + '" data-theme="' + theme + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="' + __arya_uiEscape(policy) + '"><title>' + __arya_uiEscape(options.title ?? 'Arya App') + '</title><meta name="description" content="' + __arya_uiEscape(options.description ?? '') + '"><style nonce="' + nonce + '">' + ${JSON.stringify(uiStyles)} + (options.css ?? '') + '</style></head><body><main class="arya-page"><div id="arya-ui-error" role="alert" hidden></div>' + body + '</main><script id="arya-ui-state" type="application/json" nonce="' + nonce + '">' + __arya_uiJSON({ state }) + '</script><script nonce="' + nonce + '">' + ${JSON.stringify(uiClient)} + '</script></body></html>';
   }
 });
+${uiTemplatesRuntime}
 ${uiPreviewRuntime}
 `;

@@ -14,6 +14,12 @@ export fn start(port) {
     "GET /": fn() {
       return web.response(200, ui.preview({apiPath: "/api/preview"}), {"cache-control": "no-store"})
     },
+    "GET /sections": fn() => web.response(200, ui.preview({section: "sections"}), {"cache-control": "no-store"}),
+    "GET /templates": fn() => web.response(200, ui.preview({section: "templates"}), {"cache-control": "no-store"}),
+    "GET /templates/landing": fn() => web.response(200, ui.template("landing"), {"cache-control": "no-store"}),
+    "GET /templates/dashboard": fn() => web.response(200, ui.template("dashboard"), {"cache-control": "no-store"}),
+    "GET /templates/settings": fn() => web.response(200, ui.template("settings"), {"cache-control": "no-store"}),
+    "GET /templates/sign-in": fn() => web.response(200, ui.template("sign-in"), {"cache-control": "no-store"}),
     "GET /motion": fn() {
       return web.response(200, ui.preview({section: "motion"}), {"cache-control": "no-store"})
     },
