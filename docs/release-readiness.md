@@ -1,8 +1,18 @@
 # Release readiness and evidence
 
-## Current source candidate: 1.3.0-alpha.1
+## Current source candidate: 1.3.0-alpha.2
 
-The current source focuses on Node.js and retires native compilation. See [candidate notes](releases/1.3.0-alpha.1.md) and [migration](node-runtime.md). Candidate checks, packaging, and editor-host verification are recorded separately from the earlier npm transaction. No new publication is implied by the source change. A C compiler is no longer required for the current suite.
+This candidate adds the [application-flow syntax](flow-syntax.md) and list helpers. Local macOS arm64 verification passed documentation checks, TypeScript, and **245 tests with four optional skips** (249 total). Coverage includes initializer environments/TDZ, rest/spread, evaluation order and receivers, explicit async stages, guards, indexed captures, cleanup, stable error codes, source maps, passive editor services, project exports, and collection behavior.
+
+A fresh recorded working-tree snapshot passed installation, checks, compiler/creator/editor packaging, installed-package acceptance, and the read-only release audit with no local failures or pending checks. Installed-package acceptance passed again on the minimum Node 22.15.0; the snapshot suite used Node 24.16.0. Both the data-flow example and its real Python statistics pipeline ran through the installed package.
+
+Separate Chrome starter, Chrome UI/motion preview, Electron, and real VS Code/AryaCode companion-host checks passed. Companion verification used the new default-parameter/concise-function/pipeline syntax and checked semantic roles, icons, and themes. AryaCode's separately pinned embedded compiler is not upgraded by the companion extension. Live MySQL was not rerun locally for this candidate; Linux/Windows results must come from the exact pushed revision's CI.
+
+The verified snapshot and archive identities are recorded locally in `.build/evidence/clean-2026-11-10T11-34-41-491Z/` and `artifacts/QUALIFICATION.json`. Final documentation-only evidence/migration notes were refreshed after that snapshot. Earlier retained archive hashes were checked unchanged. Candidate archives remain unpublished; npm latest remains the published alpha.4 baseline.
+
+## Previous Node.js-only candidate: 1.3.0-alpha.1
+
+The earlier alpha.1 source focused on Node.js and retired native compilation. See [candidate notes](releases/1.3.0-alpha.1.md) and [migration](node-runtime.md). Candidate checks, packaging, and editor-host verification are recorded separately from the earlier npm transaction. No new publication is implied by the source change. A C compiler is no longer required for the current suite.
 
 Local candidate verification on macOS arm64 passed TypeScript, documentation checking (63 Markdown files and 382 local links), and 230 enabled tests; four optional integrations were skipped in the default suite. A fresh recorded source snapshot passed compiler/creator/editor packaging, installed-package acceptance, and the read-only audit. Installed-package acceptance also passed on Node 22.15.0; snapshot tests used Node 24.16.0.
 

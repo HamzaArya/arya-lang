@@ -352,5 +352,63 @@
       "], {duration: ${1:700}, easing: \"${2|smooth,snappy,linear,ease,ease-in,ease-out,ease-in-out|}\"})"
     ],
     "description": "Create a validated custom keyframe animation"
+  },
+  "Expression function": {
+    "prefix": "fnvalue",
+    "body": "fn ${1:name}(${2:value}) => ${0:value}",
+    "description": "Return an expression without a wrapper block"
+  },
+  "Function defaults and rest": {
+    "prefix": "fnrest",
+    "body": [
+      "fn ${1:name}(${2:initial} = ${3:0}, ...${4:values}) {",
+      "  ${0:return values}",
+      "}"
+    ],
+    "description": "Default values and remaining positional arguments"
+  },
+  "Pipeline": {
+    "prefix": "pipe",
+    "body": "${1:value} |> ${2:transform}(${0:options})",
+    "description": "Pass a value as the first argument of a function"
+  },
+  "Awaited pipeline": {
+    "prefix": "pipeawait",
+    "body": "${1:value} |> await ${0:transform}",
+    "description": "Await one pipeline stage before continuing"
+  },
+  "Guard exit": {
+    "prefix": "guard",
+    "body": [
+      "guard ${1:condition} else {",
+      "  ${0:return null}",
+      "}"
+    ],
+    "description": "Exit early when a required condition fails"
+  },
+  "Indexed iteration": {
+    "prefix": "eachindex",
+    "body": [
+      "each ${1:item} at ${2:index} in ${3:items} {",
+      "  $0",
+      "}"
+    ],
+    "description": "Iterate values with a zero-based position"
+  },
+  "Try finally": {
+    "prefix": "tryfinally",
+    "body": [
+      "try {",
+      "  $1",
+      "} finally {",
+      "  ${0:await resource.close()}",
+      "}"
+    ],
+    "description": "Run cleanup after success, return, or failure"
+  },
+  "List spread": {
+    "prefix": "spreadlist",
+    "body": "[...${1:items}, ${0:nextItem}]",
+    "description": "Compose a list from iterable values"
   }
 }

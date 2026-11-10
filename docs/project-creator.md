@@ -1,6 +1,6 @@
 # Create an Arya project
 
-The Arya 1.3.0-alpha.1 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.1.md).
+The Arya 1.3.0-alpha.2 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.2.md).
 
 ## Registry workflow
 
@@ -83,17 +83,17 @@ This is a Vite-style project creation and mounting workflow. The starter uses va
 For offline use, retain the published archives. From a built checkout, create a project using the retained compiler archive:
 
 ```sh
-node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.1.tgz
+node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.2.tgz
 ```
 
 Or install the creator archive without the repository:
 
 ```sh
-npm install --global ./create-arya-language-1.3.0-alpha.1.tgz
-create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.1.tgz
+npm install --global ./create-arya-language-1.3.0-alpha.2.tgz
+create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.2.tgz
 ```
 
-Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.1.tgz`.
+Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.2.tgz`.
 
 Copy the entire created folder to another machine, then:
 

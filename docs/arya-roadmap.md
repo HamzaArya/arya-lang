@@ -2,15 +2,17 @@
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current source version:** Arya 1.3.0-alpha.1 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
+**Current source version:** Arya 1.3.0-alpha.2 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
 **Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [current release notes](releases/1.2.0-alpha.4.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
 ## Current direction — 10 November 2026
 
-Arya focuses on readable Node.js applications combining JavaScript/npm and Python. The 1.3.0-alpha.1 source candidate retires native compilation and concentrates on five application templates, services/databases, UI/motion, Electron desktop apps, and editor quality. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.1.md).
+Arya focuses on readable Node.js applications combining JavaScript/npm and Python. The 1.3.0-alpha.2 source candidate retires native compilation and concentrates on five application templates, services/databases, UI/motion, Electron desktop apps, and editor quality. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.2.md).
 
 The published npm baseline remains 1.2.0-alpha.4; its exact archives and native-inclusive evidence are historical facts. No new npm publication is implied by the source refocus. The roadmap's original milestone plans and logs below remain history; native/compiler milestones are no longer active product work. Current qualification is tracked in [release readiness](release-readiness.md).
+
+The current candidate also adds [readable application flow](flow-syntax.md): pipelines, concise/default/rest functions, spreads, guards, indexed loops, finally cleanup, and collection helpers. Older forms remain accepted with the documented guard-keyword migration.
 
 ## Original milestone plan
 
@@ -668,6 +670,10 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 | D-011 | 2026-11-09 | Parenthesize emitted numeric literals before property chaining | Fix accepted `1.toString()` and normalized decimal forms that previously emitted invalid JavaScript; existing grouped syntax remains valid | M2 |
 | D-012 | 2026-11-09 | Record scope/declaration/reference facts during parsing; resolve the completed scope graph separately and share metadata with diagnostics/navigation | Preserve the mapped emitter, forward declarations, closures, and runtime TDZ without executing imports; all user-facing paths use one resolver | M3 |
 | D-013 | 2026-11-09 | Report all independent semantic diagnostics after a complete parse; retain one syntax diagnostic until parser recovery is implemented | Better editor/CLI feedback while keeping recovery out of M3; preserve the first-error API alias and bump the local preview to alpha.2 | M3 |
+
+| D-014 | 2026-11-10 | Adopt explicit input-first pipelines, concise/default/rest functions, iterable spreads, terminating guards, indexed iteration, and finally cleanup in 1.3.0-alpha.2 | Reduce wrappers and nesting while preserving method receivers, evaluation order, initializer environments, and explicit async behavior; the [flow contract](flow-syntax.md) and conformance tests define the rules | Grammar, runtime, editor services, starter templates |
+| D-015 | 2026-11-10 | Reserve guard as a binding word; keep at contextual and old source spellings accepted | A terminating guard has clear statement syntax; older guard bindings require the [documented rename](flow-syntax.md#validate-assumptions-with-early-exits), while property keys remain legal | Prerelease migration |
+| D-016 | 2026-11-10 | Add an input-first list library with exact-field selectors, nonmutating stable sorting, safe grouping, and explicit sync/async checks | Make routine application transformations short without silently treating promises as predicate results or modifying caller ordering | Standard library, member hints |
 
 ## Current workboard
 

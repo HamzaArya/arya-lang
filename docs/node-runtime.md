@@ -2,7 +2,7 @@
 
 Arya focuses on one purpose: readable application code that connects JavaScript/npm and Python, with useful server, database, UI, and desktop tools.
 
-**Source candidate: 1.3.0-alpha.1.** This source line compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The latest verified npm publication remains **1.2.0-alpha.4**. A source change or Git push does not replace that immutable package.
+**Source candidate: 1.3.0-alpha.2.** This source line compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The latest verified npm publication remains **1.2.0-alpha.4**. A source change or Git push does not replace that immutable package.
 
 ## What remains available
 
@@ -29,7 +29,7 @@ Create a portable UI project using a candidate archive. On the first packaging r
 
 ```sh
 npm run package:editors
-node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.1.tgz
+node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.2.tgz
 cd my-ui
 npm install
 npm run dev
@@ -62,4 +62,4 @@ Native CLI options (`--cc`, `--debug`, `--release`, `--sanitize`, `-o`, `--outpu
 
 ## Historical native work
 
-The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.1.md).
+The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.2.md).

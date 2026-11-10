@@ -4,51 +4,49 @@ export const uiProjectFiles: Readonly<Record<string, string>> = {
 use std "ui" as ui
 use std "validate" as validate
 
-const estimateSchema = validate.object({
+keep estimateSchema = validate.object({
   hours: validate.number({min: 0, max: 10000}),
   rate: validate.number({min: 0, max: 1000000})
 })
 
-fn page() {
-  return ui.page({
-    title: "Arya Studio",
-    state: {hours: 12, rate: 40, result: null, busy: false, problem: ""},
-    body: ui.stack([
-      ui.text("MADE WITH ARYA", {class: "arya-eyebrow"}),
-      ui.heading("Turn an idea into something useful."),
-      ui.text("One Arya interface. A web app or a desktop window.", {class: "arya-muted"}),
-      ui.grid([
-        ui.card([
-          ui.heading("Project estimate", {level: 2}),
-          ui.form([
-            ui.label("Hours of work", "hours"),
-            ui.input({id: "hours", type: "number", min: 0, max: 10000, step: 0.5, required: true, bind: "hours"}),
-            ui.label("Hourly rate (USD)", "rate"),
-            ui.input({id: "rate", type: "number", min: 0, max: 1000000, step: 0.01, required: true, bind: "rate"}),
-            ui.button("Calculate estimate", {type: "submit", disabled: ui.bind("busy", false)})
-          ], {action: ui.request("/api/estimate", {
-            method: "POST",
-            body: {hours: ui.bind("hours"), rate: ui.bind("rate")},
-            result: "result", pending: "busy", error: "problem"
-          })})
-        ], {animate: "rise"}),
-        ui.card([
-          ui.heading("Your estimate", {level: 2}),
-          ui.text(ui.bind("result.message", "Enter your hours and rate to begin."), {role: "status", "aria-live": "polite"}),
-          ui.text(ui.bind("problem"), {role: "alert"}),
-          ui.text("Adjust the hours or rate to compare project estimates. Reset the form to start again.", {class: "arya-muted"}),
-          ui.button("Reset form", {variant: "secondary", action: [ui.set("hours", 12), ui.set("rate", 40), ui.set("result", null), ui.set("problem", "")], disabled: ui.bind("busy", false)})
-        ], {animate: ui.motion("rise", {delay: 120, duration: 500})})
-      ])
+fn page() => ui.page({
+  title: "Arya Studio",
+  state: {hours: 12, rate: 40, result: null, busy: false, problem: ""},
+  body: ui.stack([
+    ui.text("MADE WITH ARYA", {class: "arya-eyebrow"}),
+    ui.heading("Turn an idea into something useful."),
+    ui.text("One Arya interface. A web app or a desktop window.", {class: "arya-muted"}),
+    ui.grid([
+      ui.card([
+        ui.heading("Project estimate", {level: 2}),
+        ui.form([
+          ui.label("Hours of work", "hours"),
+          ui.input({id: "hours", type: "number", min: 0, max: 10000, step: 0.5, required: true, bind: "hours"}),
+          ui.label("Hourly rate (USD)", "rate"),
+          ui.input({id: "rate", type: "number", min: 0, max: 1000000, step: 0.01, required: true, bind: "rate"}),
+          ui.button("Calculate estimate", {type: "submit", disabled: ui.bind("busy", false)})
+        ], {action: ui.request("/api/estimate", {
+          method: "POST",
+          body: {hours: ui.bind("hours"), rate: ui.bind("rate")},
+          result: "result", pending: "busy", error: "problem"
+        })})
+      ], {animate: "rise"}),
+      ui.card([
+        ui.heading("Your estimate", {level: 2}),
+        ui.text(ui.bind("result.message", "Enter your hours and rate to begin."), {role: "status", "aria-live": "polite"}),
+        ui.text(ui.bind("problem"), {role: "alert"}),
+        ui.text("Adjust the hours or rate to compare project estimates. Reset the form to start again.", {class: "arya-muted"}),
+        ui.button("Reset form", {variant: "secondary", action: [ui.set("hours", 12), ui.set("rate", 40), ui.set("result", null), ui.set("problem", "")], disabled: ui.bind("busy", false)})
+      ], {animate: ui.motion("rise", {delay: 120, duration: 500})})
     ])
-  })
-}
+  ])
+})
 
 export fn start(port) {
   return web.serve(port, {
-    "GET /": fn() { return web.response(200, page(), {"cache-control": "no-store"}) },
+    "GET /": fn() => web.response(200, page(), {"cache-control": "no-store"}),
     "POST /api/estimate": web.route(fn(request) {
-      const total = request.body.hours * request.body.rate
+      keep total = request.body.hours * request.body.rate
       return {total: total, message: "Estimated total: $" + total.toFixed(2)}
     }, {body: estimateSchema})
   }, {html: false, assets: false})

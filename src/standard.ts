@@ -6,9 +6,10 @@ import { loggingRuntime } from './std/log.js';
 import { asynchronousPythonRuntime } from './std/python.js';
 import { debugRuntime } from './std/debug.js';
 import { uiRuntime } from './std/ui.js';
+import { listRuntime } from './std/list.js';
 
 /** JavaScript-profile standard libraries. Checking only emits this source; it never runs it. */
-export const standardLibraries = ['fs', 'math', 'path', 'json', 'web', 'mysql', 'env', 'validate', 'log', 'python', 'debug', 'ui'] as const;
+export const standardLibraries = ['fs', 'math', 'path', 'json', 'web', 'mysql', 'env', 'validate', 'log', 'python', 'debug', 'ui', 'list'] as const;
 
 export const standardRuntime = String.raw`import * as __arya_fs from 'node:fs/promises';
 import * as __arya_fsSync from 'node:fs';
@@ -41,6 +42,7 @@ ${envRuntime}
 ${asynchronousPythonRuntime}
 ${debugRuntime}
 ${uiRuntime}
+${listRuntime}
 const __arya_standard = (name, sourceDirectory) => {
   switch (name) {
     case 'fs': return __arya_files;
@@ -55,6 +57,7 @@ const __arya_standard = (name, sourceDirectory) => {
     case 'python': return __arya_asyncPython(sourceDirectory);
     case 'debug': return __arya_debug;
     case 'ui': return __arya_ui;
+    case 'list': return __arya_list;
     default: throw new Error('Unknown JavaScript standard library: ' + name);
   }
 };`;

@@ -2,7 +2,7 @@
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.3.0-alpha.1`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.3.0-alpha.2`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -18,14 +18,15 @@ The keywords are:
 
 ```text
 let const fn async await return if else for in while break continue
-and or not true false null use as export new try catch throw
+and or not true false null use as export new try catch finally throw guard
+keep task when otherwise each give
 ```
 
 The following additional words cannot be binding names or bare expression names:
 
 ```text
 class function var import extends super this delete typeof void instanceof
-switch case default do finally yield with debugger enum implements interface
+switch case default do yield with debugger enum implements interface
 package private protected public static arguments eval
 ```
 
@@ -33,9 +34,9 @@ Keywords and reserved words may appear after `.` or as word object keys, except 
 
 Numbers match `[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?`. A sign is a unary operator. Leading zeros are decimal: `001` means `1`. `.5`, trailing-dot decimal notation, hex/binary/octal notation, separators, and bigint suffixes are unsupported. An integer followed by a named property, such as `1.toString()`, is property access. Literal conversion uses a JavaScript Number and must be finite; overflow such as `1e999` is a compile error. Underflow may become zero; integers beyond the safe integer range may round.
 
-Strings use matching single or double quotes. They may contain any source characters except an unescaped matching quote, backslash, or LF. The escapes are exactly `\n`, `\r`, `\t`, `\\`, `\"`, and `\'`; either quote escape is accepted in either string style. There is no interpolation, multiline-string form, `\u`, `\x`, or `\0` escape. A literal NUL character inside a string is data and is safely escaped in generated code. A bare CR inside a string is preserved.
+Strings use matching single or double quotes. They may contain any source characters except an unescaped matching quote, backslash, or LF. The escapes are exactly `\n`, `\r`, `\t`, `\\`, `\"`, and `\'`; either quote escape is accepted in either string style. There is no interpolation or `\u`, `\x`, or `\0` escape. Triple-quoted raw strings provide the multiline form described in section 13. A literal NUL character inside a string is data and is safely escaped in generated code. A bare CR inside a string is preserved.
 
-The two-character symbols are `== != <= >= += -= *= /= **`; the other symbols are `+ - * / % < > = ! ( ) { } [ ] , : ; .`. Other characters outside strings/comments cause a lexical error.
+The multi-character symbols are `== != <= >= += -= *= /= ** ?? ?. => |> ...`; the other symbols are `+ - * / % < > = ! ( ) { } [ ] , : ; .`. Other characters outside strings/comments cause a lexical error.
 
 ## 2. Statements, blocks, and newlines
 
@@ -45,41 +46,43 @@ The following grammar describes the surface. `Name` is a permitted identifier; `
 Program       := { separator | Statement }
 separator     := LF | ";"
 Block         := "{" { separator | Statement } "}"
-Declaration   := ("let" | "const") Name "=" Expr end
-Function      := ["async"] "fn" Name Parameters Block
-Parameters    := "(" [ Name { "," Name } [","] ] ")"
-Import        := "use" ("js" | "python" | "arya") String "as" Name end
+Declaration   := ("let" | "const" | "keep") Name "=" Expr end
+Function      := ["async"] ("fn" | "task") Name Parameters (Block | "=>" Expr end)
+Parameters    := "(" [ Parameter { "," Parameter } [","] ] ")"
+Parameter     := Name ["=" Expr] | "..." Name  # rest must be last, with no trailing comma
+Import        := "use" ("js" | "python" | "arya" | "std") String "as" Name end
 Export        := "export" (Declaration | Function)
 If            := "if" Expr Block ["else" (If | Block)]
 While         := "while" Expr Block
-For           := "for" Name "in" Expr Block
+For           := ("for" | "each") Name ["at" Name] "in" Expr Block
+Guard         := "guard" Expr "else" Block  # fallback must exit
 Return        := "return" [Expr] end
 LoopControl   := ("break" | "continue") end
-Try           := "try" Block "catch" Name Block
+Try           := "try" Block ("catch" Name Block ["finally" Block] | "finally" Block)
 Throw         := "throw" Expr end
 Assignment    := Target ("=" | "+=" | "-=" | "*=" | "/=") Expr end
 ExpressionStmt:= Expr end
 Statement     := Declaration | Function | Import | Export | If | While | For
-               | Return | LoopControl | Try | Throw | Assignment | ExpressionStmt
+               | Return | LoopControl | Guard | Try | Throw | Assignment | ExpressionStmt
 ```
 
-An `end` requires a newline or semicolon, or is implicit immediately before `}` or end of input. Empty separators are allowed. A completed compound statement (`fn`, `if`, `while`, `for`, `try`) needs no separator before the next statement: `if false {} print(1)` is legal. A standalone `{name: 1}` is an object expression statement, not an independent scope block.
+An `end` requires a newline or semicolon, or is implicit immediately before `}` or end of input. Empty separators are allowed. A completed block-bodied compound statement (`fn`, `if`, `while`, `for`, `try`, `guard`) needs no separator before the next statement: `if false {} print(1)` is legal. A standalone `{name: 1}` is an object expression statement, not an independent scope block.
 
 Newlines are permitted:
 
-- between statements; before a block's opening `{`; before/after `else`; and between the try block and `catch`;
+- between statements; before a block's opening `{`; before/after `else`; and between try/catch/finally blocks;
 - inside parameter lists, calls, lists, objects, grouped expressions, and index brackets at item boundaries, around commas, and before closing delimiters; object keys must keep their `:` on the same line;
 - after `=`, a compound assignment operator, a binary operator, or an object's `:` before its value.
 
-Commas remain required between items; trailing commas are accepted in parameters, calls, lists, and objects. A newline before a binary operator does not continue the preceding expression. A newline is not accepted between a unary operator and operand, after `if`/`while`/`in`/`throw`/`await`/`new` before their expression/name, after `.`, between `fn` and its name/parameters, or inside an import clause. `catch` must be followed by its name on the same line. A semicolon between an if block and `else` is invalid.
+Commas remain required between items; trailing commas are accepted in parameters, calls, lists, and objects. A leading `|>` continues an expression; other binary operators do not continue across a preceding newline. Leading-dot continuation is defined in section 13.2. A newline is not accepted between a unary operator and operand, after `if`/`while`/`in`/`throw`/`await`/`new` before their expression/name, after `.`, between `fn` and its name/parameters, or inside an import clause. `catch` must be followed by its name on the same line. A semicolon between an if block and `else` is invalid.
 
 A newline immediately after `return` ends a bare return; a value on the following line is another statement. `throw` always requires a value on the same line. These are parser rules, not JavaScript automatic semicolon insertion.
 
 ## 3. Expressions and operators
 
-Primary expressions are numbers, strings, `true`, `false`, `null`, names, parenthesized expressions, lists, objects, and anonymous `fn(...) { ... }` or `async fn(...) { ... }`. A function declaration at the start of a statement requires a name; parenthesize an anonymous function used as an entire expression statement.
+Primary expressions are numbers, strings, `true`, `false`, `null`, names, parenthesized expressions, lists, objects, and anonymous `fn(...) { ... }`, `fn(...) => Expr`, and their async forms. A function declaration at the start of a statement requires a name; parenthesize an anonymous function used as an entire expression statement.
 
-Lists contain comma-separated expressions, with no holes or spread. Objects contain comma-separated `word: value` or `"string": value` entries. Numeric, computed, shorthand, and method-definition keys are unsupported. Each key is an own string property, including `"__proto__"`, which does not change the prototype. Duplicate keys evaluate all values in order; the last value wins. Objects otherwise have the ordinary JavaScript object prototype.
+Lists contain comma-separated expressions or iterable spreads (`...Expr`), with no holes. Call and constructor argument lists also accept iterable spreads. Objects contain comma-separated `word: value` or `"string": value` entries. Numeric, computed, shorthand, and method-definition keys are unsupported. Each key is an own string property, including `"__proto__"`, which does not change the prototype. Duplicate keys evaluate all values in order; the last value wins. Objects otherwise have the ordinary JavaScript object prototype.
 
 Postfix expressions permit calls, `.word` properties, and `[Expr]` indexing, chained without restriction on the resulting value. Method calls preserve the receiver. `new Name.member(...arguments)` constructs through a name followed by zero or more named properties, then accepts postfix operations. Computed constructor names and a missing argument list are unsupported. `this` is not an Arya expression.
 
@@ -87,6 +90,8 @@ Precedence is listed from lowest to highest:
 
 | Rank | Operators | Associativity / meaning |
 | --- | --- | --- |
+| -1 | `\|>` | Left; input-first function pipeline, optionally explicitly awaited |
+| 0 | `??` | Left; nullish default |
 | 1 | `or` | Left; short-circuit logical OR, returns an operand |
 | 2 | `and` | Left; short-circuit logical AND, returns an operand |
 | 3 | `==`, `!=` | Left; strict equality/inequality |
@@ -105,13 +110,13 @@ Assignments are statements, not expressions. Targets are names, properties, or i
 
 ## 4. Bindings and scope timing
 
-The module, each function body, each conditional/loop body, and each try/catch body introduce lexical scopes. Parameters share their function body's declaration scope. A for variable shares its body scope; a catch variable shares its catch body scope. Nested scopes may shadow outer names. Duplicate declarations or parameters in the same scope are compile errors, including a body declaration duplicating a parameter, for variable, or catch name.
+The module, each function initializer/body, each conditional/loop body, and each try/catch/finally body introduce lexical scopes. Parameters have an initializer environment outside the body; their bindings are aliased into the body to preserve duplicate-declaration checks. A for variable shares its body scope; a catch variable shares its catch body scope. Nested scopes may shadow outer names. Duplicate declarations or parameters in the same scope are compile errors, including a body declaration duplicating a parameter, for variable, or catch name.
 
-The six Arya built-ins are predeclared in module scope and cannot be redeclared there; inner scopes may shadow them. Host globals are fallback bindings and may be shadowed even in module scope.
+The seven Arya built-ins are predeclared in module scope and cannot be redeclared there; inner scopes may shadow them. Host globals are fallback bindings and may be shadowed even in module scope.
 
 `let` and `const` require initializers. Their scope covers the entire enclosing lexical scope, but their bindings are uninitialized until their declaration executes. Reading or writing one before initialization throws a runtime `ReferenceError` (the temporal dead zone). This also applies when an inner binding shadows an initialized outer binding: `let value = value` cannot read the outer value.
 
-Function declarations are initialized before statements execute in their enclosing module or block, so calling a declared function earlier in that scope is legal. A function declared inside a block is not visible outside it. Parameters are initialized on a call; missing arguments are `undefined`, and extra arguments are allowed. There are no default/rest parameters or named arguments for Arya functions.
+Function declarations are initialized before statements execute in their enclosing module or block, so calling a declared function earlier in that scope is legal. A function declared inside a block is not visible outside it. Parameters initialize left to right on each call. Missing/undefined arguments use a declared default; other values are retained. Defaults cannot see body-local declarations. A final rest parameter collects remaining arguments; extra arguments otherwise remain permitted. Named arguments are not introduced. See the flow syntax contract for complete initializer/TDZ rules.
 
 Closures capture bindings rather than snapshots. Creating a closure that refers to a later declaration is legal. Calling it before that declaration initializes the binding throws `ReferenceError`; calling it afterward reads the current value. Recursion and mutual recursion are supported. Every for-loop iteration has a fresh loop binding, so closures retain that iteration's value. The loop binding also shadows an outer name while the iterable expression is evaluated, but is still uninitialized there: `let items = [1]; for items in items {}` throws ReferenceError. Use a different loop-variable name to read the outer iterable.
 
@@ -137,7 +142,7 @@ Functions return the value of `return Expr`, or undefined for bare return or rea
 
 `if` executes only the selected branch. `while` tests its condition before each iteration. `for name in Expr` iterates values using the JavaScript iterable protocol; it does not enumerate object keys. A noniterable causes a runtime TypeError. `break` exits the innermost loop; `continue` starts its next iteration. Both are compile errors outside a loop, and a nested function starts a new loop context. `return` is a compile error outside a function.
 
-`throw Expr` throws any value, not only Error objects. `try` must have a named `catch` block. The catch binding receives the thrown value and exists only in its block. There is no `finally` or bare catch form. Exceptions from an awaited rejected promise may be caught by the surrounding try/catch. A try block around promise creation without awaiting does not catch a later rejection.
+`throw Expr` throws any value, not only Error objects. `try` requires a named catch, a finally block, or both. The catch binding exists only in its handler. Finally runs after control-flow completion; a finalizer return/throw supersedes a pending result. Bare catch is not supported. Exceptions from an awaited rejected promise may be caught by the surrounding try/catch. A try block around promise creation without awaiting does not catch a later rejection.
 
 Apart from stable built-in and bridge messages documented here, host error wording and stack formatting may vary by Node/Python version. Source maps identify original Arya positions for mapped user code. Injected runtime/bridge frames remain generated locations. `arya run` and AryaCode enable maps; standalone modules require `node --enable-source-maps output.mjs`.
 
@@ -244,7 +249,7 @@ Triple double quotes (`"""`) delimit a raw multiline string. Its content is lite
 
 The contextual expression `view { ... }` introduces the JavaScript-only HTML grammar defined in the web contract. It produces an HTML string; dynamic text and attribute expressions participate in normal Arya lexical checking and HTML escaping. View element names and class names are markup, not lexical variable references. Literal script/style bodies are not Arya expressions; checking does not validate or execute their CSS/JavaScript. A literal that would close its own script/style element is rejected.
 
-The JavaScript profile accepts contextual `use std` imports for its documented standard libraries: web, fs, math, mysql, path, json, env, validate, log, python, debug, and ui. The [async Python contract](python-async.md) adds opt-in asynchronous calls and batch execution while direct Python calls retain their earlier synchronous contract. The [service contract](services.md) defines runtime schemas, structured logging, request context, parameter routes, health checks, and controlled shutdown. The MySQL/environment APIs and transaction guarantees are documented in the [MySQL guide](mysql.md). Library selection is validated during checking; loading optional dependencies and connecting to external services happen only during execution. Unknown standard-library names report `ARYA_UNKNOWN_LIBRARY` without loading runtime dependencies.
+The JavaScript profile accepts contextual `use std` imports for its documented standard libraries: web, fs, math, mysql, path, json, env, validate, log, python, debug, ui, and list. The [async Python contract](python-async.md) adds opt-in asynchronous calls and batch execution while direct Python calls retain their earlier synchronous contract. The [service contract](services.md) defines runtime schemas, structured logging, request context, parameter routes, health checks, and controlled shutdown. The MySQL/environment APIs and transaction guarantees are documented in the [MySQL guide](mysql.md). Library selection is validated during checking; loading optional dependencies and connecting to external services happen only during execution. Unknown standard-library names report `ARYA_UNKNOWN_LIBRARY` without loading runtime dependencies.
 
 `view` and `std` remain contextual rather than globally reserved. Existing identifiers using those names remain permitted outside their contextual forms. All prior file, token, and project limits continue to apply.
 
@@ -275,3 +280,7 @@ The [editor API](compiler-api.md#semantic-highlighting) provides passive lexical
 The C11/native backend, native standard-library profile, native bootstrap/compiler, native CLI template, and `arya-language/native` export are removed from the current source line. The [migration contract](node-runtime.md) defines retired flags, API behavior, replacement libraries, and the distinction between source candidates and published packages.
 
 All generated application modules run on Node.js 22.15+. `arya build` emits a JavaScript module and source map, not a standalone executable. `--target js` remains a compatibility spelling; other target values fail explicitly. The project and analysis APIs report `ARYA_UNSUPPORTED_TARGET` for unsupported legacy requests. Native artifacts and their historical contracts remain specific to their older releases.
+
+## 15. Application flow in 1.3.0-alpha.2
+
+The [flow syntax contract](flow-syntax.md) specifies input-first/awaited pipelines, concise/default/rest functions, spreads, terminating guards, indexed iteration, finally cleanup, and the `list` standard library. Pipeline input, receiver/key/getter, explicit arguments, and invocation each evaluate once in that order. Function defaults have their own environment; every indexed loop iteration has fresh value/index bindings. These additions preserve passive analysis and original-source mapping. `guard` is newly reserved as a binding name; properties with that name remain legal.

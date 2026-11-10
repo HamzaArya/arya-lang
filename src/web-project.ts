@@ -7,11 +7,9 @@ import { uiProjectFiles, desktopMain } from './ui-project.js';
 const webFiles: Readonly<Record<string, string>> = {
   'main.arya': `use std "web" as web
 
-const port = number(args[0] or "3000")
-const server = web.serve(port, {
-  "GET /api/health": fn() {
-    return {status: "ok", language: "Arya"}
-  }
+keep port = number(args[0] or "3000")
+keep server = web.serve(port, {
+  "GET /api/health": fn() => {status: "ok", language: "Arya"}
 })
 
 server.on("listening", fn() {
@@ -153,18 +151,15 @@ async function projectFiles(target: string, options: CreateProjectOptions): Prom
   };
   const source = template === 'api' ? `use std "web" as web
 
-const port = number(args[0] or "3000")
-const server = web.serve(port, {
-  "GET /api/health": fn() { return {status: "ok", language: "Arya"} },
-  "POST /api/echo": fn(request) { return {received: request.body} }
+keep port = number(args[0] or "3000")
+keep server = web.serve(port, {
+  "GET /api/health": fn() => {status: "ok", language: "Arya"},
+  "POST /api/echo": fn(request) => {received: request.body}
 }, {html: false, assets: false})
 server.on("listening", fn() { say("Arya API: http://127.0.0.1:" + str(server.address().port)) })
-` : `fn greet(name) {
-  return "Hello, " + name + "!"
-}
+` : `fn greet(name = "World") => "Hello, " + name + "!"
 
-const name = args[0] or "World"
-say(greet(name))
+say(greet(args[0]))
 `;
   const description = ui ? (template === 'desktop' ? 'Desktop GUI and web application' : 'Declarative web UI application') : template === 'web' ? 'Web application' : template === 'api' ? 'API server' : 'Command-line application';
   const readme = '# ' + name + '\n\n' + description + ' created with Arya ' + ARYA_VERSION + '.\n\n' +

@@ -4,7 +4,7 @@ Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-langua
 
 ## Requirements and tested support
 
-The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current source candidate, 1.3.0-alpha.1, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
+The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current source candidate, 1.3.0-alpha.2, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
 
 macOS arm64, Node 22.15.0 and 24.16.0, and Python 3.13.15 have recorded local results in the roadmap. A configured Linux/Windows CI job is a test plan, not a passing result. Fresh Linux/Windows results for alpha.4 were not part of its npm qualification; earlier-version CI is historical evidence. Check the candidate's [release-readiness record](release-readiness.md) before relying on a platform claim.
 

@@ -12,7 +12,9 @@ export type Expression = { token: Token } & (
   | { kind: 'object'; fields: { key: string; value: Expression }[] }
   | { kind: 'unary'; operator: string; value: Expression }
   | { kind: 'binary'; operator: string; left: Expression; right: Expression }
-  | { kind: 'function'; async: boolean; parameters: Token[]; body: Block }
+  | { kind: 'spread'; value: Expression }
+  | { kind: 'pipe'; value: Expression; callee: Expression; arguments: Expression[]; awaited: boolean }
+  | { kind: 'function'; async: boolean; parameters: Token[]; defaults: Expression[]; rest?: Token; body: Block }
   | { kind: 'call'; callee: Expression; arguments: Expression[] }
   | { kind: 'member'; object: Expression; key: Expression }
   | { kind: 'chain'; base: Expression; steps: ChainStep[] }
@@ -24,10 +26,10 @@ export type Statement = { token: Token } & (
   | { kind: 'import'; bridge: string; specifier: string; binding: LexicalBinding }
   | { kind: 'if'; condition: Expression; body: Block; otherwise?: Block }
   | { kind: 'while'; condition: Expression; body: Block }
-  | { kind: 'for'; binding: LexicalBinding; iterable: Expression; body: Block }
+  | { kind: 'for'; binding: LexicalBinding; indexBinding?: LexicalBinding; iterable: Expression; body: Block }
   | { kind: 'return'; value?: Expression }
   | { kind: 'break' | 'continue' }
-  | { kind: 'try'; body: Block; binding: LexicalBinding; handler: Block }
+  | { kind: 'try'; body: Block; binding?: LexicalBinding; handler?: Block; finalizer?: Block }
   | { kind: 'throw'; value: Expression }
   | { kind: 'assignment'; target: Expression; operator: string; value: Expression }
   | { kind: 'expression'; value: Expression }

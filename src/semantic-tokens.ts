@@ -24,8 +24,9 @@ export function semanticTokens(source: string, filename = 'document.arya'): Arya
     };
     const expression = (value: Expression): void => {
       switch (value.kind) {
-        case 'function': block(value.body); break;
+        case 'function': value.defaults.forEach(expression); block(value.body); break;
         case 'call': expression(value.callee); member(value.callee, 'method'); value.arguments.forEach(expression); break;
+        case 'pipe': expression(value.value); expression(value.callee); member(value.callee, 'method'); value.arguments.forEach(expression); break;
         case 'new': expression(value.callee); member(value.callee, 'class'); value.arguments.forEach(expression); break;
         case 'member': expression(value.object); expression(value.key); if (value.key.kind === 'literal') put(value.key.token, 'property'); break;
         case 'chain':
@@ -34,7 +35,7 @@ export function semanticTokens(source: string, filename = 'document.arya'): Arya
             if (step.kind === 'member') { expression(step.key); if (step.key.kind === 'literal') put(step.key.token, value.steps[index + 1]?.kind === 'call' ? 'method' : 'property'); }
             else step.arguments.forEach(expression);
           }); break;
-        case 'unary': expression(value.value); break;
+        case 'unary': case 'spread': expression(value.value); break;
         case 'binary': expression(value.left); expression(value.right); break;
         case 'list': value.items.forEach(expression); break;
         case 'object': value.fields.forEach(field => expression(field.value)); break;
@@ -52,7 +53,7 @@ export function semanticTokens(source: string, filename = 'document.arya'): Arya
           case 'if': expression(statement.condition); block(statement.body); if (statement.otherwise) block(statement.otherwise); break;
           case 'while': expression(statement.condition); block(statement.body); break;
           case 'for': expression(statement.iterable); block(statement.body); break;
-          case 'try': block(statement.body); block(statement.handler); break;
+          case 'try': block(statement.body); if (statement.handler) block(statement.handler); if (statement.finalizer) block(statement.finalizer); break;
         }
       }
     };

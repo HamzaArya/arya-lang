@@ -48,6 +48,14 @@ test('TextMate grammar recognizes real Arya tokens and contains strings/comments
     scopes('const item = {title: "Arya"}', 'title', 'variable.other.property');
     scopes('say(item?.name ?? "Guest")', '?.', 'keyword.operator');
     scopes('say(item?.name ?? "Guest")', '??', 'keyword.operator');
+    scopes('fn greet(name = "Guest", ...others) => name', 'name', 'variable.parameter');
+    scopes('fn greet(name = "Guest", ...others) => name', '"Guest"', 'string.quoted');
+    scopes('fn greet(name = "Guest", ...others) => name', 'others', 'variable.parameter');
+    scopes('fn greet(name = "Guest", ...others) => name', '=>', 'keyword.operator');
+    scopes('const answer = 20 |> double', '|>', 'keyword.operator');
+    scopes('guard ready else { return null }', 'guard', 'keyword.control');
+    scopes('each item at index in items {}', 'at', 'keyword.control');
+    scopes('try {} finally {}', 'finally', 'keyword.control');
     let state = grammar.tokenizeLine('style """', null).ruleStack;
     let embedded = grammar.tokenizeLine('body { color: red; }', state);
     assert.ok(embedded.tokens.some(token => token.scopes.includes('source.css')));

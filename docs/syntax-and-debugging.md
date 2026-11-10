@@ -1,6 +1,8 @@
 # Safer expressions and easier debugging
 
-The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.1 candidate.
+The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.2 candidate.
+
+The current source also adds [pipelines, concise functions, guards, indexed iteration, and finally](flow-syntax.md). Those new forms require the candidate compiler.
 
 ## Read missing data without losing valid values
 

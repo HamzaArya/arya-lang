@@ -14,9 +14,9 @@
     table))
 
 (defvar arya-font-lock-keywords
-  `((,(regexp-opt '("let" "const" "fn" "async" "await" "return" "if" "else" "for" "in" "while" "break" "continue" "and" "or" "not" "use" "as" "export" "new" "try" "catch" "throw") 'symbols) . font-lock-keyword-face)
+  `((,(regexp-opt '("let" "const" "fn" "async" "await" "return" "if" "else" "for" "in" "while" "break" "continue" "and" "or" "not" "true" "false" "null" "use" "as" "export" "new" "try" "catch" "finally" "throw" "guard" "keep" "task" "when" "otherwise" "each" "give") 'symbols) . font-lock-keyword-face)
     (,(regexp-opt '("true" "false" "null") 'symbols) . font-lock-constant-face)
-    (,(regexp-opt '("print" "len" "range" "str" "number" "args") 'symbols) . font-lock-builtin-face)
+    (,(regexp-opt '("print" "say" "len" "range" "str" "number" "args") 'symbols) . font-lock-builtin-face)
     ("\\_<fn\\_>[ \t]+\\([A-Za-z_][A-Za-z0-9_]*\\)" 1 font-lock-function-name-face)))
 
 ;;;###autoload

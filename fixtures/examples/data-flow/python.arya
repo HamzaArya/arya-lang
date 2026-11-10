@@ -1,0 +1,11 @@
+use python "statistics" as statistics
+use std "python" as python
+
+const stats = python.bind(statistics, {timeoutMs: 5000})
+fn format(value, digits = 1) => value.toFixed(digits)
+
+const average = [10, 20, 30]
+  |> await stats.mean
+  |> format(1)
+
+say("Python average:", average)

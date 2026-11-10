@@ -2,6 +2,14 @@
 
 Arya is experimental. Versioned release notes contain compatibility details; [release readiness](docs/release-readiness.md) records actual qualification.
 
+## 1.3.0-alpha.2 — readable application flow candidate
+
+- Added input-first and explicitly awaited pipelines, concise/default/rest functions, iterable spreads, checked guards, indexed loops, and finally cleanup.
+- Added ten collection helpers with field selectors, stable copied sorting, safe grouping, and explicit async/error behavior.
+- Updated starters, examples, highlighting, completion hints, snippets, and migration/specification docs.
+
+See [candidate notes](docs/releases/1.3.0-alpha.2.md) and [syntax guide](docs/flow-syntax.md). This candidate is not yet published to npm.
+
 ## 1.3.0-alpha.1 — Node.js-only source candidate
 
 - Retired native compilation, bootstrap, native project/API exports, editor settings, and CI.

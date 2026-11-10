@@ -78,3 +78,5 @@ const editors = await discoverEditors();
 ```
 
 `editorAssets(packageRoot?)` reports the installed language version and extension ID `aryacode.arya-language`. `discoverEditors(options?)` checks supported launchers/app locations. `installEditorExtension(options?)` explicitly invokes the selected editor CLI and returns per-editor results; it can accept `editor`, `cli`, `force`, `extensionsDirectory`, and `userDataDirectory`. Discovery reads local installation metadata; installation writes to editor profiles and is separate from passive analysis. See [editor setup](editor-setup.md) for flags, compatibility-manager fallback, and qualification.
+
+The 1.3.0-alpha.2 parsed AST adds pipeline/spread nodes, function default expressions, optional indexed-loop bindings, and optional catch/finalizer blocks. Custom AST traversal must visit those fields; lexical binding/reference offsets retain UTF-16 semantics. See [the syntax contract](flow-syntax.md).

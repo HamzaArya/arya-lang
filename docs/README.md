@@ -1,6 +1,6 @@
 # Arya documentation
 
-These guides cover **Arya’s Node.js application runtime** and the **1.3.0-alpha.1 source candidate**. npm `latest` still identifies the published 1.2.0-alpha.4 baseline. See [runtime and migration](node-runtime.md) for candidate setup and retired native features. Node.js 22.15+ is required; Python, MySQL/mysql2, and Electron are optional feature dependencies.
+These guides cover **Arya’s Node.js application runtime** and the **1.3.0-alpha.2 source candidate**. npm `latest` still identifies the published 1.2.0-alpha.4 baseline. See [runtime and migration](node-runtime.md) for candidate setup and retired native features. Node.js 22.15+ is required; Python, MySQL/mysql2, and Electron are optional feature dependencies.
 
 ## Start here
 
@@ -10,6 +10,7 @@ These guides cover **Arya’s Node.js application runtime** and the **1.3.0-alph
 | [Create a project](project-creator.md) | Choose web, API, CLI, UI, or desktop starters |
 | [First programs](arya-tutorial.md) | Learn syntax through nine runnable lessons |
 | [Task-report project](learning-path.md) | Build an application with multiple Arya modules |
+| [Readable application syntax](flow-syntax.md) | Use pipelines, short functions, guards, indexed loops, cleanup, and collection helpers |
 | [Language reference](arya-language.md) | Look up syntax, values, imports, and execution behavior |
 | [Editor setup](editor-setup.md) | Enable bundled colors, icons, themes, and the setup tour |
 
@@ -38,7 +39,7 @@ Runnable projects are listed in the [examples index](../fixtures/README.md).
 
 ## Releases and decisions
 
-- [Changelog](../CHANGELOG.md), [candidate changes](releases/1.3.0-alpha.1.md), [published release](releases/1.2.0-alpha.4.md), and [verified npm publication](releases/1.2.0-alpha.4-publication.json).
+- [Changelog](../CHANGELOG.md), [candidate changes](releases/1.3.0-alpha.2.md), [published release](releases/1.2.0-alpha.4.md), and [verified npm publication](releases/1.2.0-alpha.4-publication.json).
 - [Release process](releasing.md) and [current qualification](release-readiness.md).
 - [Roadmap](arya-roadmap.md), [tooling decisions](tooling-evidence.md), and [external learner review](community-review.md).
 - Historical background: [initial 0.2 plan](arya-0.2-initial-plan.md), [0.1 audit](arya-language-logic-report.md), [repository extraction](repository-extraction.md), [native plan](arya-1.1-native-plan.md), and [1.1 native publication](native-release-verification.md).

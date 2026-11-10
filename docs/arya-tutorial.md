@@ -416,3 +416,5 @@ For release/install commands and an offline path, see [installation](installing.
 ## Build an application next
 
 Try the [project creator](project-creator.md), [async Python guide](python-async.md), [MySQL example](../fixtures/examples/mysql/README.md), or [UI/animation library](ui-library.md). Use the [debugging guide](syntax-and-debugging.md) for optional access, nullish defaults, code frames, and spelling fixes.
+
+For the current source candidate, continue with [readable application syntax](flow-syntax.md): pipelines, concise functions, guarded exits, indexed iteration, cleanup, and a runnable ranking example. The older npm compiler does not include those additions.

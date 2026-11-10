@@ -17,6 +17,18 @@ const pythonMethods = {
   stats: 'python.stats() — inspect active jobs, queued jobs, and closed state.',
 };
 const members: Record<string, Record<string, string>> = {
+  list: {
+    map: 'list.map(values, selector) — transform values; selector can be a function or field name.',
+    flatMap: 'list.flatMap(values, selector) — transform and flatten one list level.',
+    filter: 'list.filter(values, selector) — keep values matching a synchronous predicate or truthy field.',
+    find: 'list.find(values, selector) — return the first matching value, or null.',
+    reduce: 'list.reduce(values, reducer, initial) — combine values with an explicit initial value.',
+    groupBy: 'list.groupBy(values, selector) — group values by string keys into a record without a prototype.',
+    sortBy: 'list.sortBy(values, selector, order = "asc") — return a stably sorted copy.',
+    take: 'list.take(values, count = 1) — return the first count values.',
+    unique: 'list.unique(values, selector) — keep the first value for each distinct key.',
+    sum: 'list.sum(values, selector) — sum finite numbers or numeric fields.',
+  },
   ui: Object.fromEntries(uiCatalog.map(([name, , signature, description]) => [name, 'ui.' + signature + ' — ' + description])),
   debug: {
     assert: 'debug.assert(condition, message = "Assertion failed.") — throw ARYA_ASSERTION if the condition is false.',
@@ -104,8 +116,8 @@ export function standardCompletions(source: string, offset: number, target: 'js'
     const shape = (expression: Expression): string | undefined => {
       if (expression.kind === 'unary' && expression.operator === 'await') return shape(expression.value);
       if (expression.kind === 'name' && expression.reference.binding) return shapes.get(expression.reference.binding);
-      if (expression.kind === 'call' && expression.callee.kind === 'member' && expression.callee.key.kind === 'literal' && expression.callee.key.value === 'connect' && shape(expression.callee.object) === 'mysql') return 'mysql.pool';
-      if (expression.kind === 'call' && expression.callee.kind === 'member' && expression.callee.key.kind === 'literal') {
+      if ((expression.kind === 'call' || expression.kind === 'pipe') && expression.callee.kind === 'member' && expression.callee.key.kind === 'literal' && expression.callee.key.value === 'connect' && shape(expression.callee.object) === 'mysql') return 'mysql.pool';
+      if ((expression.kind === 'call' || expression.kind === 'pipe') && expression.callee.kind === 'member' && expression.callee.key.kind === 'literal') {
         const owner = shape(expression.callee.object);
         if (owner === 'log' && expression.callee.key.value === 'create' || owner === 'log.logger' && expression.callee.key.value === 'child') return 'log.logger';
         if (owner === 'python' && expression.callee.key.value === 'client') return 'python.client';
@@ -114,18 +126,19 @@ export function standardCompletions(source: string, offset: number, target: 'js'
     };
     const expression = (value: Expression): void => {
       switch (value.kind) {
-        case 'function': block(value.body); break;
-        case 'call':
+        case 'function': value.defaults.forEach(expression); block(value.body); break;
+        case 'call': case 'pipe':
           if (value.callee.kind === 'member' && value.callee.key.kind === 'literal' && value.callee.key.value === 'transaction' && shape(value.callee.object) === 'mysql.pool') {
-            const callback = value.arguments[0];
+            const callback = value.kind === 'pipe' ? value.value : value.arguments[0];
             if (callback?.kind === 'function' && callback.parameters[0]) {
               const binding = parsed.bindings.find(item => item.token === callback.parameters[0]);
               if (binding) shapes.set(binding, 'mysql.transaction');
             }
           }
+          if (value.kind === 'pipe') expression(value.value);
           expression(value.callee); value.arguments.forEach(expression); break;
         case 'new': expression(value.callee); value.arguments.forEach(expression); break;
-        case 'unary': expression(value.value); break;
+        case 'unary': case 'spread': expression(value.value); break;
         case 'binary': expression(value.left); expression(value.right); break;
         case 'member': expression(value.object); expression(value.key); break;
         case 'chain': expression(value.base); value.steps.forEach(step => step.kind === 'member' ? expression(step.key) : step.arguments.forEach(expression)); break;
@@ -149,7 +162,7 @@ export function standardCompletions(source: string, offset: number, target: 'js'
           case 'if': expression(statement.condition); block(statement.body); if (statement.otherwise) block(statement.otherwise); break;
           case 'while': expression(statement.condition); block(statement.body); break;
           case 'for': expression(statement.iterable); block(statement.body); break;
-          case 'try': block(statement.body); block(statement.handler); break;
+          case 'try': block(statement.body); if (statement.handler) block(statement.handler); if (statement.finalizer) block(statement.finalizer); break;
         }
       }
     };

@@ -1,9 +1,10 @@
 # Arya examples
 
-These examples target **1.3.0-alpha.1**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. The Node application examples also work with the published 1.2.0-alpha.4 compiler. Keep companion files together when copying an example.
+These examples target **1.3.0-alpha.2**. From the repository root, run `npm ci` and `npm run build`, then use `node dist/cli.cjs run path/to/main.arya`. The Node application examples also work with the published 1.2.0-alpha.4 compiler. Keep companion files together when copying an example.
 
 | Example | Entry / instructions | Additional requirements |
 | --- | --- | --- |
+| Data pipelines | [Ranking, guards, indexed loops, and async Python](examples/data-flow/README.md) | Current source candidate; Python only for python.arya |
 | First programs | [Nine lessons](arya/learn/01-hello.arya) and [tutorial](../docs/arya-tutorial.md) | Python for lesson 6 |
 | Task report | [Multi-file project](arya/modules/tasks/main.arya) and [learning path](../docs/learning-path.md) | None |
 | JavaScript/npm | [Local package](examples/npm/README.md) | Run its npm install |

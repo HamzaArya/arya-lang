@@ -1,0 +1,25 @@
+use std "list" as list
+
+fn eligible(person) {
+  guard person.active else { return false }
+  return person.score >= 50
+}
+
+fn display(person, position = 0) => str(position + 1) + ". " + person.name
+
+const people = [
+  {name: "Hamza", active: true, score: 85},
+  {name: "Samira", active: true, score: 95},
+  {name: "Inactive", active: false, score: 100}
+]
+
+const ranked = people
+  |> list.filter(eligible)
+  |> list.sortBy("score", "desc")
+  |> list.take(3)
+
+each person at position in ranked {
+  say(display(person, position))
+}
+
+say("Total score:", ranked |> list.sum("score"))

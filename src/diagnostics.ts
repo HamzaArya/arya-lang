@@ -11,6 +11,10 @@ export function syntaxDiagnostic(message: string, token: Token): AryaDiagnostic 
   else if (message.startsWith('Put the next statement')) diagnostic.hint = 'Use a new line or semicolon between statements; leading-dot chains may span lines.';
   else if (message.includes('Optional chains cannot')) diagnostic.hint = 'Use if to check the object, then assign through an ordinary property access.';
   else if (message.startsWith('Unclosed string')) diagnostic.hint = 'Close the string with its opening quote, or use triple quotes for multiline text.';
+  else if (message.startsWith('A guard fallback')) diagnostic.hint = 'Use return/throw to leave the function, or break/continue to leave the current loop iteration.';
+  else if (message.startsWith('Pipe into')) diagnostic.hint = 'Use a function name or call. Input becomes the first argument; use |> await for an asynchronous stage.';
+  else if (message.startsWith('Put the rest parameter')) diagnostic.hint = 'Declare fn work(first, ...remaining) with no parameters or comma after the rest parameter.';
+  else if (message.startsWith('Use catch or finally')) diagnostic.hint = 'Add catch error { ... }, finally { ... }, or both after the try body.';
   return diagnostic;
 }
 

@@ -32,6 +32,8 @@ try {
   assert.ok(features.capabilities.includes('arya.ui.v1'));
   assert.equal(features.runtime, 'node');
   assert.ok(features.capabilities.includes('arya.node.v1'));
+  assert.ok(features.capabilities.includes('arya.syntax.flow.v1'));
+  assert.ok(features.capabilities.includes('arya.list.v1'));
   assert.match(run('init', 'website', '--web'), /(?:created|initialized|ready)/i);
   for (const file of ['main.arya', 'index.html', 'package.json', 'public/styles.css', 'public/app.js', 'README.md', '.gitignore']) {
     assert.ok((await readFile(join(root, 'website', file))).length > 0, file);
@@ -101,6 +103,8 @@ say(view { div bg-dark { h1 "Arya 1.2" } })
   execFileSync(process.execPath, [npm, 'install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: join(root, 'examples/npm'), stdio: 'pipe' });
   assert.equal(run('run', 'examples/npm/main.arya'), 'local npm package 42 6\n');
   assert.deepEqual(JSON.parse(run('run', 'examples/python-batch/main.arya')), { count: 4, sum: 100, mean: 25, doubled: [20, 40, 60, 80] });
+  assert.equal(run('run', 'examples/data-flow/main.arya'), '1. Samira\n2. Hamza\nTotal score: 180\n');
+  assert.equal(run('run', 'examples/data-flow/python.arya'), 'Python average: 20.0\n');
   const failure = spawnSync(process.execPath, [cli, 'run', 'fixtures/runtime-error.arya'], { cwd: root, encoding: 'utf8' });
   assert.notEqual(failure.status, 0);
   assert.match(failure.stderr, /runtime-error\.arya:3:15/);

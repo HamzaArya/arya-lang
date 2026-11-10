@@ -26,3 +26,13 @@ const server = web.serve(3000, {"GET /": page}, {html: false, assets: false})
 server.on("listening", fn() {
   say("Open http://127.0.0.1:3000")
 })
+
+# Read a transformation from top to bottom.
+fn double(value) => value * 2
+fn add(value, amount = 1) => value + amount
+keep answer = 20 |> double |> add(2)
+say(answer)
+
+each name at position in ["Arya", "Python", "JavaScript"] {
+  say(position, name)
+}

@@ -15,6 +15,15 @@ const range = (start, end, step = 1) => {
   const count = Math.max(0, Math.ceil((end - start) / step));
   if (count > 100000) throw new RangeError('range supports at most 100000 items.');
   return Array.from({ length: count }, (_, index) => start + index * step);
+};
+const __arya_invoke = (function() {}).call.bind((function() {}).apply);
+const __arya_pipeMember = (receiver, key) => ({fn: receiver[key], receiver});
+const __arya_pipe = (value, reference, extra) => {
+  if (typeof reference.fn !== 'function') {
+    try { __arya_invoke(reference.fn, reference.receiver, [value, ...extra]); }
+    catch (error) { error.code = 'ARYA_PIPELINE_STAGE'; error.message = 'Pipeline stage must be a callable function.'; throw error; }
+  }
+  return __arya_invoke(reference.fn, reference.receiver, [value, ...extra]);
 };`;
 
 export const pythonRuntime = `import { spawnSync as __arya_spawnSync } from 'node:child_process';

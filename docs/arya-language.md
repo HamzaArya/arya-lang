@@ -1,6 +1,6 @@
 # Arya 1.2 preview — practical language reference
 
-The current source is **1.3.0-alpha.1**, focused on Node.js applications. The published npm baseline remains **1.2.0-alpha.4**. See [runtime and migration](node-runtime.md). See the [documentation index](README.md) for all guides. Start with the [web and branded syntax guide](arya-web.md) for `keep`, `fn`, `if`/`else`, `each`, `return`, `say`, and HTML-first web projects with separate page, CSS, and browser JavaScript files. The [beginner tutorial and nine runnable lessons](arya-tutorial.md) teach the core using the earlier spellings, which remain supported. The [core specification and 1.2 amendments](arya-specification.md) define precise rules and migration requirements.
+The current source is **1.3.0-alpha.2**, focused on Node.js applications. The published npm baseline remains **1.2.0-alpha.4**. See [runtime and migration](node-runtime.md). See the [documentation index](README.md) for all guides. Start with the [web and branded syntax guide](arya-web.md) for `keep`, `fn`, `if`/`else`, `each`, `return`, `say`, and HTML-first web projects with separate page, CSS, and browser JavaScript files. The [beginner tutorial and nine runnable lessons](arya-tutorial.md) teach the core using the earlier spellings, which remain supported. The [core specification and 1.2 amendments](arya-specification.md) define precise rules and migration requirements.
 
 For VS Code-compatible editors, Sublime, JetBrains, Vim/Neovim, Emacs, and other clients, use the [editor setup guide](arya-editors.md). The portable kit includes a local VSIX, an installable compiler, a standard LSP server, and syntax adapters; compatibility and verification vary by editor.
 
@@ -11,6 +11,10 @@ The longer-term direction is one readable language for scripts, applications, an
 Arya 1.2.0-alpha.4 includes nullish defaults (`??`), optional access/index/calls (`?.`), and leading-dot multiline chains on Node.js. The CLI/editor add source excerpts, help, spelling Quick Fixes, and JSON check reporting. See the [syntax and debugging guide](syntax-and-debugging.md).
 
 For web interfaces and desktop GUI applications, the JavaScript target includes `use std "ui"`: styled components, responsive layouts, browser state, forms, JSON API actions, and animation presets. The same UI can run in an optional Electron window. See the [UI guide](ui-apps.md) for npm starters and the component/animation API.
+
+## Readable application flow
+
+The 1.3.0-alpha.2 source candidate adds `|>` and `|> await`, expression-bodied functions with defaults/rest parameters, list/call spread, terminating guards, indexed iteration, and finally cleanup. The `list` library supplies input-first collection operations. See the [syntax guide](flow-syntax.md) for exact evaluation, scope, async, and error behavior. Existing block functions and aliases remain accepted; rename earlier bindings called `guard`.
 
 ## Branded syntax and web applications
 

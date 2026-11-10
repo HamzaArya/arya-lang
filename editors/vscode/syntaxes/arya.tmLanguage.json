@@ -181,12 +181,22 @@
               "match": "(#|\\/\\/).*$"
             },
             {
-              "name": "variable.parameter.arya",
-              "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+              "match": "(?:(?<=\\()|(?<=,)|^)\\s*(\\.\\.\\.)?([A-Za-z_][A-Za-z0-9_]*)",
+              "captures": {
+                "1": {
+                  "name": "keyword.operator.spread.arya"
+                },
+                "2": {
+                  "name": "variable.parameter.arya"
+                }
+              }
             },
             {
               "name": "punctuation.separator.parameter.arya",
               "match": ","
+            },
+            {
+              "include": "#code"
             }
           ]
         },
@@ -250,8 +260,25 @@
           "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*:)"
         },
         {
+          "match": "\\b(for|each)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+(at)\\s+([A-Za-z_][A-Za-z0-9_]*)(?=\\s+in\\b)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.arya"
+            },
+            "2": {
+              "name": "variable.other.definition.arya"
+            },
+            "3": {
+              "name": "keyword.control.arya"
+            },
+            "4": {
+              "name": "variable.other.definition.arya"
+            }
+          }
+        },
+        {
           "name": "keyword.control.arya",
-          "match": "\\b(fn|task|let|const|keep|as|async|await|return|give|if|when|else|otherwise|for|each|in|while|break|continue|use|export|new|try|catch|throw)\\b"
+          "match": "\\b(fn|task|let|const|keep|as|async|await|return|give|if|when|else|otherwise|for|each|in|while|break|continue|use|export|new|try|catch|throw|guard|finally)\\b"
         },
         {
           "name": "keyword.operator.logical.arya",
@@ -279,7 +306,7 @@
         },
         {
           "name": "keyword.operator.arya",
-          "match": "\\?\\?|\\?\\.|==|!=|<=|>=|\\+=|-=|\\*=|\\/=|\\*\\*|[+*/%=<>!-]"
+          "match": "\\.\\.\\.|\\|>|=>|\\?\\?|\\?\\.|==|!=|<=|>=|\\+=|-=|\\*=|\\/=|\\*\\*|[+*/%=<>!-]"
         },
         {
           "include": "#paren"

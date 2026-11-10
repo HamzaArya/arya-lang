@@ -4,9 +4,11 @@
 
 Readable `.arya` programs with JavaScript/npm libraries and a Python function bridge.
 
-This extension recognizes Arya files and provides syntax highlighting, snippets, multiple syntax/name/const-write diagnostics, keyword/builtin completion, builtin hover help, a top-level outline, and same-file lexical go-to-definition. Editor features do not execute your imports. It works independently of the AryaCode IDE; AryaCode bundles the same compiler package and resolver.
+This extension recognizes Arya files and provides syntax highlighting, snippets, multiple syntax/name/const-write diagnostics, keyword/builtin completion, builtin hover help, a top-level outline, and same-file lexical go-to-definition. Editor features do not execute your imports. It works independently of the AryaCode IDE. AryaCode pins its embedded compiler separately; installing this companion does not upgrade that compiler.
 
-The 1.2.0-alpha.4 extension includes **Arya Dark**, **Arya Light**, **Arya File Icons**, a setup walkthrough, and lexical semantic colors. Imports, parameters, constants, functions, methods, properties, and constructors get distinct roles; optional access and shadowing are supported. View tags/attributes, literal CSS/JavaScript blocks, and `css: """..."""` receive richer grammar scopes. Your existing theme can also use semantic colors.
+The source extension carries language version **1.3.0-alpha.2** and supports pipelines, concise/default/rest functions, spreads, guards, indexed loops, and finally cleanup. Syntax snippets, keyword hover, and list-library member hints cover the new forms. Use a matching compiler; see the [flow syntax guide](https://github.com/HamzaArya/arya-lang/blob/main/docs/flow-syntax.md).
+
+The extension includes **Arya Dark**, **Arya Light**, **Arya File Icons**, a setup walkthrough, and lexical semantic colors. Imports, parameters, constants, functions, methods, properties, and constructors get distinct roles; optional access and shadowing are supported. View tags/attributes, literal CSS/JavaScript blocks, and `css: """..."""` receive richer grammar scopes. Your existing theme can also use semantic colors.
 
 Run **Arya: Editor Setup Guide** after installation. **Arya: Enable File Icons** selects the included icon set; **Arya: Choose Color Theme** opens the normal theme chooser; **Arya: Open Editor Tour** opens an unsaved sample. Existing icon themes may override the language's fallback icon. The extension does not change appearance preferences until you choose a theme or run its icon command.
 

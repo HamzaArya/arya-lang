@@ -2,7 +2,7 @@
 
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current source: [1.3.0-alpha.1](docs/releases/1.3.0-alpha.1.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
+**Current source: [1.3.0-alpha.2](docs/releases/1.3.0-alpha.2.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
 
 ## Start a project
 
@@ -26,6 +26,28 @@ The commands above use the published npm baseline. To try the Node.js-only candi
 | `desktop` | The same UI application in an isolated Electron window |
 
 For example, `npm create arya-language@latest my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
+
+## Read application code from top to bottom
+
+The source candidate adds pipelines, short functions with defaults/rest parameters, checked guards, indexed loops, reliable cleanup, and collection helpers:
+
+```arya
+use std "list" as list
+
+fn label(person, position = 0) => str(position + 1) + ". " + person.name
+
+keep people = [{name: "Hamza", active: true, score: 85}]
+keep leaders = people
+  |> list.filter("active")
+  |> list.sortBy("score", "desc")
+  |> list.take(3)
+
+each person at position in leaders {
+  say(label(person, position))
+}
+```
+
+These new forms require 1.3.0-alpha.2. Read the [syntax guide](docs/flow-syntax.md) or run the [data-flow example](fixtures/examples/data-flow/README.md). Existing source spellings remain accepted; older bindings named `guard` need renaming.
 
 ## Use JavaScript and Python together
 

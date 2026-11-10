@@ -1,11 +1,12 @@
 # Arya standard libraries
 
-**Source candidate: 1.3.0-alpha.1.** Import a library with `use std "name" as alias`. All libraries below run on Node.js.
+**Source candidate: 1.3.0-alpha.2.** Import a library with `use std "name" as alias`. All libraries below run on Node.js.
 
 ## JavaScript/Node profile
 
 | Library | Purpose | Contract / implementation |
 | --- | --- | --- |
+| `list` | Input-first filtering, mapping, sorting, grouping, uniqueness, and totals | [Flow syntax and list API](flow-syntax.md#list-library) |
 | `fs` | Async file reads/writes and directory listing | [File APIs](arya-web.md#files-calculations-and-mysql), [runtime source](../src/standard.ts) |
 | `path` | Host path operations | [File APIs](arya-web.md#files-calculations-and-mysql), [runtime source](../src/standard.ts) |
 | `math` | Mathematical functions/constants | [Calculation APIs](arya-web.md#files-calculations-and-mysql), [runtime source](../src/standard.ts) |
