@@ -1,20 +1,20 @@
-# Native Arya 1.1 preview
+# Native Arya 1.2 preview
 
 Arya has a C11 native backend and an Arya-written native compiler. Native programs compile ahead of time to machine-code executables. They run without Node.js, Python, an Arya installation, a C compiler, or a JavaScript engine. OS libraries remain dependencies; the macOS arm64 artifact links to libSystem.
 
-This is **1.1.0-alpha.1**, an experimental release. It does not declare the preceding stable 1.0 qualification complete. Platform support is limited to environments recorded in the release's qualification evidence. See the [native contract](arya-native-specification.md) and [implementation plan](arya-1.1-native-plan.md).
+The current npm compiler is **1.2.0-alpha.4**, an experimental preview with verified three-generation native bootstrap results. Standalone native archives from [1.1.0-alpha.1](native-release-verification.md) retain their original version; no new standalone native archive was published with alpha.4. Platform support is limited to environments recorded in the release's qualification evidence. See the [native contract](arya-native-specification.md) and [implementation plan](arya-1.1-native-plan.md).
 
 ## Build a calculator
 
 The npm compiler requires Node.js 22.15+ and a C11 toolchain (Apple Command Line Tools on macOS, GCC or Clang plus development libraries on Linux):
 
 ```sh
-npm install arya-language@next
-npx arya build calculator.arya --target native -o build/calculator
+npm install --save-exact arya-language@1.2.0-alpha.4
+npx --no-install arya build calculator.arya --target native -o build/calculator
 ./build/calculator 12 + 8
 ```
 
-The [complete calculator](../fixtures/native/calculator.arya) accepts arguments or prompts interactively. A minimal program is:
+For offline installation, use the retained matching npm archive. Registry `latest` selects alpha.4 at publication; generated projects and exact version pins are reproducible. The [complete calculator](../fixtures/native/calculator.arya) accepts arguments or prompts interactively. A minimal program is:
 
 ```arya
 use std "io" as io
@@ -26,17 +26,23 @@ print("Hello, " + name)
 Check never runs source or invokes a compiler:
 
 ```sh
-npx arya check calculator.arya --target native
-npx arya run calculator.arya --target native -- 12 + 8
+npx --no-install arya check calculator.arya --target native
+npx --no-install arya run calculator.arya --target native -- 12 + 8
 ```
 
 Use `--cc /path/to/clang` or ARYA_CC to select the compiler executable. `--debug` selects unoptimized code; `--release` selects optimized code (the default). `--sanitize` enables address/undefined-behavior sanitizers for development. Runtime errors retain original Arya file/line/UTF-16 column information independently of C debug symbols. Interactive debugging is not supplied by this alpha.
 
-The default npm CLI target remains JavaScript. `use js` and `use python` belong to that profile and produce targeted errors in native checking. `use std` belongs to native execution. Put flags before `--`; every later argument is passed literally to the program.
+The default npm CLI target remains JavaScript. `use js` and `use python` belong to that profile and produce targeted errors in native checking. `use std` selects libraries from the chosen execution profile. Native supports the libraries documented below; JavaScript has separate standard-library APIs, including web/MySQL helpers. Views and web/database helpers require the JavaScript target. Put flags before `--`; every later argument is passed literally to the program.
+
+## Branded core syntax
+
+Use `fn` and `return` in new programs. Both native compiler entry points support `keep`, `task`, `when`/`otherwise`, `each`, `give`, and `say`, alongside `const`, `fn`, `if`/`else`, `for`, `return`, and `print`. Raw triple-double-quoted multiline strings preserve literal text without interpolation. The six new keywords and module-level `say` binding require the migrations in the [branded syntax migration](releases/1.2.0-alpha.1.md).
+
+The new `view` grammar, literal CSS/browser JavaScript, web server helper, and MySQL adapter belong to the JavaScript profile and are rejected in native checking. The native profile's file/math libraries retain their existing synchronous and limited APIs. `async task`, like `async fn`, remains unavailable for native execution.
 
 ## Use the self-hosted compiler
 
-The native release archive supplies `arya-native`, legal notices, and BOOTSTRAP.json. Extract it and run:
+When supplied for a qualified candidate, the native release archive contains `arya-native`, legal notices, and BOOTSTRAP.json. Extract it and run:
 
 ```sh
 ./arya-native --version

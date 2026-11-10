@@ -1,0 +1,28 @@
+# Save this example as main.arya, then run it in a trusted project.
+use std "ui" as ui
+use std "web" as web
+
+fn greeting(name) {
+  return "Welcome, " + name + "."
+}
+
+const profile = {name: "Arya", preferences: {theme: "auto"}}
+const theme = profile?.preferences?.theme ?? "auto"
+
+fn page() {
+  return ui.page({
+    title: "A first Arya app",
+    theme: theme,
+    state: {count: 0},
+    body: ui.card([
+      ui.heading(greeting(profile.name)),
+      ui.text(ui.bind("count"), {role: "status", "aria-live": "polite"}),
+      ui.button("Add one", {action: ui.increment("count")})
+    ], {animate: "rise"})
+  })
+}
+
+const server = web.serve(3000, {"GET /": page}, {html: false, assets: false})
+server.on("listening", fn() {
+  say("Open http://127.0.0.1:3000")
+})

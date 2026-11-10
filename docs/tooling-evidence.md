@@ -4,6 +4,16 @@
 
 M3 already introduced same-file lexical go-to-definition, multiple semantic diagnostics, and preservation of completion/Outline data when semantic errors exist. Those implemented features belong to M3's evidence and acceptance; do not count them as a newly validated external-user investment.
 
+## Current implementation update — 10 November 2026
+
+The owner subsequently requested asynchronous Python integration, easier UI/animations, and richer editor setup. These shipped in 1.2.0-alpha.4. Their acceptance is engineering evidence from the [release record](release-readiness.md), not external learner observations.
+
+- Managed/async Python clients and batches are implemented; direct calls retain their synchronous contract.
+- Standard-library hints, semantic token roles, offline extension installation, themes/icons, and spelling Quick Fixes are implemented. Arbitrary dependency introspection, rename, and signature help remain deferred.
+- UI components, forms/actions, motion, Electron starters, and an embedded implementation guide are implemented and have local browser/desktop checks.
+
+The tables below retain the original decision rationale. Current implementation supersedes the earlier worker deferral; external-user selection gates remain open.
+
 ## Admissible evidence
 
 A tooling investment may be justified by an actual M7 observation or a release-critical engineering risk with a reproducible trigger. Source review, automated tests, platform failures, and benchmarks are engineering evidence. They cannot substitute for observing a learner's understanding or establish how many users are affected.
@@ -28,7 +38,7 @@ These rows cite implementation requirements and tests, not fabricated production
 | Formatter | Deferred | Formatting rules and preservation semantics are not yet specified; no external task evidence exists. | Repeated formatting confusion or a measured maintenance need with a minimal formatting contract. |
 | Parser recovery beyond one syntax error | Deferred | All independent semantic errors are already collected; syntax recovery adds grammar and editor complexity. | Observed syntax-repair bottleneck or a scoped recovery design with tests. |
 | References/rename, signature help, imported-library completion | Deferred | Same-file definitions already exist; broader tools need workspace/import semantics and reliable edit safety. | Actual repeated lookup/rename task failures after module usage is observed. |
-| Persistent/async Python worker | Deferred | Changes state, cancellation, lifecycle, and error behavior. Batching is the smaller current remedy. | Benchmarked workload remains unacceptable after batching. |
+| Persistent/async Python worker | Implemented experimentally in alpha.4 after owner request | Explicit opt-in clients define state, cancellation, queue bounds, interpreter selection, and draining; direct calls stay synchronous. | Reproducible lifecycle, throughput, or cancellation failure; real workload/learner evidence. |
 | Incremental module cache | Deferred | Correct deterministic full builds take priority; no measured unacceptable build latency is recorded. | Representative timing data with a correctness-preserving invalidation design. |
 | Source-level debugger | Deferred | Source maps give runtime traces; stepping requires a separate launch/breakpoint/tooling contract. | Observed diagnosis tasks cannot be solved by mapped errors and smaller diagnostics improvements. |
 | Unicode identifiers / bidi editor support | Deferred | Requires lexer, normalization, ranges, security/display, fonts, and editor review; translated docs are a distinct project. | A separately approved proposal with fluent/script-expert review and conformance cases. |
@@ -65,4 +75,4 @@ These selections use reproduced release-critical engineering risks, not particip
 | ENG-DEC-002: explicit import errors | A missing namespace constructor export was not included in member metadata. | Record the first qualified constructor member alongside ordinary namespace properties and validate against parsed exports. | Applies only to new Arya namespace imports; JavaScript/dynamic property behavior stays native. No separate parser or project-code execution. | Direct property/constructor missing-export and shadowed-alias regression in `tests/project.test.ts`. |
 | ENG-DEC-003: exact failed-log budget | A Unicode stderr regression reproduced 131072 forwarded bytes under a documented 65536-byte limit. | Truncate encoded bytes through a private imported Buffer helper, retaining the output-limit error code. | Ordinary successful logging unchanged; failed oversized logs remain intentionally truncated. The private helper avoids introducing a shadowable host dependency. | Unicode byte-budget and user-Buffer-shadowing regression in `tests/interop.test.ts`; passes Node 22.15/24. |
 
-The acceptance suite now contains 80 passing language tests on both locally tested Node versions, plus separate IDE/desktop qualification. This verifies these engineering mitigations, not user adoption or final 1.0 readiness. M8's external evidence review remains open alongside M7.
+The original mitigation acceptance suite contained 80 passing language tests on both locally tested Node versions, plus separate IDE/desktop qualification. This verifies these engineering mitigations, not user adoption or final 1.0 readiness. M8's external evidence review remains open alongside M7.

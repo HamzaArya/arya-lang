@@ -1,6 +1,6 @@
-# Arya 1.1 native profile contract
+# Arya native profile contract
 
-**Version:** 1.1.0-alpha.1. Experimental and separate from the [Node profile](arya-specification.md). The native compiler and runtime implement this profile; future alpha changes require conformance tests and migration notes.
+**Current implementation:** 1.2.0-alpha.4, retaining the 1.1.0-alpha.1 baseline and the 1.2 amendments below. Experimental and separate from the [Node profile](arya-specification.md). The native compiler and runtime implement this profile; future alpha changes require conformance tests and migration notes.
 
 ## Syntax and compilation
 
@@ -75,3 +75,19 @@ The shared compiler bounds sources to 256 KiB and 50,000 tokens per file and pro
 The npm builder stages owned output, validates symlink boundaries, publishes only after compiler/linker success, and rolls back on publication failure. The self-hosted compiler writes a C sidecar and stages the executable before rename; its standalone CLI operates on explicitly selected local paths and is not the IDE's trusted build service. A failed build never invokes a previous executable. Keep generated output paths separate from personal source/data.
 
 Bootstrap qualification requires three generations, identical generated C for generations 2/3, native conformance results, rejected invalid input, and an executable that works without Node. Cross-platform support requires actual target job evidence; a workflow definition alone is not evidence of a successful run.
+
+
+## Arya 1.2 preview scope
+
+The `1.2.0-alpha.1` native profile adds the branded spellings `keep`, `task`, `when`/`otherwise`, `each`, `give`, and the `say` built-in. These have the same semantics as `const`, `fn`, `if`/`else`, `for`, `return`, and `print`; existing spellings remain accepted. `async task` parses like `async fn` but remains unsupported for native execution. The six new keywords are reserved, and an older binding using one must be renamed. A prior module-level `say` binding also requires a new name. See the [migration note](releases/1.2.0-alpha.1.md).
+
+Use `fn`/`return` and `if`/`else if`/`else` in new native programs. `task`/`give` and `when`/`otherwise` remain accepted compatibility aliases, matching the Node profile.
+
+Raw triple-double-quoted multiline strings are part of the shared source grammar. They preserve their contents without interpolation or ordinary-string backslash escapes.
+
+The new `view` web grammar and the JavaScript profile's web/MySQL helpers are outside native execution. Native checking rejects them rather than falling back to Node or silently emitting incomplete web code. `use std "fs"` and `use std "math"` retain the native APIs documented above; the Node profile's asynchronous file methods and full host Math object do not change them. Native source builds still require a C11 toolchain, and native executables still run without Node.
+
+
+## Safe expressions in 1.2.0-alpha.4
+
+The TypeScript-hosted and self-hosted native compilers support nullish coalescing (`??`), optional property/index/call chains (`?.`), and leading-dot multiline chains as specified in the [syntax contract](syntax-and-debugging.md). Nullish checks distinguish null/undefined from zero, false, and empty strings. Skipped indexes/arguments do not execute; grouping ends the continuous optional chain. Native numeric specialization falls back to dynamic emission for these new operations. The shared safe-access fixture is verified under garbage-collection stress and through bootstrap stages. The JavaScript-only debug library does not expand the native library set.

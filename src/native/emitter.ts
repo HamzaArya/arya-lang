@@ -19,12 +19,14 @@ export function nativeDiagnostics(parsed: Parsed): { token: Token; message: stri
   }
   const expr = (e: Expression): void => {
     switch (e.kind) {
+      case 'view': add(e.token, 'Web views require the JavaScript profile; run without --target native.'); e.expressions.forEach(expr); break;
       case 'new': add(e.token, 'Host constructors are unavailable in native Arya.'); expr(e.callee); e.arguments.forEach(expr); break;
       case 'unary': if (e.operator === 'await') add(e.token, 'await is unavailable in the native profile.'); expr(e.value); break;
       case 'function': if (e.async) add(e.token, 'async functions are unavailable in the native profile.'); block(e.body); break;
       case 'binary': expr(e.left); expr(e.right); break;
       case 'call': expr(e.callee); e.arguments.forEach(expr); break;
       case 'member': expr(e.object); expr(e.key); break;
+      case 'chain': expr(e.base); e.steps.forEach(step => step.kind === 'member' ? expr(step.key) : step.arguments.forEach(expr)); break;
       case 'list': e.items.forEach(expr); break;
       case 'object': e.fields.forEach(f => expr(f.value)); break;
     }
@@ -69,7 +71,7 @@ export function emitNative(sources: NativeSource[], entryFilename = sources.at(-
       if (x.kind === 'literal' && typeof x.value === 'number') return cnumber(x.value);
       if (x.kind === 'name' && x.reference.binding && allowed.has(x.reference.binding)) return identifier(x.reference.binding);
       if (x.kind === 'unary' && ['+','-','not','!'].includes(x.operator)) { const a=exp(x.value); if(a!==undefined) return ['not','!'].includes(x.operator)?`(!anumtruth(${a}))`:`(${x.operator}${a})`; }
-      if (x.kind === 'binary' && !['and','or'].includes(x.operator)) { if(!numericResult(x.left)||!numericResult(x.right))return undefined; const a=exp(x.left),b=exp(x.right); if(a!==undefined && b!==undefined) { if(x.operator==='**') return `apower(${a},${b})`; if(x.operator==='%') return `fmod(${a},${b})`; return `(${a} ${x.operator} ${b})`; } }
+      if (x.kind === 'binary' && !['and','or','??'].includes(x.operator)) { if(!numericResult(x.left)||!numericResult(x.right))return undefined; const a=exp(x.left),b=exp(x.right); if(a!==undefined && b!==undefined) { if(x.operator==='**') return `apower(${a},${b})`; if(x.operator==='%') return `fmod(${a},${b})`; return `(${a} ${x.operator} ${b})`; } }
       return undefined;
     };
     const lines: string[] = []; let returned = false, valid = true;
@@ -104,6 +106,7 @@ export function emitNative(sources: NativeSource[], entryFilename = sources.at(-
     }
     expression(e: Expression,env: string): string {
       switch(e.kind) {
+        case 'view': throw new AryaError('Web views require the JavaScript profile.',e.token);
         case 'literal': return e.value===null?'av(ANULL)':typeof e.value==='number'?`an(${cnumber(e.value)})`:typeof e.value==='boolean'?`ab(${e.value?1:0})`:this.string(e.value);
         case 'name': { const b=e.reference.binding!; if(b.kind==='host') return e.token.text==='NaN'?'an(NAN)':e.token.text==='Infinity'?'an(INFINITY)':'av(AUNDEF)'; return this.temp(this.read(env,b),e.token); }
         case 'list': { const items=e.items.map(x=>this.expression(x,env)); return this.temp(`alist(${items.length},${items.length?`(AV[]){${items.join(',')}}`:'NULL'})`,e.token); }
@@ -111,10 +114,28 @@ export function emitNative(sources: NativeSource[], entryFilename = sources.at(-
         case 'unary': { const x=this.expression(e.value,env); return this.temp(`aunary(${quote(e.operator)},${x})`,e.token); }
         case 'binary': {
           const x=this.expression(e.left,env);
-          if(e.operator==='and'||e.operator==='or') { const result=this.temp(x); this.lines.push(`if (${e.operator==='or'?'!':''}atruth(${x})) {`); const y=this.expression(e.right,env); this.lines.push(`${result}=${y};`, '}'); return result; }
+          if(e.operator==='and'||e.operator==='or'||e.operator==='??') { const result=this.temp(x); const condition=e.operator==='??'?`(${x}.t==ANULL || ${x}.t==AUNDEF)`:`${e.operator==='or'?'!':''}atruth(${x})`; this.lines.push(`if (${condition}) {`); const y=this.expression(e.right,env); this.lines.push(`${result}=${y};`, '}'); return result; }
           const y=this.expression(e.right,env); return this.temp(`abin(${quote(e.operator)},${x},${y})`,e.token);
         }
         case 'member': { const x=this.expression(e.object,env),y=this.expression(e.key,env); return this.temp(`aget(${x},${y})`,e.token); }
+        case 'chain': {
+          const result = this.temp(this.expression(e.base, env));
+          const end = `chain${this.labels++}`;
+          for (const step of e.steps) {
+            if (step.optional) this.lines.push(`if (${result}.t==ANULL || ${result}.t==AUNDEF) { ${result}=av(AUNDEF); goto ${end}; }`);
+            if (step.kind === 'member') {
+              const key = this.expression(step.key, env);
+              const next = this.temp(`aget(${result},${key})`, step.token);
+              this.lines.push(`${result}=${next};`);
+            } else {
+              const args = step.arguments.map(value => this.expression(value, env));
+              const next = this.temp(`acall(${result},${args.length},${args.length ? `(AV[]){${args.join(',')}}` : 'NULL'})`, step.token);
+              this.lines.push(`${result}=${next};`);
+            }
+          }
+          this.lines.push(`${end}:;`);
+          return result;
+        }
         case 'function': { const id=makeFunction(this.u,e,'anonymous'); return this.temp(`afunction(${id},${env},"anonymous")`,e.token); }
         case 'call': { const fn=this.expression(e.callee,env), args=e.arguments.map(x=>this.expression(x,env)); return this.temp(`acall(${fn},${args.length},${args.length?`(AV[]){${args.join(',')}}`:'NULL'})`,e.token); }
         case 'new': throw new AryaError('Native constructors are unsupported.',e.token);
@@ -162,7 +183,7 @@ export function emitNative(sources: NativeSource[], entryFilename = sources.at(-
       this.lines.push(`T[0]=aenv(${parent},${globalScope(this.u,scope)},${sizes(this.u,scope)});`,`if(afailed) goto failure;`);
       if(module) {
         this.lines.push(`amod[${this.u.index}]=T[0];`, `ans[${this.u.index}]=arecord();`);
-        for(const b of this.u.groups.get(0) ?? []) if(b.kind==='builtin') { const ids:Record<string,number>={print:0,len:1,str:2,number:3,range:4}; this.temp(this.write('T[0]',b,b.name==='args'?'aprogramArgs':`abuilt(${ids[b.name]})`,true)); }
+        for(const b of this.u.groups.get(0) ?? []) if(b.kind==='builtin') { const ids:Record<string,number>={print:0,say:0,len:1,str:2,number:3,range:4}; this.temp(this.write('T[0]',b,b.name==='args'?'aprogramArgs':`abuilt(${ids[b.name]})`,true)); }
         for(const s of body.statements) if((s.kind==='declaration'||s.kind==='function')&&s.exported) this.lines.push(`aaddexport(ans[${this.u.index}],${quote(s.binding.name)},T[0],${globalScope(this.u,0)},${slot(this.u,s.binding)});`);
         this.lines.push(`ans[${this.u.index}].p->scope=-1;`);
       }

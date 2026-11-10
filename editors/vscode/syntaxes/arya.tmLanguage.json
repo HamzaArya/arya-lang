@@ -6,111 +6,492 @@
   ],
   "patterns": [
     {
-      "name": "comment.line.arya",
-      "match": "(#|\\/\\/).*$"
-    },
-    {
-      "name": "string.quoted.double.arya",
-      "begin": "\"",
-      "end": "\"|$",
-      "patterns": [
-        {
-          "name": "constant.character.escape.arya",
-          "match": "\\\\[nrt\\\\\"']"
-        },
-        {
-          "name": "invalid.illegal.escape.arya",
-          "match": "\\\\."
-        }
-      ]
-    },
-    {
-      "name": "string.quoted.single.arya",
-      "begin": "'",
-      "end": "'|$",
-      "patterns": [
-        {
-          "name": "constant.character.escape.arya",
-          "match": "\\\\[nrt\\\\\"']"
-        },
-        {
-          "name": "invalid.illegal.escape.arya",
-          "match": "\\\\."
-        }
-      ]
-    },
-    {
-      "match": "\\b(fn)\\s+([A-Za-z_][A-Za-z0-9_]*)",
-      "captures": {
-        "1": {
-          "name": "storage.type.function.arya"
-        },
-        "2": {
-          "name": "entity.name.function.arya"
-        }
-      }
-    },
-    {
-      "match": "\\b(let|const)\\s+([A-Za-z_][A-Za-z0-9_]*)",
-      "captures": {
-        "1": {
-          "name": "storage.type.arya"
-        },
-        "2": {
-          "name": "variable.other.definition.arya"
-        }
-      }
-    },
-    {
-      "match": "\\b(use)\\s+(js|python|arya)\\b",
-      "captures": {
-        "1": {
-          "name": "keyword.control.import.arya"
-        },
-        "2": {
-          "name": "storage.type.bridge.arya"
-        }
-      }
-    },
-    {
-      "name": "keyword.control.arya",
-      "match": "\\b(let|const|fn|async|await|return|if|else|for|in|while|break|continue|use|as|export|new|try|catch|throw)\\b"
-    },
-    {
-      "name": "keyword.operator.logical.arya",
-      "match": "\\b(and|or|not)\\b"
-    },
-    {
-      "name": "constant.language.arya",
-      "match": "\\b(true|false|null)\\b"
-    },
-    {
-      "name": "constant.numeric.arya",
-      "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
-    },
-    {
-      "name": "support.function.arya",
-      "match": "\\b(print|len|range|str|number)\\b"
-    },
-    {
-      "name": "variable.language.arya",
-      "match": "\\bargs\\b"
-    },
-    {
-      "name": "entity.name.function.arya",
-      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
-    },
-    {
-      "name": "keyword.operator.arya",
-      "match": "==|!=|<=|>=|\\+=|-=|\\*=|\\/=|\\*\\*|[+*/%=<>!-]"
-    },
-    {
-      "name": "punctuation.section.arya",
-      "match": "[{}()\\[\\]]"
-    },
-    {
-      "name": "punctuation.separator.arya",
-      "match": "[,;:.]"
+      "include": "#code"
     }
-  ]
+  ],
+  "repository": {
+    "code": {
+      "patterns": [
+        {
+          "name": "comment.line.arya",
+          "match": "(#|\\/\\/).*$"
+        },
+        {
+          "name": "meta.embedded.block.css.arya",
+          "begin": "\\b(style)\\s+(\"\"\")",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.tag.arya"
+            },
+            "2": {
+              "name": "punctuation.definition.string.begin.arya"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.arya"
+            }
+          },
+          "contentName": "source.css",
+          "patterns": [
+            {
+              "include": "source.css"
+            },
+            {
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "meta.embedded.block.javascript.arya",
+          "begin": "\\b(script)\\s+(\"\"\")",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.tag.arya"
+            },
+            "2": {
+              "name": "punctuation.definition.string.begin.arya"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.arya"
+            }
+          },
+          "contentName": "source.js",
+          "patterns": [
+            {
+              "include": "source.js"
+            },
+            {
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "meta.embedded.block.css.arya",
+          "begin": "\\b(css)(\\s*:\\s*)(\"\"\")",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.other.property.arya"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.arya"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.arya"
+            }
+          },
+          "contentName": "source.css",
+          "patterns": [
+            {
+              "include": "source.css"
+            },
+            {
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.triple.double.arya",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        },
+        {
+          "name": "string.quoted.double.arya",
+          "begin": "\"",
+          "end": "\"|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.arya",
+              "match": "\\\\[nrt\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.escape.arya",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.arya",
+          "begin": "'",
+          "end": "'|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.arya",
+              "match": "\\\\[nrt\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.escape.arya",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "meta.view.arya",
+          "begin": "\\b(view)\\s*(\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.view.arya"
+            },
+            "2": {
+              "name": "punctuation.section.view.begin.arya"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.view.end.arya"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#view-content"
+            }
+          ]
+        },
+        {
+          "name": "meta.function.parameters.arya",
+          "begin": "\\b(fn|task)\\s*(?:([A-Za-z_][A-Za-z0-9_]*)\\s*)?(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.function.arya"
+            },
+            "2": {
+              "name": "entity.name.function.arya"
+            },
+            "3": {
+              "name": "punctuation.section.parameters.begin.arya"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.parameters.end.arya"
+            }
+          },
+          "patterns": [
+            {
+              "name": "comment.line.arya",
+              "match": "(#|\\/\\/).*$"
+            },
+            {
+              "name": "variable.parameter.arya",
+              "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+            },
+            {
+              "name": "punctuation.separator.parameter.arya",
+              "match": ","
+            }
+          ]
+        },
+        {
+          "match": "\\b(let|const|keep)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.arya"
+            },
+            "2": {
+              "name": "variable.other.definition.arya"
+            }
+          }
+        },
+        {
+          "match": "\\b(use)\\s+(js|python|arya|std)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.control.import.arya"
+            },
+            "2": {
+              "name": "storage.type.bridge.arya"
+            }
+          }
+        },
+        {
+          "match": "\\b(as)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.import.arya"
+            },
+            "2": {
+              "name": "entity.name.namespace.arya"
+            }
+          }
+        },
+        {
+          "match": "(\\?\\.|\\.)([A-Za-z_][A-Za-z0-9_]*)(?=\\s*(?:\\?\\.\\s*)?\\()",
+          "captures": {
+            "1": {
+              "name": "keyword.operator.accessor.arya"
+            },
+            "2": {
+              "name": "entity.name.function.member.arya"
+            }
+          }
+        },
+        {
+          "match": "(\\?\\.|\\.)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.operator.accessor.arya"
+            },
+            "2": {
+              "name": "variable.other.property.arya"
+            }
+          }
+        },
+        {
+          "name": "variable.other.property.arya",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*:)"
+        },
+        {
+          "name": "keyword.control.arya",
+          "match": "\\b(fn|task|let|const|keep|as|async|await|return|give|if|when|else|otherwise|for|each|in|while|break|continue|use|export|new|try|catch|throw)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.arya",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "constant.language.arya",
+          "match": "\\b(true|false|null)\\b"
+        },
+        {
+          "name": "constant.numeric.arya",
+          "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "support.function.arya",
+          "match": "\\b(print|say|len|range|str|number)\\b"
+        },
+        {
+          "name": "variable.language.arya",
+          "match": "\\bargs\\b"
+        },
+        {
+          "name": "entity.name.function.arya",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+        },
+        {
+          "name": "keyword.operator.arya",
+          "match": "\\?\\?|\\?\\.|==|!=|<=|>=|\\+=|-=|\\*=|\\/=|\\*\\*|[+*/%=<>!-]"
+        },
+        {
+          "include": "#paren"
+        },
+        {
+          "name": "punctuation.section.arya",
+          "match": "[{}\\[\\]]"
+        },
+        {
+          "name": "punctuation.separator.arya",
+          "match": "[,;:.]"
+        }
+      ]
+    },
+    "paren": {
+      "name": "meta.group.arya",
+      "begin": "\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.group.begin.arya"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.group.end.arya"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#code"
+        }
+      ]
+    },
+    "view-content": {
+      "patterns": [
+        {
+          "name": "comment.line.arya",
+          "match": "(#|\\/\\/).*$"
+        },
+        {
+          "name": "meta.embedded.block.css.arya",
+          "begin": "\\b(style)\\s+(\"\"\")",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.tag.arya"
+            },
+            "2": {
+              "name": "punctuation.definition.string.begin.arya"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.arya"
+            }
+          },
+          "contentName": "source.css",
+          "patterns": [
+            {
+              "include": "source.css"
+            },
+            {
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "meta.embedded.block.javascript.arya",
+          "begin": "\\b(script)\\s+(\"\"\")",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.tag.arya"
+            },
+            "2": {
+              "name": "punctuation.definition.string.begin.arya"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.arya"
+            }
+          },
+          "contentName": "source.js",
+          "patterns": [
+            {
+              "include": "source.js"
+            },
+            {
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.triple.double.arya",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        },
+        {
+          "name": "string.quoted.double.arya",
+          "begin": "\"",
+          "end": "\"|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.arya",
+              "match": "\\\\[nrt\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.escape.arya",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.arya",
+          "begin": "'",
+          "end": "'|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.arya",
+              "match": "\\\\[nrt\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.escape.arya",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "meta.view.children.arya",
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#view-content"
+            }
+          ]
+        },
+        {
+          "include": "#paren"
+        },
+        {
+          "name": "meta.tag.arya",
+          "begin": "([A-Za-z][A-Za-z0-9_-]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.tag.arya"
+            }
+          },
+          "end": "(?=\\{|\\}|;|$)|(?<=[\"\\'])\\s*(?=[A-Za-z])",
+          "patterns": [
+            {
+              "name": "meta.tag.attributes.arya",
+              "begin": "\\(",
+              "end": "\\)",
+              "patterns": [
+                {
+                  "name": "entity.other.attribute-name.arya",
+                  "match": "[A-Za-z_:][A-Za-z0-9_:.-]*(?=\\s*=)"
+                },
+                {
+                  "include": "#code"
+                }
+              ]
+            },
+            {
+              "name": "string.quoted.triple.double.arya",
+              "begin": "\"\"\"",
+              "end": "\"\"\""
+            },
+            {
+              "name": "string.quoted.double.arya",
+              "begin": "\"",
+              "end": "\"|$",
+              "patterns": [
+                {
+                  "name": "constant.character.escape.arya",
+                  "match": "\\\\[nrt\\\\\"']"
+                },
+                {
+                  "name": "invalid.illegal.escape.arya",
+                  "match": "\\\\."
+                }
+              ]
+            },
+            {
+              "name": "string.quoted.single.arya",
+              "begin": "'",
+              "end": "'|$",
+              "patterns": [
+                {
+                  "name": "constant.character.escape.arya",
+                  "match": "\\\\[nrt\\\\\"']"
+                },
+                {
+                  "name": "invalid.illegal.escape.arya",
+                  "match": "\\\\."
+                }
+              ]
+            },
+            {
+              "name": "entity.other.attribute-name.class.arya",
+              "match": "[A-Za-z_][A-Za-z0-9_-]*"
+            }
+          ]
+        },
+        {
+          "name": "punctuation.separator.arya",
+          "match": ";"
+        }
+      ]
+    }
+  }
 }

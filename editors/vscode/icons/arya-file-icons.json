@@ -1,0 +1,92 @@
+{
+  "iconDefinitions": {
+    "arya": {
+      "iconPath": "../media/arya-mark-dark.svg"
+    },
+    "arya-light": {
+      "iconPath": "../media/arya-mark.svg"
+    },
+    "file": {
+      "iconPath": "./file.svg"
+    },
+    "folder": {
+      "iconPath": "./folder.svg"
+    },
+    "folder-open": {
+      "iconPath": "./folder-open.svg"
+    },
+    "js": {
+      "iconPath": "./js.svg"
+    },
+    "ts": {
+      "iconPath": "./ts.svg"
+    },
+    "python": {
+      "iconPath": "./python.svg"
+    },
+    "json": {
+      "iconPath": "./json.svg"
+    },
+    "html": {
+      "iconPath": "./html.svg"
+    },
+    "css": {
+      "iconPath": "./css.svg"
+    },
+    "markdown": {
+      "iconPath": "./markdown.svg"
+    },
+    "sql": {
+      "iconPath": "./sql.svg"
+    }
+  },
+  "file": "file",
+  "folder": "folder",
+  "folderExpanded": "folder-open",
+  "fileExtensions": {
+    "arya": "arya",
+    "js": "js",
+    "mjs": "js",
+    "cjs": "js",
+    "jsx": "js",
+    "ts": "ts",
+    "tsx": "ts",
+    "py": "python",
+    "pyi": "python",
+    "json": "json",
+    "jsonc": "json",
+    "html": "html",
+    "htm": "html",
+    "css": "css",
+    "scss": "css",
+    "less": "css",
+    "md": "markdown",
+    "mdx": "markdown",
+    "sql": "sql"
+  },
+  "languageIds": {
+    "arya": "arya",
+    "javascript": "js",
+    "javascriptreact": "js",
+    "typescript": "ts",
+    "typescriptreact": "ts",
+    "python": "python",
+    "json": "json",
+    "jsonc": "json",
+    "html": "html",
+    "css": "css",
+    "scss": "css",
+    "less": "css",
+    "markdown": "markdown",
+    "sql": "sql"
+  },
+  "light": {
+    "fileExtensions": {
+      "arya": "arya-light"
+    },
+    "languageIds": {
+      "arya": "arya-light"
+    }
+  },
+  "hidesExplorerArrows": false
+}

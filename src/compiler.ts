@@ -3,10 +3,15 @@ import { dirname, isAbsolute, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { javascriptRuntime, pythonRuntime } from './runtime.js';
 import { origin, finalize } from './source-map.js';
+import { parseView, webRuntime } from './web.js';
+import { standardLibraries, standardRuntime } from './standard.js';
+import { syntaxDiagnostic } from './diagnostics.js';
+export { formatDiagnostics, diagnosticFixes } from './diagnostics.js';
+export type { DiagnosticFix } from './diagnostics.js';
 import { LexicalScopes, type AryaDiagnostic, type BindingKind, type LexicalBinding, type LexicalReference, type Resolution, type ScopeKind } from './resolver.js';
 export type { AryaDiagnostic, BindingKind, LexicalBinding, LexicalReference } from './resolver.js';
 
-export const ARYA_VERSION = '1.1.0-alpha.1';
+export const ARYA_VERSION = '1.2.0-alpha.4';
 export interface Token { kind: 'word' | 'number' | 'string' | 'symbol' | 'newline' | 'eof'; text: string; start: number; end: number; line: number; column: number }
 export interface AryaSymbol { name: string; kind: 'function' | 'variable' | 'module'; token: Token }
 export interface AryaImport { specifier: string; token: Token; alias: Token }
@@ -15,12 +20,13 @@ export class AryaError extends Error {
   readonly diagnostics: AryaDiagnostic[];
   constructor(message: string, readonly token: Token, diagnostics?: AryaDiagnostic[]) {
     super(message); this.name = 'AryaError';
-    this.diagnostics = diagnostics ?? [{ code: 'ARYA_SYNTAX', message, token }];
+    this.diagnostics = diagnostics ?? [syntaxDiagnostic(message, token)];
   }
 }
-export const keywords = ['let', 'const', 'fn', 'async', 'await', 'return', 'if', 'else', 'for', 'in', 'while', 'break', 'continue', 'and', 'or', 'not', 'true', 'false', 'null', 'use', 'as', 'export', 'new', 'try', 'catch', 'throw'];
+export const keywords = ['let', 'const', 'fn', 'async', 'await', 'return', 'if', 'else', 'for', 'in', 'while', 'break', 'continue', 'and', 'or', 'not', 'true', 'false', 'null', 'use', 'as', 'export', 'new', 'try', 'catch', 'throw', 'keep', 'task', 'when', 'otherwise', 'each', 'give'];
 export const builtins: Record<string, string> = {
   print: 'print(...values) — write values to the terminal.',
+  say: 'say(...values) — write values to the terminal (Arya spelling of print).',
   len: 'len(value) — length of a string or list.',
   range: 'range(end) or range(start, end, step = 1) — a list of integers; end is excluded.',
   str: 'str(value) — convert a value to text.',
@@ -50,6 +56,15 @@ export function tokenize(source: string): Token[] {
       const match = /^(?:\d+(?:\.\d+)?)(?:[eE][+-]?\d+)?/.exec(source.slice(offset))![0];
       for (const _ of match) advance(); token.text = match;
       if (!Number.isFinite(Number(match))) throw new AryaError('Number is outside the supported range.', token);
+    } else if ((char === '"' || char === "'") && source.startsWith(char.repeat(3), offset)) {
+      token.kind = 'string';
+      const delimiter = char.repeat(3);
+      advance(); advance(); advance();
+      const start = offset;
+      while (offset < source.length && !source.startsWith(delimiter, offset)) advance();
+      if (offset === source.length) throw new AryaError('Unclosed multiline string. Close it with ' + delimiter + '.', token);
+      token.text = source.slice(start, offset);
+      advance(); advance(); advance();
     } else if (char === '"' || char === "'") {
       token.kind = 'string'; const quote = advance(); let value = '', closed = false;
       while (offset < source.length) {
@@ -68,7 +83,7 @@ export function tokenize(source: string): Token[] {
     } else {
       token.kind = 'symbol';
       const pair = source.slice(offset, offset + 2);
-      if (['==', '!=', '<=', '>=', '+=', '-=', '*=', '/=', '**'].includes(pair)) { advance(); advance(); token.text = pair; }
+      if (['==', '!=', '<=', '>=', '+=', '-=', '*=', '/=', '**', '??', '?.'].includes(pair)) { advance(); advance(); token.text = pair; }
       else if ('+-*/%<>=!(){}[],:;.'.includes(char)) token.text = advance();
       else throw new AryaError(`Unexpected character ${JSON.stringify(char)}.`, token);
     }
@@ -78,11 +93,11 @@ export function tokenize(source: string): Token[] {
   tokens.push(point()); return tokens;
 }
 
-interface Expression { node: Ast.Expression; code: string; assignable?: boolean; target?: LexicalReference }
+interface Expression { node: Ast.Expression; code: string; assignable?: boolean; target?: LexicalReference; chain?: Ast.Expression & { kind: 'chain' } }
 export interface SourceAnalysis extends Resolution { symbols: AryaSymbol[]; imports: AryaImport[]; exports: Token[]; moduleMembers: ModuleMember[] }
 export interface Compilation extends SourceAnalysis { code: string; map: string; mapFilename: string; usesPython: boolean }
 export interface CompileOptions { filename: string; outputFilename: string; aryaImports?: Readonly<Record<string, string>> }
-const precedence: Record<string, number> = { or: 1, and: 2, '==': 3, '!=': 3, '<': 4, '<=': 4, '>': 4, '>=': 4, '+': 5, '-': 5, '*': 6, '/': 6, '%': 6, '**': 7 };
+const precedence: Record<string, number> = { '??': 0, or: 1, and: 2, '==': 3, '!=': 3, '<': 4, '<=': 4, '>': 4, '>=': 4, '+': 5, '-': 5, '*': 6, '/': 6, '%': 6, '**': 7 };
 class Parser {
   private index = 0;
   private depth = 0;
@@ -98,6 +113,7 @@ class Parser {
   readonly ast: Ast.Block = { scopeId: 0, statements: [] };
   private blockAst = this.ast;
   usesPython = false;
+  usesViews = false;
   constructor(private readonly tokens: Token[], private readonly filename: string, private readonly resolvedImports?: Readonly<Record<string, string>>) {}
   private get current() { return this.tokens[this.index]!; }
   private is(text: string) { return this.current.kind !== 'string' && this.current.text === text; }
@@ -160,16 +176,16 @@ class Parser {
   private statement(): string { const token = this.current; return origin(token, this.statementBody()); }
   private statementBody(): string {
     const token = this.current, exported = this.match('export');
-    if (exported && (!this.scopes.isModule || !['let', 'const', 'fn', 'async'].some(word => this.is(word)))) throw new AryaError('Export a top-level variable or function.', token);
+    if (exported && (!this.scopes.isModule || !['let', 'const', 'fn', 'async', 'keep', 'task'].some(word => this.is(word)))) throw new AryaError('Export a top-level variable or function.', token);
     const prefix = exported ? 'export ' : '';
-    if (this.is('let') || this.is('const')) {
-      const keyword = this.take().text as 'let' | 'const', name = this.identifier(), binding = this.declare(name, keyword);
+    if (this.is('let') || this.is('const') || this.is('keep')) {
+      const keyword = this.take().text === 'let' ? 'let' : 'const', name = this.identifier(), binding = this.declare(name, keyword);
       if (exported) this.exports.push(name);
       this.expect('='); this.lines(); const value = this.expression(); this.end();
       return this.record({ kind: 'declaration', token, binding, value: value.node, exported }, `${prefix}${keyword} ${origin(name, name.text)} = ${value.code};`);
     }
-    if (this.is('fn') || this.is('async')) {
-      const async = this.match('async'); this.expect('fn'); const name = this.identifier(), binding = this.declare(name, 'function');
+    if (this.is('fn') || this.is('async') || this.is('task')) {
+      const async = this.match('async'); if (!this.match('task')) this.expect('fn'); const name = this.identifier(), binding = this.declare(name, 'function');
       if (exported) this.exports.push(name);
       const value = this.functionBody(async, token);
       return this.record({ kind: 'function', token, binding, value: value.node, exported }, `${prefix}${async ? 'async ' : ''}function ${origin(name, name.text)}${value.code}`);
@@ -186,7 +202,7 @@ class Parser {
         const specifier = this.resolvedImports?.[module.text] ?? module.text.split('/').map(encodeURIComponent).join('/') + '.mjs';
         return `import * as ${origin(name, name.text)} from ${JSON.stringify(specifier)};`;
       }
-      if (bridge.text === 'std') return '';
+      if (bridge.text === 'std') return `const ${name.text} = __arya_standard(${JSON.stringify(module.text)}, ${JSON.stringify(dirname(resolve(this.filename)))});`;
       if (bridge.text === 'python') {
         this.usesPython = true;
         const specifier = module.text.endsWith('.py') ? resolve(dirname(this.filename), module.text) : module.text;
@@ -196,12 +212,12 @@ class Parser {
       const internal = `__arya_import${this.imports++}`;
       return `import * as ${internal} from ${JSON.stringify(specifier)};\nconst ${name.text} = ${internal}.default ?? ${internal};`;
     }
-    if (this.match('if')) {
+    if (this.match('if') || this.match('when')) {
       const condition = this.expression(), body = this.block();
       const saved = this.index; this.lines();
-      if (this.match('else')) {
+      if (this.match('else') || this.match('otherwise')) {
         this.lines(); let other: { code: string; node: Ast.Block };
-        if (this.is('if')) {
+        if (this.is('if') || this.is('when')) {
           const previous = this.blockAst, node: Ast.Block = { scopeId: -1, statements: [] }; this.blockAst = node;
           const code = this.statement(); this.blockAst = previous; other = { code, node };
         } else other = this.block();
@@ -213,12 +229,12 @@ class Parser {
       const condition = this.expression(); this.loopDepth++; const body = this.block(); this.loopDepth--;
       return this.record({ kind: 'while', token, condition: condition.node, body: body.node }, `while (${condition.code}) ${body.code}`);
     }
-    if (this.match('for')) {
+    if (this.match('for') || this.match('each')) {
       const name = this.identifier(); this.scopes.enter('loop'); const binding = this.declare(name, 'loop');
       this.expect('in'); const iterable = this.expression(); this.loopDepth++; const body = this.block('block', [], [binding]); this.loopDepth--; this.scopes.leave();
       return this.record({ kind: 'for', token, binding, iterable: iterable.node, body: body.node }, `for (let ${origin(name, name.text)} of ${iterable.code}) ${body.code}`);
     }
-    if (this.match('return')) {
+    if (this.match('return') || this.match('give')) {
       if (!this.functionDepth) throw new AryaError('Use return inside a function.', token);
       const empty = this.current.kind === 'newline' || this.current.kind === 'eof' || this.is(';') || this.is('}');
       const value = empty ? undefined : this.expression(); this.end();
@@ -235,7 +251,7 @@ class Parser {
     if (this.match('throw')) { const value = this.expression(); this.end(); return this.record({ kind: 'throw', token, value: value.node }, `throw ${value.code};`); }
     const expression = this.expression();
     if (['=', '+=', '-=', '*=', '/='].some(operator => this.is(operator))) {
-      if (!expression.assignable) throw new AryaError('Assign to a variable, property, or list item.', token);
+      if (!expression.assignable) throw new AryaError(expression.chain ? 'Optional chains cannot be assignment targets. Check the object before assigning.' : 'Assign to a variable, property, or list item.', token);
       const operator = this.take(); if (expression.target) expression.target.access = operator.text === '=' ? 'write' : 'readwrite';
       this.lines(); const value = this.expression(); this.end();
       return this.record({ kind: 'assignment', token, target: expression.node, operator: operator.text, value: value.node }, `${expression.code} ${origin(operator, operator.text)} ${value.code};`);
@@ -280,22 +296,62 @@ class Parser {
   }
   private postfix(initial: Expression): Expression {
     let value = initial;
+    const append = (step: Ast.ChainStep, suffix: string) => {
+      if (step.optional || value.chain) {
+        const chain: Ast.Expression & { kind: 'chain' } = value.chain ?? { kind: 'chain', token: step.token, base: value.node, steps: [] };
+        chain.steps.push(step);
+        value = { code: value.code + suffix, node: chain, chain };
+      } else if (step.kind === 'call') {
+        value = { code: value.code + suffix, node: { kind: 'call', token: value.node.token, callee: value.node, arguments: step.arguments } };
+      } else {
+        value = { code: value.code + suffix, assignable: true, node: { kind: 'member', token: step.token, object: value.node, key: step.key } };
+      }
+    };
     while (true) {
-      if (this.match('(')) { const args = this.arguments(')'); value = { code: `${value.code}(${args.code})`, node: { kind: 'call', token: value.node.token, callee: value.node, arguments: args.nodes } }; }
-      else if (this.match('.')) {
+      if (this.current.kind === 'newline') {
+        let next = this.index;
+        while (this.tokens[next]?.kind === 'newline') next++;
+        if (this.tokens[next]?.kind === 'symbol' && ['.', '?.'].includes(this.tokens[next]!.text)) this.index = next;
+        else break;
+      }
+      const token = this.current;
+      const optional = this.match('?.');
+      if (this.match('(')) {
+        const args = this.arguments(')');
+        append({ kind: 'call', token, optional, arguments: args.nodes }, `${optional ? origin(token, '?.') : ''}${value.chain ? origin(token, '(') : '('}${args.code})`);
+      } else if (!optional && this.match('.')) {
         if (this.current.kind !== 'word') throw new AryaError('Expected a property name after the dot.', this.current);
         const member = this.take(); if (value.target) this.moduleMembers.push({ reference: value.target, token: member });
-        value = { code: `${value.code}.${origin(member, member.text)}`, assignable: true, node: { kind: 'member', token: member, object: value.node, key: { kind: 'literal', token: member, value: member.text } } };
+        append({ kind: 'member', token: member, optional: false, key: { kind: 'literal', token: member, value: member.text } }, `${origin(member, '.')}${origin(member, member.text)}`);
       } else if (this.match('[')) {
         this.lines(); const index = this.expression(); this.lines(); this.expect(']');
-        value = { code: `${value.code}[${index.code}]`, assignable: true, node: { kind: 'member', token: index.node.token, object: value.node, key: index.node } };
+        append({ kind: 'member', token: index.node.token, optional, key: index.node }, `${optional ? origin(token, '?.') : ''}${origin(index.node.token, '[')}${index.code}]`);
+      } else if (optional) {
+        if (this.current.kind !== 'word') throw new AryaError("Expected a property name, '[' or '(' after '?.'.", this.current);
+        const member = this.take(); if (value.target) this.moduleMembers.push({ reference: value.target, token: member });
+        append({ kind: 'member', token: member, optional: true, key: { kind: 'literal', token: member, value: member.text } }, `${origin(token, '?.')}${origin(member, member.text)}`);
       } else break;
     }
     return value;
   }
   private primary(): Expression {
     const token = this.current;
-    if (this.match('(')) { this.lines(); const value = this.expression(); this.lines(); this.expect(')'); return { ...value, code: `(${value.code})` }; }
+    if (this.is('view') && this.tokens[this.index + 1]?.text === '{' && this.tokens[this.index + 1]?.kind === 'symbol') {
+      this.take(); this.usesViews = true;
+      const parser = this;
+      const result = parseView({
+        get current() { return parser.current; },
+        take: () => this.take(), is: text => this.is(text), match: text => this.match(text),
+        expect: text => this.expect(text), separators: () => this.separators(),
+        expression: () => this.expression(),
+        fail: (message, point) => { throw new AryaError(message, point); }
+      });
+      return { code: origin(token, result.code), node: { kind: 'view', token, expressions: result.expressions } };
+    }
+    if (this.match('(')) {
+      this.lines(); const { chain: _chain, ...value } = this.expression(); this.lines(); this.expect(')');
+      return { ...value, code: `(${value.code})` };
+    }
     if (this.match('[')) { const args = this.arguments(']'); return { code: `[${args.code}]`, node: { kind: 'list', token, items: args.nodes } }; }
     if (this.match('{')) {
       const fields: string[] = [], nodes: { key: string; value: Ast.Expression }[] = []; this.lines();
@@ -306,7 +362,7 @@ class Parser {
       } while (this.match(','));
       this.expect('}'); return { code: `({${fields.join(', ')}})`, node: { kind: 'object', token, fields: nodes } };
     }
-    if (this.is('fn') || this.is('async')) { const async = this.match('async'); this.expect('fn'); const body = this.functionBody(async, token); return { code: `(${async ? 'async ' : ''}function${body.code})`, node: body.node }; }
+    if (this.is('fn') || this.is('async') || this.is('task')) { const async = this.match('async'); if (!this.match('task')) this.expect('fn'); const body = this.functionBody(async, token); return { code: `(${async ? 'async ' : ''}function${body.code})`, node: body.node }; }
     if (token.kind === 'string') { this.take(); return { code: origin(token, JSON.stringify(token.text)), node: { kind: 'literal', token, value: token.text } }; }
     if (token.kind === 'number') { this.take(); return { code: `(${origin(token, String(Number(token.text)))})`, node: { kind: 'literal', token, value: Number(token.text) } }; }
     if (['true', 'false', 'null'].some(word => this.is(word))) { this.take(); return { code: origin(token, token.text), node: { kind: 'literal', token, value: token.text === 'null' ? null : token.text === 'true' } }; }
@@ -317,17 +373,17 @@ class Parser {
     throw new AryaError('Expected a value, name, or function call.', token);
   }
 }
-export function parseProgram(source: string, filename: string, aryaImports?: Readonly<Record<string, string>>): SourceAnalysis & { ast: Ast.Block; body: string; usesPython: boolean } {
+export function parseProgram(source: string, filename: string, aryaImports?: Readonly<Record<string, string>>): SourceAnalysis & { ast: Ast.Block; body: string; usesPython: boolean; usesViews: boolean } {
   const parser = new Parser(tokenize(source), filename, aryaImports);
   const body = parser.parse();
-  return { ast: parser.ast, body, usesPython: parser.usesPython, symbols: parser.symbols, imports: parser.aryaImports, exports: parser.exports, moduleMembers: parser.moduleMembers, ...parser.scopes.resolve() };
+  return { ast: parser.ast, body, usesPython: parser.usesPython, usesViews: parser.usesViews, symbols: parser.symbols, imports: parser.aryaImports, exports: parser.exports, moduleMembers: parser.moduleMembers, ...parser.scopes.resolve() };
 }
 
 /** Parse and resolve without generating maps, resolving imports, or running code.
  * Syntax errors throw AryaError; a complete parse returns all lexical diagnostics.
  */
 export function analyzeSource(source: string, filename = 'main.arya'): SourceAnalysis {
-  const { ast: _ast, body: _body, usesPython: _usesPython, ...analysis } = parseProgram(source, filename);
+  const { ast: _ast, body: _body, usesPython: _usesPython, usesViews: _usesViews, ...analysis } = parseProgram(source, filename);
   return analysis;
 }
 
@@ -335,11 +391,11 @@ export function analyzeSource(source: string, filename = 'main.arya'): SourceAna
 export function compile(source: string, filenameOrOptions: string | CompileOptions = 'main.arya'): Compilation {
   const filename = typeof filenameOrOptions === 'string' ? filenameOrOptions : filenameOrOptions.filename;
   const outputFilename = typeof filenameOrOptions === 'string' ? resolve(filename) + '.mjs' : filenameOrOptions.outputFilename;
-  const { ast, body, usesPython, ...analysis } = parseProgram(source, filename, typeof filenameOrOptions === 'string' ? undefined : filenameOrOptions.aryaImports);
-  const nativeImport = ast.statements.find(statement => statement.kind === 'import' && statement.bridge === 'std');
-  if (nativeImport) throw new AryaError('use std requires --target native.', nativeImport.token);
+  const { ast, body, usesPython, usesViews, ...analysis } = parseProgram(source, filename, typeof filenameOrOptions === 'string' ? undefined : filenameOrOptions.aryaImports);
+  const stdImports = ast.statements.filter(statement => statement.kind === 'import' && statement.bridge === 'std');
+  for (const statement of stdImports) if (statement.kind === 'import' && !(standardLibraries as readonly string[]).includes(statement.specifier)) throw new AryaError(`Standard library '${statement.specifier}' is unavailable in the JavaScript profile; use --target native for native libraries.`, statement.token);
   const first = analysis.diagnostics[0];
   if (first) throw new AryaError(first.message, first.token, analysis.diagnostics);
-  const annotated = `// Generated by Arya ${ARYA_VERSION} from ${JSON.stringify(filename)}\n${javascriptRuntime}\n${usesPython ? `const __arya_source = ${JSON.stringify(pathToFileURL(resolve(filename)).href)};\n${pythonRuntime}` : ''}\n${body}\n`;
+  const annotated = `// Generated by Arya ${ARYA_VERSION} from ${JSON.stringify(filename)}\n${javascriptRuntime}\n${stdImports.length ? standardRuntime : ''}\n${usesViews ? webRuntime : ''}\n${usesPython ? `const __arya_source = ${JSON.stringify(pathToFileURL(resolve(filename)).href)};\n${pythonRuntime}` : ''}\n${body}\n`;
   return { ...finalize(annotated, source, filename, outputFilename), ...analysis, usesPython };
 }

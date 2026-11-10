@@ -4,6 +4,8 @@
 
 The project should observe people who did not implement Arya using a supplied candidate archive, its installation guide, and the beginner learning path. Include both beginners and programmers familiar with another language, and seek Afghan programmers/learners where possible. Invitations and participant coordination require a real project owner/reviewer; no messages or invitations are sent by this plan.
 
+Use the current [1.2.0-alpha.4 release](releases/1.2.0-alpha.4.md) as the starting candidate, with an exact package pin and matching documentation revision. Its automated/public-install results are recorded separately; no new participant observations were supplied with this release.
+
 ## Candidate and session setup
 
 Record the candidate version, archive SHA-256, source revision or candidate manifest, Node/Python versions, operating system/architecture, editor, and the documentation revision before the session. Use the exact artifact rather than a participant unknowingly using a global older compiler. A clean temporary project should not depend on the implementation checkout.

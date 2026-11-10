@@ -21,7 +21,7 @@ const git = (...args) => {
   if (result.status !== 0) throw new Error(result.stderr || 'Cannot inventory source files.');
   return result.stdout;
 };
-const allowed = /^(?:src\/|tests\/|scripts\/|fixtures\/|editors\/|docs\/|brand\/|\.github\/|README\.md$|SECURITY\.md$|LICENSE(?:\.[^/]+)?$|NOTICE$|THIRD-PARTY-NOTICES\.txt$|\.gitignore$|package(?:-lock)?\.json$|tsconfig(?:\.[^/]+)?\.json$)/;
+const allowed = /^(?:src\/|tests\/|scripts\/|fixtures\/|editors\/|docs\/|brand\/|bootstrap\/|packages\/|\.github\/|README\.md$|CONTRIBUTING\.md$|CHANGELOG\.md$|SECURITY\.md$|LICENSE(?:\.[^/]+)?$|NOTICE$|THIRD-PARTY-NOTICES\.txt$|\.gitignore$|\.npmignore$|package(?:-lock)?\.json$|tsconfig(?:\.[^/]+)?\.json$)/;
 const files = [...new Set(git('ls-files', '-z', '--cached', '--others', '--exclude-standard').split('\0').filter(name => name && allowed.test(name)))].sort();
 const sha = data => createHash('sha256').update(data).digest('hex');
 const inventory = [];

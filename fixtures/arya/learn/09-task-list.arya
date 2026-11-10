@@ -14,11 +14,11 @@ fn countDone(items) {
   return count
 }
 
-for task in tasks {
+for item in tasks {
   let marker = "[ ]"
-  if task.done {
+  if item.done {
     marker = "[x]"
   }
-  print(marker + " " + task.title)
+  print(marker + " " + item.title)
 }
 print("Completed:", countDone(tasks), "of", len(tasks))

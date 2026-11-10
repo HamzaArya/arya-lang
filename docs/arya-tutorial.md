@@ -4,9 +4,20 @@ This tutorial teaches the current Arya language, developed in this standalone re
 
 Arya is the language. AryaCode is the editor. Save your code in a file ending in `.arya`. The current compiler turns that code into JavaScript and runs it with Node.js. Later lessons show how the same Arya program can use JavaScript libraries and call Python functions.
 
-The [language reference](arya-language.md) explains usage; the [0.2 specification](arya-specification.md) defines precise rules and limitations. This tutorial gives you an order to learn them in.
+The [language reference](arya-language.md) explains usage; the [core specification](arya-specification.md) defines precise rules and limitations. This tutorial gives you an order to learn them in.
 
-## Set up your first lesson
+## Start without an editor checkout
+
+Install the compiler in a new directory:
+
+```sh
+npm init -y
+npm install --save-exact arya-language@1.2.0-alpha.4
+```
+
+Save the first lesson below as `main.arya`, then run `npx --no-install arya check main.arya` and `npx --no-install arya run main.arya`. Use any text editor; [editor setup](editor-setup.md) enables the bundled extension and icons. Python is needed only for Python examples.
+
+## Use the checked-in lessons in AryaCode
 
 1. Restart the refreshed AryaCode app if it is already open.
 2. Use **File → Open Folder** and choose this repository's `fixtures/arya` folder.
@@ -25,7 +36,7 @@ Prefer a terminal? From the **arya-lang repository root**, run:
 npm run arya -- run fixtures/arya/learn/01-hello.arya
 ```
 
-Replace the filename to run a different lesson. These repository commands need Node and the repository's npm dependencies. On a fresh checkout, run `npm ci` once. The checkout does not install a global command automatically. To use `arya` directly or work in another editor, install the compiler package from the [editor kit](arya-editors.md).
+Replace the filename to run a different lesson. These repository commands need Node and the repository's npm dependencies. On a fresh checkout, run `npm ci` and `npm run build` first. The checkout does not install a global command automatically. To use `arya` directly or work in another editor, use the [npm installation guide](installing.md).
 
 ## Lesson 1: print a message and remember a value
 
@@ -328,12 +339,12 @@ fn countDone(items) {
   return count
 }
 
-for task in tasks {
+for item in tasks {
   let marker = "[ ]"
-  if task.done {
+  if item.done {
     marker = "[x]"
   }
-  print(marker + " " + task.title)
+  print(marker + " " + item.title)
 }
 print("Completed:", countDone(tasks), "of", len(tasks))
 ```
@@ -357,7 +368,7 @@ Open [web.arya](../fixtures/arya/web.arya) from the parent examples folder and c
 
 Change the message in `response.end(JSON.stringify(...))`, save, stop the running file with **AryaCode: Stop Current File**, and run it again. Reload the page and click the button. The server does not reload itself when code changes. Only run one example on port 3000 at a time; stop `express.arya` first if it is running.
 
-That example shows how to reuse a JavaScript library from Arya. Browser HTML and JavaScript still use their normal syntax; Arya 0.1 does not provide a dedicated UI syntax or JSX.
+That example shows how to reuse a JavaScript library from Arya. The 1.2 preview also supplies a dedicated `view` syntax for HTML and literal CSS/browser JavaScript in one file; see the [web guide](arya-web.md) and `fixtures/web/studio.arya`. The original example continues to use ordinary HTML strings.
 
 ## Run, check, and build
 
@@ -392,7 +403,7 @@ For example, `let greeting = "hello"; print(greetng)` fails Check with `Unknown 
 
 To read an error such as `practice.arya:3:12`, open `practice.arya` at line 3, column 12. For syntax problems, start with the first reported error, fix it, save, and run again.
 
-When these lessons feel comfortable, use the [reference](arya-language.md) for `while`, `break`, `continue`, exports, additional operators, and bridge details. JavaScript/npm and JSON-compatible Python calls are the working bridges today. Other language bridges and native compilation are planned work, not syntax you can use yet.
+When these lessons feel comfortable, use the [reference](arya-language.md) for `while`, `break`, `continue`, exports, additional operators, and bridge details. JavaScript/npm and JSON-compatible Python calls are the working bridges today. A separate [native C11 profile](arya-native.md) is also implemented for command-line programs; it has its own libraries and does not include Node/Python imports. Other direct language bridges remain unsupported.
 
 ## Continue with a multi-file project
 
@@ -401,3 +412,7 @@ Follow the [task-report learning path](learning-path.md) to split a working prog
 The [interop guide](interop.md) lists stable Python error codes and two complete projects: a reproducible local npm dependency and one-call Python batching. Catch `error.code` for reliable categorization instead of matching platform-specific process messages. `ARYA_PYTHON_TIMEOUT` means reduce or split the work; `ARYA_PYTHON_OUTPUT_LIMIT` means reduce logging/results; `ARYA_PYTHON_PROTOCOL` means malformed or corrupted worker stdout. Regular Python logging goes to stderr. Exact large numbers should travel as strings.
 
 For release/install commands and an offline path, see [installation](installing.md). The [community review protocol](community-review.md) is ready for real learner sessions; external observations have not yet been collected.
+
+## Build an application next
+
+Try the [project creator](project-creator.md), [async Python guide](python-async.md), [MySQL example](../fixtures/examples/mysql/README.md), or [UI/animation library](ui-library.md). Use the [debugging guide](syntax-and-debugging.md) for optional access, nullish defaults, code frames, and spelling fixes.

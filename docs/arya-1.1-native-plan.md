@@ -1,5 +1,7 @@
 # Arya 1.1.0 native compilation plan
 
+> Historical native implementation plan. The backend and self-hosted compiler shipped experimentally in 1.1; current usage is in the [native guide](arya-native.md) and [alpha.4 release notes](releases/1.2.0-alpha.4.md). Stable gates remain open.
+
 **Status:** Native implementation and self-hosted compiler added in 1.1.0-alpha.1; platform/release qualification is tracked separately. See the [native guide](arya-native.md) and [contract](arya-native-specification.md).
 **Requested target:** Arya language/compiler 1.1.0, independently of AryaCode.
 **Date:** 9 November 2026.

@@ -1,0 +1,35 @@
+# The branded syntax works in both native and JavaScript profiles.
+keep title = "Arya"
+keep multiline = """Arya
+branded"""
+keep raw = '''\n'''
+
+task counter() {
+  let value = 0
+  give task() { value += 1; give value }
+}
+keep next = counter()
+if next() != 1 or next() != 2 { throw "Anonymous task closure failed" }
+if multiline != "Arya\nbranded" or len(raw) != 2 { throw "Raw multiline string failed" }
+
+task sum(values) {
+  let total = 0
+  each value in values {
+    total += value
+  }
+  give total
+}
+
+keep total = sum(range(1, 6))
+say(title + " total:", total)
+
+if total > 20 {
+  say("Large")
+} else if total == 15 {
+  say("Ready")
+} else {
+  say("Small")
+}
+
+task negative() { give -1 }
+say(negative())

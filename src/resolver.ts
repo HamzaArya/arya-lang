@@ -5,7 +5,7 @@ export type BindingKind = 'let' | 'const' | 'function' | 'parameter' | 'loop' | 
 export type ScopeKind = 'module' | 'function' | 'block' | 'loop' | 'catch';
 export interface LexicalBinding { name: string; kind: BindingKind; scopeId: number; token?: Token }
 export interface LexicalReference { token: Token; access: 'read' | 'write' | 'readwrite'; binding?: LexicalBinding }
-export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_NATIVE_UNSUPPORTED'; message: string; token: Token; suggestion?: string }
+export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_NATIVE_UNSUPPORTED'; message: string; token: Token; suggestion?: string; hint?: string }
 export interface Resolution { bindings: LexicalBinding[]; references: LexicalReference[]; diagnostics: AryaDiagnostic[] }
 interface Scope { id: number; kind: ScopeKind; parent?: Scope; declarations: Map<string, LexicalBinding> }
 
@@ -56,11 +56,12 @@ export class LexicalScopes {
         const suggestion = suggestions.get(key);
         const diagnostic: AryaDiagnostic = { code: 'ARYA_UNKNOWN_NAME', token, message: `Unknown name '${token.text}'.${suggestion ? ` Did you mean '${suggestion}'?` : ''}` };
         if (suggestion) diagnostic.suggestion = suggestion;
+        else diagnostic.hint = 'Declare this name in an accessible scope, or add an explicit library import.';
         diagnostics.push(diagnostic);
       } else {
         reference.binding = binding;
         if (reference.access !== 'read' && ['const', 'import', 'builtin'].includes(binding.kind)) {
-          diagnostics.push({ code: 'ARYA_CONST_ASSIGNMENT', token, message: `Cannot assign to const '${token.text}'.` });
+          diagnostics.push({ code: 'ARYA_CONST_ASSIGNMENT', token, message: `Cannot assign to const '${token.text}'.`, hint: binding.kind === 'const' ? 'Use let for a binding that must be reassigned, or change the assignment.' : 'Create a separate let binding; imports and built-ins cannot be reassigned.' });
         }
       }
     }

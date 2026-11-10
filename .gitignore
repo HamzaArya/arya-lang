@@ -4,6 +4,10 @@ dist/
 artifacts/
 editors/vscode/dist/
 editors/vscode/media/
+packages/create-arya-language/dist/
+packages/create-arya-language/LICENSE
+packages/create-arya-language/NOTICE
+packages/create-arya-language/THIRD-PARTY-NOTICES.txt
 *.vsix
 .DS_Store
 **/.arya/

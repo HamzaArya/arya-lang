@@ -1,0 +1,60 @@
+{
+  "published": [
+    {
+      "name": "arya-language",
+      "version": "1.2.0-alpha.4",
+      "filename": "artifacts/arya-language-1.2.0-alpha.4.tgz",
+      "sha256": "b27d7bfc7cf3d8bcbe4ecd06b65ce2bb9a9c2a73a0c0b233b77e914e26f010d1",
+      "integrity": "sha512-HqudduWuGVKxkaaCVnYrz32r81cwAhrTg58jD6qqUOQmoyjlOCINBxPS3XtbHjjwayuH2Qn2M81cQLNPVVGDLw==",
+      "tag": "latest",
+      "registryTarball": "https://registry.npmjs.org/arya-language/-/arya-language-1.2.0-alpha.4.tgz",
+      "integrityVerified": true,
+      "npmUrl": "https://www.npmjs.com/package/arya-language/v/1.2.0-alpha.4",
+      "verifiedDistTags": {
+        "latest": "1.2.0-alpha.4",
+        "next": "1.2.0-alpha.3"
+      }
+    },
+    {
+      "name": "create-arya-language",
+      "version": "1.2.0-alpha.4",
+      "filename": "artifacts/create-arya-language-1.2.0-alpha.4.tgz",
+      "sha256": "457f2616d29e16be6bebea912f2f1f25c444450303a8b8f35b56ddeeb5235b51",
+      "integrity": "sha512-pRjWZAs4CxXANcUMMmQ6HMDI9MM2xZ5RcJ1pfHZ63qcxN4IbW8igu0NYDprnDj9DlPFdzjnlDyuC8gyWLD5Lig==",
+      "tag": "latest",
+      "registryTarball": "https://registry.npmjs.org/create-arya-language/-/create-arya-language-1.2.0-alpha.4.tgz",
+      "integrityVerified": true,
+      "npmUrl": "https://www.npmjs.com/package/create-arya-language/v/1.2.0-alpha.4",
+      "verifiedDistTags": {
+        "latest": "1.2.0-alpha.4",
+        "next": "1.2.0-alpha.3"
+      }
+    }
+  ],
+  "publishedOn": "2026-11-10T09:34:10.426Z",
+  "registry": "https://registry.npmjs.org/",
+  "sourceSnapshot": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-clean-candidate-OnMrBK/source",
+  "sourceManifestSha256": "96bd4f72cd0fbca7dd74ea95c0fa2091bb6bc58283a186096f802dd065530461",
+  "workingTreeCommitClaimed": false,
+  "qualificationFile": "artifacts/QUALIFICATION.json",
+  "artifactsMustRemainFrozen": true,
+  "publicNpmSmokeTest": true,
+  "publicSmoke": {
+    "consumer": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya public alpha4 oRh3ji",
+    "freshNpmCache": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya public alpha4 oRh3ji/npm-cache",
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "npmCreateLatest": true,
+    "npmInstallIgnoreScripts": true,
+    "check": true,
+    "build": true,
+    "cliVersion": "Arya 1.2.0-alpha.4",
+    "bundledEditorAssets": true,
+    "uiLiveServer": true,
+    "uiValidation": true,
+    "desktopCreator": true
+  },
+  "state": "published-and-verified",
+  "publicationVerified": true
+}

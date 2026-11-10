@@ -1,4 +1,7 @@
+import { pythonWorker } from './python-worker.js';
+
 export const javascriptRuntime = `const print = (...values) => console.log(...values);
+const say = print;
 const len = value => {
   if (typeof value !== 'string' && !Array.isArray(value)) throw new TypeError('len expects a string or list.');
   return value.length;
@@ -13,53 +16,6 @@ const range = (start, end, step = 1) => {
   if (count > 100000) throw new RangeError('range supports at most 100000 items.');
   return Array.from({ length: count }, (_, index) => start + index * step);
 };`;
-
-// A fresh Python process handles one JSON request. Library stdout goes to stderr,
-// leaving stdout exclusively for the protocol response. No shell is involved.
-const pythonWorker = `import contextlib, importlib, importlib.util, json, os, sys
-stage = 'request'
-try:
-    request = json.load(sys.stdin)
-    with contextlib.redirect_stdout(sys.stderr):
-        module_name = request['module']
-        stage = 'import'
-        if module_name.endswith('.py') or os.path.isabs(module_name):
-            if not os.path.isfile(module_name):
-                stage = 'file'
-                raise FileNotFoundError('Cannot find Python file: ' + module_name)
-            spec = importlib.util.spec_from_file_location('_arya_bridge', module_name)
-            if spec is None or spec.loader is None:
-                raise ImportError('Cannot load Python file: ' + module_name)
-            module = importlib.util.module_from_spec(spec)
-            sys.path.insert(0, os.path.dirname(os.path.abspath(module_name)))
-            spec.loader.exec_module(module)
-        else:
-            module = importlib.import_module(module_name)
-        stage = 'member'
-        target = module
-        for part in request['member']:
-            if part.startswith('_'):
-                raise ValueError('Python bridge members must be public')
-            target = getattr(target, part)
-        if not callable(target):
-            raise TypeError('Python bridge target must be a public callable')
-        stage = 'call'
-        result = target(*request['args'], **request.get('kwargs', {}))
-    stage = 'return'
-    response = json.dumps({'ok': True, 'value': result}, allow_nan=False)
-except Exception as error:
-    code = 'ARYA_PYTHON_EXCEPTION'
-    if stage == 'file':
-        code = 'ARYA_PYTHON_FILE_NOT_FOUND'
-    elif stage == 'import' and isinstance(error, ModuleNotFoundError):
-        code = 'ARYA_PYTHON_MODULE_NOT_FOUND'
-    elif stage == 'member':
-        code = 'ARYA_PYTHON_MEMBER'
-    elif stage == 'return':
-        code = 'ARYA_PYTHON_RETURN'
-    response = json.dumps({'ok': False, 'code': code, 'error': type(error).__name__ + ': ' + str(error)})
-sys.stdout.write(response)
-`;
 
 export const pythonRuntime = `import { spawnSync as __arya_spawnSync } from 'node:child_process';
 import { fileURLToPath as __arya_fileURLToPath } from 'node:url';
@@ -113,6 +69,7 @@ const __arya_python = module => {
   };
   const member = parts => new Proxy(function () {}, {
     get(_target, key) {
+      if (key === Symbol.for('arya.python.callable')) return Object.freeze({ module, member: Object.freeze([...parts]), source: __arya_source });
       if (key === 'then' || typeof key !== 'string') return undefined;
       if (key === 'with') return (values, kwargs) => {
         if (!Array.isArray(values) || kwargs === null || typeof kwargs !== 'object' || Array.isArray(kwargs)) throw __arya_bridgeError('ARYA_PYTHON_ARGUMENTS', 'Use function.with([arguments], { keyword: value }).', TypeError);

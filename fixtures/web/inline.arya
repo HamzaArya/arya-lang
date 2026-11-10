@@ -1,0 +1,18 @@
+# Optional inline markup for small tools. HTML-first projects use index.html instead.
+use std "web" as web
+
+keep home = view {
+  html(lang="en") {
+    head {
+      title "Arya inline view"
+      style """body { font-family: system-ui; padding: 3rem; background: #11131c; color: white; }"""
+    }
+    body {
+      h1 "Made with Arya"
+      p "This app explicitly opts into an inline view."
+    }
+  }
+}
+
+web.serve(number(args[0] or "3000"), {"/": home}, {html: false})
+say("Arya inline view is running")

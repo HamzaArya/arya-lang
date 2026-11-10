@@ -1,5 +1,21 @@
 import * as vscode from 'vscode';
-import { analyze, completions, definitionAt, hoverAt } from '../../../src/language-service.js';
+import { analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from '../../../src/language-service.js';
+import {semanticTokens, semanticTokenTypes, semanticTokenModifiers} from '../../../src/semantic-tokens.js';
+
+/** Also used by the companion extension when AryaCode owns the other language providers. */
+export function registerAryaSemanticHighlighting(context: vscode.ExtensionContext): void {
+  const legend = new vscode.SemanticTokensLegend([...semanticTokenTypes], [...semanticTokenModifiers]);
+  context.subscriptions.push(vscode.languages.registerDocumentSemanticTokensProvider({language: 'arya'}, {
+    provideDocumentSemanticTokens(document, cancellation) {
+      const builder = new vscode.SemanticTokensBuilder(legend);
+      for (const token of semanticTokens(document.getText(), document.uri.toString())) {
+        if (cancellation.isCancellationRequested) break;
+        builder.push(new vscode.Range(token.line, token.character, token.line, token.character + token.length), token.type, token.modifiers);
+      }
+      return builder.build();
+    }
+  }, legend));
+}
 
 /** Editor services parse and resolve text; imports/Python execute only through Run. */
 export function registerAryaLanguage(context: vscode.ExtensionContext): void {
@@ -9,7 +25,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
     if (document.languageId !== 'arya') { diagnostics.delete(document.uri); return; }
     diagnostics.set(document.uri, analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') }).diagnostics.map(error => {
       const start = document.positionAt(error.token.start), end = document.positionAt(Math.max(error.token.start + 1, error.token.end));
-      const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message, vscode.DiagnosticSeverity.Error);
+      const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message + (error.hint ? '\nHelp: ' + error.hint : ''), vscode.DiagnosticSeverity.Error);
       diagnostic.source = 'Arya'; diagnostic.code = error.code; return diagnostic;
     }));
   };
@@ -26,19 +42,36 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       const key = document.uri.toString(); clearTimeout(pending.get(key)); pending.delete(key); diagnostics.delete(document.uri);
     }),
     vscode.languages.registerCompletionItemProvider(selector, {
-      provideCompletionItems(document) {
+      provideCompletionItems(document, position) {
         const kinds = { keyword: vscode.CompletionItemKind.Keyword, function: vscode.CompletionItemKind.Function, variable: vscode.CompletionItemKind.Variable, module: vscode.CompletionItemKind.Module };
-        return completions(analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') })).map(value => {
+        const source = document.getText(), offset = document.offsetAt(position);
+        const target = vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js');
+        const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset, target) : completions(analyze(source, document.uri.toString(), { target }));
+        return items.map(value => {
           const item = new vscode.CompletionItem(value.label, kinds[value.kind]); if (value.detail) item.detail = value.detail; return item;
         });
       },
-    }),
+    }, '.'),
     vscode.languages.registerHoverProvider(selector, {
       provideHover(document, position) {
         const hover = hoverAt(document.getText(), document.offsetAt(position));
         return hover ? new vscode.Hover(hover.text, new vscode.Range(document.positionAt(hover.start), document.positionAt(hover.end))) : undefined;
       },
     }),
+    vscode.languages.registerCodeActionsProvider(selector, {
+      provideCodeActions(document, range, context) {
+        if (context.only && !context.only.contains(vscode.CodeActionKind.QuickFix)) return [];
+        const source = document.getText();
+        const target = vscode.workspace.getConfiguration('aryaLanguage', document.uri).get<'js' | 'native'>('target', 'js');
+        return diagnosticFixes(source, analyze(source, document.uri.toString(), { target }).diagnostics, document.offsetAt(range.start), document.offsetAt(range.end)).map(fix => {
+          const action = new vscode.CodeAction(fix.title, vscode.CodeActionKind.QuickFix);
+          action.isPreferred = true;
+          action.edit = new vscode.WorkspaceEdit();
+          action.edit.replace(document.uri, new vscode.Range(document.positionAt(fix.start), document.positionAt(fix.end)), fix.replacement);
+          return action;
+        });
+      }
+    }, { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }),
     vscode.languages.registerDefinitionProvider(selector, {
       provideDefinition(document, position) {
         const token = definitionAt(analyze(document.getText(), document.uri.toString(), { target: vscode.workspace.getConfiguration('aryaLanguage',document.uri).get<'js'|'native'>('target','js') }), document.offsetAt(position));

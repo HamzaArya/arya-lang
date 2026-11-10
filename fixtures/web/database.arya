@@ -1,0 +1,25 @@
+# Install mysql2 in your project and set DB_HOST, DB_USER, DB_PASSWORD, DB_NAME.
+# This example needs an existing MySQL server; SELECT needs no application table.
+use std "web" as web
+use std "mysql" as mysql
+use std "json" as json
+use std "python" as python
+use python "math" as math
+
+keep db = await mysql.connect({
+  host: process.env.DB_HOST or "localhost",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+})
+
+web.serve(3001, {
+  "GET /report": async fn(request) {
+    keep calculations = python.bind(math, {signal: request.signal})
+    keep rows = await db.rows("SELECT ? AS value", [81])
+    keep report = {value: rows[0].value, root: await calculations.sqrt(rows[0].value)}
+    await json.write("report.json", report)
+    return report
+  }
+}, {html: false})
+say("Report endpoint: http://127.0.0.1:3001/report")

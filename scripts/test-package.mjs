@@ -25,11 +25,60 @@ try {
   assert.match(run('--version'), new RegExp(pkg.version.replaceAll('.', '\\.')));
   const launched = execFileSync(process.execPath, [npm, 'exec', '--offline', '--no', '--', 'arya', '--version'], { cwd: root, encoding: 'utf8' });
   assert.equal(launched.trim(), `Arya ${pkg.version}`);
+  const editorAssets = JSON.parse(run('editor', 'path', '--json'));
+  assert.equal(editorAssets.version, pkg.version);
+  for (const name of ['vsix', 'icon', 'darkIcon', 'grammar', 'guide']) assert.ok((await readFile(editorAssets[name])).length > 0, name);
+  const features = JSON.parse(await readFile(join(root, 'node_modules/arya-language/dist/features.json'), 'utf8'));
+  assert.ok(features.capabilities.includes('arya.ui.v1'));
+  assert.match(run('init', 'website', '--web'), /(?:created|initialized|ready)/i);
+  for (const file of ['main.arya', 'index.html', 'package.json', 'public/styles.css', 'public/app.js', 'README.md', '.gitignore']) {
+    assert.ok((await readFile(join(root, 'website', file))).length > 0, file);
+  }
+  assert.match(run('check', 'website/main.arya'), /Check OK/);
+  assert.match(run('build', 'website/main.arya'), /main\.arya\.mjs/);
+  const websiteManifest = JSON.parse(await readFile(join(root, 'website/package.json'), 'utf8'));
+  assert.equal(websiteManifest.devDependencies['arya-language'], pkg.version);
+  assert.equal(websiteManifest.scripts.dev, 'arya run main.arya');
+  assert.match(await readFile(join(root, 'website/index.html'), 'utf8'), /<div id="root"><\/div>/);
+  const creatorArchive = resolve(`artifacts/create-arya-language-${pkg.version}.tgz`);
+  execFileSync(process.execPath, [npm, 'install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', creatorArchive], { cwd: root, stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'exec', '--offline', '--no', '--', 'create-arya-language', 'portable-web', '--template', 'web', '--compiler', archive], { cwd: root, stdio: 'pipe' });
+  const portable = join(root, 'moved-project');
+  await cp(join(root, 'portable-web'), portable, { recursive: true });
+  execFileSync(process.execPath, [npm, 'install', '--offline', '--cache', join(root, 'empty-cache'), '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: portable, stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'run', 'check'], { cwd: portable, stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'run', 'build'], { cwd: portable, stdio: 'pipe' });
+  const localVersion = execFileSync(process.execPath, [join(portable, 'node_modules/arya-language/dist/cli.cjs'), '--version'], { cwd: portable, encoding: 'utf8' });
+  assert.equal(localVersion.trim(), `Arya ${pkg.version}`);
+  execFileSync(process.execPath, [npm, 'exec', '--offline', '--no', '--', 'arya-language', 'api-project', '--template', 'api'], { cwd: root, stdio: 'pipe' });
+  assert.match(await readFile(join(root, 'api-project/main.arya'), 'utf8'), /html: false/);
+  execFileSync(process.execPath, [npm, 'create', 'arya-language', 'npm-created', '--offline', '--', '--template', 'cli'], { cwd: root, stdio: 'pipe' });
+  assert.match(await readFile(join(root, 'npm-created/main.arya'), 'utf8'), /fn greet/);
+  for (const template of ['ui', 'desktop']) {
+    const name = 'registry-' + template;
+    run('create', name, '--template', template);
+    const manifest = JSON.parse(await readFile(join(root, name, 'package.json'), 'utf8'));
+    assert.equal(manifest.devDependencies['arya-language'], pkg.version);
+    assert.match(run('check', name + '/main.arya'), /Check OK/);
+    assert.match(run('build', name + '/main.arya'), /main\.arya\.mjs/);
+  }
+  await writeFile(join(root, 'ui-guide.arya'), 'use std "ui" as ui\nsay(ui.preview({section: "guide"}))\n');
+  const guide = run('run', 'ui-guide.arya');
+  assert.match(guide, /npm create arya-language@latest/);
+  assert.match(guide, /Implementation guide/);
   assert.match(run('check', 'fixtures/hello.arya'), /Check OK/);
   assert.match(run('build', 'fixtures/hello.arya'), /hello\.arya\.mjs/);
   assert.match(run('run', 'fixtures/hello.arya'), /Ready to build/);
   assert.match(run('run', 'fixtures/learn/08-arguments.arya', '--', 'literal; argument'), /literal; argument/);
   assert.match(run('run', 'fixtures/bridge.arya'), /Mean: 25/);
+  await writeFile(join(root, 'web-preview.arya'), `use std "math" as math
+use std "json" as json
+use std "mysql" as mysql
+task twice(value) { give value * 2 }
+say(json.stringify({value: twice(math.sqrt(81))}))
+say(view { div bg-dark { h1 "Arya 1.2" } })
+`);
+  assert.equal(run('run', 'web-preview.arya'), '{"value":18}\n<div class="bg-dark"><h1>Arya 1.2</h1></div>\n');
   assert.equal(run('run', 'fixtures/conformance/numeric-members.arya'), '1 1.00 100 1\n');
   assert.equal(run('run', 'fixtures/conformance/precedence.arya'), '[4,-4,512,5,7,8,3,true,"fallback",true]\n kept 0\n');
   assert.match(run('check', 'fixtures/check/valid-scopes.arya'), /Check OK/);
@@ -70,5 +119,5 @@ try {
     const nativeApi=execFileSync(process.execPath,['--input-type=module','-e','import {emitNative} from "arya-language/native"; console.log(emitNative([{filename:"x.arya",source:"print(1)"}]).code.includes("native C11"));'],{cwd:root,encoding:'utf8'});
     assert.equal(nativeApi.trim(),'true');
   }
-  console.log(`Clean installed package ${pkg.version}: API, CLI check/build/run, conformance fixtures, mapped CLI/standalone traces, arguments, and Python bridge passed.`);
+  console.log(`Clean installed package ${pkg.version}: compiler/creator, bundled editor assets, UI/desktop starters and guide, npm create and npx entry points, portable project install/check/build, CLI/native conformance, source maps, arguments, and Python bridge passed.`);
 } finally { await rm(root, { recursive: true, force: true }); }

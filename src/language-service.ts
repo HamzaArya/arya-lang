@@ -1,15 +1,20 @@
 import { fileURLToPath } from 'node:url';
-import { AryaError, analyzeSource, parseProgram, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
+import { AryaError, parseProgram, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
 import { nativeDiagnostics } from './native/emitter.js';
+import { standardLibraries } from './standard.js';
+export { standardCompletions } from './standard-completions.js';
+export { diagnosticFixes } from './diagnostics.js';
+export {semanticTokens, encodeSemanticTokens, semanticTokenTypes, semanticTokenModifiers} from './semantic-tokens.js';
 
 export interface Analysis extends SourceAnalysis { error?: AryaDiagnostic }
 export function analyze(source: string, uri: string, options: { target?: 'js' | 'native' } = {}): Analysis {
   let filename = 'document.arya';
   try { if (uri.startsWith('file:')) filename = fileURLToPath(uri); } catch { /* Unsaved documents do not need a filesystem path. */ }
   try {
-    const analysis = analyzeSource(source, filename);
-    if(options.target==='native') analysis.diagnostics.push(...nativeDiagnostics(parseProgram(source,filename)));
-    else for(const statement of parseProgram(source,filename).ast.statements) if(statement.kind==='import' && statement.bridge==='std') analysis.diagnostics.push({code:'ARYA_NATIVE_UNSUPPORTED',token:statement.token,message:'use std requires the native execution profile.'});
+    const parsed = parseProgram(source, filename);
+    const { ast: _ast, body: _body, usesPython: _python, usesViews: _views, ...analysis } = parsed;
+    if(options.target==='native') analysis.diagnostics.push(...nativeDiagnostics(parsed));
+    else for(const statement of parsed.ast.statements) if(statement.kind==='import' && statement.bridge==='std' && !(standardLibraries as readonly string[]).includes(statement.specifier)) analysis.diagnostics.push({code:'ARYA_NATIVE_UNSUPPORTED',token:statement.token,message:`Standard library '${statement.specifier}' is unavailable in the JavaScript profile; select native for native libraries.`});
     const error = analysis.diagnostics[0];
     return error ? { ...analysis, error } : analysis;
   }
@@ -29,7 +34,8 @@ export function definitionAt(analysis: Analysis, offset: number): Token | undefi
 
 export function completions(analysis: Analysis): { label: string; kind: 'keyword' | 'function' | 'variable' | 'module'; detail?: string }[] {
   return [
-    ...keywords.map(label => ({ label, kind: 'keyword' as const })),
+    ...keywords.filter(label => !['when', 'otherwise', 'task', 'give'].includes(label)).map(label => ({ label, kind: 'keyword' as const })),
+    { label: 'view', kind: 'keyword' as const, detail: 'view { ... } — build escaped HTML using Arya elements.' },
     ...Object.entries(builtins).map(([label, detail]) => ({ label, detail, kind: label === 'args' ? 'variable' as const : 'function' as const })),
     ...analysis.symbols.map(symbol => ({ label: symbol.name, kind: symbol.kind })),
   ];
@@ -45,11 +51,18 @@ export function hoverAt(source: string, offset: number): { text: string; start: 
   let quote = '', comment = false, escaped = false;
   for (let i = 0; i < start; i++) {
     const char = source[i]!;
+    if (quote.length === 3) {
+      if (source.startsWith(quote, i)) { i += 2; quote = ''; }
+      continue;
+    }
     if (char === '\n') { comment = false; quote = ''; escaped = false; continue; }
     if (comment) continue;
     if (quote) { if (escaped) escaped = false; else if (char === '\\') escaped = true; else if (char === quote) quote = ''; }
     else if (char === '#' || source.startsWith('//', i)) comment = true;
-    else if (char === '"' || char === "'") quote = char;
+    else if (char === '"' || char === "'") {
+      quote = source.startsWith(char.repeat(3), i) ? char.repeat(3) : char;
+      if (quote.length === 3) i += 2;
+    }
   }
   if (quote || comment || source[start - 1] === '.') return undefined;
   return { text, start, end };

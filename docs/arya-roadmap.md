@@ -1,18 +1,33 @@
-# Arya Roadmap: 0.2 to 1.0
+# Arya roadmap and implementation history
 
 **Status:** Living implementation plan  
 **Created:** 8 November 2026  
-**Current language version:** Arya 0.2.0-alpha.3 (public-release preparation)
-**Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [candidate release notes](releases/0.2.0-alpha.3.md)
+**Current language version:** Arya 1.2.0-alpha.4 (published experimental preview)
+**Implementation status:** [source maps](source-maps.md); [core specification](arya-specification.md); [current release notes](releases/1.2.0-alpha.4.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
-**Proposed post-1.0 work:** [Arya 1.1.0 native compilation plan](arya-1.1-native-plan.md) adds an optional native CLI execution profile using the user-selected C backend. Remaining architecture and scope are proposed; the plan does not change the current release status and retains the existing 0.2/1.0 completion gates.
+## Current delivery — 10 November 2026
 
-**Native 1.1 preview:** [C11 implementation and self-hosted compiler](arya-native.md), [native contract](arya-native-specification.md), and [implementation plan](arya-1.1-native-plan.md). Native qualification and experimental releases do not close the stable 1.0 gates below.
+Arya's purpose is readable application code spanning JavaScript/npm and Python, with practical server, database, UI, and editor tools.
+
+| Area | Current state |
+| --- | --- |
+| npm distribution | Compiler and creator 1.2.0-alpha.4 published on `latest`; exact hashes and a fresh-install result are in the [publication record](releases/1.2.0-alpha.4-publication.json). |
+| Application creation | Web, API, CLI, native, UI, and Electron desktop starters with pinned compiler versions. |
+| Interoperability | JavaScript imports, synchronous Python bridge, and opt-in asynchronous bound calls/batches/managed clients. |
+| Services/data | MySQL pools/transactions, schemas, structured logs, request context, health checks, and shutdown. |
+| UI | Components, state/forms, JSON actions, reduced-motion-aware animations, and a preview/implementation guide. |
+| Editor tooling | Offline VSIX, themes/icons, semantic tokens, standard-library hints, spelling fixes, LSP, and adapters. |
+| Native profile | C11 backend and Arya-written compiler with three-generation bootstrap verification. |
+| Remaining work | Current cross-platform qualification, real learner observations, stable contract/support, formatter, safe rename, interactive debugger, and additional ecosystem integrations. |
+
+See [current qualification](release-readiness.md). The milestone plan below preserves the original 0.2-to-stable goals, original scope exclusions, and dated evidence. Later alpha implementations can add capabilities while stable/platform/learner gates remain open. The 1.x alpha labels do not declare the original stability goals complete.
+
+## Original milestone plan
 
 ## Purpose
 
-This plan takes Arya from the current 0.1 prototype to a dependable 0.2 release, then toward a stable 1.0 language. It is written as a working document: tasks have IDs, dependencies, acceptance criteria, and checkboxes so progress and design decisions can be recorded here.
+This original plan takes Arya from the 0.1 prototype to a dependable 0.2 release, then toward a stable 1.0 language. It is written as a working document: tasks have IDs, dependencies, acceptance criteria, and checkboxes so progress and design decisions can be recorded here.
 
 The first user-visible goal is deliberately narrow:
 
@@ -24,7 +39,7 @@ Arya 0.2 then adds a written language contract, lexical name resolution, first-c
 
 Unless a later language decision explicitly changes it, Arya will keep JavaScript-compatible values and Node.js execution as its default direction. This preserves direct access to JavaScript and npm while Arya develops its own syntax, compiler checks, modules, tooling, and interoperability contracts.
 
-The following work is outside the Arya 0.2 scope:
+The following work was outside the original Arya 0.2 scope (later previews added native execution and optional managed Python clients):
 
 - a native-code backend or Arya virtual machine;
 - a static type system;
@@ -177,7 +192,7 @@ If fragment composition begins reproducing a parser tree indirectly or becomes d
 
 - [x] Determine and validate the output path before compilation, then pass its generated filename into the compile contract.
 - [x] In [`packages/arya/src/cli.ts`](../src/cli.ts), write `<output>.map` beside the generated `.mjs` for both `build` and `run`.
-- [x] In [`packages/services/src/language-runner.ts`](../../arya-ide/packages/services/src/language-runner.ts), write the map inside the same fingerprinted `.arya/run` directory as `program.mjs`.
+- [x] In [`packages/services/src/language-runner.ts`](repository-extraction.md), write the map inside the same fingerprinted `.arya/run` directory as `program.mjs`.
 - [x] Apply existing `containedPath` checks separately to the map path in AryaCode.
 - [x] Write code and map only after compilation succeeds so a syntax failure cannot create a partially updated pair.
 - [x] Decide whether two-file replacement needs temporary files and rename. Record the decision; at minimum, never write a new module referring to a missing new map.
@@ -712,3 +727,5 @@ Add dated notes here when work changes direction, reveals a constraint, or close
 
 - **2026-11-09, post-publication documentation:** Published Apache-2.0 [`arya-language@0.2.0-alpha.3`](https://www.npmjs.com/package/arya-language/v/0.2.0-alpha.3) to npm after owner 2FA and created the [`v0.2.0-alpha.3` GitHub prerelease](https://github.com/HamzaArya/arya-lang/releases/tag/v0.2.0-alpha.3). Anonymous registry/version/tarball retrieval succeeded; published tarball SHA-256 is `3ab98fe2b8745051a9b451fd3c4311a7805238226dfa163df37997560b07744b`, matching the reviewed artifact. All eight GitHub assets were downloaded and matched. The immutable tag/source is `5a962385e1bdf35c8476748b992dc7efb0a01e2f`; this later documentation record does not alter its packaged preparation-state documents or retag the release. `next` and `latest` both resolve to this alpha; the authenticated `latest` removal request returned HTTP 400. A fresh credential-free `arya-language@next` install passed the installed CLI and multi-file Check/Run example. The version and GitHub release remain prerelease.
 - **2026-11-09, current CI scope:** [Run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620) passes all six Linux/Windows/macOS × Node 22.15/24 compiler/conformance/CLI/npm-pack/installed-acceptance jobs for the release source. Actual editor archive builds and embedded/portable desktop suites remain local macOS evidence. Public alpha publication does not close final 0.2/1.0, external-community/tooling, or untested desktop/architecture gates.
+
+- **2026-11-10:** Published compiler and creator 1.2.0-alpha.4 on npm `latest`; public archive hashes and fresh-cache UI/desktop/editor-asset acceptance were verified. Current source-snapshot, browser/Electron/editor-host, minimum-Node, and native-bootstrap results are summarized in the release-readiness record. Refreshed repository guides and CI packaging; historical tags, artifacts, and evidence remain unchanged.

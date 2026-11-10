@@ -1,5 +1,7 @@
 # Repository extraction and ownership
 
+> Historical extraction inventory. Paths and IDE ownership below describe the 8 November 2026 split. Current sources are mapped in [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 Source checkout: `/Users/hamza/Projects/github-repo/arya-ide`, revision `15a7955`.
 New repository: `/Users/hamza/Projects/github-repo/arya-lang`.
 Inventory date: 8 November 2026.

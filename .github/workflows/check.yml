@@ -36,13 +36,21 @@ jobs:
           node --version > artifacts/evidence/runtime.txt
           python --version >> artifacts/evidence/runtime.txt
           npm run check 2>&1 | tee artifacts/evidence/check.log
-      - name: Pack the checked compiler
-        run: npm pack --ignore-scripts --pack-destination artifacts
+      - name: Pack compiler, creator, and editor distributions
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run package:editors 2>&1 | tee artifacts/evidence/editors.log
       - name: Verify installation and mapped traces outside the checkout
         shell: bash
         run: |
           set -o pipefail
           npm run test:package 2>&1 | tee artifacts/evidence/package.log
+      - name: Audit the packaged release
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run release:check -- --json 2>&1 | tee artifacts/evidence/release-audit.json
       - name: Preserve qualification evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,5 +1,7 @@
 # Verified native preview publication
 
+> Historical publication evidence for 1.1.0-alpha.1. Its hashes, native binaries, and platform results remain specific to that release. See [current qualification](release-readiness.md) for 1.2.0-alpha.4.
+
 Arya **1.1.0-alpha.1** was published on 9 November 2026 as an experimental native/self-hosting preview. It is not a stable 1.1 qualification.
 
 - [GitHub prerelease and standalone compilers](https://github.com/HamzaArya/arya-lang/releases/tag/v1.1.0-alpha.1)

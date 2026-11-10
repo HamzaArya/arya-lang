@@ -1,0 +1,119 @@
+# Install the example dependencies and configure DB_USER and DB_NAME before running.
+use std "env" as env
+use std "mysql" as mysql
+use std "web" as web
+use std "validate" as validate
+use std "log" as log
+
+keep logger = log.create({
+  name: "task-api",
+  level: env.get("LOG_LEVEL", "info")
+})
+
+keep taskInput = validate.object({
+  title: validate.string({trim: true, min: 1, max: 200})
+})
+
+keep db = await mysql.connect({
+  host: env.get("DB_HOST", "127.0.0.1"),
+  port: env.int("DB_PORT", 3306),
+  socketPath: env.get("DB_SOCKET", undefined),
+  user: env.require("DB_USER"),
+  password: env.get("DB_PASSWORD", ""),
+  database: env.require("DB_NAME"),
+  connectionLimit: 10
+})
+
+async fn listTasks() {
+  return await db.rows("""
+    SELECT id, title, completed
+    FROM tasks
+    ORDER BY id DESC
+    LIMIT 100
+  """)
+}
+
+async fn createTask(request) {
+  keep item = await db.transaction(async fn(tx) {
+    keep saved = await tx.execute(
+      "INSERT INTO tasks (title) VALUES (?)",
+      [request.body.title]
+    )
+
+    await tx.execute(
+      "INSERT INTO task_events (task_id, action) VALUES (?, ?)",
+      [saved.insertId, "created"]
+    )
+
+    return await tx.one(
+      "SELECT id, title, completed FROM tasks WHERE id = ?",
+      [saved.insertId]
+    )
+  })
+
+  request.log.info("task.created", {id: item.id})
+  return web.response(201, item)
+}
+
+async fn health() {
+  await db.ping()
+  return {status: "ok"}
+}
+
+async fn getTask(request) {
+  keep item = await db.one(
+    "SELECT id, title, completed FROM tasks WHERE id = ?",
+    [request.params.id]
+  )
+
+  if item == null {
+    throw web.error(404, "Task was not found.", "TASK_NOT_FOUND")
+  }
+
+  return item
+}
+
+keep port = env.int("PORT", 3000)
+keep server = web.serve(port, {
+  "GET /api/health": health,
+  "GET /health/live": fn() { return {status: "ok"} },
+  "GET /health/ready": fn() {
+    return web.health({mysql: fn() { return db.ping() }})
+  },
+  "GET /api/tasks": listTasks,
+  "GET /api/tasks/:id": getTask,
+  "POST /api/tasks": web.route(createTask, {body: taskInput})
+}, {html: false, assets: false, logger: logger})
+
+server.on("listening", fn() {
+  logger.info("service.listening", {port: server.address().port})
+})
+
+server.on("error", async fn(error) {
+  logger.error("service.start_failed", {code: error.code})
+  process.exitCode = 1
+  await db.close()
+})
+
+let stopping = false
+
+async fn shutdown() {
+  if stopping { return }
+  stopping = true
+
+  try {
+    await web.shutdown(server, {
+      timeoutMs: 10000,
+      cleanup: async fn() {
+        await db.close()
+      }
+    })
+    logger.info("service.stopped")
+  } catch error {
+    logger.error("service.stop_failed", {code: error.code})
+    process.exit(1)
+  }
+}
+
+process.on("SIGINT", shutdown)
+process.on("SIGTERM", shutdown)

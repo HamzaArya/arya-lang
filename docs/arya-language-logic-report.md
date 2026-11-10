@@ -1,5 +1,7 @@
 # Arya Language Logic Report
 
+> Historical audit of Arya 0.1.0 at the revision below. Findings describe that snapshot, not the current compiler. Links to extracted language files now use their repository destinations; IDE ownership is described in the [extraction inventory](repository-extraction.md). Start at the [current documentation](README.md) for 1.2.0-alpha.4.
+
 **Audit date:** 8 November 2026  
 **Language version:** Arya 0.1.0  
 **Repository revision:** `15a7955` on `main`  
@@ -63,12 +65,12 @@ The core is deliberately small: the compiler, runtime, CLI, language service, an
 
 Main components:
 
-- [`packages/arya/src/compiler.ts`](../packages/arya/src/compiler.ts) contains tokenization, parsing, static syntax checks, symbol collection, and JavaScript generation.
-- [`packages/arya/src/runtime.ts`](../packages/arya/src/runtime.ts) defines Arya built-ins and the Python JSON bridge embedded in generated modules.
-- [`packages/arya/src/cli.ts`](../packages/arya/src/cli.ts) implements `run`, `check`, and `build`.
-- [`packages/arya/src/language-service.ts`](../packages/arya/src/language-service.ts) exposes parse analysis, completion data, and built-in hover information.
-- [`packages/arya/src/lsp.ts`](../packages/arya/src/lsp.ts) provides portable diagnostics, completion, hover, and document symbols over LSP.
-- [`packages/services/src/language-runner.ts`](../packages/services/src/language-runner.ts) integrates compilation and execution with AryaCode workspace trust, tool selection, and output containment.
+- [`packages/arya/src/compiler.ts`](../src/compiler.ts) contains tokenization, parsing, static syntax checks, symbol collection, and JavaScript generation.
+- [`packages/arya/src/runtime.ts`](../src/runtime.ts) defines Arya built-ins and the Python JSON bridge embedded in generated modules.
+- [`packages/arya/src/cli.ts`](../src/cli.ts) implements `run`, `check`, and `build`.
+- [`packages/arya/src/language-service.ts`](../src/language-service.ts) exposes parse analysis, completion data, and built-in hover information.
+- [`packages/arya/src/lsp.ts`](../src/lsp.ts) provides portable diagnostics, completion, hover, and document symbols over LSP.
+- [`packages/services/src/language-runner.ts`](repository-extraction.md) integrates compilation and execution with AryaCode workspace trust, tool selection, and output containment.
 
 ## Lexical rules owned by Arya
 

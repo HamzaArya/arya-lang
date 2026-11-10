@@ -1,9 +1,23 @@
 import * as vscode from 'vscode';
 import { dirname, join } from 'node:path';
-import { registerAryaLanguage } from './arya-language.js';
+import { registerAryaLanguage, registerAryaSemanticHighlighting } from './arya-language.js';
+import {readFile} from 'node:fs/promises';
 
 /** A portable editor extension. AryaCode already includes these providers. */
 export function activate(context: vscode.ExtensionContext): void {
+  registerAryaSemanticHighlighting(context);
+  context.subscriptions.push(
+    vscode.commands.registerCommand('aryaLanguage.enableFileIcons', async () => {
+      await vscode.workspace.getConfiguration('workbench').update('iconTheme', 'arya-file-icons', vscode.ConfigurationTarget.Global);
+      void vscode.window.showInformationMessage('Arya File Icons enabled. Choose Preferences: File Icon Theme to switch back.');
+    }),
+    vscode.commands.registerCommand('aryaLanguage.chooseTheme', () => vscode.commands.executeCommand('workbench.action.selectTheme')),
+    vscode.commands.registerCommand('aryaLanguage.gettingStarted', () => vscode.commands.executeCommand('workbench.action.openWalkthrough', 'aryacode.arya-language#aryaLanguage.gettingStarted', false)),
+    vscode.commands.registerCommand('aryaLanguage.openExample', async () => {
+      const content = await readFile(join(context.extensionPath, 'examples/editor-tour.arya'), 'utf8');
+      await vscode.window.showTextDocument(await vscode.workspace.openTextDocument({language: 'arya', content}));
+    })
+  );
   const builtin = vscode.extensions.getExtension('aryacode.arya-workbench');
   void vscode.commands.executeCommand('setContext', 'aryaLanguage.standalone', !builtin);
   if (builtin) {

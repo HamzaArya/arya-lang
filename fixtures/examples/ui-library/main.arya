@@ -1,0 +1,34 @@
+use std "ui" as ui
+use std "web" as web
+use std "validate" as validate
+
+const profile = validate.object({
+  name: validate.string({min: 1, max: 80, trim: true}),
+  email: validate.string({min: 3, max: 254, trim: true}),
+  plan: validate.enum(["personal", "team", "company"]),
+  updates: validate.boolean()
+})
+
+export fn start(port) {
+  return web.serve(port, {
+    "GET /": fn() {
+      return web.response(200, ui.preview({apiPath: "/api/preview"}), {"cache-control": "no-store"})
+    },
+    "GET /motion": fn() {
+      return web.response(200, ui.preview({section: "motion"}), {"cache-control": "no-store"})
+    },
+    "GET /guide": fn() {
+      return web.response(200, ui.preview({section: "guide"}), {"cache-control": "no-store"})
+    },
+    "POST /api/preview": web.route(fn(request) {
+      if not request.body.email.includes("@") {
+        throw web.error(400, "Enter a valid email address.", "ARYA_EMAIL")
+      }
+      return {message: "Preview saved for " + request.body.name + ".", plan: request.body.plan}
+    }, {body: profile})
+  }, {html: false, assets: false})
+}
+
+export async fn stop(server) {
+  await web.shutdown(server, {timeoutMs: 5000})
+}

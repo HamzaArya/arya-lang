@@ -1,8 +1,8 @@
-# Arya language specification — 0.2
+# Arya language specification — 1.2 preview
 
-The 1.1 preview retains this Node execution contract and adds a separate [native profile specification](arya-native-specification.md), including contextual use std imports. Native programs do not inherit the Node host-global surface.
+The 1.2 preview retains this Node execution contract, as amended by [section 13](#13-arya-12-preview-amendments). The native backend introduced in 1.1 has a separate [native profile specification](arya-native-specification.md), including contextual use std imports. Native programs do not inherit the Node host-global surface.
 
-**Status:** normative core and approved 0.2 design, 9 November 2026. **Implementation baseline:** `0.2.0-alpha.3`, Node.js 22.15 or later. This is a pre-1.0 contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.2.0-alpha.4`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -97,7 +97,7 @@ Precedence is listed from lowest to highest:
 | 8 | prefix `not`, `!`, `+`, `-`, `await` | Right; unary operand includes postfix operations |
 | 9 | calls, properties, indexing, constructor/postfix forms | Evaluated as the indicated chain |
 
-Grouping overrides precedence. **`-2 ** 2` is `4`**, `-(2 ** 2)` is `-4`, and `2 ** 3 ** 2` is `512`. `await task().value` awaits the property value; use `(await task()).value` to access a property after awaiting the call result. Constructor syntax is restricted as described above; it is not an arbitrary prefix accepting another unary expression.
+Grouping overrides precedence. **`-2 ** 2` is `4`**, `-(2 ** 2)` is `-4`, and `2 ** 3 ** 2` is `512`. `await load().value` awaits the property value; use `(await load()).value` to access a property after awaiting the call result. Constructor syntax is restricted as described above; it is not an arbitrary prefix accepting another unary expression.
 
 Operands, call arguments, collection items, and object values evaluate left to right, subject to short-circuiting. `and` returns its left operand if falsy, otherwise its right; `or` returns its left operand if truthy, otherwise its right. The skipped operand is not evaluated. `not` and `!` always return booleans. Comparisons do not chain mathematically: `a < b < c` means `(a < b) < c`.
 
@@ -232,3 +232,40 @@ The executable core conformance suite is [tests/conformance.test.ts](../tests/co
 The [resolver suite](../tests/resolver.test.ts) covers name/assignment diagnostics, all declaration kinds, scope boundaries and timing, conservative spelling suggestions, passive imports, navigation, metadata preservation, and CLI stale-output prevention. The portable LSP suite additionally exercises multiple semantic diagnostics and definition requests with UTF-16 positions and live-edit recovery. AryaCode owns equivalent registered-provider desktop acceptance in its repository.
 
 Run `npm run check` for type checking and all conformance layers. Platform/minimum-Node qualification is recorded separately in [source-map acceptance](source-maps.md); a written contract does not imply every platform has been tested. The [project suite](../tests/project.test.ts) qualifies graph resolution/publication and mapped dependency errors; the [interop suite](../tests/interop.test.ts) qualifies the JavaScript/Python matrix. Cross-platform and external learner evidence remain separate release gates.
+
+
+## 13. Arya 1.2 preview amendments
+
+Starting in `1.2.0-alpha.1`, this section and the [web contract](arya-web.md) amend the preceding 0.2 baseline. Other core semantics retain their preceding definitions. The [versioned decision and migration](releases/1.2.0-alpha.1.md) records the intentional compatibility changes.
+
+The keywords `keep`, `task`, `when`, `otherwise`, `each`, and `give` are reserved. They respectively alias `const`, `fn`, `if`, `else`, `for`, and `return`. Preferred authoring uses `fn`/`return` and `if`/`else if`/`else`; `task`, `give`, `when`, and `otherwise` remain accepted compatibility aliases but are omitted from completion suggestions. `async task`, anonymous `task`, `otherwise when`, exported `task`, and exported `keep` follow the corresponding original forms. Both spellings produce the same scope and evaluation semantics. Prior bindings using those six words must be renamed. `say(...values)` is a seventh built-in binding and aliases `print`; a prior module-scope `say` binding must also be renamed.
+
+Triple double quotes (`"""`) delimit a raw multiline string. Its content is literal, including newlines and backslashes, until the next matching triple delimiter. It does not interpolate expressions. Single/double quoted strings retain section 1's existing escape rules.
+
+The contextual expression `view { ... }` introduces the JavaScript-only HTML grammar defined in the web contract. It produces an HTML string; dynamic text and attribute expressions participate in normal Arya lexical checking and HTML escaping. View element names and class names are markup, not lexical variable references. Literal script/style bodies are not Arya expressions; checking does not validate or execute their CSS/JavaScript. A literal that would close its own script/style element is rejected.
+
+The JavaScript profile accepts contextual `use std` imports for its documented standard libraries: web, fs, math, mysql, path, json, env, validate, log, python, debug, and ui. The [async Python contract](python-async.md) adds opt-in asynchronous calls and batch execution while direct Python calls retain their earlier synchronous contract. The [service contract](services.md) defines runtime schemas, structured logging, request context, parameter routes, health checks, and controlled shutdown. The MySQL/environment APIs and transaction guarantees are documented in the [MySQL guide](mysql.md). Library selection is validated during checking; loading optional dependencies and connecting to external services happen only during execution. These libraries do not expand the native standard-library contract. The native profile rejects views and unsupported libraries with a targeted diagnostic.
+
+`view` and `std` remain contextual rather than globally reserved. Existing identifiers using those names remain permitted outside their contextual forms. All prior file, token, and project limits continue to apply.
+
+
+### 13.1 HTML-first defaults in 1.2.0-alpha.2
+
+The [alpha.2 decision and migration](releases/1.2.0-alpha.2.md) makes a separate HTML entry the default Node web-application structure. `arya init [directory] --web` creates an Arya server, `index.html`, and separate public CSS/JavaScript assets. Initialization must not overwrite existing destination files.
+
+`web.serve(port, routes = {}, options = {})` requires its HTML entry to exist before listening. The default root is the original source directory of the Arya module importing `web`; the default HTML entry is `index.html`, and the default public asset directory is `public`. The optional `root`, `html`, and `assets` settings select other locations. GET/HEAD `/` serves the HTML entry; unmatched GET/HEAD paths may serve contained public assets. Explicit routes take precedence. Runtime file serving must not expose directory listings, dotfiles, traversal paths, or symlink escapes.
+
+`html: false` explicitly opts out of the entry requirement for API-only applications and inline views. An alpha.1 application that served inline routes without an HTML file must add this option or create the required entry. No core keyword, expression, Python bridge, or native-profile semantics change in this amendment. Static browser-file availability is validated at runtime, not by passive Arya Check. Generated code records original source locations; HTML and public assets are not copied into the JavaScript build graph.
+
+
+### 13.2 Expressions and diagnostics in 1.2.0-alpha.4
+
+The [syntax and debugging contract](syntax-and-debugging.md) adds `??`, optional property/index/call chains, and leading-dot newline continuation to both execution profiles and the self-hosted compiler. `??` has rank 0, below `or`, and is left-associative; it skips its right operand unless the left is null or undefined. Optional access retains ordinary lexical/export checks, evaluates each base once, skips the continuous chain when nullish, and rejects direct assignment targets. Parentheses end that continuous chain. Existing bare-return newline semantics remain unchanged.
+
+The Node-hosted CLI adds source excerpts/help for project diagnostics and JSON reporting through `arya check file.arya --json`, including native-target checks. One-based display positions and UTF-16 offsets are retained. Diagnostic metadata gains optional `hint`; conservative spelling fixes are derived only from current lexical analysis. The JavaScript profile adds explicit `debug.assert`, `debug.inspect`, and `debug.trace` helpers. These APIs are included in the published alpha.4 preview. They do not declare a stable release.
+
+### 13.3 UI and editor libraries in 1.2.0-alpha.4
+
+The JavaScript `ui` standard library renders HTML components, client state/actions, forms, requests, and motion. The [UI contract](ui-library.md) defines its public APIs and serialization constraints; [UI starters](ui-apps.md) use explicit `html: false` routes. `ui.preview()` renders library pages but does not register server routes automatically. UI browser execution is distinct from server-side Arya and optional Python calls. The native profile does not implement this library.
+
+The [editor API](compiler-api.md#semantic-highlighting) provides passive lexical semantic tokens with UTF-16 positions, shared with LSP and the portable extension. Installing editor assets is an explicit command; npm installation does not alter editor preferences. These APIs do not add static types, automatic library introspection, or a formatter.

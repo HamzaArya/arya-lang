@@ -1,0 +1,54 @@
+use std "env" as env
+use std "log" as log
+use std "web" as web
+
+use arya "./handlers.arya" as handlers
+use arya "./schemas.arya" as schemas
+
+keep logger = log.create({
+  name: "arya-service",
+  level: env.get("LOG_LEVEL", "info")
+})
+
+keep server = web.serve(env.int("PORT", 3000), {
+  "GET /health/live": handlers.live,
+  "GET /health/ready": fn() {
+    return web.health({service: fn() { return true }})
+  },
+
+  "GET /api/greet/:name": web.route(handlers.greet, {
+    params: schemas.greetingParams,
+    query: schemas.greetingQuery
+  }),
+
+  "POST /api/echo": web.route(handlers.echo, {
+    body: schemas.message
+  })
+}, {
+  html: false,
+  assets: false,
+  logger: logger,
+  handlerTimeoutMs: env.int("REQUEST_DEADLINE_MS", 5000)
+})
+
+server.on("listening", fn() {
+  logger.info("service.listening", {port: server.address().port})
+})
+
+server.on("error", fn(error) {
+  logger.error("service.start_failed", {code: error.code})
+  process.exitCode = 1
+})
+
+async fn shutdown() {
+  try {
+    await web.shutdown(server, {timeoutMs: 10000})
+    logger.info("service.stopped")
+  } catch error {
+    logger.error("service.stop_failed", {code: error.code})
+    process.exit(1)
+  }
+}
+
+process.once("SIGINT", shutdown)
+process.once("SIGTERM", shutdown)

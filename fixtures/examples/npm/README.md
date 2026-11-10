@@ -6,12 +6,12 @@ From that copied directory:
 
 ```sh
 npm install --ignore-scripts --no-audit --no-fund
-npm install --ignore-scripts --no-audit --no-fund /absolute/path/to/arya-language-<version>.tgz
+npm install --save-exact --ignore-scripts --no-audit --no-fund arya-language@1.2.0-alpha.4
 npx --no-install arya check main.arya
 npx --no-install arya run main.arya
 ```
 
-Use the actual compiler archive filename from the Arya build. Output:
+For an entirely offline compiler install, replace the registry specifier with the actual path to the retained alpha.4 archive and add `--offline`. Output:
 
 ```text
 local npm package 42 6

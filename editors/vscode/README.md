@@ -1,10 +1,16 @@
 # Arya Language
 
-![Arya bridge mark](media/arya-logo.png)
+![Arya bridge mark](https://raw.githubusercontent.com/HamzaArya/arya-lang/main/brand/arya-logo.png)
 
 Readable `.arya` programs with JavaScript/npm libraries and a Python function bridge.
 
 This extension recognizes Arya files and provides syntax highlighting, snippets, multiple syntax/name/const-write diagnostics, keyword/builtin completion, builtin hover help, a top-level outline, and same-file lexical go-to-definition. Editor features do not execute your imports. It works independently of the AryaCode IDE; AryaCode bundles the same compiler package and resolver.
+
+The 1.2.0-alpha.4 extension includes **Arya Dark**, **Arya Light**, **Arya File Icons**, a setup walkthrough, and lexical semantic colors. Imports, parameters, constants, functions, methods, properties, and constructors get distinct roles; optional access and shadowing are supported. View tags/attributes, literal CSS/JavaScript blocks, and `css: """..."""` receive richer grammar scopes. Your existing theme can also use semantic colors.
+
+Run **Arya: Editor Setup Guide** after installation. **Arya: Enable File Icons** selects the included icon set; **Arya: Choose Color Theme** opens the normal theme chooser; **Arya: Open Editor Tour** opens an unsaved sample. Existing icon themes may override the language's fallback icon. The extension does not change appearance preferences until you choose a theme or run its icon command.
+
+The npm package bundles this VSIX and its assets. After `npm install arya-language@latest`, `npx --no-install arya editor install` installs into detected supported editors without a marketplace download. `arya editor path` reports the VSIX for manual installation. The companion also works in AryaCode: its built-in diagnostics and execution controls remain in charge, while this extension provides appearance and semantic tokens.
 
 ```arya
 use python "math" as math
@@ -20,4 +26,6 @@ Install this local VSIX using **Extensions: Install from VSIX**, then open a `.a
 
 Run commands require workspace trust and save the source file first. **Arya: Stop File** ends a running task. Diagnostics and syntax highlighting remain available in Restricted Mode. This extension does not install npm or Python dependencies automatically.
 
-Arya currently compiles to JavaScript ES modules. Python calls transport JSON-compatible arguments and results using a fresh process per call. There is no static type checking, dependency API completion, formatting, native compilation, or source-level debugger yet. This local package has not been published to an extension marketplace.
+Arya currently compiles to JavaScript ES modules. Direct Python calls transport JSON-compatible data synchronously. The `python` standard library provides async calls, bound imports, per-batch processing, and managed client lifecycle; no static Python API introspection is performed.
+
+The extension and LSP provide documented standard-library member hints and local MySQL pool/transaction completions after a dot, plus mysqlconnect, mysqlrows, mysqltransaction, validateschema, webroute, logcreate, and webshutdown snippets. Runtime schema APIs, operational HTTP helpers, immutable local logger instances, and Python clients also have completion hints. Python snippets are pythonasync, pythonclient, pythoncall, and pythonmap. These hints do not inspect arbitrary npm or Python dependencies. The language supports ??, optional member/call access, and multiline chains, with updated highlighting. The extension and LSP offer spelling Quick Fixes based on current lexical diagnostics; ambiguous names and constant writes are not automatically rewritten. See the [debugging guide](https://github.com/HamzaArya/arya-lang/blob/main/docs/syntax-and-debugging.md). Static type checking, formatting, and source-level debugging remain unavailable. Native compilation uses the separately documented C11 profile. This local package has not been published to an extension marketplace.

@@ -5,7 +5,7 @@ use std "process" as process
 use std "runtime" as runtime
 use arya "./runtime-source.arya" as runtime_source
 
-const VERSION = "1.1.0-alpha.1"
+const VERSION = "1.2.0-alpha.4"
 let scopeCounter = 0
 let functionCounter = 0
 let definitions = []
@@ -68,6 +68,18 @@ fn tokenize(source) {
       token.text = source.slice(start, i)
       token.value = number(token.text)
       if token.value == Infinity { fail(token, "Number is outside the supported range.") }
+    } else if (c == '"' or c == "'") and source.slice(i, i + 3) == c + c + c {
+      token.kind = "string"
+      let close = c + c + c
+      i += 3; column += 3
+      let start = i
+      while i < len(source) and source.slice(i, i + 3) != close {
+        if source[i] == "\n" { line += 1; column = 0 } else { column += 1 }
+        i += 1
+      }
+      if i >= len(source) { fail(token, "Unclosed multiline string.") }
+      token.text = source.slice(start, i); token.value = token.text
+      i += 3; column += 3
     } else if c == '"' or c == "'" {
       token.kind = "string"
       let close = c
@@ -90,7 +102,7 @@ fn tokenize(source) {
       i += 1; column += 1; token.text = value; token.value = value
     } else {
       let pair = source.slice(i, i + 2)
-      if has(["==", "!=", "<=", ">=", "+=", "-=", "*=", "/=", "**"], pair) { token.text = pair; i += 2; column += 2 }
+      if has(["==", "!=", "<=", ">=", "+=", "-=", "*=", "/=", "**", "??", "?."], pair) { token.text = pair; i += 2; column += 2 }
       else if "+-*/%<>=!(){}[],:;.".includes(c) { i += 1; column += 1 }
       else { fail(token, "Unexpected source character.") }
     }
@@ -112,7 +124,7 @@ fn ending(p) {
   if current(p).kind != "newline" and not is(p, ";") { fail(current(p), "Put the next statement on a new line or use a semicolon.") }
   separators(p)
 }
-const reserved = ["let", "const", "fn", "async", "await", "return", "if", "else", "for", "in", "while", "break", "continue", "and", "or", "not", "true", "false", "null", "use", "as", "export", "new", "try", "catch", "throw", "class", "function", "var", "import", "extends", "super", "this", "delete", "typeof", "void", "instanceof", "switch", "case", "default", "do", "finally", "yield", "with", "debugger", "enum", "implements", "interface", "package", "private", "protected", "public", "static", "arguments", "eval"]
+const reserved = ["let", "const", "fn", "async", "await", "return", "if", "else", "for", "in", "while", "break", "continue", "and", "or", "not", "true", "false", "null", "use", "as", "export", "new", "try", "catch", "throw", "keep", "task", "when", "otherwise", "each", "give", "class", "function", "var", "import", "extends", "super", "this", "delete", "typeof", "void", "instanceof", "switch", "case", "default", "do", "finally", "yield", "with", "debugger", "enum", "implements", "interface", "package", "private", "protected", "public", "static", "arguments", "eval"]
 fn name(p) {
   let token = current(p)
   if token.kind != "word" or has(reserved, token.text) { fail(token, "Expected a name.") }
@@ -179,6 +191,7 @@ fn argsList(p, close) {
 }
 fn primary(p) {
   let token = current(p)
+  if is(p, "async") or is(p, "await") { fail(token, "async/await require the JavaScript profile.") }
   if match(p, "(") { lines(p); let value = expression(p, 0); lines(p); expect(p, ")"); return value }
   if match(p, "[") { return {kind: "list", token: token, items: argsList(p, "]")} }
   if match(p, "{") {
@@ -194,7 +207,7 @@ fn primary(p) {
     }
     expect(p, "}"); return {kind: "object", token: token, fields: fields}
   }
-  if match(p, "fn") { return functionValue(p, token) }
+  if match(p, "fn") or match(p, "task") { return functionValue(p, token) }
   if token.kind == "string" or token.kind == "number" { take(p); return {kind: "literal", token: token, value: token.value} }
   if match(p, "true") { return {kind: "literal", token: token, value: true} }
   if match(p, "false") { return {kind: "literal", token: token, value: false} }
@@ -211,19 +224,37 @@ fn unary(p) {
     take(p); return {kind: "unary", token: token, operator: token.text, value: unary(p)}
   }
   let value = primary(p)
+  let chaining = false
   while true {
-    if match(p, "(") { value = {kind: "call", token: value.token, callee: value, arguments: argsList(p, ")")} }
-    else if match(p, ".") {
+    if current(p).kind == "newline" {
+      let next = p.at
+      while p.tokens[next].kind == "newline" { next += 1 }
+      if p.tokens[next].kind == "symbol" and has([".", "?."], p.tokens[next].text) { p.at = next }
+      else { break }
+    }
+    let token = current(p)
+    let optional = match(p, "?.")
+    let step = null
+    if match(p, "(") { step = {kind: "call", token: token, optional: optional, arguments: argsList(p, ")")} }
+    else if not optional and match(p, ".") {
       let key = take(p); if key.kind != "word" { fail(key, "Expected a property name.") }
-      value = {kind: "member", token: key, object: value, key: {kind: "literal", token: key, type: "string", value: key.text}}
+      step = {kind: "member", token: key, optional: false, key: {kind: "literal", token: key, type: "string", value: key.text}}
     } else if match(p, "[") {
       lines(p); let key = expression(p, 0); lines(p); expect(p, "]")
-      value = {kind: "member", token: key.token, object: value, key: key}
+      step = {kind: "member", token: key.token, optional: optional, key: key}
+    } else if optional {
+      let key = take(p); if key.kind != "word" { fail(key, "Expected a property, index, or call after optional access.") }
+      step = {kind: "member", token: key, optional: true, key: {kind: "literal", token: key, type: "string", value: key.text}}
     } else { break }
+    if optional or chaining {
+      if not chaining { value = {kind: "chain", token: step.token, base: value, steps: []}; chaining = true }
+      value.steps.push(step)
+    } else if step.kind == "call" { value = {kind: "call", token: value.token, callee: value, arguments: step.arguments} }
+    else { value = {kind: "member", token: step.token, object: value, key: step.key} }
   }
   return value
 }
-const ranks = {or: 1, and: 2, "==": 3, "!=": 3, "<": 4, "<=": 4, ">": 4, ">=": 4, "+": 5, "-": 5, "*": 6, "/": 6, "%": 6, "**": 7}
+const ranks = {"??": 0, or: 1, and: 2, "==": 3, "!=": 3, "<": 4, "<=": 4, ">": 4, ">=": 4, "+": 5, "-": 5, "*": 6, "/": 6, "%": 6, "**": 7}
 fn expression(p, minimum) {
   p.depth += 1
   if p.depth > 100 { fail(current(p), "Expression nesting exceeds 100.") }
@@ -239,14 +270,15 @@ fn expression(p, minimum) {
 fn statement(p) {
   let token = current(p)
   let exported = match(p, "export")
-  if exported and (p.scope.parent != null or not has(["let", "const", "fn"], current(p).text)) { fail(token, "Export a top-level declaration.") }
-  if is(p, "let") or is(p, "const") {
+  if exported and (p.scope.parent != null or not has(["let", "const", "fn", "keep", "task"], current(p).text)) { fail(token, "Export a top-level declaration.") }
+  if is(p, "let") or is(p, "const") or is(p, "keep") {
     let kind = take(p).text
+    if kind == "keep" { kind = "const" }
     let b = declare(p, name(p), kind); expect(p, "="); lines(p)
     let value = expression(p, 0); ending(p)
     return {kind: "declaration", token: token, binding: b, value: value, exported: exported}
   }
-  if match(p, "fn") {
+  if match(p, "fn") or match(p, "task") {
     let b = declare(p, name(p), "function")
     return {kind: "function", token: token, binding: b, value: functionValue(p, token), exported: exported}
   }
@@ -263,10 +295,10 @@ fn statement(p) {
     b.imported = imported
     return imported
   }
-  if match(p, "if") {
+  if match(p, "if") or match(p, "when") {
     let condition = expression(p, 0); let body = block(p, null); let saved = p.at
     lines(p); let other = null
-    if match(p, "else") { lines(p); if is(p, "if") { other = {scope: null, statements: [statement(p)]} } else { other = block(p, null) } }
+    if match(p, "else") or match(p, "otherwise") { lines(p); if is(p, "if") or is(p, "when") { other = {scope: null, statements: [statement(p)]} } else { other = block(p, null) } }
     else { p.at = saved }
     return {kind: "if", token: token, condition: condition, body: body, otherwise: other}
   }
@@ -275,7 +307,7 @@ fn statement(p) {
     let body = block(p, null); p.loops -= 1
     return {kind: "while", token: token, condition: condition, body: body}
   }
-  if match(p, "for") {
+  if match(p, "for") or match(p, "each") {
     let previous = p.scope
     p.scope = scope(previous)
     let b = declare(p, name(p), "loop"); expect(p, "in"); let iterable = expression(p, 0)
@@ -293,7 +325,7 @@ fn statement(p) {
     return {kind: "try", token: token, body: body, binding: b, handler: block(p, handlerScope)}
   }
   if match(p, "throw") { let value = expression(p, 0); ending(p); return {kind: "throw", token: token, value: value} }
-  if match(p, "return") {
+  if match(p, "return") or match(p, "give") {
     if p.functions == 0 { fail(token, "Return requires a function.") }
     let value = null
     if current(p).kind != "newline" and current(p).kind != "eof" and not is(p, ";") and not is(p, "}") { value = expression(p, 0) }
@@ -316,7 +348,7 @@ fn parse(source, filename) {
   if len(source) > 262144 { throw "Source exceeds 256 KiB." }
   let p = {tokens: tokenize(source), at: 0, scope: scope(null), loops: 0, functions: 0, depth: 0}
   let fake = {text: "", line: 0, column: 0, start: 0}
-  for builtin in ["print", "len", "str", "number", "range", "args"] {
+  for builtin in ["print", "say", "len", "str", "number", "range", "args"] {
     fake = {text: builtin, line: 0, column: 0, start: 0}
     declare(p, fake, "builtin")
   }
@@ -364,6 +396,16 @@ fn literalString(e, text) {
   if data == "" { data = "0" }
   return temp(e, "as16((const uint16_t[]){" + data + "}," + str(len(text)) + ")")
 }
+fn checkMemberExport(object, key, token) {
+  if object.kind == "name" and (key.type == "string" or key.token.kind == "string") {
+    let b = binding(object)
+    if b.kind == "import" and b.imported.bridge == "arya" {
+      let found = false
+      for item in b.imported.unit.ast.statements { if (item.kind == "declaration" or item.kind == "function") and item.exported and item.binding.name == key.value { found = true } }
+      if not found { fail(token, "Module does not export '" + key.value + "'.") }
+    }
+  }
+}
 fn expr(e, node, env) {
   location(e, node.token)
   if node.kind == "literal" {
@@ -409,11 +451,13 @@ fn expr(e, node, env) {
   }
   if node.kind == "binary" {
     let left = expr(e, node.left, env)
-    if node.operator == "and" or node.operator == "or" {
+    if node.operator == "and" or node.operator == "or" or node.operator == "??" {
       let result = temp(e, left)
       let invert = ""
       if node.operator == "or" { invert = "!" }
-      emit(e, "if(" + invert + "atruth(" + left + ")){")
+      let condition = invert + "atruth(" + left + ")"
+      if node.operator == "??" { condition = left + ".t==ANULL||" + left + ".t==AUNDEF" }
+      emit(e, "if(" + condition + "){")
       let right = expr(e, node.right, env)
       emit(e, result + "=" + right + ";}")
       return result
@@ -423,18 +467,37 @@ fn expr(e, node, env) {
     return temp(e, "abin(" + quote(node.operator) + "," + left + "," + right + ")")
   }
   if node.kind == "member" {
-    if node.object.kind == "name" and (node.key.type == "string" or node.key.token.kind == "string") {
-      let b = binding(node.object)
-      if b.kind == "import" and b.imported.bridge == "arya" {
-        let found = false
-        for item in b.imported.unit.ast.statements { if (item.kind == "declaration" or item.kind == "function") and item.exported and item.binding.name == node.key.value { found = true } }
-        if not found { fail(node.token, "Module does not export '" + node.key.value + "'.") }
-      }
-    }
+    checkMemberExport(node.object, node.key, node.token)
     let object = expr(e, node.object, env)
     let key = expr(e, node.key, env)
     location(e, node.token)
     return temp(e, "aget(" + object + "," + key + ")")
+  }
+  if node.kind == "chain" {
+    let result = temp(e, expr(e, node.base, env))
+    let end = "chain" + str(e.labels); e.labels += 1
+    let first = true
+    for step in node.steps {
+      if step.optional { emit(e, "if(" + result + ".t==ANULL||" + result + ".t==AUNDEF){" + result + "=av(AUNDEF);goto " + end + ";}") }
+      if step.kind == "member" {
+        if first { checkMemberExport(node.base, step.key, step.token) }
+        let key = expr(e, step.key, env)
+        location(e, step.token)
+        let next = temp(e, "aget(" + result + "," + key + ")")
+        emit(e, result + "=" + next + ";")
+      } else {
+        let items = []
+        for arg in step.arguments { items.push(expr(e, arg, env)) }
+        let data = "NULL"
+        if len(items) > 0 { data = "(AV[]){" + items.join(",") + "}" }
+        location(e, step.token)
+        let next = temp(e, "acall(" + result + "," + str(len(items)) + "," + data + ")")
+        emit(e, result + "=" + next + ";")
+      }
+      first = false
+    }
+    emit(e, end + ":;")
+    return result
   }
   if node.kind == "function" {
     let id = makeFunction(e.unit, node)
@@ -548,7 +611,7 @@ fn finish(e, b, params, module) {
     emit(e, "amod[" + str(e.unit.id) + "]=T[0];ans[" + str(e.unit.id) + "]=arecord();")
     for builtin in b.scope.bindings {
       if builtin.kind == "builtin" {
-        let ids = {print: 0, len: 1, str: 2, number: 3, range: 4}
+        let ids = {print: 0, say: 0, len: 1, str: 2, number: 3, range: 4}
         let value = "aprogramArgs"
         if builtin.name != "args" { value = "abuilt(" + str(ids[builtin.name]) + ")" }
         temp(e, writeBinding(e, "T[0]", builtin, value, 1))
@@ -589,7 +652,7 @@ fn numericExpr(node, allowed) {
     if op == "!" { return {code: "(!anumtruth(" + value.code + "))", numeric: false} }
     return {code: "(" + op + value.code + ")", numeric: true}
   }
-  if node.kind == "binary" and node.operator != "and" and node.operator != "or" {
+  if node.kind == "binary" and node.operator != "and" and node.operator != "or" and node.operator != "??" {
     let left = numericExpr(node.left, allowed)
     let right = numericExpr(node.right, allowed)
     if left == null or right == null or not left.numeric or not right.numeric { return null }

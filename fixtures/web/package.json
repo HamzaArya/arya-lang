@@ -1,0 +1,14 @@
+{
+  "name": "arya-studio-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "arya run studio.arya",
+    "check": "arya check studio.arya",
+    "build": "arya build studio.arya"
+  },
+  "devDependencies": {
+    "arya-language": "1.2.0-alpha.4"
+  }
+}

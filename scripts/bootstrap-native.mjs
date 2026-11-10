@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { resolve, join } from 'node:path';
 const require=createRequire(import.meta.url);
+const verifyOnly=process.argv.includes('--verify-only');
 const {checkNativeProject,writeNativeProject}=require('../dist/native.cjs');
 const pkg=JSON.parse(await readFile('package.json','utf8'));
 const root=resolve('.build/bootstrap-native');await mkdir(root,{recursive:true});
@@ -31,13 +32,25 @@ for(const [label,exe] of [['stage1',one],['stage3',three]]) {
   const sampleOutput=join(root,'conformance-'+label);run(exe,['build',conformance,'-o',sampleOutput]);
   const actual=run(sampleOutput,[],{env:{...process.env,ARYA_GC_STRESS:'1',ARYA_GC_STATS:'1'}});
   if(actual!==expected)throw new Error('Bootstrap conformance failed for '+label+': '+actual);
+  const brandedOutput=join(root,'branded-'+label);run(exe,['build',resolve('fixtures/native/branded.arya'),'-o',brandedOutput]);
+  const branded=run(brandedOutput,[],{env:{...process.env,PATH:'/nonexistent',ARYA_GC_STRESS:'1'}});
+  if(branded!=='Arya total: 15\nReady\n-1\n')throw new Error('Bootstrap branded syntax failed for '+label+': '+branded);
+  const safeOutput=join(root,'safe-access-'+label);run(exe,['build',resolve('fixtures/native/safe-access.arya'),'-o',safeOutput]);
+  const safe=run(safeOutput,[],{env:{...process.env,PATH:'/nonexistent',ARYA_GC_STRESS:'1'}});
+  if(safe!=='fallback\nskipped\n0\n0 false \n42\nARYA\n1-2-3\nno callback\nTypeError\nTypeError\nTypeError\n7\n')throw new Error('Bootstrap safe-access syntax failed for '+label+': '+safe);
 }
 const invalid=join(root,'invalid.arya');await writeFile(invalid,'const value = 1\nvalue = 2\n');
 let rejected=false;try{run(three,['check',invalid]);}catch{rejected=true;}if(!rejected)throw new Error('Bootstrapped compiler accepted a const write.');
-const installed=resolve('artifacts',`arya-native-${pkg.version}-${process.platform}-${process.arch}`);await mkdir(installed,{recursive:true});
-await copyFile(three,join(installed,'arya-native'));
-for(const name of ['LICENSE','NOTICE','THIRD-PARTY-NOTICES.txt'])await copyFile(name,join(installed,name));
-const evidence={version:pkg.version,platform:process.platform,architecture:process.arch,compilerVersion:run(process.env.ARYA_CC??process.env.CC??'cc',['--version']).split('\n')[0],stages:3,generatedCIdentical:true,generatedCSha256:createHash('sha256').update(third).digest('hex'),binarySha256:createHash('sha256').update(await readFile(three)).digest('hex'),sourceSha256:createHash('sha256').update(await readFile(filename)).digest('hex'),runtimeSha256:createHash('sha256').update(runtime).digest('hex'),calculatorResult:calculator.trim(),conformance:true,constWriteRejected:true};
+const missingExport=join(root,'missing-export.arya');await writeFile(join(root,'exports.arya'),'export const present = 1\n');
+await writeFile(missingExport,'use arya "./exports.arya" as helper\nsay(helper?.missing)\n');
+let exportRejected=false;try{run(three,['check',missingExport]);}catch{exportRejected=true;}if(!exportRejected)throw new Error('Bootstrapped compiler accepted a missing optional namespace export.');
+const installed=resolve('artifacts',`arya-native-${pkg.version}-${process.platform}-${process.arch}`);
+if(!verifyOnly) {
+  await mkdir(installed,{recursive:true});
+  await copyFile(three,join(installed,'arya-native'));
+  for(const name of ['LICENSE','NOTICE','THIRD-PARTY-NOTICES.txt'])await copyFile(name,join(installed,name));
+}
+const evidence={version:pkg.version,platform:process.platform,architecture:process.arch,compilerVersion:run(process.env.ARYA_CC??process.env.CC??'cc',['--version']).split('\n')[0],stages:3,generatedCIdentical:true,generatedCSha256:createHash('sha256').update(third).digest('hex'),binarySha256:createHash('sha256').update(await readFile(three)).digest('hex'),sourceSha256:createHash('sha256').update(await readFile(filename)).digest('hex'),runtimeSha256:createHash('sha256').update(runtime).digest('hex'),calculatorResult:calculator.trim(),conformance:true,brandedSyntax:true,constWriteRejected:true};
 await writeFile(join(root,'evidence.json'),JSON.stringify(evidence,null,2)+'\n');
-await writeFile(join(installed,'BOOTSTRAP.json'),JSON.stringify(evidence,null,2)+'\n');
+if(!verifyOnly)await writeFile(join(installed,'BOOTSTRAP.json'),JSON.stringify(evidence,null,2)+'\n');
 console.log(JSON.stringify(evidence,null,2));

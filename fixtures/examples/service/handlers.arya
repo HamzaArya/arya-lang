@@ -1,0 +1,19 @@
+export fn live() {
+  return {status: "ok"}
+}
+
+export fn greet(request) {
+  return {
+    message: "Hello, " + request.params.name + request.query.punctuation,
+    requestId: request.requestId
+  }
+}
+
+export fn echo(request) {
+  request.log.info("message.accepted")
+
+  return {
+    message: request.body.message,
+    requestId: request.requestId
+  }
+}

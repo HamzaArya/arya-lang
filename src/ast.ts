@@ -1,8 +1,12 @@
 import type { Token, LexicalBinding, LexicalReference } from './compiler.js';
 
 export interface Block { scopeId: number; statements: Statement[] }
+export type ChainStep =
+  | { kind: 'member'; token: Token; optional: boolean; key: Expression }
+  | { kind: 'call'; token: Token; optional: boolean; arguments: Expression[] };
 export type Expression = { token: Token } & (
   | { kind: 'literal'; value: string | number | boolean | null }
+  | { kind: 'view'; expressions: Expression[] }
   | { kind: 'name'; reference: LexicalReference }
   | { kind: 'list'; items: Expression[] }
   | { kind: 'object'; fields: { key: string; value: Expression }[] }
@@ -11,6 +15,7 @@ export type Expression = { token: Token } & (
   | { kind: 'function'; async: boolean; parameters: Token[]; body: Block }
   | { kind: 'call'; callee: Expression; arguments: Expression[] }
   | { kind: 'member'; object: Expression; key: Expression }
+  | { kind: 'chain'; base: Expression; steps: ChainStep[] }
   | { kind: 'new'; callee: Expression; arguments: Expression[] }
 );
 export type Statement = { token: Token } & (

@@ -1,6 +1,6 @@
 # Learn Arya by building a task report
 
-This path starts with one file and finishes with three Arya modules using a JavaScript standard-library API. You need Node.js 22.15 or later, npm, and a locally supplied `arya-language-<version>.tgz` archive. Python and third-party npm packages are not required. This is a runnable learning path; external learner observations are tracked separately in the [community-review process](community-review.md).
+This path starts with one file and finishes with three Arya modules using a JavaScript standard-library API. You need Node.js 22.15 or later, npm, and an npm installation of Arya 1.2.0-alpha.4. Python and third-party npm packages are not required. This is a runnable learning path; external learner observations are tracked separately in the [community-review process](community-review.md).
 
 ## Install into a fresh folder
 
@@ -10,14 +10,14 @@ Create a folder called `arya-learning` and open a terminal there. Create `packag
 {"private": true}
 ```
 
-Install the archive using its actual absolute path:
+Install the pinned compiler:
 
 ```sh
-npm install --offline --ignore-scripts --no-audit --no-fund /absolute/path/to/arya-language-<version>.tgz
+npm install --save-exact arya-language@1.2.0-alpha.4
 npx --no-install arya --version
 ```
 
-Replace `<version>` with the archive's version. The install uses a local file; it does not require a published Arya registry package. All `npx` commands below use `--no-install`, so a misspelled command cannot silently download another package. See [installation and upgrades](installing.md) for runtime checks, Windows path examples, and troubleshooting.
+For offline use, replace the registry package with the actual path to its retained `arya-language-1.2.0-alpha.4.tgz` archive and add `--offline --ignore-scripts --no-audit --no-fund`. All `npx` commands below use `--no-install`, so a misspelled command cannot silently download another package. See [installation and upgrades](installing.md) for runtime checks, Windows path examples, and troubleshooting.
 
 ## 1. Run one file
 
@@ -163,7 +163,7 @@ The output is the same. Keep source and generated files in their project layout;
 
 These exercises intentionally fail. They are not part of the completed reference project.
 
-Change a call from `tasks.countRemaining(items)` to `task.countRemaining(items)`. Check should report `Unknown name 'task'` at that token and may suggest `tasks`. Correct it before continuing. Check validates the alias, not whether every property exists on a JavaScript object.
+Change a call from `tasks.countRemaining(items)` to `taks.countRemaining(items)`. Check should report `Unknown name 'taks'` at that token and may suggest `tasks`. Correct it before continuing. Check validates the alias, not whether every property exists on a JavaScript object.
 
 Try adding:
 

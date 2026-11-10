@@ -1,25 +1,89 @@
 # Arya programming language
 
-Arya 1.1 preview adds [native compilation and an Arya-written self-hosted compiler](docs/arya-native.md): `arya build main.arya --target native`. Native programs run without Node.js; the original JavaScript target remains available. See the [native profile contract](docs/arya-native-specification.md).
+Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-Arya compiles single-file and multi-file `.arya` programs to JavaScript ES modules, imports JavaScript/npm libraries, and calls Python functions through a JSON bridge. This repository owns the language independently of the AryaCode IDE.
+**Current release: [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md)** — published on npm as `latest`. Arya remains an experimental alpha. The default target runs on Node.js; a separate C11 target builds native command-line executables.
 
-Requires Node.js 22.15 or later. Python is optional unless a program uses `use python`. The full integration suite and clean-package tests require Python (`ARYA_PYTHON`, or `python3`/`python` on PATH).
+## Start a project
+
+Requires **Node.js 22.15 or newer** and npm:
+
+```sh
+npm create arya-language@latest my-app
+cd my-app
+npm install
+npm run dev
+```
+
+Choose a template in the wizard, or specify one:
+
+| Template | What you get |
+| --- | --- |
+| `web` | Arya server, `index.html`, and separate CSS/browser JavaScript |
+| `api` | JSON endpoints without an HTML entry |
+| `cli` | A command-line program with arguments |
+| `native` | A command-line program compiled through C11 |
+| `ui` | Arya components, forms, browser state, API actions, and animations |
+| `desktop` | The same UI application in an isolated Electron window |
+
+For example, `npm create arya-language@latest my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
+
+## Use JavaScript and Python together
+
+```arya
+use js "node:crypto" as crypto
+use python "statistics" as statistics
+use std "python" as python
+
+const stats = python.bind(statistics)
+const mean = await stats.mean([10, 20, 30])
+
+say({id: crypto.randomUUID(), mean: mean})
+```
+
+Install the compiler with `npm install arya-language@latest`, save the example as `main.arya`, and run `npx --no-install arya run main.arya`. Python is required for this example. Install additional npm and Python libraries in the application's respective environments.
+
+Direct Python calls remain synchronous. The async library adds bound imports, keyword arguments, batches, cancellation, bounded queues, and interpreter selection. See [interop](docs/interop.md), [async Python](docs/python-async.md), and the [reporting service example](fixtures/examples/python-web/README.md).
+
+## Build useful applications
+
+| Goal | Guide |
+| --- | --- |
+| Learn the language | [Tutorial](docs/arya-tutorial.md), [task-report project](docs/learning-path.md), [reference](docs/arya-language.md) |
+| Build a server | [Web applications](docs/arya-web.md), [validation, logs, and shutdown](docs/services.md) |
+| Connect a database | [MySQL pools, prepared queries, and transactions](docs/mysql.md) |
+| Build an interface | [UI and desktop apps](docs/ui-apps.md), [component and animation reference](docs/ui-library.md) |
+| Find and fix errors | [Safer expressions, code frames, Quick Fixes, and debug helpers](docs/syntax-and-debugging.md) |
+| Build a native CLI | [Native guide](docs/arya-native.md) and [profile contract](docs/arya-native-specification.md) |
+| Embed the compiler | [Compiler, language-service, project, and editor APIs](docs/compiler-api.md) |
+
+The UI library includes an interactive component gallery, motion playground, copyable examples, and an implementation guide. From a source checkout, run `npm run ui:preview` and open **http://127.0.0.1:3040**. Applications can serve the same pages with `ui.preview()`.
+
+## Enable editor support
+
+The npm package includes an offline extension, `.arya` icons, Arya Dark/Light themes, semantic highlighting, and portable editor adapters:
+
+```sh
+npm install arya-language@latest
+npx --no-install arya editor install
+```
+
+This installs into detected supported VS Code-compatible editors, including VS Code and AryaCode. Reload the editor and open **Arya: Editor Setup Guide** to choose icons and themes. npm installation itself does not change editor preferences. Other editors can use `arya-lsp --stdio` and the supplied adapters. See [editor setup](docs/editor-setup.md) and [editor compatibility](docs/arya-editors.md).
+
+## Work on the repository
 
 ```sh
 npm ci
 npm run check
-npm run arya -- run fixtures/arya/hello.arya
-npm run package
-npm run test:package
+npm run ui:preview
 ```
 
-The local archive appears in `artifacts/`. Install it into any project with `npm install /absolute/path/to/arya-language-<version>.tgz`, then use `npx --no-install arya run main.arya`, `arya check`, `arya build`, or `arya-lsp --stdio`. No registry publication is needed.
+The full suite additionally needs Python and a C11 toolchain. MySQL, Chrome, Electron, and editor-host checks have separate setup. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the source layout, commands, and validation workflow. Release packaging must preserve already published archives; follow the [release process](docs/releasing.md).
 
-The compiler API is available as `import { compile, analyzeSource, AryaError, ARYA_VERSION } from 'arya-language'`; editor analysis is available from `arya-language/language-service`. Check rejects unknown lexical names and const writes without executing imports. The CLI, portable extension, LSP, and AryaCode share resolution and same-file lexical navigation data. See the [API contract](docs/compiler-api.md), [language reference](docs/arya-language.md), [tutorial](docs/arya-tutorial.md), [roadmap](docs/arya-roadmap.md), and [release process](docs/releasing.md).
+## Documentation and release status
 
-AryaCode installs the same versioned npm archive as other consumers. Its workspace trust, selected tools, filesystem containment, process lifecycle, and integration tests stay in the IDE. See [extraction inventory](docs/repository-extraction.md).
+Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.2.0-alpha.4-publication.json).
 
-Arya is licensed under [Apache-2.0](LICENSE), copyright 2026 Hamza Arya. Third-party licenses are retained in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). The npm package is `arya-language`; the CLI commands remain `arya` and `arya-lsp`. The public preview uses npm's `next` tag and a [GitHub prerelease](https://github.com/HamzaArya/arya-lang/releases). It is not a stable 1.0 release. Local qualification covers macOS arm64; Linux/Windows and external learner review remain pending.
+The current release has recorded local macOS arm64 qualification. Fresh Linux/Windows qualification and external learner review remain open. Electron desktop installers, a formatter, static types, and interactive source-level debugging are separate work; see the [roadmap](docs/arya-roadmap.md) and [readiness record](docs/release-readiness.md).
 
-For the npm preview, use `npm install --save-exact arya-language@0.2.0-alpha.3`, then `npx --no-install arya --version`. See the [release-readiness record](docs/release-readiness.md), [installation guide](docs/installing.md), [multi-file learning path](docs/learning-path.md), and [community review protocol](docs/community-review.md). Report security issues privately as described in [SECURITY.md](SECURITY.md).
+Licensed under [Apache-2.0](LICENSE), copyright 2026 Hamza Arya. Retain [NOTICE](NOTICE) and [third-party notices](THIRD-PARTY-NOTICES.txt) in distributions. Report vulnerabilities through [SECURITY.md](SECURITY.md).

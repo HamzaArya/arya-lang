@@ -8,7 +8,10 @@
     ]
   },
   "Async function": {
-    "prefix": "async",
+    "prefix": [
+      "async",
+      "asyncfn"
+    ],
     "body": [
       "async fn ${1:name}(${2:values}) {",
       "  ${0:return values}",
@@ -49,5 +52,305 @@
       "use arya \"${1:./module.arya}\" as ${2:module}"
     ],
     "description": "Import an Arya module namespace"
+  },
+  "Arya constant": {
+    "prefix": "keep",
+    "body": "keep ${1:name} = ${0:value}",
+    "description": "Declare a constant binding"
+  },
+  "Arya decision": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition} {",
+      "  $2",
+      "} else {",
+      "  $0",
+      "}"
+    ],
+    "description": "Choose a branch with if / else"
+  },
+  "Arya each": {
+    "prefix": "each",
+    "body": [
+      "each ${1:item} in ${2:items} {",
+      "  $0",
+      "}"
+    ],
+    "description": "Iterate through values"
+  },
+  "Arya say": {
+    "prefix": "say",
+    "body": "say($0)",
+    "description": "Print values to the terminal"
+  },
+  "Arya view": {
+    "prefix": "view",
+    "body": [
+      "view {",
+      "  html {",
+      "    head { title \"${1:My Arya app}\" }",
+      "    body {",
+      "      h1 \"${2:Hello from Arya}\"",
+      "      $0",
+      "    }",
+      "  }",
+      "}"
+    ],
+    "description": "Create an HTML view (JavaScript target)"
+  },
+  "Arya CSS": {
+    "prefix": "style",
+    "body": [
+      "style \"\"\"",
+      "  ${0:body { font-family: system-ui; \\}}",
+      "\"\"\""
+    ],
+    "description": "Embed literal CSS in a view"
+  },
+  "Arya browser script": {
+    "prefix": "script",
+    "body": [
+      "script \"\"\"",
+      "  $0",
+      "\"\"\""
+    ],
+    "description": "Embed browser JavaScript in a view"
+  },
+  "Arya standard library": {
+    "prefix": "usestd",
+    "body": "use std \"${1|web,fs,math,json,path,mysql,env,validate,log,python,debug,ui|}\" as ${2:library}",
+    "description": "Import a standard library for the selected execution profile"
+  },
+  "Arya web application": {
+    "prefix": "webapp",
+    "body": [
+      "use std \"web\" as web",
+      "",
+      "web.serve(${1:3000}, {",
+      "  \"GET /api/health\": fn() {",
+      "    return {status: \"ok\"}",
+      "  }",
+      "})",
+      "$0"
+    ],
+    "description": "Serve index.html and public assets with an Arya API route (JavaScript target)"
+  },
+  "Arya inline web application": {
+    "prefix": "webinline",
+    "body": [
+      "use std \"web\" as web",
+      "",
+      "keep home = view {",
+      "  html {",
+      "    head { title \"${1:My Arya app}\" }",
+      "    body { h1 \"${2:Hello from Arya}\" }",
+      "  }",
+      "}",
+      "",
+      "web.serve(${3:3000}, {\"/\": home}, {html: false})",
+      "$0"
+    ],
+    "description": "Serve an optional inline view without an HTML entry (JavaScript target)"
+  },
+  "MySQL connection": {
+    "prefix": "mysqlconnect",
+    "body": [
+      "use std \"env\" as env",
+      "use std \"mysql\" as mysql",
+      "",
+      "keep ${1:db} = await mysql.connect({",
+      "  host: env.get(\"DB_HOST\", \"127.0.0.1\"),",
+      "  user: env.require(\"DB_USER\"),",
+      "  password: env.get(\"DB_PASSWORD\", \"\"),",
+      "  database: env.require(\"DB_NAME\")",
+      "})",
+      "$0"
+    ],
+    "description": "Open and verify a MySQL pool using environment configuration"
+  },
+  "MySQL prepared query": {
+    "prefix": "mysqlrows",
+    "body": [
+      "keep ${1:rows} = await ${2:db}.rows(",
+      "  \"${3:SELECT id, title FROM tasks WHERE completed = ?}\",",
+      "  [${4:false}]",
+      ")",
+      "$0"
+    ],
+    "description": "Read rows with prepared values"
+  },
+  "MySQL transaction": {
+    "prefix": "mysqltransaction",
+    "body": [
+      "keep ${1:result} = await ${2:db}.transaction(async fn(tx) {",
+      "  keep saved = await tx.execute(",
+      "    \"${3:INSERT INTO tasks (title) VALUES (?)}\",",
+      "    [${4:title}]",
+      "  )",
+      "",
+      "  return saved",
+      "})",
+      "$0"
+    ],
+    "description": "Commit related writes together; roll back on failure"
+  },
+  "Return": {
+    "prefix": "return",
+    "body": "return $0",
+    "description": "Return a value from a function"
+  },
+  "Validated request body": {
+    "prefix": "validateschema",
+    "body": [
+      "keep ${1:input} = validate.object({",
+      "  ${2:title}: validate.string({trim: true, min: 1, max: 200})",
+      "})",
+      "$0"
+    ],
+    "description": "Define a strict request schema with normalized text"
+  },
+  "Validated API route": {
+    "prefix": "webroute",
+    "body": [
+      "\"${1:POST /api/items}\": web.route(${2:createItem}, {",
+      "  body: ${3:input}",
+      "})",
+      "$0"
+    ],
+    "description": "Validate a request before calling its handler"
+  },
+  "Structured logger": {
+    "prefix": "logcreate",
+    "body": [
+      "use std \"log\" as log",
+      "",
+      "keep ${1:logger} = log.create({",
+      "  name: \"${2:my-service}\",",
+      "  level: \"info\"",
+      "})",
+      "$0"
+    ],
+    "description": "Create a structured JSON logger with default credential-field redaction"
+  },
+  "Graceful HTTP shutdown": {
+    "prefix": "webshutdown",
+    "body": [
+      "await web.shutdown(${1:server}, {",
+      "  timeoutMs: 10000,",
+      "  cleanup: async fn() {",
+      "    await ${2:db}.close()",
+      "  }",
+      "})",
+      "$0"
+    ],
+    "description": "Finish active requests before closing shared resources"
+  },
+  "Asynchronous Python import": {
+    "prefix": "pythonasync",
+    "body": [
+      "use std \"python\" as python",
+      "use python \"${1:statistics}\" as ${2:library}",
+      "",
+      "keep ${3:asyncLibrary} = python.bind(${2:library})",
+      "keep ${4:result} = await ${3:asyncLibrary}.${5:mean}(${6:values})",
+      "$0"
+    ],
+    "description": "Call Python with normal function syntax without blocking JavaScript"
+  },
+  "Managed Python client": {
+    "prefix": "pythonclient",
+    "body": [
+      "keep ${1:py} = python.client({",
+      "  timeoutMs: 5000,",
+      "  maxConcurrency: 4,",
+      "  queueLimit: 32",
+      "})",
+      "$0"
+    ],
+    "description": "Bound concurrent Python work and queued requests"
+  },
+  "Python call with cancellation": {
+    "prefix": "pythoncall",
+    "body": [
+      "keep ${1:result} = await ${2:py}.call(${3:library.function}, [${4:value}], {",
+      "  kwargs: {${5:option}: ${6:value}},",
+      "  signal: ${7:request.signal}",
+      "})",
+      "$0"
+    ],
+    "description": "Call Python with keyword arguments and cancellation"
+  },
+  "Python batch mapping": {
+    "prefix": "pythonmap",
+    "body": "keep ${1:results} = await ${2:python}.map(${3:library.function}, ${4:values})\n$0",
+    "description": "Process a list in one Python invocation, preserving order"
+  },
+  "Safe nested value": {
+    "prefix": "safevalue",
+    "body": "keep ${1:value} = ${2:object}?.${3:property} ?? ${4:fallback}\n$0",
+    "description": "Use a default only when a value is null or undefined"
+  },
+  "Debug assertion": {
+    "prefix": "debugassert",
+    "body": "debug.assert(${1:condition}, \"${2:Explain the expected condition.}\")\n$0",
+    "description": "Check an invariant with a mapped source location"
+  },
+  "Debug trace": {
+    "prefix": "debugtrace",
+    "body": "debug.trace(\"${1:label}\", ${2:value})\n$0",
+    "description": "Inspect a value and its caller location on stderr"
+  },
+  "Arya interactive UI": {
+    "prefix": "uipage",
+    "body": [
+      "use std \"ui\" as ui",
+      "",
+      "const page = ui.page({",
+      "  title: \"${1:My app}\",",
+      "  state: {count: 0},",
+      "  body: ui.card([",
+      "    ui.heading(\"${2:Hello from Arya}\"),",
+      "    ui.text(ui.bind(\"count\"), {role: \"status\", \"aria-live\": \"polite\"}),",
+      "    ui.button(\"Add one\", {action: ui.increment(\"count\")})",
+      "  ], {animate: \"rise\"})",
+      "})",
+      "$0"
+    ],
+    "description": "Create an interactive Arya UI page with browser state and animation (JavaScript profile)"
+  },
+  "Arya UI preview": {
+    "prefix": "uipreview",
+    "body": "ui.preview({section: \"${1|components,motion,guide|}\", basePath: \"${2:/ui}\"})",
+    "description": "Render the built-in UI library preview or implementation guide"
+  },
+  "Arya UI field": {
+    "prefix": "uifield",
+    "body": "ui.field(\"${1:Label}\", ui.input({id: \"${2:name}\", bind: \"${3:name}\"}), {hint: \"${4:Helpful context}\"})",
+    "description": "Create a labelled input with an associated hint"
+  },
+  "Arya UI dialog": {
+    "prefix": "uidialog",
+    "body": [
+      "ui.dialog(\"${1:confirm}\", \"${2:Confirm action}\", [",
+      "  ui.text(\"${3:Continue?}\"),",
+      "  ui.button(\"Continue\", {action: ui.close(\"${1:confirm}\")})",
+      "])"
+    ],
+    "description": "Create a native modal dialog; open with ui.open(id)"
+  },
+  "Arya UI motion": {
+    "prefix": "uimotion",
+    "body": "ui.motion(\"${1|rise,fade,slide,scale,pulse,drop,slide-right,fade-out,zoom-out,bounce,shake,flip,spin,wiggle,blur,float|}\", {duration: ${2:600}, trigger: \"${3|load,hover,press,visible|}\"})",
+    "description": "Configure a preset animation with timing and trigger"
+  },
+  "Arya UI keyframes": {
+    "prefix": "uikeyframes",
+    "body": [
+      "ui.keyframes([",
+      "  {opacity: 0, transform: \"translateY(24px)\"},",
+      "  {opacity: 1, transform: \"translateY(0)\"}",
+      "], {duration: ${1:700}, easing: \"${2|smooth,snappy,linear,ease,ease-in,ease-out,ease-in-out|}\"})"
+    ],
+    "description": "Create a validated custom keyframe animation"
   }
 }

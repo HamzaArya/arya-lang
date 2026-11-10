@@ -1,6 +1,6 @@
 {
   "name": "arya-language",
-  "version": "1.1.0-alpha.1",
+  "version": "1.2.0-alpha.4",
   "private": false,
   "license": "Apache-2.0",
   "author": {
@@ -50,11 +50,17 @@
     "./native": {
       "types": "./dist/types/native.d.ts",
       "default": "./dist/native.cjs"
+    },
+    "./editor": {
+      "types": "./dist/types/editor.d.ts",
+      "default": "./dist/editor.cjs"
     }
   },
   "bin": {
     "arya": "dist/cli.cjs",
-    "arya-lsp": "dist/lsp.cjs"
+    "arya-lsp": "dist/lsp.cjs",
+    "arya-language": "dist/create.cjs",
+    "create-arya": "dist/create.cjs"
   },
   "files": [
     "dist",
@@ -63,6 +69,8 @@
     "brand",
     "editors",
     "README.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
     "LICENSE",
     "NOTICE",
     "THIRD-PARTY-NOTICES.txt",
@@ -70,18 +78,22 @@
     "bootstrap"
   ],
   "scripts": {
+    "ui:preview": "npm run build && node dist/cli.cjs build fixtures/examples/ui-library/main.arya && node fixtures/examples/ui-library/serve.mjs",
     "build": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node scripts/test.mjs",
-    "check": "npm run typecheck && npm test",
+    "test:mysql": "node scripts/test-mysql.mjs",
+    "docs:check": "node scripts/check-docs.mjs",
+    "check": "npm run docs:check && npm run typecheck && npm test",
     "arya": "node dist/cli.cjs",
-    "package": "npm run check && npm pack --pack-destination artifacts",
+    "package": "npm run check && npm run package:editors",
     "package:editors": "node scripts/package-editors.mjs",
     "test:package": "node scripts/test-package.mjs",
     "prepack": "npm run build",
     "release:check": "node scripts/check-release.mjs",
     "test:clean": "node scripts/verify-clean.mjs",
-    "bootstrap:native": "npm run build && node scripts/bootstrap-native.mjs"
+    "bootstrap:native": "npm run build && node scripts/bootstrap-native.mjs",
+    "test:editors": "npm run build && node scripts/test-editor-host.mjs"
   },
   "devDependencies": {
     "@jridgewell/gen-mapping": "0.3.13",

@@ -1,0 +1,100 @@
+use std "env" as env
+use std "log" as log
+use std "python" as python
+use std "validate" as validate
+use std "web" as web
+
+use js "node:crypto" as crypto
+use python "./analytics.py" as analytics
+
+keep logger = log.create({name: "python-reports"})
+keep py = python.client({
+  timeoutMs: 5000,
+  maxConcurrency: 4,
+  queueLimit: 32
+})
+
+keep environment = await py.info()
+logger.info("python.selected", {version: environment.version})
+
+keep reportInput = validate.object({
+  csv: validate.string({min: 1, max: 200000}),
+  column: validate.optional(validate.string({min: 1, max: 80}), "amount"),
+  digits: validate.optional(validate.integer({min: 0, max: 8}), 2)
+})
+
+async fn createReport(request) {
+  let summary = null
+
+  try {
+    keep analyze = py.bind(analytics, {
+      kwargs: {
+        column: request.body.column,
+        digits: request.body.digits
+      },
+      signal: request.signal
+    })
+
+    summary = await analyze.summarize_csv(request.body.csv)
+  } catch error {
+    if error.code == "ARYA_PYTHON_EXCEPTION" and error.pythonType == "ValueError" {
+      throw web.error(422, "CSV data could not be processed.", "INVALID_CSV")
+    }
+
+    if error.code == "ARYA_PYTHON_QUEUE_FULL" {
+      throw web.error(503, "Reporting is busy. Try again later.", "REPORTS_BUSY")
+    }
+
+    throw error
+  }
+
+  keep checksum = crypto.createHash("sha256")
+    .update(request.body.csv)
+    .digest("hex")
+
+  request.log.info("report.created", {rows: summary.count})
+
+  return {
+    checksum: checksum,
+    summary: summary,
+    requestId: request.requestId
+  }
+}
+
+keep server = web.serve(env.int("PORT", 3000), {
+  "GET /health/live": fn() { return {status: "ok"} },
+  "GET /health/ready": fn() {
+    return web.health({python: fn(signal) { return py.info({signal: signal}) }}, {timeoutMs: 3000})
+  },
+  "POST /api/reports": web.route(createReport, {body: reportInput})
+}, {
+  html: false,
+  assets: false,
+  logger: logger,
+  handlerTimeoutMs: 6000
+})
+
+server.on("listening", fn() {
+  logger.info("service.listening", {port: server.address().port})
+})
+
+server.on("error", async fn(error) {
+  logger.error("service.start_failed", {code: error.code})
+  process.exitCode = 1
+  await py.close()
+})
+
+async fn shutdown() {
+  try {
+    await web.shutdown(server, {
+      timeoutMs: 10000,
+      cleanup: fn() { return py.close() }
+    })
+  } catch error {
+    logger.error("service.stop_failed", {code: error.code})
+    process.exit(1)
+  }
+}
+
+process.once("SIGINT", shutdown)
+process.once("SIGTERM", shutdown)

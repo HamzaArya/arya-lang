@@ -1,83 +1,60 @@
 # Release readiness and evidence
 
-**Post-publication update, 9 November 2026.** The owner-authorized Apache-2.0 `arya-language@0.2.0-alpha.3` is published on npm, and its GitHub prerelease is published. The verified release source is `5a962385e1bdf35c8476748b992dc7efb0a01e2f`. The evidence below records actual publication and current six-job CI results; external learner review, final 0.2/1.0 qualification, and untested desktop/platform/architecture combinations remain open.
+**Current release: 1.2.0-alpha.4, published 10 November 2026.** Both `arya-language` and `create-arya-language` are published on npm's `latest` tag. The [publication record](releases/1.2.0-alpha.4-publication.json) contains registry URLs, SHA-256/SHA-512 identities, verified tags, and public-install results. This is an experimental alpha, with the scope below.
 
-This update is a later documentation record. The immutable release tag and packaged documents retain their reviewed pre-publication preparation state; they have not been rewritten or retagged. A public alpha is still an experimental alpha, not a stable release.
+## Current release evidence
 
-## Published alpha.3 evidence
+| Area | Recorded alpha.4 result |
+| --- | --- |
+| Source provenance | Recorded working-tree snapshot; manifest SHA-256 `96bd4f72cd0fbca7dd74ea95c0fa2091bb6bc58283a186096f802dd065530461`. No clean release commit was claimed for the npm artifact. Later repository commits do not change those published bytes. |
+| Core checking | TypeScript and 243 enabled tests passed; four optional integrations were skipped in the default suite. |
+| Clean package | Fresh snapshot dependency installation, compiler/creator/editor packaging, installed-package acceptance, and mechanical audit passed. |
+| Minimum Node | Installed-package acceptance passed on Node 22.15.0; the source snapshot used Node 24.16.0. |
+| Native bootstrap | Three generations converged to identical generated C; native conformance, branded syntax, safe access, and const-write rejection passed. |
+| Browser/desktop | Separate Chrome UI/library and Electron checks passed. Initial simultaneous Chrome launches timed out at startup; the serial browser retry passed. |
+| Editors | Real VS Code 1.143.1 and AryaCode 1.145.2 hosts passed semantic token, theme, file-icon, and setup-tour checks in temporary profiles. |
+| Public install | Fresh-cache `npm create arya-language@latest`, npm install with lifecycle scripts disabled, check/build, live UI/API validation, bundled editor assets, and desktop project creation passed. |
+| Archive identity | Both public registry downloads matched the reviewed SHA-256 and SHA-512 hashes. Published archives remain frozen. |
+| Live MySQL | Not rerun for alpha.4; unit/driver-contract coverage is part of the default suite. Use the separate live-database workflow for current evidence. |
+| Platforms | Local macOS arm64 evidence. Fresh Linux/Windows results were not part of this npm publication. |
 
-- npm: [`arya-language@0.2.0-alpha.3`](https://www.npmjs.com/package/arya-language/v/0.2.0-alpha.3). CLI publication succeeded after owner 2FA; the anonymous [registry version record](https://registry.npmjs.org/arya-language/0.2.0-alpha.3) and its tarball returned HTTP 200. The `next` tag is set. The registry also exposes `latest` at this alpha; the authenticated removal request returned HTTP 400. The semantic version and GitHub release remain explicitly prerelease. A fresh credential-free `arya-language@next` install passed the installed CLI and multi-file Check/Run example.
-- GitHub: [`v0.2.0-alpha.3` prerelease](https://github.com/HamzaArya/arya-lang/releases/tag/v0.2.0-alpha.3), targeting source `5a962385e1bdf35c8476748b992dc7efb0a01e2f`. All eight uploaded assets were downloaded and matched the reviewed bytes.
-- Published npm tarball SHA-256: `3ab98fe2b8745051a9b451fd3c4311a7805238226dfa163df37997560b07744b`. The verified source manifest contains 122 files with SHA-256 `f2381b363458e04bc1cd0331a27f89fe396bb77fbd060ff430c20518c6fca101` and records a clean release source tree.
-- [CI run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620): all six configured Linux/Windows/macOS and Node 22.15/24 jobs passed compiler/conformance, CLI, npm packing, and installed-package acceptance. This is not a claim that the CI built every editor archive or ran desktop apps; editor artifact builds and the embedded/portable desktop suites were verified locally on macOS only.
+Full local logs and artifact metadata were retained under `.build/evidence/clean-2026-11-10T09-24-23-144Z/` and `artifacts/QUALIFICATION.json` on the publishing machine. These ignored local directories are not portable public links; the versioned publication record and release notes carry the public summary.
 
-## Local audit
+See [alpha.4 release notes](releases/1.2.0-alpha.4.md) for feature and migration details. A GitHub release, editor-marketplace publication, and an updated AryaCode embedded compiler are separate distribution operations.
 
-Run from the repository root after building and packing the candidate:
+## Remaining qualification
+
+| Gate | Current state / next evidence |
+| --- | --- |
+| Current Linux/Windows and additional architectures | Run the compiler/package CI matrix for the exact source revision; retain job results. Prior-version success is historical evidence. |
+| Other editor products/platforms | Adapters are supplied; each actual application/version remains its own qualification target. |
+| Live services | Run disposable MySQL integration and application-specific deployment tests before claiming those environments. |
+| External learners | No real session results supplied. Follow [community review](community-review.md) and report observed failures and interventions. |
+| Dari/Pashto material | No fluent translation review supplied. |
+| Stable compatibility/support | No stable release, SLA, or maintained stable branch declared. Follow the [compatibility policy](compatibility-policy.md) and [security policy](../SECURITY.md). |
+
+The repository workflows are executable qualification plans. A workflow file or newly pushed commit does not by itself establish a passing platform result.
+
+## Read-only local audit
+
+After packaging a new candidate in a disposable snapshot:
 
 ```sh
-node scripts/check-release.mjs
-node scripts/check-release.mjs --json
+npm run release:check -- --json
 ```
 
-The script only reads local files and an existing archive; it does not publish, install dependencies, mutate metadata, create a tag, or contact a service. It verifies version consistency, owner/public-prerelease metadata, Apache-2.0/NOTICE/third-party text, the private security contact, runtime requirements, package/editor contents, and available artifact checksums. Missing artifacts are reported as pending. Invalid metadata or an inconsistent existing artifact is a local failure.
+The audit reads metadata, legal files, existing archives, and checksums. It does not build, execute program code, publish, or authenticate. Exit zero means no mechanical failures; missing artifacts can still be pending. `localArtifactReady` and `publicPrereleasePackageReady` additionally require complete local artifact checks. The latter expects the ordinary `next` prerelease package default; an explicit authorized publish flag selected `latest` for alpha.4.
 
-Exit zero means no local mechanical failures. `localArtifactReady` additionally requires no pending local artifacts/checksums; `publicPrereleasePackageReady` requires those complete mechanical checks plus the adopted public `next`-channel prerelease metadata. Neither field authenticates an account, reruns tests, approves a source revision, or proves a live upload. The legacy `publicReleaseReady`, `publicationVerified`, and `stableReleaseReady` remain false because those facts are not certified by this read-only audit. Actual live publication is independently recorded above; the audit flags have not been reinterpreted as transaction evidence. Linux/Windows and learner gates are labeled separately rather than treated as blockers for an honestly scoped alpha. Archive presence does not prove an external learner session occurred.
+The audit's `publicReleaseReady`, `publicationVerified`, and `stableReleaseReady` remain false because this tool does not verify those external facts. The independent publication record verifies the completed npm transaction. Do not interpret an audit flag as a failed live publication or turn archive presence into learner evidence.
 
-Use the [release process](releasing.md) to build, clean-install, and qualify the artifact. Run the actual test suite and archive acceptance commands; this audit does not rerun them or infer their results from a file's existence. Record outputs with the exact candidate version, source revision, and archive hash.
+## Record a new candidate
 
-## Gate ownership and evidence required
+Use [the release process](releasing.md). Preserve the candidate version, exact commit or source-manifest hash, dependency lockfile hash, Node/Python/C-toolchain versions, OS/architecture, command outputs, optional skips, archive hashes, registry responses, and downloaded-byte verification. A source snapshot can verify uncommitted work honestly; it must not be labeled a clean Git release commit.
 
-| Gate | Current state | Evidence needed to close it |
-| --- | --- | --- |
-| Language implementation/conformance | Alpha.3: latest full local run passes 87 language/artifact tests; runtime qualification is recorded separately | Passing compiler, execution, lexical, module, mapping, and interop suites for the exact candidate. |
-| Compiler/extension/CLI version labels | Mechanically audited | Matching package, compiler, extension language metadata, lockfile, archive identity, and release notes. |
-| Clean install | Local isolated-snapshot acceptance passes | Archive installed into a fresh temporary project without repository-relative dependencies; version/check/build/run, multi-file example, and mapped failure observed. |
-| Clean release provenance | Published alpha source `5a962385e1bdf35c8476748b992dc7efb0a01e2f` verified from a clean retained snapshot | The source manifest, dependency lockfile, logs, and matching artifacts identify the exact release. Later working-tree changes are outside that published revision. |
-| Public license/distribution terms | Apache-2.0 adopted by Hamza Arya | Retain the canonical LICENSE, owner NOTICE, and bundled third-party notices in source and every artifact; audit their actual bytes. |
-| Publication destination and release authority | Hamza Arya published npm alpha.3 and the GitHub prerelease; links/hash recorded above | Preserve the exact release assets and tag. The registry rejected `latest` tag cleanup with HTTP 400; use the explicit preview version or `next` installation commands. |
-| Security reporting path | hamzaarya123@gmail.com; best-effort active-preview policy adopted | [SECURITY.md](../SECURITY.md) names Hamza Arya and the private address without inventing an SLA. Stable support lines/periods remain undefined until a stable release is qualified. |
-| Linux and Windows | Alpha.3 compiler/CLI/package jobs pass in CI run 42566241620, including the Windows Unicode-path regression | Keep claims limited to the tested jobs. Desktop/editor execution on other operating systems and additional architectures is not established by those jobs. |
-| macOS/local runtime evidence | Alpha.3 local suites: 87 language/artifact, 62 IDE, both desktop suites pass | Preserve prior roadmap results; rerun and record the current candidate rather than treating previous-version results as automatic qualification. |
-| External learning observations | No feedback supplied; stable-readiness gate remains open | Real sessions/findings remain M7/M8/M9 evidence; a public alpha can invite that future review without claiming it happened. See [community review](community-review.md). |
-| Dari/Pashto material | No fluent review supplied | Fluent review for any translation before claiming reviewed translated learning material. No translation is required merely to finish untranslated engineering work. |
-| Evidence-selected tooling | Three reproduced engineering mitigations recorded; learner-driven selection pending | Completed [tooling decisions](tooling-evidence.md) linked to actual findings or a reproducible release-critical engineering risk. |
-| Stable 1.0 contract | Policy prepared; stable release not declared | Qualified versioned 1.0 specification, compatibility/deprecation rules, owner decisions, distribution/platform evidence, and user-readiness gates. |
+## Historical evidence
 
-## Candidate evidence template
+- [0.2.0-alpha.3 release](releases/0.2.0-alpha.3.md): source `5a962385e1bdf35c8476748b992dc7efb0a01e2f`, npm SHA-256 `3ab98fe2b8745051a9b451fd3c4311a7805238226dfa163df37997560b07744b`, verified [GitHub prerelease](https://github.com/HamzaArya/arya-lang/releases/tag/v0.2.0-alpha.3). [CI run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620) passed six compiler/package jobs for that older source; desktop evidence was local macOS only.
+- [1.1.0-alpha.1 native publication](native-release-verification.md): version-specific native binaries, bootstrap hashes, and platform results.
+- [1.2.0-alpha.3 npm publication](releases/1.2.0-alpha.3-publication.json): compiler/creator hashes and the earlier `next` tag verification.
 
-Store a completed record alongside the release revision or review, not as invented prefilled results:
-
-```text
-Candidate version:
-Source revision / reviewed snapshot manifest:
-Working tree status at packaging:
-Dependency lockfile SHA-256:
-Archive / VSIX / editor-kit filenames and SHA-256:
-Build commands and environment:
-Node / Python versions:
-OS / architecture:
-Compiler/conformance result and log:
-Clean-install result and log:
-Multi-file execution and mapped dependency failure:
-LSP / portable / AryaCode result and log:
-Platform job URLs or retained logs:
-License and release-authority decision:
-Publication destination and artifact approval:
-Security contact and supported-release policy:
-External learner session/finding references:
-Tooling selection decisions:
-Remaining limitations / failed gates:
-```
-
-## What may be completed now
-
-Repository-local implementation, meaningful automated tests, examples, installation/migration instructions, compatibility policy, review protocol, evidence templates, checksums, and reproducible release commands can all be prepared without inventing the missing external facts. Those are concrete deliverables and should be tracked as complete when verified.
-
-The alpha's license/destination/contact, exact release source/artifact review, and successful npm/GitHub publication are now recorded above. Broader M6 desktop/architecture qualification and M7's external observations stay open. M8 retains its evidence-selection gate, and M9 stays unqualified until the stable conditions hold. Owner authorization can select a license and destination; it cannot fabricate a platform run or a learner's observations.
-
-The local `test:clean` run completed fresh dependency installation, checks, package/editor builds, installed lessons/examples, and audit in an isolated retained source snapshot. The exact source manifest, logs, runtime, and snapshot path are in `.build/clean-candidate-record.json`; built candidate artifacts and hashes are reviewable under `artifacts/`. A dirty parent checkout is still not a clean release commit, and these local results do not establish platform or participant outcomes.
-
-## Native 1.1 preview
-
-The 1.1.0-alpha.1 candidate adds the [native contract](arya-native-specification.md), C11 backend, explicit-root collector, native standard library, and an Arya-written compiler. Native platform qualification is recorded by the native workflow, three-generation bootstrap evidence, native conformance/sanitizer results, and benchmark samples for the exact revision. These alpha results do not close the earlier stable/community gates. Compiler and AryaCode product versions remain independent.
+Historical artifacts and immutable tags remain unchanged. Their older test counts and registry pointers do not describe the current release.

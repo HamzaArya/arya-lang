@@ -1,0 +1,40 @@
+name: MySQL integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mysql:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: arya-ci-only
+          MYSQL_DATABASE: arya_test
+          MYSQL_USER: arya
+          MYSQL_PASSWORD: arya-ci-only
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      ARYA_MYSQL_TEST_CONFIG: '{"host":"127.0.0.1","port":3306,"user":"arya","password":"arya-ci-only","database":"arya_test"}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.15.0'
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix fixtures/examples/mysql --ignore-scripts
+      - run: npm run test:mysql
