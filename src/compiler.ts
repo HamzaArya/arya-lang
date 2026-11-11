@@ -14,7 +14,7 @@ export type { DiagnosticFix } from './diagnostics.js';
 import { LexicalScopes, type AryaDiagnostic, type BindingKind, type LexicalBinding, type LexicalReference, type Resolution, type ScopeKind } from './resolver.js';
 export type { AryaDiagnostic, BindingKind, LexicalBinding, LexicalReference } from './resolver.js';
 
-export const ARYA_VERSION = '1.3.0-alpha.7';
+export const ARYA_VERSION = '1.3.0-alpha.9';
 export interface Token { kind: 'word' | 'number' | 'string' | 'symbol' | 'newline' | 'eof'; text: string; start: number; end: number; line: number; column: number }
 export interface AryaSymbol { name: string; kind: 'function' | 'variable' | 'module'; token: Token }
 export interface AryaImport { specifier: string; token: Token; alias: Token }

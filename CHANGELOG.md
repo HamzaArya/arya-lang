@@ -1,6 +1,25 @@
 # Changelog
 
-## 1.3.0-alpha.7 — local business application candidate
+## 1.3.0-alpha.9 — local reliability candidate (unpublished)
+
+- Check the documented decimal/datetime argument and result types in annotated modules; infer their exported result declarations. Unannotated modules keep runtime validation, and JavaScript Date objects remain a dynamic boundary.
+- Audit stable candidate metadata on `latest` and prereleases on `next`, including matching editor preview flags, valid release versions, and compiler/creator version agreement.
+- Include the creator archive, legal files, publication metadata and checksum in package-readiness checks. A mechanical pass does not declare stable qualification.
+- Expand the CI matrix to the Node 22 minimum, current Node 22, Node 24 and Node 26 across Linux, Windows and macOS.
+- Preserve LF source/fixture checkouts across platforms; emit immediate TAP failure details and bound test execution so leaked handles cannot consume the whole CI job.
+- Update archive/editor packaging dependencies to fflate 0.8.3 and VSCE 4.1.0; scope a minimatch 11.0.7 override to VSCE to address known denial-of-service advisories.
+- Align primary installation guides with published alpha.7 and document the [stable release plan](docs/stable-release-plan.md).
+
+These changes are not in the frozen 1.3.0-alpha.7 archives. The new candidate is 1.3.0-alpha.9 with extension 1.3.4; neither is published. See [candidate changes and qualification](docs/releases/1.3.0-alpha.9.md).
+
+- Correct optional type inference for fallthrough, required parameter positions, list/call spreads, and try/catch/finally control flow. Add runtime and declaration regressions.
+- Refresh dependency diagnostics across open/change/close, share one workspace analysis per buffer revision, refuse incomplete exported-symbol renames, and recover bounded unfinished completion/signature requests.
+- Normalize web roots with native canonical paths and close test children before deleting their working directories; retain real Windows qualification as a separate gate.
+- Keep local-only npm fixture/package acceptance installs explicitly offline.
+- Keep compiler and extension identities separate in packaging and `arya editor status`; align current onboarding with the actual published version.
+- Add a focused getting-started path and a mixed JavaScript/Arya module example without requiring a custom editor.
+
+## 1.3.0-alpha.7 — published prerelease
 
 - Isolate injected runtime dependencies from lexical module host bindings.
 - Add exact decimal strings, strict dates/instants/zones and bounded async iterators.
@@ -8,7 +27,7 @@
 - Add conservative formatting/lint, parser recovery, snapshot navigation/signatures,
   incremental compilation, esbuild adapter and explicit Node test entry points.
 - Integrate an application-owned bank CSV preview in the separate Arya Ledger repository.
-- Unpublished and experimental. See [contracts and limits](docs/business-applications.md)
+- Published on npm's `next` tag and still experimental. See [contracts and limits](docs/business-applications.md)
   and [phase evidence](docs/business-applications-plan.md).
 
 

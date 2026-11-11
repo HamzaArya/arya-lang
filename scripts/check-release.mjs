@@ -23,27 +23,45 @@ const readJson = async path => JSON.parse(await text(path));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const owner = { name: 'Hamza Arya', homepage: 'https://hamzaarya.com', securityContact: 'hamzaarya123@gmail.com', repository: 'https://github.com/HamzaArya/arya-lang' };
 const repositoryUrl = value => (typeof value === 'string' ? value : value?.url ?? '').replace(/^git\+/, '').replace(/\.git$/, '').replace(/\/$/, '');
-const publicMetadata = value => value.private !== true && value.license === 'Apache-2.0' && value.publishConfig?.access === 'public' && value.publishConfig?.tag === 'next' && value.publishConfig?.registry === 'https://registry.npmjs.org/';
+const publicMetadata = (value, channel) => value.private !== true && value.license === 'Apache-2.0' && value.publishConfig?.access === 'public' && value.publishConfig?.tag === channel && value.publishConfig?.registry === 'https://registry.npmjs.org/';
+// Published artifacts use plain SemVer or a prerelease; build metadata is not
+// supported by the shared npm/editor artifact naming convention.
+const releaseVersion = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?$/;
+const tar = (...parameters) => {
+  const result = spawnSync('tar', parameters, { cwd: root, encoding: 'utf8', timeout: 10_000, maxBuffer: 8 * 1024 * 1024 });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(result.stderr.trim() || `tar exited ${result.status}`);
+  return result.stdout;
+};
 const legal = {};
-let pkg;
+let pkg, prerelease = false, channel;
 try {
   pkg = await readJson('package.json');
-  if (pkg.name !== 'arya-language' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version ?? '')) throw new Error('Expected arya-language with a valid version string.');
+  if (pkg.name !== 'arya-language' || typeof pkg.version !== 'string' || !releaseVersion.test(pkg.version)) throw new Error('Expected arya-language with a valid SemVer release or prerelease version, without build metadata.');
+  prerelease = pkg.version.includes('-');
+  channel = prerelease ? 'next' : 'latest';
   add('package-identity', 'pass', `${pkg.name} ${pkg.version}`);
 } catch (error) { add('package-identity', 'fail', error.message); }
 
 if (pkg && checks[0].status === 'pass') {
+  const editorVersion = pkg.aryaEditorVersion ?? pkg.version.split('-')[0];
+  const validEditorVersion = typeof editorVersion === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(editorVersion);
   for (const [id, path, inspect] of [
     ['compiler-version', 'src/compiler.ts', source => source.match(/export const ARYA_VERSION\s*=\s*['"]([^'"]+)['"]/)?.[1] === pkg.version],
     ['lockfile-version', 'package-lock.json', source => { const lock = JSON.parse(source); return lock.name === pkg.name && lock.version === pkg.version && lock.packages?.['']?.name === pkg.name && lock.packages?.['']?.version === pkg.version && lock.packages?.['']?.license === pkg.license; }],
-    ['extension-version', 'editors/vscode/package.json', source => { const extension = JSON.parse(source); return extension.aryaLanguageVersion === pkg.version && extension.version === pkg.version.split('-')[0] && extension.preview === pkg.version.includes('-'); }],
+    ['extension-version', 'editors/vscode/package.json', source => { const extension = JSON.parse(source); return extension.aryaLanguageVersion === pkg.version && validEditorVersion && extension.version === editorVersion && extension.preview === pkg.version.includes('-'); }],
     ['extension-license', 'editors/vscode/package.json', source => JSON.parse(source).license === pkg.license],
     ['security-contact', 'SECURITY.md', source => source.includes(owner.securityContact) && source.includes(owner.name)],
   ]) {
     try { add(id, inspect(await text(path)) ? 'pass' : 'fail', `${path} must match the candidate and recorded owner decisions.`); }
     catch (error) { add(id, 'fail', `${path}: ${error.message}`); }
   }
-  add('public-prerelease-metadata', publicMetadata(pkg) && pkg.version.includes('-') ? 'pass' : 'fail', 'Apache-2.0 public prerelease; publishConfig must use the npm registry, public access, and next tag. This audit does not qualify a stable/latest release.');
+  add(prerelease ? 'public-prerelease-metadata' : 'public-stable-metadata', publicMetadata(pkg, channel) && (prerelease || Number(pkg.version.split('.')[0]) >= 1) ? 'pass' : 'fail', `Apache-2.0 public package; publishConfig must use the npm registry, public access, and ${channel} tag. A stable candidate must have major version 1 or later. Metadata alone does not qualify a stable release.`);
+  try {
+    const creator = await readJson('packages/create-arya-language/package.json');
+    add('creator-identity', creator.name === 'create-arya-language' && creator.version === pkg.version && creator.bin?.['create-arya-language'] === 'dist/create.cjs' ? 'pass' : 'fail', 'Creator name, version and CLI entry must match the compiler release.');
+    add('creator-public-metadata', publicMetadata(creator, channel) && creator.engines?.node === pkg.engines?.node && repositoryUrl(creator.repository) === owner.repository ? 'pass' : 'fail', `Creator must use the same Node requirement and ${channel} channel as the compiler.`);
+  } catch (error) { add('creator-metadata', 'fail', error.message); }
   add('owner-metadata', (typeof pkg.author === 'string' ? pkg.author : pkg.author?.name) === owner.name && pkg.homepage?.replace(/\/$/, '') === owner.homepage && repositoryUrl(pkg.repository) === owner.repository ? 'pass' : 'fail', 'Author Hamza Arya, homepage https://hamzaarya.com, and the existing GitHub repository match the owner selections.');
   add('node-requirement', typeof pkg.engines?.node === 'string' && pkg.engines.node.includes('22.15') ? 'pass' : 'fail', `Declared Node requirement: ${pkg.engines?.node ?? 'missing'}; documented minimum is 22.15.`);
   add('required-commands', ['check', 'build', 'test', 'test:package'].every(name => typeof pkg.scripts?.[name] === 'string') ? 'pass' : 'fail', 'Build/check/test/clean-package commands are declared; this audit does not run them.');
@@ -60,16 +78,10 @@ if (pkg && checks[0].status === 'pass') {
   if (await exists(archivePath)) {
     artifacts.push({ filename: archiveName, sha256: hash(await readFile(join(root, archivePath))) });
     try {
-      const tar = (...parameters) => {
-        const result = spawnSync('tar', parameters, { cwd: root, encoding: 'utf8', timeout: 10_000, maxBuffer: 8 * 1024 * 1024 });
-        if (result.error) throw result.error;
-        if (result.status !== 0) throw new Error(result.stderr.trim() || `tar exited ${result.status}`);
-        return result.stdout;
-      };
       const entries = new Set(tar('-tzf', archivePath).trim().split(/\r?\n/));
       const metadata = JSON.parse(tar('-xOf', archivePath, 'package/package.json'));
       add('archive-identity', metadata.name === pkg.name && metadata.version === pkg.version ? 'pass' : 'fail', 'Packed package name/version match source metadata.');
-      add('archive-public-metadata', publicMetadata(metadata) && JSON.stringify(metadata.author) === JSON.stringify(pkg.author) && metadata.homepage === pkg.homepage && repositoryUrl(metadata.repository) === owner.repository ? 'pass' : 'fail', 'Packed license/owner/repository and public next-channel metadata match the reviewed source.');
+      add('archive-public-metadata', publicMetadata(metadata, channel) && JSON.stringify(metadata.author) === JSON.stringify(pkg.author) && metadata.homepage === pkg.homepage && repositoryUrl(metadata.repository) === owner.repository ? 'pass' : 'fail', `Packed license/owner/repository and public ${channel}-channel metadata match the reviewed source.`);
       const files = ['dist/compiler.cjs', 'dist/project.cjs', 'dist/cli.cjs', 'dist/lsp.cjs', 'dist/language-service.cjs', 'dist/types/compiler.d.ts', 'dist/types/project.d.ts', 'LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.txt', 'SECURITY.md', 'docs/arya-specification.md', 'docs/arya-tutorial.md', `docs/releases/${pkg.version}.md`];
       const missing = files.filter(path => !entries.has(`package/${path}`));
       add('archive-contents', missing.length ? 'fail' : 'pass', missing.length ? `Missing from archive: ${missing.join(', ')}` : 'Compiler/project/CLI/LSP/types, legal files, security policy, specification, tutorial, and release notes are present.');
@@ -78,6 +90,23 @@ if (pkg && checks[0].status === 'pass') {
       add('archive-generated-files', accidental.length ? 'fail' : 'pass', accidental.length ? `Unexpected generated/dependency files: ${accidental.slice(0, 8).join(', ')}` : 'No generated workspace output, cache, git metadata, or node_modules directory was packed.');
     } catch (error) { add('archive-inspection', 'fail', error.message); }
   } else add('archive', 'pending', `Build and review ${archivePath}.`);
+
+  const creatorName = `create-arya-language-${pkg.version}.tgz`, creatorPath = join('artifacts', creatorName);
+  if (await exists(creatorPath)) {
+    artifacts.push({filename: creatorName, sha256: hash(await readFile(join(root, creatorPath)))});
+    try {
+      const entries = new Set(tar('-tzf', creatorPath).trim().split(/\r?\n/));
+      const metadata = JSON.parse(tar('-xOf', creatorPath, 'package/package.json'));
+      const source = await readJson('packages/create-arya-language/package.json');
+      add('creator-archive-identity', metadata.name === source.name && metadata.version === pkg.version && metadata.bin?.['create-arya-language'] === 'dist/create.cjs' ? 'pass' : 'fail', 'Packed creator identity and CLI entry match this release.');
+      add('creator-archive-metadata', publicMetadata(metadata, channel) && metadata.engines?.node === pkg.engines?.node && JSON.stringify(metadata.author) === JSON.stringify(source.author) && metadata.homepage === source.homepage && repositoryUrl(metadata.repository) === owner.repository ? 'pass' : 'fail', 'Packed creator publication, runtime and owner metadata match the reviewed source.');
+      const missing = ['dist/create.cjs', 'README.md', ...Object.keys(legal)].filter(path => !entries.has(`package/${path}`));
+      add('creator-archive-contents', missing.length ? 'fail' : 'pass', missing.length ? `Missing from creator archive: ${missing.join(', ')}` : 'Creator CLI, README and legal files are present.');
+      for (const path of Object.keys(legal)) add(`creator-archive-legal:${path}`, entries.has(`package/${path}`) && tar('-xOf', creatorPath, `package/${path}`) === legal[path] ? 'pass' : 'fail', `Creator ${path} bytes match the reviewed source.`);
+      const accidental = [...entries].filter(path => /\/(?:\.arya|__pycache__|\.git|node_modules)\//.test(path));
+      add('creator-archive-generated-files', accidental.length ? 'fail' : 'pass', accidental.length ? `Unexpected creator archive files: ${accidental.slice(0, 8).join(', ')}` : 'Creator archive excludes workspace output and dependency directories.');
+    } catch (error) { add('creator-archive-inspection', 'fail', error.message); }
+  } else add('creator-archive', 'pending', `Build and review ${creatorPath}.`);
 
   for (const [filename, prefix, metadata] of [[`arya-language-${pkg.version}.vsix`, 'extension/', true], [`arya-editor-kit-${pkg.version}.zip`, '', false]]) {
     if (!await exists(join('artifacts', filename))) { add(`artifact:${filename}`, 'pending', 'Build the editor artifacts before declaring a complete release set.'); continue; }
@@ -100,7 +129,7 @@ if (pkg && checks[0].status === 'pass') {
       }
       if (metadata) {
         const extension = JSON.parse(Buffer.from(entries['extension/package.json'] ?? []).toString('utf8'));
-        add('vsix-metadata', extension.license === pkg.license && extension.aryaLanguageVersion === pkg.version && extension.version === pkg.version.split('-')[0] && extension.preview === true ? 'pass' : 'fail', 'VSIX metadata declares the candidate language version, Apache-2.0, and preview status.');
+        add('vsix-metadata', extension.license === pkg.license && extension.aryaLanguageVersion === pkg.version && validEditorVersion && extension.version === editorVersion && extension.preview === prerelease ? 'pass' : 'fail', 'VSIX metadata declares the candidate language version, Apache-2.0, and matching prerelease/stable status.');
       }
     } catch (error) { add(`inspect:${filename}`, 'fail', error.message); }
   }
@@ -124,12 +153,13 @@ const manualGates = [
 const failures = checks.filter(check => check.status === 'fail');
 const localPending = checks.filter(check => check.status === 'pending').length;
 const localArtifactReady = failures.length === 0 && localPending === 0;
-const publicPrereleasePackageReady = localArtifactReady && !!pkg?.version?.includes('-') && publicMetadata(pkg);
-const report = { version: pkg?.version ?? null, packageName: pkg?.name ?? null, root, localFailures: failures.length, localPending, localArtifactReady, publicPrereleasePackageReady, publicReleaseReady: false, publicationVerified: false, stableReleaseReady: false, interpretation: 'Read-only local package audit. publicPrereleasePackageReady covers mechanical package prerequisites only; legacy publicReleaseReady remains false because this audit cannot certify account authorization, test/provenance review or a live publication. Stable/platform/community gates remain separate.', checks, artifacts, manualGates };
+const publicPrereleasePackageReady = localArtifactReady && prerelease && publicMetadata(pkg, channel);
+const publicStablePackageReady = localArtifactReady && !prerelease && publicMetadata(pkg, channel);
+const report = { version: pkg?.version ?? null, packageName: pkg?.name ?? null, root, channel: channel ?? null, localFailures: failures.length, localPending, localArtifactReady, publicPrereleasePackageReady, publicStablePackageReady, publicReleaseReady: false, publicationVerified: false, stableReleaseReady: false, interpretation: 'Read-only local package audit. publicPrereleasePackageReady and publicStablePackageReady cover mechanical compiler, creator and editor package prerequisites only; publicReleaseReady remains false because this audit cannot certify account authorization, test/provenance review or a live publication. Stable contract, support, platform and community evidence require separate review.', checks, artifacts, manualGates };
 if (json) console.log(JSON.stringify(report, null, 2));
 else {
   console.log(`Arya ${report.version ?? '(unknown version)'} local release audit`);
-  console.log(`Public prerelease package: ${publicPrereleasePackageReady ? 'MECHANICAL CHECKS PASS' : 'NOT READY'}. Publication: NOT VERIFIED. Stable release: NOT QUALIFIED.`);
+  console.log(`Public ${prerelease ? 'prerelease' : 'stable candidate'} package: ${(prerelease ? publicPrereleasePackageReady : publicStablePackageReady) ? 'MECHANICAL CHECKS PASS' : 'NOT READY'}. Publication: NOT VERIFIED. Stable release: NOT QUALIFIED.`);
   for (const check of checks) console.log(`${check.status.toUpperCase()} ${check.id}: ${check.detail}`);
   for (const artifact of artifacts) console.log(`SHA256 ${artifact.sha256}  ${artifact.filename}`);
   for (const gate of manualGates) console.log(`${gate.status.toUpperCase()} ${gate.id}: ${gate.detail}`);

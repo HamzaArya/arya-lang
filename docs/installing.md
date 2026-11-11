@@ -1,12 +1,12 @@
 # Install and upgrade Arya
 
-Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-language`; the commands are `arya` and `arya-lsp`. The last verified npm publication recorded here is **1.2.0-alpha.4**, published on 10 November 2026 with the `latest` tag. It includes UI/desktop starters and bundled editor support. It remains an experimental alpha; see the [release notes](releases/1.2.0-alpha.4.md) for scope and compatibility.
+Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-language`; the commands are `arya` and `arya-lsp`. The current published preview is **1.3.0-alpha.7**, published on 11 November 2026 with the `next` tag. The `latest` tag remains on the older 1.2 release. It includes UI/desktop starters and bundled editor support. It remains an experimental alpha; see the [release notes](releases/1.3.0-alpha.7.md) for scope and compatibility.
 
 ## Requirements and tested support
 
-The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current source candidate, 1.3.0-alpha.4, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
+The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current published preview, 1.3.0-alpha.7, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
 
-macOS arm64, Node 22.15.0 and 24.16.0, and Python 3.13.15 have recorded local results in the roadmap. A configured Linux/Windows CI job is a test plan, not a passing result. Fresh Linux/Windows results for alpha.4 were not part of its npm qualification; earlier-version CI is historical evidence. Check the candidate's [release-readiness record](release-readiness.md) before relying on a platform claim.
+Local macOS arm64 results and the exact-candidate CI links are recorded in [release readiness](release-readiness.md). Check those results for the package and runtime you use. The expanded stabilization matrix includes additional Node versions; configured jobs count as qualification only after they pass.
 
 ## Install in one project
 
@@ -14,13 +14,13 @@ Install the current preview directly from npm:
 
 ```sh
 npm init -y
-npm install --save-exact arya-language@1.2.0-alpha.4
+npm install --save-exact arya-language@1.3.0-alpha.7
 npx --no-install arya --version
 ```
 
-The CLI identifies `Arya 1.2.0-alpha.4`. To create a new application interactively, use `npm create arya-language@1.2.0-alpha.4`, then run `npm install` and `npm run dev` inside the created folder. Registry installation uses matching compiler and creator versions; no repository checkout or archive transfer is required. `@latest` follows the registry tag, which may move after this publication record.
+The CLI identifies `Arya 1.3.0-alpha.7`. To create a new application interactively, use `npm create arya-language@1.3.0-alpha.7`, then run `npm install` and `npm run dev` inside the created folder. Registry installation uses matching compiler and creator versions; no repository checkout or archive transfer is required. `@latest` follows the registry tag, which may move after this publication record.
 
-The [release notes](releases/1.2.0-alpha.4.md) describe compatibility; the [publication record](releases/1.2.0-alpha.4-publication.json) verifies registry hashes and a fresh public install. Local/offline archive installation remains available as described below.
+The [release notes](releases/1.3.0-alpha.7.md) describe compatibility; the [publication record](releases/1.3.0-alpha.7-publication.json) verifies registry hashes and a fresh public install. Local/offline archive installation remains available as described below.
 
 `arya-language@latest` selects whichever public preview the registry tag currently names; it can change when a new release is selected. Pin the intended archive or published version for reproducible projects. Read the matching release notes before upgrading.
 
@@ -53,14 +53,14 @@ With the compiler installed:
 npx --no-install arya create
 ```
 
-The current source candidate offers web, API, CLI, UI, and Electron desktop applications. The published baseline also offers the older native template, retired in 1.3. The generated `package.json` pins Arya and supplies `npm run dev`, `check`, `start`, and `build` scripts. Web apps use one `index.html` containing `div#root`; browser code renders the interface there. New flow syntax and UI sections/templates require [candidate setup](node-runtime.md#try-the-candidate).
+The current release offers web, API, CLI, UI, and Electron desktop applications. The native template was retired in 1.3. The generated `package.json` pins Arya and supplies `npm run dev`, `check`, `start`, and `build` scripts. Web apps use one `index.html` containing `div#root`; browser code renders the interface there. Flow syntax and UI sections/templates are included in alpha.7; unpublished changes require [candidate setup](node-runtime.md#try-the-candidate).
 
-The pinned registry entry is `npm create arya-language@1.2.0-alpha.4`. npm install arya-language remains a normal compiler installation and does not ask project-creation questions automatically.
+The pinned registry entry is `npm create arya-language@1.3.0-alpha.7`. npm install arya-language remains a normal compiler installation and does not ask project-creation questions automatically.
 
 For an offline project or an unpublished future candidate, supply a matching compiler archive:
 
 ```sh
-npx --no-install arya create my-app --template web --compiler /path/to/arya-language-1.2.0-alpha.4.tgz
+npx --no-install arya create my-app --template web --compiler /path/to/arya-language-1.3.0-alpha.7.tgz
 cd my-app
 npm install
 npm run dev

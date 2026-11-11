@@ -1,6 +1,6 @@
 # Security reporting and supported releases
 
-Arya is an experimental language preview. The active experimental source line (`1.3.0-alpha.7` candidate; npm release `1.2.0-alpha.4`) receives best-effort security fixes from **Hamza Arya**; users of earlier previews should upgrade to the latest reviewed preview when a fix is available. No stable release, fixed maintenance period, or response-time guarantee is declared.
+Arya is an experimental language preview. The active published preview is `1.3.0-alpha.7` on npm's `next` channel; `latest` remains on `1.2.0-alpha.4` in the publication record. The active preview line receives best-effort security fixes from **Hamza Arya**; users of earlier previews should upgrade to a reviewed version containing an applicable fix. The [stable release plan](docs/stable-release-plan.md) requires a maintained-line and support-period decision before stable publication. No stable release, fixed maintenance period, or response-time guarantee is declared yet.
 
 ## Report a vulnerability privately
 

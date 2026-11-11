@@ -5,6 +5,8 @@ import { createRequire } from 'node:module';
 import {buildEditorPackage, buildPortableEditors} from './build-editor-package.mjs';
 const require = createRequire(import.meta.url);
 const manifest = JSON.parse(await readFile('package.json', 'utf8'));
+const editorVersion = manifest.aryaEditorVersion ?? manifest.version.split('-')[0];
+if (typeof editorVersion !== 'string' || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(editorVersion)) throw new Error('aryaEditorVersion must be a numeric major.minor.patch extension version.');
 const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning' };
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
@@ -19,7 +21,7 @@ await build({ ...common, entryPoints: ['editors/vscode/src/extension.ts'], outfi
 await cp('dist/cli.cjs', 'editors/vscode/dist/arya.cjs');
 await cp('brand', 'editors/vscode/media', { recursive: true });
 const extension = JSON.parse(await readFile('editors/vscode/package.json', 'utf8'));
-extension.version = manifest.version.split('-')[0];
+extension.version = editorVersion;
 extension.preview = manifest.version.includes('-');
 extension.aryaLanguageVersion = manifest.version;
 await writeFile('editors/vscode/package.json', JSON.stringify(extension, null, 2) + '\n');

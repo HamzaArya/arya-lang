@@ -1,6 +1,7 @@
 # Arya in other editors
 
-The published 1.2.0-alpha.4 baseline and the 1.3.0-alpha.4 source candidate include an offline VSIX, file icons, Arya Dark/Light themes, semantic tokens, and generated editor adapters. Use `arya editor status` and `arya editor install` after `npm install arya-language@latest`. See the [npm/editor setup guide](editor-setup.md). Icon visibility is controlled by the selected file-icon theme; other editors need their own integration steps.
+The published Marketplace extension 1.3.2 bundles language 1.3.0-alpha.7. The local candidate extension 1.3.4 bundles language 1.3.0-alpha.9 and is not published. `arya editor status` reports both identities in the new candidate.
+The published 1.3.0-alpha.7 preview and the unpublished 1.3.0-alpha.9 candidate include an offline VSIX, file icons, Arya Dark/Light themes, semantic tokens, and generated editor adapters. Use `arya editor status` and `arya editor install` after `npm install --save-exact arya-language@1.3.0-alpha.7`. See the [npm/editor setup guide](editor-setup.md). Icon visibility is controlled by the selected file-icon theme; other editors need their own integration steps.
 
 Arya source files use **`.arya`**, language ID **`arya`**, and TextMate scope **`source.arya`**. The portable language server speaks LSP over standard input/output. Opening a file in an arbitrary editor does not automatically install a new language: install the matching package or configure its file association first.
 
@@ -9,7 +10,7 @@ Arya source files use **`.arya`**, language ID **`arya`**, and TextMate scope **
 Install the published npm package and locate its bundled files:
 
 ```sh
-npm install --save-exact arya-language@1.2.0-alpha.4
+npm install --save-exact arya-language@1.3.0-alpha.7
 npx --no-install arya editor status
 npx --no-install arya editor path
 ```
@@ -35,11 +36,11 @@ Extract the ZIP into a stable location. Paths such as `editors/vim` below refer 
 Node.js 22.15+ is required. To make the commands available to other editors:
 
 ```sh
-npm install -g /absolute/path/to/arya-language-1.2.0-alpha.4.tgz
+npm install -g /absolute/path/to/arya-language-1.3.0-alpha.7.tgz
 arya --version
 ```
 
-Use the actual path to your downloaded or built package. Your npm executable directory must be on PATH. A project-local alternative is `npm install /absolute/path/to/arya-language-1.2.0-alpha.4.tgz`, followed by `npx --no-install arya run main.arya`; point the editor at that installation's executable or its absolute `dist/lsp.cjs` path.
+Use the actual path to your downloaded or built package. Your npm executable directory must be on PATH. A project-local alternative is `npm install /absolute/path/to/arya-language-1.3.0-alpha.7.tgz`, followed by `npx --no-install arya run main.arya`; point the editor at that installation's executable or its absolute `dist/lsp.cjs` path.
 
 Editors start the server with `arya-lsp --stdio`. It waits for protocol messages, so starting it interactively in a terminal does not display a prompt. From the source checkout, an equivalent server command after `npm run build` is:
 
@@ -71,7 +72,7 @@ There is no guarantee that every editor or version accepts these integrations. Z
 
 ## VS Code-compatible editors
 
-Run **Extensions: Install from VSIX**, select `arya-language-1.2.0-alpha.4.vsix`, and reopen an `.arya` file. VS Code's CLI can also install it with `code --install-extension /absolute/path/to/arya-language-1.2.0-alpha.4.vsix`. Forks may use a different CLI name. [VS Code VSIX installation](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix)
+Run **Extensions: Install from VSIX**, select `arya-language-1.3.0-alpha.7.vsix`, and reopen an `.arya` file. VS Code's CLI can also install it with `code --install-extension /absolute/path/to/arya-language-1.3.0-alpha.7.vsix`. Forks may use a different CLI name. [VS Code VSIX installation](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix)
 
 The extension includes its compiler and does not need the global Arya package. Node must be available for execution. Set `aryaLanguage.nodePath` if needed; set `aryaLanguage.pythonPath` for an optional Python bridge interpreter. Syntax/editor features work without an installed system Node runtime because they run in the editor's extension host. Running/checking source files requires a trusted local workspace. Use **Arya: Run File**, **Arya: Check File**, and **Arya: Stop File**.
 

@@ -2,6 +2,25 @@
 
 This example requires Arya 1.2.0-alpha.4 or later. A request flows through Arya input validation, Python's CSV/statistics libraries, and JavaScript's crypto library. No npm or Python packages are needed beyond Arya, Node.js, and Python 3.
 
+## Run from an installed npm package
+
+No repository checkout is required. With Node.js 22.15+ and Python 3 available:
+
+```sh
+mkdir arya-reports
+cd arya-reports
+npm init -y
+npm install --save-exact arya-language@1.3.0-alpha.7
+node --input-type=module -e "import {cp} from 'node:fs/promises'; await cp('node_modules/arya-language/fixtures/examples/python-web', 'src', {recursive:true});"
+npx --no-install arya run src/main.arya
+```
+
+This copies the example into your own `src` folder. Edit that copy, not files in
+node_modules. Public instructions use published alpha.7; testing the unpublished
+alpha.8 candidate requires its matching compiler archive instead of the npm version.
+
+## Run from a source checkout
+
 From the repository root:
 
 ```sh

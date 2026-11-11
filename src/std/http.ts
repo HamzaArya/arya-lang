@@ -141,8 +141,10 @@ const __arya_web = sourceDirectory => Object.freeze({
     };
     const sourceRoot = __arya_path.resolve(sourceDirectory ?? process.cwd());
     const requestedRoot = __arya_path.resolve(sourceRoot, options.root ?? '.');
+    // Match fs.promises.realpath below: the legacy resolver can retain Windows 8.3 aliases.
+    const realpath = __arya_fsSync.realpathSync.native;
     let root;
-    try { root = __arya_fsSync.realpathSync(requestedRoot); if (!__arya_fsSync.statSync(root).isDirectory()) throw new Error('not a directory'); }
+    try { root = realpath(requestedRoot); if (!__arya_fsSync.statSync(root).isDirectory()) throw new Error('not a directory'); }
     catch { throw new Error('Web root is not an accessible directory: ' + requestedRoot); }
     const contained = (name, label) => {
       if (__arya_path.isAbsolute(name)) throw new TypeError(label + ' must be relative to the web root.');
@@ -153,7 +155,7 @@ const __arya_web = sourceDirectory => Object.freeze({
     const indexPath = html === false ? undefined : contained(html, 'HTML entry');
     if (indexPath) {
       try {
-        const actual = __arya_fsSync.realpathSync(indexPath);
+        const actual = realpath(indexPath);
         if (!inside(root, actual) || !__arya_fsSync.statSync(actual).isFile()) throw new Error('not a contained file');
       } catch {
         throw new Error('Arya web requires an HTML entry file: ' + indexPath + '. Create it or start a project with arya init --web. Use {html: false} explicitly for API-only or inline applications.');
@@ -162,7 +164,7 @@ const __arya_web = sourceDirectory => Object.freeze({
     const assetPath = assets === false ? undefined : contained(assets, 'Assets directory');
     if (assetPath) {
       try {
-        const actual = __arya_fsSync.realpathSync(assetPath);
+        const actual = realpath(assetPath);
         if (!inside(root, actual) || !__arya_fsSync.statSync(actual).isDirectory()) throw new TypeError('Assets directory must be a directory inside the web root.');
       } catch (error) { if (error.code !== 'ENOENT') throw error; }
     }

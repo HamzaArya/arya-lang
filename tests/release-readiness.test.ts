@@ -13,15 +13,17 @@ const name = 'arya-language';
 const legalFiles = ['LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.txt'];
 const requiredDocuments = ['README.md', ...legalFiles, 'SECURITY.md', 'docs/arya-specification.md', 'docs/arya-tutorial.md', 'docs/installing.md', 'docs/compatibility-policy.md', 'docs/community-review.md', 'docs/tooling-evidence.md', 'docs/release-readiness.md'];
 
-async function fixture(t: { after(fn: () => Promise<unknown>): void }) {
+async function fixture(t: { after(fn: () => Promise<unknown>): void }, candidateVersion = version) {
+  const version = candidateVersion;
   const root = await mkdtemp(join(tmpdir(), 'arya audit 🌉 '));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const pkg = { name, version, private: false, license: 'Apache-2.0', author: { name: 'Hamza Arya', url: 'https://hamzaarya.com' }, homepage: 'https://hamzaarya.com', repository: { type: 'git', url: 'git+https://github.com/HamzaArya/arya-lang.git' }, publishConfig: { access: 'public', tag: 'next', registry: 'https://registry.npmjs.org/' }, engines: { node: '>=22.15' }, scripts: { check: 'node MUST-NOT-EXECUTE.mjs', build: 'node MUST-NOT-EXECUTE.mjs', test: 'node MUST-NOT-EXECUTE.mjs', 'test:package': 'node MUST-NOT-EXECUTE.mjs' } };
+  const pkg = { name, version, private: false, license: 'Apache-2.0', author: { name: 'Hamza Arya', url: 'https://hamzaarya.com' }, homepage: 'https://hamzaarya.com', repository: { type: 'git', url: 'git+https://github.com/HamzaArya/arya-lang.git' }, publishConfig: { access: 'public', tag: version.includes('-') ? 'next' : 'latest', registry: 'https://registry.npmjs.org/' }, engines: { node: '>=22.15' }, scripts: { check: 'node MUST-NOT-EXECUTE.mjs', build: 'node MUST-NOT-EXECUTE.mjs', test: 'node MUST-NOT-EXECUTE.mjs', 'test:package': 'node MUST-NOT-EXECUTE.mjs' } };
   const files: Record<string, string> = {
     'package.json': JSON.stringify(pkg),
     'package-lock.json': JSON.stringify({ name, version, packages: { '': { name, version, license: pkg.license } } }),
     'src/compiler.ts': `export const ARYA_VERSION = '${version}';\n`,
-    'editors/vscode/package.json': JSON.stringify({ version: '0.2.0', aryaLanguageVersion: version, preview: true, license: pkg.license }),
+    'editors/vscode/package.json': JSON.stringify({ version: version.split('-')[0], aryaLanguageVersion: version, preview: version.includes('-'), license: pkg.license }),
+    'packages/create-arya-language/package.json': JSON.stringify({ ...pkg, name: 'create-arya-language', bin: { 'create-arya-language': 'dist/create.cjs' } }),
     [`docs/releases/${version}.md`]: 'Audit fixture release notes.\n',
     'MUST-NOT-EXECUTE.mjs': 'import {writeFileSync} from "node:fs"; writeFileSync("CANARY", "bad");\n',
   };
@@ -41,6 +43,7 @@ function run(root: string) {
 }
 
 async function archive(root: string, pkg: object, overrides: Record<string, string> = {}) {
+  const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
   const staging = join(root, 'staging/package');
   await mkdir(staging, { recursive: true });
   for (const path of ['dist/compiler.cjs', 'dist/project.cjs', 'dist/cli.cjs', 'dist/lsp.cjs', 'dist/language-service.cjs', 'dist/types/compiler.d.ts', 'dist/types/project.d.ts', ...legalFiles, 'SECURITY.md', 'docs/arya-specification.md', 'docs/arya-tutorial.md', `docs/releases/${version}.md`]) {
@@ -55,9 +58,24 @@ async function archive(root: string, pkg: object, overrides: Record<string, stri
   const tar = spawnSync('tar', ['-czf', join('artifacts', `${name}-${version}.tgz`), '-C', 'staging', 'package'], { cwd: root, encoding: 'utf8', timeout: 10_000 });
   assert.ifError(tar.error);
   assert.equal(tar.status, 0, tar.stderr);
+  await creatorArchive(root);
+}
+
+async function creatorArchive(root: string, overrides: Record<string, unknown> = {}) {
+  const source = JSON.parse(await readFile(join(root, 'packages/create-arya-language/package.json'), 'utf8'));
+  const staging = join(root, 'creator-staging/package');
+  await mkdir(join(staging, 'dist'), {recursive: true});
+  await writeFile(join(staging, 'dist/create.cjs'), '// Mechanical fixture; never executed by the audit.\n');
+  await writeFile(join(staging, 'README.md'), 'Creator fixture.\n');
+  for (const filename of legalFiles) await cp(join(root, filename), join(staging, filename));
+  await writeFile(join(staging, 'package.json'), JSON.stringify({...source, ...overrides}));
+  const tar = spawnSync('tar', ['-czf', join('artifacts', `create-arya-language-${source.version}.tgz`), '-C', 'creator-staging', 'package'], {cwd: root, encoding: 'utf8', timeout: 10_000});
+  assert.ifError(tar.error);
+  assert.equal(tar.status, 0, tar.stderr);
 }
 
 async function editorArchives(root: string, wrongNotice = false) {
+  const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
   const legal: Record<string, Uint8Array> = {};
   for (const path of legalFiles) legal[path] = new Uint8Array(await readFile(join(root, path)));
   const extension = JSON.parse(await readFile(join(root, 'editors/vscode/package.json'), 'utf8'));
@@ -70,7 +88,7 @@ async function editorArchives(root: string, wrongNotice = false) {
   await writeFile(join(root, `artifacts/arya-language-${version}.vsix`), zipSync(vsix));
   await writeFile(join(root, `artifacts/arya-editor-kit-${version}.zip`), zipSync(legal));
   const checksums = [];
-  for (const filename of [`${name}-${version}.tgz`, `arya-language-${version}.vsix`, `arya-editor-kit-${version}.zip`]) {
+  for (const filename of [`${name}-${version}.tgz`, `create-arya-language-${version}.tgz`, `arya-language-${version}.vsix`, `arya-editor-kit-${version}.zip`]) {
     const hash = createHash('sha256').update(await readFile(join(root, 'artifacts', filename))).digest('hex');
     checksums.push(`${hash}  ${filename}`);
   }
@@ -109,7 +127,7 @@ test('release audit verifies archive contents and recorded checksum bytes rather
   assert.equal(result.status, 1);
   assert.ok(report.checks.some((item: { id: string; status: string }) => item.id === 'archive-contents' && item.status === 'pass'));
   assert.ok(report.checks.some((item: { id: string; status: string }) => item.id === `checksum:${name}-${version}.tgz` && item.status === 'fail'));
-  assert.equal(report.artifacts.length, 1);
+  assert.equal(report.artifacts.length, 2);
   assert.match(report.artifacts[0].sha256, /^[a-f0-9]{64}$/);
 });
 
@@ -151,4 +169,82 @@ test('tarball and editor legal files must be the exact reviewed source texts', a
   assert.ok(report.checks.some((item: { id: string; status: string }) => item.id === 'archive-legal:LICENSE' && item.status === 'fail'));
   assert.ok(report.checks.some((item: { id: string; status: string }) => item.id === `legal:arya-language-${version}.vsix:NOTICE` && item.status === 'fail'));
   assert.equal(report.publicPrereleasePackageReady, false);
+});
+
+test('stable package metadata can pass without claiming stable qualification or executing candidate commands', async t => {
+  const {root, pkg} = await fixture(t, '1.3.0');
+  await archive(root, pkg);
+  await editorArchives(root);
+  const {result, report} = run(root);
+  assert.equal(result.status, 0, JSON.stringify(report.checks.filter((item: {status: string}) => item.status !== 'pass')));
+  assert.equal(report.channel, 'latest');
+  assert.equal(report.publicStablePackageReady, true);
+  assert.equal(report.publicPrereleasePackageReady, false);
+  assert.equal(report.stableReleaseReady, false);
+  assert.equal(report.publicationVerified, false);
+  assert.equal(report.artifacts.length, 4);
+  await assert.rejects(access(join(root, 'CANARY')), {code: 'ENOENT'});
+});
+
+test('stable candidates reject a next tag, preview editor metadata and zero-major stability claims', async t => {
+  const {root, pkg} = await fixture(t, '1.3.0');
+  await archive(root, pkg);
+  const extensionPath = join(root, 'editors/vscode/package.json');
+  const extension = JSON.parse(await readFile(extensionPath, 'utf8'));
+  await writeFile(extensionPath, JSON.stringify({...extension, preview: true}));
+  await editorArchives(root);
+  await writeFile(join(root, 'package.json'), JSON.stringify({...pkg, publishConfig: {...pkg.publishConfig, tag: 'next'}}));
+  const {result, report} = run(root);
+  assert.equal(result.status, 1);
+  for (const id of ['public-stable-metadata', 'extension-version', 'vsix-metadata']) assert.ok(report.checks.some((item: {id: string; status: string}) => item.id === id && item.status === 'fail'), id);
+  assert.equal(report.publicStablePackageReady, false);
+  const zero = await fixture(t, '0.3.0');
+  assert.ok(run(zero.root).report.checks.some((item: {id: string; status: string}) => item.id === 'public-stable-metadata' && item.status === 'fail'));
+});
+
+test('creator archive presence, version and checksum are required for complete package readiness', async t => {
+  const {root, pkg} = await fixture(t);
+  await archive(root, pkg);
+  await editorArchives(root);
+  await rm(join(root, `artifacts/create-arya-language-${version}.tgz`));
+  const missing = run(root).report;
+  assert.equal(missing.localArtifactReady, false);
+  assert.ok(missing.checks.some((item: {id: string; status: string}) => item.id === 'creator-archive' && item.status === 'pending'));
+  await creatorArchive(root, {version: '9.9.9', publishConfig: {...pkg.publishConfig, tag: 'latest'}});
+  const {result, report} = run(root);
+  assert.equal(result.status, 1);
+  for (const id of ['creator-archive-identity', 'creator-archive-metadata', `checksum:create-arya-language-${version}.tgz`]) assert.ok(report.checks.some((item: {id: string; status: string}) => item.id === id && item.status === 'fail'), id);
+});
+
+test('invalid release versions fail before archive inspection', async t => {
+  for (const candidate of ['01.3.0', '1.3.0-alpha..1', '1.3.0-01', '1.3.0+local']) {
+    const {root, pkg} = await fixture(t);
+    await writeFile(join(root, 'package.json'), JSON.stringify({...pkg, version: candidate}));
+    const {result, report} = run(root);
+    assert.equal(result.status, 1);
+    assert.equal(report.checks[0].id, 'package-identity');
+    assert.equal(report.checks[0].status, 'fail');
+    assert.equal(report.publicStablePackageReady, false);
+    assert.equal(report.artifacts.length, 0);
+  }
+});
+
+
+test('independent editor version is explicit and verified in source and packaged metadata', async t => {
+  const {root, pkg} = await fixture(t, '1.3.0-alpha.8');
+  const candidate = {...pkg, aryaEditorVersion: '1.3.3'};
+  await writeFile(join(root, 'package.json'), JSON.stringify(candidate));
+  const extensionPath = join(root, 'editors/vscode/package.json');
+  const extension = JSON.parse(await readFile(extensionPath, 'utf8'));
+  await writeFile(extensionPath, JSON.stringify({...extension, version: '1.3.3'}));
+  await archive(root, candidate);
+  await editorArchives(root);
+  assert.equal(run(root).result.status, 0);
+  await writeFile(extensionPath, JSON.stringify({...extension, version: '1.3.2'}));
+  await editorArchives(root);
+  const mismatch = run(root);
+  assert.equal(mismatch.result.status, 1);
+  for (const id of ['extension-version', 'vsix-metadata']) assert.ok(mismatch.report.checks.some((item: {id: string; status: string}) => item.id === id && item.status === 'fail'));
+  await writeFile(join(root, 'package.json'), JSON.stringify({...candidate, aryaEditorVersion: '1.3.3-preview'}));
+  assert.equal(run(root).result.status, 1);
 });

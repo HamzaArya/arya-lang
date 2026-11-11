@@ -1,5 +1,5 @@
 import {access, stat, readFile, mkdtemp, rm} from 'node:fs/promises';
-import {constants} from 'node:fs';
+import {constants, readFileSync} from 'node:fs';
 import {delimiter, dirname, extname, isAbsolute, join, resolve} from 'node:path';
 import {homedir, tmpdir} from 'node:os';
 import {execFile} from 'node:child_process';
@@ -15,7 +15,12 @@ export interface EditorInstallOptions extends EditorDiscovery {editor?: EditorNa
 
 export function editorAssets(packageRoot = resolve(__dirname, '..')) {
   const root = resolve(packageRoot);
-  return {version: ARYA_VERSION, extensionId: 'aryacode.arya-language', vsix: join(root, 'dist/editor/arya-language.vsix'),
+  let extensionVersion: string | undefined;
+  try {
+    const metadata = JSON.parse(readFileSync(join(root, 'editors/vscode/package.json'), 'utf8'));
+    if (typeof metadata.version === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(metadata.version)) extensionVersion = metadata.version;
+  } catch { /* Assets can be inspected even when optional editor metadata is absent. */ }
+  return {version: ARYA_VERSION, languageVersion: ARYA_VERSION, extensionVersion, extensionId: 'aryacode.arya-language', vsix: join(root, 'dist/editor/arya-language.vsix'),
     icon: join(root, 'brand/arya-mark.svg'), darkIcon: join(root, 'brand/arya-mark-dark.svg'),
     grammar: join(root, 'editors/vscode/syntaxes/arya.tmLanguage.json'), adapters: join(root, 'dist/editor/adapters'),
     guide: join(root, 'docs/editor-setup.md')};
@@ -177,7 +182,7 @@ export async function runEditorSetup(args: string[]): Promise<void> {
   if (command === 'status') {
     const clients = await discoverEditors();
     const report = {assets, bundled: await file(assets.vsix), editors: clients};
-    console.log(json ? JSON.stringify(report) : 'Arya ' + ARYA_VERSION + ' editor files\n\nVSIX: ' + assets.vsix + '\nIcon: ' + assets.icon + '\nGrammar: ' + assets.grammar + '\nAdapters: ' + assets.adapters + '\nDetected: ' + (clients.map(client => client.id).join(', ') || 'none') + '\n\nInstall: npx --no-install arya editor install\nThen choose Arya: Editor Setup Guide in your editor.');
+    console.log(json ? JSON.stringify(report) : 'Arya language ' + ARYA_VERSION + '\nBundled extension ' + (assets.extensionVersion ?? '(metadata unavailable)') + ' (separate version)\n\nVSIX: ' + assets.vsix + '\nIcon: ' + assets.icon + '\nGrammar: ' + assets.grammar + '\nAdapters: ' + assets.adapters + '\nDetected: ' + (clients.map(client => client.id).join(', ') || 'none') + '\n\nInstall: npx --no-install arya editor install\nThen choose Arya: Editor Setup Guide in your editor.');
     return;
   }
   const report = await installEditorExtension(options);

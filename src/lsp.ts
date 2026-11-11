@@ -3,21 +3,17 @@ import {
   type Diagnostic, type Range,
 } from 'vscode-languageserver/node.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';
+import {createWorkspaceAnalysisCache} from './workspace-service.js';
 import { ARYA_VERSION } from './compiler.js';
-import { analyzeWorkspace, referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes, type Analysis } from './language-service.js';
+import { referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from './language-service.js';
 import {semanticTokens, encodeSemanticTokens, semanticTokenTypes, semanticTokenModifiers} from './semantic-tokens.js';
 
 // stdio is the portable transport. stdout contains protocol frames only.
 const connection = createConnection(process.stdin, process.stdout);
 const documents = new TextDocuments(TextDocument);
-const cache = new Map<string, { version: number; analysis: Analysis }>();
-const timers = new Map<string, ReturnType<typeof setTimeout>>();
-const analysisFor = (document: TextDocument) => {
-  const previous = cache.get(document.uri);
-  if (previous?.version === document.version) return previous.analysis;
-  const analysis = analyzeWorkspace(documents.all().map(d=>({uri:d.uri,source:d.getText()}))).get(document.uri)!;
-  cache.set(document.uri, { version: document.version, analysis }); return analysis;
-};
+const cache = createWorkspaceAnalysisCache();
+let validationTimer: ReturnType<typeof setTimeout> | undefined;
+const analysisFor = (document: TextDocument) => cache.analyze(snapshots()).get(document.uri)!;
 const range = (document: TextDocument, start: number, end: number): Range => ({ start: document.positionAt(start), end: document.positionAt(end) });
 connection.onInitialize(params => {
   return ({
@@ -39,14 +35,17 @@ function validate(document: TextDocument) {
   for (const error of analysisFor(document).diagnostics) diagnostics.push({ severity: DiagnosticSeverity.Error, source: 'Arya', code: error.code, message: error.message + (error.hint ? '\nHelp: ' + error.hint : ''), range: range(document, error.token.start, Math.max(error.token.start + 1, error.token.end)) });
   void connection.sendDiagnostics({ uri: document.uri, version: document.version, diagnostics });
 }
-documents.onDidChangeContent(({ document }) => {
-  cache.clear();
-  clearTimeout(timers.get(document.uri));
-  timers.set(document.uri, setTimeout(() => { timers.delete(document.uri); for(const open of documents.all())validate(open); }, 100));
+documents.onDidChangeContent(() => {
+  clearTimeout(validationTimer);
+  validationTimer = setTimeout(() => {
+    validationTimer = undefined;
+    for (const document of documents.all()) validate(document);
+  }, 100);
 });
 documents.onDidClose(({ document }) => {
-  clearTimeout(timers.get(document.uri)); timers.delete(document.uri); cache.delete(document.uri);
+  clearTimeout(validationTimer); validationTimer = undefined;
   void connection.sendDiagnostics({ uri: document.uri, diagnostics: [] });
+  for (const open of documents.all()) validate(open);
 });
 connection.onCompletion(({ textDocument, position }) => {
   const document = documents.get(textDocument.uri); if (!document) return [];
@@ -73,7 +72,7 @@ connection.onReferences(({textDocument,position})=>{
 connection.onRenameRequest(({textDocument,position,newName})=>{
   const document=documents.get(textDocument.uri);if(!document)return null;
   const changes:Record<string,{range:Range;newText:string}[]>={};
-  for(const edit of renameInWorkspace(snapshots(),document.uri,document.offsetAt(position),newName))(changes[edit.uri]??=[]).push({range:range(documents.get(edit.uri)!,edit.start,edit.end),newText:edit.replacement});
+  for(const edit of renameInWorkspace(snapshots(),document.uri,document.offsetAt(position),newName,{openDocumentsOnly:true}))(changes[edit.uri]??=[]).push({range:range(documents.get(edit.uri)!,edit.start,edit.end),newText:edit.replacement});
   return {changes};
 });
 connection.onSignatureHelp(({textDocument,position})=>{
@@ -101,7 +100,7 @@ connection.onCodeAction(({ textDocument, range: requested, context }) => {
     edit: { documentChanges: [{ textDocument: { uri: document.uri, version: document.version }, edits: [{ range: range(document, fix.start, fix.end), newText: fix.replacement }] }] }
   }));
 });
-connection.onShutdown(() => { for (const timer of timers.values()) clearTimeout(timer); timers.clear(); cache.clear(); });
+connection.onShutdown(() => { clearTimeout(validationTimer); cache.clear(); });
 connection.languages.semanticTokens.on(({textDocument}) => {
   const document = documents.get(textDocument.uri);
   return {data: document ? encodeSemanticTokens(semanticTokens(document.getText(), document.uri)) : []};

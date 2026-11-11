@@ -1,6 +1,6 @@
 # Learn Arya: your first programs
 
-This tutorial teaches the core shared by the published 1.2.0-alpha.4 baseline and the 1.3.0-alpha.4 source candidate. Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
+This tutorial uses the published 1.3.0-alpha.7 preview. The current checkout is the unpublished 1.3.0-alpha.9 reliability candidate; its fixes are listed in [candidate notes](releases/1.3.0-alpha.9.md). Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
 
 Arya is the language. AryaCode is the editor. Save your code in a file ending in `.arya`. The current compiler turns that code into JavaScript and runs it with Node.js. Later lessons show how the same Arya program can use JavaScript libraries and call Python functions.
 
@@ -12,7 +12,7 @@ Install the compiler in a new directory:
 
 ```sh
 npm init -y
-npm install --save-exact arya-language@1.2.0-alpha.4
+npm install --save-exact arya-language@1.3.0-alpha.7
 ```
 
 Save the first lesson below as `main.arya`, then run `npx --no-install arya check main.arya` and `npx --no-install arya run main.arya`. Use any text editor; [editor setup](editor-setup.md) enables the bundled extension and icons. Python is needed only for Python examples.

@@ -10,7 +10,7 @@ if (!npm) throw new Error('Run through npm run test:package.');
 const root = await mkdtemp(join(tmpdir(), 'arya clean package '));
 try {
   await writeFile(join(root, 'package.json'), '{"private":true,"type":"module"}\n');
-  execFileSync(process.execPath, [npm, 'install', '--ignore-scripts', '--no-audit', '--no-fund', archive], { cwd: root, stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', archive], { cwd: root, stdio: 'pipe' });
   const installed = JSON.parse(await readFile(join(root, 'node_modules', pkg.name, 'package.json'), 'utf8'));
   assert.equal(installed.name, 'arya-language');
   assert.equal(installed.license, 'Apache-2.0');
@@ -48,6 +48,8 @@ try {
   assert.equal(launched.trim(), `Arya ${pkg.version}`);
   const editorAssets = JSON.parse(run('editor', 'path', '--json'));
   assert.equal(editorAssets.version, pkg.version);
+  assert.equal(editorAssets.languageVersion, pkg.version);
+  assert.equal(editorAssets.extensionVersion, pkg.aryaEditorVersion ?? pkg.version.split('-')[0]);
   for (const name of ['vsix', 'icon', 'darkIcon', 'grammar', 'guide']) assert.ok((await readFile(editorAssets[name])).length > 0, name);
   const features = JSON.parse(await readFile(join(root, 'node_modules/arya-language/dist/features.json'), 'utf8'));
   assert.ok(features.capabilities.includes('arya.ui.v1'));
@@ -67,7 +69,7 @@ try {
   assert.equal(websiteManifest.scripts.dev, 'arya run main.arya');
   assert.match(await readFile(join(root, 'website/index.html'), 'utf8'), /<div id="root"><\/div>/);
   const creatorArchive = resolve(`artifacts/create-arya-language-${pkg.version}.tgz`);
-  execFileSync(process.execPath, [npm, 'install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', creatorArchive], { cwd: root, stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'install', '--offline', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', creatorArchive], { cwd: root, stdio: 'pipe' });
   execFileSync(process.execPath, [npm, 'exec', '--offline', '--no', '--', 'create-arya-language', 'portable-web', '--template', 'web', '--compiler', archive], { cwd: root, stdio: 'pipe' });
   const portable = join(root, 'moved-project');
   await cp(join(root, 'portable-web'), portable, { recursive: true });
@@ -127,7 +129,7 @@ print(view { div bg-dark { h1 "Arya 1.2" } })
   assert.equal(graph.trim(), '3');
   for (const file of ['01-hello', '02-decisions', '03-lists-and-loops', '04-functions-and-objects', '05-javascript', '06-python', '07-async', '08-arguments', '09-task-list']) run('run', `fixtures/learn/${file}.arya`);
   await cp(join(root, 'node_modules/arya-language/fixtures/examples'), join(root, 'examples'), { recursive: true, filter: path => !['.arya', 'node_modules', '__pycache__'].includes(basename(path)) });
-  execFileSync(process.execPath, [npm, 'install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: join(root, 'examples/npm'), stdio: 'pipe' });
+  execFileSync(process.execPath, [npm, 'install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: join(root, 'examples/npm'), stdio: 'pipe' });
   assert.equal(run('run', 'examples/npm/main.arya'), 'local npm package 42 6\n');
   assert.deepEqual(JSON.parse(run('run', 'examples/python-batch/main.arya')), { count: 4, sum: 100, mean: 25, doubled: [20, 40, 60, 80] });
   assert.equal(run('run', 'examples/data-flow/main.arya'), '1. Samira\n2. Hamza\nTotal score: 180\n');

@@ -22,6 +22,8 @@ test('npm build includes a complete offline VSIX, icons, themes, walkthrough, an
   const manifest = JSON.parse(Buffer.from(archive['extension/package.json']!).toString());
   assert.equal(manifest.publisher + '.' + manifest.name, assets.extensionId);
   assert.equal(manifest.aryaLanguageVersion, assets.version);
+  assert.equal(assets.languageVersion, assets.version);
+  assert.equal(assets.extensionVersion, manifest.version);
   for (const name of ['dist/extension.cjs', 'dist/arya.cjs', 'media/arya-mark.svg', 'media/arya-mark-dark.svg', 'icons/arya-file-icons.json', 'themes/arya-dark.json', 'themes/arya-light.json', 'examples/editor-tour.arya', 'walkthroughs/icons.md']) assert.ok(archive['extension/' + name]?.length, name);
   const icons = JSON.parse(Buffer.from(archive['extension/icons/arya-file-icons.json']!).toString());
   assert.equal(icons.fileExtensions.arya, 'arya'); assert.equal(icons.languageIds.arya, 'arya');
@@ -103,4 +105,17 @@ test('editor CLI validates its flags and reports assets without changing editor 
   assert.ok(run('--help').stdout.includes('aryacode'));
   const invalid = run('install', '--editor', 'unknown', '--json');
   assert.equal(invalid.status, 1); assert.equal(JSON.parse(invalid.stdout).error.code, 'ARYA_EDITOR');
+});
+
+
+test('editor asset reports keep language and independently versioned extension identities distinct', async t => {
+  const root = await fixture(t);
+  assert.equal(editorAssets(root).extensionVersion, undefined);
+  await mkdir(join(root, 'editors/vscode'), {recursive: true});
+  await writeFile(join(root, 'editors/vscode/package.json'), JSON.stringify({version: '1.3.3'}));
+  const assets = editorAssets(root);
+  assert.equal(assets.extensionVersion, '1.3.3');
+  assert.equal(assets.languageVersion, assets.version);
+  await writeFile(join(root, 'editors/vscode/package.json'), JSON.stringify({version: '1.3.3-preview'}));
+  assert.equal(editorAssets(root).extensionVersion, undefined);
 });

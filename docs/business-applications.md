@@ -139,6 +139,16 @@ results do not establish validation. There is no automatic `.d.ts` consumption o
 claim of TypeScript compatibility. Unsupported annotation syntax is rejected;
 conditional, mapped, generic, overload, alias and class types are not implemented.
 
+Unreleased stabilization change: checked `std decimal` and `std datetime` imports
+now use their documented argument/result signatures, including required rounding
+and time-zone arguments. Decimal arithmetic returns strings, `compare`/`toNumber`
+return numbers, and `zoned` returns a typed date/time/timeZone record. Those types
+also flow into generated declarations. JavaScript Date objects in `toDate` and
+`fromDate` remain dynamic, as do other standard libraries. Runtime validation still
+enforces calendar values, decimal grammar, rounding-mode names and numeric limits.
+Unannotated modules retain their prior behavior. This improvement is not present
+in the frozen alpha.7 package and requires the next reviewed compiler artifact.
+
 Checked graph builds emit adjacent `.d.mts` files for exported bindings, including
 inferred return/record types. Unknown/dynamic parts remain unknown/any in those
 files. The compiler API exposes `typing.exports`, `typing.bindings`,
@@ -220,9 +230,7 @@ The language service exports `analyzeWorkspace`, `referencesInWorkspace`, `renam
 only supplied documents participate. Lexical bindings and direct Arya namespace
 members are linked. Rename checks names, collisions and lexical capture. LSP
 exposes references/rename/signature help/formatting and typed member completion
-for open documents. Open-document diagnostics also propagate checked import contracts. Signatures/completion currently require a complete parse;
-closed-file discovery, dynamic property rename and richer incomplete-source
-inference remain future work. Real editor-host qualification is separate.
+for open documents. Open-document diagnostics also propagate checked import contracts. In the unpublished alpha.8 candidate, opening/changing/closing a dependency revalidates importers, unchanged snapshots share an analysis, trailing-member completion and bounded unfinished end-of-file calls receive recovery, and editor rename refuses exported-symbol changes when unopened callers cannot be covered. The explicit snapshot rename API retains its supplied-document contract. Closed-file discovery, imported signatures/member inference, dynamic property rename and general incomplete-source recovery remain future work. Real editor-host qualification is separate.
 
 ## Streaming and cancellation
 

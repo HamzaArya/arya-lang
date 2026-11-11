@@ -1,6 +1,6 @@
 # MySQL applications with Arya
 
-These experimental APIs are included in Arya 1.2.0-alpha.4 for the JavaScript/Node target. Install the recorded published baseline with `npm install --save-exact arya-language@1.2.0-alpha.4`, or build this checkout with `npm run build`. The APIs below are also available in the 1.3.0-alpha.4 source candidate.
+These experimental APIs are included in the published Arya 1.3.0-alpha.7 Node.js preview. Install it with `npm install --save-exact arya-language@1.3.0-alpha.7`. The current source is the unpublished 1.3.0-alpha.9 candidate; use [candidate setup](node-runtime.md#try-the-candidate) for its fixes.
 
 Arya's JavaScript profile provides a managed MySQL library:
 

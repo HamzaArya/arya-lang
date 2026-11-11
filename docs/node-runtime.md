@@ -2,7 +2,7 @@
 
 Arya focuses on one purpose: readable application code that connects JavaScript/npm and Python, with useful server, database, UI, and desktop tools.
 
-**Source candidate: 1.3.0-alpha.7.** This source line compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The last verified npm publication recorded here is **1.2.0-alpha.4** (10 November 2026). A source change or Git push does not replace that immutable package.
+**Published preview: 1.3.0-alpha.7 on `next`.** Arya compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The `latest` tag remains on 1.2.0-alpha.4. The current source candidate is **1.3.0-alpha.9** with extension **1.3.4**, neither published. Source edits do not change published package bytes.
 
 ## What remains available
 
@@ -31,15 +31,15 @@ For a portable UI project, first look for a matching retained candidate archive.
 
 ```sh
 npm run package:editors
-node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.7.tgz
+node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.9.tgz
 cd my-ui
 npm install
 npm run dev
 ```
 
-Packaging refuses to replace existing versioned archives. Reuse the matching retained candidate archive or use `npm run test:clean` to build a fresh disposable snapshot. A creator without `--compiler` pins its source version from npm, so registry installation of this candidate requires a separate publication first.
+Packaging refuses to replace existing versioned archives. Reuse the matching retained candidate archive or use `npm run test:clean` to build a fresh disposable snapshot. A creator without `--compiler` pins its source version from npm. Alpha.7 is published; alpha.8 is not. Use the matching alpha.8 archive with `--compiler` rather than asking npm to install an unpublished version.
 
-For the recorded published baseline, use `npm create arya-language@1.2.0-alpha.4 my-ui -- --template ui`. Its version and available wizard choices remain those of the published package.
+For the current published preview, use `npm create arya-language@1.3.0-alpha.7 my-ui -- --template ui`. For changed source, select a new candidate version before packaging; see the [stable release plan](stable-release-plan.md).
 
 ## Removed native surface
 

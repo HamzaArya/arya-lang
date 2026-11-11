@@ -1,6 +1,7 @@
+import {createWorkspaceAnalysisCache} from '../../../src/workspace-service.js';
 import {formatSource} from '../../../src/tooling.js';
 import * as vscode from 'vscode';
-import { analyzeWorkspace, referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from '../../../src/language-service.js';
+import { referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from '../../../src/language-service.js';
 import {semanticTokens, semanticTokenTypes, semanticTokenModifiers} from '../../../src/semantic-tokens.js';
 
 /** Also used by the companion extension when AryaCode owns the other language providers. */
@@ -21,25 +22,32 @@ export function registerAryaSemanticHighlighting(context: vscode.ExtensionContex
 /** Editor services parse and resolve text; imports/Python execute only through Run. */
 export function registerAryaLanguage(context: vscode.ExtensionContext): void {
   const diagnostics = vscode.languages.createDiagnosticCollection('arya');
-  const pending = new Map<string, ReturnType<typeof setTimeout>>();
+  const cache = createWorkspaceAnalysisCache();
+  const snapshots = () => vscode.workspace.textDocuments.filter(d => d.languageId === 'arya' && !d.isClosed).map(d => ({uri:d.uri.toString(), source:d.getText()}));
+  let pending: ReturnType<typeof setTimeout> | undefined;
   const validate = (document: vscode.TextDocument) => {
     if (document.languageId !== 'arya') { diagnostics.delete(document.uri); return; }
-    diagnostics.set(document.uri, (analyzeWorkspace(vscode.workspace.textDocuments.filter(d=>d.languageId==='arya').map(d=>({uri:d.uri.toString(),source:d.getText()}))).get(document.uri.toString()) ?? analyze(document.getText(),document.uri.toString())).diagnostics.map(error => {
+    diagnostics.set(document.uri, (cache.analyze(snapshots()).get(document.uri.toString()) ?? analyze(document.getText(),document.uri.toString())).diagnostics.map(error => {
       const start = document.positionAt(error.token.start), end = document.positionAt(Math.max(error.token.start + 1, error.token.end));
       const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message + (error.hint ? '\nHelp: ' + error.hint : ''), vscode.DiagnosticSeverity.Error);
       diagnostic.source = 'Arya'; diagnostic.code = error.code; return diagnostic;
     }));
   };
+  const validateAll = () => {
+    for (const document of vscode.workspace.textDocuments) if (!document.isClosed && document.languageId === 'arya') validate(document);
+  };
   const selector: vscode.DocumentSelector = { language: 'arya' };
   context.subscriptions.push(diagnostics,
-    vscode.workspace.onDidOpenTextDocument(validate),
+    vscode.workspace.onDidOpenTextDocument(document => { if (document.languageId === 'arya') validateAll(); }),
     vscode.workspace.onDidChangeTextDocument(event => {
       if (event.document.languageId !== 'arya') return;
-      const key = event.document.uri.toString(); clearTimeout(pending.get(key));
-      pending.set(key, setTimeout(() => { pending.delete(key); if (!event.document.isClosed) for(const open of vscode.workspace.textDocuments)if(open.languageId==='arya')validate(open); }, 180));
+      clearTimeout(pending);
+      pending = setTimeout(() => { pending = undefined; validateAll(); }, 180);
     }),
     vscode.workspace.onDidCloseTextDocument(document => {
-      const key = document.uri.toString(); clearTimeout(pending.get(key)); pending.delete(key); diagnostics.delete(document.uri);
+      if (document.languageId !== 'arya') return;
+      clearTimeout(pending); pending = undefined; diagnostics.delete(document.uri);
+      validateAll();
     }),
     vscode.languages.registerCompletionItemProvider(selector, {
       provideCompletionItems(document, position) {
@@ -89,7 +97,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       provideRenameEdits(document,position,newName) {
         const snapshots=vscode.workspace.textDocuments.filter(d=>d.languageId==='arya').map(d=>({uri:d.uri.toString(),source:d.getText()}));
         const result=new vscode.WorkspaceEdit();
-        for(const edit of renameInWorkspace(snapshots,document.uri.toString(),document.offsetAt(position),newName)) {
+        for(const edit of renameInWorkspace(snapshots,document.uri.toString(),document.offsetAt(position),newName,{openDocumentsOnly:true})) {
           const target=vscode.workspace.textDocuments.find(d=>d.uri.toString()===edit.uri)!;
           result.replace(target.uri,new vscode.Range(target.positionAt(edit.start),target.positionAt(edit.end)),newName);
         }
@@ -117,7 +125,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
         } catch { return []; }
       },
     }),
-    { dispose() { for (const timer of pending.values()) clearTimeout(timer); pending.clear(); } },
+    { dispose() { clearTimeout(pending); cache.clear(); } },
   );
-  for (const document of vscode.workspace.textDocuments) validate(document);
+  validateAll();
 }

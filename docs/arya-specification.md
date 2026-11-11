@@ -2,7 +2,7 @@
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** `1.3.0-alpha.7`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** unpublished `1.3.0-alpha.9`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -324,3 +324,28 @@ analysis fields are retained; `typing` adds passive export/binding metadata.
 Parser recovery may add independent syntax diagnostics while preserving the first
 error alias. [Migration and limits](business-applications.md) define this candidate;
 no stable release or broader platform qualification is implied.
+
+
+## 18. Reliability candidate — 1.3.0-alpha.9
+
+Decision R-001: optional return inference includes undefined when a body can fall
+through. Control-flow completion accounts for try/catch/finally; an abrupt finally
+completion overrides the pending result. Calls must supply every required positional
+slot even when earlier slots have defaults. Typed list spreads contribute element
+types, not nested list types. Call spreads use guaranteed argument positions;
+unknown-length spreads cannot prove a required positional argument exists.
+These checks may reject programs accepted by alpha.7. Correct the missing return
+or argument, explicitly include undefined in an intended result type, or pass the
+required arguments separately. Type syntax still inserts no runtime validation.
+
+Decision R-002: editor adapters use one open-buffer workspace analysis per revision
+and revalidate dependent diagnostics on document lifecycle changes. Snapshot APIs
+remain explicit about their supplied files. Editor rename refuses exported-symbol
+edits when unopened callers cannot be covered. Bounded incomplete-source recovery
+supports trailing member completion and unfinished end-of-file calls; it does not
+claim general parser recovery or closed-file discovery.
+
+Compiler version 1.3.0-alpha.9 and extension version 1.3.4 are distinct identities.
+The extension's `aryaLanguageVersion` identifies its bundled compiler; the root
+`aryaEditorVersion` selects its numeric extension release. See [candidate notes](releases/1.3.0-alpha.9.md)
+for actual verification. Neither version is published by a local build.

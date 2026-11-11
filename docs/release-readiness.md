@@ -1,5 +1,42 @@
 # Release readiness and evidence
 
+## Release candidate: 1.3.0-alpha.9
+
+Compiler/creator **1.3.0-alpha.9** and extension **1.3.4** include the reliability
+changes below and the Marketplace-sized listing icon. The release includes the
+hidden `.gitattributes` checkout policy and `.github` workflow changes. New
+qualification and publication evidence will be recorded for this exact version;
+alpha.8 evidence remains specific to its frozen archives.
+
+## Retained local reliability candidate: 1.3.0-alpha.8
+
+Compiler/creator 1.3.0-alpha.8 and extension 1.3.3 are local unpublished previews.
+On macOS arm64 / Node 24.16.0, the complete `npm run check` passed documentation
+links, TypeScript and 296 tests, with four optional integrations skipped (300 total).
+The test coverage includes LSP protocol and mocked VS Code dependency lifecycle,
+type/runtime/declaration agreement, native-path aliases and the mixed-JavaScript
+quickstart. Real GUI editor-host, browser, Electron and live MySQL checks were not
+rerun in this review. A fresh source snapshot passed dependency installation, the
+complete check, compiler/creator/editor packaging, installed-package acceptance
+and the read-only audit. The snapshot is a recorded dirty-tree inventory, not a
+clean release commit. No package was published.
+
+The first aggregate attempt timed out in a local-only npm fixture; the fixture now
+uses `--offline`. A new onboarding test initially compared a symbolic temporary
+path with its canonical path; its assertion now uses the canonical directory.
+The complete suite passed after those corrections and the independent declaration
+precedence fix. These are recorded failures and reruns, not silently discarded tests.
+
+The prior [HEAD qualification](https://github.com/HamzaArya/arya-lang/actions/runs/42990804426)
+passed Linux/macOS Node 22.15/24 but both Windows jobs were cancelled. Inspection
+reproduced the Windows static-file alias mismatch locally and fixed test-child
+cleanup order. Windows Node24's inherited-pipe Python cancellation test passed;
+no speculative Python cancellation change was made. A real Windows rerun of this
+new candidate remains required; the current source has not been pushed.
+
+See [alpha.8 changes and migration](releases/1.3.0-alpha.8.md). Existing alpha.7
+archives and publication records are retained unchanged.
+
 ## Current published preview: 1.3.0-alpha.7
 
 The business application preview is published to npm’s `next` channel. Both public

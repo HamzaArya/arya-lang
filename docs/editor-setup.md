@@ -1,15 +1,15 @@
 # Install Arya's editor support from npm
 
-The published 1.2.0-alpha.4 baseline and the 1.3.0-alpha.4 source candidate include the complete offline VSIX, `.arya` file icons, dark/light themes, syntax grammars, semantic language-server support, and portable editor adapters. Downloading the package downloads these files too, even with `--ignore-scripts`. No npm lifecycle hook installs extensions, changes editor settings, or contacts an editor marketplace.
+The published 1.3.0-alpha.7 preview includes the complete offline VSIX, `.arya` file icons, dark/light themes, syntax grammars, semantic language-server support, and portable editor adapters. Downloading the package downloads these files too, even with `--ignore-scripts`. No npm lifecycle hook installs extensions, changes editor settings, or contacts an editor marketplace.
 
-Use `npm install --save-exact arya-language@1.2.0-alpha.4` for the recorded published baseline. `@latest` follows a mutable registry tag. For candidate-only grammar or UI additions, install the [matching compiler archive](node-runtime.md#try-the-candidate) and its bundled VSIX. Check registry tags with `npm view arya-language dist-tags`.
+Use `npm install --save-exact arya-language@1.3.0-alpha.7` for the current published preview. `@latest` still selects the older 1.2 release. For unpublished changes, install the [matching compiler archive](node-runtime.md#try-the-candidate) and its bundled VSIX. Check registry tags with `npm view arya-language dist-tags`.
 
 ## Install and enable the editor extension
 
 Install the package and enable its bundled extension:
 
 ```sh
-npm install --save-exact arya-language@1.2.0-alpha.4
+npm install --save-exact arya-language@1.3.0-alpha.7
 npx --no-install arya editor status
 npx --no-install arya editor install
 ```

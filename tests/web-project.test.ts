@@ -139,45 +139,48 @@ test('a publication failure rolls back created files while preserving an existin
 });
 
 test('generated web project checks, builds and serves HTML/assets from an unrelated working directory', async t => {
+  // Nested test cleanup stops the child before the parent removes its Windows cwd.
   const root = await directory(t);
-  const target = join(root, 'site');
-  const unrelated = join(root, 'elsewhere');
-  await mkdir(unrelated);
-  await createWebProject(target);
-  const source = join(target, 'main.arya');
-  const checked = cli(unrelated, 'check', source);
-  assert.equal(checked.status, 0, checked.stderr);
-  const built = cli(unrelated, 'build', source);
-  assert.equal(built.status, 0, built.stderr);
-  const base = await start(t, built.stdout.trim(), unrelated);
-  const get = (path: string) => fetch(base + path, { signal: AbortSignal.timeout(5000) });
-  const html = await get('/');
-  assert.equal(html.status, 200);
-  assert.match(html.headers.get('content-type')!, /text\/html/);
-  assert.equal(await html.text(), await readFile(join(target, 'index.html'), 'utf8'));
-  const css = await get('/styles.css');
-  assert.equal(css.status, 200);
-  assert.match(css.headers.get('content-type')!, /text\/css/);
-  assert.equal(await css.text(), await readFile(join(target, 'public/styles.css'), 'utf8'));
-  const script = await get('/app.js');
-  assert.equal(script.status, 200);
-  assert.match(script.headers.get('content-type')!, /(?:application|text)\/javascript/);
-  const browserSource = await script.text();
-  assert.equal(browserSource, await readFile(join(target, 'public/app.js'), 'utf8'));
-  let click: (() => Promise<void>) | undefined;
-  const button = { disabled: false, addEventListener: (event: string, callback: () => Promise<void>) => { assert.equal(event, 'click'); click = callback; } };
-  const status = { textContent: '' };
-  const mount = { innerHTML: '', querySelector: (selector: string) => selector === '#check-server' ? button : status };
-  runInNewContext(browserSource, {
-    document: { querySelector: (selector: string) => { assert.equal(selector, '#root'); return mount; } },
-    fetch: (path: string) => get(path)
+  await t.test('running application', async t => {
+    const target = join(root, 'site');
+    const unrelated = join(root, 'elsewhere');
+    await mkdir(unrelated);
+    await createWebProject(target);
+    const source = join(target, 'main.arya');
+    const checked = cli(unrelated, 'check', source);
+    assert.equal(checked.status, 0, checked.stderr);
+    const built = cli(unrelated, 'build', source);
+    assert.equal(built.status, 0, built.stderr);
+    const base = await start(t, built.stdout.trim(), unrelated);
+    const get = (path: string) => fetch(base + path, { signal: AbortSignal.timeout(5000) });
+    const html = await get('/');
+    assert.equal(html.status, 200);
+    assert.match(html.headers.get('content-type')!, /text\/html/);
+    assert.equal(await html.text(), await readFile(join(target, 'index.html'), 'utf8'));
+    const css = await get('/styles.css');
+    assert.equal(css.status, 200);
+    assert.match(css.headers.get('content-type')!, /text\/css/);
+    assert.equal(await css.text(), await readFile(join(target, 'public/styles.css'), 'utf8'));
+    const script = await get('/app.js');
+    assert.equal(script.status, 200);
+    assert.match(script.headers.get('content-type')!, /(?:application|text)\/javascript/);
+    const browserSource = await script.text();
+    assert.equal(browserSource, await readFile(join(target, 'public/app.js'), 'utf8'));
+    let click: (() => Promise<void>) | undefined;
+    const button = { disabled: false, addEventListener: (event: string, callback: () => Promise<void>) => { assert.equal(event, 'click'); click = callback; } };
+    const status = { textContent: '' };
+    const mount = { innerHTML: '', querySelector: (selector: string) => selector === '#check-server' ? button : status };
+    runInNewContext(browserSource, {
+      document: { querySelector: (selector: string) => { assert.equal(selector, '#root'); return mount; } },
+      fetch: (path: string) => get(path)
+    });
+    assert.match(mount.innerHTML, /<main>/);
+    assert.match(mount.innerHTML, /id="status"/);
+    assert.ok(click);
+    await click();
+    assert.equal(button.disabled, false);
+    assert.match(status.textContent, /connected/i);
+    assert.deepEqual(await (await get('/api/health')).json(), { status: 'ok', language: 'Arya' });
+    assert.equal((await get('/main.arya')).status, 404);
   });
-  assert.match(mount.innerHTML, /<main>/);
-  assert.match(mount.innerHTML, /id="status"/);
-  assert.ok(click);
-  await click();
-  assert.equal(button.disabled, false);
-  assert.match(status.textContent, /connected/i);
-  assert.deepEqual(await (await get('/api/health')).json(), { status: 'ok', language: 'Arya' });
-  assert.equal((await get('/main.arya')).status, 404);
 });

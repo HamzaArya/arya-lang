@@ -21,6 +21,22 @@ export function analyzeWorkspace(documents:SourceDocument[]):Map<string,Analysis
   for(const document of documents)visit(document.uri);
   return results;
 }
+/** Reuse one passive analysis for an unchanged set of open buffers, including dependency lifecycles. */
+export function createWorkspaceAnalysisCache() {
+  let sources = new Map<string, string>();
+  let results: Map<string, Analysis> | undefined;
+  return {
+    analyze(documents: SourceDocument[]): Map<string, Analysis> {
+      const next = new Map(documents.map(document => [document.uri, document.source]));
+      if (!results || next.size !== sources.size || [...next].some(([uri, source]) => sources.get(uri) !== source)) {
+        results = analyzeWorkspace(documents);
+        sources = next;
+      }
+      return results;
+    },
+    clear() { sources.clear(); results = undefined; },
+  };
+}
 export interface SourceLocation {uri:string; start:number; end:number}
 /** Navigation operates on caller-supplied snapshots; it never imports dependencies. */
 export function referencesInWorkspace(documents:SourceDocument[],uri:string,offset:number):SourceLocation[] {
@@ -43,9 +59,17 @@ export function referencesInWorkspace(documents:SourceDocument[],uri:string,offs
   if(declaration.exports.includes(target.token))for(const [from,analysis] of parsed)for(const m of analysis.moduleMembers){const found=moduleTarget(analysis,m,from);if(found?.uri===target.uri&&found.token===target.token)result.push({uri:from,start:m.token.start,end:m.token.end});}
   return [...new Map(result.map(r=>[`${r.uri}:${r.start}`,r])).values()];
 }
-export function renameInWorkspace(documents:SourceDocument[],uri:string,offset:number,name:string):{uri:string;start:number;end:number;replacement:string}[] {
+export function renameInWorkspace(documents:SourceDocument[],uri:string,offset:number,name:string,options:{openDocumentsOnly?:boolean}={}):{uri:string;start:number;end:number;replacement:string}[] {
   if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)||analyze('const '+name+' = 0','untitled:rename').diagnostics.length)throw new Error('Choose a valid non-reserved Arya name.');
   const references=referencesInWorkspace(documents,uri,offset), edits=references.map(r=>({...r,replacement:name}));
+  // Editors cannot discover unopened callers yet. Never silently perform a partial public rename.
+  if (options.openDocumentsOnly && references.length) {
+    const target = references[0]!;
+    const document = documents.find(document => document.uri === target.uri)!;
+    if (analyze(document.source, document.uri).exports.some(token => token.start === target.start)) {
+      throw new Error('Cannot safely rename an exported symbol: unopened files may reference it. Project-wide rename is not supported yet.');
+    }
+  }
   for(const document of documents){let source=document.source;for(const edit of edits.filter(e=>e.uri===document.uri).sort((a,b)=>b.start-a.start))source=source.slice(0,edit.start)+name+source.slice(edit.end);if(edits.some(e=>e.uri===document.uri)) {
       const before=analyze(document.source,document.uri), after=analyze(source,document.uri);
       if(after.diagnostics.length)throw new Error('Rename creates a conflict or the affected document has unresolved diagnostics.');
@@ -62,9 +86,26 @@ export function renameInWorkspace(documents:SourceDocument[],uri:string,offset:n
 export function signatureAt(source:string,offset:number):{label:string;activeParameter:number}|undefined {
   let tokens;try{tokens=tokenize(source).filter(t=>t.start<offset&&t.kind!=='newline');}catch{return undefined;}
   let depth=0,commas=0,open=-1;
-  for(let i=tokens.length-1;i>=0;i--){const t=tokens[i]!;if([')',']','}'].includes(t.text))depth++;else if(['(','[','{'].includes(t.text)){if(depth===0&&t.text==='('){open=i;break;}depth--;}else if(t.text===','&&depth===0)commas++;}
+  for(let i=tokens.length-1;i>=0;i--){const t=tokens[i]!;if(t.kind!=='symbol')continue;if([')',']','}'].includes(t.text))depth++;else if(['(','[','{'].includes(t.text)){if(depth===0&&t.text==='('){open=i;break;}depth--;}else if(t.text===','&&depth===0)commas++;}
   if(open<1)return undefined;
-  const token=tokens[open-1]!, analysis=analyze(source,'untitled:signature');
+  const token=tokens[open-1]!;
+  let analysis=analyze(source,'untitled:signature');
+  // Only repair an unfinished call at EOF. Do not discard or rewrite unrelated source.
+  if (analysis.diagnostics.some(d => d.code === 'ARYA_SYNTAX') && !source.slice(offset).trim()) {
+    const stack: string[] = [];
+    const pairs: Record<string,string> = {'(':')','[':']','{':'}'};
+    for (const item of tokens) {
+      if (item.kind !== 'symbol') continue;
+      if (pairs[item.text]) stack.push(pairs[item.text]!);
+      else if ([')',']','}'].includes(item.text) && stack.pop() !== item.text) return undefined;
+      if (stack.length > 32) return undefined;
+    }
+    if (stack.length) {
+      const last = tokens.at(-1);
+      const placeholder = last?.kind === 'symbol' && ['(', ','].includes(last.text) ? 'null' : '';
+      analysis = analyze(source.slice(0,offset) + placeholder + stack.reverse().join(''), 'untitled:signature');
+    }
+  }
   const reference=analysis.references.find(r=>r.token.start===token.start);
   let value=analysis.typing.bindings.find(b=>b.binding===reference?.binding)?.type;
   if(!value&&tokens[open-2]?.text==='.'){
@@ -74,8 +115,12 @@ export function signatureAt(source:string,offset:number):{label:string;activePar
   return value?.kind==='function'?{label:token.text+typeText(value),activeParameter:commas}:undefined;
 }
 export function typedCompletions(source:string,offset:number):{label:string;kind:'variable'|'function';detail:string}[] {
-  const analysis=analyze(source,'untitled:completion'), prefix=source.slice(0,offset).match(/([A-Za-z_][A-Za-z0-9_]*)\.[A-Za-z0-9_]*$/);
+  const prefix=source.slice(0,offset).match(/([A-Za-z_][A-Za-z0-9_]*)\.[A-Za-z0-9_]*$/);
   if(!prefix)return [];
-  const start=offset-prefix[0].length, ref=analysis.references.find(r=>r.token.start===start),value=analysis.typing.bindings.find(b=>b.binding===ref?.binding)?.type;
+  const start=offset-prefix[0].length;
+  const end=offset+(source.slice(offset).match(/^[A-Za-z0-9_]*/)?.[0].length ?? 0);
+  // Repair only this member, preserving receiver offsets and lexical scope.
+  const analysis=analyze(source.slice(0,start)+prefix[1]+'.aryaCompletion'+source.slice(end),'untitled:completion');
+  const ref=analysis.references.find(r=>r.token.start===start),value=analysis.typing.bindings.find(b=>b.binding===ref?.binding)?.type;
   return value?.kind==='record'?Object.entries(value.fields).map(([label,field])=>({label,kind:field.type.kind==='function'?'function':'variable',detail:typeText(field.type)})):[];
 }

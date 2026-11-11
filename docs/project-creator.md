@@ -1,13 +1,13 @@
 # Create an Arya project
 
-The Arya 1.3.0-alpha.4 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.4.md).
+The published Arya 1.3.0-alpha.7 preview provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.7.md).
 
 ## Registry workflow
 
-The recorded published baseline is 1.2.0-alpha.4. Its Node.js templates work as shown below; use [candidate setup](node-runtime.md#try-the-candidate) for the new source creator:
+The current published preview is 1.3.0-alpha.7. Pin it explicitly; `@latest` still selects the older 1.2 release. Use [candidate setup](node-runtime.md#try-the-candidate) for unpublished source changes:
 
 ```sh
-npm create arya-language@1.2.0-alpha.4
+npm create arya-language@1.3.0-alpha.7
 cd my-arya-app
 npm install
 npm run dev
@@ -65,7 +65,7 @@ Use `--template ui` or `--template desktop` for components and animations writte
 With npm create, separate creator flags from npm flags:
 
 ```sh
-npm create arya-language@1.2.0-alpha.4 my-site -- --template web
+npm create arya-language@1.3.0-alpha.7 my-site -- --template web
 ```
 
 ## Web application rendering
@@ -84,20 +84,22 @@ This is a Vite-style project creation and mounting workflow. The starter uses va
 
 ## Portable and offline projects
 
-For offline use, retain the published archives. From a built checkout, create a project using the retained compiler archive:
+For offline use, retain matching compiler and creator archives. The current source
+checkout is alpha.8 and must use an alpha.8 compiler archive. After building and
+packaging the candidate (see [candidate setup](node-runtime.md#try-the-candidate)):
 
 ```sh
-node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.4.tgz
+node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.9.tgz
 ```
 
 Or install the creator archive without the repository:
 
 ```sh
-npm install --global ./create-arya-language-1.3.0-alpha.4.tgz
-create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.4.tgz
+npm install --global ./create-arya-language-1.3.0-alpha.9.tgz
+create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.9.tgz
 ```
 
-Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.4.tgz`.
+Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.9.tgz`.
 
 Copy the entire created folder to another machine, then:
 

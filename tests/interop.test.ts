@@ -237,8 +237,8 @@ test('shipped offline npm and Python batch examples run from their documented pr
   assert.ok(npm, 'Run the full suite through npm run check so the active npm CLI is available.');
   const npmRoot = join(root, 'npm');
   await cp('fixtures/examples/npm', npmRoot, { recursive: true });
-  const install = spawnSync(process.execPath, [npm, 'install', '--ignore-scripts', '--no-audit', '--no-fund'], {
-    cwd: npmRoot, env: { ...process.env, npm_config_cache: join(root, 'npm-cache') }, encoding: 'utf8', timeout: 30_000,
+  const install = spawnSync(process.execPath, [npm, 'install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund'], {
+    cwd: npmRoot, env: { ...process.env, npm_config_cache: join(root, 'npm-cache'), npm_config_update_notifier: 'false' }, encoding: 'utf8', timeout: 30_000,
   });
   assert.ifError(install.error);
   assert.equal(install.status, 0, install.stderr);

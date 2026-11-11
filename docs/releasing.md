@@ -1,12 +1,12 @@
-# Build and publish an Arya prerelease
+# Build and publish an Arya release
 
-**Source candidate: 1.3.0-alpha.7. Published release: 1.2.0-alpha.4.** Both npm packages were verified on `latest` on 10 November 2026; their [verified transaction record](releases/1.2.0-alpha.4-publication.json) identifies the exact archives. Follow this process for a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
+**Published preview: 1.3.0-alpha.7 on `next`; `latest` remains 1.2.0-alpha.4.** The [verified transaction record](releases/1.3.0-alpha.7-publication.json) identifies the exact archives. Unreleased stabilization work needs a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
 
 Hamza Arya is the release maintainer. The project uses Apache-2.0, npm packages `arya-language` and `create-arya-language`, and the existing [HamzaArya/arya-lang](https://github.com/HamzaArya/arya-lang) repository. Private security reporting is described in [SECURITY.md](../SECURITY.md).
 
 ## Prepare a new candidate
 
-1. Review intended source changes and choose a new prerelease version. Update root package/lockfile, `src/compiler.ts`, and the creator package together. Build synchronizes the extension's numeric version, preview flag, and full `aryaLanguageVersion`.
+1. Review intended source changes and choose a new version. Update root package/lockfile, `src/compiler.ts`, and the creator package together. Set both packages' `publishConfig.tag` to `next` for a prerelease or `latest` for a qualified stable release. Set the root `aryaEditorVersion` to a numeric extension version newer than the last published extension (currently the local candidate uses 1.3.4). Build synchronizes that numeric version, the preview flag, and full `aryaLanguageVersion`; the compiler and extension versions need not be equal. Use plain SemVer or a prerelease without build metadata, which the editor/archive naming convention does not support.
 2. Update current guides, migration notes, and `docs/releases/<version>.md`. Describe optional dependencies and the actual qualification scope. Keep historical release hashes and records intact.
 3. Run `npm ci` and `npm run check`. Run appropriate optional database, browser, Electron, and editor-host checks; report skips and failures accurately.
 4. Run `npm run test:clean` to verify and package a fresh source snapshot. This inventories tracked/unignored source without changing the Git index, records SHA-256 provenance, installs dependencies, checks docs/types/tests, builds all distributions, tests installed packages, and runs the read-only audit.
@@ -65,6 +65,12 @@ Update AryaCode's compiler pin, archive integrity, lockfile, and integration met
 ZIP/VSIX packaging sorts entries and normalizes timestamps/modes while retaining executable scripts. `SOURCE_DATE_EPOCH` accepts a nonnegative safe integer; unset/empty defaults to 1980-01-01. ZIP dates are clamped to 1980–2099 and rounded down to two seconds in UTC. Source payload identity still matters: changing docs or metadata produces different archives and requires a new published version.
 
 The read-only audit verifies mechanical prerequisites, not authentication, live publication, or stable support. See [release readiness](release-readiness.md), [compatibility](compatibility-policy.md), and [historical release notes](../CHANGELOG.md) for their separate evidence.
+
+## Stable release qualification
+
+Follow the [stable release plan](stable-release-plan.md) before choosing a version without a prerelease suffix. The audit accepts stable candidate metadata with a major version of at least 1, `latest` publication tags, and editor `preview: false`. It checks compiler, creator, VSIX and editor-kit archives and their checksums.
+
+`publicStablePackageReady` means those mechanical package checks passed. `stableReleaseReady` and `publicationVerified` remain false in this read-only audit because it does not collect platform results, approve a support policy, observe external users or perform publication. Review that evidence for the exact new candidate separately; do not turn those fields into unconditional success flags. Runtime/signature changes after alpha.7 must be packaged and tested under the new version.
 
 ## Independent Marketplace metadata
 

@@ -3,16 +3,17 @@
 ![Arya bridge mark](https://raw.githubusercontent.com/HamzaArya/arya-lang/main/brand/arya-logo.png)
 
 Write `.arya` programs with JavaScript/npm libraries and a Python function bridge.
-This experimental extension includes the **1.3.0-alpha.7** compiler and language
-tools. The Marketplace prerelease is extension version **1.3.2**; the frozen npm
-and offline editor distributions retain extension version **1.3.0**. Both carry
-the same reviewed runtime and editor code.
+This local experimental extension candidate is **1.3.4** and includes the
+**1.3.0-alpha.9** compiler. Neither candidate is published. The published
+Marketplace extension **1.3.2** bundles language **1.3.0-alpha.7**. Compiler and
+extension versions are separate; `arya editor status` reports both for the new candidate.
 
 Features include:
 
 - Syntax highlighting, semantic colors, snippets, completion, hover, and outline.
 - Syntax, lexical name, constant-write, and optional static-type diagnostics.
-- Workspace go-to-definition, references, rename with capture checks, and signature help.
+- Lexical go-to-definition, open-document references, guarded rename, and signature help.
+- Rename refuses exported-symbol changes when unopened callers cannot be covered.
 - Document formatting, spelling Quick Fixes, and standard-library member hints.
 - **Arya: Run File**, **Arya: Check File**, and **Arya: Stop File** commands.
 - **Arya Dark**, **Arya Light**, **Arya File Icons**, and an editor setup walkthrough.

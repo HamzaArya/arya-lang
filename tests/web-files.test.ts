@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { syncBuiltinESMExports } from 'node:module';
 import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, sep as fsPathSeparator } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { once } from 'node:events';
 import { request } from 'node:http';
@@ -167,4 +169,31 @@ test('public files reject raw traversal, malformed encodings, dotfiles and symli
   assert.equal((await client.fetch('/escape.txt')).status, 404);
   assert.equal((await client.fetch('/hidden-alias.txt')).status, 404);
   assert.equal((await client.fetch('/outside/secret.txt')).status, 404);
+});
+
+// Windows' legacy realpath resolver can retain an 8.3 alias while the native
+// promise API expands it. Model that mismatch even on macOS/Linux.
+test('web uses one native canonical path for startup and request containment', async t => {
+  const outer = await fixture(t);
+  await mkdir(join(outer, 'long-project-name'));
+  const root = fs.realpathSync.native(join(outer, 'long-project-name'));
+  const alias = join(outer, 'SHORT~1');
+  await symlink(root, alias, 'junction');
+  await mkdir(join(root, 'public'));
+  await writeFile(join(root, 'index.html'), '<h1>Native root</h1>');
+  await writeFile(join(root, 'public', 'site.css'), 'body{}');
+  const original = fs.realpathSync;
+  const legacy = Object.assign(((path: any, options: any) => {
+    const actual = original(path, options);
+    return typeof actual === 'string' && (actual === root || actual.startsWith(root + fsPathSeparator))
+      ? alias + actual.slice(root.length) : actual;
+  }) as typeof original, { native: original.native });
+  const mock = t.mock.method(fs, 'realpathSync', legacy);
+  syncBuiltinESMExports();
+  try {
+    const module = await load(root, 'use std "web" as web\nexport const server = web.serve(0)');
+    const client = await running(t, module.server);
+    assert.equal(await (await client.fetch('/')).text(), '<h1>Native root</h1>');
+    assert.equal(await (await client.fetch('/site.css')).text(), 'body{}');
+  } finally { mock.mock.restore(); syncBuiltinESMExports(); }
 });
