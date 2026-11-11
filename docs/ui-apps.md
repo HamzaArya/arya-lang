@@ -11,7 +11,7 @@ For the full component and animation library, run `npm run ui:preview` and open 
 Create an app directly from npm:
 
 ```sh
-npm create arya-language@latest my-ui -- --template ui
+npm create arya-language@1.2.0-alpha.4 my-ui -- --template ui
 cd my-ui
 npm install
 npm run dev
@@ -47,7 +47,7 @@ fn counter() {
 }
 
 web.serve(3000, {"GET /": counter}, {html: false, assets: false})
-say("Open http://127.0.0.1:3000")
+print("Open http://127.0.0.1:3000")
 ```
 
 Components run on the server and produce HTML. A small included browser controller handles state and actions. Each page load receives an independent copy of state; state updates do not rerun Arya functions. Bindings update text and control properties without replacing the DOM or evaluating source strings. Page state is public browser data: keep database credentials and Python/database operations in server routes.
@@ -89,6 +89,8 @@ Actions run after a button click or form submission:
 - `ui.toggle("expanded")` toggles a boolean value.
 - A list, such as `[ui.set("count", 0), ui.set("message", "Reset")]`, executes sequentially and stops after a failed request or cancelled awaited animation.
 - `ui.request(path, options)` calls a same-origin JSON endpoint.
+
+The component/action fragments below assume `use std "ui" as ui` and belong inside a page body or an action definition. See the complete app above for imports and serving.
 
 Actions are data, not server closures. Passing `fn() { ... }` as an action produces `ARYA_UI`. Put server logic behind a route and call it with a request:
 
@@ -147,4 +149,4 @@ ARYA_TEST_ELECTRON=/path/to/electron node --test .build/tests/ui-desktop.test.cj
 
 Run `npm test` first to compile these test files. Neither opt-in test downloads a runtime. The browser check exercises the generated form and real Arya routes under CSP; the desktop check verifies renderer isolation, navigation/window restrictions, the form, and server shutdown.
 
-The 1.3.0-alpha.3 source candidate adds ten components, eight page sections, and four full-page templates. See [sections and templates](ui-patterns.md) for customization, server actions, and live preview routes. These additions require the matching candidate compiler.
+The 1.3.0-alpha.4 source candidate adds ten components, eight page sections, and four full-page templates. See [sections and templates](ui-patterns.md) for customization, server actions, and live preview routes. These additions require the matching candidate compiler.

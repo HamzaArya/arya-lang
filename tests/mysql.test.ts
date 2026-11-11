@@ -71,7 +71,7 @@ async function fixture(t: { after(fn: () => Promise<unknown>): void }, driver = 
     state = (await import(pathToFileURL(join(driverRoot, 'promise.mjs')).href)).state;
   }
   const filename = join(root, 'main.arya');
-  await writeFile(join(root, 'main.mjs'), compile('use std "mysql" as mysql\nexport keep connect = mysql.connect', filename).code);
+  await writeFile(join(root, 'main.mjs'), compile("use std \"mysql\" as mysql\nexport const connect = mysql.connect", filename).code);
   const module = await import(pathToFileURL(join(root, 'main.mjs')).href);
   return { root, state: state!, connect: module.connect as (options?: unknown) => Promise<Database> };
 }

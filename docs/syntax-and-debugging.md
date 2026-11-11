@@ -1,19 +1,19 @@
 # Safer expressions and easier debugging
 
-The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.3 candidate.
+The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.4 candidate.
 
 The current source also adds [pipelines, concise functions, guards, indexed iteration, and finally](flow-syntax.md). Those new forms require the candidate compiler.
 
 ## Read missing data without losing valid values
 
 ```arya
-keep settings = {retries: 0, enabled: false}
+const settings = {retries: 0, enabled: false}
 
-keep retries = settings?.retries ?? 3
-keep enabled = settings?.enabled ?? true
-keep title = settings?.page?.title ?? "Untitled"
+const retries = settings?.retries ?? 3
+const enabled = settings?.enabled ?? true
+const title = settings?.page?.title ?? "Untitled"
 
-say(retries, enabled, title)
+print(retries, enabled, title)
 ```
 
 This prints `0 false Untitled`. `left ?? right` evaluates the right side only if the left is `null` or `undefined`. Zero, false, empty text, and NaN are retained. The left side is evaluated once. `??` is left-associative and has lower precedence than `or`; all previous operator ranks remain unchanged. Thus `null ?? false or 7` means `null ?? (false or 7)`. Parentheses can make mixed logical expressions clearer. Generated JavaScript explicitly groups these expressions.
@@ -21,13 +21,13 @@ This prints `0 false Untitled`. `left ?? right` evaluates the right side only if
 Optional operations support properties, indexes, and calls:
 
 ```arya
-keep user = null
-keep name = user?.profile?.name ?? "Guest"
-keep first = user?.items?.[0]
-keep callback = null
-keep result = callback?.("hello") ?? "No callback"
+const user = null
+const name = user?.profile?.name ?? "Guest"
+const first = user?.items?.[0]
+const callback = null
+const result = callback?.("hello") ?? "No callback"
 
-say(name, first, result)
+print(name, first, result)
 ```
 
 `?.` stops the remaining continuous chain when its operand is null or undefined, returning undefined. Skipped index expressions and call arguments are not evaluated. Methods keep their receiver, so `object.method?.(value)` still calls that object's method correctly. A non-null non-callable value still throws; exceptions from a getter/function are not swallowed. Names must still be declared and initialized before use. Optional access does not bypass Arya namespace-export checking.
@@ -41,15 +41,15 @@ These expression features follow the documented JavaScript/Node semantics. Optio
 ## Keep chains readable
 
 ```arya
-keep result = ["Arya", "Python", "JavaScript"]
+const result = ["Arya", "Python", "JavaScript"]
   .slice(1)
   .join(" + ")
   .toUpperCase()
 
-say(result)
+print(result)
 ```
 
-A leading `.` or `?.` continues the previous expression across newlines, blank lines, and comments. Calls/indexes inside that chain keep their existing evaluation order. A semicolon ends the expression. A newline after bare `return`/`give` still ends the return; the new chain syntax does not change that rule. An `await` still includes following property accesses in its operand: use `(await load()).value` when the property belongs to the resolved result.
+A leading `.` or `?.` continues the previous expression across newlines, blank lines, and comments. Calls/indexes inside that chain keep their existing evaluation order. A semicolon ends the expression. A newline after bare `return`/`return` still ends the return; the new chain syntax does not change that rule. An `await` still includes following property accesses in its operand: use `(await load()).value` when the property belongs to the resolved result.
 
 ## Diagnose before running
 
@@ -87,11 +87,11 @@ The JavaScript profile adds `use std "debug" as debug`:
 ```arya
 use std "debug" as debug
 
-keep totals = [10, 20, 30]
+const totals = [10, 20, 30]
 debug.assert(len(totals) > 0, "Expected at least one total.")
 
-keep first = debug.trace("first total", totals[0])
-say(debug.inspect({first: first, values: totals}))
+const first = debug.trace("first total", totals[0])
+print(debug.inspect({first: first, values: totals}))
 ```
 
 | Helper | Behavior |

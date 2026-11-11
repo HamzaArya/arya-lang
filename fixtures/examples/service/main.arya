@@ -5,12 +5,12 @@ use std "web" as web
 use arya "./handlers.arya" as handlers
 use arya "./schemas.arya" as schemas
 
-keep logger = log.create({
+const logger = log.create({
   name: "arya-service",
   level: env.get("LOG_LEVEL", "info")
 })
 
-keep server = web.serve(env.int("PORT", 3000), {
+const server = web.serve(env.int("PORT", 3000), {
   "GET /health/live": handlers.live,
   "GET /health/ready": fn() {
     return web.health({service: fn() { return true }})

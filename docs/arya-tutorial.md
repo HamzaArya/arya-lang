@@ -1,6 +1,6 @@
 # Learn Arya: your first programs
 
-This tutorial teaches the current Arya language, developed in this standalone repository. Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
+This tutorial teaches the core shared by the published 1.2.0-alpha.4 baseline and the 1.3.0-alpha.4 source candidate. Start with no programming experience: run a lesson, read its output, change one thing, and run it again. You do not need to know JavaScript or Python before lessons 1–4.
 
 Arya is the language. AryaCode is the editor. Save your code in a file ending in `.arya`. The current compiler turns that code into JavaScript and runs it with Node.js. Later lessons show how the same Arya program can use JavaScript libraries and call Python functions.
 
@@ -288,7 +288,7 @@ print(greeting)
 
 The output is `Waiting...`, then `Hello, Hamza` after about 100 milliseconds. A promise represents a result that may arrive later. `async fn` creates a function whose call returns a promise; `await` waits for the result before this part of the program continues. You can use `await` at the top level or inside an `async fn`, but not inside a regular `fn`.
 
-You will use this pattern for many JavaScript network and file APIs. It does not make the current Python bridge asynchronous; those calls block until Python returns.
+You will use this pattern for many JavaScript network and file APIs. Direct Python calls in lesson 6 still block until Python returns. For nonblocking Python work, use the explicit [async Python API](python-async.md).
 
 **Your turn:** change `100` to `1000` and observe the longer pause. The output text should remain the same.
 
@@ -316,7 +316,7 @@ Now it prints `Hello, Hamza`. `args` is a list of strings passed at startup. The
 npm run arya -- run fixtures/arya/learn/08-arguments.arya -- "Arya learner"
 ```
 
-**Your turn:** pass your own name. Later, convert numeric arguments with `number(...)` before doing arithmetic. Arya 0.1 has no builtin `input()` prompt; command-line arguments are a simple way to start accepting input.
+**Your turn:** pass your own name. Later, convert numeric arguments with `number(...)` before doing arithmetic. Arya has no builtin `input()` prompt; command-line arguments are a simple way to start accepting input.
 
 ## Lesson 9: build a small task-list program
 
@@ -368,7 +368,7 @@ Open [web.arya](../fixtures/arya/web.arya) from the parent examples folder and c
 
 Change the message in `response.end(JSON.stringify(...))`, save, stop the running file with **AryaCode: Stop Current File**, and run it again. Reload the page and click the button. The server does not reload itself when code changes. Only run one example on port 3000 at a time; stop `express.arya` first if it is running.
 
-That example shows how to reuse a JavaScript library from Arya. The 1.2 preview also supplies a dedicated `view` syntax for HTML and literal CSS/browser JavaScript in one file; see the [web guide](arya-web.md) and `fixtures/web/studio.arya`. The original example continues to use ordinary HTML strings.
+That example shows how to reuse a JavaScript library from Arya. Arya also supplies a dedicated `view` syntax for HTML and literal CSS/browser JavaScript in one file; see the [web guide](arya-web.md) and `fixtures/web/studio.arya`. The original example continues to use ordinary HTML strings.
 
 ## Run, check, and build
 

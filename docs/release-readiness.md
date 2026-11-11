@@ -1,12 +1,33 @@
 # Release readiness and evidence
 
-## Current source candidate: 1.3.0-alpha.3
+## Current source candidate: 1.3.0-alpha.7
+
+This unpublished business application candidate adds the [bounded APIs and tools](business-applications.md).
+Phase changes, compatibility effects and executed evidence are tracked in the
+[implementation record](business-applications-plan.md). Package provenance and
+qualification will be recorded from the fresh snapshot. Previous results below
+remain specific to their original versions. Stable support, public publication,
+Linux/Windows and application deployment remain separate gates.
+
+## Previous canonical-syntax candidate: 1.3.0-alpha.4
+
+This candidate selects canonical syntax and removes the alternate parser spellings and implicit `say` builtin. See [release notes](releases/1.3.0-alpha.4.md) and [syntax migration](syntax-migration.md). The compiler, generated runtime, starter templates, fixtures, active documentation, snippets, grammars, completions, hover help, source highlighting, and editor tour use the chosen spellings.
+
+The previous version's verification and archive hashes below remain specific to their original snapshots. Local macOS arm64 `npm run check` passed documentation links, TypeScript, and 252 tests with four optional skips (256 total) on Node 24.16.0. Fresh alpha.4 compiler/creator tarballs, VSIX, and editor-kit packaging passed. Installed-package acceptance outside the checkout passed, including removed-syntax rejection, reclaimed names, canonical conformance, npm creator/npx entry points, all five starters, portable project installation, source maps, and Python. The read-only audit reported zero local failures/pending checks; all 32 pre-existing retained archives were checked unchanged. Verification used this working checkout rather than a new clean-source snapshot. Documentation-only result notes were added afterward without replacing the reviewed archives. Real browser, Electron, editor-host, live MySQL, and Linux/Windows checks were not rerun for this syntax change. The npm baseline remains the recorded 1.2.0-alpha.4 publication.
+
+## Previous UI candidate: 1.3.0-alpha.3
 
 This candidate extends the [UI components, sections, and templates](ui-patterns.md). Local macOS arm64 verification passed TypeScript/documentation checks and **251 tests with four optional skips** (255 total). A fresh recorded working-tree snapshot passed installation, checks, compiler/creator/editor packaging, installed-package acceptance, and the local release audit with no failures/pending checks. Installed-package acceptance also passed on Node 22.15.0; the snapshot suite used Node 24.16.0.
 
 Real Chrome checks passed for the controls, eight section demos, four full-page templates, preview submit actions, themes, existing forms/motion, source tabs, CSP, and 390px mobile layouts without page overflow. Desktop/mobile screenshots were inspected for spacing and readability. Live MySQL, Electron, and real editor hosts were not rerun locally for this UI candidate; previous results remain version-specific. GitHub platform results must be checked for the exact pushed revision.
 
 The recorded snapshot is identified by source manifest `76c8729929fbdcb6159539b68df12c6259626eb91a4b3c612f57404afef79581`; local evidence lives in `.build/evidence/clean-2026-11-10T12-05-04-939Z/`. Documentation-only version/evidence notes were refreshed after that snapshot. Retained candidate archives and hashes are recorded in `artifacts/QUALIFICATION.json`; earlier archive hashes remain unchanged. This is an unpublished candidate. The latest verified npm publication remains alpha.4.
+
+### Documentation review — 11 November 2026
+
+Repository documentation was reorganized and checked against the current source. `npm run check` passed documentation links, TypeScript, and 251 tests, with four optional integrations skipped. The 74 non-error Arya guide snippets compiled (nine with their documented surrounding bindings/imports); the intentional const-write exercise was verified to fail. Temporary-project smoke checks covered CLI arguments/JSON reports, build/maps, standalone execution, file/JSON helpers, and all five creator templates.
+
+This review did not rerun browser, Electron, editor-host, live MySQL, or cross-platform qualification. It did not rebuild retained release archives; their earlier source manifests and hashes remain specific to their recorded snapshots.
 
 ## Previous flow candidate: 1.3.0-alpha.2
 
@@ -29,9 +50,9 @@ Separate Chrome UI/library and Electron tests passed. The first Chrome UI startu
 The source snapshot check now excludes tracked deletions while retaining new working files; a real Git-inventory regression verifies that behavior without staging changes. Candidate archives and source/check evidence remain local preparation artifacts until a separate publication is performed.
 
 
-## Latest published baseline
+## Recorded published baseline
 
-**Current release: 1.2.0-alpha.4, published 10 November 2026.** Both `arya-language` and `create-arya-language` are published on npm's `latest` tag. The [publication record](releases/1.2.0-alpha.4-publication.json) contains registry URLs, SHA-256/SHA-512 identities, verified tags, and public-install results. This is an experimental alpha, with the scope below.
+**Recorded publication: 1.2.0-alpha.4, published 10 November 2026.** Both `arya-language` and `create-arya-language` were verified on npm's `latest` tag at publication. The [publication record](releases/1.2.0-alpha.4-publication.json) contains registry URLs, SHA-256/SHA-512 identities, verified tags, and public-install results. This is an experimental alpha, with the scope below.
 
 ## Published alpha.4 baseline evidence
 
@@ -80,12 +101,12 @@ The audit's `publicReleaseReady`, `publicationVerified`, and `stableReleaseReady
 
 ## Record a new candidate
 
-Use [the release process](releasing.md). Preserve the candidate version, exact commit or source-manifest hash, dependency lockfile hash, Node/Python/C-toolchain versions, OS/architecture, command outputs, optional skips, archive hashes, registry responses, and downloaded-byte verification. A source snapshot can verify uncommitted work honestly; it must not be labeled a clean Git release commit.
+Use [the release process](releasing.md). Preserve the candidate version, exact commit or source-manifest hash, dependency lockfile hash, Node/Python versions, OS/architecture, command outputs, optional skips, archive hashes, registry responses, and downloaded-byte verification. A source snapshot can verify uncommitted work honestly; it must not be labeled a clean Git release commit.
 
 ## Historical evidence
 
 - [0.2.0-alpha.3 release](releases/0.2.0-alpha.3.md): source `5a962385e1bdf35c8476748b992dc7efb0a01e2f`, npm SHA-256 `3ab98fe2b8745051a9b451fd3c4311a7805238226dfa163df37997560b07744b`, verified [GitHub prerelease](https://github.com/HamzaArya/arya-lang/releases/tag/v0.2.0-alpha.3). [CI run 42566241620](https://github.com/HamzaArya/arya-lang/actions/runs/42566241620) passed six compiler/package jobs for that older source; desktop evidence was local macOS only.
-- [1.1.0-alpha.1 native publication](native-release-verification.md): version-specific native binaries, bootstrap hashes, and platform results.
+- [1.1.0-alpha.1 native publication](history/native-release-verification.md): version-specific native binaries, bootstrap hashes, and platform results.
 - [1.2.0-alpha.3 npm publication](releases/1.2.0-alpha.3-publication.json): compiler/creator hashes and the earlier `next` tag verification.
 
 Historical artifacts and immutable tags remain unchanged. Their older test counts and registry pointers do not describe the current release.

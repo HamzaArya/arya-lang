@@ -1,11 +1,12 @@
+import type { Type } from './types.js';
 import type { Token } from './compiler.js';
 import { hostGlobals } from './host-globals.js';
 
 export type BindingKind = 'let' | 'const' | 'function' | 'parameter' | 'loop' | 'catch' | 'import' | 'builtin' | 'host';
 export type ScopeKind = 'module' | 'function' | 'block' | 'loop' | 'catch';
-export interface LexicalBinding { name: string; kind: BindingKind; scopeId: number; token?: Token }
+export interface LexicalBinding { name: string; kind: BindingKind; scopeId: number; token?: Token; annotation?: Type }
 export interface LexicalReference { token: Token; access: 'read' | 'write' | 'readwrite'; binding?: LexicalBinding }
-export interface AryaDiagnostic { code: 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_UNKNOWN_LIBRARY' | 'ARYA_UNSUPPORTED_TARGET'; message: string; token: Token; suggestion?: string; hint?: string }
+export interface AryaDiagnostic { code: 'ARYA_UNHANDLED_PROMISE' | 'ARYA_UNUSED' | 'ARYA_UNREACHABLE' | 'ARYA_TYPE' | 'ARYA_TYPE_UNKNOWN' | 'ARYA_SYNTAX' | 'ARYA_UNKNOWN_NAME' | 'ARYA_CONST_ASSIGNMENT' | 'ARYA_MODULE_NOT_FOUND' | 'ARYA_MODULE_CYCLE' | 'ARYA_MODULE_ESCAPE' | 'ARYA_MODULE_EXPORT' | 'ARYA_PROJECT_LIMIT' | 'ARYA_UNKNOWN_LIBRARY' | 'ARYA_UNSUPPORTED_TARGET'; message: string; token: Token; suggestion?: string; hint?: string }
 export interface Resolution { bindings: LexicalBinding[]; references: LexicalReference[]; diagnostics: AryaDiagnostic[] }
 interface Scope { id: number; kind: ScopeKind; parent?: Scope; declarations: Map<string, LexicalBinding> }
 
@@ -23,6 +24,10 @@ export class LexicalScopes {
       const binding: LexicalBinding = { name, kind: 'builtin', scopeId: 0 };
       this.current.declarations.set(name, binding); this.bindings.push(binding);
     }
+  }
+  checkpoint(): () => void {
+    const current=this.current, declarations=new Map(current.declarations), bindings=this.bindings.length, references=this.references.length, next=this.nextScope;
+    return () => {this.current=current;current.declarations=declarations;this.bindings.length=bindings;this.references.length=references;this.nextScope=next;};
   }
   get isModule(): boolean { return this.current.kind === 'module'; }
   get scopeId(): number { return this.current.id; }

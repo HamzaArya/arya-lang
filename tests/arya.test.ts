@@ -75,7 +75,7 @@ try { helper.summarize([fn() { return 1 }]) } catch error { print(error.message)
 });
 
 test('syntax diagnostics have source positions and reject invalid constructs without executing imports', () => {
-  for (const source of ['let = 1', 'fn f(a, a) {}', 'return 1', 'break', 'if true {', 'let n = "unclosed', 'let a = 1 let b = 2', 'let x = 1\nlet x = 2', 'fn f() { await task() }', 'use ruby "math" as m', 'let x = (1 + )', 'let __arya_source = 1', 'let class = 1', '(1 + 2) = 3', 'fn f() { export let n = 1 }']) assert.throws(() => compile(source), AryaError, source);
+  for (const source of ['let = 1', 'fn f(a, a) {}', 'return 1', 'break', 'if true {', 'let n = "unclosed', 'let a = 1 let b = 2', 'let x = 1\nlet x = 2', "fn f() { await fn() }", 'use ruby "math" as m', 'let x = (1 + )', 'let __arya_source = 1', 'let class = 1', '(1 + 2) = 3', 'fn f() { export let n = 1 }']) assert.throws(() => compile(source), AryaError, source);
   assert.throws(() => compile('# comment\nlet value = @'), (error: unknown) => error instanceof AryaError && error.token.line === 1 && error.token.column === 12);
   assert.doesNotThrow(() => compile('use js "does-not-exist" as library\nuse python "also_missing" as py'));
   assert.throws(() => compile('let a = ' + '('.repeat(200) + '1' + ')'.repeat(200)), AryaError);

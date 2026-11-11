@@ -1,7 +1,6 @@
 import { pythonWorker } from './python-worker.js';
 
 export const javascriptRuntime = `const print = (...values) => console.log(...values);
-const say = print;
 const len = value => {
   if (typeof value !== 'string' && !Array.isArray(value)) throw new TypeError('len expects a string or list.');
   return value.length;

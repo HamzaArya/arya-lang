@@ -1,22 +1,22 @@
-# Arya 1.2 HTML-first web projects
+# HTML-first web projects
 
-Arya `1.2.0-alpha.4` supports HTML-first web applications with a real HTML entry file by default. Arya handles the server; standard HTML, CSS, and browser JavaScript handle the page. This experimental preview is published on npm as `latest`. For interfaces written in Arya, see [UI and desktop applications](ui-apps.md).
+The published 1.2.0-alpha.4 baseline and 1.3.0-alpha.4 source candidate support HTML-first web applications with a real HTML entry file by default. Arya handles the server; standard HTML, CSS, and browser JavaScript handle the page. Examples below pin the recorded published baseline; [candidate setup](node-runtime.md#try-the-candidate) covers this checkout. For interfaces written in Arya, see [UI and desktop applications](ui-apps.md).
 
 ## Create a project
 
 Use the interactive creator to choose a web app, API server, CLI tool, UI app, or desktop app. Use the published preview:
 
 ```sh
-npm create arya-language@latest
+npm create arya-language@1.2.0-alpha.4
 cd my-arya-app
 npm install
 npm run dev
 ```
 
-For portable/offline creation, use the retained version-matched compiler archive:
+From a built candidate checkout, portable creation uses its matching retained archive:
 
 ```sh
-node dist/create.cjs my-app --compiler artifacts/arya-language-1.2.0-alpha.4.tgz
+node dist/create.cjs my-app --template web --compiler artifacts/arya-language-1.3.0-alpha.4.tgz
 ```
 
 The wizard asks what you want to build. Choose **Web app**. The optional compiler archive is copied into `vendor/` and makes the compiler dependency portable between machines. Otherwise `package.json` pins the exact compiler version on npm. See the [creator guide](project-creator.md) for automation and portable installation.
@@ -76,7 +76,7 @@ npm run arya -- run fixtures/web/studio.arya
 ## Write the logic in Arya
 
 ```arya
-keep passingScore = 60
+const passingScore = 60
 
 fn result(score) {
   if score >= passingScore {
@@ -86,38 +86,25 @@ fn result(score) {
   }
 }
 
-each score in [40, 70, 95] {
-  say(result(score))
+for score in [40, 70, 95] {
+  print(result(score))
 }
 ```
 
-| Arya spelling | Meaning | Existing spelling, still supported |
-| --- | --- | --- |
-| `keep name = value` | Declare a binding that cannot be reassigned | `const` |
-| `fn name(values) { ... }` | Define a reusable function | `task` (compatibility alias) |
-| `async fn name(values) { ... }` | Define an asynchronous function | `async task` (compatibility alias) |
-| `return value` | Return a value from a function | `give` (compatibility alias) |
-| `if condition { ... }` | Run a conditional branch | `when` (compatibility alias) |
-| `else { ... }` / `else if ...` | Add another branch | `otherwise` / `otherwise when` (compatibility aliases) |
-| `each item in items { ... }` | Iterate through values | `for` |
-| `say(values)` | Print values to the terminal | `print(values)` |
+| Syntax | Meaning |
+| --- | --- |
+| `let name = value` | Declare a mutable binding. |
+| `const name = value` | Declare a binding that cannot be reassigned. |
+| `fn name(values) { ... }` | Define a reusable function. |
+| `async fn name(values) { ... }` | Define an asynchronous function. |
+| `return value` | Return a value from a function. |
+| `if condition { ... } else if other { ... } else { ... }` | Choose a branch. |
+| `for item in items { ... }` | Iterate through values. |
+| `print(values)` | Print values to the terminal. |
 
-Use `fn` and `return` for functions, and `if`, `else if`, and `else` for conditions. The earlier `task`, `give`, `when`, and `otherwise` aliases still run for compatibility, but new examples, snippets, and completion suggestions use the preferred forms.
+These forms are shared by the published baseline and current source. The 1.3.0-alpha.4 candidate removes the earlier alternate spellings; use [syntax migration](syntax-migration.md) when upgrading existing programs.
 
-These spellings keep the existing scope, evaluation, and error rules. `keep` prevents reassignment; it does not freeze an object. A newline immediately after `return` ends a bare return. `fn` also works for anonymous callbacks. `say` is a built-in binding with the same declaration restrictions as `print`.
-
-The six words `keep`, `task`, `give`, `when`, `otherwise`, and `each` are newly reserved. Rename older variables/functions using those names. For example:
-
-```arya
-# Before 1.2:
-# let task = {title: "Learn Arya"}
-
-# After:
-let item = {title: "Learn Arya"}
-say(item.title)
-```
-
-Existing `fn`, `const`, `if`, `else`, `for`, `return`, and `print` code continues to work when it does not use the newly reserved words as identifiers.
+`const` prevents reassignment; it does not freeze an object. A newline immediately after `return` ends a bare return. `fn` also works for anonymous callbacks. `print` is a built-in binding and cannot be redeclared at module scope.
 
 ## Optional inline views
 
@@ -126,8 +113,8 @@ The default project uses `index.html`. For small tools or generated pages, the e
 `view { ... }` is an expression producing an HTML string. Element names replace opening and closing HTML tags. Braces group children; a string or a parenthesized expression supplies text.
 
 ```arya
-keep name = "Hamza"
-keep home = view {
+const name = "Hamza"
+const home = view {
   html {
     head {
       title "My Arya page"
@@ -160,9 +147,9 @@ Text and attribute values are escaped for HTML. Text such as `"<strong>Hello</st
 A triple-quoted string is also useful for ordinary multiline text:
 
 ```arya
-keep message = """First line
+const message = """First line
 Second line"""
-say(message)
+print(message)
 ```
 
 ## Serve HTML and JSON
@@ -174,7 +161,7 @@ use python "math" as math
 # index.html is required beside this source file.
 web.serve(3000, {
   "GET /api/root": fn(request) {
-    keep value = number(request.query.value or "81")
+    const value = number(request.query.value or "81")
     return {root: math.sqrt(value)}
   },
   "POST /api/echo": fn(request) {
@@ -183,7 +170,7 @@ web.serve(3000, {
 })
 ```
 
-`web.serve(port, routes, options)` returns a Node HTTP server, including its `.close()` method. Both `routes` and `options` are optional. The host defaults to `127.0.0.1`. By default, startup requires `index.html`; GET/HEAD `/` serves that file, and otherwise unmatched GET/HEAD requests can serve files from `public/`. Explicit routes take precedence over file serving. Route keys are paths or a method followed by a path, such as `"GET /api/root"`. Routes match exact paths. Values can be static HTML/data or functions receiving a request. Asynchronous handlers can `await` operations and `return` their result.
+`web.serve(port, routes, options)` returns a Node HTTP server, including its `.close()` method. Both `routes` and `options` are optional. The host defaults to `127.0.0.1`. By default, startup requires `index.html`; GET/HEAD `/` serves that file, and otherwise unmatched GET/HEAD requests can serve files from `public/`. Explicit routes take precedence over file serving. Route keys are paths or a method followed by a path, such as `"GET /api/root"`. They support exact paths and [named segments](services.md#routes-and-request-context). Values can be static HTML/data or functions receiving a request. Asynchronous handlers can `await` operations and `return` their result.
 
 | Request field | Meaning |
 | --- | --- |
@@ -217,7 +204,7 @@ You can still choose Express:
 
 ```arya
 use js "express" as express
-keep app = express()
+const app = express()
 app.get("/", fn(request, response) {
   response.send("Hello from Arya")
 })
@@ -235,9 +222,9 @@ use std "fs" as fs
 use std "math" as math
 
 await fs.writeText("result.txt", str(math.sqrt(81)))
-say(await fs.readText("result.txt"))
-say(await fs.exists("result.txt"))
-say(await fs.list("."))
+print(await fs.readText("result.txt"))
+print(await fs.exists("result.txt"))
+print(await fs.list("."))
 ```
 
 The file functions are asynchronous. `math` exposes JavaScript's `Math` API.
@@ -251,21 +238,21 @@ npm install mysql2
 ```arya
 use std "mysql" as mysql
 
-keep db = await mysql.connect({
+const db = await mysql.connect({
   host: process.env.DB_HOST or "localhost",
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME
 })
 
-keep rows = await db.rows("SELECT ? AS answer", [42])
-say(rows[0].answer)
+const rows = await db.rows("SELECT ? AS answer", [42])
+print(rows[0].answer)
 await db.close()
 ```
 
 `db.rows(sql, params)` returns row data directly. `db.one` returns the first row or `null`; `db.scalar` returns its first column or `null`. `db.execute(sql, params)` returns row data or a statement-result packet, without the driver's field metadata. Parameter lists are optional and default to `[]`; use placeholders for values. `db.transaction(async fn(tx) { ... })` commits related work on one dedicated connection or rolls back on failure. `db.ping()` checks connectivity; `db.close()` waits for active operations and closes the pool. The optional driver is loaded and the connection is verified when connecting, rather than during passive checking.
 
-`use js` and `use python` remain available in the same file. Python calls use the existing synchronous JSON bridge: each call starts a fresh process, retains no Python state, and blocks while it runs. Only supported JSON-compatible arguments/results cross the bridge. Direct synchronous Python calls inside a request limit throughput. The development [async Python library](python-async.md) provides an opt-in alternative with `python.bind`/`call`/`map` and cancellation; pass `request.signal` to stop Python work when a request is cancelled. See [interop](interop.md).
+`use js` and `use python` remain available in the same file. Python calls use the existing synchronous JSON bridge: each call starts a fresh process, retains no Python state, and blocks while it runs. Only supported JSON-compatible arguments/results cross the bridge. Direct synchronous Python calls inside a request limit throughput. The [async Python library](python-async.md) provides an opt-in alternative with `python.bind`/`call`/`map` and cancellation; pass `request.signal` to stop Python work when a request is cancelled. See [interop](interop.md).
 
 The JavaScript profile also supplies `use std "path" as path`, exposing Node's path helpers, and `use std "json" as json` with `parse(text)`, `stringify(value)`, asynchronous `read(path)`, and asynchronous `write(path, value)`.
 

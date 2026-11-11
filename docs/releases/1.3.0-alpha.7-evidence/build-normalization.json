@@ -1,0 +1,10 @@
+{
+  "description": "The clean build normalized the extension manifest language version; compiler sources and all other input files match SOURCE-MANIFEST.json. Publication documentation is added separately.",
+  "files": [
+    {
+      "filename": "editors/vscode/package.json",
+      "inputSha256": "8d3569f3a0e65c4ddd21ad10b0ce44910d2e0b00439868f786bb9291dd4934a8",
+      "builtSha256": "590276322bedc824f6cc0aa9c4e9d8e5b972eff536f36c59fd08ba61f78cb73e"
+    }
+  ]
+}

@@ -5,16 +5,16 @@ fn mark() {
   return "unused"
 }
 
-keep missing = null
-say(missing?.[mark()].value ?? "fallback")
-say(missing?.method(mark()) ?? "skipped")
-say(hits)
+const missing = null
+print(missing?.[mark()].value ?? "fallback")
+print(missing?.method(mark()) ?? "skipped")
+print(hits)
 
-say(0 ?? 99, false ?? true, "" ?? "default")
-say(null ?? undefined ?? 42)
+print(0 ?? 99, false ?? true, "" ?? "default")
+print(null ?? undefined ?? 42)
 
-keep user = {profile: {name: "Arya"}}
-say(user
+const user = {profile: {name: "Arya"}}
+print(user
   ?.profile
   .name
   .toUpperCase())
@@ -22,17 +22,17 @@ say(user
 let values = [1]
 values?.push?.(2)
 values?.["push"]?.(3)
-say(values.join("-"))
+print(values.join("-"))
 
-keep absent = {}
-say(absent.missing?.(mark()) ?? "no callback")
+const absent = {}
+print(absent.missing?.(mark()) ?? "no callback")
 
-try { (missing?.value).next } catch error { say(error.name) }
-try { {child: null}?.child.next } catch error { say(error.name) }
-try { (7)?.() } catch error { say(error.name) }
+try { (missing?.value).next } catch error { print(error.name) }
+try { {child: null}?.child.next } catch error { print(error.name) }
+try { (7)?.() } catch error { print(error.name) }
 
 fn choose() {
   if 0 ?? 1 { return 9 }
   return 7
 }
-say(choose())
+print(choose())

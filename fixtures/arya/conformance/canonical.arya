@@ -1,0 +1,35 @@
+# Canonical syntax and closures run on Node.js.
+const title = "Arya"
+const multiline = """Arya
+canonical"""
+const raw = '''\n'''
+
+fn counter() {
+  let value = 0
+  return fn() { value += 1; return value }
+}
+const next = counter()
+if next() != 1 or next() != 2 { throw "Anonymous function closure failed" }
+if multiline != "Arya\ncanonical" or len(raw) != 2 { throw "Raw multiline string failed" }
+
+fn sum(values) {
+  let total = 0
+  for value in values {
+    total += value
+  }
+  return total
+}
+
+const total = sum(range(1, 6))
+print(title + " total:", total)
+
+if total > 20 {
+  print("Large")
+} else if total == 15 {
+  print("Ready")
+} else {
+  print("Small")
+}
+
+fn negative() { return -1 }
+print(negative())

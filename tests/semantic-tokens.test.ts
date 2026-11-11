@@ -11,7 +11,7 @@ fn outer(name) {
   count += 1
   return ui.text(greet(name))
 }
-say(name)
+print(name)
 `;
   const tokens = semanticTokens(source);
   const at = (position: number) => tokens.find(token => token.start === position)!;
@@ -23,12 +23,12 @@ say(name)
   assert.equal(at(source.lastIndexOf('name))')).type, 'parameter');
   assert.equal(at(source.indexOf('text(')).type, 'method');
   assert.ok(at(source.indexOf('count +=')).modifiers.includes('modification'));
-  assert.ok(at(source.indexOf('say(')).modifiers.includes('defaultLibrary'));
+  assert.ok(at(source.indexOf("print(")).modifiers.includes('defaultLibrary'));
   assert.ok(at(source.lastIndexOf('name)')).modifiers.includes('readonly'));
 });
 
 test('optional chains, computed indexes, constructors, and Unicode use precise UTF-16 ranges', () => {
-  const source = 'use js "node:buffer" as data\nconst emoji = "🌉"; const key = "name"; const value = data?.Buffer?.from("hi").length\nconst item = new data.Buffer(4)\nsay(data[key])';
+  const source = "use js \"node:buffer\" as data\nconst emoji = \"🌉\"; const key = \"name\"; const value = data?.Buffer?.from(\"hi\").length\nconst item = new data.Buffer(4)\nprint(data[key])";
   const tokens = semanticTokens(source);
   const at = (word: string, last = false) => tokens.find(token => token.start === (last ? source.lastIndexOf(word) : source.indexOf(word)))!;
   assert.equal(at('Buffer?').type, 'property');

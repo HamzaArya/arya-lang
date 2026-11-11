@@ -1,6 +1,34 @@
 # Changelog
 
+## 1.3.0-alpha.7 — local business application candidate
+
+- Isolate injected runtime dependencies from lexical module host bindings.
+- Add exact decimal strings, strict dates/instants/zones and bounded async iterators.
+- Add bounded optional types, unknown external declarations, module checking and `.d.mts` output.
+- Add conservative formatting/lint, parser recovery, snapshot navigation/signatures,
+  incremental compilation, esbuild adapter and explicit Node test entry points.
+- Integrate an application-owned bank CSV preview in the separate Arya Ledger repository.
+- Unpublished and experimental. See [contracts and limits](docs/business-applications.md)
+  and [phase evidence](docs/business-applications-plan.md).
+
+
 Arya is experimental. Versioned release notes contain compatibility details; [release readiness](docs/release-readiness.md) records actual qualification.
+
+## Unreleased documentation
+
+- Added a [CLI reference](docs/cli.md), a [release index](docs/releases/README.md), and file/JSON/path/math/environment contracts in the [standard-library reference](docs/standard-library.md).
+- Clarified published-baseline versus source-candidate requirements and pinned consumer setup examples to the recorded published version.
+- Corrected Python async/persistent-process claims, CLI argument handling, creator/archive version matching, and specification/API summaries.
+- Replaced the milestone workboard with a [current roadmap](docs/arya-roadmap.md); moved superseded plans, audits, and retired native instructions into the [historical archive](docs/history/README.md), preserving their evidence and updating links.
+
+## 1.3.0-alpha.4 — canonical syntax candidate
+
+- Standardized on `const`, `fn`, `return`, `if`/`else`, `for`, and `print`; mutable bindings retain `let`.
+- Removed alternate parser spellings and the implicit `say` builtin. The removed words are ordinary identifiers.
+- Migrated starters, fixtures, active docs, snippets, grammars, completions, hover help, source highlighting, and the editor tour.
+- Added rejection/reclaimed-name coverage and updated diagnostic/source-position checks.
+
+See [candidate notes](docs/releases/1.3.0-alpha.4.md) and [syntax migration](docs/syntax-migration.md). This breaking prerelease candidate is not published to npm.
 
 ## 1.3.0-alpha.3 — UI sections and templates candidate
 

@@ -8,7 +8,7 @@ exports.run = async () => {
   assert.ok(extension, 'installed Arya extension');
   await extension.activate();
   const filename = path.join(process.env.ARYA_EDITOR_TEST_WORKSPACE, 'colors.arya');
-  const source = 'use std "ui" as ui\nkeep emoji = "🌉"\nfn greeting(name = emoji) => name |> ui.text\nsay(greeting("Arya"))\n';
+  const source = "use std \"ui\" as ui\nconst emoji = \"🌉\"\nfn greeting(name = emoji) => name |> ui.text\nprint(greeting(\"Arya\"))\n";
   await fs.writeFile(filename, source);
   const document = await vscode.workspace.openTextDocument(filename);
   await vscode.window.showTextDocument(document);

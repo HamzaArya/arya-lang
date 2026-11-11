@@ -1,10 +1,10 @@
 # Install and upgrade Arya
 
-Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-language`; the commands are `arya` and `arya-lsp`. Version **1.2.0-alpha.4** is published on npm’s `latest` tag and includes UI/desktop starters and bundled editor support. It remains an experimental alpha; see the [release notes](releases/1.2.0-alpha.4.md) for scope and compatibility.
+Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-language`; the commands are `arya` and `arya-lsp`. The last verified npm publication recorded here is **1.2.0-alpha.4**, published on 10 November 2026 with the `latest` tag. It includes UI/desktop starters and bundled editor support. It remains an experimental alpha; see the [release notes](releases/1.2.0-alpha.4.md) for scope and compatibility.
 
 ## Requirements and tested support
 
-The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current source candidate, 1.3.0-alpha.3, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
+The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current source candidate, 1.3.0-alpha.4, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
 
 macOS arm64, Node 22.15.0 and 24.16.0, and Python 3.13.15 have recorded local results in the roadmap. A configured Linux/Windows CI job is a test plan, not a passing result. Fresh Linux/Windows results for alpha.4 were not part of its npm qualification; earlier-version CI is historical evidence. Check the candidate's [release-readiness record](release-readiness.md) before relying on a platform claim.
 
@@ -18,15 +18,9 @@ npm install --save-exact arya-language@1.2.0-alpha.4
 npx --no-install arya --version
 ```
 
-The CLI identifies `Arya 1.2.0-alpha.4`. You can also choose `arya-language@latest` for the current preview. To create a new application interactively, use `npm create arya-language@latest`, then run `npm install` and `npm run dev` inside the created folder. Registry installation uses matching compiler and creator versions; no repository checkout or archive transfer is required.
+The CLI identifies `Arya 1.2.0-alpha.4`. To create a new application interactively, use `npm create arya-language@1.2.0-alpha.4`, then run `npm install` and `npm run dev` inside the created folder. Registry installation uses matching compiler and creator versions; no repository checkout or archive transfer is required. `@latest` follows the registry tag, which may move after this publication record.
 
 The [release notes](releases/1.2.0-alpha.4.md) describe compatibility; the [publication record](releases/1.2.0-alpha.4-publication.json) verifies registry hashes and a fresh public install. Local/offline archive installation remains available as described below.
-
-For the previously published 0.2 preview, an exact registry installation remains:
-
-```sh
-npm install --save-exact arya-language@0.2.0-alpha.3
-```
 
 `arya-language@latest` selects whichever public preview the registry tag currently names; it can change when a new release is selected. Pin the intended archive or published version for reproducible projects. Read the matching release notes before upgrading.
 
@@ -49,7 +43,7 @@ node --enable-source-maps .arya/build/main.arya.mjs
 
 Check prints `Check OK` and never executes imports. Run and standalone execution print `Hello from Arya`. Build prints its generated entry path and writes source maps alongside the generated modules. Keep those maps with the output when diagnosing failures. The maps contain a copy of the original source text.
 
-For arguments, use `npx --no-install arya run main.arya -- "literal argument"`. Read them through the Arya `args` list. Flags after the module path belong to the program rather than Node.
+For arguments, use `npx --no-install arya run main.arya -- "literal argument"`. Read them through the Arya `args` list. Everything after `--` belongs to the program. The candidate CLI still recognizes compatibility/retired compiler flags between the file and `--`; see the [command reference](cli.md#run-and-pass-arguments).
 
 ## Create a project interactively
 
@@ -59,9 +53,9 @@ With the compiler installed:
 npx --no-install arya create
 ```
 
-The current candidate offers web, API, CLI, UI, and Electron desktop applications. The generated package.json pins Arya and supplies npm run dev/check/build scripts. Web apps use one index.html containing div#root; browser code renders the interface there.
+The current source candidate offers web, API, CLI, UI, and Electron desktop applications. The published baseline also offers the older native template, retired in 1.3. The generated `package.json` pins Arya and supplies `npm run dev`, `check`, `start`, and `build` scripts. Web apps use one `index.html` containing `div#root`; browser code renders the interface there. New flow syntax and UI sections/templates require [candidate setup](node-runtime.md#try-the-candidate).
 
-The published registry entry is npm create arya-language@latest. npm install arya-language remains a normal compiler installation and does not ask project-creation questions automatically.
+The pinned registry entry is `npm create arya-language@1.2.0-alpha.4`. npm install arya-language remains a normal compiler installation and does not ask project-creation questions automatically.
 
 For an offline project or an unpublished future candidate, supply a matching compiler archive:
 
@@ -76,7 +70,7 @@ The archive is copied into vendor/ and referenced relatively, so the generated p
 
 ## Work across several files
 
-With a module-capable candidate, place dependencies below the entry file's directory:
+Place dependencies below the entry file's directory:
 
 ```text
 project/
@@ -125,7 +119,7 @@ AryaCode installs its own pinned compiler archive. Installing a different compil
 
 1. Save or commit your source and dependency lockfile.
 2. Read the target version's release notes and migration examples.
-3. Install that exact archive with `npm install --save-exact "/absolute/path/to/arya-language-<new-version>.tgz"`.
+3. Install the exact registry version with `npm install --save-exact arya-language@<new-version>`, or the reviewed archive with `npm install --save-exact "/absolute/path/to/arya-language-<new-version>.tgz"`. Unpublished candidates require an archive.
 4. Check `npx --no-install arya --version`, run Check on the entry file, and run the project's tests/examples.
 5. Rebuild generated output. Do not mix a new generated module with an older map.
 

@@ -23,14 +23,14 @@ test('unsupported standard libraries have matching passive compiler and editor d
 test('legacy API native requests fail explicitly before filesystem access', async () => {
   const options = {target: 'native'} as unknown as ProjectOptions;
   await assert.rejects(checkProject('/does-not-exist.arya', options), (error: any) => error.diagnostics[0].code === 'ARYA_UNSUPPORTED_TARGET');
-  assert.equal(analyze('say(42)', 'file:///main.arya', options).diagnostics[0]?.code, 'ARYA_UNSUPPORTED_TARGET');
+  assert.equal(analyze("print(42)", 'file:///main.arya', options).diagnostics[0]?.code, 'ARYA_UNSUPPORTED_TARGET');
 });
 
 test('CLI retires compiler flags while preserving explicit JS compatibility and literal program arguments', async t => {
   const root = await mkdtemp(join(tmpdir(), 'arya node runtime '));
   t.after(() => rm(root, {recursive: true, force: true}));
   const filename = join(root, 'main.arya');
-  await writeFile(filename, 'say(args.join("|"))');
+  await writeFile(filename, "print(args.join(\"|\"))");
   const cli = resolve('dist/cli.cjs');
   for (const flag of ['--cc', '--cc=missing', '--sanitize', '--debug', '--release', '-o', '--output', '--output=app']) {
     const result = spawnSync(process.execPath, [cli, 'check', filename, flag, '--json'], {encoding: 'utf8'});

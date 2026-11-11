@@ -1,16 +1,16 @@
 use std "debug" as debug
 
-keep customer = {
+const customer = {
   name: "Hamza",
   preferences: {notifications: false}
 }
 
-keep notifications = customer?.preferences?.notifications ?? true
+const notifications = customer?.preferences?.notifications ?? true
 debug.assert(notifications == false, "An explicit false preference must be preserved.")
 
-keep tools = ["Arya", "Python", "JavaScript"]
+const tools = ["Arya", "Python", "JavaScript"]
   .slice(1)
   .join(" + ")
 
 debug.trace("tools", tools)
-say(debug.inspect({customer: customer.name, notifications: notifications, tools: tools}))
+print(debug.inspect({customer: customer.name, notifications: notifications, tools: tools}))

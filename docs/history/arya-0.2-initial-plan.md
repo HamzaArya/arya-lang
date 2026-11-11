@@ -1,6 +1,6 @@
 # Initial Arya 0.2 plan
 
-> Historical initial plan. This records the original 0.2 proposal; current features and commands are in the [documentation index](README.md).
+> Historical initial plan. This records the original 0.2 proposal; current features and commands are in the [documentation index](../README.md).
 
 Start with one failing program. When you run it through either the CLI or AryaCode, the stack trace should tell you which line in the original .arya file failed. Use that as the first milestone for Arya 0.2, then build toward Arya 1.0 as a documented language people can install, learn, and use for their own projects.
 Step 1 · Make runtime errors point to .arya

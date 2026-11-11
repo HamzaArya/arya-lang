@@ -1,0 +1,9 @@
+use python "math" as math
+use std "python" as python
+const values = range(20)
+const start = performance.now()
+for value in values { await python.call(math.sqrt, [value]) }
+const freshMs = performance.now() - start
+const batchStart = performance.now()
+const result = await python.map(math.sqrt, values)
+print({freshCalls: 20, freshMs: freshMs, batchMs: performance.now() - batchStart, values: len(result)})

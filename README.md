@@ -2,20 +2,20 @@
 
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current source: [1.3.0-alpha.3](docs/releases/1.3.0-alpha.3.md)** — a Node.js-only candidate. The latest published npm release is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md). The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
+**Current source: [1.3.0-alpha.7](docs/releases/1.3.0-alpha.7.md)** — a Node.js-only candidate. The last verified npm publication recorded here is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md), published 10 November 2026. The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
 
 ## Start a project
 
 Requires **Node.js 22.15 or newer** and npm:
 
 ```sh
-npm create arya-language@latest my-app -- --template web
+npm create arya-language@1.2.0-alpha.4 my-app -- --template web
 cd my-app
 npm install
 npm run dev
 ```
 
-The commands above use the published npm baseline. To try the Node.js-only candidate from this checkout, follow [candidate setup](docs/node-runtime.md#try-the-candidate). Its creator offers these five templates:
+The commands above pin the published npm baseline. `@latest` follows the mutable registry tag. To try the Node.js-only candidate from this checkout, follow [candidate setup](docs/node-runtime.md#try-the-candidate). Its creator offers these five templates:
 
 | Template | What you get |
 | --- | --- |
@@ -25,7 +25,7 @@ The commands above use the published npm baseline. To try the Node.js-only candi
 | `ui` | Arya components, forms, browser state, API actions, and animations |
 | `desktop` | The same UI application in an isolated Electron window |
 
-For example, `npm create arya-language@latest my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
+For example, `npm create arya-language@1.2.0-alpha.4 my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
 
 ## Read application code from top to bottom
 
@@ -36,18 +36,18 @@ use std "list" as list
 
 fn label(person, position = 0) => str(position + 1) + ". " + person.name
 
-keep people = [{name: "Hamza", active: true, score: 85}]
-keep leaders = people
+const people = [{name: "Hamza", active: true, score: 85}]
+const leaders = people
   |> list.filter("active")
   |> list.sortBy("score", "desc")
   |> list.take(3)
 
-each person at position in leaders {
-  say(label(person, position))
+for person at position in leaders {
+  print(label(person, position))
 }
 ```
 
-These new forms require 1.3.0-alpha.2. Read the [syntax guide](docs/flow-syntax.md) or run the [data-flow example](fixtures/examples/data-flow/README.md). Existing source spellings remain accepted; older bindings named `guard` need renaming.
+These forms were added in 1.3.0-alpha.2 and are included in the current source candidate; the published 1.2 baseline does not support them. Read the [syntax guide](docs/flow-syntax.md) or run the [data-flow example](fixtures/examples/data-flow/README.md). Use canonical `const`, `fn`, `return`, `if`/`else`, `for`, and `print`. The alpha.4 candidate removes alternate spellings; see [syntax migration](docs/syntax-migration.md). Older bindings named `guard` also need renaming.
 
 ## Use JavaScript and Python together
 
@@ -59,10 +59,10 @@ use std "python" as python
 const stats = python.bind(statistics)
 const mean = await stats.mean([10, 20, 30])
 
-say({id: crypto.randomUUID(), mean: mean})
+print({id: crypto.randomUUID(), mean: mean})
 ```
 
-Install the compiler with `npm install arya-language@latest`, save the example as `main.arya`, and run `npx --no-install arya run main.arya`. Python is required for this example. Install additional npm and Python libraries in the application's respective environments.
+Install the compiler with `npm install --save-exact arya-language@1.2.0-alpha.4`, save the example as `main.arya`, and run `npx --no-install arya run main.arya`. Python is required for this example. Install additional npm and Python libraries in the application's respective environments.
 
 Direct Python calls remain synchronous. The async library adds bound imports, keyword arguments, batches, cancellation, bounded queues, and interpreter selection. See [interop](docs/interop.md), [async Python](docs/python-async.md), and the [reporting service example](fixtures/examples/python-web/README.md).
 
@@ -76,6 +76,7 @@ Direct Python calls remain synchronous. The async library adds bound imports, ke
 | Build an interface | [UI and desktop apps](docs/ui-apps.md), [component and animation reference](docs/ui-library.md) |
 | Find and fix errors | [Safer expressions, code frames, Quick Fixes, and debug helpers](docs/syntax-and-debugging.md) |
 | Embed the compiler | [Compiler, language-service, project, and editor APIs](docs/compiler-api.md) |
+| Use the terminal | [Commands, arguments, JSON reports, and build output](docs/cli.md) |
 
 The UI library includes an interactive component gallery, eight reusable page sections, four full-page templates, a motion playground, and an implementation guide. The [sections and templates guide](docs/ui-patterns.md) covers landing pages, dashboards, settings, and sign-in interfaces. From a source checkout, run `npm run ui:preview` and open **http://127.0.0.1:3040**. Applications can serve the same pages with `ui.preview()`.
 
@@ -84,7 +85,7 @@ The UI library includes an interactive component gallery, eight reusable page se
 The npm package includes an offline extension, `.arya` icons, Arya Dark/Light themes, semantic highlighting, and portable editor adapters:
 
 ```sh
-npm install arya-language@latest
+npm install --save-exact arya-language@1.2.0-alpha.4
 npx --no-install arya editor install
 ```
 
@@ -104,6 +105,6 @@ The full suite additionally needs Python. A C compiler is not required. MySQL, C
 
 Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.2.0-alpha.4-publication.json).
 
-The current release has recorded local macOS arm64 qualification. Fresh Linux/Windows qualification and external learner review remain open. Electron desktop installers, a formatter, static types, and interactive source-level debugging are separate work; see the [roadmap](docs/arya-roadmap.md) and [readiness record](docs/release-readiness.md).
+The current candidate has recorded local macOS arm64 qualification. Fresh Linux/Windows qualification and external learner review remain open. The current candidate adds [business APIs, optional types, formatting, incremental builds and Node test integration](docs/business-applications.md). Electron installers and interactive editor debugging qualification remain separate work; see the [roadmap](docs/arya-roadmap.md) and [readiness record](docs/release-readiness.md).
 
 Licensed under [Apache-2.0](LICENSE), copyright 2026 Hamza Arya. Retain [NOTICE](NOTICE) and [third-party notices](THIRD-PARTY-NOTICES.txt) in distributions. Report vulnerabilities through [SECURITY.md](SECURITY.md).

@@ -1,7 +1,7 @@
 # Optional inline markup for small tools. HTML-first projects use index.html instead.
 use std "web" as web
 
-keep home = view {
+const home = view {
   html(lang="en") {
     head {
       title "Arya inline view"
@@ -15,4 +15,4 @@ keep home = view {
 }
 
 web.serve(number(args[0] or "3000"), {"/": home}, {html: false})
-say("Arya inline view is running")
+print("Arya inline view is running")

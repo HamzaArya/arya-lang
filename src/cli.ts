@@ -1,3 +1,5 @@
+import {writeFile} from 'node:fs/promises';
+import {formatSource, lintSource} from './tooling.js';
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { ARYA_VERSION, formatDiagnostics, diagnosticFixes } from './compiler.js';
@@ -12,7 +14,7 @@ async function main(): Promise<void> {
   const [command, file, ...rest] = process.argv.slice(2);
   if (command === '--version') { console.log(`Arya ${ARYA_VERSION}`); return; }
   if (!command || command === '--help') {
-    console.log('Arya — readable code, connected ecosystems\n\n  arya create [directory] [--template web|api|cli|ui|desktop]\n  arya init [directory] --web\n  arya editor status|install|path [--editor all|code|aryacode|cursor|codium|windsurf]\n  arya run <file.arya> [-- program arguments]\n  arya check <file.arya> [--json]\n  arya build <file.arya>\n\nArya compiles to JavaScript modules and runs on Node.js 22.15+.\nBuild output: .arya/build beside the entry source.\nWeb projects use index.html, main.arya, and public CSS/JavaScript files.\nSet ARYA_PYTHON to select the interpreter for Python bridge calls.'); return;
+    console.log('Arya — readable code, connected ecosystems\n\n  arya create [directory] [--template web|api|cli|ui|desktop]\n  arya init [directory] --web\n  arya editor status|install|path [--editor all|code|aryacode|cursor|codium|windsurf]\n  arya run <file.arya> [-- program arguments]\n  arya check <file.arya> [--json]\n  arya build <file.arya>\n  arya fmt <file.arya> [--check]\n  arya lint <file.arya>\n  arya test <file.test.arya>\n\nArya compiles to JavaScript modules and runs on Node.js 22.15+.\nBuild output: .arya/build beside the entry source.\nWeb projects use index.html, main.arya, and public CSS/JavaScript files.\nSet ARYA_PYTHON to select the interpreter for Python bridge calls.'); return;
   }
   if (command === 'init' || command === 'create') { await runProjectCreator(process.argv.slice(3), command); return; }
   if (command === 'editor') {
@@ -24,7 +26,14 @@ async function main(): Promise<void> {
     }
     return;
   }
-  if (!['run', 'check', 'build'].includes(command) || !file || !file.toLowerCase().endsWith('.arya')) throw new Error('Use arya run, check, or build followed by a .arya file. See --help.');
+  if ((command === 'fmt' || command === 'lint') && file?.endsWith('.arya')) {
+    if(rest.some(arg=>arg!=='--check') || command==='lint'&&rest.length)throw new Error('Use arya fmt file.arya [--check] or arya lint file.arya.');
+    const source=await readBounded(resolve(file));
+    if(command==='fmt') { const formatted=formatSource(source,file); if(rest.includes('--check')) {if(formatted!==source){console.error('Formatting required: '+file);process.exitCode=1;}} else await writeFile(resolve(file),formatted); }
+    else {const diagnostics=lintSource(source,file);if(diagnostics.length){console.error(formatDiagnostics(file,source,diagnostics));process.exitCode=1;}}
+    return;
+  }
+  if (!['run','test', 'check', 'build'].includes(command) || !file || !file.toLowerCase().endsWith('.arya')) throw new Error('Use arya run, check, or build followed by a .arya file. See --help.');
   const target = 'js';
   const programArgs: string[] = [];
   for (let index = 0; index < rest.length; index++) {
@@ -66,7 +75,9 @@ async function main(): Promise<void> {
     throw error;
   }
   if (command === 'build') { console.log(output); return; }
-  const child = spawn(process.execPath, ['--enable-source-maps', output, ...programArgs], { stdio: 'inherit', env: process.env });
+  const childEnv = {...process.env};
+  if(command==='test')delete childEnv.NODE_TEST_CONTEXT; // Start an independent runner when invoked from a Node test host.
+  const child = spawn(process.execPath, ['--enable-source-maps', ...(command==='test'?['--test']:[]), output, ...programArgs], { stdio: 'inherit', env: childEnv });
   // Forward interruption when the CLI is used outside AryaCode's task terminal.
   const interrupt = () => child.kill('SIGINT'), terminate = () => child.kill('SIGTERM');
   process.on('SIGINT', interrupt); process.on('SIGTERM', terminate);

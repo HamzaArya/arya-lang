@@ -1,3 +1,4 @@
+import type {Type} from './types.js';
 import type { Token, LexicalBinding, LexicalReference } from './compiler.js';
 
 export interface Block { scopeId: number; statements: Statement[] }
@@ -14,7 +15,7 @@ export type Expression = { token: Token } & (
   | { kind: 'binary'; operator: string; left: Expression; right: Expression }
   | { kind: 'spread'; value: Expression }
   | { kind: 'pipe'; value: Expression; callee: Expression; arguments: Expression[]; awaited: boolean }
-  | { kind: 'function'; async: boolean; parameters: Token[]; defaults: Expression[]; rest?: Token; body: Block }
+  | { kind: 'function'; async: boolean; parameters: Token[]; returnType?: Type; optionalParameters?: number[]; defaults: Expression[]; rest?: Token; body: Block }
   | { kind: 'call'; callee: Expression; arguments: Expression[] }
   | { kind: 'member'; object: Expression; key: Expression }
   | { kind: 'chain'; base: Expression; steps: ChainStep[] }

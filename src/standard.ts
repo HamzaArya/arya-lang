@@ -1,3 +1,6 @@
+import {asyncRuntime} from './std/async.js';
+import { decimalRuntime } from './std/decimal.js';
+import { datetimeRuntime } from './std/datetime.js';
 import { httpRuntime } from './std/http.js';
 import { envRuntime } from './std/env.js';
 import { mysqlRuntime } from './std/mysql.js';
@@ -9,7 +12,7 @@ import { uiRuntime } from './std/ui.js';
 import { listRuntime } from './std/list.js';
 
 /** JavaScript-profile standard libraries. Checking only emits this source; it never runs it. */
-export const standardLibraries = ['fs', 'math', 'path', 'json', 'web', 'mysql', 'env', 'validate', 'log', 'python', 'debug', 'ui', 'list'] as const;
+export const standardLibraries = ['async', 'decimal', 'datetime', 'fs', 'math', 'path', 'json', 'web', 'mysql', 'env', 'validate', 'log', 'python', 'debug', 'ui', 'list'] as const;
 
 export const standardRuntime = String.raw`import * as __arya_fs from 'node:fs/promises';
 import * as __arya_fsSync from 'node:fs';
@@ -34,6 +37,8 @@ const __arya_json = Object.freeze({
   read: async path => JSON.parse(await __arya_files.readText(path)),
   write: (path, value) => __arya_files.writeText(path, JSON.stringify(value, null, 2) + '\n')
 });
+${datetimeRuntime}
+${asyncRuntime}
 ${validationRuntime}
 ${loggingRuntime}
 ${httpRuntime}
@@ -45,6 +50,9 @@ ${uiRuntime}
 ${listRuntime}
 const __arya_standard = (name, sourceDirectory) => {
   switch (name) {
+    case 'async': return __arya_async;
+    case 'decimal': return __arya_decimal;
+    case 'datetime': return __arya_datetime;
     case 'fs': return __arya_files;
     case 'math': return Math;
     case 'path': return __arya_path;
@@ -61,3 +69,5 @@ const __arya_standard = (name, sourceDirectory) => {
     default: throw new Error('Unknown JavaScript standard library: ' + name);
   }
 };`;
+
+export const standardRuntimeFor = (libraries: string[]) => (libraries.includes('decimal') ? decimalRuntime : '') + standardRuntime;

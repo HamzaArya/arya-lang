@@ -30,12 +30,12 @@ fn append(value, values = []) {
   values.push(value)
   return values
 }
-say(total(), total(10, ...[1, 2, 3]), total(null))
-say(JSON.stringify(record(42)))
-say(JSON.stringify([...[1, 2], ..."🌉a", 3]))
-say(JSON.stringify(append(1)), JSON.stringify(append(2)))
+print(total(), total(10, ...[1, 2, 3]), total(null))
+print(JSON.stringify(record(42)))
+print(JSON.stringify([...[1, 2], ..."🌉a", 3]))
+print(JSON.stringify(append(1)), JSON.stringify(append(2)))
 async fn double(value = 2) => await Promise.resolve(value * 2)
-say(await double(), await double(0))
+print(await double(), await double(0))
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, '0 16 null\n{"value":42,"ready":true}\n[1,2,"🌉","a",3]\n[1] [2]\n4 0\n');
@@ -47,8 +47,8 @@ const label = "outer"
 fn read(value = label) { const label = "body"; return value }
 fn identity(value = 42) => value
 fn forward(first = second, second = 2) => first
-say(read(), identity(false), identity(0), identity(null), identity(undefined))
-try { forward() } catch error { say(error.name) }
+print(read(), identity(false), identity(0), identity(null), identity(undefined))
+try { forward() } catch error { print(error.name) }
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, 'outer false 0 null 42\nReferenceError\n');
@@ -70,7 +70,7 @@ export const extra=async()=>{events.push('extra');return 3};
 export const trace=()=>events.join(',');`;
   const result = await run(t, `use js "./helper.mjs" as helper
 const answer = helper.input() |> helper.object()[helper.key()](await helper.extra())
-say(answer, helper.trace())`, {'helper.mjs': helper});
+print(answer, helper.trace())`, {'helper.mjs': helper});
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, '45 input,object,key,getter,extra,invoke\n');
 });
@@ -80,14 +80,14 @@ test('pipelines support explicit async stages, preserve promises, and continue a
 fn add(value, amount = 1) => value + amount
 async fn double(value) => await Promise.resolve(value * 2)
 const pending = 2 |> double
-say(Promise.resolve(pending) == pending, await pending)
+print(Promise.resolve(pending) == pending, await pending)
 const answer = 20
   |> await double
   # A documented continuation.
   |> add(2)
-say(answer, 3 |> (fn(value) => value * 2))
-say(null ?? 2 + 3 |> add(1) |> add(2))
-say(await (2 |> double))
+print(answer, 3 |> (fn(value) => value * 2))
+print(null ?? 2 + 3 |> add(1) |> add(2))
+print(await (2 |> double))
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, 'true 4\n42 6\n8\n4\n');
@@ -104,13 +104,13 @@ fn require(value) {
   return value
 }
 const values = []
-each value in range(6) {
+for value in range(6) {
   guard value % 2 == 0 else { continue }
   guard value < 4 else { break }
   values.push(value)
 }
-say(greet(null), greet("Arya"), require("ready"), require(false), values.join("-"))
-try { require(null) } catch error { say(error) }
+print(greet(null), greet("Arya"), require("ready"), require(false), values.join("-"))
+try { require(null) } catch error { print(error) }
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, 'Guest Arya ready empty 0-2\nmissing\n');
@@ -119,18 +119,18 @@ try { require(null) } catch error { say(error) }
 test('indexed loops preserve iterable semantics, fresh captures, and outer names in iterable expressions', async t => {
   const result = await run(t, `
 const index = 100
-each value at index in [index] { say(value, index) }
+for value at index in [index] { print(value, index) }
 const callbacks = []
-each value at position in "🌉a" { callbacks.push(fn() => str(position) + ":" + value) }
-say(callbacks[0](), callbacks[1]())
+for value at position in "🌉a" { callbacks.push(fn() => str(position) + ":" + value) }
+print(callbacks[0](), callbacks[1]())
 const positions = []
-each value at position in new Set(["a", "b"]) {
+for value at position in new Set(["a", "b"]) {
   positions.push(position)
   position = 99
 }
-say(positions.join(","), index)
+print(positions.join(","), index)
 let at = "contextual"
-say(at)
+print(at)
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, '100 0\n0:🌉 1:a\n0,1 100\ncontextual\n');
@@ -148,13 +148,13 @@ async fn work(ready = true) {
     events.push("cleanup")
   }
 }
-say(await work(), await work(false))
+print(await work(), await work(false))
 try { throw "problem" } catch error { events.push(error) } finally { events.push("after catch") }
-each value in [1, 2] {
+for value in [1, 2] {
   try { if value == 1 { continue }; break } finally { events.push(value) }
 }
 fn override() { try { return 1 } finally { return 2 } }
-say(events.join("|"), override())
+print(events.join("|"), override())
 `);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, 'done blocked\ncleanup|cleanup|problem|after catch|1|2 2\n');
@@ -166,24 +166,24 @@ test('new syntax rejects ambiguous or unsafe forms with targeted diagnostics', (
     ['fn invalid(...values,) {}', /rest parameter last/],
     ['fn invalid(...values = []) {}', /rest parameter cannot have a default/],
     ['async fn invalid(value = await Promise.resolve(1)) {}', /Use await/],
-    ['guard true else { say("fallthrough") }', /guard fallback must exit/],
+    ["guard true else { print(\"fallthrough\") }", /guard fallback must exit/],
     ['fn invalid() { guard true else { if false { return 1 } } }', /guard fallback must exit/],
     ['guard true { throw "missing else" }', /guard condition else/],
     ['1 |> 42', /Pipe into a function/],
     ['const object = {}\n1 |> (object?.method)()', /Pipe into a function/],
     ['1 |> fn(value) => value', /Wrap an inline function/],
-    ['fn invalid() => 1 |> await say', /awaited pipeline/],
+    ['fn invalid() => 1 |> await print', /awaited pipeline/],
     ['try {}', /catch or finally/],
-    ['each item at item in [] {}', /already defined/],
+    ["for item at item in [] {}", /already defined/],
     ['let guard = 1', /Expected a name/],
   ];
   for (const [source, pattern] of rejected) assert.throws(() => compile(source), pattern, source);
   assert.throws(() => compile('fn value() => missing'), /Unknown name 'missing'/);
-  assert.equal(analyze('guard true else { say(1) }', 'file:///main.arya').diagnostics[0]?.hint?.includes('return/throw'), true);
+  assert.equal(analyze("guard true else { print(1) }", 'file:///main.arya').diagnostics[0]?.hint?.includes('return/throw'), true);
 });
 
 test('pipeline failures have stable error codes and preserve original source frames', async t => {
-  const badStage = await run(t, 'const stage = 42\ntry { 1 |> stage } catch error { say(error.code, error.name) }');
+  const badStage = await run(t, "const stage = 42\ntry { 1 |> stage } catch error { print(error.code, error.name) }");
   assert.equal(badStage.status, 0, badStage.stderr);
   assert.equal(badStage.stdout, 'ARYA_PIPELINE_STAGE TypeError\n');
   const failure = await run(t, 'fn fail(value) => value.missing\nnull\n  |> fail');
@@ -201,7 +201,7 @@ try {} finally { db. }
   const offset = source.lastIndexOf('db.') + 3;
   const labels = standardCompletions(source, offset).map(item => item.label);
   assert.ok(labels.includes('transaction'));
-  const valid = 'fn format(value, suffix = "!") => value + suffix\nconst result = "Arya" |> format\neach name at index in [result] { guard name else { continue }; try { say(index) } finally { say(format(name)) } }';
+  const valid = "fn format(value, suffix = \"!\") => value + suffix\nconst result = \"Arya\" |> format\nfor name at index in [result] { guard name else { continue }; try { print(index) } finally { print(format(name)) } }";
   assert.deepEqual(analyzeSource(valid).diagnostics, []);
   const tokens = semanticTokens(valid);
   assert.equal(tokens.find(token => token.start === valid.lastIndexOf('format'))?.type, 'function');
@@ -219,7 +219,7 @@ test('exported short functions and pipeline namespace calls retain project expor
   t.after(() => rm(root, {recursive: true, force: true}));
   await writeFile(join(root, 'math.arya'), 'export fn scale(value, factor = 2) => value * factor');
   const filename = join(root, 'main.arya');
-  await writeFile(filename, 'use arya "./math.arya" as math\nsay(21 |> math.scale)');
+  await writeFile(filename, "use arya \"./math.arya\" as math\nprint(21 |> math.scale)");
   const output = await writeProject(await buildProject(filename));
   const result = spawnSync(process.execPath, ['--enable-source-maps', output], {encoding: 'utf8'});
   assert.equal(result.status, 0, result.stderr); assert.equal(result.stdout, '42\n');

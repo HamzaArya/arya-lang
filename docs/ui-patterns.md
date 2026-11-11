@@ -1,6 +1,6 @@
 # UI components, sections, and templates
 
-These additions require the **1.3.0-alpha.3 source candidate**. Build this checkout or install its matching archive; the published 1.2.0-alpha.4 npm package contains the original UI library. See [candidate setup](node-runtime.md#try-the-candidate).
+These additions require the **1.3.0-alpha.4 source candidate**. Build this checkout or install its matching archive; the published 1.2.0-alpha.4 npm package contains the original UI library. See [candidate setup](node-runtime.md#try-the-candidate).
 
 Components are small building blocks, sections combine them into reusable parts of a page, and templates return complete HTML documents. They share the existing light/dark/auto themes, escaped rendering, state/actions, and motion API. No frontend dependency or CDN is added.
 
@@ -74,7 +74,7 @@ All templates accept `brand`, `title`, `description`, `theme`, `lang`, `css`, `n
 | `settings` | `heading`, `submitAction`. Default state: `{name: "", email: "", notifications: true}`. |
 | `sign-in` | `heading`, `submitAction`, `helpHref`. Default state: `{email: "", password: "", remember: false}`. Password state must start empty. |
 
-Settings and sign-in display optional `result.message` and `problem` state values. Connect a save action to a same-origin, validated server route:
+Settings and sign-in display optional `result.message` and `problem` state values. In a route handler with `use std "ui" as ui` imported, return the following template and implement its same-origin POST endpoint:
 
 ```arya
 ui.template("settings", {

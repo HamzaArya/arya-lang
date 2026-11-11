@@ -10,7 +10,7 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
 await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, runtime: 'node', capabilities: ['arya.node.v1', 'arya.syntax.flow.v1', 'arya.list.v1', 'arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.patterns.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
 await mkdir('artifacts', { recursive: true });
-for (const name of ['compiler', 'project', 'language-service', 'cli', 'lsp', 'create', 'editor']) {
+for (const name of ['compiler', 'project', 'language-service', 'cli', 'lsp', 'create', 'editor', 'esbuild']) {
   await build({ ...common, entryPoints: [`src/${name}.ts`], outfile: `dist/${name}.cjs`, ...(['cli', 'lsp', 'create'].includes(name) ? { banner: { js: '#!/usr/bin/env node' } } : {}) });
 }
 for (const name of ['cli', 'lsp', 'create']) await chmod(`dist/${name}.cjs`, 0o755);
@@ -24,9 +24,9 @@ extension.preview = manifest.version.includes('-');
 extension.aryaLanguageVersion = manifest.version;
 await writeFile('editors/vscode/package.json', JSON.stringify(extension, null, 2) + '\n');
 const notices = [];
-for (const name of ['vscode-languageserver', 'vscode-languageserver-protocol', 'vscode-languageserver-types', 'vscode-jsonrpc', 'vscode-languageserver-textdocument', '@jridgewell/gen-mapping', '@jridgewell/sourcemap-codec', '@jridgewell/resolve-uri', '@jridgewell/trace-mapping']) {
+for (const name of ['vscode-languageserver', 'vscode-languageserver-protocol', 'vscode-languageserver-types', 'vscode-jsonrpc', 'vscode-languageserver-textdocument', 'decimal.js', '@jridgewell/gen-mapping', '@jridgewell/sourcemap-codec', '@jridgewell/resolve-uri', '@jridgewell/trace-mapping']) {
   const pkg = JSON.parse(await readFile(`node_modules/${name}/package.json`, 'utf8'));
-  notices.push(`${name} ${pkg.version}\n${await readFile(`node_modules/${name}/${name.startsWith('@jridgewell/') ? 'LICENSE' : 'License.txt'}`, 'utf8')}`);
+  notices.push(`${name} ${pkg.version}\n${await readFile(`node_modules/${name}/${name === 'decimal.js' ? 'LICENCE.md' : name.startsWith('@jridgewell/') ? 'LICENSE' : 'License.txt'}`, 'utf8')}`);
 }
 await writeFile('THIRD-PARTY-NOTICES.txt', notices.join('\n\n-----\n\n'));
 await cp('THIRD-PARTY-NOTICES.txt', 'editors/vscode/THIRD-PARTY-NOTICES.txt');

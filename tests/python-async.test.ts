@@ -73,11 +73,11 @@ async function fixture(t: { after(fn: () => Promise<unknown>): void }) {
 use python "./helper.py" as helper
 use python "math" as math
 use python "arya_module_not_installed_9917" as missing
-export keep tools = python
-export keep py = python.client({timeoutMs: 3000, maxConcurrency: 2})
-export keep worker = helper
-export keep mathematics = math
-export keep absent = missing
+export const tools = python
+export const py = python.client({timeoutMs: 3000, maxConcurrency: 2})
+export const worker = helper
+export const mathematics = math
+export const absent = missing
 `;
   const output = join(root, 'main.mjs');
   await writeFile(output, compile(source, join(root, 'main.arya')).code);
@@ -154,7 +154,9 @@ test('JavaScript remains responsive while Python waits, with no polling hidden i
 
 test('Python clients bound active jobs and queues, remove cancelled jobs, and drain on close', async t => {
   const { root, tools, worker } = await fixture(t);
-  const py = tools.client({ timeoutMs: 3000, maxConcurrency: 1, queueLimit: 1 });
+  // Queue/shutdown assertions use file handshakes; startup latency is not this test's contract.
+  // Dedicated deadline tests below retain their explicit short timeout assertions.
+  const py = tools.client({ timeoutMs: 15000, maxConcurrency: 1, queueLimit: 1 });
   t.after(() => py.close());
   const start = join(root, 'queue-start'), release = join(root, 'queue-release');
   const first = py.call(worker.wait, [start, release]);
@@ -283,7 +285,7 @@ test('explicit virtual environments and imported Python functions retain their s
   const sub = join(root, 'sub'); await mkdir(sub);
   await writeFile(join(sub, 'helper.py'), 'import os\ndef cwd():\n    return os.getcwd()\n');
   const filename = join(sub, 'module.arya');
-  await writeFile(filename + '.mjs', compile('use python "./helper.py" as helper\nexport keep cwd = helper.cwd', filename).code);
+  await writeFile(filename + '.mjs', compile("use python \"./helper.py\" as helper\nexport const cwd = helper.cwd", filename).code);
   const module = await import(pathToFileURL(filename + '.mjs').href);
   assert.equal(await py.call(module.cwd), sub);
 });
@@ -293,7 +295,7 @@ test('Python callable arguments are rejected without importing their module thro
   const canary = join(root, 'must-not-import');
   await writeFile(join(root, 'side_effect.py'), `import pathlib\npathlib.Path(${JSON.stringify(canary)}).write_text("imported")\ndef value():\n    return 1\n`);
   const filename = join(root, 'side_effect.arya');
-  await writeFile(filename + '.mjs', compile('use python "./side_effect.py" as helper\nexport keep callback = helper.value', filename).code);
+  await writeFile(filename + '.mjs', compile("use python \"./side_effect.py\" as helper\nexport const callback = helper.value", filename).code);
   const module = await import(pathToFileURL(filename + '.mjs').href);
   await assert.rejects(py.call(worker.add, [module.callback]), code('ARYA_PYTHON_INPUT'));
   await assert.rejects(access(canary));
@@ -316,11 +318,11 @@ test('async Python output limits and failed UTF-8 logs stay bounded without shad
   const { root } = await fixture(t);
   const source = `use std "python" as python
 use python "./helper.py" as helper
-keep Buffer = null
+const Buffer = null
 try { await python.call(helper.noisy, [70000], {maxOutputBytes: 128 * 1024}) }
-catch error { say(error.code) }
+catch error { print(error.code) }
 try { await python.call(helper.oversized, [10000], {maxOutputBytes: 100}) }
-catch error { say(error.code) }
+catch error { print(error.code) }
 `;
   const filename = join(root, 'limits.mjs');
   await writeFile(filename, compile(source, join(root, 'limits.arya')).code);
@@ -331,7 +333,7 @@ catch error { say(error.code) }
 });
 
 test('checking async Python use remains passive', () => {
-  const source = 'use std "python" as python\nuse python "not_installed" as library\nkeep client = python.client({interpreter: "missing"})\nkeep result = await client.call(library.run)';
+  const source = "use std \"python\" as python\nuse python \"not_installed\" as library\nconst client = python.client({interpreter: \"missing\"})\nconst result = await client.call(library.run)";
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
 });

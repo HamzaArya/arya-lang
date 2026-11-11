@@ -79,7 +79,7 @@ test('bad schema configuration fails immediately, while compiler/editor checking
     () => validate.object({ field: {} }), () => validate.parse({}, 1),
     () => validate.optional(validate.integer(), 'invalid'),
   ]) assert.throws(action, code('ARYA_VALIDATION_SCHEMA'));
-  const source = 'use std "validate" as validate\nkeep body = validate.parse(validate.integer(), "invalid")';
+  const source = "use std \"validate\" as validate\nconst body = validate.parse(validate.integer(), \"invalid\")";
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
 });

@@ -7,17 +7,17 @@ use std "web" as web
 use js "node:crypto" as crypto
 use python "./analytics.py" as analytics
 
-keep logger = log.create({name: "python-reports"})
-keep py = python.client({
+const logger = log.create({name: "python-reports"})
+const py = python.client({
   timeoutMs: 5000,
   maxConcurrency: 4,
   queueLimit: 32
 })
 
-keep environment = await py.info()
+const environment = await py.info()
 logger.info("python.selected", {version: environment.version})
 
-keep reportInput = validate.object({
+const reportInput = validate.object({
   csv: validate.string({min: 1, max: 200000}),
   column: validate.optional(validate.string({min: 1, max: 80}), "amount"),
   digits: validate.optional(validate.integer({min: 0, max: 8}), 2)
@@ -27,7 +27,7 @@ async fn createReport(request) {
   let summary = null
 
   try {
-    keep analyze = py.bind(analytics, {
+    const analyze = py.bind(analytics, {
       kwargs: {
         column: request.body.column,
         digits: request.body.digits
@@ -48,7 +48,7 @@ async fn createReport(request) {
     throw error
   }
 
-  keep checksum = crypto.createHash("sha256")
+  const checksum = crypto.createHash("sha256")
     .update(request.body.csv)
     .digest("hex")
 
@@ -61,7 +61,7 @@ async fn createReport(request) {
   }
 }
 
-keep server = web.serve(env.int("PORT", 3000), {
+const server = web.serve(env.int("PORT", 3000), {
   "GET /health/live": fn() { return {status: "ok"} },
   "GET /health/ready": fn() {
     return web.health({python: fn(signal) { return py.info({signal: signal}) }}, {timeoutMs: 3000})

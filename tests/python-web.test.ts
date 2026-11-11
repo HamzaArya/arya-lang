@@ -66,15 +66,15 @@ def wait(start, release):
   await writeFile(join(root, 'main.arya'), `use std "web" as web
 use std "python" as python
 use python "./worker.py" as worker
-keep py = python.client({timeoutMs: 5000})
-keep server = web.serve(0, {
+const py = python.client({timeoutMs: 5000})
+const server = web.serve(0, {
   "GET /health/live": fn() { return {status: "ok"} },
   "GET /status": fn() { return py.stats() },
   "GET /work": async fn(request) {
     return await py.call(worker.wait, [${JSON.stringify(join(root, 'started'))}, ${JSON.stringify(join(root, 'release'))}], {signal: request.signal})
   }
 }, {html: false, assets: false})
-server.on("listening", fn() { say(JSON.stringify({port: server.address().port})) })
+server.on("listening", fn() { print(JSON.stringify({port: server.address().port})) })
 `);
   const client = await start(t, root);
   const controller = new AbortController();

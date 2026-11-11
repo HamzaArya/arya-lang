@@ -54,8 +54,8 @@
     "description": "Import an Arya module namespace"
   },
   "Arya constant": {
-    "prefix": "keep",
-    "body": "keep ${1:name} = ${0:value}",
+    "prefix": "const",
+    "body": "const ${1:name} = ${0:value}",
     "description": "Declare a constant binding"
   },
   "Arya decision": {
@@ -68,20 +68,6 @@
       "}"
     ],
     "description": "Choose a branch with if / else"
-  },
-  "Arya each": {
-    "prefix": "each",
-    "body": [
-      "each ${1:item} in ${2:items} {",
-      "  $0",
-      "}"
-    ],
-    "description": "Iterate through values"
-  },
-  "Arya say": {
-    "prefix": "say",
-    "body": "say($0)",
-    "description": "Print values to the terminal"
   },
   "Arya view": {
     "prefix": "view",
@@ -140,7 +126,7 @@
     "body": [
       "use std \"web\" as web",
       "",
-      "keep home = view {",
+      "const home = view {",
       "  html {",
       "    head { title \"${1:My Arya app}\" }",
       "    body { h1 \"${2:Hello from Arya}\" }",
@@ -158,7 +144,7 @@
       "use std \"env\" as env",
       "use std \"mysql\" as mysql",
       "",
-      "keep ${1:db} = await mysql.connect({",
+      "const ${1:db} = await mysql.connect({",
       "  host: env.get(\"DB_HOST\", \"127.0.0.1\"),",
       "  user: env.require(\"DB_USER\"),",
       "  password: env.get(\"DB_PASSWORD\", \"\"),",
@@ -171,7 +157,7 @@
   "MySQL prepared query": {
     "prefix": "mysqlrows",
     "body": [
-      "keep ${1:rows} = await ${2:db}.rows(",
+      "const ${1:rows} = await ${2:db}.rows(",
       "  \"${3:SELECT id, title FROM tasks WHERE completed = ?}\",",
       "  [${4:false}]",
       ")",
@@ -182,8 +168,8 @@
   "MySQL transaction": {
     "prefix": "mysqltransaction",
     "body": [
-      "keep ${1:result} = await ${2:db}.transaction(async fn(tx) {",
-      "  keep saved = await tx.execute(",
+      "const ${1:result} = await ${2:db}.transaction(async fn(tx) {",
+      "  const saved = await tx.execute(",
       "    \"${3:INSERT INTO tasks (title) VALUES (?)}\",",
       "    [${4:title}]",
       "  )",
@@ -202,7 +188,7 @@
   "Validated request body": {
     "prefix": "validateschema",
     "body": [
-      "keep ${1:input} = validate.object({",
+      "const ${1:input} = validate.object({",
       "  ${2:title}: validate.string({trim: true, min: 1, max: 200})",
       "})",
       "$0"
@@ -224,7 +210,7 @@
     "body": [
       "use std \"log\" as log",
       "",
-      "keep ${1:logger} = log.create({",
+      "const ${1:logger} = log.create({",
       "  name: \"${2:my-service}\",",
       "  level: \"info\"",
       "})",
@@ -251,8 +237,8 @@
       "use std \"python\" as python",
       "use python \"${1:statistics}\" as ${2:library}",
       "",
-      "keep ${3:asyncLibrary} = python.bind(${2:library})",
-      "keep ${4:result} = await ${3:asyncLibrary}.${5:mean}(${6:values})",
+      "const ${3:asyncLibrary} = python.bind(${2:library})",
+      "const ${4:result} = await ${3:asyncLibrary}.${5:mean}(${6:values})",
       "$0"
     ],
     "description": "Call Python with normal function syntax without blocking JavaScript"
@@ -260,7 +246,7 @@
   "Managed Python client": {
     "prefix": "pythonclient",
     "body": [
-      "keep ${1:py} = python.client({",
+      "const ${1:py} = python.client({",
       "  timeoutMs: 5000,",
       "  maxConcurrency: 4,",
       "  queueLimit: 32",
@@ -272,7 +258,7 @@
   "Python call with cancellation": {
     "prefix": "pythoncall",
     "body": [
-      "keep ${1:result} = await ${2:py}.call(${3:library.function}, [${4:value}], {",
+      "const ${1:result} = await ${2:py}.call(${3:library.function}, [${4:value}], {",
       "  kwargs: {${5:option}: ${6:value}},",
       "  signal: ${7:request.signal}",
       "})",
@@ -282,12 +268,12 @@
   },
   "Python batch mapping": {
     "prefix": "pythonmap",
-    "body": "keep ${1:results} = await ${2:python}.map(${3:library.function}, ${4:values})\n$0",
+    "body": "const ${1:results} = await ${2:python}.map(${3:library.function}, ${4:values})\n$0",
     "description": "Process a list in one Python invocation, preserving order"
   },
   "Safe nested value": {
     "prefix": "safevalue",
-    "body": "keep ${1:value} = ${2:object}?.${3:property} ?? ${4:fallback}\n$0",
+    "body": "const ${1:value} = ${2:object}?.${3:property} ?? ${4:fallback}\n$0",
     "description": "Use a default only when a value is null or undefined"
   },
   "Debug assertion": {
@@ -387,9 +373,9 @@
     "description": "Exit early when a required condition fails"
   },
   "Indexed iteration": {
-    "prefix": "eachindex",
+    "prefix": "forindex",
     "body": [
-      "each ${1:item} at ${2:index} in ${3:items} {",
+      "for ${1:item} at ${2:index} in ${3:items} {",
       "  $0",
       "}"
     ],

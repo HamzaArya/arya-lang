@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {compile} from '../src/compiler.js';
+import {TraceMap,generatedPositionFor,originalPositionFor} from '@jridgewell/trace-mapping';
+
+test('Node inspector breakpoint maps to the original Arya statement',{timeout:15000},async t=>{
+  const root=await mkdtemp(join(tmpdir(),'arya-inspector-'));t.after(()=>rm(root,{recursive:true,force:true}));
+  const filename=join(root,'main.arya'),output=join(root,'main.mjs'),source='const process = "user"\nconst amount = 42\nprint(amount)\n';
+  const compiled=compile(source,{filename,outputFilename:output});await writeFile(filename,source);await writeFile(output,compiled.code);await writeFile(output+'.map',compiled.map);
+  const map=new TraceMap(compiled.map),mappedSource=map.sources[0]!;
+  const generated=generatedPositionFor(map,{source:mappedSource,line:3,column:0});assert.ok(generated.line);
+  const child=spawn(process.execPath,['--enable-source-maps','--inspect-brk=127.0.0.1:0',output],{stdio:['ignore','pipe','pipe']});
+  t.after(()=>{child.kill('SIGKILL');});
+  const deadline=setTimeout(()=>child.kill('SIGKILL'),10000);t.after(()=>clearTimeout(deadline));
+  const address=await new Promise<string>((ok,fail)=>{let stderr='';child.stderr.on('data',chunk=>{stderr+=chunk;const match=/ws:\/\/[^\s]+/.exec(stderr);if(match)ok(match[0]);});child.once('error',fail);child.once('exit',code=>fail(new Error('Inspector exited '+code)));});
+  const socket=new WebSocket(address);t.after(()=>socket.close());await new Promise<void>((ok,fail)=>{socket.addEventListener('open',()=>ok(),{once:true});socket.addEventListener('error',()=>fail(new Error('Inspector connection failed')),{once:true});});
+  let next=0;const replies=new Map<number,{ok:(value:any)=>void;fail:(value:any)=>void}>(),pauses:any[]=[];let notify:(()=>void)|undefined;
+  socket.addEventListener('message',event=>{const message=JSON.parse(String(event.data));if(message.id){const pending=replies.get(message.id);replies.delete(message.id);if(message.error)pending?.fail(message.error);else pending?.ok(message.result);}else if(message.method==='Debugger.paused'){pauses.push(message.params);notify?.();}});
+  const send=(method:string,params={})=>new Promise<any>((ok,fail)=>{const id=++next;replies.set(id,{ok,fail});socket.send(JSON.stringify({id,method,params}));});
+  const pause=async()=>{if(!pauses.length)await new Promise<void>(ok=>{notify=ok;});notify=undefined;return pauses.shift();};
+  await send('Debugger.enable');await send('Runtime.enable');
+  await send('Debugger.setBreakpointByUrl',{urlRegex:'main\\.mjs$',lineNumber:generated.line!-1,columnNumber:generated.column});
+  await send('Runtime.runIfWaitingForDebugger');await pause();await send('Debugger.resume');
+  const stopped=await pause(),location=stopped.callFrames[0].location;
+  const original=originalPositionFor(map,{line:location.lineNumber+1,column:location.columnNumber});
+  assert.equal(original.line,3);assert.equal(original.source,mappedSource);
+  await send('Debugger.resume');socket.close();
+});

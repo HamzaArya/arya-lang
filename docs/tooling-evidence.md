@@ -4,6 +4,8 @@
 
 M3 already introduced same-file lexical go-to-definition, multiple semantic diagnostics, and preservation of completion/Outline data when semantic errors exist. Those implemented features belong to M3's evidence and acceptance; do not count them as a newly validated external-user investment.
 
+M1–M9 refer to the [archived milestone roadmap](history/roadmap-through-1.3.0-alpha.3.md). Use the [current roadmap](arya-roadmap.md) for active scope and the [readiness record](release-readiness.md) for candidate results.
+
 ## Current implementation update — 10 November 2026
 
 The owner subsequently requested asynchronous Python integration, easier UI/animations, and richer editor setup. These shipped in 1.2.0-alpha.4. Their acceptance is engineering evidence from the [release record](release-readiness.md), not external learner observations.
@@ -12,7 +14,7 @@ The owner subsequently requested asynchronous Python integration, easier UI/anim
 - Standard-library hints, semantic token roles, offline extension installation, themes/icons, and spelling Quick Fixes are implemented. Arbitrary dependency introspection, rename, and signature help remain deferred.
 - UI components, forms/actions, motion, Electron starters, and an embedded implementation guide are implemented and have local browser/desktop checks.
 
-The tables below retain the original decision rationale. Current implementation supersedes the earlier worker deferral; external-user selection gates remain open.
+The tables below retain the original decision rationale. Managed async execution is implemented with fresh child processes; a persistent worker remains deferred. External-user selection gates remain open.
 
 ## Runtime focus decision — 10 November 2026
 
@@ -42,7 +44,8 @@ These rows cite implementation requirements and tests, not fabricated production
 | Formatter | Deferred | Formatting rules and preservation semantics are not yet specified; no external task evidence exists. | Repeated formatting confusion or a measured maintenance need with a minimal formatting contract. |
 | Parser recovery beyond one syntax error | Deferred | All independent semantic errors are already collected; syntax recovery adds grammar and editor complexity. | Observed syntax-repair bottleneck or a scoped recovery design with tests. |
 | References/rename, signature help, imported-library completion | Deferred | Same-file definitions already exist; broader tools need workspace/import semantics and reliable edit safety. | Actual repeated lookup/rename task failures after module usage is observed. |
-| Persistent/async Python worker | Implemented experimentally in alpha.4 after owner request | Explicit opt-in clients define state, cancellation, queue bounds, interpreter selection, and draining; direct calls stay synchronous. | Reproducible lifecycle, throughput, or cancellation failure; real workload/learner evidence. |
+| Async Python calls and managed clients | Implemented experimentally in alpha.4 after owner request | Explicit opt-in clients define batch-local state, cancellation, queue bounds, interpreter selection, and draining; each call/batch starts a fresh process and direct calls stay synchronous. | Reproducible lifecycle, throughput, or cancellation failure; real workload/learner evidence. |
+| Persistent Python worker | Deferred | Cross-call state and object lifetime need a separate contract; batching already reduces repeated imports within a call. | Measured workloads showing that the existing process/batch API is insufficient. |
 | Incremental module cache | Deferred | Correct deterministic full builds take priority; no measured unacceptable build latency is recorded. | Representative timing data with a correctness-preserving invalidation design. |
 | Source-level debugger | Deferred | Source maps give runtime traces; stepping requires a separate launch/breakpoint/tooling contract. | Observed diagnosis tasks cannot be solved by mapped errors and smaller diagnostics improvements. |
 | Unicode identifiers / bidi editor support | Deferred | Requires lexer, normalization, ranges, security/display, fonts, and editor review; translated docs are a distinct project. | A separately approved proposal with fluent/script-expert review and conformance cases. |

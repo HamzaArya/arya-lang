@@ -1,6 +1,6 @@
 # Arya in other editors
 
-The 1.2.0-alpha.4 npm package includes an offline VSIX, file icons, Arya Dark/Light themes, semantic tokens, and generated editor adapters. Use `arya editor status` and `arya editor install` after `npm install arya-language@latest`. See the [npm/editor setup guide](editor-setup.md). Icon visibility is controlled by the selected file-icon theme; other editors need their own integration steps.
+The published 1.2.0-alpha.4 baseline and the 1.3.0-alpha.4 source candidate include an offline VSIX, file icons, Arya Dark/Light themes, semantic tokens, and generated editor adapters. Use `arya editor status` and `arya editor install` after `npm install arya-language@latest`. See the [npm/editor setup guide](editor-setup.md). Icon visibility is controlled by the selected file-icon theme; other editors need their own integration steps.
 
 Arya source files use **`.arya`**, language ID **`arya`**, and TextMate scope **`source.arya`**. The portable language server speaks LSP over standard input/output. Opening a file in an arbitrary editor does not automatically install a new language: install the matching package or configure its file association first.
 
@@ -9,21 +9,21 @@ Arya source files use **`.arya`**, language ID **`arya`**, and TextMate scope **
 Install the published npm package and locate its bundled files:
 
 ```sh
-npm install arya-language@latest
+npm install --save-exact arya-language@1.2.0-alpha.4
 npx --no-install arya editor status
 npx --no-install arya editor path
 ```
 
 The package contains `dist/editor/arya-language.vsix`, `dist/editor/adapters/`, and `brand/`. From a source checkout, `npm ci` and `npm run build` produce the same kinds of editor assets. For new release packaging in a disposable checkout, follow the [release process](releasing.md); preserve already published archives.
 
-Release packaging produces these retained files under `artifacts/`:
+Release packaging produces these retained files under `artifacts/`. Substitute the reviewed release/candidate version; examples below use the published baseline:
 
 | Artifact | Purpose |
 | --- | --- |
-| `arya-editor-kit-1.2.0-alpha.4.zip` | All editor configuration files, the VSIX, CLI package, logo variants, and this guide |
-| `arya-language-1.2.0-alpha.4.vsix` | Standalone extension for VS Code-compatible desktop editors |
-| `arya-language-1.2.0-alpha.4.tgz` | Node package containing `arya` and `arya-lsp` commands |
-| `create-arya-language-1.2.0-alpha.4.tgz` | Matching npm project initializer |
+| `arya-editor-kit-<version>.zip` | All editor configuration files, the VSIX, CLI package, logo variants, and this guide |
+| `arya-language-<version>.vsix` | Standalone extension for VS Code-compatible desktop editors |
+| `arya-language-<version>.tgz` | Node package containing `arya` and `arya-lsp` commands |
+| `create-arya-language-<version>.tgz` | Matching npm project initializer |
 | `SHA256SUMS` | SHA-256 checksums of the compiler, creator, VSIX, and editor-kit archives |
 
 The kit is an Apache-2.0 development preview, with `LICENSE`, `NOTICE`, and retained third-party notices. The npm package is `arya-language`; historical archives are available in [GitHub prereleases](https://github.com/HamzaArya/arya-lang/releases). The alpha.4 npm publication did not create a new GitHub release. The VSIX is installed manually; Open VSX, VS Code Marketplace, other editor registries, and operating-system file-association databases are separate publication targets.

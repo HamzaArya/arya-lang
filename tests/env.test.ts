@@ -34,8 +34,8 @@ test('environment integers and booleans are strict, retain zero/false, and valid
 });
 
 test('environment imports remain passive', () => {
-  const source = 'use std "env" as env\nkeep secret = env.require("ARYA_MISSING_CHECK_ONLY")';
+  const source = "use std \"env\" as env\nconst secret = env.require(\"ARYA_MISSING_CHECK_ONLY\")";
   assert.doesNotThrow(() => compile(source));
   assert.deepEqual(analyze(source, 'file:///main.arya').diagnostics, []);
-  assert.doesNotThrow(() => compile(source + '\nuse python "math" as math\nsay(math.sqrt(4))'));
+  assert.doesNotThrow(() => compile(source + "\nuse python \"math\" as math\nprint(math.sqrt(4))"));
 });

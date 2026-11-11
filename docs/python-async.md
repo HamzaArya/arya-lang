@@ -1,6 +1,6 @@
 # Python and JavaScript together
 
-These experimental APIs are included in Arya 1.2.0-alpha.4 for the JavaScript/Node target. Install `arya-language@latest` or build this checkout with `npm run build`.
+These experimental APIs are included in Arya 1.2.0-alpha.4 for the JavaScript/Node target. Install the recorded published baseline with `npm install --save-exact arya-language@1.2.0-alpha.4`, or build this checkout with `npm run build`. The APIs below are also available in the 1.3.0-alpha.4 source candidate.
 
 Arya can coordinate JavaScript libraries and Python functions without handwritten child-process or HTTP glue. Existing direct Python calls remain synchronous. The new JavaScript-profile `python` standard library provides an explicit asynchronous path:
 
@@ -9,11 +9,11 @@ use std "python" as python
 use python "statistics" as statistics
 use js "node:crypto" as crypto
 
-keep stats = python.bind(statistics)
-keep mean = await stats.mean([10, 20, 30])
-keep id = crypto.randomUUID()
+const stats = python.bind(statistics)
+const mean = await stats.mean([10, 20, 30])
+const id = crypto.randomUUID()
 
-say({id: id, mean: mean})
+print({id: id, mean: mean})
 ```
 
 Write application logic in Arya, call Python where its libraries help, and use JavaScript/npm libraries normally. You still need to understand each library's API and dependencies; Arya handles the process, transport, and call lifecycle.
@@ -26,11 +26,11 @@ Write application logic in Arya, call Python where its libraries help, and use J
 use std "python" as python
 use python "math" as math
 
-keep calculations = python.bind(math)
-say(await calculations.sqrt(81))
+const calculations = python.bind(math)
+print(await calculations.sqrt(81))
 
-keep sqrt = python.bind(math.sqrt)
-say(await sqrt(16))
+const sqrt = python.bind(math.sqrt)
+print(await sqrt(16))
 ```
 
 Bound wrappers also support `function.with(args, kwargs)` to override their keyword arguments. `then` is unavailable so wrappers are not mistaken for promises; `toJSON` is unavailable so JSON serialization cannot accidentally invoke an async Python function. Use the original import with `python.call` when explicitly calling a Python member named `toJSON`. Bindings still use fresh processes for individual calls; they do not create persistent Python objects.
@@ -43,12 +43,12 @@ Bound wrappers also support `function.with(args, kwargs)` to override their keyw
 use std "python" as python
 use python "json" as json
 
-keep text = await python.call(json.dumps, [{language: "Arya"}], {
+const text = await python.call(json.dumps, [{language: "Arya"}], {
   kwargs: {indent: 2, ensure_ascii: false},
   timeoutMs: 5000
 })
 
-say(text)
+print(text)
 ```
 
 Per-call options are `kwargs`, `signal`, `timeoutMs`, `interpreter`, `maxInputBytes`, and `maxOutputBytes`. Unknown/misspelled options are rejected. Undefined option fields use defaults. `signal` must be an AbortSignal. Already-cancelled signals fail before a child starts; cancellation while queued removes the job.
@@ -61,8 +61,8 @@ Calls execute in fresh processes, so module state and Python object identity do 
 use std "python" as python
 use python "math" as math
 
-keep roots = await python.map(math.sqrt, [4, 9, 16, 25])
-say(roots)
+const roots = await python.map(math.sqrt, [4, 9, 16, 25])
+print(roots)
 ```
 
 `python.map(target, values, options = {})` calls the target once per value, passing one positional argument each time. All items run sequentially, in order, in one process and one module instance. This reduces interpreter/import overhead compared with a separate process for each item. The same `kwargs` apply to every item. Lists are limited to 10,000 items; an empty list returns `[]` without starting Python.
@@ -77,15 +77,15 @@ For functions needing multiple arguments per item, write a small Python helper a
 use std "python" as python
 use python "math" as math
 
-keep py = python.client({
+const py = python.client({
   timeoutMs: 15000,
   maxConcurrency: 4,
   queueLimit: 32
 })
 
-keep environment = await py.info()
-say(environment.version, environment.executable, environment.virtualenv)
-say(await py.call(math.sqrt, [81]))
+const environment = await py.info()
+print(environment.version, environment.executable, environment.virtualenv)
+print(await py.call(math.sqrt, [81]))
 
 await py.close()
 ```
@@ -112,8 +112,8 @@ To use a virtual environment, select its executable explicitly:
 ```arya
 use std "python" as python
 
-keep py = python.client({interpreter: "./.venv/bin/python"})
-say(await py.info())
+const py = python.client({interpreter: "./.venv/bin/python"})
+print(await py.info())
 await py.close()
 ```
 
@@ -127,7 +127,7 @@ use std "web" as web
 use python "statistics" as statistics
 
 async fn calculate(request) {
-  keep mean = await python.call(statistics.mean, [[10, 20, 30]], {
+  const mean = await python.call(statistics.mean, [[10, 20, 30]], {
     signal: request.signal,
     timeoutMs: 5000
   })

@@ -23,13 +23,13 @@ Acceptance coverage:
 - IDE tests retain trust, selected runtimes, arguments, symlink containment, and non-executing Build.
 - Desktop tests observe real Build/Run tasks using an `uncaughtExceptionMonitor` that saves the thrown stack without handling it. A one-line instrumentation prefix preserves the first fixture's failure line and column.
 
-Original M1 (alpha.1) qualification on macOS arm64 with Python 3.13.15 is retained below. Current alpha.4 results are recorded in the [release-readiness record](release-readiness.md).
+Original M1 (alpha.1) qualification on macOS arm64 with Python 3.13.15 is retained below. Current candidate results are recorded in the [release-readiness record](release-readiness.md).
 
 | Runtime | Verified |
 | --- | --- |
 | Node 22.15.0 (minimum) | `npm run check`: 16 tests; clean-installed package; five AryaCode package/runner tests |
 | Node 24.16.0 | `npm run check`: 16 tests |
 
-The [qualification workflow](../.github/workflows/check.yml) runs `npm ci`, `npm run check`, archive packing, and `npm run test:package` on Linux, Windows, and macOS with Node 22.15.0 and 24 plus Python 3.13. Linux/Windows results are pending until that workflow runs. It covers this repository; AryaCode qualification runs separately in the IDE repository. A local Docker daemon was unavailable for Linux verification.
+The [qualification workflow](../.github/workflows/check.yml) runs `npm ci`, `npm run check`, archive packing, and `npm run test:package` on Linux, Windows, and macOS with Node 22.15.0 and 24 plus Python 3.13. A successful run qualifies only its exact revision; see the current readiness record for available results. It covers this repository; AryaCode qualification runs separately in the IDE repository. The original M1 local run had no Docker daemon for Linux verification.
 
 Source maps do not by themselves add stepping or breakpoints; an interactive debugger remains outside M1.

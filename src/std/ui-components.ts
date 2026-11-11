@@ -29,7 +29,7 @@ const __arya_uiComponents = {
   code: (source, options = {}) => {
     const {language = 'arya', ...props} = options;
     if (typeof source !== 'string' || typeof language !== 'string') __arya_uiError('code expects source text and an optional language label.');
-    const tokens = [], pattern = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\/\/[^\n]*|#[^\n]*|\b(?:use|std|as|const|keep|let|fn|task|async|await|return|give|if|when|else|otherwise|for|each|in|true|false|null|try|catch|finally|guard|while|break|continue|throw|export|new|and|or|not)\b|\b\d+(?:\.\d+)?\b/g;
+    const tokens = [], pattern = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\/\/[^\n]*|#[^\n]*|\b(?:use|std|as|const|let|fn|async|await|return|if|else|for|in|true|false|null|try|catch|finally|guard|while|break|continue|throw|export|new|and|or|not)\b|\b\d+(?:\.\d+)?\b/g;
     let offset = 0;
     if (language === 'arya') for (const match of source.matchAll(pattern)) {
       tokens.push(source.slice(offset, match.index));

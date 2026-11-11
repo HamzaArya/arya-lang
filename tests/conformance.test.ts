@@ -164,18 +164,18 @@ test('the normative host-global list is available on the execution runtime and c
   assert.equal(await execute(root, source), '[]\n4\n');
 });
 
-test('module-level host shadowing has the documented generated-runtime scope limitation', async t => {
+test('module-level host shadowing preserves builtins and cannot affect runtime initialization', async t => {
   const root = await project(t);
-  assert.equal(await execute(root, 'const String = fn(value) { return "custom" }; const Number = fn(value) { return 9 }; print(str(1), number("bad"))'), 'custom 9\n');
+  assert.equal(await execute(root, 'const String = fn(value) { return "custom" }; const Number = fn(value) { return 9 }; print(str(1), number("bad"))'), '1 NaN\n');
   const outputFilename = join(root, 'shadow.mjs');
-  const result = compile('const process = {argv: []}\nprint("must not reach user code")', { filename: join(root, 'shadow.arya'), outputFilename });
+  const result = compile('const process = {argv: []}\nprint("runtime initialized")', { filename: join(root, 'shadow.arya'), outputFilename });
   await writeFile(outputFilename, result.code);
   await writeFile(`${outputFilename}.map`, result.map);
   const run = spawnSync(process.execPath, ['--enable-source-maps', outputFilename], { encoding: 'utf8', timeout: 10_000 });
   assert.ifError(run.error);
-  assert.notEqual(run.status, 0);
-  assert.match(run.stderr, /ReferenceError/);
-  assert.equal(run.stdout, '');
+  assert.equal(run.status, 0);
+  assert.equal(run.stderr, '');
+  assert.equal(run.stdout, 'runtime initialized\n');
 });
 
 test('async functions, await grouping, and assignment evaluation retain JavaScript behavior', async t => {

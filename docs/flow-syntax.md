@@ -1,27 +1,27 @@
 # Readable application syntax
 
-**Requires the 1.3.0-alpha.2 source candidate.** These features are not in npm's published 1.2.0-alpha.4 release. Build this checkout or install the matching candidate archive; see [candidate setup](node-runtime.md#try-the-candidate).
+**Added in 1.3.0-alpha.2; included in the current 1.3.0-alpha.4 source candidate.** These features are not in npm's published 1.2.0-alpha.4 release. Build this checkout or install the matching candidate archive; see [candidate setup](node-runtime.md#try-the-candidate).
 
-Use `keep` for an immutable binding, `let` for a mutable binding, `fn` for a function, `each` for iteration, and `say` for output. Existing `const`, `for`, `print`, and block-bodied functions remain accepted. The features below reduce wrappers, nesting, and manual collection code while retaining explicit execution and errors.
+Use `const` for an immutable binding, `let` for a mutable binding, `fn` for a function, `for` for iteration, and `print` for output. Block-bodied functions remain available alongside concise functions. The current candidate uses one set of spellings; see [syntax migration](syntax-migration.md) for the breaking alias removal in alpha.4.
 
 ## Transform data from top to bottom
 
 ```arya
 use std "list" as list
 
-keep people = [
+const people = [
   {name: "Hamza", active: true, score: 85},
   {name: "Samira", active: true, score: 95},
   {name: "Inactive", active: false, score: 100}
 ]
 
-keep leaders = people
+const leaders = people
   |> list.filter("active")
   |> list.sortBy("score", "desc")
   |> list.take(3)
 
-each person at position in leaders {
-  say(position + 1, person.name)
+for person at position in leaders {
+  print(position + 1, person.name)
 }
 ```
 
@@ -37,14 +37,14 @@ Stages use function names, ordinary member access/calls, or parenthesized inline
 use python "statistics" as statistics
 use std "python" as python
 
-keep stats = python.bind(statistics, {timeoutMs: 5000})
+const stats = python.bind(statistics, {timeoutMs: 5000})
 fn format(value, digits = 1) => value.toFixed(digits)
 
-keep average = [10, 20, 30]
+const average = [10, 20, 30]
   |> await stats.mean
   |> format(1)
 
-say(average)
+print(average)
 ```
 
 `|> await` waits for that stage before continuing and is allowed at module level or inside an async function. Ordinary `|>` preserves promises, so `await (value |> asyncFunction)` is also valid. Explicit stage arguments may themselves contain `await` in an async context. This syntax retains Python's existing process/JSON/cancellation contract.
@@ -58,8 +58,8 @@ fn greet(name = "World") => "Hello, " + name
 fn total(initial = 0, ...values) => values.reduce(fn(sum, value) => sum + value, initial)
 fn person(name) => {name: name, active: true}
 
-say(greet(), total(10, ...[1, 2, 3]))
-keep combined = [0, ...[1, 2], 3]
+print(greet(), total(10, ...[1, 2, 3]))
+const combined = [0, ...[1, 2], 3]
 ```
 
 An expression body returns its expression. After `=>`, `{name: name}` is an object expression; use the ordinary `fn name(...) { ... }` form for statements. Named functions remain hoisted. A concise function declaration needs a newline, semicolon, block end, or EOF after its expression.
@@ -81,11 +81,11 @@ fn greeting(person) {
 
 The guard body can contain normal statements before its exit. This makes error handling explicit while keeping the successful path unindented. `guard` is a new reserved binding word; rename older bindings with that name. Object keys and properties named `guard` remain legal.
 
-Rename a prior binding such as `keep guard = true; say(guard)` to `keep ready = true; say(ready)`. Existing records such as `{guard: true}` and access through `record.guard` keep working.
+Rename a prior binding such as `const guard = true; print(guard)` to `const ready = true; print(ready)`. Existing records such as `{guard: true}` and access through `record.guard` keep working.
 
 ## Iterate values and positions together
 
-`each value at index in values { ... }` supplies a zero-based index and a fresh value/index binding for every iteration. It works with the ordinary JavaScript iterable protocol, including strings and sets, without converting the iterable to a list. String iteration counts Unicode code points, as existing `each` does.
+`for value at index in values { ... }` supplies a zero-based index and a fresh value/index binding for every iteration. It works with the ordinary JavaScript iterable protocol, including strings and sets, without converting the iterable to a list. String iteration counts Unicode code points, as existing `for` does.
 
 The index is local to the body; an outer index name remains visible while evaluating the iterable. Changing the body index does not change subsequent indexes. `at` is contextual in this header and remains a valid identifier elsewhere.
 
@@ -95,14 +95,14 @@ The index is local to the body; an outer index name remains visible while evalua
 use std "mysql" as mysql
 use std "env" as env
 
-keep db = await mysql.connect({
+const db = await mysql.connect({
   user: env.require("DB_USER"),
   password: env.get("DB_PASSWORD", ""),
   database: env.require("DB_NAME")
 })
 
 try {
-  say(await db.scalar("SELECT ? + ? AS value", [20, 22]))
+  print(await db.scalar("SELECT ? + ? AS value", [20, 22]))
 } finally {
   await db.close()
 }

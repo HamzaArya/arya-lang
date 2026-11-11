@@ -1,5 +1,7 @@
 # Compiler API
 
+The current 1.3.0-alpha.7 compiler accepts [canonical syntax only](syntax-migration.md). The exported keyword and builtin metadata, parser, source analysis, and generated runtime all use the same spellings. Removed words are normal identifiers; an undeclared `say` is an unknown name.
+
 The package version and `ARYA_VERSION` identify the language/compiler release. During the experimental alpha series, API changes require a documented minor or prerelease version; fixes preserve supported call forms.
 
 ```ts
@@ -19,9 +21,9 @@ const result = compile(sourceText, {
 // result.moduleMembers: direct namespace member references for project validation
 ```
 
-Compilation and analysis are synchronous, side-effect free, and do not resolve or execute imported code. The caller controls filesystem reads/writes and execution. `AryaError.token` gives zero-based line and UTF-16 column plus source offsets. The CLI prints one-based positions. `compile` rejects syntax and semantic errors; `AryaError.message`/`token` retain the first error for compatibility, and `AryaError.diagnostics` contains all independent semantic errors from a complete parse (one error for syntax failure).
+Compilation and analysis are synchronous, side-effect free, and do not resolve or execute imported code. The caller controls filesystem reads/writes and execution. `AryaError.token` gives zero-based line and UTF-16 column plus source offsets. The CLI prints one-based positions. `compile` rejects syntax and semantic errors; `AryaError.message`/`token` retain the first error for compatibility, and `AryaError.diagnostics` contains all independent semantic errors from a complete parse (up to 20 independently recovered syntax errors).
 
-`analyzeSource(sourceText, filename?)` returns `{symbols, bindings, references, diagnostics}` without producing maps. Syntax failure throws `AryaError`; a complete parse returns every semantic diagnostic. Bindings record their kind (`let`, `const`, `function`, `parameter`, `loop`, `catch`, `import`, `builtin`, or `host`) and scope ID. References record their source token, access (`read`, `write`, or `readwrite`), and resolved binding when known. User bindings have declaration tokens; host and builtin bindings do not. The graph is serializable and contains no scope-parent cycles. Scope IDs are local implementation identifiers, not persistent IDs.
+`analyzeSource(sourceText, filename?)` returns `{symbols, bindings, references, diagnostics, imports, exports, moduleMembers}` without producing maps. Syntax failure throws `AryaError` with bounded recovery diagnostics; a complete parse returns every semantic diagnostic. Bindings record their kind (`let`, `const`, `function`, `parameter`, `loop`, `catch`, `import`, `builtin`, or `host`) and scope ID. References record their source token, access (`read`, `write`, or `readwrite`), and resolved binding when known. User bindings have declaration tokens; host and builtin bindings do not. The graph is serializable and contains no scope-parent cycles. Scope IDs are local implementation identifiers, not persistent IDs.
 
 Diagnostics have `{code, message, token, suggestion?, hint?}`. `hint` is optional actionable help; existing code/message/token fields retain their meanings. Source-analysis codes include `ARYA_SYNTAX`, `ARYA_UNKNOWN_NAME`, `ARYA_CONST_ASSIGNMENT`, and `ARYA_UNKNOWN_LIBRARY`. Unsupported legacy API target requests use `ARYA_UNSUPPORTED_TARGET`. Semantic diagnostics are ordered by source position. Suggestions are conservative and optional.
 
@@ -31,7 +33,7 @@ Write `result.map` beside the generated module before writing `result.code`, the
 
 The 0.1 `compile(sourceText, filename)` form remains supported. It assumes the generated filename is `<absolute source filename>.mjs`; use the options form when writing output elsewhere. Version `0.2.0-alpha.2` adds lexical checks to both call forms, so formerly accepted unknown names and const writes now fail compilation. This is name checking, not type checking. See the [migration notes](releases/0.2.0-alpha.2.md).
 
-The [normative specification](arya-specification.md#7-arya-built-ins-and-guaranteed-host-globals) defines the guaranteed bare host names used for lexical resolution. User declarations may shadow them, subject to the documented generated-runtime limitations. Known-name TDZ timing, dependency availability, object properties, and runtime types remain runtime concerns.
+The [normative specification](arya-specification.md#7-arya-built-ins-and-guaranteed-host-globals) defines the guaranteed bare host names used for lexical resolution. User declarations may shadow them, independently of generated runtime helpers. Known-name TDZ timing, dependency availability, object properties, and runtime types remain runtime concerns.
 
 ## Project graph API
 
@@ -80,3 +82,5 @@ const editors = await discoverEditors();
 `editorAssets(packageRoot?)` reports the installed language version and extension ID `aryacode.arya-language`. `discoverEditors(options?)` checks supported launchers/app locations. `installEditorExtension(options?)` explicitly invokes the selected editor CLI and returns per-editor results; it can accept `editor`, `cli`, `force`, `extensionsDirectory`, and `userDataDirectory`. Discovery reads local installation metadata; installation writes to editor profiles and is separate from passive analysis. See [editor setup](editor-setup.md) for flags, compatibility-manager fallback, and qualification.
 
 The 1.3.0-alpha.2 parsed AST adds pipeline/spread nodes, function default expressions, optional indexed-loop bindings, and optional catch/finalizer blocks. Custom AST traversal must visit those fields; lexical binding/reference offsets retain UTF-16 semantics. See [the syntax contract](flow-syntax.md).
+
+Business candidate APIs, typing metadata, incremental builds, esbuild integration and workspace navigation are defined in [business APIs](business-applications.md).

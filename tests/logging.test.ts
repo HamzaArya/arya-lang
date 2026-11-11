@@ -56,5 +56,5 @@ test('logger config errors are explicit and importing the library during checkin
   const logger = log.create({ sink() {} });
   assert.throws(() => logger.info({}), (error: any) => error.code === 'ARYA_LOG_CONFIG');
   assert.throws(() => logger.info('text', []), (error: any) => error.code === 'ARYA_LOG_CONFIG');
-  assert.doesNotThrow(() => compile('use std "log" as log\nkeep logger = log.create()\nlogger.info("not executed")'));
+  assert.doesNotThrow(() => compile("use std \"log\" as log\nconst logger = log.create()\nlogger.info(\"not executed\")"));
 });

@@ -4,7 +4,7 @@ export const uiProjectFiles: Readonly<Record<string, string>> = {
 use std "ui" as ui
 use std "validate" as validate
 
-keep estimateSchema = validate.object({
+const estimateSchema = validate.object({
   hours: validate.number({min: 0, max: 10000}),
   rate: validate.number({min: 0, max: 1000000})
 })
@@ -46,7 +46,7 @@ export fn start(port) {
   return web.serve(port, {
     "GET /": fn() => web.response(200, page(), {"cache-control": "no-store"}),
     "POST /api/estimate": web.route(fn(request) {
-      keep total = request.body.hours * request.body.rate
+      const total = request.body.hours * request.body.rate
       return {total: total, message: "Estimated total: $" + total.toFixed(2)}
     }, {body: estimateSchema})
   }, {html: false, assets: false})

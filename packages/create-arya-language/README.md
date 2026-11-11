@@ -2,10 +2,10 @@
 
 Interactive starters for web apps, API servers, CLI tools, UI apps, and Electron desktop apps.
 
-The current source is the Node.js-only 1.3.0-alpha.3 candidate. The npm command below uses the published 1.2.0-alpha.4 baseline until a new release is published:
+The current source is the Node.js-only 1.3.0-alpha.4 candidate. The npm command below pins the recorded published 1.2.0-alpha.4 baseline:
 
 ```sh
-npm create arya-language@latest my-app
+npm create arya-language@1.2.0-alpha.4 my-app
 cd my-app
 npm install
 npm run dev
@@ -22,7 +22,7 @@ creator with a Vite-style workflow; it does not install Vite or provide hot modu
 For offline use, install the local creator archive and run:
 
 ```sh
-npx --no-install create-arya-language my-app --compiler /path/to/arya-language-1.3.0-alpha.3.tgz
+npx --no-install create-arya-language my-app --compiler /path/to/arya-language-1.3.0-alpha.4.tgz
 ```
 
 The compiler archive is copied into vendor/ and referenced by a relative file dependency,

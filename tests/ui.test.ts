@@ -14,7 +14,7 @@ async function library(t: { after(fn: () => Promise<unknown>): void }) {
   const root = await mkdtemp(join(tmpdir(), 'arya ui '));
   t.after(() => rm(root, { recursive: true, force: true }));
   const filename = join(root, 'ui.mjs');
-  await writeFile(filename, compile('use std "ui" as ui\nexport keep tools = ui').code);
+  await writeFile(filename, compile("use std \"ui\" as ui\nexport const tools = ui").code);
   return (await import(pathToFileURL(filename).href)).tools;
 }
 
@@ -160,7 +160,7 @@ test('motion honors initial and changed reduced-motion preferences', () => {
 });
 
 test('UI checking remains passive, editor hints describe APIs', () => {
-  const source = 'use std "ui" as ui\nkeep page = ui.page({state: {notExecuted: missingPackage()}})';
+  const source = "use std \"ui\" as ui\nconst page = ui.page({state: {notExecuted: missingPackage()}})";
   assert.throws(() => compile(source), /missingPackage/);
   assert.doesNotThrow(() => compile('use std "ui" as ui\nui.page({state: {bad: Infinity}})'.replace('Infinity', '1 / 0')));
   const prefix = 'use std "ui" as ui\nui.';

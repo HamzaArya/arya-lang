@@ -5,32 +5,32 @@ use python "statistics" as statistics
 
 fn total(values) {
   let result = 0
-  each value in values {
+  for value in values {
     result += value
   }
   return result
 }
 
-keep port = number(args[0] or "3000")
-keep server = web.serve(port, {
+const port = number(args[0] or "3000")
+const server = web.serve(port, {
   "POST /api/calculate": fn(request) {
     if not request.body or not Array.isArray(request.body.values) or len(request.body.values) == 0 {
       return web.response(400, {error: "Supply a nonempty values list"})
     }
-    keep values = request.body.values
-    each value in values {
+    const values = request.body.values
+    for value in values {
       if not Number.isFinite(value) {
         return web.response(400, {error: "Every value must be a finite number"})
       }
     }
-    keep sum = total(values)
+    const sum = total(values)
     return {count: len(values), total: sum, average: sum / len(values)}
   },
   "GET /api/python": async fn(request) {
-    keep stats = python.bind(statistics, {signal: request.signal})
+    const stats = python.bind(statistics, {signal: request.signal})
     return {source: "Python statistics", mean: await stats.mean([10, 20, 30])}
   }
 })
 server.on("listening", fn() {
-  say("Arya Studio: http://127.0.0.1:" + str(server.address().port))
+  print("Arya Studio: http://127.0.0.1:" + str(server.address().port))
 })

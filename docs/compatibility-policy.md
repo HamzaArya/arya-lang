@@ -1,6 +1,6 @@
 # Compatibility and stabilization policy
 
-This policy covers the Node.js-only 1.3.0-alpha.3 source candidate and published 1.2.0-alpha.4 baseline and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The owner-selected Apache-2.0 alpha publication policy is described below; publishing a preview does not qualify a stable release. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate.
+This policy covers the Node.js-only 1.3.0-alpha.7 source candidate and published 1.2.0-alpha.4 baseline and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The owner-selected Apache-2.0 alpha publication policy is described below; publishing a preview does not qualify a stable release. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate.
 
 ## Version labels
 
@@ -62,4 +62,4 @@ The first public preview was 0.2.0-alpha.3. On 10 November 2026 the owner select
 
 ## Node.js-only source line
 
-The 1.3.0-alpha.3 candidate intentionally removes the experimental native backend and public native APIs. This breaking prerelease change is documented in [the migration guide](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.3.md). Earlier published native artifacts remain immutable historical releases; they are not maintained targets of the new source line.
+Beginning in 1.3.0-alpha.1, the source line intentionally removes the experimental native backend and public native APIs. This breaking prerelease change is documented in [the migration guide](node-runtime.md) and [runtime candidate notes](releases/1.3.0-alpha.1.md). Earlier published native artifacts remain immutable historical releases; they are not maintained targets of the new source line.

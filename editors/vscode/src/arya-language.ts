@@ -1,5 +1,6 @@
+import {formatSource} from '../../../src/tooling.js';
 import * as vscode from 'vscode';
-import { analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from '../../../src/language-service.js';
+import { analyzeWorkspace, referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes } from '../../../src/language-service.js';
 import {semanticTokens, semanticTokenTypes, semanticTokenModifiers} from '../../../src/semantic-tokens.js';
 
 /** Also used by the companion extension when AryaCode owns the other language providers. */
@@ -23,7 +24,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
   const pending = new Map<string, ReturnType<typeof setTimeout>>();
   const validate = (document: vscode.TextDocument) => {
     if (document.languageId !== 'arya') { diagnostics.delete(document.uri); return; }
-    diagnostics.set(document.uri, analyze(document.getText(), document.uri.toString()).diagnostics.map(error => {
+    diagnostics.set(document.uri, (analyzeWorkspace(vscode.workspace.textDocuments.filter(d=>d.languageId==='arya').map(d=>({uri:d.uri.toString(),source:d.getText()}))).get(document.uri.toString()) ?? analyze(document.getText(),document.uri.toString())).diagnostics.map(error => {
       const start = document.positionAt(error.token.start), end = document.positionAt(Math.max(error.token.start + 1, error.token.end));
       const diagnostic = new vscode.Diagnostic(new vscode.Range(start, end), error.message + (error.hint ? '\nHelp: ' + error.hint : ''), vscode.DiagnosticSeverity.Error);
       diagnostic.source = 'Arya'; diagnostic.code = error.code; return diagnostic;
@@ -35,7 +36,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
     vscode.workspace.onDidChangeTextDocument(event => {
       if (event.document.languageId !== 'arya') return;
       const key = event.document.uri.toString(); clearTimeout(pending.get(key));
-      pending.set(key, setTimeout(() => { pending.delete(key); if (!event.document.isClosed) validate(event.document); }, 180));
+      pending.set(key, setTimeout(() => { pending.delete(key); if (!event.document.isClosed) for(const open of vscode.workspace.textDocuments)if(open.languageId==='arya')validate(open); }, 180));
     }),
     vscode.workspace.onDidCloseTextDocument(document => {
       const key = document.uri.toString(); clearTimeout(pending.get(key)); pending.delete(key); diagnostics.delete(document.uri);
@@ -44,7 +45,7 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
       provideCompletionItems(document, position) {
         const kinds = { keyword: vscode.CompletionItemKind.Keyword, function: vscode.CompletionItemKind.Function, variable: vscode.CompletionItemKind.Variable, module: vscode.CompletionItemKind.Module };
         const source = document.getText(), offset = document.offsetAt(position);
-        const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset) : completions(analyze(source, document.uri.toString()));
+        const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? [...standardCompletions(source, offset),...typedCompletions(source,offset)] : completions(analyze(source, document.uri.toString()));
         return items.map(value => {
           const item = new vscode.CompletionItem(value.label, kinds[value.kind]); if (value.detail) item.detail = value.detail; return item;
         });
@@ -74,6 +75,37 @@ export function registerAryaLanguage(context: vscode.ExtensionContext): void {
         const token = definitionAt(analyze(document.getText(), document.uri.toString()), document.offsetAt(position));
         return token ? new vscode.Location(document.uri, new vscode.Range(document.positionAt(token.start), document.positionAt(token.end))) : undefined;
       },
+    }),
+    vscode.languages.registerReferenceProvider(selector, {
+      provideReferences(document,position) {
+        const snapshots=vscode.workspace.textDocuments.filter(d=>d.languageId==='arya').map(d=>({uri:d.uri.toString(),source:d.getText()}));
+        return referencesInWorkspace(snapshots,document.uri.toString(),document.offsetAt(position)).map(ref=>{
+          const target=vscode.workspace.textDocuments.find(d=>d.uri.toString()===ref.uri)!;
+          return new vscode.Location(target.uri,new vscode.Range(target.positionAt(ref.start),target.positionAt(ref.end)));
+        });
+      }
+    }),
+    vscode.languages.registerRenameProvider(selector, {
+      provideRenameEdits(document,position,newName) {
+        const snapshots=vscode.workspace.textDocuments.filter(d=>d.languageId==='arya').map(d=>({uri:d.uri.toString(),source:d.getText()}));
+        const result=new vscode.WorkspaceEdit();
+        for(const edit of renameInWorkspace(snapshots,document.uri.toString(),document.offsetAt(position),newName)) {
+          const target=vscode.workspace.textDocuments.find(d=>d.uri.toString()===edit.uri)!;
+          result.replace(target.uri,new vscode.Range(target.positionAt(edit.start),target.positionAt(edit.end)),newName);
+        }
+        return result;
+      }
+    }),
+    vscode.languages.registerSignatureHelpProvider(selector, {
+      provideSignatureHelp(document,position) {
+        const signature=signatureAt(document.getText(),document.offsetAt(position));if(!signature)return undefined;
+        const result=new vscode.SignatureHelp();result.signatures=[new vscode.SignatureInformation(signature.label)];result.activeSignature=0;result.activeParameter=signature.activeParameter;return result;
+      }
+    },'(',','),
+    vscode.languages.registerDocumentFormattingEditProvider(selector, {
+      provideDocumentFormattingEdits(document) {
+        try{return [vscode.TextEdit.replace(new vscode.Range(document.positionAt(0),document.positionAt(document.getText().length)),formatSource(document.getText()))];}catch{return [];}
+      }
     }),
     vscode.languages.registerDocumentSymbolProvider(selector, {
       provideDocumentSymbols(document) {

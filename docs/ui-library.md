@@ -2,7 +2,7 @@
 
 Arya 1.2.0-alpha.4's JavaScript target includes a component library, browser state/actions, a motion engine, and a built-in preview with an implementation guide. No frontend packages, CDN assets, or browser source evaluation are required. These experimental APIs require compiler 1.2.0-alpha.4 or later.
 
-The **1.3.0-alpha.3 source candidate** adds ten components, eight reusable sections, and four complete templates. See [sections and templates](ui-patterns.md) for contracts and customization. The new APIs require this candidate compiler; the older npm archive does not include them.
+The **1.3.0-alpha.4 source candidate** adds ten components, eight reusable sections, and four complete templates. See [sections and templates](ui-patterns.md) for contracts and customization. The new APIs require this candidate compiler; the older npm archive does not include them.
 
 ## Open the live library
 
@@ -120,6 +120,8 @@ Actions are descriptors: `ui.set`, `ui.toggle`, `ui.increment`, `ui.request`, `u
 `ui.copy` copies component text through the browser clipboard API, which requires HTTPS/localhost and permission. Code blocks remain selectable when clipboard access is denied. Themes last for the current page visit; no storage is written automatically.
 
 ## Motion
+
+The component/action fragments below assume `use std "ui" as ui`. Place components in a page body and actions on a button/form; the complete interface example above shows the surrounding application.
 
 Available presets:
 
@@ -302,6 +304,8 @@ The same catalog supplies the built-in guide and editor hints. All public functi
 
 ### Motion
 
+The component/action fragments below assume `use std "ui" as ui`. Place components in a page body and actions on a button/form; the complete interface example above shows the surrounding application.
+
 | API | Purpose |
 | --- | --- |
 | `ui.presets()` | Return the available animation preset names. |
@@ -314,7 +318,7 @@ The same catalog supplies the built-in guide and editor hints. All public functi
 
 ### Additional components, sections, and templates (source candidate)
 
-Requires 1.3.0-alpha.3. See [the complete contracts](ui-patterns.md).
+Requires 1.3.0-alpha.4. See [the complete contracts](ui-patterns.md).
 
 | API | Purpose |
 | --- | --- |

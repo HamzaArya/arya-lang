@@ -1,6 +1,6 @@
 # MySQL applications with Arya
 
-These experimental APIs are included in Arya 1.2.0-alpha.4 for the JavaScript/Node target. Install `arya-language@latest` or build this checkout with `npm run build`.
+These experimental APIs are included in Arya 1.2.0-alpha.4 for the JavaScript/Node target. Install the recorded published baseline with `npm install --save-exact arya-language@1.2.0-alpha.4`, or build this checkout with `npm run build`. The APIs below are also available in the 1.3.0-alpha.4 source candidate.
 
 Arya's JavaScript profile provides a managed MySQL library:
 
@@ -8,7 +8,7 @@ Arya's JavaScript profile provides a managed MySQL library:
 use std "env" as env
 use std "mysql" as mysql
 
-keep db = await mysql.connect({
+const db = await mysql.connect({
   host: env.get("DB_HOST", "127.0.0.1"),
   port: env.int("DB_PORT", 3306),
   user: env.require("DB_USER"),
@@ -16,13 +16,13 @@ keep db = await mysql.connect({
   database: env.require("DB_NAME")
 })
 
-keep tasks = await db.rows(
+const tasks = await db.rows(
   "SELECT id, title FROM tasks WHERE completed = ? ORDER BY id DESC LIMIT 100",
   [false]
 )
 
-each item in tasks {
-  say(item.title)
+for item in tasks {
+  print(item.title)
 }
 
 await db.close()
@@ -51,15 +51,15 @@ BIGINT values are returned as strings by default; DECIMAL retains the driver's e
 | `await db.ping()` | `true`, or an error if connectivity fails. |
 | `await db.close()` | Wait for active operations, then close the pool. Repeated calls share the same result. |
 
-Every SQL call uses mysql2's prepared `execute` API. Pass values separately using `?` placeholders:
+Every SQL call uses mysql2's prepared `execute` API. Pass values separately using `?` placeholders. The following fragments continue after `db` has connected in the first example:
 
 ```arya
-keep saved = await db.execute(
+const saved = await db.execute(
   "INSERT INTO tasks (title) VALUES (?)",
   ["Learn Arya"]
 )
 
-keep item = await db.one(
+const item = await db.one(
   "SELECT id, title FROM tasks WHERE id = ?",
   [saved.insertId]
 )
@@ -72,8 +72,8 @@ Parameters can contain text, finite numbers, booleans, `null`, bigint, valid Jav
 Related writes use one dedicated connection:
 
 ```arya
-keep item = await db.transaction(async fn(tx) {
-  keep saved = await tx.execute(
+const item = await db.transaction(async fn(tx) {
+  const saved = await tx.execute(
     "INSERT INTO tasks (title) VALUES (?)",
     ["Ship the application"]
   )
@@ -103,7 +103,7 @@ The `env` library reads the running process environment:
 | Call | Behavior |
 | --- | --- |
 | `env.get(name, fallback = null)` | Return text or a fallback; preserve an empty string. |
-| `env.require(name)` | Require a nonempty value, naming missing configuration in the error. |
+| `env.require(name)` | Require a value containing non-whitespace text, naming missing configuration in the error. |
 | `env.int(name, fallback)` | Require a safe integer; no decimal truncation or empty-string conversion. |
 | `env.bool(name, fallback)` | Accept `true`, `false`, `1`, or `0`, case-insensitively. |
 

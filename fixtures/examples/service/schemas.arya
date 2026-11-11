@@ -1,13 +1,13 @@
 use std "validate" as validate
 
-export keep message = validate.object({
+export const message = validate.object({
   message: validate.string({trim: true, min: 1, max: 1000})
 })
 
-export keep greetingParams = validate.object({
+export const greetingParams = validate.object({
   name: validate.string({trim: true, min: 1, max: 80})
 })
 
-export keep greetingQuery = validate.object({
+export const greetingQuery = validate.object({
   punctuation: validate.optional(validate.enum(["!", "."]), "!")
 })

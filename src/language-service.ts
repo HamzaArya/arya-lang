@@ -1,3 +1,4 @@
+import type {Type} from './types.js';
 import { fileURLToPath } from 'node:url';
 import { AryaError, parseProgram, builtins, keywords, type SourceAnalysis, type AryaDiagnostic, type Token } from './compiler.js';
 export { standardCompletions } from './standard-completions.js';
@@ -8,22 +9,22 @@ export interface Analysis extends SourceAnalysis { error?: AryaDiagnostic }
 const syntaxHelp: Record<string, string> = {
   fn: 'fn name(value = default, ...remaining) => expression — return an expression, or use a block for statements.',
   guard: 'guard condition else { return ... } — exit early when a condition is false; the fallback must terminate.',
-  each: 'each value at index in values { ... } — iterate values, optionally with a zero-based position.',
+  for: 'for value at index in values { ... } — iterate values, optionally with a zero-based position.',
   finally: 'try { ... } finally { ... } — run cleanup after success, return, throw, or loop control.',
-  keep: 'keep name = value — declare an immutable binding; object contents can still be changed.',
+  const: 'const name = value — declare an immutable binding; object contents can still be changed.',
 };
-export function analyze(source: string, uri: string, options: { target?: 'js' } = {}): Analysis {
+export function analyze(source: string, uri: string, options: { target?: 'js'; moduleTypes?: Readonly<Record<string,Type>> } = {}): Analysis {
   let filename = 'document.arya';
   try { if (uri.startsWith('file:')) filename = fileURLToPath(uri); } catch { /* Unsaved documents do not need a filesystem path. */ }
   try {
-    const parsed = parseProgram(source, filename);
+    const parsed = parseProgram(source, filename, undefined, options.moduleTypes);
     const { ast: _ast, body: _body, usesPython: _python, usesViews: _views, ...analysis } = parsed;
     if (options.target !== undefined && options.target !== 'js') analysis.diagnostics.unshift({code: 'ARYA_UNSUPPORTED_TARGET', token: {kind: 'eof', text: '', start: 0, end: Math.min(1, source.length), line: 0, column: 0}, message: 'Arya supports the Node.js runtime only. Remove the retired target option.'});
     const error = analysis.diagnostics[0];
     return error ? { ...analysis, error } : analysis;
   }
   catch (error) {
-    if (error instanceof AryaError) return { symbols: [], bindings: [], references: [], imports: [], exports: [], moduleMembers: [], diagnostics: error.diagnostics, error: error.diagnostics[0]! };
+    if (error instanceof AryaError) return { symbols: [], bindings: [], references: [], imports: [], exports: [], moduleMembers: [], typing: {enabled:false,exports:{},declarations:'',bindings:[]}, diagnostics: error.diagnostics, error: error.diagnostics[0]! };
     throw error;
   }
 }
@@ -38,7 +39,7 @@ export function definitionAt(analysis: Analysis, offset: number): Token | undefi
 
 export function completions(analysis: Analysis): { label: string; kind: 'keyword' | 'function' | 'variable' | 'module'; detail?: string }[] {
   return [
-    ...keywords.filter(label => !['when', 'otherwise', 'task', 'give'].includes(label)).map(label => ({label, kind: 'keyword' as const, ...(syntaxHelp[label] ? {detail: syntaxHelp[label]} : {})})),
+    ...keywords.map(label => ({label, kind: 'keyword' as const, ...(syntaxHelp[label] ? {detail: syntaxHelp[label]} : {})})),
     { label: 'view', kind: 'keyword' as const, detail: 'view { ... } — build escaped HTML using Arya elements.' },
     ...Object.entries(builtins).map(([label, detail]) => ({ label, detail, kind: label === 'args' ? 'variable' as const : 'function' as const })),
     ...analysis.symbols.map(symbol => ({ label: symbol.name, kind: symbol.kind })),
@@ -71,3 +72,6 @@ export function hoverAt(source: string, offset: number): { text: string; start: 
   if (quote || comment || source[start - 1] === '.' || /^\s*:/.test(source.slice(end))) return undefined;
   return { text, start, end };
 }
+
+export {analyzeWorkspace, referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions} from './workspace-service.js';
+export type {SourceDocument, SourceLocation} from './workspace-service.js';

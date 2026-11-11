@@ -1,6 +1,6 @@
 # Build and publish an Arya prerelease
 
-**Source candidate: 1.3.0-alpha.3. Published release: 1.2.0-alpha.4.** Both npm packages are available on `latest`; their [verified transaction record](releases/1.2.0-alpha.4-publication.json) identifies the exact archives. Follow this process for a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
+**Source candidate: 1.3.0-alpha.7. Published release: 1.2.0-alpha.4.** Both npm packages were verified on `latest` on 10 November 2026; their [verified transaction record](releases/1.2.0-alpha.4-publication.json) identifies the exact archives. Follow this process for a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
 
 Hamza Arya is the release maintainer. The project uses Apache-2.0, npm packages `arya-language` and `create-arya-language`, and the existing [HamzaArya/arya-lang](https://github.com/HamzaArya/arya-lang) repository. Private security reporting is described in [SECURITY.md](../SECURITY.md).
 

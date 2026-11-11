@@ -2,7 +2,7 @@
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, updated 10 November 2026. **Current implementation:** `1.3.0-alpha.3`, Node.js 22.15 or later, retaining the 0.2 core with section 13 amendments. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** `1.3.0-alpha.7`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -19,7 +19,6 @@ The keywords are:
 ```text
 let const fn async await return if else for in while break continue
 and or not true false null use as export new try catch finally throw guard
-keep task when otherwise each give
 ```
 
 The following additional words cannot be binding names or bare expression names:
@@ -46,15 +45,15 @@ The following grammar describes the surface. `Name` is a permitted identifier; `
 Program       := { separator | Statement }
 separator     := LF | ";"
 Block         := "{" { separator | Statement } "}"
-Declaration   := ("let" | "const" | "keep") Name "=" Expr end
-Function      := ["async"] ("fn" | "task") Name Parameters (Block | "=>" Expr end)
+Declaration   := ("let" | "const") Name "=" Expr end
+Function      := ["async"] "fn" Name Parameters (Block | "=>" Expr end)
 Parameters    := "(" [ Parameter { "," Parameter } [","] ] ")"
 Parameter     := Name ["=" Expr] | "..." Name  # rest must be last, with no trailing comma
 Import        := "use" ("js" | "python" | "arya" | "std") String "as" Name end
 Export        := "export" (Declaration | Function)
 If            := "if" Expr Block ["else" (If | Block)]
 While         := "while" Expr Block
-For           := ("for" | "each") Name ["at" Name] "in" Expr Block
+For           := "for" Name ["at" Name] "in" Expr Block
 Guard         := "guard" Expr "else" Block  # fallback must exit
 Return        := "return" [Expr] end
 LoopControl   := ("break" | "continue") end
@@ -112,7 +111,7 @@ Assignments are statements, not expressions. Targets are names, properties, or i
 
 The module, each function initializer/body, each conditional/loop body, and each try/catch/finally body introduce lexical scopes. Parameters have an initializer environment outside the body; their bindings are aliased into the body to preserve duplicate-declaration checks. A for variable shares its body scope; a catch variable shares its catch body scope. Nested scopes may shadow outer names. Duplicate declarations or parameters in the same scope are compile errors, including a body declaration duplicating a parameter, for variable, or catch name.
 
-The seven Arya built-ins are predeclared in module scope and cannot be redeclared there; inner scopes may shadow them. Host globals are fallback bindings and may be shadowed even in module scope.
+The six Arya built-ins are predeclared in module scope and cannot be redeclared there; inner scopes may shadow them. Host globals are fallback bindings and may be shadowed even in module scope.
 
 `let` and `const` require initializers. Their scope covers the entire enclosing lexical scope, but their bindings are uninitialized until their declaration executes. Reading or writing one before initialization throws a runtime `ReferenceError` (the temporal dead zone). This also applies when an inner binding shadows an initialized outer binding: `let value = value` cannot read the outer value.
 
@@ -124,7 +123,7 @@ Closures capture bindings rather than snapshots. Creating a closure that refers 
 
 ## 5. Values and conversions
 
-Arya uses JavaScript values directly: Number, string, boolean, null, undefined, object (including lists, functions and promises), and BigInt/Symbol values obtained through host calls or imports. There are no distinct Arya wrapper types. JavaScript libraries may supply other host objects. There is no static type system.
+Arya uses JavaScript values directly: Number, string, boolean, null, undefined, object (including lists, functions and promises), and BigInt/Symbol values obtained through host calls or imports. There are no distinct Arya wrapper types. JavaScript libraries may supply other host objects. Optional checking is defined in section 17; unannotated legacy modules remain dynamic.
 
 Numbers use IEEE-754 binary64; arithmetic may produce `NaN`, positive/negative infinity, or negative zero even though nonfinite numeric literals are rejected. Rounding beyond the safe integer range is observable. Division by zero does not itself throw. `%` is remainder, including its JavaScript sign behavior. `+` may concatenate strings after JavaScript primitive conversion; other arithmetic and relational comparisons use JavaScript coercion. Mixing BigInt and Number in arithmetic throws where JavaScript does.
 
@@ -159,7 +158,7 @@ Apart from stable built-in and bridge messages documented here, host error wordi
 
 Extra arguments to `len`, `str`, `number`, and `range` are ignored after their defined parameters. `range()` is invalid; `range(0)` is empty. The 100,000 range cap is an enforced runtime limit in this profile, not a limit on lists created in other ways.
 
-These behaviors assume the host bindings/methods used by the runtime have not been replaced. Module-level host-name shadowing currently shares the injected runtime's lexical environment; see section 12 for that implementation limitation.
+These behaviors assume the host bindings/methods used by the runtime have not been replaced. Module-level lexical host-name shadowing is isolated from injected helpers as defined in section 17.
 
 The following names are the guaranteed **bare host-global surface** for the Node execution profile. User declarations may shadow them. The shared internal `hostGlobals` list records this exact set; conformance tests verify documentation and runtime availability. This is the allowlist M3 must use independently of the machine running analysis.
 
@@ -200,7 +199,7 @@ Arguments are serialized by JavaScript JSON.stringify with a rejecting replacer.
 
 Python returns are serialized with `json.dumps(..., allow_nan=False)` and parsed as JavaScript JSON. Python lists/tuples become lists, dictionaries become objects with JSON string keys, None becomes null, and booleans remain booleans. Unsupported Python objects or nonfinite numbers raise a catchable bridge error. Large Python integers may round to Number on return; there is no bigint transport. Negative zero sent from Arya becomes JSON zero; a Python `-0.0` return retains its sign after JSON.parse. Applications needing exact integers/decimals must encode them as strings explicitly.
 
-Python exceptions become Error objects with `Python: <exception type>: <message>`. Worker startup/timeout/buffer failures use `Python bridge failed: ...`; unsuccessful process status uses `Python bridge exited with status <status>.`; malformed stdout uses `Python bridge returned an invalid JSON response.` Python library stdout is redirected to stderr and forwarded so stdout remains the response channel. The worker protocol forces UTF-8 and validates the complete response envelope. Bridge errors carry stable `ARYA_PYTHON_*` codes with actionable interpreter/module/file/member/input/return/timeout/output/protocol hints; existing message prefixes are retained. On process start, timeout, or buffer failure (`spawnSync` reports an error), captured stderr forwarding is bounded to 64 KiB before the diagnostic. Ordinary logging, nonzero exits, and Python exception responses may forward logs within the normal 8 MiB subprocess bound. Calls have a 30-second timeout and 8 MiB stdout/stderr buffers. See the [interop contract and matrix](interop.md) for exact codes and examples. There is no persistent worker, async Python call, callback transport, or streaming result.
+Python exceptions become Error objects with `Python: <exception type>: <message>`. Worker startup/timeout/buffer failures use `Python bridge failed: ...`; unsuccessful process status uses `Python bridge exited with status <status>.`; malformed stdout uses `Python bridge returned an invalid JSON response.` Python library stdout is redirected to stderr and forwarded so stdout remains the response channel. The worker protocol forces UTF-8 and validates the complete response envelope. Bridge errors carry stable `ARYA_PYTHON_*` codes with actionable interpreter/module/file/member/input/return/timeout/output/protocol hints; existing message prefixes are retained. On process start, timeout, or buffer failure (`spawnSync` reports an error), captured stderr forwarding is bounded to 64 KiB before the diagnostic. Ordinary logging, nonzero exits, and Python exception responses may forward logs within the normal 8 MiB subprocess bound. Calls have a 30-second timeout and 8 MiB stdout/stderr buffers. See the [interop contract and matrix](interop.md) for exact codes and examples. Direct calls are synchronous and use fresh processes. The opt-in [async Python API](python-async.md) adds nonblocking calls, batches, and managed clients without persistent cross-call state, callback transport, or streaming results.
 
 ## 10. Compilation and analysis
 
@@ -208,7 +207,7 @@ Python exceptions become Error objects with `Python: <exception type>: <message>
 
 Check validates syntax, duplicate declarations, control-flow/export/import context, lexical names, and direct/compound const writes. Resolution uses completed lexical scopes, so forward functions, recursion, legal shadowing, and captures of later declarations resolve. Every bare name must bind to a visible declaration, Arya built-in, or section 7 host global. Property names and object literal keys are not lexical references; computed indexes and constructor base names are references.
 
-After a complete parse, all independent semantic diagnostics are returned in source order: `ARYA_UNKNOWN_NAME` for unresolved names and `ARYA_CONST_ASSIGNMENT` for illegal lexical writes. A unique single-edit neighbor may produce a spelling suggestion, including a transposed pair. Suggestions are optional, never change binding, and are omitted for ambiguous names or unusually large scopes/identifiers. Syntax failures return one `ARYA_SYNTAX` diagnostic; parser recovery is outside this preview. Compilation rejects any diagnostic; editor analysis retains declarations and resolved references when only semantic errors are present. CLI errors print source file/line/column, and successful Check prints `Check OK`.
+After a complete parse, all independent semantic diagnostics are returned in source order: `ARYA_UNKNOWN_NAME` for unresolved names and `ARYA_CONST_ASSIGNMENT` for illegal lexical writes. A unique single-edit neighbor may produce a spelling suggestion, including a transposed pair. Suggestions are optional, never change binding, and are omitted for ambiguous names or unusually large scopes/identifiers. Syntax failures return bounded recovered `ARYA_SYNTAX` diagnostics as defined in section 17. Compilation rejects any diagnostic; editor analysis retains declarations and resolved references when only semantic errors are present. CLI errors print source file/line/column, and successful Check prints `Check OK`.
 
 Known-name use before initialization remains runtime TDZ behavior; a closure referring to a later declaration is not rejected because of its text position. JavaScript/Python dependency availability, general property existence, runtime types, and host API failures are not checked. Explicit project Check additionally validates Arya dependencies and direct namespace exports as described in section 11. A passing Check therefore does not guarantee successful execution. Same-file go-to-definition uses resolved declaration tokens, including parameters, closures, loops, and imports; properties, unresolved names, built-ins, and host globals have no local target. Source-map support and navigation do not add an interactive debugger.
 
@@ -230,20 +229,20 @@ The output directory is owned generated storage, never the project root or a dir
 
 The compiler accepts at most 262,144 UTF-16 source units and 50,000 tokens excluding EOF, including newline tokens. The CLI's bounded reader separately accepts at most 262,144 UTF-8 bytes, so a Unicode file can reach the CLI limit sooner. Parser nesting is capped at 100 active guarded expression/unary/block operations, not 100 physical brace pairs. These defensive limits cause compile errors; they do not limit runtime recursion or list sizes generally. Projects are capped at 1024 canonical Arya modules and 16 MiB total UTF-8 source, in addition to per-file bounds. Runtime range/Python limits are described in their sections. Changes to limits must be documented without presenting them as new syntax or type rules.
 
-**Generated-runtime scope limitation:** Module-level host declarations are accepted, but the injected runtime shares their lexical scope. Its references to `console`, `String`, `Number`, `Array`, `Math`, `undefined`, and (for Python) other host names can consequently resolve to user declarations. For example, declaring a module-level `String` function changes `str`; declaring a module-level `process` causes args initialization to encounter its temporal dead zone before user statements run. Inner-scope host shadowing does not change the runtime's outer bindings. Prefer inner scopes for such shadowing; full runtime name isolation remains an implementation improvement. The host-global allowlist is a lexical-resolution contract, not a claim that this existing runtime limitation is solved.
+**Runtime isolation:** module-level host declarations and import aliases are isolated from injected helper dependencies beginning with 1.3.0-alpha.7. User references retain lexical timing and shadowing. See section 17 and its conformance regressions.
 
 The executable core conformance suite is [tests/conformance.test.ts](../tests/conformance.test.ts), with a [CLI precedence fixture](../fixtures/arya/conformance/precedence.arya). It covers lexical boundaries, newline rules, precedence, short-circuit operands, block/function timing, TDZ closures, const mutation, per-iteration capture, conversions, identity, numeric edges, host-global availability, nullish import selection, import hoisting, live exports, Python JSON edges, and limits. Existing [execution tests](../tests/arya.test.ts), [editor/LSP tests](../tests/arya-editor.test.ts), and [source-map tests](../tests/source-maps.test.ts) also qualify callbacks, constructors, async behavior, control-flow rejection, passive analysis, diagnostics, and original source locations.
 
 The [resolver suite](../tests/resolver.test.ts) covers name/assignment diagnostics, all declaration kinds, scope boundaries and timing, conservative spelling suggestions, passive imports, navigation, metadata preservation, and CLI stale-output prevention. The portable LSP suite additionally exercises multiple semantic diagnostics and definition requests with UTF-16 positions and live-edit recovery. AryaCode owns equivalent registered-provider desktop acceptance in its repository.
 
-Run `npm run check` for type checking and all conformance layers. Platform/minimum-Node qualification is recorded separately in [source-map acceptance](source-maps.md); a written contract does not imply every platform has been tested. The [project suite](../tests/project.test.ts) qualifies graph resolution/publication and mapped dependency errors; the [interop suite](../tests/interop.test.ts) qualifies the JavaScript/Python matrix. Cross-platform and external learner evidence remain separate release gates.
+Run `npm run check` for type checking and all conformance layers. Current platform/minimum-Node qualification is recorded separately in [release readiness](release-readiness.md); a written contract does not imply every platform has been tested. The [project suite](../tests/project.test.ts) qualifies graph resolution/publication and mapped dependency errors; the [interop suite](../tests/interop.test.ts) qualifies the JavaScript/Python matrix. Cross-platform and external learner evidence remain separate release gates.
 
 
 ## 13. Arya 1.2 preview amendments
 
 Starting in `1.2.0-alpha.1`, this section and the [web contract](arya-web.md) amend the preceding 0.2 baseline. Other core semantics retain their preceding definitions. The [versioned decision and migration](releases/1.2.0-alpha.1.md) records the intentional compatibility changes.
 
-The keywords `keep`, `task`, `when`, `otherwise`, `each`, and `give` are reserved. They respectively alias `const`, `fn`, `if`, `else`, `for`, and `return`. Preferred authoring uses `fn`/`return` and `if`/`else if`/`else`; `task`, `give`, `when`, and `otherwise` remain accepted compatibility aliases but are omitted from completion suggestions. `async task`, anonymous `task`, `otherwise when`, exported `task`, and exported `keep` follow the corresponding original forms. Both spellings produce the same scope and evaluation semantics. Prior bindings using those six words must be renamed. `say(...values)` is a seventh built-in binding and aliases `print`; a prior module-scope `say` binding must also be renamed.
+The 1.2 preview introduced alternate keyword spellings and an output alias. They are removed from the current contract in 1.3.0-alpha.4; section 16 and the [syntax migration guide](syntax-migration.md) define the change. Earlier release notes retain their version-specific syntax and reserved-word requirements.
 
 Triple double quotes (`"""`) delimit a raw multiline string. Its content is literal, including newlines and backslashes, until the next matching triple delimiter. It does not interpolate expressions. Single/double quoted strings retain section 1's existing escape rules.
 
@@ -284,3 +283,44 @@ All generated application modules run on Node.js 22.15+. `arya build` emits a Ja
 ## 15. Application flow in 1.3.0-alpha.2
 
 The [flow syntax contract](flow-syntax.md) specifies input-first/awaited pipelines, concise/default/rest functions, spreads, terminating guards, indexed iteration, finally cleanup, and the `list` standard library. Pipeline input, receiver/key/getter, explicit arguments, and invocation each evaluate once in that order. Function defaults have their own environment; every indexed loop iteration has fresh value/index bindings. These additions preserve passive analysis and original-source mapping. `guard` is newly reserved as a binding name; properties with that name remain legal.
+
+## 16. Canonical syntax in 1.3.0-alpha.4
+
+The only binding/function/branch/iteration/output spellings are `let`, `const`, `fn`, `return`, `if`, `else`, `for`, and `print`. Mutable bindings still use `let`; async functions use `async fn`. The former `keep`, `task`, `give`, `when`, `otherwise`, and `each` parser alternatives and the implicit `say` built-in are removed. This is a deliberate breaking prerelease change.
+
+Removed words are ordinary identifiers, including at module scope. They are no longer predeclared or reserved, and normal lexical scope/const checks apply to user declarations with those names. An undeclared `say(...)` fails with `ARYA_UNKNOWN_NAME`. Property names and library members such as `ui.when(...)` retain their meaning. Generated runtime code declares only the six documented built-ins.
+
+The [migration guide](syntax-migration.md) and [release notes](releases/1.3.0-alpha.4.md) cover replacements, editor/compiler matching, and rebuild requirements. Existing pipelines, default/rest parameters, concise and block function bodies, indexed `for` loops, guards, finally cleanup, views, module graphs, and bridge semantics retain their contracts.
+
+## 17. Business application candidate — 1.3.0-alpha.7
+
+Decision B-001: module lexical bindings that shadow guaranteed host names must
+not alter injected helper dependencies. Compilation renames resolved user bindings
+and retains public export names, lexical timing and original source positions.
+Host-object mutation remains ordinary JavaScript behavior. Rebuild generated output.
+This supersedes section 12's older name-isolation limitation.
+
+Decision B-002: optional annotations use `: Type` on declarations, parameters,
+function results and import aliases. Type forms, inference boundaries, unknown
+external values and strict null narrowing follow the [bounded type contract](business-applications.md#optional-type-annotations).
+An async result annotation describes the resolved value. Type syntax is erased;
+no runtime validation is inserted. Checked Arya exports propagate through project
+builds. Unsupported type forms fail explicitly; TypeScript compatibility is not
+claimed. Existing unannotated modules keep their dynamic runtime semantics.
+The tokenizer additionally accepts `?` and `|` in these type forms; they are not
+new expression operators. No new globally reserved identifier is introduced.
+
+Decision B-003: `decimal`, `datetime` and `async` standard imports implement the
+[documented business APIs](business-applications.md). Decimal operations accept
+bounded decimal strings and require explicit rounding for division/quantization.
+Date-only strings remain independent of the host zone. Streaming concurrency is
+bounded and cancellation/cleanup are cooperative. Currency and accounting policy
+remain application responsibilities. Focused conformance tests cover all three.
+
+Compatibility: generated spelling changes are internal; user bindings/exports keep
+their source names. Previously documented helper-shadowing failures now succeed.
+Annotations and libraries are additive, opt-in experimental features. Existing
+analysis fields are retained; `typing` adds passive export/binding metadata.
+Parser recovery may add independent syntax diagnostics while preserving the first
+error alias. [Migration and limits](business-applications.md) define this candidate;
+no stable release or broader platform qualification is implied.

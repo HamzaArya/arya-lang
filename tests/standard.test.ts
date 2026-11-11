@@ -20,21 +20,21 @@ async function load(root: string, source: string) {
   return import(pathToFileURL(output).href);
 }
 
-test('standard files, JSON, math and path execute together with branded tasks', async t => {
+test('standard files, JSON, math and path execute together with canonical functions', async t => {
   const root = await fixture(t);
   const module = await load(root, `
 use std "fs" as files
 use std "json" as json
 use std "math" as math
 use std "path" as path
-keep folder = ${JSON.stringify(root)}
-keep file = path.join(folder, "report.json")
+const folder = ${JSON.stringify(root)}
+const file = path.join(folder, "report.json")
 await json.write(file, {root: math.sqrt(81), values: [1, 2]})
-export keep report = await json.read(file)
-export keep text = await files.readText(file)
-export keep exists = await files.exists(file)
-export keep missing = await files.exists(path.join(folder, "absent"))
-export keep names = await files.list(folder)
+export const report = await json.read(file)
+export const text = await files.readText(file)
+export const exists = await files.exists(file)
+export const missing = await files.exists(path.join(folder, "absent"))
+export const names = await files.list(folder)
 `);
   assert.deepEqual(module.report, { root: 9, values: [1, 2] });
   assert.match(module.text, /"root": 9/);
@@ -47,14 +47,14 @@ test('web serves views and asynchronous JSON routes with bounded request bodies'
   const root = await fixture(t);
   const module = await load(root, `
 use std "web" as web
-keep home = view { html { body { h1 "Arya web" } } }
-export keep server = web.serve(0, {
+const home = view { html { body { h1 "Arya web" } } }
+export const server = web.serve(0, {
   "/": home,
-  "GET /api": async task(request) { give {name: request.query.name, method: request.method} },
-  "POST /api": task(request) { give web.response(201, request.body, {"x-arya": "yes"}) },
-  "/empty": task() {},
-  "/broken": task() { throw null },
-  "/bad-status": task() { throw {aryaHttpStatus: 900} }
+  "GET /api": async fn(request) { return {name: request.query.name, method: request.method} },
+  "POST /api": fn(request) { return web.response(201, request.body, {"x-arya": "yes"}) },
+  "/empty": fn() {},
+  "/broken": fn() { throw null },
+  "/bad-status": fn() { throw {aryaHttpStatus: 900} }
 }, {maxBodyBytes: 64, html: false})
 `);
   const server = module.server as Server;
@@ -96,12 +96,12 @@ test('MySQL adapter resolves optional mysql2, forwards parameters and unwraps ro
   }};`);
   const module = await load(root, `
 use std "mysql" as mysql
-keep db = await mysql.connect({host: "test-host"})
-export keep rows = await db.rows("SELECT ? AS name", ["O'Reilly"])
-export keep result = await db.execute("SELECT 1")
+const db = await mysql.connect({host: "test-host"})
+export const rows = await db.rows("SELECT ? AS name", ["O'Reilly"])
+export const result = await db.execute("SELECT 1")
 export let rejected = false
 try { await db.rows("SELECT ?", {}) } catch error { rejected = true }
-export keep closed = await db.close()
+export const closed = await db.close()
 `);
   assert.deepEqual(module.rows, [{ sql: 'SELECT ? AS name', parameters: ["O'Reilly"], host: 'test-host' }]);
   assert.deepEqual(module.result[0].parameters, []);
@@ -110,18 +110,18 @@ export keep closed = await db.close()
 });
 
 test('checking standard libraries is passive and editor analysis agrees with compilation', () => {
-  const source = 'use std "mysql" as mysql\nuse std "web" as web\nkeep db = mysql.connect({})';
+  const source = "use std \"mysql\" as mysql\nuse std \"web\" as web\nconst db = mysql.connect({})";
   assert.doesNotThrow(() => compile(source));
   assert.equal(analyze(source, 'file:///main.arya').diagnostics.length, 0);
   assert.throws(() => compile('use std "missing" as library'), /Unknown Arya standard library/);
   assert.ok(analyze('use std "missing" as library', 'file:///main.arya').diagnostics.length > 0);
-  const labels = completions(analyze('say(1)', 'file:///main.arya')).map(item => item.label);
-  for (const label of ['fn', 'keep', 'if', 'else', 'each', 'return', 'say', 'view']) assert.ok(labels.includes(label), label);
-  for (const label of ['when', 'otherwise', 'task', 'give']) assert.ok(!labels.includes(label), 'Compatibility alias should not be suggested: ' + label);
+  const labels = completions(analyze("print(1)", 'file:///main.arya')).map(item => item.label);
+  for (const label of ['fn', 'const', 'if', 'else', 'for', 'return', 'print', 'view']) assert.ok(labels.includes(label), label);
+  for (const label of ['keep', 'task', 'when', 'otherwise', 'each', 'give', 'say']) assert.ok(!labels.includes(label), 'Removed spelling should not be suggested: ' + label);
 });
 
 test('builtin hover excludes multiline CSS and browser JavaScript literals', () => {
-  const source = 'keep page = view { script """\nprint(1)\n""" }\nsay(1)';
+  const source = "const page = view { script \"\"\"\nprint(1)\n\"\"\" }\nprint(1)";
   assert.equal(hoverAt(source, source.indexOf('print') + 2), undefined);
-  assert.match(hoverAt(source, source.lastIndexOf('say') + 1)!.text, /say/);
+  assert.match(hoverAt(source, source.lastIndexOf('print') + 1)!.text, /print/);
 });

@@ -43,7 +43,7 @@ test('web requires index.html before listening and reports how to create a proje
   const root = await fixture(t);
   await assert.rejects(load(root, 'use std "web" as web\nweb.serve(0)'), /requires an HTML entry file:.*index\.html.*arya init --web/);
   await writeFile(join(root, 'index.html'), '<!doctype html><h1>Home</h1>');
-  const module = await load(root, 'use std "web" as web\nexport keep server = web.serve(0)', 'with-index');
+  const module = await load(root, "use std \"web\" as web\nexport const server = web.serve(0)", 'with-index');
   const client = await running(t, module.server);
   const home = await client.fetch('/');
   assert.equal(home.status, 200);
@@ -57,7 +57,7 @@ test('web source roots survive generated output directories and unrelated workin
   await mkdir(project); await mkdir(generated);
   await writeFile(join(project, 'index.html'), '<h1>Source-relative page</h1>');
   const output = join(generated, 'main.mjs');
-  await writeFile(output, compile('use std "web" as web\nexport keep server = web.serve(0)', join(project, 'main.arya')).code);
+  await writeFile(output, compile("use std \"web\" as web\nexport const server = web.serve(0)", join(project, 'main.arya')).code);
   const module = await import(pathToFileURL(output).href);
   const client = await running(t, module.server);
   assert.notEqual(process.cwd(), project);
@@ -73,7 +73,7 @@ test('web serves public assets with MIME, byte lengths and HEAD without exposing
   await writeFile(join(root, 'public', 'app.js'), 'document.title = "Arya";');
   await writeFile(join(root, 'main.arya'), 'private source');
   await mkdir(join(root, 'public', 'folder'));
-  const module = await load(root, 'use std "web" as web\nexport keep server = web.serve(0)');
+  const module = await load(root, "use std \"web\" as web\nexport const server = web.serve(0)");
   const client = await running(t, module.server);
   const style = await client.fetch('/styles.css?cache=1');
   assert.equal(style.status, 200);
@@ -98,9 +98,9 @@ test('web serves public assets with MIME, byte lengths and HEAD without exposing
 test('explicit API routes override files and html:false keeps API-only applications explicit', async t => {
   const root = await fixture(t);
   const module = await load(root, `use std "web" as web
-export keep server = web.serve(0, {
+export const server = web.serve(0, {
   "/": "Inline page",
-  "GET /api/status": task() { give {ready: true} }
+  "GET /api/status": fn() { return {ready: true} }
 }, {html: false})`);
   const client = await running(t, module.server);
   assert.equal(await (await client.fetch('/')).text(), 'Inline page');
@@ -108,7 +108,7 @@ export keep server = web.serve(0, {
   await writeFile(join(root, 'index.html'), '<h1>Default</h1>');
   await mkdir(join(root, 'public')); await writeFile(join(root, 'public', 'status.json'), '{"file":true}');
   const override = await load(root, `use std "web" as web
-export keep server = web.serve(0, {"/": "Route first", "GET /status.json": {route: true}})`, 'override');
+export const server = web.serve(0, {"/": "Route first", "GET /status.json": {route: true}})`, 'override');
   const second = await running(t, override.server);
   assert.equal(await (await second.fetch('/')).text(), 'Route first');
   assert.deepEqual(await (await second.fetch('/status.json')).json(), { route: true });
@@ -120,7 +120,7 @@ test('web root options resolve relative to the importing source and validate con
   await writeFile(join(root, 'site', 'home.html'), '<h1>Configured</h1>');
   await writeFile(join(root, 'site', 'assets', 'app.css'), 'body{}');
   const module = await load(root, `use std "web" as web
-export keep server = web.serve(0, {}, {root: "site", html: "home.html", assets: "assets"})`);
+export const server = web.serve(0, {}, {root: "site", html: "home.html", assets: "assets"})`);
   const client = await running(t, module.server);
   assert.equal(await (await client.fetch('/')).text(), '<h1>Configured</h1>');
   assert.equal((await client.fetch('/app.css')).status, 200);
@@ -137,10 +137,10 @@ export keep server = web.serve(0, {}, {root: "site", html: "home.html", assets: 
 test('web responses preserve status and headers across separately compiled Arya modules', async t => {
   const root = await fixture(t);
   await writeFile(join(root, 'helper.arya.mjs'), compile(`use std "web" as web
-export task created() { give web.response(201, {created: true}, {"x-created": "yes"}) }`, join(root, 'helper.arya')).code);
+export fn created() { return web.response(201, {created: true}, {"x-created": "yes"}) }`, join(root, 'helper.arya')).code);
   const module = await load(root, `use std "web" as web
 use arya "./helper.arya" as helper
-export keep server = web.serve(0, {"POST /created": helper.created}, {html: false})`);
+export const server = web.serve(0, {"POST /created": helper.created}, {html: false})`);
   const client = await running(t, module.server);
   const response = await client.fetch('/created', { method: 'POST' });
   assert.equal(response.status, 201);
@@ -159,7 +159,7 @@ test('public files reject raw traversal, malformed encodings, dotfiles and symli
   await symlink(join(root, 'secret.txt'), join(root, 'public', 'escape.txt'));
   await symlink(join(root, 'public', '.env'), join(root, 'public', 'hidden-alias.txt'));
   await symlink(root, join(root, 'public', 'outside'));
-  const module = await load(root, 'use std "web" as web\nexport keep server = web.serve(0)');
+  const module = await load(root, "use std \"web\" as web\nexport const server = web.serve(0)");
   const client = await running(t, module.server);
   for (const path of ['/../secret.txt', '/%2e%2e/secret.txt', '/%2Eenv', '/.env', '/.hidden/file.txt', '/%2f..%2fsecret.txt', '/%5c..%5csecret.txt', '/%00', '/%zz']) {
     assert.equal(await client.raw(path), 400, path);

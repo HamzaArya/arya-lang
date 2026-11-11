@@ -12,7 +12,7 @@ async function library(t: {after(fn: () => Promise<unknown>): void}) {
   const root = await mkdtemp(join(tmpdir(), 'arya ui patterns '));
   t.after(() => rm(root, {recursive: true, force: true}));
   const filename = join(root, 'library.mjs');
-  await writeFile(filename, compile('use std "ui" as ui\nexport keep tools = ui').code);
+  await writeFile(filename, compile("use std \"ui\" as ui\nexport const tools = ui").code);
   return {ui: (await import(pathToFileURL(filename).href)).tools, root};
 }
 
@@ -105,7 +105,7 @@ test('all full-page templates render customizable escaped content and isolated i
 test('every copyable pattern example compiles and renders as real Arya', async t => {
   const {root} = await library(t);
   for (const item of uiPatternExamples) {
-    const source = 'use std "ui" as ui\nexport keep html = ui.page({state: {plan: "personal", query: "", capacity: 65}, body: ' + item.code + '})';
+    const source = "use std \"ui\" as ui\nexport const html = ui.page({state: {plan: \"personal\", query: \"\", capacity: 65}, body: " + item.code + '})';
     const filename = join(root, item.id + '.mjs');
     await writeFile(filename, compile(source).code);
     assert.match((await import(pathToFileURL(filename).href)).html, /^<!doctype html>/, item.title);

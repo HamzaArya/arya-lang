@@ -12,7 +12,7 @@ Define the input once, then attach it to a route:
 use std "validate" as validate
 use std "web" as web
 
-keep newItem = validate.object({
+const newItem = validate.object({
   title: validate.string({trim: true, min: 1, max: 200}),
   completed: validate.optional(validate.boolean(), false)
 })
@@ -46,13 +46,13 @@ Direct validation is also useful for files and Python/JavaScript results:
 ```arya
 use std "validate" as validate
 
-keep input = validate.object({count: validate.integer({min: 1, max: 100})})
-keep result = validate.check(input, {count: 10})
+const input = validate.object({count: validate.integer({min: 1, max: 100})})
+const result = validate.check(input, {count: 10})
 
 if result.ok {
-  say(result.value.count)
+  print(result.value.count)
 } else {
-  say(result.issues)
+  print(result.issues)
 }
 ```
 
@@ -68,7 +68,7 @@ Route keys support exact paths, method-qualified paths, and named segments:
 use std "web" as web
 use std "validate" as validate
 
-keep path = validate.object({id: validate.integer({coerce: true, min: 1})})
+const path = validate.object({id: validate.integer({coerce: true, min: 1})})
 
 web.serve(3000, {
   "GET /api/items/:id": web.route(fn(request) {
@@ -102,8 +102,8 @@ Existing function handlers, static route values, `web.response`, HTML entry file
 ```arya
 use std "log" as log
 
-keep logger = log.create({name: "orders", level: "info"})
-keep requestLog = logger.child({requestId: "example-request"})
+const logger = log.create({name: "orders", level: "info"})
+const requestLog = logger.child({requestId: "example-request"})
 
 requestLog.info("order.created", {orderId: "42"})
 requestLog.error("order.failed", {code: "PAYMENT_UNAVAILABLE"})

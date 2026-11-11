@@ -4,7 +4,7 @@ import {
 } from 'vscode-languageserver/node.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ARYA_VERSION } from './compiler.js';
-import { analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes, type Analysis } from './language-service.js';
+import { analyzeWorkspace, referencesInWorkspace, renameInWorkspace, signatureAt, typedCompletions, analyze, completions, standardCompletions, definitionAt, hoverAt, diagnosticFixes, type Analysis } from './language-service.js';
 import {semanticTokens, encodeSemanticTokens, semanticTokenTypes, semanticTokenModifiers} from './semantic-tokens.js';
 
 // stdio is the portable transport. stdout contains protocol frames only.
@@ -15,7 +15,7 @@ const timers = new Map<string, ReturnType<typeof setTimeout>>();
 const analysisFor = (document: TextDocument) => {
   const previous = cache.get(document.uri);
   if (previous?.version === document.version) return previous.analysis;
-  const analysis = analyze(document.getText(), document.uri);
+  const analysis = analyzeWorkspace(documents.all().map(d=>({uri:d.uri,source:d.getText()}))).get(document.uri)!;
   cache.set(document.uri, { version: document.version, analysis }); return analysis;
 };
 const range = (document: TextDocument, start: number, end: number): Range => ({ start: document.positionAt(start), end: document.positionAt(end) });
@@ -24,7 +24,7 @@ connection.onInitialize(params => {
   serverInfo: { name: 'Arya Language Server', version: ARYA_VERSION },
   capabilities: {
     positionEncoding: 'utf-16', textDocumentSync: TextDocumentSyncKind.Incremental,
-    completionProvider: { resolveProvider: false, triggerCharacters: ['.'] }, hoverProvider: true, documentSymbolProvider: true, definitionProvider: true,
+    completionProvider: { resolveProvider: false, triggerCharacters: ['.'] }, hoverProvider: true, documentSymbolProvider: true, definitionProvider: true, referencesProvider: true, renameProvider: true, signatureHelpProvider:{triggerCharacters:['(',',']}, documentFormattingProvider:true,
     codeActionProvider: { codeActionKinds: [CodeActionKind.QuickFix] },
     semanticTokensProvider: {legend: {tokenTypes: [...semanticTokenTypes], tokenModifiers: [...semanticTokenModifiers]}, full: true},
   },
@@ -40,8 +40,9 @@ function validate(document: TextDocument) {
   void connection.sendDiagnostics({ uri: document.uri, version: document.version, diagnostics });
 }
 documents.onDidChangeContent(({ document }) => {
+  cache.clear();
   clearTimeout(timers.get(document.uri));
-  timers.set(document.uri, setTimeout(() => { timers.delete(document.uri); validate(document); }, 100));
+  timers.set(document.uri, setTimeout(() => { timers.delete(document.uri); for(const open of documents.all())validate(open); }, 100));
 });
 documents.onDidClose(({ document }) => {
   clearTimeout(timers.get(document.uri)); timers.delete(document.uri); cache.delete(document.uri);
@@ -51,7 +52,7 @@ connection.onCompletion(({ textDocument, position }) => {
   const document = documents.get(textDocument.uri); if (!document) return [];
   const kinds = { keyword: CompletionItemKind.Keyword, function: CompletionItemKind.Function, variable: CompletionItemKind.Variable, module: CompletionItemKind.Module };
   const source = document.getText(), offset = document.offsetAt(position);
-  const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? standardCompletions(source, offset) : completions(analysisFor(document));
+  const items = /\.[A-Za-z0-9_]*$/.test(source.slice(0, offset)) ? [...standardCompletions(source, offset),...typedCompletions(source,offset)] : completions(analysisFor(document));
   return items.map(item => ({ ...item, kind: kinds[item.kind] }));
 });
 connection.onHover(({ textDocument, position }) => {
@@ -63,6 +64,27 @@ connection.onDefinition(({ textDocument, position }) => {
   const document = documents.get(textDocument.uri); if (!document) return null;
   const token = definitionAt(analysisFor(document), document.offsetAt(position));
   return token ? { uri: document.uri, range: range(document, token.start, token.end) } : null;
+});
+const snapshots=()=>documents.all().map(d=>({uri:d.uri,source:d.getText()}));
+connection.onReferences(({textDocument,position})=>{
+  const document=documents.get(textDocument.uri);if(!document)return [];
+  return referencesInWorkspace(snapshots(),document.uri,document.offsetAt(position)).map(ref=>({uri:ref.uri,range:range(documents.get(ref.uri)!,ref.start,ref.end)}));
+});
+connection.onRenameRequest(({textDocument,position,newName})=>{
+  const document=documents.get(textDocument.uri);if(!document)return null;
+  const changes:Record<string,{range:Range;newText:string}[]>={};
+  for(const edit of renameInWorkspace(snapshots(),document.uri,document.offsetAt(position),newName))(changes[edit.uri]??=[]).push({range:range(documents.get(edit.uri)!,edit.start,edit.end),newText:edit.replacement});
+  return {changes};
+});
+connection.onSignatureHelp(({textDocument,position})=>{
+  const document=documents.get(textDocument.uri);if(!document)return null;
+  const signature=signatureAt(document.getText(),document.offsetAt(position));
+  return signature?{signatures:[{label:signature.label}],activeSignature:0,activeParameter:signature.activeParameter}:null;
+});
+connection.onDocumentFormatting(async ({textDocument})=>{
+  const document=documents.get(textDocument.uri);if(!document)return [];
+  const {formatSource}=await import('./tooling.js');
+  try{return [{range:range(document,0,document.getText().length),newText:formatSource(document.getText())}];}catch{return [];}
 });
 connection.onDocumentSymbol(({ textDocument }) => {
   const document = documents.get(textDocument.uri); if (!document) return [];

@@ -1,11 +1,11 @@
 # Native Arya 1.2 preview
 
-> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
 
 
 Arya has a C11 native backend and an Arya-written native compiler. Native programs compile ahead of time to machine-code executables. They run without Node.js, Python, an Arya installation, a C compiler, or a JavaScript engine. OS libraries remain dependencies; the macOS arm64 artifact links to libSystem.
 
-The current npm compiler is **1.2.0-alpha.4**, an experimental preview with verified three-generation native bootstrap results. Standalone native archives from [1.1.0-alpha.1](native-release-verification.md) retain their original version; no new standalone native archive was published with alpha.4. Platform support is limited to environments recorded in the release's qualification evidence. See the [native contract](arya-native-specification.md) and [implementation plan](arya-1.1-native-plan.md).
+The native-capable npm baseline described here is **1.2.0-alpha.4**, an experimental preview with verified three-generation native bootstrap results. Standalone native archives from [1.1.0-alpha.1](native-release-verification.md) retain their original version; no new standalone native archive was published with alpha.4. Platform support is limited to environments recorded in the release's qualification evidence. See the [native contract](arya-native-specification.md) and [implementation plan](arya-1.1-native-plan.md).
 
 ## Build a calculator
 
@@ -39,7 +39,7 @@ The default npm CLI target remains JavaScript. `use js` and `use python` belong 
 
 ## Branded core syntax
 
-Use `fn` and `return` in new programs. Both native compiler entry points support `keep`, `task`, `when`/`otherwise`, `each`, `give`, and `say`, alongside `const`, `fn`, `if`/`else`, `for`, `return`, and `print`. Raw triple-double-quoted multiline strings preserve literal text without interpolation. The six new keywords and module-level `say` binding require the migrations in the [branded syntax migration](releases/1.2.0-alpha.1.md).
+Use `fn` and `return` in new programs. Both native compiler entry points support `keep`, `task`, `when`/`otherwise`, `each`, `give`, and `say`, alongside `const`, `fn`, `if`/`else`, `for`, `return`, and `print`. Raw triple-double-quoted multiline strings preserve literal text without interpolation. The six new keywords and module-level `say` binding require the migrations in the [branded syntax migration](../releases/1.2.0-alpha.1.md).
 
 The new `view` grammar, literal CSS/browser JavaScript, web server helper, and MySQL adapter belong to the JavaScript profile and are rejected in native checking. The native profile's file/math libraries retain their existing synchronous and limited APIs. `async task`, like `async fn`, remains unavailable for native execution.
 

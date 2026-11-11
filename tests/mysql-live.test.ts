@@ -15,7 +15,7 @@ test('live MySQL prepares values, preserves large numbers, commits, rolls back, 
   t.after(() => rm(root, { recursive: true, force: true }));
   const output = join(root, 'main.mjs');
   const source = `use std "mysql" as mysql
-export keep connect = mysql.connect
+export const connect = mysql.connect
 `;
   await writeFile(output, compile(source, join(root, 'main.arya')).code);
   const { connect } = await import(pathToFileURL(output).href);

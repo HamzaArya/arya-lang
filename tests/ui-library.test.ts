@@ -14,7 +14,7 @@ async function library(t: {after(fn: () => Promise<unknown>): void}) {
   const root = await mkdtemp(join(tmpdir(), 'arya ui library '));
   t.after(() => rm(root, {recursive: true, force: true}));
   const filename = join(root, 'library.mjs');
-  await writeFile(filename, compile('use std "ui" as ui\nexport keep tools = ui').code);
+  await writeFile(filename, compile("use std \"ui\" as ui\nexport const tools = ui").code);
   return (await import(pathToFileURL(filename).href)).tools;
 }
 

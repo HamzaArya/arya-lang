@@ -1,6 +1,6 @@
 # Readable data pipelines
 
-Requires the **1.3.0-alpha.2 source candidate**. The published 1.2.0-alpha.4 package does not include this syntax or the `list` library.
+Added in 1.3.0-alpha.2; use the current **1.3.0-alpha.4 source candidate** or its matching archive. The published 1.2.0-alpha.4 package does not include this syntax or the `list` library.
 
 From the repository root:
 

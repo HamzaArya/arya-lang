@@ -17,6 +17,9 @@ const pythonMethods = {
   stats: 'python.stats() — inspect active jobs, queued jobs, and closed state.',
 };
 const members: Record<string, Record<string, string>> = {
+  decimal: Object.fromEntries(['from(text)', 'add(a, b)', 'subtract(a, b)', 'multiply(a, b)', 'compare(a, b)', 'divide(a, b, places, rounding)', 'quantize(value, places, rounding)', 'toNumber(value)'].map(signature=>[signature.split('(')[0]!, 'decimal.'+signature+' — exact decimal strings; explicit rounding.'])),
+  datetime: Object.fromEntries(['date(text)', 'instant(text)', 'zoned(instant, zone)', 'dateAt(instant, zone)', 'toDate(instant)', 'fromDate(date)', 'atOffset(date, time, offset)'].map(signature=>[signature.split('(')[0]!, 'datetime.'+signature+' — strict ISO values and explicit zones.'])),
+  async: {map:'async.map(iterable, callback, {concurrency = 4, signal}) — ordered async iterable with bounded read-ahead.',each:'await async.each(iterable, callback, options) — drain work with backpressure and cleanup.'},
   list: {
     map: 'list.map(values, selector) — transform values; selector can be a function or field name.',
     flatMap: 'list.flatMap(values, selector) — transform and flatten one list level.',

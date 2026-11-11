@@ -1,15 +1,15 @@
 # Arya 1.1.0 native compilation plan
 
-> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
 
 
-> Historical native implementation plan. The backend and self-hosted compiler shipped experimentally in 1.1; current usage is in the [native guide](arya-native.md) and [alpha.4 release notes](releases/1.2.0-alpha.4.md). Stable gates remain open.
+> Historical native implementation plan. The backend and self-hosted compiler shipped experimentally in 1.1; historical usage is in the [native guide](arya-native.md) and [alpha.4 release notes](../releases/1.2.0-alpha.4.md). Stable gates remain open.
 
 **Status:** Native implementation and self-hosted compiler added in 1.1.0-alpha.1; platform/release qualification is tracked separately. See the [native guide](arya-native.md) and [contract](arya-native-specification.md).
 **Requested target:** Arya language/compiler 1.1.0, independently of AryaCode.
 **Date:** 9 November 2026.
 **Backend decision:** User-selected C11 backend, 9 November 2026. Self-hosting was additionally requested and implemented through an Arya-written compiler and three-generation bootstrap check.
-**Starting point:** The working repository identifies itself as 0.2.0-alpha.3. The existing [roadmap](arya-roadmap.md) and [stable-release gates](release-readiness.md) still apply.
+**Starting point:** The working repository identifies itself as 0.2.0-alpha.3. The existing [roadmap](../arya-roadmap.md) and [stable-release gates](../release-readiness.md) still apply.
 
 ## 1. Product goal
 
@@ -21,7 +21,7 @@ The first release examples are a calculator, a file-processing utility, and a mu
 
 **Performance priority:** Generate efficient machine code and measure its cost against equivalent optimized native programs. Native compilation alone does not guarantee maximum speed; representation, specialization, allocation, runtime calls, and algorithm choice must also be addressed.
 
-This plan assumes an additive native execution profile. Existing JavaScript execution remains available and remains the default. Replacing the stable language's existing JavaScript semantics would require a separate compatibility decision and potentially a major release under the [compatibility policy](compatibility-policy.md).
+This plan assumes an additive native execution profile. Existing JavaScript execution remains available and remains the default. Replacing the stable language's existing JavaScript semantics would require a separate compatibility decision and potentially a major release under the [compatibility policy](../compatibility-policy.md).
 
 ## 2. Release scope
 
@@ -90,7 +90,7 @@ Type inference and specialization are internal optimizations in this release. Ad
 
 ## 4. Native semantic contract
 
-Freeze a versioned native profile before implementing the complete backend. The [current specification](arya-specification.md) describes the Node profile; it must not silently become the specification for an incomplete JavaScript reimplementation.
+Freeze a versioned native profile before implementing the complete backend. The [current specification](../arya-specification.md) describes the Node profile; it must not silently become the specification for an incomplete JavaScript reimplementation.
 
 | Area | Proposed native behavior and acceptance requirement |
 | --- | --- |

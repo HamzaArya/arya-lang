@@ -19,7 +19,7 @@ async function fixture(t: { after(fn: () => Promise<unknown>): void }) {
   const root = await mkdtemp(join(tmpdir(), 'arya services '));
   t.after(() => rm(root, { recursive: true, force: true }));
   const output = join(root, 'main.mjs');
-  await writeFile(output, compile('use std "web" as web\nuse std "validate" as validate\nuse std "log" as log\nexport keep http = web\nexport keep rules = validate\nexport keep logging = log', join(root, 'main.arya')).code);
+  await writeFile(output, compile("use std \"web\" as web\nuse std \"validate\" as validate\nuse std \"log\" as log\nexport const http = web\nexport const rules = validate\nexport const logging = log", join(root, 'main.arya')).code);
   const module = await import(pathToFileURL(output).href);
   const listen = async (routes: Record<string, any>, options: Record<string, any> = {}) => {
     const server = module.http.serve(0, routes, { html: false, assets: false, ...options }) as Server;
@@ -250,14 +250,14 @@ test('schemas and shutdown handles work across separately compiled Arya modules'
   const { root, web } = await fixture(t);
   await mkdir(join(root, 'shared'));
   const helper = join(root, 'shared', 'rules.arya');
-  await writeFile(helper + '.mjs', compile('use std "validate" as validate\nexport keep body = validate.object({title: validate.string({trim: true, min: 1})})', helper).code);
+  await writeFile(helper + '.mjs', compile("use std \"validate\" as validate\nexport const body = validate.object({title: validate.string({trim: true, min: 1})})", helper).code);
   const filename = join(root, 'portable.arya');
   const source = `use std "web" as web
 use arya "./shared/rules.arya" as rules
-export keep server = web.serve(0, {
+export const server = web.serve(0, {
   "POST /items": web.route(fn(request) { return request.body }, {body: rules.body})
 }, {html: false, assets: false})
-export keep shutdown = web.shutdown
+export const shutdown = web.shutdown
 `;
   await writeFile(filename + '.mjs', compile(source, filename).code);
   const module = await import(pathToFileURL(filename + '.mjs').href);

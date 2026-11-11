@@ -1,19 +1,19 @@
 # Create an Arya project
 
-The Arya 1.3.0-alpha.3 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.3.md).
+The Arya 1.3.0-alpha.4 candidate provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.4.md).
 
 ## Registry workflow
 
-The published 1.2.0-alpha.4 baseline remains available on `latest`. Its Node.js templates work as shown below; use [candidate setup](node-runtime.md#try-the-candidate) for the new source creator:
+The recorded published baseline is 1.2.0-alpha.4. Its Node.js templates work as shown below; use [candidate setup](node-runtime.md#try-the-candidate) for the new source creator:
 
 ```sh
-npm create arya-language@latest
+npm create arya-language@1.2.0-alpha.4
 cd my-arya-app
 npm install
 npm run dev
 ```
 
-The wizard asks:
+The current source creator's wizard asks:
 
 ```text
 Project directory (my-arya-app):
@@ -27,6 +27,8 @@ What do you want to build?
 
 Select a project type (1):
 ```
+
+The published 1.2.0-alpha.4 wizard additionally offers native CLI, so its displayed numbering differs. Prefer `--template <name>` in automation; the five names in the table below work in both versions.
 
 Enter a number or template name. Press Enter for the displayed default. Ctrl+C cancels; EOF cancels without creating a project. Invalid template selections are prompted again. Existing/nonempty directories and symlink targets are refused, with rollback of newly created files on publication failure.
 
@@ -46,6 +48,8 @@ Generated projects pin the exact compiler version; later changes to registry tag
 
 Every template includes package.json, README.md, and .gitignore. package.json is private, pins the compiler version, requires Node 22.15+, and supplies dev/start/check/build scripts. Run npm install in the created folder once, then use its local compiler through those scripts. No global compiler or source checkout is needed afterwards.
 
+The compiler is a `devDependency`; the desktop starter also places Electron there. Include development dependencies when using the generated scripts, including `start`, because they invoke the compiler. For direct execution of built output, follow the [CLI build reference](cli.md#build-output-and-standalone-execution) and retain the application's runtime dependencies, helpers, and assets. UI entries export lifecycle functions; their generated `serve.mjs` launcher starts the browser application.
+
 For automation:
 
 ```sh
@@ -61,7 +65,7 @@ Use `--template ui` or `--template desktop` for components and animations writte
 With npm create, separate creator flags from npm flags:
 
 ```sh
-npm create arya-language@latest my-site -- --template web
+npm create arya-language@1.2.0-alpha.4 my-site -- --template web
 ```
 
 ## Web application rendering
@@ -83,17 +87,17 @@ This is a Vite-style project creation and mounting workflow. The starter uses va
 For offline use, retain the published archives. From a built checkout, create a project using the retained compiler archive:
 
 ```sh
-node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.3.tgz
+node dist/create.cjs my-site --compiler artifacts/arya-language-1.3.0-alpha.4.tgz
 ```
 
 Or install the creator archive without the repository:
 
 ```sh
-npm install --global ./create-arya-language-1.3.0-alpha.3.tgz
-create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.3.tgz
+npm install --global ./create-arya-language-1.3.0-alpha.4.tgz
+create-arya-language my-site --compiler ./arya-language-1.3.0-alpha.4.tgz
 ```
 
-Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.3.tgz`.
+Choose Web app when prompted. The compiler archive must identify the arya-language package and match the creator's version. It is copied to vendor/ and package.json references `file:vendor/arya-language-1.3.0-alpha.4.tgz`.
 
 Copy the entire created folder to another machine, then:
 

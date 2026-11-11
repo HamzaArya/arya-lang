@@ -19,9 +19,30 @@ try {
   }
   const api = execFileSync(process.execPath, ['--input-type=module', '-e', 'import {compile,ARYA_VERSION} from "arya-language"; console.log(ARYA_VERSION); if (!compile("print(42)").code.includes("42")) process.exit(1)'], { cwd: root, encoding: 'utf8' });
   assert.equal(api.trim(), pkg.version);
+  execFileSync(process.execPath, ['--input-type=module', '-e', `
+    import assert from 'node:assert/strict';
+    import {compile, analyzeSource, keywords, builtins} from 'arya-language';
+    for (const source of ['keep value = 1', 'task work() {}', 'async task work() {}', 'const work = task() {}', 'when true {}', 'if true {} otherwise {}', 'each value in [] {}', 'fn work() { give 1 }', 'say(1)']) assert.throws(() => compile(source), Error, source);
+    for (const word of ['keep', 'task', 'when', 'otherwise', 'each', 'give', 'say']) {
+      assert.ok(!keywords.includes(word));
+      assert.ok(!Object.hasOwn(builtins, word));
+    }
+    assert.equal(analyzeSource('say(1)').diagnostics[0].code, 'ARYA_UNKNOWN_NAME');
+    assert.deepEqual(analyzeSource('const task = 1; fn say(value) => value + task; print(say(2))').diagnostics, []);
+  `], {cwd: root, stdio: 'pipe'});
   await cp(join(root, 'node_modules/arya-language/fixtures/arya'), join(root, 'fixtures'), { recursive: true, filter: path => !['.arya', '__pycache__'].includes(basename(path)) });
   const cli = join(root, 'node_modules/arya-language/dist/cli.cjs');
   const run = (...args) => execFileSync(process.execPath, [cli, ...args], { cwd: root, encoding: 'utf8' });
+  const business = join(root, 'business.arya');
+  await writeFile(business, 'use std "decimal" as decimal\nuse std "datetime" as time\nconst String = "user"\nconst process = "user"\nexport fn total(value: string): string => decimal.add(value,"0.2")\nprint(JSON.stringify([total("0.1"),time.date("2024-02-29"),String,str(2)]))');
+  assert.deepEqual(JSON.parse(run('run',business)),['0.3','2024-02-29','user','2']);
+  assert.match(await readFile(join(root,'.arya/build/business.arya.d.mts'),'utf8'),/arg0: string/);
+  await writeFile(join(root,'consumer.mts'),'import {total} from "./.arya/build/business.arya.mjs"; const value: string = total("0.1");\n');
+  execFileSync(process.execPath,[resolve('node_modules/typescript/bin/tsc'),'--noEmit','--skipLibCheck','--module','nodenext',join(root,'consumer.mts')],{cwd:root,stdio:'pipe'});
+  const typedCaller=join(root,'caller.arya');await writeFile(typedCaller,'use arya "./business.arya" as business\nbusiness.total(1)');
+  const invalid=spawnSync(process.execPath,[cli,'check',typedCaller,'--json'],{cwd:root,encoding:'utf8'});
+  assert.equal(invalid.status,1);assert.equal(JSON.parse(invalid.stdout).diagnostics[0].code,'ARYA_TYPE');
+
   assert.match(run('--version'), new RegExp(pkg.version.replaceAll('.', '\\.')));
   const launched = execFileSync(process.execPath, [npm, 'exec', '--offline', '--no', '--', 'arya', '--version'], { cwd: root, encoding: 'utf8' });
   assert.equal(launched.trim(), `Arya ${pkg.version}`);
@@ -67,11 +88,11 @@ try {
     assert.match(run('check', name + '/main.arya'), /Check OK/);
     assert.match(run('build', name + '/main.arya'), /main\.arya\.mjs/);
   }
-  await writeFile(join(root, 'ui-guide.arya'), 'use std "ui" as ui\nsay(ui.preview({section: "guide"}))\n');
+  await writeFile(join(root, 'ui-guide.arya'), "use std \"ui\" as ui\nprint(ui.preview({section: \"guide\"}))\n");
   const guide = run('run', 'ui-guide.arya');
   assert.match(guide, /npm create arya-language@latest/);
   assert.match(guide, /Implementation guide/);
-  await writeFile(join(root, 'ui-template.arya'), 'use std "ui" as ui\nsay(ui.template("dashboard", {brand: "Installed template", metrics: [{label: "Open tasks", value: 7}], rows: []}))\n');
+  await writeFile(join(root, 'ui-template.arya'), "use std \"ui\" as ui\nprint(ui.template(\"dashboard\", {brand: \"Installed template\", metrics: [{label: \"Open tasks\", value: 7}], rows: []}))\n");
   const dashboard = run('run', 'ui-template.arya');
   assert.match(dashboard, /Installed template/);
   assert.match(dashboard, /Open tasks/);
@@ -83,12 +104,13 @@ try {
   await writeFile(join(root, 'web-preview.arya'), `use std "math" as math
 use std "json" as json
 use std "mysql" as mysql
-task twice(value) { give value * 2 }
-say(json.stringify({value: twice(math.sqrt(81))}))
-say(view { div bg-dark { h1 "Arya 1.2" } })
+fn twice(value) { return value * 2 }
+print(json.stringify({value: twice(math.sqrt(81))}))
+print(view { div bg-dark { h1 "Arya 1.2" } })
 `);
   assert.equal(run('run', 'web-preview.arya'), '{"value":18}\n<div class="bg-dark"><h1>Arya 1.2</h1></div>\n');
   assert.equal(run('run', 'fixtures/conformance/numeric-members.arya'), '1 1.00 100 1\n');
+  assert.equal(run('run', 'fixtures/conformance/canonical.arya'), 'Arya total: 15\nReady\n-1\n');
   assert.equal(run('run', 'fixtures/conformance/precedence.arya'), '[4,-4,512,5,7,8,3,true,"fallback",true]\n kept 0\n');
   assert.match(run('check', 'fixtures/check/valid-scopes.arya'), /Check OK/);
   assert.equal(run('run', 'fixtures/check/valid-scopes.arya'), '2 3\n1\n');

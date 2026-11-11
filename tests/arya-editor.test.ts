@@ -36,26 +36,32 @@ test('TextMate grammar recognizes real Arya tokens and contains strings/comments
     scopes('print("a\\q")', '\\q', 'invalid.illegal.escape');
     scopes('print("a\\\"b")', '\\"', 'constant.character.escape');
     scopes('// let print = 1', 'print', 'comment.line');
-    scopes('keep title = "Arya"', 'keep', 'storage.type');
-    scopes('task greet(name) { give name }', 'greet', 'entity.name.function');
-    scopes('when true { say(1) }', 'when', 'keyword.control');
-    scopes('when true { say(1) }', 'say', 'support.function');
+    scopes("const title = \"Arya\"", 'const', 'storage.type');
+    scopes("fn greet(name) { return name }", 'greet', 'entity.name.function');
+    scopes("if true { print(1) }", 'if', 'keyword.control');
+    scopes("if true { print(1) }", 'print', 'support.function');
     scopes('use std "web" as web', 'std', 'storage.type.bridge');
     scopes('fn greeting(person, count) { return person }', 'person', 'variable.parameter');
     scopes('use std "ui" as widgets', 'widgets', 'entity.name.namespace');
     scopes('widgets?.button("Go")', 'button', 'entity.name.function.member');
     scopes('profile?.name', 'name', 'variable.other.property');
     scopes('const item = {title: "Arya"}', 'title', 'variable.other.property');
-    scopes('say(item?.name ?? "Guest")', '?.', 'keyword.operator');
-    scopes('say(item?.name ?? "Guest")', '??', 'keyword.operator');
+    scopes("print(item?.name ?? \"Guest\")", '?.', 'keyword.operator');
+    scopes("print(item?.name ?? \"Guest\")", '??', 'keyword.operator');
     scopes('fn greet(name = "Guest", ...others) => name', 'name', 'variable.parameter');
     scopes('fn greet(name = "Guest", ...others) => name', '"Guest"', 'string.quoted');
     scopes('fn greet(name = "Guest", ...others) => name', 'others', 'variable.parameter');
     scopes('fn greet(name = "Guest", ...others) => name', '=>', 'keyword.operator');
     scopes('const answer = 20 |> double', '|>', 'keyword.operator');
     scopes('guard ready else { return null }', 'guard', 'keyword.control');
-    scopes('each item at index in items {}', 'at', 'keyword.control');
+    scopes("for item at index in items {}", 'at', 'keyword.control');
     scopes('try {} finally {}', 'finally', 'keyword.control');
+    for (const word of ['keep', 'task', 'when', 'otherwise', 'each', 'give', 'say']) {
+      const line = word === 'say' ? 'say(1)' : word + ' value';
+      const token = grammar.tokenizeLine(line, null).tokens.find(token => token.startIndex === 0);
+      assert.ok(token);
+      assert.ok(!token.scopes.some(scope => /^(storage\.type|keyword\.control|support\.function)/.test(scope)), word);
+    }
     let state = grammar.tokenizeLine('style """', null).ruleStack;
     let embedded = grammar.tokenizeLine('body { color: red; }', state);
     assert.ok(embedded.tokens.some(token => token.scopes.includes('source.css')));
@@ -64,7 +70,7 @@ test('TextMate grammar recognizes real Arya tokens and contains strings/comments
     embedded = grammar.tokenizeLine('document.title = "Arya";', state);
     assert.ok(embedded.tokens.some(token => token.scopes.includes('source.js')));
     state = grammar.tokenizeLine('"""', embedded.ruleStack).ruleStack;
-    assert.ok(grammar.tokenizeLine('say(1)', state).tokens.some(token => token.scopes.includes('support.function.arya')));
+    assert.ok(grammar.tokenizeLine("print(1)", state).tokens.some(token => token.scopes.includes('support.function.arya')));
     state = grammar.tokenizeLine('const page = view {', null).ruleStack;
     const element = '  button(id="go") action-button "Go"';
     const rendered = grammar.tokenizeLine(element, state);
@@ -73,7 +79,7 @@ test('TextMate grammar recognizes real Arya tokens and contains strings/comments
       assert.ok(rendered.tokens.find(token => token.startIndex <= point && point < token.endIndex)?.scopes.includes(scope!), word);
     }
     state = grammar.tokenizeLine('}', rendered.ruleStack).ruleStack;
-    assert.ok(grammar.tokenizeLine('say(1)', state).tokens.some(token => token.scopes.includes('support.function.arya')));
+    assert.ok(grammar.tokenizeLine("print(1)", state).tokens.some(token => token.scopes.includes('support.function.arya')));
     state = grammar.tokenizeLine('css: """', null).ruleStack;
     assert.ok(grammar.tokenizeLine('body { color: red; }', state).tokens.some(token => token.scopes.includes('source.css')));
   } finally { registry.dispose(); }
@@ -145,24 +151,24 @@ test('portable LSP supports Unicode diagnostics, edits, completion, hover, outli
   const resolved = diagnosticWait(second, 4);
   await connection.sendNotification('textDocument/didChange', { textDocument: { uri: second, version: 4 }, contentChanges: [{ text: 'const total = 1\nprint(total)' }] });
   assert.deepEqual(await resolved, []);
-  const typo = 'keep total = "🌉"\nsay(totla)';
+  const typo = "const total = \"🌉\"\nprint(totla)";
   const typoWait = diagnosticWait(second, 5);
   await connection.sendNotification('textDocument/didChange', { textDocument: { uri: second, version: 5 }, contentChanges: [{ text: typo }] });
   const typoDiagnostics = await typoWait;
-  const actions = await connection.sendRequest<CodeAction[]>('textDocument/codeAction', { textDocument: { uri: second }, range: { start: { line: 1, character: 4 }, end: { line: 1, character: 9 } }, context: { diagnostics: typoDiagnostics, only: ['quickfix'] } });
+  const actions = await connection.sendRequest<CodeAction[]>('textDocument/codeAction', { textDocument: { uri: second }, range: { start: { line: 1, character: 6 }, end: { line: 1, character: 11 } }, context: { diagnostics: typoDiagnostics, only: ['quickfix'] } });
   assert.equal(actions.length, 1);
   assert.match(actions[0]!.title, /totla.*total/);
-  assert.deepEqual(actions[0]!.edit!.documentChanges, [{ textDocument: { uri: second, version: 5 }, edits: [{ range: { start: { line: 1, character: 4 }, end: { line: 1, character: 9 } }, newText: 'total' }] }]);
+  assert.deepEqual(actions[0]!.edit!.documentChanges, [{ textDocument: { uri: second, version: 5 }, edits: [{ range: { start: { line: 1, character: 6 }, end: { line: 1, character: 11 } }, newText: 'total' }] }]);
   const repaired = diagnosticWait(second, 6);
   await connection.sendNotification('textDocument/didChange', { textDocument: { uri: second, version: 6 }, contentChanges: [{ text: typo.replace('totla', 'total') }] });
   assert.deepEqual(await repaired, []);
-  const stale = await connection.sendRequest<CodeAction[]>('textDocument/codeAction', { textDocument: { uri: second }, range: { start: { line: 1, character: 4 }, end: { line: 1, character: 9 } }, context: { diagnostics: typoDiagnostics, only: ['quickfix'] } });
+  const stale = await connection.sendRequest<CodeAction[]>('textDocument/codeAction', { textDocument: { uri: second }, range: { start: { line: 1, character: 6 }, end: { line: 1, character: 11 } }, context: { diagnostics: typoDiagnostics, only: ['quickfix'] } });
   assert.deepEqual(stale, []);
   assert.deepEqual((await connection.sendRequest<DocumentSymbol[]>('textDocument/documentSymbol', { textDocument: { uri } })).map(symbol => symbol.name), ['library', 'greet']);
   const cleared = diagnosticWait(second);
   await connection.sendNotification('textDocument/didClose', { textDocument: { uri: second } }); assert.deepEqual(await cleared, []);
   const databaseUri = pathToFileURL(join(root, 'database.arya')).href;
-  const databaseSource = 'use std "mysql" as mysql\nkeep db = await mysql.connect({})\ndb.';
+  const databaseSource = "use std \"mysql\" as mysql\nconst db = await mysql.connect({})\ndb.";
   const databaseDiagnostics = diagnosticWait(databaseUri, 1);
   await connection.sendNotification('textDocument/didOpen', { textDocument: { uri: databaseUri, languageId: 'arya', version: 1, text: databaseSource } });
   assert.ok((await databaseDiagnostics).some(item => item.code === 'ARYA_SYNTAX'));

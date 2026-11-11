@@ -6,7 +6,7 @@ use std "json" as json
 use std "python" as python
 use python "math" as math
 
-keep db = await mysql.connect({
+const db = await mysql.connect({
   host: process.env.DB_HOST or "localhost",
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -15,11 +15,11 @@ keep db = await mysql.connect({
 
 web.serve(3001, {
   "GET /report": async fn(request) {
-    keep calculations = python.bind(math, {signal: request.signal})
-    keep rows = await db.rows("SELECT ? AS value", [81])
-    keep report = {value: rows[0].value, root: await calculations.sqrt(rows[0].value)}
+    const calculations = python.bind(math, {signal: request.signal})
+    const rows = await db.rows("SELECT ? AS value", [81])
+    const report = {value: rows[0].value, root: await calculations.sqrt(rows[0].value)}
     await json.write("report.json", report)
     return report
   }
 }, {html: false})
-say("Report endpoint: http://127.0.0.1:3001/report")
+print("Report endpoint: http://127.0.0.1:3001/report")

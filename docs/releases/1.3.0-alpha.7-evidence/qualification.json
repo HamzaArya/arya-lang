@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "version": "1.3.0-alpha.7",
+    "archive": "arya-language-1.3.0-alpha.7.tgz",
+    "sha256": "cfe66ecc8b96888d1e6c9e62545c253a161afcf7ed35e4d47c8c30dcd4ac9a20",
+    "sha512": "bc8c89d026dbe85cf4721a894a892a8ef105b928116ee6b5730e3eb8b636529037cd7bb08a25da8bc411209a88b2346c428176c4e7b1f6d15d5884b91bd9dd50",
+    "sourceManifestSha256": "ba6871662cd784dbec7f434f8185b4518487280b4746d1c24c60fed09407da44",
+    "sourceGitRevision": "f0b8079d77b56fedcc0ab5063bc5c3d425ee5769",
+    "workingTreeSnapshot": true,
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "published": false,
+    "stableReleaseReady": false
+  },
+  "testFileConcurrency": 1,
+  "node24": {
+    "passed": 273,
+    "skipped": 4,
+    "total": 277
+  },
+  "node22": {
+    "version": "22.15.0",
+    "packageAcceptance": true,
+    "focusedPassed": 21
+  },
+  "chromePassed": 2,
+  "editors": [
+    {
+      "name": "VS Code",
+      "version": "1.143.1",
+      "scope": "activation/semantic/icons/themes"
+    },
+    {
+      "name": "AryaCode",
+      "version": "1.145.2",
+      "scope": "companion activation/semantic/icons/themes; embedded compiler unchanged"
+    }
+  ],
+  "ledger": {
+    "backendPassed": 22,
+    "frontendPassed": 5,
+    "buildPassed": true,
+    "relocationTimeZones": [
+      "Asia/Kabul",
+      "America/Los_Angeles"
+    ],
+    "pythonDecimalRoundtrip": "9007199254740993.31"
+  },
+  "unqualified": [
+    "Live MySQL/session auth chain",
+    "Docker image",
+    "Ledger Electron installer",
+    "Linux",
+    "Windows"
+  ],
+  "published": false,
+  "stableReleaseReady": false,
+  "phase": "Prepublication qualification; publication status recorded separately"
+}

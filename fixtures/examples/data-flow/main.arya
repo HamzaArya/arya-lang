@@ -18,8 +18,8 @@ const ranked = people
   |> list.sortBy("score", "desc")
   |> list.take(3)
 
-each person at position in ranked {
-  say(display(person, position))
+for person at position in ranked {
+  print(display(person, position))
 }
 
-say("Total score:", ranked |> list.sum("score"))
+print("Total score:", ranked |> list.sum("score"))

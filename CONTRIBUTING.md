@@ -51,6 +51,12 @@ Optional checks need explicit dependencies:
 
 Report skipped optional tests explicitly.
 
+## Documentation changes
+
+Use [docs/README.md](docs/README.md) as the current guide index and [docs/releases/README.md](docs/releases/README.md) for versioned changes. State when a feature needs a source candidate rather than the published baseline; use exact package versions in reproducible examples. Check command/option names against `src/cli.ts` and `src/project-creator.ts`, and library signatures against `src/standard.ts` and `src/std/`.
+
+Keep old plans, audits, and retired instructions in [docs/history/](docs/history/README.md), with their original version/evidence scope. Preserve published hashes and publication records. Update inbound links when moving a document. Run `npm run docs:check` after edits and check/run affected examples; link checking does not execute code samples or verify external URLs.
+
 ## Make a change
 
 Document public behavior where users look for it. Grammar changes must agree across the compiler, language service, and editor integrations. Keep Check/editor analysis free of dependency execution, database connections, and user-code evaluation.
@@ -64,3 +70,5 @@ Open issues and pull requests in [HamzaArya/arya-lang](https://github.com/HamzaA
 Licensed under [Apache-2.0](LICENSE). Preserve [NOTICE](NOTICE) and [third-party notices](THIRD-PARTY-NOTICES.txt). No separate contributor license agreement is currently required.
 
 Publication is a separate maintainer action. Follow the [release process](docs/releasing.md), use a new version for new package bytes, and preserve source manifests and checksums. Documentation commits after publication do not modify the published package.
+
+The source test runner bounds concurrent test files to two to avoid competing Python startup deadlines and process pressure. Set `ARYA_TEST_CONCURRENCY=1` for a heavily loaded host (range 1–64); assertions and deadlines are unchanged.

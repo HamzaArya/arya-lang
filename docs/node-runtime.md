@@ -2,9 +2,11 @@
 
 Arya focuses on one purpose: readable application code that connects JavaScript/npm and Python, with useful server, database, UI, and desktop tools.
 
-**Source candidate: 1.3.0-alpha.3.** This source line compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The latest verified npm publication remains **1.2.0-alpha.4**. A source change or Git push does not replace that immutable package.
+**Source candidate: 1.3.0-alpha.7.** This source line compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The last verified npm publication recorded here is **1.2.0-alpha.4** (10 November 2026). A source change or Git push does not replace that immutable package.
 
 ## What remains available
+
+Alpha.4 also removes the earlier alternate spellings. Use `const`, `fn`, `return`, `if`/`else`, `for`, and `print`; see [syntax migration](syntax-migration.md). Mutable bindings still use `let`.
 
 - Arya syntax, modules, closures, async functions, optional access, and nullish defaults.
 - JavaScript/npm imports and synchronous or opt-in asynchronous Python calls.
@@ -25,11 +27,11 @@ node dist/cli.cjs --version
 node dist/cli.cjs run fixtures/arya/hello.arya
 ```
 
-Create a portable UI project using a candidate archive. On the first packaging run in this checkout:
+For a portable UI project, first look for a matching retained candidate archive. If none exists, package in a fresh disposable checkout or use `npm run test:clean`; [the release process](releasing.md) explains where that verifier retains its snapshot archives. In a fresh checkout with no retained versioned archives:
 
 ```sh
 npm run package:editors
-node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.3.tgz
+node dist/create.cjs my-ui --template ui --compiler artifacts/arya-language-1.3.0-alpha.7.tgz
 cd my-ui
 npm install
 npm run dev
@@ -37,7 +39,7 @@ npm run dev
 
 Packaging refuses to replace existing versioned archives. Reuse the matching retained candidate archive or use `npm run test:clean` to build a fresh disposable snapshot. A creator without `--compiler` pins its source version from npm, so registry installation of this candidate requires a separate publication first.
 
-For the published baseline, `npm create arya-language@latest my-ui -- --template ui` continues to work. Its version and available wizard choices remain those of the published package.
+For the recorded published baseline, use `npm create arya-language@1.2.0-alpha.4 my-ui -- --template ui`. Its version and available wizard choices remain those of the published package.
 
 ## Removed native surface
 
@@ -48,7 +50,7 @@ The 1.3 candidate retires the C11 backend/runtime, Arya-written standalone compi
 | `arya run main.arya --target native` | `arya run main.arya` |
 | `arya check main.arya --target native` | `arya check main.arya` |
 | `arya build main.arya --target native -o app` | `arya build main.arya`; use the printed JavaScript entry path |
-| `use std "io"` printing | `say(...)` or `print(...)` |
+| `use std "io"` printing | `print(...)` or `print(...)` |
 | Native file helpers | Async `use std "fs"` or `use js "node:fs/promises"` |
 | Native process/environment helpers | `use std "env"`, `use js "node:process"`, or `use js "node:child_process"` |
 | `aryaLanguage.target` / `aryaLanguage.ccPath` | Remove those obsolete editor settings |
@@ -62,4 +64,4 @@ Native CLI options (`--cc`, `--debug`, `--release`, `--sanitize`, `-o`, `--outpu
 
 ## Historical native work
 
-The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.3.md).
+The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.7.md).
