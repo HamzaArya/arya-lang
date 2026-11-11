@@ -1,6 +1,6 @@
 # Release notes and publication records
 
-The source version is **1.3.0-alpha.7**. The last verified npm publication recorded here is **1.2.0-alpha.4** on 10 November 2026. Registry tags such as `latest` and `next` can move; use an exact version for reproducible installation. Current verification scope is in [release readiness](../release-readiness.md).
+The current npm preview is **1.3.0-alpha.7**, published to `next` on 11 November 2026. The `latest` tag remains on **1.2.0-alpha.4**. See the [publication record](1.3.0-alpha.7-publication.json). Registry tags can move; use an exact version for reproducible installation. Current verification scope is in [release readiness](../release-readiness.md).
 
 ## Source candidates
 

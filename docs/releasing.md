@@ -65,3 +65,18 @@ Update AryaCode's compiler pin, archive integrity, lockfile, and integration met
 ZIP/VSIX packaging sorts entries and normalizes timestamps/modes while retaining executable scripts. `SOURCE_DATE_EPOCH` accepts a nonnegative safe integer; unset/empty defaults to 1980-01-01. ZIP dates are clamped to 1980–2099 and rounded down to two seconds in UTC. Source payload identity still matters: changing docs or metadata produces different archives and requires a new published version.
 
 The read-only audit verifies mechanical prerequisites, not authentication, live publication, or stable support. See [release readiness](release-readiness.md), [compatibility](compatibility-policy.md), and [historical release notes](../CHANGELOG.md) for their separate evidence.
+
+## Independent Marketplace metadata
+
+When a frozen npm/offline VSIX must remain unchanged, prepare a separately versioned
+Marketplace package from it:
+
+```sh
+node scripts/package-marketplace.mjs artifacts/arya-language-1.3.0-alpha.7.vsix 1.3.2 artifacts/arya-language-marketplace-1.3.2.vsix brand/arya-marketplace-icon.png
+```
+
+The script refuses archive replacement and checks that every runtime, grammar,
+and legal payload remains unchanged. Only the numeric extension version,
+VSIX manifest, README, and optional listing icon may change. The listing icon
+was rasterized from the existing Arya SVG mark to meet Marketplace size limits. Upload this prerelease through the publisher
+manager, verify the public version, and record its checksum separately.

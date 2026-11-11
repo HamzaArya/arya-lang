@@ -2,7 +2,7 @@
 
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current source: [1.3.0-alpha.7](docs/releases/1.3.0-alpha.7.md)** — a Node.js-only candidate. The last verified npm publication recorded here is [1.2.0-alpha.4](docs/releases/1.2.0-alpha.4.md), published 10 November 2026. The new runtime focus removes the native compiler; see [runtime and migration](docs/node-runtime.md). Arya remains experimental.
+**Current release: [1.3.0-alpha.7](docs/releases/1.3.0-alpha.7.md)** — an experimental Node.js preview, published to npm's `next` channel. Install with `npm install --save-exact arya-language@1.3.0-alpha.7`. The `latest` channel remains on 1.2.0-alpha.4. See [runtime and migration](docs/node-runtime.md).
 
 ## Start a project
 
@@ -103,7 +103,7 @@ The full suite additionally needs Python. A C compiler is not required. MySQL, C
 
 ## Documentation and release status
 
-Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.2.0-alpha.4-publication.json).
+Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.3.0-alpha.7-publication.json).
 
 The current candidate has recorded local macOS arm64 qualification. Fresh Linux/Windows qualification and external learner review remain open. The current candidate adds [business APIs, optional types, formatting, incremental builds and Node test integration](docs/business-applications.md). Electron installers and interactive editor debugging qualification remain separate work; see the [roadmap](docs/arya-roadmap.md) and [readiness record](docs/release-readiness.md).
 

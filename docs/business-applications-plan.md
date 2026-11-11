@@ -1,6 +1,6 @@
 # Node business applications candidate
 
-Status: implementation in progress, 11 November 2026. Baseline: dirty working-tree
+Status: implemented local candidate; qualification is scoped below, 11 November 2026. Baseline: dirty working-tree
 1.3.0-alpha.4, Node 24.16.0 macOS arm64; `npm run check` passes 252 tests,
 4 optional skips. Existing changes are retained. Ledger baseline has unrelated
 printing edits; no business database will be used for verification.
@@ -104,3 +104,26 @@ local unit run; this is a single mocked-service observation, not a throughput SL
 Live session/database/Electron qualification is recorded separately from these
 unit results. The reviewed local compiler artifact pin and final evidence follow
 in G after the snapshot workflow.
+
+## G. Packaging and exact-candidate verification
+
+The final candidate is 1.3.0-alpha.7. Alpha.5 and alpha.6 were retained, not
+replaced: alpha.6 removed unused standard-library source directories for relocatable
+bundles, and alpha.7 corrected scalar rest annotations/declaration shapes.
+The final fresh snapshot passed all five release-workflow stages. Node 24.16.0
+ran 273 passing tests plus 4 optional skips (277 total); serial file execution
+was selected with ARYA_TEST_CONCURRENCY=1. The queue/shutdown handshake fixture
+uses 15 seconds; dedicated short deadline assertions remain intact. Earlier
+load-sensitive failures are retained separately and do not count as passes.
+
+Node 22.15.0 installed-package acceptance and 21 focused tests passed. Two real
+Chrome checks passed. Ledger's pinned archive passes 22 backend checks, 5 frontend
+checks and its production build; relocation/maps, two time zones, no Python/compiler
+at execution, notice distribution, hash integrity and build-failure invalidation
+were verified. Real Python Decimal string transport passed. No business database
+was used. Exact hashes, final editor evidence and environmental gaps are recorded
+in the [engineering report](business-applications-report.md). No publish/deploy/push
+or stable declaration was performed. New evidence notes do not replace frozen
+archive bytes or turn this dirty snapshot into a clean release commit.
+
+Final editor-host checks passed on the exact alpha.7 snapshot: VS Code 1.143.1 standalone and AryaCode 1.145.2 companion activation, semantic tokens, icons and themes. These do not upgrade AryaCode's separately embedded compiler or qualify interactive editor breakpoint behavior. The Node inspector breakpoint check is independently executed. All 44 prior archive identities were rechecked unchanged.

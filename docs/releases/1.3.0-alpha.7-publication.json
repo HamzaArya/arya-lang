@@ -1,0 +1,129 @@
+{
+  "version": "1.3.0-alpha.7",
+  "verifiedAt": "2026-11-11T08:36:16.863Z",
+  "registry": "https://registry.npmjs.org/",
+  "packages": [
+    {
+      "name": "arya-language",
+      "version": "1.3.0-alpha.7",
+      "publishedAt": "2026-11-11T08:35:49.799Z",
+      "distTags": {
+        "next": "1.3.0-alpha.7",
+        "latest": "1.2.0-alpha.4"
+      },
+      "tarball": "https://registry.npmjs.org/arya-language/-/arya-language-1.3.0-alpha.7.tgz",
+      "sha256": "cfe66ecc8b96888d1e6c9e62545c253a161afcf7ed35e4d47c8c30dcd4ac9a20",
+      "integrity": "sha512-vIyJ0Cbb6Fz0chqJSokqjvEFuSgRbua1cw4+uLY2UpA3zXuwiiXai8QRIJqIsjRsQoF2xOex9tFdWIS5G9ndUA==",
+      "downloadMatchesReviewedArchive": true
+    },
+    {
+      "name": "create-arya-language",
+      "version": "1.3.0-alpha.7",
+      "publishedAt": "2026-11-11T08:34:38.164Z",
+      "distTags": {
+        "next": "1.3.0-alpha.7",
+        "latest": "1.2.0-alpha.4"
+      },
+      "tarball": "https://registry.npmjs.org/create-arya-language/-/create-arya-language-1.3.0-alpha.7.tgz",
+      "sha256": "91ecd668d6dcee779bd46a0d6cf752a1c8370f832cd480637435a8748143c3b8",
+      "integrity": "sha512-vquGWSWC/6aIgPDrKajs1Jw5e40k9SSoLOCLXj6Kq+f/A/yDU2gavTdQeW3aR8Z/PjOoKYdiG2pFkoVT5iQYAg==",
+      "downloadMatchesReviewedArchive": true
+    }
+  ],
+  "stableReleaseReady": false,
+  "consumer": {
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "freshCache": true,
+    "installFromPublicRegistry": true,
+    "compilerVersion": true,
+    "decimalDateHostIsolation": true,
+    "declarations": true,
+    "typeMismatch": true,
+    "creatorPinsExactCompiler": true,
+    "createdProjectCheck": true
+  },
+  "reviewedSourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d",
+  "sourceManifestSha256": "ba6871662cd784dbec7f434f8185b4518487280b4746d1c24c60fed09407da44",
+  "extension": {
+    "input": "artifacts/arya-language-1.3.0-alpha.7.vsix",
+    "output": "artifacts/arya-language-marketplace-1.3.2.vsix",
+    "version": "1.3.2",
+    "languageVersion": "1.3.0-alpha.7",
+    "changed": [
+      "extension.vsixmanifest",
+      "extension/media/arya-logo.png",
+      "extension/package.json",
+      "extension/readme.md"
+    ],
+    "listingIcon": "brand/arya-marketplace-icon.png",
+    "sha256": "c4d4ec8293f999f38a57c955bb34782ce083738a1f33f51de6f7eeb9b826d085",
+    "runtimePayloadsUnchanged": true,
+    "marketplaceStatus": "verifying",
+    "url": "https://marketplace.visualstudio.com/items?itemName=aryacode.arya-language",
+    "channel": "prerelease",
+    "localInstall": [
+      "VS Code 1.143.1",
+      "AryaCode 1.145.2"
+    ],
+    "hostTests": [
+      {
+        "editor": "code",
+        "vscode": "1.143.1",
+        "extension": "aryacode.arya-language",
+        "languageVersion": "1.3.0-alpha.7",
+        "tokens": 10,
+        "fileIcons": "arya-file-icons",
+        "themes": [
+          "Arya Dark",
+          "Arya Light"
+        ],
+        "aryacodeBuiltin": false
+      },
+      {
+        "editor": "aryacode",
+        "vscode": "1.145.2",
+        "extension": "aryacode.arya-language",
+        "languageVersion": "1.3.0-alpha.7",
+        "tokens": 10,
+        "fileIcons": "arya-file-icons",
+        "themes": [
+          "Arya Dark",
+          "Arya Light"
+        ],
+        "aryacodeBuiltin": true
+      }
+    ],
+    "listingIconSource": "brand/arya-mark.svg",
+    "listingIconPixels": [
+      256,
+      256
+    ],
+    "localInstalledVersion": "1.3.2",
+    "publicMetadataSha256Matched": true,
+    "publicListingVerified": false
+  },
+  "ci": {
+    "sourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d",
+    "qualification": "https://github.com/HamzaArya/arya-lang/actions/runs/42988234569",
+    "mysql": "https://github.com/HamzaArya/arya-lang/actions/runs/42988234561",
+    "mysqlStatus": "success",
+    "qualificationStatus": "in_progress",
+    "observedAt": "2026-11-11T08:46:44.971468+00:00",
+    "jobs": {
+      "ubuntu-latest / Node 22.15.0": "success",
+      "ubuntu-latest / Node 24": "success",
+      "macos-latest / Node 22.15.0": "success",
+      "macos-latest / Node 24": "success",
+      "windows-latest / Node 22.15.0": "in_progress",
+      "windows-latest / Node 24": "in_progress"
+    }
+  },
+  "github": {
+    "tag": "v1.3.0-alpha.7",
+    "url": "https://github.com/HamzaArya/arya-lang/releases/tag/v1.3.0-alpha.7",
+    "prerelease": true,
+    "sourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d"
+  }
+}
