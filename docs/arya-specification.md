@@ -2,7 +2,7 @@
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** unpublished `1.3.0-alpha.9`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** `1.3.0-alpha.9`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -326,7 +326,7 @@ error alias. [Migration and limits](business-applications.md) define this candid
 no stable release or broader platform qualification is implied.
 
 
-## 18. Reliability candidate — 1.3.0-alpha.9
+## 18. Reliability release — 1.3.0-alpha.9
 
 Decision R-001: optional return inference includes undefined when a body can fall
 through. Control-flow completion accounts for try/catch/finally; an abrupt finally

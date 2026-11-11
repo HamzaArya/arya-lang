@@ -1,13 +1,13 @@
 # Create an Arya project
 
-The published Arya 1.3.0-alpha.7 preview provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.7.md).
+The published Arya 1.3.0-alpha.9 preview provides five Node.js application starters. The native template is retired. See [runtime and migration](node-runtime.md) and [candidate notes](releases/1.3.0-alpha.9.md).
 
 ## Registry workflow
 
-The current published preview is 1.3.0-alpha.7. Pin it explicitly; `@latest` still selects the older 1.2 release. Use [candidate setup](node-runtime.md#try-the-candidate) for unpublished source changes:
+The current published preview is 1.3.0-alpha.9. Pin it explicitly; `@latest` still selects the older 1.2 release. Use [candidate setup](node-runtime.md#try-the-candidate) for unpublished source changes:
 
 ```sh
-npm create arya-language@1.3.0-alpha.7
+npm create arya-language@1.3.0-alpha.9
 cd my-arya-app
 npm install
 npm run dev
@@ -65,7 +65,7 @@ Use `--template ui` or `--template desktop` for components and animations writte
 With npm create, separate creator flags from npm flags:
 
 ```sh
-npm create arya-language@1.3.0-alpha.7 my-site -- --template web
+npm create arya-language@1.3.0-alpha.9 my-site -- --template web
 ```
 
 ## Web application rendering

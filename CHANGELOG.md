@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0-alpha.9 — local reliability candidate (unpublished)
+## 1.3.0-alpha.9 — published reliability preview
 
 - Check the documented decimal/datetime argument and result types in annotated modules; infer their exported result declarations. Unannotated modules keep runtime validation, and JavaScript Date objects remain a dynamic boundary.
 - Audit stable candidate metadata on `latest` and prereleases on `next`, including matching editor preview flags, valid release versions, and compiler/creator version agreement.
@@ -10,7 +10,7 @@
 - Update archive/editor packaging dependencies to fflate 0.8.3 and VSCE 4.1.0; scope a minimatch 11.0.7 override to VSCE to address known denial-of-service advisories.
 - Align primary installation guides with published alpha.7 and document the [stable release plan](docs/stable-release-plan.md).
 
-These changes are not in the frozen 1.3.0-alpha.7 archives. The new candidate is 1.3.0-alpha.9 with extension 1.3.4; neither is published. See [candidate changes and qualification](docs/releases/1.3.0-alpha.9.md).
+These changes are not in the frozen 1.3.0-alpha.7 archives. The new release is 1.3.0-alpha.9 on npm’s `next` channel with published extension 1.3.4. See [candidate changes and qualification](docs/releases/1.3.0-alpha.9.md).
 
 - Correct optional type inference for fallthrough, required parameter positions, list/call spreads, and try/catch/finally control flow. Add runtime and declaration regressions.
 - Refresh dependency diagnostics across open/change/close, share one workspace analysis per buffer revision, refuse incomplete exported-symbol renames, and recover bounded unfinished completion/signature requests.

@@ -1,0 +1,1286 @@
+{
+  "gitRevision": "ebecd74d3569c61c24710b4f12a57134194c6fdd",
+  "workingTreeDirty": false,
+  "files": [
+    {
+      "filename": ".gitattributes",
+      "sha256": "5a9db4791aa77be7705e577db56389a3f0eed263e45a0e317bcde078a302fcd8"
+    },
+    {
+      "filename": ".github/workflows/check.yml",
+      "sha256": "1c0381abdc3da8274e8e0d4232f32653073925002ae88bd947fb99422ebba74e"
+    },
+    {
+      "filename": ".github/workflows/mysql.yml",
+      "sha256": "f7abd2a002aae498485ca56439b26f696ad43295d687aa5675dde2be7db3f70a"
+    },
+    {
+      "filename": ".gitignore",
+      "sha256": "536cb11a5394634ef64bb10c079a5092b17d697381cb22b612a472780f3cdb9d"
+    },
+    {
+      "filename": ".npmignore",
+      "sha256": "a5718b19d8e41f9c68208a5ca4c0542bd5d522345cc66c6274d7257a3ffba5fa"
+    },
+    {
+      "filename": "CHANGELOG.md",
+      "sha256": "0dbc35e02c1dd6f5d70957bae41e1575d6ee768ea1767c7217ea9ad32abfe55d"
+    },
+    {
+      "filename": "CONTRIBUTING.md",
+      "sha256": "0dc4dd61a46ca83c4fd1fe6f86a16f7dfad0dce87158c2d813307d174e3d72bd"
+    },
+    {
+      "filename": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "filename": "NOTICE",
+      "sha256": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30"
+    },
+    {
+      "filename": "README.md",
+      "sha256": "5b1e24bbac53f52d792ed76624c43f246bce0824d5d89349c69b6992f43e2a79"
+    },
+    {
+      "filename": "SECURITY.md",
+      "sha256": "7d6ac517f98ff96fffd61b33b4f57f2ef506d7fe37a8f884126605dffaa7002b"
+    },
+    {
+      "filename": "THIRD-PARTY-NOTICES.txt",
+      "sha256": "dd1f3327aa518876095548658aa3642bca7e9ca8b5ea52150abc057c435739da"
+    },
+    {
+      "filename": "brand/README.md",
+      "sha256": "8053d8a85c97f67625f98fefbcff435c8b0898bfd977f40d8da615a607c5ddd9"
+    },
+    {
+      "filename": "brand/arya-logo-dark.png",
+      "sha256": "452fd940e7ad74e30728148679d0f0528db57194ae2f11ff3ac35527dcb6d345"
+    },
+    {
+      "filename": "brand/arya-logo.png",
+      "sha256": "068f7b3ed830946fd8c5b39f5229f18ed44e5ec7654d1023a273563854f4a6b5"
+    },
+    {
+      "filename": "brand/arya-mark-dark.svg",
+      "sha256": "293b823ef4548085952835a2517fd6d25722cc38002f30780138c961912aee8a"
+    },
+    {
+      "filename": "brand/arya-mark-monochrome.svg",
+      "sha256": "149fa8d941dee1c509b34d6021d2c51193bebcef8aa44e388ec23d37cf7e3401"
+    },
+    {
+      "filename": "brand/arya-mark.svg",
+      "sha256": "c64ad72caf632ac009ce4e98f90a267605334ae01004cdda2bd613137015ef35"
+    },
+    {
+      "filename": "brand/arya-marketplace-icon.png",
+      "sha256": "740b3aaed6e51556477b0c0ea5fef113181251580803b196f29a05d0958c26db"
+    },
+    {
+      "filename": "brand/prompts.txt",
+      "sha256": "9acc66607c4108a7b09462485c952f60535cec3a904d6219229f9edc1f276021"
+    },
+    {
+      "filename": "docs/README.md",
+      "sha256": "9cf07f8adee282bde3ed5a5588214dca1c3940fa46e38eaf087da076efdaad8d"
+    },
+    {
+      "filename": "docs/arya-editors.md",
+      "sha256": "e59b405db429e4f4483f5a47342269e5c1a8758cc3769d68a0689b20d888fedb"
+    },
+    {
+      "filename": "docs/arya-language.md",
+      "sha256": "a9dd2e90f7c7de239165271ea4e67ed6e2bafd7aeba038ebbd7fee5918e5606a"
+    },
+    {
+      "filename": "docs/arya-roadmap.md",
+      "sha256": "3f89c6eea5a97ffc8900679c587a513412e4ca8aecf283e2898e62b0a69c701f"
+    },
+    {
+      "filename": "docs/arya-specification.md",
+      "sha256": "ebdc6fce7c69817c90c7f94394bd97c61ea6810f2a76476194c55572785dffab"
+    },
+    {
+      "filename": "docs/arya-tutorial.md",
+      "sha256": "4b7398b69ae937ab51091b7c36b9dd1fe293e84cf76aa3bc41926115bc2b0e03"
+    },
+    {
+      "filename": "docs/arya-web.md",
+      "sha256": "b8dd4e9ff9a0ee391a4fddbd2185060119edfe2f749828034582d7e3dcd51d55"
+    },
+    {
+      "filename": "docs/business-applications-plan.md",
+      "sha256": "bfe0d9aeefd8059f0141185432604c570c30dea7eb3898648497580f4cdce359"
+    },
+    {
+      "filename": "docs/business-applications-report.md",
+      "sha256": "487a8830a464b836b2f216034ec0f6bb1a7d0d143b5eab978587233aaab56b27"
+    },
+    {
+      "filename": "docs/business-applications.md",
+      "sha256": "daadeab636716ee30d14fab42d237a8edd0db71642f379ad23875bc64150788e"
+    },
+    {
+      "filename": "docs/cli.md",
+      "sha256": "96eaafd658e12c71435dcb82937d139ba9240ff2928c6926ed78408bb039a80d"
+    },
+    {
+      "filename": "docs/community-review.md",
+      "sha256": "85eca3730542e5fd7b33bf2484e8e315321da476829c315e7d1b219ab3f49354"
+    },
+    {
+      "filename": "docs/compatibility-policy.md",
+      "sha256": "6a61193065a75d96016e12930f2e856e84601e59a44f9560c2b0a0fccd6584c3"
+    },
+    {
+      "filename": "docs/compiler-api.md",
+      "sha256": "078e935d3dbf75ba9f12053de22defc1f117cb5bb495157087096699bfc170fd"
+    },
+    {
+      "filename": "docs/editor-setup.md",
+      "sha256": "ba30a2aa3a5a21f81359024215c32d1bb64349c35161685a0c018dd6f9f97cd0"
+    },
+    {
+      "filename": "docs/flow-syntax.md",
+      "sha256": "603b6ae4fba883c172f751664a593916f17989e4cda8104f667d30e79fdb9fbd"
+    },
+    {
+      "filename": "docs/getting-started.md",
+      "sha256": "c7c0f920e54e5a51682956ebd3f6b69ad7b52406e223dcfcb1279c29a029fd44"
+    },
+    {
+      "filename": "docs/history/README.md",
+      "sha256": "7231eb8563696fd78b1f51b077d2e642d4115a3e3e03b8b151dff90e8a35fe68"
+    },
+    {
+      "filename": "docs/history/arya-0.2-initial-plan.md",
+      "sha256": "6d2bcbc2cc148f19bd19e8dcede732d7ce03d60d0d71e99a9c85747c7d1caab4"
+    },
+    {
+      "filename": "docs/history/arya-1.1-native-plan.md",
+      "sha256": "838a614e92e5c1a3f12269a1e81be74078059b515774e3e2e0876e03694e2f5e"
+    },
+    {
+      "filename": "docs/history/arya-language-logic-report.md",
+      "sha256": "8cdc647d5957506ef9f30d81c503dfb5426cba394e7325a25e43490855a863d4"
+    },
+    {
+      "filename": "docs/history/arya-native-specification.md",
+      "sha256": "9d0a0613c7b4b68b106d7a7a01edc800879046fde404a7195e63a67debb97474"
+    },
+    {
+      "filename": "docs/history/arya-native.md",
+      "sha256": "18131fd1fe2586e08beb8d37ac455a9ddb46c2b6553726b6ab59fb982cb61bb2"
+    },
+    {
+      "filename": "docs/history/native-release-verification.md",
+      "sha256": "f1cf9eb9e242c6ff778367f75045b79b0e5647cedebb656191af9e74694f8ccd"
+    },
+    {
+      "filename": "docs/history/repository-extraction.md",
+      "sha256": "9ada6fda97c67f89d12e4ed8b41d567cba226810bad8422d315fea83498ce242"
+    },
+    {
+      "filename": "docs/history/roadmap-through-1.3.0-alpha.3.md",
+      "sha256": "8cb37e752eafeb77d3ce11e39b6f9d44d0fde2c2ccfb9c1f0f241f5168eca171"
+    },
+    {
+      "filename": "docs/installing.md",
+      "sha256": "3a2a9b0e15d11b0814f6a18344162b3272a13a6e7aab5f0f1b497696a0e24140"
+    },
+    {
+      "filename": "docs/interop.md",
+      "sha256": "2deefe171fbd7278dd9c64790819a64df36a739d2875cc4a644bae5a5cb902a2"
+    },
+    {
+      "filename": "docs/learning-path.md",
+      "sha256": "6ad562bd443a0de41ade986fc0d9a1a5d8eb0e0756eb21686d3c12e7471e60b7"
+    },
+    {
+      "filename": "docs/mysql.md",
+      "sha256": "77f7d18717936b85ecb6357b7a187ab0807d600ecac61f241745bc0069408180"
+    },
+    {
+      "filename": "docs/node-runtime.md",
+      "sha256": "6fb4bda085ead1279b16d3be25a7c61d11209fe84ec0a097679e3870a100997e"
+    },
+    {
+      "filename": "docs/package-arya-original.mjs",
+      "sha256": "731a42aa4a051fae8246aad4203844da32a2c776d7b4970c5cf76e01f849f735"
+    },
+    {
+      "filename": "docs/project-creator.md",
+      "sha256": "4a1db8c90644141c12eda7d58c5d3734099552a153d1bd13fc1b97923064f745"
+    },
+    {
+      "filename": "docs/python-async.md",
+      "sha256": "962718e200ba71c076e75ad9c4872491b2d8835491958eef3ae4bf504a9c5a00"
+    },
+    {
+      "filename": "docs/release-readiness.md",
+      "sha256": "23cdb9d5eba0b6550a4e369c53fa6c53f348dce75b4ca5486dc6fe5b53a34ec2"
+    },
+    {
+      "filename": "docs/releases/0.2.0-alpha.1.md",
+      "sha256": "d1d0cd158ffbc040117f3341688ad9c34bdf762677dccf75aaa7e5c3c1146946"
+    },
+    {
+      "filename": "docs/releases/0.2.0-alpha.2.md",
+      "sha256": "b352ded68e3d9b3dd22c0aecc643dcad977189e6cd622384a89d84406a4fddbf"
+    },
+    {
+      "filename": "docs/releases/0.2.0-alpha.3.md",
+      "sha256": "d6e4facc7a46337ef757fdcb464760424161db7be2af1c99cc9cdd1bc0b6b377"
+    },
+    {
+      "filename": "docs/releases/1.1.0-alpha.1.md",
+      "sha256": "8e29ba5e8ea23e70894469487d9ba7b78b6b79d99bab7649d0f8d545288b827c"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.1.md",
+      "sha256": "b3e81baaf070e22127972dd3a0e322b263100ab8dfc70b0636f04e6506017666"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.2.md",
+      "sha256": "36c4858e19e2bc02c1c50c63c06cce97eeee9d9645b7edd830b08ec07b2bd701"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.3-publication.json",
+      "sha256": "226a85ead24f635a0ccdbe13e92844a2c1cfd71ace957726e89e89de9eee49c5"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.3.md",
+      "sha256": "eac4de3097c219f8520092a9e3a05d504a2322cfc56d779c2897b0bfa2fa2260"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.4-publication.json",
+      "sha256": "62b6bb5ecd23be814b2229619c1dc7005cd3a8fa413c39d0e01a5cb0dee06e63"
+    },
+    {
+      "filename": "docs/releases/1.2.0-alpha.4.md",
+      "sha256": "f129d34913adf46a700f9474fba08912c81881aa4d97a1eab8d71fb9810d6512"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.1.md",
+      "sha256": "3b05b9a935cf7ab0370395882ced9039fdb14279b78575ef4efd17235a420756"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.2.md",
+      "sha256": "9ea51237a255592daa1a6c2bd12c3c5e30c2cfb3b3ca195c3296e24a5e1f566e"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.3.md",
+      "sha256": "4b4969de8b7243c77b70f273ac0189130e677b8e64056febf0436257f83b6383"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.4.md",
+      "sha256": "a22b95f5f17f41e9a89e5a88d849e944b194e233457476f9a3de814080f54482"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.5.md",
+      "sha256": "445e1739e01a77913ef5309d3a38a259556d2a4792d8dabafa38af8cdad061f5"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.6.md",
+      "sha256": "9a98cb148ff41ee2b0b1debbe900ffd1f5a62682b46d10561b0ad57e97044344"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.7-evidence/SOURCE-MANIFEST.json",
+      "sha256": "ba6871662cd784dbec7f434f8185b4518487280b4746d1c24c60fed09407da44"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.7-evidence/build-normalization.json",
+      "sha256": "fcacb356c19ffd5206962a510ef205fd2540e8efebe461176c73a9533f89ea4c"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.7-evidence/qualification.json",
+      "sha256": "8f1b4bfe75116fdda7c25c0e2ba3962a32cbdc566304c1242c623da757bfd13f"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.7-publication.json",
+      "sha256": "a7cd1db619210f182601e4f0a35bff2dda6b79cee5598a719c17187de3d99f87"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.7.md",
+      "sha256": "93efbd9147b26d1665e5ffa346bedcbcad5edc3f4dec8ed1c65ca16148ae68b0"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.8.md",
+      "sha256": "3ebb6b1f129582a99e362510ddedb6360de78b1a110d34045d022f7d314e2914"
+    },
+    {
+      "filename": "docs/releases/1.3.0-alpha.9.md",
+      "sha256": "f8f7f27c5b945508275eaa5adf90d34753110c104f7d55a4ec1a62f0f1f6983a"
+    },
+    {
+      "filename": "docs/releases/README.md",
+      "sha256": "49769a35abccf0244605fa8730ffc8de00a34df00bfe141e3aafe73b25750554"
+    },
+    {
+      "filename": "docs/releasing.md",
+      "sha256": "d97fb35fff35a4697e4c727b27090c57f8f749f2fd3974dd4e8529ad21feb450"
+    },
+    {
+      "filename": "docs/services.md",
+      "sha256": "9890911a3a912536f2d49fff7c26223ee4642312bbe34d30ab0f9aaf8cee5769"
+    },
+    {
+      "filename": "docs/source-maps.md",
+      "sha256": "b2e1ca3251a764ffe2bf8536c6525542cf4566cc15f8909d68d1aced45fb2cb7"
+    },
+    {
+      "filename": "docs/stable-release-plan.md",
+      "sha256": "8ffdfd10f82eb8c7df3cc9fc7576ddf67dba76627c01542e8db43a2612db1e6c"
+    },
+    {
+      "filename": "docs/standard-library.md",
+      "sha256": "04e0caa056d743ed54da8e32643b995f8d4e4c21964ea9618ae3bed30f3b33c2"
+    },
+    {
+      "filename": "docs/syntax-and-debugging.md",
+      "sha256": "93615bc5397a970ee924e2cd7a8d351ac80ced1a11f8764d92ad04cf7d65593b"
+    },
+    {
+      "filename": "docs/syntax-migration.md",
+      "sha256": "f156141fd23faee7ccc6bec44ca5c0185d31733b53b06c4034855795a841f510"
+    },
+    {
+      "filename": "docs/tooling-evidence.md",
+      "sha256": "654f6ad225cbf5c41590344a46c93fd70def28bc91d6da0ea3c30de7512fb110"
+    },
+    {
+      "filename": "docs/ui-apps.md",
+      "sha256": "1477ea5f98dc4fbbe46b2c113479f45d708f27d92d8391ea8a9d0bbec7b09f60"
+    },
+    {
+      "filename": "docs/ui-library.md",
+      "sha256": "2d34467ab93072c51ba6dd1c25e2b227f5c6ae2fe36d1621d5fb72f5101ee8f3"
+    },
+    {
+      "filename": "docs/ui-patterns.md",
+      "sha256": "a714aa75b9c1190d142b94ef41db2481fea993903dc610eb0d06f75fc2bfeef8"
+    },
+    {
+      "filename": "editors/emacs/arya-mode.el",
+      "sha256": "6b5636e07e9fe2a2234a019f7dac8946d9cd1e34a43395dd506f31123418c125"
+    },
+    {
+      "filename": "editors/helix/languages.toml",
+      "sha256": "c47a6df55bad8e0798096113e77e22945809838aff0518854e3241febcfc2728"
+    },
+    {
+      "filename": "editors/nano/arya.nanorc",
+      "sha256": "833b13c5926f323b3c7a4aeccdf957e13593038f287124291e9d983447a090ee"
+    },
+    {
+      "filename": "editors/neovim/arya.lua",
+      "sha256": "7d79aa4a3a02a7d72e4a933f15280f56a4bbea076c8a6c63eee6b150d67aa7e8"
+    },
+    {
+      "filename": "editors/vim/ftdetect/arya.vim",
+      "sha256": "13a6620329860b8dffddd18410b9fcc06818ce35ef78c3cbb04efb1c0e9b5818"
+    },
+    {
+      "filename": "editors/vim/ftplugin/arya.vim",
+      "sha256": "c2384fd29e129423b12975b16989655cbf1a23a7c4a39f3dedaeffd0fd7f82a3"
+    },
+    {
+      "filename": "editors/vim/syntax/arya.vim",
+      "sha256": "e3a2f0bb1028b2536f16ea73ca77e295f00eeb1bea318a251c55c95303b6c024"
+    },
+    {
+      "filename": "editors/vscode/.vscodeignore",
+      "sha256": "cdcfe988a44fd30395b9e912e2bb267038b8b673997225ed05ae5bf498de0e7b"
+    },
+    {
+      "filename": "editors/vscode/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "filename": "editors/vscode/NOTICE",
+      "sha256": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30"
+    },
+    {
+      "filename": "editors/vscode/README.md",
+      "sha256": "006b0ac5428418c6d56c67d22b902fc73d6914bb94c6479dffb44d04ffbdb4a7"
+    },
+    {
+      "filename": "editors/vscode/THIRD-PARTY-NOTICES.txt",
+      "sha256": "dd1f3327aa518876095548658aa3642bca7e9ca8b5ea52150abc057c435739da"
+    },
+    {
+      "filename": "editors/vscode/examples/editor-tour.arya",
+      "sha256": "ac4657f67edd94d49021b646493a0ceb99b91d91a571ab8de59d2341160f8518"
+    },
+    {
+      "filename": "editors/vscode/icons/arya-file-icons.json",
+      "sha256": "05420942251f34ff642aa918e017393cd6d19efc06f78d2eb42b6c809dda8648"
+    },
+    {
+      "filename": "editors/vscode/icons/css.svg",
+      "sha256": "4c896ee9c67173d0f0153f2cea12d4f4592d7d7929b8285d193381cacf20d580"
+    },
+    {
+      "filename": "editors/vscode/icons/file.svg",
+      "sha256": "db2b9e95db417c8d897b193e2a961699a0ba6e39b5bb8f69fa09f763853aa576"
+    },
+    {
+      "filename": "editors/vscode/icons/folder-open.svg",
+      "sha256": "4568f09f0af6084466c9e995ffe3c684242095c3964502526cbf33515f6351c0"
+    },
+    {
+      "filename": "editors/vscode/icons/folder.svg",
+      "sha256": "aaca403b7b1306861d09fbd5e879636c842f62be695ff4f59d2b07206ad7d249"
+    },
+    {
+      "filename": "editors/vscode/icons/html.svg",
+      "sha256": "3a80270bc5994cab67a7292c214d33e704f9a79da3c3769481e92c449d6dc9bb"
+    },
+    {
+      "filename": "editors/vscode/icons/js.svg",
+      "sha256": "187f7aa307ce7afa1813e13c26e5d0e705c79e74b63395ab18d89ed8232b6320"
+    },
+    {
+      "filename": "editors/vscode/icons/json.svg",
+      "sha256": "98e8aa76cfd8a579d60321b96b9a9ac468e86040614e5e2ae56a56e36eb0b206"
+    },
+    {
+      "filename": "editors/vscode/icons/markdown.svg",
+      "sha256": "8a98273ece9968f0fbde089f3cd74a1df2870a91a6d90d6dc49ab55beb45db2a"
+    },
+    {
+      "filename": "editors/vscode/icons/python.svg",
+      "sha256": "7acdd3db34ac2c373efdea0414b98141db0e463d86d9c8b96852d8dc4c1b2b20"
+    },
+    {
+      "filename": "editors/vscode/icons/sql.svg",
+      "sha256": "e360238af6f0cae4bcb0e540262f03a1e0181ae8ab4bccd4cc28a4d5d320f814"
+    },
+    {
+      "filename": "editors/vscode/icons/ts.svg",
+      "sha256": "4ac2f3e30d3fdfec958da22e08be3e9712a3410c7be29b39ac86fae25c15738d"
+    },
+    {
+      "filename": "editors/vscode/language-configuration.json",
+      "sha256": "74c0ef5b87278157a2ecd783e11bfaf88fa99143cc996c5d088e4804834fc849"
+    },
+    {
+      "filename": "editors/vscode/package.json",
+      "sha256": "a60992af256d9a7249270febce496b7e2f0508baa37e6dc0339adecc03bb512a"
+    },
+    {
+      "filename": "editors/vscode/snippets/arya.json",
+      "sha256": "e84d8b9b8b575400efc471d46e469b6d8acde6dcbaae9ff82f69845f2e9bdcee"
+    },
+    {
+      "filename": "editors/vscode/src/arya-language.ts",
+      "sha256": "f2239cf8efe550558af51e457daebd09dd5fc9e89012f81ad94b15ec7635d9c0"
+    },
+    {
+      "filename": "editors/vscode/src/extension.ts",
+      "sha256": "b8b872dd454597579f131183bb71508d0df74d1a6c19054cfbc0760e5b716ae8"
+    },
+    {
+      "filename": "editors/vscode/syntaxes/arya.tmLanguage.json",
+      "sha256": "0be666d2c8ee81f81f975a4b829a454dac1c7068f4a0bea07c42e2b28de4ed6c"
+    },
+    {
+      "filename": "editors/vscode/themes/arya-dark.json",
+      "sha256": "cc028d2a5c4497d10c162b120fdec6222110cb1100dbd5b499b04eeb0c759306"
+    },
+    {
+      "filename": "editors/vscode/themes/arya-light.json",
+      "sha256": "f4bf6bd01937e0f54941d947e905c66fc7bd2df8643b5a84b54a544ac64bc83d"
+    },
+    {
+      "filename": "editors/vscode/walkthroughs/colors.md",
+      "sha256": "039100681b0df961513da835400fc362d5553091ae7960ec092f69a7889f4f37"
+    },
+    {
+      "filename": "editors/vscode/walkthroughs/icons.md",
+      "sha256": "b2914879f00462123e90682b00da04fba17b16c984997534ad32cf60f493fd26"
+    },
+    {
+      "filename": "editors/vscode/walkthroughs/tour.md",
+      "sha256": "f27f34ba3bbcadf88d709a5ea0a68d982143759901f908a2ee5b831d2e322b31"
+    },
+    {
+      "filename": "fixtures/.npmignore",
+      "sha256": "6bcb2f6c0f28bf8b3ea0a880df031aa235dec9f654e48ed8f112d4ab8f2f30a9"
+    },
+    {
+      "filename": "fixtures/README.md",
+      "sha256": "3f735667db90679bdab22ca284b9bf40cd1e8a080cbc2f02694a4596c3fdf1f5"
+    },
+    {
+      "filename": "fixtures/arya/bridge.arya",
+      "sha256": "494fe07baa7c225e95f1504640f7a547883babf08f1202090b8040ff8b094e1c"
+    },
+    {
+      "filename": "fixtures/arya/check/const-write.arya",
+      "sha256": "58baed8f8d2a2e7dbe4222bb2b46ccf6d694732c482c5ac83109b45e63e14dbb"
+    },
+    {
+      "filename": "fixtures/arya/check/unknown-name.arya",
+      "sha256": "4db8598c9dcd7b53acb88a818ee93fa567bcda2aed87396d9215e6070fc4ebf9"
+    },
+    {
+      "filename": "fixtures/arya/check/valid-scopes.arya",
+      "sha256": "43701877b5e2142896e4d31cc2061ede6ce927f6aeb3a19f2391fc93ca91aef0"
+    },
+    {
+      "filename": "fixtures/arya/conformance/canonical.arya",
+      "sha256": "342a78579110f4d0346952fff9738b7174b7ae49ee882771cb6c198555d56b7f"
+    },
+    {
+      "filename": "fixtures/arya/conformance/numeric-members.arya",
+      "sha256": "1ceea41f1fcc5abb6f904bf1fb21b385407332baa0fc2a9c03df393dcddebe5c"
+    },
+    {
+      "filename": "fixtures/arya/conformance/precedence.arya",
+      "sha256": "073c4571c9d5d2344ff5f9bcd6627bdac878898fe0e3b51ee369ac425ea2a0cb"
+    },
+    {
+      "filename": "fixtures/arya/conformance/safe-access.arya",
+      "sha256": "2a9c475a0cc7e76d4fe566f3a86a36bcca41f3bc60385ac2ce3e9771c8a99452"
+    },
+    {
+      "filename": "fixtures/arya/errors/async.arya",
+      "sha256": "eeb0ce840ada7306cfb47cc883967a07963d020fe89cf0e684d6b9df2bec7655"
+    },
+    {
+      "filename": "fixtures/arya/errors/builtin.arya",
+      "sha256": "4cf5490971aed22d0a47dce1151b1822b87b4a9cd4ed89774a318c9bd36f73a5"
+    },
+    {
+      "filename": "fixtures/arya/errors/cases.json",
+      "sha256": "4fc923a4c664fbf2fb5aba3d0be447e3c721ce625a46da08212c4c5d5ec65d8e"
+    },
+    {
+      "filename": "fixtures/arya/errors/multiline.arya",
+      "sha256": "5b038daa3bed840a13ae85f812e6375220c796bcad59cfdb580bd601c1443400"
+    },
+    {
+      "filename": "fixtures/arya/errors/python.arya",
+      "sha256": "d7471d569588ef0f8cbf54d5edda84ac1804a4280f15dd37dc895fad8d04830e"
+    },
+    {
+      "filename": "fixtures/arya/errors/unicode.arya",
+      "sha256": "04ac93a8a60b2c651666af03bf374e83b92b9aa51b5af874ea687a7e8ce4c24e"
+    },
+    {
+      "filename": "fixtures/arya/express.arya",
+      "sha256": "79786f6b3f43f41aa8dc72c3d18c6942f96b3e1af83f15b3a361d683a61506c8"
+    },
+    {
+      "filename": "fixtures/arya/hello.arya",
+      "sha256": "62d5de99e05866cb6cb9115f85b25a8938aaee5eeadc7bf8b6389e7afad749fc"
+    },
+    {
+      "filename": "fixtures/arya/learn/01-hello.arya",
+      "sha256": "afc3c719954b8943940289ef459c1b0c1d05921179a332e5b0854fd966bfa01b"
+    },
+    {
+      "filename": "fixtures/arya/learn/02-decisions.arya",
+      "sha256": "daba0cfc7d51142d8cd3946995ac79af5e56b948c3a5716f54de00ad63c57e3e"
+    },
+    {
+      "filename": "fixtures/arya/learn/03-lists-and-loops.arya",
+      "sha256": "705dd0af0949d744a0835a6d1be1f1683d1fce6bf9ad80c5f52785b130b82efb"
+    },
+    {
+      "filename": "fixtures/arya/learn/04-functions-and-objects.arya",
+      "sha256": "885d01ae00c0d70103c02653d8bde038d5b7b905fc827f1ab1c1d3a40526b926"
+    },
+    {
+      "filename": "fixtures/arya/learn/05-javascript.arya",
+      "sha256": "53687f76d22ed0c282da8a7ced44548b96d8f8e7a14f5c6eb70237d084279bf4"
+    },
+    {
+      "filename": "fixtures/arya/learn/06-python.arya",
+      "sha256": "b7c6a4b2a024c5e760cc8a86718461d1713e9349441f611a885143c2dcc050c9"
+    },
+    {
+      "filename": "fixtures/arya/learn/07-async.arya",
+      "sha256": "5ba58581a0860c58cb25f71c4ebf7f8498d35cc934e24f33ab5792a04e20533e"
+    },
+    {
+      "filename": "fixtures/arya/learn/08-arguments.arya",
+      "sha256": "201777f4cec075ad647a3e2ad49e8f16b5980a92a62f8dec04c916b000b405da"
+    },
+    {
+      "filename": "fixtures/arya/learn/09-task-list.arya",
+      "sha256": "d02164a8f1073c2a0e038ca3e973b6ba1eff84dd51d1ac26852e93bfe2c50283"
+    },
+    {
+      "filename": "fixtures/arya/learn/helloworld.arya",
+      "sha256": "b50eff61d33da8edbfbf76a2f38b2962b58daac0925b5199ae0125f8cb9c3079"
+    },
+    {
+      "filename": "fixtures/arya/modules/tasks/lib/report.arya",
+      "sha256": "48ca9e9778f37febf65fb39aac5ff60fdc914a5e019bbe18c7ae3773a58d54ce"
+    },
+    {
+      "filename": "fixtures/arya/modules/tasks/lib/tasks.arya",
+      "sha256": "90ac7fb1485d812b7d8a5f932d5af6353000c6bc2f964d5c93b19c0d191a101d"
+    },
+    {
+      "filename": "fixtures/arya/modules/tasks/main.arya",
+      "sha256": "30fc168d892b109009ac73c20934a1d9d0fb901c27a0bd356270f1dcb2945583"
+    },
+    {
+      "filename": "fixtures/arya/runtime-error.arya",
+      "sha256": "5c4a3d373c1bfbbc2ff98100509ad306c4d5dff09329cba9cb8c3135f75fe70c"
+    },
+    {
+      "filename": "fixtures/arya/statistics_helper.py",
+      "sha256": "e9982e5de85b9061c648e80e4c2ed96e2529d2f8b613525c6e43958a25996479"
+    },
+    {
+      "filename": "fixtures/arya/web.arya",
+      "sha256": "a2b092fb3af849ecad53a86e9930d73ce9aa73326df8cb202fae33fe3445d220"
+    },
+    {
+      "filename": "fixtures/examples/business/python-benchmark.arya",
+      "sha256": "3e0b2e1462c8d981fd550a426ddd233a3b4b26e35656af52abe59867037c1a8a"
+    },
+    {
+      "filename": "fixtures/examples/data-flow/README.md",
+      "sha256": "995e678fea0f0c3ed72d48e61246e7f3b875f546ed79ae1462fb66dd07dcece7"
+    },
+    {
+      "filename": "fixtures/examples/data-flow/main.arya",
+      "sha256": "3774cc63666714450ce6f4cee697b3189f1fb5040f031b8d187f88bf47e10b92"
+    },
+    {
+      "filename": "fixtures/examples/data-flow/python.arya",
+      "sha256": "7c442cd549a938730ac6b33c812a8dd0b7120ea9c4b9b117369a9b1ef29333e7"
+    },
+    {
+      "filename": "fixtures/examples/debugging/README.md",
+      "sha256": "ba2ef8eb1adaf9993d65c78bf78291c42df72fe212054bdcf4796da639b68792"
+    },
+    {
+      "filename": "fixtures/examples/debugging/main.arya",
+      "sha256": "275c15231f15b9b1d9f8d8a81f04a683ef995ce99cb08a49534d932b0fdefd70"
+    },
+    {
+      "filename": "fixtures/examples/mysql/README.md",
+      "sha256": "4cf93fd339154b78258a6436c4ec33455b27724ae16054448b7a6925f109b602"
+    },
+    {
+      "filename": "fixtures/examples/mysql/main.arya",
+      "sha256": "83b6f9f96274179dc9d038231b117da7b85d6ee1e56b62ae8ae21ed308e5daf1"
+    },
+    {
+      "filename": "fixtures/examples/mysql/package-lock.json",
+      "sha256": "27f685bd93637a8ba25782aaf2d05999656dedb69791a27cce2c6e34f5fc9aaa"
+    },
+    {
+      "filename": "fixtures/examples/mysql/package.json",
+      "sha256": "d42f3c0761c0d61d63a2dc3438b2249acff53ffd6ad738b963c6e7c3cf9827c0"
+    },
+    {
+      "filename": "fixtures/examples/mysql/schema.sql",
+      "sha256": "6df43428625c92efbbb192e0d4fe5e88e9394975863a8d1d5ce2c351f090539f"
+    },
+    {
+      "filename": "fixtures/examples/npm/README.md",
+      "sha256": "eb5dff43237738f4bc5566f8c2f94010708c1bddbebf71adef1c95c9b4e50a0c"
+    },
+    {
+      "filename": "fixtures/examples/npm/main.arya",
+      "sha256": "f77c0b3df7e1c778ac6d3c45f419d5f992f5f6dbe64d509ace6f32bc7848a8fa"
+    },
+    {
+      "filename": "fixtures/examples/npm/package.json",
+      "sha256": "e9e331e7693de8620d8318ed34fbc63573cfc79375603bb199972e31a9e62f4f"
+    },
+    {
+      "filename": "fixtures/examples/npm/vendor/math/index.mjs",
+      "sha256": "e274ca8147fee85f6d5197add1496c132e3d191fbab612fd8645cc2393937690"
+    },
+    {
+      "filename": "fixtures/examples/npm/vendor/math/package.json",
+      "sha256": "9988d4911225963e1a97b7b8559bb43b0e4df6d424da16fe1dbd72265eb575a6"
+    },
+    {
+      "filename": "fixtures/examples/python-batch/README.md",
+      "sha256": "5b33311cee4b1a1eb62da1d2f125fb916ae8b4380c99d5b63b1247abd5feddfb"
+    },
+    {
+      "filename": "fixtures/examples/python-batch/main.arya",
+      "sha256": "0bfb8888b113719f140cfe84c025443dc94be56267dce402cd8bba5593fa3e5d"
+    },
+    {
+      "filename": "fixtures/examples/python-batch/statistics_helper.py",
+      "sha256": "7f6a5da895046e75d42ee63c4e515a67def7708cb5d238573aae754e1bedfdd5"
+    },
+    {
+      "filename": "fixtures/examples/python-web/README.md",
+      "sha256": "49a33210f726608808e8443534784d07474c48a6d4583d5f60e9959cdd3c24e1"
+    },
+    {
+      "filename": "fixtures/examples/python-web/analytics.py",
+      "sha256": "49feb7ea6cf70fbadbc704c2738242e43376710b950494efce372787bc62d138"
+    },
+    {
+      "filename": "fixtures/examples/python-web/main.arya",
+      "sha256": "b0eee132f54059b84885117365c8d25416c2ff0f2da192f9148a3753ab5a763c"
+    },
+    {
+      "filename": "fixtures/examples/service/README.md",
+      "sha256": "ca0053965877b150336c65e65098d4174be01ab09fecb6aa2dda9bec4b5b9217"
+    },
+    {
+      "filename": "fixtures/examples/service/handlers.arya",
+      "sha256": "e7c01ac9c899824292ec39fb3a8a35d49cb636bf5848466e9bd8853a73ec72eb"
+    },
+    {
+      "filename": "fixtures/examples/service/main.arya",
+      "sha256": "e3a3fd07120e4bb049970761373c6983a939d36f5a2e001473b44a0053de4170"
+    },
+    {
+      "filename": "fixtures/examples/service/schemas.arya",
+      "sha256": "d8f7af10717c43519eff4c77de28a806e33300315c1109d9309de9d7efa100ed"
+    },
+    {
+      "filename": "fixtures/examples/ui-library/README.md",
+      "sha256": "d0b1901ad7c7a4e248c829488d2134b1618513d5757efb68f41d7d054177acc7"
+    },
+    {
+      "filename": "fixtures/examples/ui-library/main.arya",
+      "sha256": "f0e44527dd0b074ac78f6da91d6533751794537208980a23caddf90c7dfc8c27"
+    },
+    {
+      "filename": "fixtures/examples/ui-library/serve.mjs",
+      "sha256": "a3a8fa1a72c4d7374a95e1f638d4741be6b0088c9dbbc4d8a2629c412d93c196"
+    },
+    {
+      "filename": "fixtures/examples/ui/README.md",
+      "sha256": "5bcf23f638c6febc1c43ee10bf763cdd8c452891c06b71ea00fc80de2c703332"
+    },
+    {
+      "filename": "fixtures/examples/ui/desktop.cjs",
+      "sha256": "28bf1a242d0480595bd47f9774934cc1639e0724dfb89346eacc3c623df4ce9a"
+    },
+    {
+      "filename": "fixtures/examples/ui/main.arya",
+      "sha256": "20ca28e82ad88e5b549985f3e4382d34fe2fed881a602aae5f8144903cf41049"
+    },
+    {
+      "filename": "fixtures/examples/ui/serve.mjs",
+      "sha256": "3e2326db436781f635eeb93c71432c8acf7ebe4fdff1b064a177dd75a3653a7e"
+    },
+    {
+      "filename": "fixtures/web/README.md",
+      "sha256": "1143520f0a935fed657b109b274d0e46e4c25c6232e78c7a3489dbda0b8369f6"
+    },
+    {
+      "filename": "fixtures/web/database.arya",
+      "sha256": "268fc60d66dbd9d316e9e37b82b279122383595e3fc96e7e840b182664abb589"
+    },
+    {
+      "filename": "fixtures/web/index.html",
+      "sha256": "3e7fee55ddf1d3329cee415a615d0ca08a3ace43660cbe35eeee11da05c27107"
+    },
+    {
+      "filename": "fixtures/web/inline.arya",
+      "sha256": "f8052c41cc7c685fc9b21ae97a8870e0b38cbdf373d235e1e1a705b4d718efa4"
+    },
+    {
+      "filename": "fixtures/web/package.json",
+      "sha256": "6f24ca1b3c2bdad54f34bd8dff5b5378318f3f03bce0bad841bbc04fecf4c717"
+    },
+    {
+      "filename": "fixtures/web/public/app.js",
+      "sha256": "ce2486389a77e14052dc1fb77651560811b740d86ccf0469d60b97553c48177b"
+    },
+    {
+      "filename": "fixtures/web/public/styles.css",
+      "sha256": "f9ebc334212b037f89a7594f202518a93e997fed54e1c09e1797f39bc295346b"
+    },
+    {
+      "filename": "fixtures/web/studio.arya",
+      "sha256": "2db8bdba676d8de4fa5cb8f2ef66b250f64c271a3e31ba6e4651feabf9bf1b15"
+    },
+    {
+      "filename": "package-lock.json",
+      "sha256": "0ea2cbd8bcbf807f4fa5813611b99e2e3e538e049292e3e30b4c05f86d863e24"
+    },
+    {
+      "filename": "package.json",
+      "sha256": "7294fe0e1f6e83486a3c0a230f7a1a57c51dca61e7939bb195460cd84fce547e"
+    },
+    {
+      "filename": "packages/create-arya-language/README.md",
+      "sha256": "3e53488d59013124e8940d3aa8176d288181099bc3880032a831159ff2ca23a4"
+    },
+    {
+      "filename": "packages/create-arya-language/package.json",
+      "sha256": "0735874a00fe7366642b27b2569a4ec2627e448a884ae22c0acf81210910a9a8"
+    },
+    {
+      "filename": "scripts/build-editor-package.mjs",
+      "sha256": "2bc0bf9e3061389a1a30cd8d8c4b2a05195d90281aa7220046e318817d76c56a"
+    },
+    {
+      "filename": "scripts/build.mjs",
+      "sha256": "55234cbd92c9a393427ffe74d4897b368d394acf75bfdd4dd116742cd919378e"
+    },
+    {
+      "filename": "scripts/check-docs.mjs",
+      "sha256": "6299c0687ed1da8e6f5d4fb75a4492436f55a29eb86fe9f74242e801f04dff59"
+    },
+    {
+      "filename": "scripts/check-release.mjs",
+      "sha256": "b618d2b45f438372ab3705f62c615355c9ddbd04e4c3dc266e624b3bba320ef6"
+    },
+    {
+      "filename": "scripts/editor-adapters.mjs",
+      "sha256": "c386ba79707068b79622f2be49f4f07b5600de524f731bed591dbdb5b47d4c06"
+    },
+    {
+      "filename": "scripts/editor-archive.mjs",
+      "sha256": "d8be5107e345cb98aeae325ef69e553a9b93e4719e22d65e71991be4612bb67b"
+    },
+    {
+      "filename": "scripts/package-editors.mjs",
+      "sha256": "3a5048dcd586a0b7b8e49edc05d8249e489b4888030cbaa887685898389cd625"
+    },
+    {
+      "filename": "scripts/package-marketplace.mjs",
+      "sha256": "c41599752ea834c2ef5d82f2e65a02bcca0a78be0a867bcf72de8814d517c682"
+    },
+    {
+      "filename": "scripts/test-editor-host.mjs",
+      "sha256": "fe690f88fa388f9e0b5f6716adf123d79178b0cc682901c9993c137bafdb4899"
+    },
+    {
+      "filename": "scripts/test-mysql.mjs",
+      "sha256": "1976df70f86bba12bce259d8b3dec25253c89307dee937a9288cbdafdd2e06d6"
+    },
+    {
+      "filename": "scripts/test-package.mjs",
+      "sha256": "6b5e0550b53b77905238be258e56cdfa16270e8b118576f4496dc323075f402b"
+    },
+    {
+      "filename": "scripts/test.mjs",
+      "sha256": "83cbdc4b2e2d2ae6c1236c4b4abb350ec0eea18a66d50bf4b9ae05c264b87fb1"
+    },
+    {
+      "filename": "scripts/verify-clean.mjs",
+      "sha256": "648da57febb3b5b52c1495f920d65c8d383eba768bbecc6c40aa9189210db6aa"
+    },
+    {
+      "filename": "src/ast.ts",
+      "sha256": "0a04daed5db76b9eb72606f05ee06d064580a5504bd93bb401f627d6efcf3fed"
+    },
+    {
+      "filename": "src/cli.ts",
+      "sha256": "5c4c723df8693bfb064bbca048873a2bbb0c2ec731fc7950c3f5891c76d47c81"
+    },
+    {
+      "filename": "src/compiler.ts",
+      "sha256": "bcdab83534335a58a2843879450debc4b4207a51950a656aad6f635f5573ad27"
+    },
+    {
+      "filename": "src/create.ts",
+      "sha256": "934b51460faa569578c4fef5426b4a900be8c981f4f922555d3e9dce723e64b7"
+    },
+    {
+      "filename": "src/diagnostics.ts",
+      "sha256": "e438404de649cf392bff49ecb6b7240fd7a287a1d1d9a6b25104ea94a261bc4d"
+    },
+    {
+      "filename": "src/editor.ts",
+      "sha256": "f784f5d04f122638ef445f14c50a2ed4df8b94da99be91a3172d422cfb607c12"
+    },
+    {
+      "filename": "src/esbuild.ts",
+      "sha256": "510fdad5906a60f728d792cf2ea5d704a8daa2660e90e32b7c928cce043d23a9"
+    },
+    {
+      "filename": "src/files.ts",
+      "sha256": "742f5f2c1d1a4f4fa8380c114ff1fe1b36e7e67c3405fa769d0cc34a5a85e562"
+    },
+    {
+      "filename": "src/host-globals.ts",
+      "sha256": "e090767ed293b5921eac399b808d33360cea4e67417c09a21a517dbc538ec38d"
+    },
+    {
+      "filename": "src/language-service.ts",
+      "sha256": "d7ce337731e37287ecb0fb9dee3c992d257081588cf46e0e6bde57c0ffb63bb0"
+    },
+    {
+      "filename": "src/lsp.ts",
+      "sha256": "41f6eef7a7e833e0974ac0e7655e131bcd925d60714014cf93d43cd9f19db9d1"
+    },
+    {
+      "filename": "src/native-assets.d.ts",
+      "sha256": "8609d63a279e8323ffe9ee13ed87a408304ed63f9e1bc5c569087dd8b29ddc60"
+    },
+    {
+      "filename": "src/project-creator.ts",
+      "sha256": "5ded8f2cde04e4ee714dec8e3016ed38c863fe56d9bae6b35c530d389cf01d69"
+    },
+    {
+      "filename": "src/project.ts",
+      "sha256": "18ac32f7a769497ff889cb2115d5252a4891928133d6ee9206de2905b2f2a4c7"
+    },
+    {
+      "filename": "src/python-worker.ts",
+      "sha256": "21518bf3b5f2f2eb398bf5f8b4ea5aeb48e8684adee55725ce5708ce9fb97364"
+    },
+    {
+      "filename": "src/resolver.ts",
+      "sha256": "53a1058d97701d930a8b1d1ed077a4a336177d4a918845c53f7dc2a4e0a4958b"
+    },
+    {
+      "filename": "src/runtime.ts",
+      "sha256": "e09347ffccfd262931cd50a33a1ebe8842268b4dc3e27db1286e4b8f7da4ecd1"
+    },
+    {
+      "filename": "src/semantic-tokens.ts",
+      "sha256": "ddf079c3cffbbfacd571f80ea6d81f3e124cd780d0b6a0019977ca5dd827c4a5"
+    },
+    {
+      "filename": "src/source-map.ts",
+      "sha256": "cf719722f7692796384c996ff22d81a8527074dff7a63874081e3df56f19fe20"
+    },
+    {
+      "filename": "src/standard-completions.ts",
+      "sha256": "4eb5b32604c17f97998fd752a18d3138c45a59e7fc0ab37a6e931417a1aa152b"
+    },
+    {
+      "filename": "src/standard.ts",
+      "sha256": "800fcd61a72fe09b59c74b3daa1fef540c1352e47130c71dce712a2af80a4ac5"
+    },
+    {
+      "filename": "src/std/async.ts",
+      "sha256": "ec95e37720f14aa25f29107caf286987566d6c9c6d81b74e1273a024ac6ef522"
+    },
+    {
+      "filename": "src/std/datetime.ts",
+      "sha256": "1c77a44cec7ec34bf04d9fbaa6a5e7cb288337e376319c029c9a98cd384cedda"
+    },
+    {
+      "filename": "src/std/debug.ts",
+      "sha256": "f8858339e602b03cec7d93aa89457cbd95154d609360d80e08d0b8634405175f"
+    },
+    {
+      "filename": "src/std/decimal.ts",
+      "sha256": "08e9479105180b818de253478285a3d8675d5a4ed2c12d3077204ec7bf294522"
+    },
+    {
+      "filename": "src/std/env.ts",
+      "sha256": "574280249c16fadcb2490adacb6750ff06757ccb1eacfbccbad283a7345052b7"
+    },
+    {
+      "filename": "src/std/http.ts",
+      "sha256": "f1044196d1c3987928b8fcf042543031b7be80a66536e98fd577723eaa5386c1"
+    },
+    {
+      "filename": "src/std/list.ts",
+      "sha256": "140b36dfb4a1e647cc40404051ba581e6c8d234e5741de3437ff15b208ce81b0"
+    },
+    {
+      "filename": "src/std/log.ts",
+      "sha256": "7ffcb6fc4693586aa7b15c07fc7930789f6c66766b9bdd2e2f507b56cd6b5e61"
+    },
+    {
+      "filename": "src/std/mysql.ts",
+      "sha256": "2ff62aff1f1381c3003bafc5c7de8a17c41d54a30622e798d6ee52bbb0593115"
+    },
+    {
+      "filename": "src/std/python.ts",
+      "sha256": "936550ace3974d1f202c4e3c50b9358c8c0e8005823908148e9ef1b7878df1a9"
+    },
+    {
+      "filename": "src/std/ui-components.ts",
+      "sha256": "af460b4d1f8cd9018ed8c44536ed0e00c37e1de4e72eb7926a2b8efe9efad526"
+    },
+    {
+      "filename": "src/std/ui-motion.ts",
+      "sha256": "11ef2d856e9ae7125af7965578a6ba13a6ef442f4d0761c227974ac34005796a"
+    },
+    {
+      "filename": "src/std/ui-pattern-preview.ts",
+      "sha256": "8415f9a16fcdef79196e9464771c615934ce709c86e5947c688822d14c0af9f3"
+    },
+    {
+      "filename": "src/std/ui-patterns.ts",
+      "sha256": "e4018cda59840b01b9e44df5bfa1329e191b880ed0a5ffc45fa3b95922fc90bf"
+    },
+    {
+      "filename": "src/std/ui-preview.ts",
+      "sha256": "92f65ba0a68a91120249490ba91b8e5b737ff6593f2083c966aa8831060e7cea"
+    },
+    {
+      "filename": "src/std/ui-templates.ts",
+      "sha256": "ee21c38b63f3aa443e67778c316e3bcd88ef9f1f81e621ce0bb2b791f206d0a9"
+    },
+    {
+      "filename": "src/std/ui.ts",
+      "sha256": "ddd76ec73a8695b9a84d591b393b50b11482bae01630309598c1687aa3c03e26"
+    },
+    {
+      "filename": "src/std/validate.ts",
+      "sha256": "ca04438504bba4b76706937b4eb0d7c5beb77bdc33708004b086bb1eb20f6f46"
+    },
+    {
+      "filename": "src/tooling.ts",
+      "sha256": "a411e8c86b397dcc862a5ad9549a4e1f78af2584be6c95b6c8738d259a86950e"
+    },
+    {
+      "filename": "src/types.ts",
+      "sha256": "379ae078762ebeb978b13a4f78a61af9b468aa04f9dbe709a30b3dae3fb5242a"
+    },
+    {
+      "filename": "src/ui-catalog.ts",
+      "sha256": "5a04746a6dc9cfb85279bbf53475e30a2294b95de44d9f86af0bed870cb865bc"
+    },
+    {
+      "filename": "src/ui-client.ts",
+      "sha256": "1be2eab7386e82e192cfad2a5360055f227217271df4c9d9b7d0431134b71fb3"
+    },
+    {
+      "filename": "src/ui-motion.ts",
+      "sha256": "c00e0bd9de21fc606a003297c7c80a3fc0ec93d2b132345866d3abc0c12cd55c"
+    },
+    {
+      "filename": "src/ui-project.ts",
+      "sha256": "537f5fa2e3c090efef9ea46d31f6d69e3ce614100fdfbba76cc192d1838375a6"
+    },
+    {
+      "filename": "src/ui-styles.ts",
+      "sha256": "51b80a2007941840f200cea3f77ab39f600ea69aefdbcfdb2bb83d5e9e26fd14"
+    },
+    {
+      "filename": "src/web-project.ts",
+      "sha256": "f1ccde6af4c4ac7ce44ce9605159ea97523091334e8c97529b5cf98fe29c1511"
+    },
+    {
+      "filename": "src/web.ts",
+      "sha256": "830b29f55e8632081b139f187e1f854be127e5ddb549def53bfa87ed3f2cd9c0"
+    },
+    {
+      "filename": "src/workspace-service.ts",
+      "sha256": "3dfc6a67a2cb537ef839292e1a8d6c01a67e61ade2e8ff823fbf8f870645b950"
+    },
+    {
+      "filename": "tests/arya-editor.test.ts",
+      "sha256": "7489ae24767f0886674ba9e292b36fd8160af087c7188086a74385adf9a10f62"
+    },
+    {
+      "filename": "tests/arya.test.ts",
+      "sha256": "5fe6dd60b17e8776f61718da1cc1057f475d8abf20fbcfa9b35212455c4d2ec6"
+    },
+    {
+      "filename": "tests/async-workloads.test.ts",
+      "sha256": "b7bce8014f51348694ae9a29424352a1a34f20c1ab7c9ab7eb058a3d7aaec0e9"
+    },
+    {
+      "filename": "tests/business-tooling.test.ts",
+      "sha256": "81611bbf7962d27ed7903a7bbe42ba7a6daf6ab68d5945098d19191320b1eff2"
+    },
+    {
+      "filename": "tests/business-values.test.ts",
+      "sha256": "d227dfd8365c235fcbacc8a62a52840576185367b562baf65f67733b7cf34a6c"
+    },
+    {
+      "filename": "tests/clean-snapshot.test.ts",
+      "sha256": "ee759b0bf58900b072b922a3f22a39434a49e590fc7cc848480ad57f0e83b0b4"
+    },
+    {
+      "filename": "tests/conformance.test.ts",
+      "sha256": "709923b0ece88d9c2012357cc38984dfcdc54a2b21e91bd13e78141af673373d"
+    },
+    {
+      "filename": "tests/debug.test.ts",
+      "sha256": "e2ec6b7a6d1af324518fc8d6da22be621be7bf82e1854288441eea174dde16b9"
+    },
+    {
+      "filename": "tests/developer-onboarding.test.ts",
+      "sha256": "e36dd31924ee39f83993437bb28be94e3a4bc49aeea03d54a419a6111b9d621b"
+    },
+    {
+      "filename": "tests/diagnostics.test.ts",
+      "sha256": "c7dab97482f2d1ab74634331a2a7cc17626ebcd85865755fa8a079cf3c8b88b6"
+    },
+    {
+      "filename": "tests/editor-artifacts.test.ts",
+      "sha256": "596bfb795781b511ea483fab6b903e16717fcbb67336686b3abb760e92e19c6c"
+    },
+    {
+      "filename": "tests/editor-reliability.test.ts",
+      "sha256": "2418d98a46dc804a36fa2dd419786234a5b4f6e226906084753bf85866225458"
+    },
+    {
+      "filename": "tests/editor-setup.test.ts",
+      "sha256": "aba76fc9b43ff0197c3902e76cec257f7823fbc0717f9a3ed0da87af25852b71"
+    },
+    {
+      "filename": "tests/env.test.ts",
+      "sha256": "2b4ba1fae84c73f9115a2fe9de83feb24818deb0ac432f75a4eaf99dbfb8fc71"
+    },
+    {
+      "filename": "tests/fixtures/editor-host.cjs",
+      "sha256": "fd55e4ced4d58a2052617e70f29bad88b5eaa5cff87ecf82dd095b8b2dba9c74"
+    },
+    {
+      "filename": "tests/flow-syntax.test.ts",
+      "sha256": "1f71e4d8d6229f42432bafd26580369fcb39ff3215a3ce2af9b15b8f4de33747"
+    },
+    {
+      "filename": "tests/helpers/chrome.ts",
+      "sha256": "f6903a124c42eb22365267c6be2ce4d56b5095e2b26c3c3ae9094ec440ce877d"
+    },
+    {
+      "filename": "tests/inspector.test.ts",
+      "sha256": "e10e4e79bb70a3ad0f181d0327ebcaf1f0a8394b95694ba1d55f940ad8818a4f"
+    },
+    {
+      "filename": "tests/interop.test.ts",
+      "sha256": "41b563ac34ada9c3b638562dd1500a533d9fa2c6656c90df1f6a583f57d3de02"
+    },
+    {
+      "filename": "tests/list.test.ts",
+      "sha256": "fc198da28bee1ed512c222f637e4f2f35619a66c2a45aa30d9eabf044ad4e55a"
+    },
+    {
+      "filename": "tests/logging.test.ts",
+      "sha256": "9b575941a6322244d2753257b7b768b9f4364a2adbe03a20c5b01f050349a264"
+    },
+    {
+      "filename": "tests/mysql-live.test.ts",
+      "sha256": "989f3d22a24a88eb9f859bd0196ca9d90207e571533e847ccc6f9f69528eaeba"
+    },
+    {
+      "filename": "tests/mysql.test.ts",
+      "sha256": "cfb988db2185520a6f4c69c02e61b382afdf11586d28655a16d71c514f1e871f"
+    },
+    {
+      "filename": "tests/node-runtime.test.ts",
+      "sha256": "fb4e022b0d3fb81ffbc705c748f0643b1d114787936af5276eec35a1bbe37da4"
+    },
+    {
+      "filename": "tests/packaging.test.ts",
+      "sha256": "bc973d017ae7460ca1d9cf7d1cfa1fdb567db7f3872a90e84a16f682d94f4407"
+    },
+    {
+      "filename": "tests/pro-syntax.test.ts",
+      "sha256": "0fb87ebf68a516e18ab72bb9afd308f9f69809c7acb9d8bf22ad0223a441de15"
+    },
+    {
+      "filename": "tests/project-creator.test.ts",
+      "sha256": "8cd1ae09a80115d282c9ad8b1280b61c57e59d2146c2d180727057983a34ec3d"
+    },
+    {
+      "filename": "tests/project.test.ts",
+      "sha256": "ae3b57975f6aa1afc6ec6077bc0dcb28f0b514ccbdda6a5aab1d1d8491763044"
+    },
+    {
+      "filename": "tests/python-async.test.ts",
+      "sha256": "662f54ae33b1f78825b91fcbcae776eb9c37942f70de3bd931bd306f0db6fd84"
+    },
+    {
+      "filename": "tests/python-web.test.ts",
+      "sha256": "96224abeef232916ff251020a9c21367e736f5db3144843ae0637144068b4871"
+    },
+    {
+      "filename": "tests/release-readiness.test.ts",
+      "sha256": "1593696ede08e920fe8f6c9fa1b4e434b250743e23ee8fed74858aa64457e50e"
+    },
+    {
+      "filename": "tests/resolver.test.ts",
+      "sha256": "b6d5025af4c75ca97a0d52bf6846a568273cfa493bb9b14cc17f70f847ed439c"
+    },
+    {
+      "filename": "tests/runtime-isolation.test.ts",
+      "sha256": "1ac23e2ac201ed12157f9e25bb428fa759566b8f29b129fc3bd27309149b4c33"
+    },
+    {
+      "filename": "tests/semantic-tokens.test.ts",
+      "sha256": "5c108427236f7bffbd54fe0f000309e2f9a7a0870a0030f78efec2a42df30169"
+    },
+    {
+      "filename": "tests/service-example.test.ts",
+      "sha256": "25b461500762c7c03b1ba8f6820582fbf7d47922a88757d1841ee9a574f8dbb7"
+    },
+    {
+      "filename": "tests/services.test.ts",
+      "sha256": "956b00a143292eefda93b5175d7204a0b6beef62a3c9b43dcafc5f47eb36d450"
+    },
+    {
+      "filename": "tests/source-maps.test.ts",
+      "sha256": "1efe8d263cac454ac506933b1a409f23878afffda6fe06292ba7f09ab6fecb47"
+    },
+    {
+      "filename": "tests/standard-completions.test.ts",
+      "sha256": "fe8f0e7ceb70c540c93f681c85dd480804a6199b4576af7a4ad6ab534515ed13"
+    },
+    {
+      "filename": "tests/standard.test.ts",
+      "sha256": "019ed2298f3c3543f41505c14c199d9ec825cff45f001bb7449513532c8a293e"
+    },
+    {
+      "filename": "tests/syntax.test.ts",
+      "sha256": "1ad5233b961192dd3e49b90a688607428d3f0c4458d24b7aa6ac5f162cb0957f"
+    },
+    {
+      "filename": "tests/types.test.ts",
+      "sha256": "7c182f9a460a0025fef4830e46a96467c57648f6209abed36b274bf68ab5bde6"
+    },
+    {
+      "filename": "tests/ui-browser.test.ts",
+      "sha256": "f151c7a578e17296d8ef266e10d4761a470606ac4af19705f527f0265a7893ec"
+    },
+    {
+      "filename": "tests/ui-desktop.test.ts",
+      "sha256": "6364067bc94bf564c56665c39f0e7dfb18cccfef5e97e14636f4bdbe8f974a8c"
+    },
+    {
+      "filename": "tests/ui-library-browser.test.ts",
+      "sha256": "b65b42522be483f1159d8ff437c4d839d99c098da168fd7c9e75f52eafaa2dc4"
+    },
+    {
+      "filename": "tests/ui-library.test.ts",
+      "sha256": "5954768df5f3920e6f9bc3830d44f2b305bb6183f52d36bed817805183daea8a"
+    },
+    {
+      "filename": "tests/ui-patterns.test.ts",
+      "sha256": "64e2974b6b21d5308e0e6d1f68833cdfa7fe91064ab1bcf8d7999f857b685009"
+    },
+    {
+      "filename": "tests/ui.test.ts",
+      "sha256": "fd2a4982add3036f2511a1298bab42b19bc15c00212cd256d904466d8884cae0"
+    },
+    {
+      "filename": "tests/validation.test.ts",
+      "sha256": "7b20fe00b00d972461abec5f97c93d67b024402db9248efd7b04a82887d4b71f"
+    },
+    {
+      "filename": "tests/web-files.test.ts",
+      "sha256": "44fd68992b7b3a67074460e4bae381263fd3b6fb58fd92cf0b50148b6fe9e28d"
+    },
+    {
+      "filename": "tests/web-project.test.ts",
+      "sha256": "3866cf9d733d1599b36bb69314c77a5b397ad1c0f7d95fe3414b2ee33692b759"
+    },
+    {
+      "filename": "tests/web-views.test.ts",
+      "sha256": "681a5d40312f1f3ebfff705bf3fea7e616f40050855d0371a0706cbcfd78601f"
+    },
+    {
+      "filename": "tsconfig.build.json",
+      "sha256": "6a13346a60f409370dab7add396d959777ea9b5065117c7b15c7a12e6b9e2ff3"
+    },
+    {
+      "filename": "tsconfig.json",
+      "sha256": "f271dafdafba0a444240614ea91f4a090ca51ef332abcea3e7caed59260290e2"
+    }
+  ]
+}

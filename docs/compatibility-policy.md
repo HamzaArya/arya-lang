@@ -1,6 +1,6 @@
 # Compatibility and stabilization policy
 
-This policy covers the published Node.js-only 1.3.0-alpha.7 preview, the older 1.2.0-alpha.4 baseline, and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate. The [stable release plan](stable-release-plan.md) identifies the work needed before making a stable compatibility promise.
+This policy covers the published Node.js-only 1.3.0-alpha.9 preview, the older 1.2.0-alpha.4 baseline, and future stable releases. A numeric 1.x prefix with an alpha suffix does not establish stability. The current [normative specification](arya-specification.md), versioned release notes, and actual qualification results define the available candidate. The [stable release plan](stable-release-plan.md) identifies the work needed before making a stable compatibility promise.
 
 ## Version labels
 

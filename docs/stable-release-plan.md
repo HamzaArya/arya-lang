@@ -1,9 +1,13 @@
 # Arya stable release plan
 
-Status: stabilization work, 11 November 2026. The current local reliability candidate is [1.3.0-alpha.9](releases/1.3.0-alpha.9.md) with extension 1.3.4; neither is published. The published version remains
-1.3.0-alpha.7. A possible first stable target is **1.3.0**, following a new release
-candidate and qualification. This document does not declare or publish that release.
-Work in this plan applies to the Arya repository.
+Status: stabilization work, 11 November 2026. The published experimental preview
+is [1.3.0-alpha.9](releases/1.3.0-alpha.9.md) on `next`, with extension 1.3.4.
+Its [publication record](releases/1.3.0-alpha.9-publication.json) includes the clean
+source, all 12 passing platform jobs, package checks and public distribution evidence.
+A possible first stable target is **1.3.0**, following a new release candidate and
+qualification. This document does not declare a stable release. The work applies
+to the Arya repository.
+
 
 ## Define the compatibility promise
 

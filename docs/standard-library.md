@@ -1,6 +1,6 @@
 # Arya standard libraries
 
-**Published preview: 1.3.0-alpha.7; source candidate: unpublished 1.3.0-alpha.9.** Import a library with `use std "name" as alias`. All libraries below run on Node.js and are included in published alpha.7. The older 1.2 release on `latest` lacks `list`, `decimal`, `datetime` and `async`. Follow [candidate setup](node-runtime.md#try-the-candidate) for unreleased fixes.
+**Published preview: 1.3.0-alpha.9.** Import a library with `use std "name" as alias`. All libraries below run on Node.js and are included in published alpha.9. The older 1.2 release on `latest` lacks `list`, `decimal`, `datetime` and `async`. Follow [candidate setup](node-runtime.md#try-the-candidate) for unreleased fixes.
 
 ## JavaScript/Node profile
 

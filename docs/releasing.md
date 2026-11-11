@@ -1,12 +1,12 @@
 # Build and publish an Arya release
 
-**Published preview: 1.3.0-alpha.7 on `next`; `latest` remains 1.2.0-alpha.4.** The [verified transaction record](releases/1.3.0-alpha.7-publication.json) identifies the exact archives. Unreleased stabilization work needs a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
+**Published preview: 1.3.0-alpha.9 on `next`; `latest` remains 1.2.0-alpha.4.** The [verified transaction record](releases/1.3.0-alpha.9-publication.json) identifies the exact archives. Unreleased stabilization work needs a **new version**. Never rebuild over retained published archives or attempt to replace an existing npm version.
 
 Hamza Arya is the release maintainer. The project uses Apache-2.0, npm packages `arya-language` and `create-arya-language`, and the existing [HamzaArya/arya-lang](https://github.com/HamzaArya/arya-lang) repository. Private security reporting is described in [SECURITY.md](../SECURITY.md).
 
 ## Prepare a new candidate
 
-1. Review intended source changes and choose a new version. Update root package/lockfile, `src/compiler.ts`, and the creator package together. Set both packages' `publishConfig.tag` to `next` for a prerelease or `latest` for a qualified stable release. Set the root `aryaEditorVersion` to a numeric extension version newer than the last published extension (currently the local candidate uses 1.3.4). Build synchronizes that numeric version, the preview flag, and full `aryaLanguageVersion`; the compiler and extension versions need not be equal. Use plain SemVer or a prerelease without build metadata, which the editor/archive naming convention does not support.
+1. Review intended source changes and choose a new version. Update root package/lockfile, `src/compiler.ts`, and the creator package together. Set both packages' `publishConfig.tag` to `next` for a prerelease or `latest` for a qualified stable release. Set the root `aryaEditorVersion` to a numeric extension version newer than the last published extension (the current release uses 1.3.4). Build synchronizes that numeric version, the preview flag, and full `aryaLanguageVersion`; the compiler and extension versions need not be equal. Use plain SemVer or a prerelease without build metadata, which the editor/archive naming convention does not support.
 2. Update current guides, migration notes, and `docs/releases/<version>.md`. Describe optional dependencies and the actual qualification scope. Keep historical release hashes and records intact.
 3. Run `npm ci` and `npm run check`. Run appropriate optional database, browser, Electron, and editor-host checks; report skips and failures accurately.
 4. Run `npm run test:clean` to verify and package a fresh source snapshot. This inventories tracked/unignored source without changing the Git index, records SHA-256 provenance, installs dependencies, checks docs/types/tests, builds all distributions, tests installed packages, and runs the read-only audit.
@@ -33,8 +33,8 @@ Select the intended registry tag explicitly. Package defaults use `next` for pre
 
 ```sh
 arya_release_version="<new-version>"
-npm publish "./artifacts/arya-language-$arya_release_version.tgz" --ignore-scripts --registry https://registry.npmjs.org/ --access public --tag latest
-npm publish "./artifacts/create-arya-language-$arya_release_version.tgz" --ignore-scripts --registry https://registry.npmjs.org/ --access public --tag latest
+npm publish "./artifacts/arya-language-$arya_release_version.tgz" --ignore-scripts --registry https://registry.npmjs.org/ --access public --tag next
+npm publish "./artifacts/create-arya-language-$arya_release_version.tgz" --ignore-scripts --registry https://registry.npmjs.org/ --access public --tag next
 ```
 
 Use the reviewed archive paths if they remain in the temporary snapshot. Publish does not need a rebuild or lifecycle script. Ensure the selected tag is the intended maintainer decision before running the command; do not assume that a prerelease should automatically become `latest`.

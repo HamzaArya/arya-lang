@@ -1,6 +1,6 @@
 # Readable application syntax
 
-**Added in 1.3.0-alpha.2; included in published 1.3.0-alpha.7 and the unpublished 1.3.0-alpha.9 candidate.** Install the published preview with an exact alpha.7 pin, or follow [candidate setup](node-runtime.md#try-the-candidate) for unreleased fixes. The older 1.2 release on `latest` does not include these forms.
+**Added in 1.3.0-alpha.2; included in published 1.3.0-alpha.9.** Install the published preview with an exact alpha.9 pin, or follow [candidate setup](node-runtime.md#try-the-candidate) for unreleased fixes. The older 1.2 release on `latest` does not include these forms.
 
 Use `const` for an immutable binding, `let` for a mutable binding, `fn` for a function, `for` for iteration, and `print` for output. Block-bodied functions remain available alongside concise functions. The current candidate uses one set of spellings; see [syntax migration](syntax-migration.md) for the breaking alias removal in alpha.4.
 

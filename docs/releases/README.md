@@ -1,13 +1,12 @@
 # Release notes and publication records
 
-The current **unpublished source candidate is [1.3.0-alpha.9](1.3.0-alpha.9.md)** with extension 1.3.4. Local preparation does not change npm tags or the Marketplace.
-The current npm preview is **1.3.0-alpha.7**, published to `next` on 11 November 2026. The `latest` tag remains on **1.2.0-alpha.4**. See the [publication record](1.3.0-alpha.7-publication.json). Registry tags can move; use an exact version for reproducible installation. Current verification scope is in [release readiness](../release-readiness.md).
+The current published npm preview is **[1.3.0-alpha.9](1.3.0-alpha.9.md)** on `next`, with Marketplace extension **1.3.4**. The `latest` tag remains on **1.2.0-alpha.4**. See the [verified publication record](1.3.0-alpha.9-publication.json) and [release readiness](../release-readiness.md). Registry tags can move; pin an exact version for reproducible installs.
 
 ## Source candidates
 
 | Version | Changes |
 | --- | --- |
-| [1.3.0-alpha.9](1.3.0-alpha.9.md) | Reliability fixes, safer editor operations and consistent version/onboarding guidance; unpublished |
+| [1.3.0-alpha.9](1.3.0-alpha.9.md) | Reliability fixes, safer editor operations and consistent version/onboarding guidance; published on `next` |
 | [1.3.0-alpha.8](1.3.0-alpha.8.md) | Retained local reliability candidate; never published |
 | [1.3.0-alpha.7](1.3.0-alpha.7.md) | Checked rest parameter arrays and final business application artifact |
 | [1.3.0-alpha.6](1.3.0-alpha.6.md) | Relocatable business mapping builds; reviewed successor to alpha.5 |

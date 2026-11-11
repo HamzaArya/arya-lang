@@ -3,10 +3,10 @@
 ![Arya bridge mark](https://raw.githubusercontent.com/HamzaArya/arya-lang/main/brand/arya-logo.png)
 
 Write `.arya` programs with JavaScript/npm libraries and a Python function bridge.
-This local experimental extension candidate is **1.3.4** and includes the
-**1.3.0-alpha.9** compiler. Neither candidate is published. The published
-Marketplace extension **1.3.2** bundles language **1.3.0-alpha.7**. Compiler and
-extension versions are separate; `arya editor status` reports both for the new candidate.
+The published experimental extension is **1.3.4**, bundling compiler
+**1.3.0-alpha.9**. The same reviewed VSIX is distributed through npm, GitHub
+and Marketplace. Compiler and extension versions are separate;
+`arya editor status` reports both.
 
 Features include:
 
@@ -52,7 +52,7 @@ and execution controls remain in charge, while the companion supplies appearance
 and semantic tokens. AryaCode pins its embedded compiler separately; installing
 this extension does not update that compiler.
 
-For offline installation, install `arya-language@1.3.0-alpha.7`, then run
+For offline installation, install `arya-language@1.3.0-alpha.9`, then run
 `npx --no-install arya editor install`. `arya editor path` reports its bundled
 VSIX. See the [editor guide](https://github.com/HamzaArya/arya-lang/blob/main/docs/arya-editors.md)
 and [business APIs and tools](https://github.com/HamzaArya/arya-lang/blob/main/docs/business-applications.md).

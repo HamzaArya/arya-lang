@@ -1,11 +1,10 @@
 # Arya documentation
 
-**Unpublished source candidate:** [1.3.0-alpha.9](releases/1.3.0-alpha.9.md), bundled extension 1.3.4. Public install examples below remain pinned to published alpha.7.
-These guides cover **Arya’s Node.js application runtime** and the published **1.3.0-alpha.7** preview on `next`. The `latest` tag remains on 1.2.0-alpha.4 in the [publication record](releases/1.3.0-alpha.7-publication.json). Tags can move; installation examples pin a version. Unreleased stabilization changes are identified in the [changelog](../CHANGELOG.md). Node.js 22.15+ is required; Python, MySQL/mysql2, and Electron are optional feature dependencies.
+These guides cover **Arya’s Node.js application runtime** and the published **1.3.0-alpha.9** preview on `next`. The `latest` tag remains on 1.2.0-alpha.4 in the [publication record](releases/1.3.0-alpha.9-publication.json). Tags can move; installation examples pin a version. Unreleased stabilization changes are identified in the [changelog](../CHANGELOG.md). Node.js 22.15+ is required; Python, MySQL/mysql2, and Electron are optional feature dependencies.
 
 | Version | Use it for |
 | --- | --- |
-| Published `1.3.0-alpha.7` | Canonical syntax, Node/npm/Python integration, services/MySQL, UI, editor tooling, and [business APIs](business-applications.md) |
+| Published `1.3.0-alpha.9` | Canonical syntax, Node/npm/Python integration, services/MySQL, UI, editor tooling, and [business APIs](business-applications.md) |
 | Older published `1.2.0-alpha.4` | Earlier syntax and native functionality; use its versioned documentation when maintaining an older installation |
 
 Unreleased features need the compiler built from this checkout or a new matching archive. The creator without `--compiler` requires its exact compiler version on npm.
@@ -51,7 +50,7 @@ Runnable projects are listed in the [examples index](../fixtures/README.md).
 
 ## Releases and decisions
 
-- [Changelog](../CHANGELOG.md), [release index](releases/README.md), [published release](releases/1.3.0-alpha.7.md), and [verified npm publication](releases/1.3.0-alpha.7-publication.json).
+- [Changelog](../CHANGELOG.md), [release index](releases/README.md), [published release](releases/1.3.0-alpha.9.md), and [verified npm publication](releases/1.3.0-alpha.9-publication.json).
 - [Release process](releasing.md) and [current qualification](release-readiness.md).
 - [Stable release plan](stable-release-plan.md): compatibility scope, engineering priorities and observable release criteria.
 - [Roadmap](arya-roadmap.md), [tooling decisions](tooling-evidence.md), and [external learner review](community-review.md).

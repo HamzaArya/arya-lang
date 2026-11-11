@@ -2,10 +2,10 @@
 
 Interactive starters for web apps, API servers, CLI tools, UI apps, and Electron desktop apps.
 
-The current source is the unpublished Node.js-only 1.3.0-alpha.9 candidate. The npm command below pins the published 1.3.0-alpha.7 preview:
+The published Node.js preview is 1.3.0-alpha.9. The command below pins that exact compiler and creator version:
 
 ```sh
-npm create arya-language@1.3.0-alpha.7 my-app
+npm create arya-language@1.3.0-alpha.9 my-app
 cd my-app
 npm install
 npm run dev

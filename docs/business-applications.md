@@ -1,6 +1,6 @@
 # Node business application APIs
 
-Available in **1.3.0-alpha.7**, published to npm’s `next` channel.
+Available in **1.3.0-alpha.9**, published to npm’s `next` channel.
 This is a bounded experimental implementation. Runtime input validation remains
 necessary at HTTP, CSV, database, JavaScript and Python boundaries.
 

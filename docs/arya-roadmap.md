@@ -1,6 +1,6 @@
 # Arya roadmap
 
-Arya focuses on readable Node.js applications that connect JavaScript/npm and Python. The current published preview is **1.3.0-alpha.7** on `next`; the publication record retains **1.2.0-alpha.4** on `latest`. An alpha version remains experimental even when its numeric prefix is 1.x. The [stable release plan](stable-release-plan.md) tracks the next compatibility and qualification work; unreleased source changes require new artifacts.
+Arya focuses on readable Node.js applications that connect JavaScript/npm and Python. The current published preview is **1.3.0-alpha.9** on `next`; the publication record retains **1.2.0-alpha.4** on `latest`. An alpha version remains experimental even when its numeric prefix is 1.x. The [stable release plan](stable-release-plan.md) tracks the next compatibility and qualification work; unreleased source changes require new artifacts.
 
 Use [release readiness](release-readiness.md) for version-specific verification and [compatibility policy](compatibility-policy.md) for release promises. This roadmap distinguishes implemented features from work that still needs evidence; it does not set release dates.
 

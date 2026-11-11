@@ -1,6 +1,6 @@
 # Python and JavaScript together
 
-These experimental APIs are included in the published Arya 1.3.0-alpha.7 Node.js preview. Install it with `npm install --save-exact arya-language@1.3.0-alpha.7`. This checkout is the unpublished 1.3.0-alpha.9 candidate; follow [candidate setup](node-runtime.md#try-the-candidate) to use its fixes. Python is an optional dependency selected by your application.
+These experimental APIs are included in the published Arya 1.3.0-alpha.9 Node.js preview. Install it with `npm install --save-exact arya-language@1.3.0-alpha.9`. This checkout is the published 1.3.0-alpha.9 preview; follow [candidate setup](node-runtime.md#try-the-candidate) to use its fixes. Python is an optional dependency selected by your application.
 
 Arya can coordinate JavaScript libraries and Python functions without handwritten child-process or HTTP glue. Existing direct Python calls remain synchronous. The new JavaScript-profile `python` standard library provides an explicit asynchronous path:
 

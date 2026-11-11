@@ -9,7 +9,7 @@ application. This is an experimental preview, not a promise of production stabil
 Install Node.js 22.15 or newer. From a directory where you keep projects:
 
 ```sh
-npm create arya-language@1.3.0-alpha.7 hello-arya -- --template cli
+npm create arya-language@1.3.0-alpha.9 hello-arya -- --template cli
 cd hello-arya
 npm install
 npm run dev -- Hamza
@@ -18,20 +18,17 @@ npm run build
 ```
 
 The CLI starter prints `Hello, Hamza!`. Open `main.arya` in any editor and change
-the greeting. Run it again. The project pins the published alpha.7 compiler; the
-new alpha.8 fixes require the [local candidate/archive workflow](node-runtime.md#try-the-candidate)
-until separately published. Do not substitute an unpublished version into an npm
-registry command.
+the greeting. Run it again. The project pins the published alpha.9 compiler.
+For future unpublished changes, use the [candidate/archive workflow](node-runtime.md#try-the-candidate).
 
 Add `print(missingName)` at the end and run `npm run check`. Read the source
 location and unknown-name diagnostic, remove that line, then Check again. This
 shows how to recover from a mistake before introducing services or dependencies.
 
 For editor assistance follow [editor setup](editor-setup.md). AryaCode is optional.
-The published extension 1.3.2 contains compiler 1.3.0-alpha.7; the unpublished
-extension 1.3.4 contains compiler 1.3.0-alpha.9. In the new candidate,
-`npx --no-install arya editor status` identifies both versions. Extension version
-numbers are not compiler version numbers.
+The published extension 1.3.4 contains compiler 1.3.0-alpha.9. Run
+`npx --no-install arya editor status` to see both identities. Extension version
+numbers are separate from compiler versions.
 
 ## Add one Arya module to JavaScript
 

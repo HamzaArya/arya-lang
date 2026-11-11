@@ -1,0 +1,102 @@
+{
+  "node": "v24.16.0",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "sourceManifestSha256": "2d6960fd5d683b81edca7f2041901e4cff2fb47150485039a36cc97b30fb7a05",
+  "packageLockSha256": "0ea2cbd8bcbf807f4fa5813611b99e2e3e538e049292e3e30b4c05f86d863e24",
+  "passed": true,
+  "stableReleaseReady": false,
+  "version": "1.3.0-alpha.9",
+  "sourceCommit": "ebecd74d3569c61c24710b4f12a57134194c6fdd",
+  "sourceWorkingTreeDirty": false,
+  "hiddenFilesIncluded": [
+    ".gitattributes",
+    ".github/workflows/check.yml"
+  ],
+  "commands": [
+    {
+      "name": "install",
+      "args": [
+        "ci",
+        "--no-audit",
+        "--no-fund",
+        "--offline"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "check",
+      "args": [
+        "run",
+        "check"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "editors",
+      "args": [
+        "run",
+        "package:editors"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "package",
+      "args": [
+        "run",
+        "test:package"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "audit",
+      "args": [
+        "run",
+        "release:check",
+        "--",
+        "--json"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "tests": {
+    "passed": 296,
+    "skipped": 4,
+    "total": 300
+  },
+  "editorHosts": [
+    {
+      "editor": "code",
+      "vscode": "1.143.1",
+      "extension": "aryacode.arya-language",
+      "languageVersion": "1.3.0-alpha.9",
+      "tokens": 10,
+      "fileIcons": "arya-file-icons",
+      "themes": [
+        "Arya Dark",
+        "Arya Light"
+      ],
+      "aryacodeBuiltin": false
+    },
+    {
+      "editor": "aryacode",
+      "vscode": "1.145.2",
+      "extension": "aryacode.arya-language",
+      "languageVersion": "1.3.0-alpha.9",
+      "tokens": 10,
+      "fileIcons": "arya-file-icons",
+      "themes": [
+        "Arya Dark",
+        "Arya Light"
+      ],
+      "aryacodeBuiltin": true
+    }
+  ],
+  "ci": {
+    "qualification": "https://github.com/HamzaArya/arya-lang/actions/runs/42997134329",
+    "matrixJobs": 12,
+    "matrixConclusion": "success",
+    "mysql": "https://github.com/HamzaArya/arya-lang/actions/runs/42997134200",
+    "mysqlConclusion": "success"
+  }
+}

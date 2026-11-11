@@ -1,18 +1,17 @@
 # Arya programming language
 
-**Local reliability candidate: [1.3.0-alpha.9](docs/releases/1.3.0-alpha.9.md), with editor extension 1.3.4.** This candidate is not published. The public commands below deliberately use alpha.7; use [candidate setup](docs/node-runtime.md#try-the-candidate) for the new fixes.
 
 New here? Follow the [first useful program and mixed JavaScript workflow](docs/getting-started.md).
 Arya brings JavaScript/npm libraries, Python functions, servers, and interfaces together through readable `.arya` code. Created by Afghan developer [Hamza Arya](https://hamzaarya.com), it has its own grammar, compiler, language server, and editor support.
 
-**Current release: [1.3.0-alpha.7](docs/releases/1.3.0-alpha.7.md)** — an experimental Node.js preview, published to npm's `next` channel. Install with `npm install --save-exact arya-language@1.3.0-alpha.7`. The `latest` channel remains on 1.2.0-alpha.4. See [runtime and migration](docs/node-runtime.md).
+**Current release: [1.3.0-alpha.9](docs/releases/1.3.0-alpha.9.md)** — an experimental Node.js preview, published to npm's `next` channel. Install with `npm install --save-exact arya-language@1.3.0-alpha.9`. The `latest` channel remains on 1.2.0-alpha.4. See [runtime and migration](docs/node-runtime.md).
 
 ## Start a project
 
 Requires **Node.js 22.15 or newer** and npm:
 
 ```sh
-npm create arya-language@1.3.0-alpha.7 my-app -- --template web
+npm create arya-language@1.3.0-alpha.9 my-app -- --template web
 cd my-app
 npm install
 npm run dev
@@ -28,7 +27,7 @@ The commands above pin the current published preview. `@latest` still selects th
 | `ui` | Arya components, forms, browser state, API actions, and animations |
 | `desktop` | The same UI application in an isolated Electron window |
 
-For example, `npm create arya-language@1.3.0-alpha.7 my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
+For example, `npm create arya-language@1.3.0-alpha.9 my-ui -- --template ui` creates a UI application. Starters pin the compiler and include `dev`, `start`, `check`, and `build` scripts. See [project creation](docs/project-creator.md) and [installation](docs/installing.md), including portable archive installation.
 
 ## Read application code from top to bottom
 
@@ -65,7 +64,7 @@ const mean = await stats.mean([10, 20, 30])
 print({id: crypto.randomUUID(), mean: mean})
 ```
 
-Install the compiler with `npm install --save-exact arya-language@1.3.0-alpha.7`, save the example as `main.arya`, and run `npx --no-install arya run main.arya`. Python is required for this example. Install additional npm and Python libraries in the application's respective environments.
+Install the compiler with `npm install --save-exact arya-language@1.3.0-alpha.9`, save the example as `main.arya`, and run `npx --no-install arya run main.arya`. Python is required for this example. Install additional npm and Python libraries in the application's respective environments.
 
 Direct Python calls remain synchronous. The async library adds bound imports, keyword arguments, batches, cancellation, bounded queues, and interpreter selection. See [interop](docs/interop.md), [async Python](docs/python-async.md), and the [reporting service example](fixtures/examples/python-web/README.md).
 
@@ -88,7 +87,7 @@ The UI library includes an interactive component gallery, eight reusable page se
 The npm package includes an offline extension, `.arya` icons, Arya Dark/Light themes, semantic highlighting, and portable editor adapters:
 
 ```sh
-npm install --save-exact arya-language@1.3.0-alpha.7
+npm install --save-exact arya-language@1.3.0-alpha.9
 npx --no-install arya editor install
 ```
 
@@ -106,7 +105,7 @@ The full suite additionally needs Python. A C compiler is not required. MySQL, C
 
 ## Documentation and release status
 
-Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.3.0-alpha.7-publication.json).
+Start at the [documentation index](docs/README.md). Changes are listed in the [changelog](CHANGELOG.md); exact npm hashes and public-install verification are in the [publication record](docs/releases/1.3.0-alpha.9-publication.json).
 
 The [stable release plan](docs/stable-release-plan.md) defines the compatibility contract, remaining qualification work, and requirements for a future 1.3.0 release. Unreleased source improvements are listed separately in the changelog and require a new artifact version.
 

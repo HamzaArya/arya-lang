@@ -2,7 +2,7 @@
 
 Arya focuses on one purpose: readable application code that connects JavaScript/npm and Python, with useful server, database, UI, and desktop tools.
 
-**Published preview: 1.3.0-alpha.7 on `next`.** Arya compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The `latest` tag remains on 1.2.0-alpha.4. The current source candidate is **1.3.0-alpha.9** with extension **1.3.4**, neither published. Source edits do not change published package bytes.
+**Published preview: 1.3.0-alpha.9 on `next`, with extension 1.3.4.** Arya compiles `.arya` files to JavaScript ES modules and runs them on Node.js 22.15+. The `latest` tag remains on 1.2.0-alpha.4. Source edits require a new version and do not change published package bytes.
 
 ## What remains available
 
@@ -37,9 +37,9 @@ npm install
 npm run dev
 ```
 
-Packaging refuses to replace existing versioned archives. Reuse the matching retained candidate archive or use `npm run test:clean` to build a fresh disposable snapshot. A creator without `--compiler` pins its source version from npm. Alpha.7 is published; alpha.8 is not. Use the matching alpha.8 archive with `--compiler` rather than asking npm to install an unpublished version.
+Packaging refuses to replace existing versioned archives. Reuse the matching retained candidate archive or use `npm run test:clean` to build a fresh disposable snapshot. A creator without `--compiler` pins its source version from npm. Alpha.9 is published. The retained alpha.8 candidate was never published and still requires its matching archive.
 
-For the current published preview, use `npm create arya-language@1.3.0-alpha.7 my-ui -- --template ui`. For changed source, select a new candidate version before packaging; see the [stable release plan](stable-release-plan.md).
+For the current published preview, use `npm create arya-language@1.3.0-alpha.9 my-ui -- --template ui`. For changed source, select a new candidate version before packaging; see the [stable release plan](stable-release-plan.md).
 
 ## Removed native surface
 
@@ -64,4 +64,4 @@ Native CLI options (`--cc`, `--debug`, `--release`, `--sanitize`, `-o`, `--outpu
 
 ## Historical native work
 
-The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.7.md).
+The implementation remains in [Git history at 1d3d553](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Earlier native releases, checksums, and qualification records retain their original scope. They are historical artifacts, not supported targets of the 1.3 source line. See the [candidate release notes](releases/1.3.0-alpha.9.md).
