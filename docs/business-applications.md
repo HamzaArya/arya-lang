@@ -36,7 +36,7 @@ print(decimal.divide("10", "3", 2, "down"))
 Inputs are strings matching `-?(0|[1-9][0-9]*)(\.[0-9]+)?`, at most 1024
 characters. No Number input, whitespace, grouping, exponent, NaN or infinity is
 accepted. Places must be integers from 0 to 100. Results longer than 1024
-characters fail rather than truncate. The pinned decimal.js 10.6.0 engine uses a
+characters fail rather than truncate. The pinned [decimal.js 10.6.0 engine](https://mikemcl.github.io/decimal.js/) uses a
 private constructor, 4096 significant digits and fixed exponent bounds; these
 limits cover exact add/subtract/multiply of supported inputs and division before
 rounding. No global Decimal configuration is modified or exposed. The engine is

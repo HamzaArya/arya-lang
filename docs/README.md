@@ -57,3 +57,5 @@ Runnable projects are listed in the [examples index](../fixtures/README.md).
 Historical plans and versioned release records describe their own dates and versions. Their hashes, test counts, and old registry tags remain evidence; use the current guides for installation.
 
 Business application engineering: [APIs and limitations](business-applications.md), [phase plan and evidence](business-applications-plan.md).
+
+The final [business engineering report](business-applications-report.md) records delivered behavior, exact artifacts, executed checks and remaining qualification.

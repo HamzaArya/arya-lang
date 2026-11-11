@@ -60,7 +60,7 @@
     "listingIcon": "brand/arya-marketplace-icon.png",
     "sha256": "c4d4ec8293f999f38a57c955bb34782ce083738a1f33f51de6f7eeb9b826d085",
     "runtimePayloadsUnchanged": true,
-    "marketplaceStatus": "verifying",
+    "marketplaceStatus": "published; Microsoft verification completed",
     "url": "https://marketplace.visualstudio.com/items?itemName=aryacode.arya-language",
     "channel": "prerelease",
     "localInstall": [
@@ -102,7 +102,20 @@
     ],
     "localInstalledVersion": "1.3.2",
     "publicMetadataSha256Matched": true,
-    "publicListingVerified": false
+    "publicRegistryVerification": {
+      "version": "1.3.2",
+      "languageVersion": "1.3.0-alpha.7",
+      "publisher": "aryacode",
+      "extension": "arya-language",
+      "preRelease": true,
+      "publicVersionVerified": true,
+      "downloadMatchesSubmittedVsix": true,
+      "sha256": "c4d4ec8293f999f38a57c955bb34782ce083738a1f33f51de6f7eeb9b826d085",
+      "downloadUrl": "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/aryacode/vsextensions/arya-language/1.3.2/vspackage",
+      "publishedAt": "2026-11-11T08:42:47.810Z",
+      "verifiedAt": "2026-11-11T08:47:05.086Z"
+    },
+    "publisherDashboardVerifiedAt": "2026-11-11T08:54:11.148997+00:00"
   },
   "ci": {
     "sourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d",
@@ -110,20 +123,94 @@
     "mysql": "https://github.com/HamzaArya/arya-lang/actions/runs/42988234561",
     "mysqlStatus": "success",
     "qualificationStatus": "in_progress",
-    "observedAt": "2026-11-11T08:46:44.971468+00:00",
+    "observedAt": "2026-11-11T08:54:21.847005+00:00",
     "jobs": {
       "ubuntu-latest / Node 22.15.0": "success",
-      "ubuntu-latest / Node 24": "success",
+      "windows-latest / Node 24": "in_progress",
       "macos-latest / Node 22.15.0": "success",
       "macos-latest / Node 24": "success",
-      "windows-latest / Node 22.15.0": "in_progress",
-      "windows-latest / Node 24": "in_progress"
-    }
+      "ubuntu-latest / Node 24": "success",
+      "windows-latest / Node 22.15.0": "in_progress"
+    },
+    "windowsQualification": "pending; no Windows support claim",
+    "qualificationConclusion": ""
   },
   "github": {
     "tag": "v1.3.0-alpha.7",
     "url": "https://github.com/HamzaArya/arya-lang/releases/tag/v1.3.0-alpha.7",
     "prerelease": true,
-    "sourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d"
+    "sourceCommit": "8ea5f942e786b8ad83fa52b097731368a850028d",
+    "releaseCreated": true,
+    "isDraft": false,
+    "assets": [
+      {
+        "name": "LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "bytes": 11358
+      },
+      {
+        "name": "NOTICE",
+        "sha256": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "bytes": 266
+      },
+      {
+        "name": "SHA256SUMS",
+        "sha256": "9fed9f2697a1b7d357a95c64efdce48ee7dc2de4f58463c4d30e182e42554984",
+        "bytes": 505
+      },
+      {
+        "name": "SOURCE-MANIFEST.json",
+        "sha256": "ba6871662cd784dbec7f434f8185b4518487280b4746d1c24c60fed09407da44",
+        "bytes": 44316
+      },
+      {
+        "name": "THIRD-PARTY-NOTICES.txt",
+        "sha256": "dd1f3327aa518876095548658aa3642bca7e9ca8b5ea52150abc057c435739da",
+        "bytes": 11289
+      },
+      {
+        "name": "arya-editor-kit-1.3.0-alpha.7.zip",
+        "sha256": "ca5a3798381db99bb03af96147d3cdb7d519d7d356cb1134a2a3bf3a6df09925",
+        "bytes": 6802207
+      },
+      {
+        "name": "arya-language-1.3.0-alpha.7.tgz",
+        "sha256": "cfe66ecc8b96888d1e6c9e62545c253a161afcf7ed35e4d47c8c30dcd4ac9a20",
+        "bytes": 4279257
+      },
+      {
+        "name": "arya-language-1.3.0-alpha.7.vsix",
+        "sha256": "f80406ff2fd00ae11f2d83e9eeadd95f205cd5c68ee9cffc2b39853da2e58d8b",
+        "bytes": 891946
+      },
+      {
+        "name": "arya-language-marketplace-1.3.2.vsix",
+        "sha256": "c4d4ec8293f999f38a57c955bb34782ce083738a1f33f51de6f7eeb9b826d085",
+        "bytes": 617425
+      },
+      {
+        "name": "build-normalization.json",
+        "sha256": "fcacb356c19ffd5206962a510ef205fd2540e8efebe461176c73a9533f89ea4c",
+        "bytes": 465
+      },
+      {
+        "name": "create-arya-language-1.3.0-alpha.7.tgz",
+        "sha256": "91ecd668d6dcee779bd46a0d6cf752a1c8370f832cd480637435a8748143c3b8",
+        "bytes": 106837
+      },
+      {
+        "name": "marketplace-package.json",
+        "sha256": "80424a3f2c4d1a6c53326332046734d8d9f8bf1fa0fb00406d896052a264f277",
+        "bytes": 493
+      },
+      {
+        "name": "qualification.json",
+        "sha256": "8f1b4bfe75116fdda7c25c0e2ba3962a32cbdc566304c1242c623da757bfd13f",
+        "bytes": 1688
+      }
+    ],
+    "serverAssetDigestsMatch": true,
+    "publicDownloadsMatch": true,
+    "publicDownloadsVerifiedAt": "2026-11-11T08:53:27.673397+00:00"
   }
 }

@@ -1,13 +1,27 @@
 # Release readiness and evidence
 
-## Current source candidate: 1.3.0-alpha.7
+## Current published preview: 1.3.0-alpha.7
 
-This unpublished business application candidate adds the [bounded APIs and tools](business-applications.md).
-Phase changes, compatibility effects and executed evidence are tracked in the
-[implementation record](business-applications-plan.md). Package provenance and
-qualification will be recorded from the fresh snapshot. Previous results below
-remain specific to their original versions. Stable support, public publication,
-Linux/Windows and application deployment remain separate gates.
+The business application preview is published to npm’s `next` channel. Both public
+package downloads match the reviewed archives. A fresh public-registry install
+passed compiler, decimal/date, host-binding isolation, declaration, type-error,
+and project-creator checks. The `latest` tag remains on 1.2.0-alpha.4.
+
+The [publication record](releases/1.3.0-alpha.7-publication.json) identifies source,
+archive hashes, public verification and distribution status. The
+[engineering report](business-applications-report.md) and
+[implementation record](business-applications-plan.md) retain the prepublication
+qualification evidence. Historical “unpublished” statements refer to that phase.
+
+Local qualification passed 273 tests with four optional skips, Node 22 package
+acceptance, browser checks, and actual VS Code/AryaCode extension hosts. GitHub
+Linux/macOS checks passed on Node 22/24, and live MySQL integration passed.
+Windows jobs were still running when publication evidence was recorded; consult
+the linked workflow for current results. Marketplace extension 1.3.2 carries the
+reviewed language 1.3.0-alpha.7 code. Its status is recorded separately.
+
+Stable support, Docker, signed installers and application deployments remain
+separate qualification targets. Earlier results below remain version-specific.
 
 ## Previous canonical-syntax candidate: 1.3.0-alpha.4
 
@@ -78,9 +92,9 @@ See [alpha.4 release notes](releases/1.2.0-alpha.4.md) for feature and migration
 
 | Gate | Current state / next evidence |
 | --- | --- |
-| Current Linux/Windows and additional architectures | Run the compiler/package CI matrix for the exact source revision; retain job results. Prior-version success is historical evidence. |
+| Current platforms and additional architectures | Linux/macOS passed on Node 22/24 for reviewed source 8ea5f94. Windows remains pending in the linked matrix; additional architectures remain unqualified. |
 | Other editor products/platforms | Adapters are supplied; each actual application/version remains its own qualification target. |
-| Live services | Run disposable MySQL integration and application-specific deployment tests before claiming those environments. |
+| Live services | The disposable MySQL integration workflow passed for reviewed source 8ea5f94. Application-specific deployments and authentication chains remain separate checks. |
 | External learners | No real session results supplied. Follow [community review](community-review.md) and report observed failures and interventions. |
 | Dari/Pashto material | No fluent translation review supplied. |
 | Stable compatibility/support | No stable release, SLA, or maintained stable branch declared. Follow the [compatibility policy](compatibility-policy.md) and [security policy](../SECURITY.md). |
