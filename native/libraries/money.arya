@@ -1,0 +1,57 @@
+# Exact immutable amounts. Currency tags contain no scale or accounting policy.
+use std "decimal" as decimal
+use std "runtime" as runtime
+const values = decimal.values
+fn fail(code, message) { let error = new RangeError(message); error.code = code; throw error }
+fn policy(options) {
+  if not runtime.isRecord(options) or runtime.hasAccessor(options) { fail("ARYA_MONEY_INPUT", "Money options must be data fields.") }
+  for key in runtime.keys(options) { if not ["currency", "scale", "rounding"].includes(key) { fail("ARYA_MONEY_INPUT", "Unknown Money option: " + key) } }
+  if runtime.kind(options.currency) != "string" or len(options.currency) != 3 { fail("ARYA_MONEY_CURRENCY", "Specify a three-letter uppercase currency tag.") }
+  for letter in options.currency { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter) { fail("ARYA_MONEY_CURRENCY", "Specify a three-letter uppercase currency tag.") } }
+  if not Number.isInteger(options.scale) or options.scale < 0 or options.scale > 100 { fail("ARYA_MONEY_SCALE", "Money scale must be an integer from 0 to 100.") }
+  if not decimal.roundingModes.includes(options.rounding) { fail("ARYA_MONEY_ROUNDING", "Specify an explicit decimal rounding policy.") }
+}
+fn wrap(amount, options) {
+  const exact = values.quantize(amount, options.scale, options.rounding)
+  const currency = options.currency; const scale = options.scale; const rounding = options.rounding
+  return runtime.freeze({amount: exact, currency: currency, scale: scale, rounding: rounding,
+    toJSON: fn() { return {amount: values.format(exact), currency: currency, scale: scale, rounding: rounding} }})
+}
+fn checked(value) {
+  if not runtime.isRecord(value) or runtime.hasAccessor(value) { fail("ARYA_MONEY_INPUT", "Expected a Money value with data fields.") }
+  policy({currency: value.currency, scale: value.scale, rounding: value.rounding})
+  values.compare(value.amount, value.amount)
+  # Structural copies must still represent exactly the declared scale.
+  if values.compare(value.amount, values.quantize(value.amount, value.scale, value.rounding)) != 0 { fail("ARYA_MONEY_SCALE", "Money amount exceeds its declared scale.") }
+}
+fn pair(left, right) {
+  checked(left); checked(right)
+  if left.currency != right.currency { fail("ARYA_MONEY_CURRENCY", "Money currencies differ; convert explicitly.") }
+  if left.scale != right.scale { fail("ARYA_MONEY_SCALE", "Money scales differ; rescale explicitly.") }
+  if left.rounding != right.rounding { fail("ARYA_MONEY_ROUNDING", "Money rounding policies differ.") }
+}
+fn options(value) { return {currency: value.currency, scale: value.scale, rounding: value.rounding} }
+export fn create(amount, selected) { policy(selected); return wrap(values.parse(amount), selected) }
+export fn add(left, right) { pair(left, right); return wrap(values.add(left.amount, right.amount), options(left)) }
+export fn subtract(left, right) { pair(left, right); return wrap(values.subtract(left.amount, right.amount), options(left)) }
+export fn compare(left, right) { pair(left, right); return values.compare(left.amount, right.amount) }
+export fn format(value) { checked(value); return values.format(value.amount) }
+export fn toNumber(value) { checked(value); return values.toNumber(value.amount) }
+export fn rescale(value, scale, rounding) { checked(value); let selected = {currency: value.currency, scale: scale, rounding: rounding}; policy(selected); return wrap(value.amount, selected) }
+export fn convert(value, currency, rate, scale, rounding) {
+  checked(value); let selected = {currency: currency, scale: scale, rounding: rounding}; policy(selected)
+  let parsed = values.parse(rate)
+  if values.compare(parsed, values.parse("0")) <= 0 { fail("ARYA_MONEY_RATE", "FX rate must be positive.") }
+  return wrap(values.multiply(value.amount, parsed), selected)
+}
+export fn toMinorUnits(value) {
+  checked(value)
+  return values.format(values.multiply(value.amount, values.parse("1" + "0".repeat(value.scale))))
+}
+export fn fromMinorUnits(amount, selected) {
+  policy(selected)
+  if runtime.kind(amount) != "string" or amount.includes(".") { fail("ARYA_MONEY_INPUT", "Minor units must be a canonical integer string.") }
+  let parsed = values.parse(amount)
+  let divisor = values.parse("1" + "0".repeat(selected.scale))
+  return wrap(values.divide(parsed, divisor, selected.scale, selected.rounding), selected)
+}

@@ -1,0 +1,111 @@
+# Native standard-library contracts. Checking constructs data, never services.
+use arya "./type-model.arya" as types
+use std "runtime" as runtime
+fn ObjectAssign(value) { let result = {}; for key in runtime.keys(value) { result[key] = value[key] }; return result }
+
+fn fnType(parameters, result, minimum, builtin) { return types.callable(parameters, result, minimum, builtin) }
+fn record(fields, optional) { return types.record(fields, optional) }
+fn array(value) { return types.array(value) }
+fn promise(value) { return types.promise(value) }
+fn either(values) { return types.union(values) }
+fn queries() { return record({rows: fnType(["string", array("any")], promise(array("unknown")), 1), one: fnType(["string", array("any")], promise("unknown"), 1), scalar: fnType(["string", array("any")], promise("unknown"), 1), execute: fnType(["string", array("any")], promise("unknown"), 1)}) }
+export fn moduleType(name) {
+  let list = array("any")
+  let selector = either(["string", fnType(["any", "number"], "any")])
+  if name == "path" {
+    let variadic = fnType([], "string", 0); variadic.rest = array("string")
+    let profile = {normalize: fnType(["string"], "string"), isAbsolute: fnType(["string"], "boolean"), join: variadic, resolve: variadic, relative: fnType(["string", "string"], "string"), dirname: fnType(["string"], "string"), basename: fnType(["string", "string"], "string", 1), extname: fnType(["string"], "string"), format: fnType([record({root: "string", dir: "string", base: "string", name: "string", ext: "string"}, true)], "string"), parse: fnType(["string"], record({root: "string", dir: "string", base: "string", name: "string", ext: "string"})), toNamespacedPath: fnType(["any"], "any"), _makeLong: fnType(["any"], "any"), matchesGlob: fnType(["string", "string"], "boolean"), sep: "string", delimiter: "string", realPath: fnType(["string"], "string")}
+    let nested = record(profile); nested.fields.posix = {type: "any", optional: false}; nested.fields.win32 = {type: "any", optional: false}; profile = ObjectAssign(profile); profile.posix = nested; profile.win32 = nested; return record(profile)
+  }
+  if name == "python" {
+    let options = record({interpreter: "string", timeoutMs: "number", maxInputBytes: "number", maxOutputBytes: "number", maxConcurrency: "number", queueLimit: "number", kwargs: "any", signal: "any"}, true)
+    let methods = {call: fnType(["any", list, options], promise("unknown"), 1), map: fnType(["any", list, options], promise(array("unknown")), 2), bind: fnType(["any", options], "any", 1), info: fnType([options], promise("unknown"), 0), close: fnType([], promise("void")), stats: fnType([], record({active: "number", queued: "number", closed: "boolean"}))}
+    let client = record(methods); methods = ObjectAssign(methods); methods.client = fnType([options], client, 0); return record(methods)
+  }
+  if name == "ui" {
+    let fields = {}; let general = fnType([], "any", 0); general.rest = list
+    for key in ["is", "not", "when", "section", "divider", "link", "code", "preview", "badge", "alert", "stat", "avatar", "textarea", "slider", "checkbox", "radio", "switch", "field", "progress", "spinner", "skeleton", "empty", "list", "table", "breadcrumbs", "tabs", "accordion", "dialog", "tooltip", "open", "close", "copy", "theme", "toast", "presets", "keyframes", "animate", "pause", "resume", "cancel", "parallel", "container", "buttonGroup", "image", "descriptionList", "timeline", "steps", "pagination", "segmented", "search", "meter", "navbar", "hero", "features", "pricing", "testimonials", "faq", "cta", "footer", "templates", "template", "bind", "motion", "element", "stack", "row", "grid", "card", "heading", "text", "button", "input", "label", "form", "select", "set", "toggle", "increment", "request", "page"] { fields[key] = general }
+    fields.page = fnType(["any"], "string"); fields.template = fnType(["string", "any"], "string", 1); fields.presets = fnType([], array("string")); fields.templates = fnType([], array("string")); return record(fields)
+  }
+  if name == "desktop" { return record({open: fnType(["string", record({title: "string", width: "number", height: "number"}, true)], record({close: fnType([], "void"), closed: promise("void")}), 1)}) }
+  if name == "accounting" {
+    let execution = record({backend: "string", signal: "any"}, true)
+    let invoiceOptions = record({currency: "string", scale: "number", rounding: "string", priceScale: "number"}, true)
+    let moneyOptions = record({currency: "string", scale: "number"})
+    let invoice = record({currency: "string", scale: "number", backend: "string", lineCount: "number", rounding: "string", priceScale: "number", quantityScale: "number", policy: "string", gross: "string", discount: "string", net: "string", tax: "string", total: "string"})
+    let ledger = record({currency: "string", scale: "number", backend: "string", entryCount: "number", debit: "string", credit: "string", difference: "string", balanced: "boolean", accounts: array(record({account: "string", debit: "string", credit: "string", balance: "string"}))})
+    let invoices = record({currency: "string", scale: "number", length: "number", calculate: fnType([execution], invoice, 0), calculateAsync: fnType([execution], promise(invoice), 0)})
+    let entries = record({currency: "string", scale: "number", length: "number", calculate: fnType([execution], ledger, 0), calculateAsync: fnType([execution], promise(ledger), 0)})
+    return record({prepareInvoices: fnType([list, invoiceOptions], invoices), prepareLedger: fnType([list, moneyOptions], entries), invoiceBatch: fnType([list, invoiceOptions, execution], invoice, 2), ledgerBatch: fnType([list, moneyOptions, execution], ledger, 2), backendInfo: fnType([], record({nativeAvailable: "boolean", nativeReason: either(["string", "null"]), nativeAbi: "number", platform: "string", maxRows: "number", maxAccounts: "number", maxAsyncJobs: "number"}))})
+  }
+  if name == "async" { return record({sleep: fnType(["number"], promise("void"), 0), each: fnType(["any", "any", "any"], promise("void"), 2), map: fnType(["any", "any", "any"], {kind: "async-iterator", value: "any"}, 2)}) }
+  if name == "validate" {
+    let schema = {kind: "schema", value: "any"}
+    return record({string: fnType(["any"], {kind: "schema", value: "string"}, 0), number: fnType(["any"], {kind: "schema", value: "number"}, 0), integer: fnType(["any"], {kind: "schema", value: "number"}, 0), boolean: fnType(["any"], {kind: "schema", value: "boolean"}, 0), enum: fnType([list], schema, 1, "validate.enum"), optional: fnType(["any", "any"], schema, 1, "validate.optional"), nullable: fnType(["any"], schema, 1, "validate.nullable"), array: fnType(["any", "any"], schema, 1, "validate.array"), object: fnType(["any", "any"], schema, 1, "validate.object"), parse: fnType(["any", "unknown"], "any", 2, "validate.parse"), check: fnType(["any", "unknown"], "any", 2, "validate.check")})
+  }
+  if name == "io" { let print = fnType([], "void", 0); print.rest = list; return record({print: print, write: fnType(["any"], "void"), readLine: fnType([], either(["string", "null"])), readChunk: fnType(["number"], either(["string", "null"]))}) }
+  if name == "money" {
+    let options = record({currency: "string", scale: "number", rounding: "string"})
+    let value = record({amount: "any", currency: "string", scale: "number", rounding: "string", toJSON: fnType([], "any")})
+    return record({create: fnType(["string", options], value), add: fnType([value, value], value), subtract: fnType([value, value], value), compare: fnType([value, value], "number"), format: fnType([value], "string"), toNumber: fnType([value], "number"), rescale: fnType([value, "number", "string"], value), convert: fnType([value, "string", "string", "number", "string"], value), toMinorUnits: fnType([value], "string"), fromMinorUnits: fnType(["string", options], value)})
+  }
+  if name == "csv" {
+    let options = record({delimiter: "string", maxFieldUnits: "number", maxRecordUnits: "number", maxColumns: "number"}, true)
+    let decoder = record({push: fnType(["string"], array(array("string"))), finish: fnType([], array(array("string")))})
+    return record({decoder: fnType([options], decoder, 0), each: fnType([fnType([], "any"), fnType([array(array("string"))], "any"), "any"], promise("number"), 2)})
+  }
+  if name == "finance" {
+    let options = record({currency: "string", scale: "number", rounding: "string"})
+    let batch = record({length: "number", calculate: fnType([], "any"), calculateAsync: fnType(["any"], promise("any"), 0)})
+    return record({prepareInvoices: fnType([list, "string", "string", options], batch), invoiceTotals: fnType([list, "string", "string", options], "any"), prepareBudgets: fnType([list, options], batch), budgetVariance: fnType([list, options], "any"), prepareScores: fnType([list], batch), amountScores: fnType([list], array("number")), prepareProduction: fnType(["string", array("string"), "string", options], batch), production: fnType(["string", array("string"), "string", options], array("string")), allocate: fnType(["string", array("string"), options], array("string")), straightLine: fnType(["string", "string", "number", options], array("string"))})
+  }
+  if name == "debug" { return record({assert: fnType(["any", "string"], "void", 1), inspect: fnType(["any", "any"], "string", 1), trace: fnType(["string"], "void", 0)}) }
+  if name == "math" {
+    let fields = {}; for key in ["abs", "acos", "acosh", "asin", "asinh", "atan", "atanh", "cbrt", "ceil", "clz32", "cos", "cosh", "exp", "expm1", "floor", "fround", "f16round", "log", "log1p", "log2", "log10", "round", "sign", "sin", "sinh", "sqrt", "tan", "tanh", "trunc"] { fields[key] = fnType(["number"], "number") }
+    for key in ["atan2", "imul", "pow"] { fields[key] = fnType(["number", "number"], "number") }
+    let variadic = fnType([], "number", 0); variadic.rest = array("number"); for key in ["min", "max", "hypot"] { fields[key] = variadic }; fields.random = fnType([], "number")
+    for key in ["E", "LN10", "LN2", "LOG10E", "LOG2E", "PI", "SQRT1_2", "SQRT2"] { fields[key] = "number" }; return record(fields)
+  }
+  if name == "log" {
+    let fields = {}; for key in ["trace", "debug", "info", "warn", "error", "fatal"] { fields[key] = fnType(["string", "any"], "void", 1) }; fields.child = fnType(["any"], "any"); let child = record(fields); fields = ObjectAssign(fields); fields.child = fnType(["any"], child); return record({create: fnType([record({name: "string", level: "string", sink: fnType(["string"], "any"), redact: array("string")}, true)], record(fields), 0)})
+  }
+  if name == "process" { return record({run: fnType([array("string")], "number"), exit: fnType(["number"], "never", 0), env: fnType(["string"], either(["string", "null"])), cwd: fnType([], "string"), executable: fnType([], "string"), error: fnType(["any"], "void"), onSignal: fnType(["string", fnType(["string"], "any"), record({once: "boolean"}, true)], fnType([], "void"), 2)}) }
+  if name == "runtime" {
+    let fields = {}; let general = fnType([], "any", 0); general.rest = list
+    for key in ["clock", "collect", "codeUnit", "keys", "platform", "kind", "sameValue", "deepEqual", "freeze", "context", "exitCode", "defer", "onFinish", "elapsed", "fieldGetter", "error", "readFrame", "writeFrame", "tag", "hasAccessor", "errorMatches", "stringFromCodes", "randomUUID", "isRecord", "jsonParse", "jsonStringify", "uriEncode", "uriDecode"] { fields[key] = general }
+    return record(fields)
+  }
+  if name == "decimal" {
+    let values = record({parse: fnType(["string"], "any"), format: fnType(["any"], "string"), add: fnType(["any", "any"], "any"), subtract: fnType(["any", "any"], "any"), multiply: fnType(["any", "any"], "any"), compare: fnType(["any", "any"], "number"), divide: fnType(["any", "any", "number", "string"], "any"), quantize: fnType(["any", "number", "string"], "any"), toNumber: fnType(["any"], "number")})
+    return record({from: fnType(["string"], "string"), add: fnType(["string", "string"], "string"), subtract: fnType(["string", "string"], "string"), multiply: fnType(["string", "string"], "string"), compare: fnType(["string", "string"], "number"), divide: fnType(["string", "string", "number", "string"], "string"), quantize: fnType(["string", "number", "string"], "string"), toNumber: fnType(["string"], "number"), roundingModes: array("string"), values: values})
+  }
+  if name == "datetime" { return record({date: fnType(["string"], "string"), instant: fnType(["string"], "string"), zoned: fnType(["string", "string"], record({date: "string", time: "string", timeZone: "string"})), dateAt: fnType(["string", "string"], "string"), atOffset: fnType(["string", "string", "string"], "string"), fromDate: fnType(["any"], "string"), toDate: fnType(["string"], "any")}) }
+  if name == "list" { return record({map: fnType([list, selector], list, 2, "list.map"), flatMap: fnType([list, selector], list, 2, "list.flatMap"), filter: fnType([list, selector], list, 2, "list.filter"), find: fnType([list, selector], "any", 2, "list.find"), reduce: fnType([list, fnType(["any", "any", "number"], "any"), "any"], "any", 3, "list.reduce"), groupBy: fnType([list, selector], "any"), sortBy: fnType([list, selector, "string"], list, 1, "list.sortBy"), take: fnType([list, "number"], list, 1, "list.take"), unique: fnType([list, selector], list, 1, "list.unique"), sum: fnType([list, selector], "number", 1), reserve: fnType([list, "number"], list)}) }
+  if name == "fs" {
+    let info = either([record({type: "string", device: "number", inode: "number", size: "number", modified: "number", changed: "number", modifiedNanoseconds: "number", changedNanoseconds: "number", mode: "number"}), "null"])
+    return record({readText: fnType(["string"], promise("string")), readTextSync: fnType(["string"], "string"), writeText: fnType(["string", "string"], promise("void")), writeTextSync: fnType(["string", "string"], "void"), appendText: fnType(["string", "string"], "void"), list: fnType(["string"], promise(array("string"))), listSync: fnType(["string"], array("string")), exists: fnType(["string"], promise("boolean")), existsSync: fnType(["string"], "boolean"), makeDirectory: fnType(["string"], "void"), rename: fnType(["string", "string"], "void"), remove: fnType(["string"], "void"), tempDirectory: fnType(["string"], "string"), removeDirectory: fnType(["string"], "void"), publish: fnType(["string", "string"], "void"), publishDirectory: fnType(["string", "string"], "void"), isFile: fnType(["string"], "boolean"), infoSync: fnType(["string"], info)})
+  }
+  if name == "json" { return record({parse: fnType(["string", "any"], "unknown", 1), stringify: fnType(["any", "any", "any"], either(["string", "undefined"]), 1), read: fnType(["string"], promise("unknown")), write: fnType(["string", "any"], promise("void"))}) }
+  if name == "env" { return record({get: fnType(["string", "any"], "any", 1), require: fnType(["string"], "string"), int: fnType(["string", either(["string", "number"])], "number", 1), bool: fnType(["string", either(["string", "boolean"])], "boolean", 1)}) }
+  if name == "security" {
+    let passwordOptions = record({profile: "string"}, true)
+    let context = record({account: "string", purpose: "string"})
+    let ring = record({encrypt: fnType(["string", context], "string"), decrypt: fnType(["string", context], "string"), rotate: fnType(["string", context], record({encrypted: "string", rotated: "boolean"}))})
+    return record({randomToken: fnType(["number"], "string", 0), uuid: fnType([], "string"), generateKey: fnType([], "string"), hash: fnType(["string"], "string"), hmac: fnType(["string", "string"], "string"), verifyHmac: fnType(["string", "string", "string"], "boolean"), timingSafeEqual: fnType(["string", "string"], "boolean"), hashPassword: fnType(["string", passwordOptions], promise("string"), 1), verifyPassword: fnType(["string", "string"], promise("boolean")), passwordNeedsUpgrade: fnType(["string", passwordOptions], "boolean", 1), verifyPasswordAndUpgrade: fnType(["string", "string", passwordOptions], promise(record({ok: "boolean", upgraded: "boolean", hash: either(["string", "null"])})), 2), keyring: fnType([record({active: "string", keys: "any"})], ring), encrypt: fnType(["string", "string"], "string"), decrypt: fnType(["string", "string"], "string")})
+  }
+  if name == "mysql" {
+    let session = queries()
+    let pool = record({rows: session.fields.rows.type, one: session.fields.one.type, scalar: session.fields.scalar.type, execute: session.fields.execute.type, transaction: fnType([fnType([session], "any")], promise("unknown")), ping: fnType([], promise("boolean")), close: fnType([], promise("void"))})
+    return record({connect: fnType([record({host: "string", user: "string", password: "string", database: "string", socketPath: "string", port: "number", connectionLimit: "number", queueLimit: "number", connectTimeout: "number", charset: "string", timezone: "string", dateStrings: either(["boolean", array("string")]), multipleStatements: "boolean", namedPlaceholders: "boolean", supportBigNumbers: "boolean", bigNumberStrings: "boolean", ssl: "any"}, true)], promise(pool), 0)})
+  }
+  if name == "testing" {
+    let options = record({timeoutMs: "number", skip: either(["boolean", "string"]), todo: either(["boolean", "string"]), concurrency: "number"}, true)
+    let callback = fnType(["any"], "any")
+    return record({test: fnType(["string", callback, options], promise("void"), 2), suite: fnType(["string", callback, options], promise("void"), 2), skip: fnType(["string", either(["boolean", "string"])], promise("void"), 1), todo: fnType(["string", either(["boolean", "string"])], promise("void"), 1), before: fnType([callback], "void"), after: fnType([callback], "void"), beforeEach: fnType([callback], "void"), afterEach: fnType([callback], "void"), assert: fnType(["any", "string"], "void", 1), equal: fnType(["any", "any", "string"], "void", 2), notEqual: fnType(["any", "any", "string"], "void", 2), deepEqual: fnType(["any", "any", "string"], "void", 2), notDeepEqual: fnType(["any", "any", "string"], "void", 2), throws: fnType([fnType([], "any"), "any", "string"], "void", 1), rejects: fnType([fnType([], "any"), "any", "string"], promise("void"), 1), fail: fnType(["string"], "void", 0), mock: fnType(["any"], "any", 0)})
+  }
+  if name == "web" {
+    let response = record({status: "number", body: "any", headers: "any"})
+    return record({response: fnType(["number", "any", "any"], response, 2), error: fnType(["number", "string", "string"], "any", 2), route: fnType([fnType(["any"], "any"), "any"], "any", 1), health: fnType(["any", record({timeoutMs: "number"}, true)], promise(response), 0), shutdown: fnType(["any", record({timeoutMs: "number", cleanup: fnType([], "any")}, true)], promise("void"), 1), serve: fnType(["number", "any", record({host: "string", root: "string", html: either(["boolean", "string"]), assets: either(["boolean", "string"]), maxBodyBytes: "number", maxConnections: "number", requestTimeoutMs: "number", handlerTimeoutMs: "number", trustRequestId: "boolean", before: fnType(["any"], "any"), logger: "any"}, true)], "any", 1)})
+  }
+  return "any"
+}

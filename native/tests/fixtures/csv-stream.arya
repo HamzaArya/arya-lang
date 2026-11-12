@@ -1,0 +1,34 @@
+use std "csv" as csv
+use std "runtime" as runtime
+use std "debug" as debug
+use std "async" as tasks
+fn equal(a: any, b: any): void { debug.assert(runtime.deepEqual(a, b), "CSV mismatch") }
+fn error(code: string, call: any): void { let caught = false; try { call() } catch failure { equal(failure.code, code); caught = true }; debug.assert(caught) }
+let source = 'name,amount\r\n"فارسی 😀","1,234.50"\r\n"a\r\nb","say ""hello"""\n"\u0000",=print(99)\n'
+let expected = [["name", "amount"], ["فارسی 😀", "1,234.50"], ["a\r\nb", 'say "hello"'], ["\u0000", "=print(99)"]]
+for size in [1, 2, 3, 5, 13, 65536] {
+  let parser = csv.decoder(); let rows: any = []; let at = 0
+  while at < len(source) { rows = rows.concat(parser.push(source.slice(at, at + size))); runtime.collect(); at += size }
+  rows = rows.concat(parser.finish()); equal(rows, expected)
+  error("ARYA_CSV_STATE", fn() { parser.push("") })
+}
+let empty = csv.decoder(); equal(empty.finish(), [])
+let blank = csv.decoder(); equal(blank.push("\n"), [[""]]); equal(blank.finish(), [])
+let trailing = csv.decoder(); equal(trailing.push("a,"), []); equal(trailing.finish(), [["a", ""]])
+let custom = csv.decoder({delimiter: ";"}); equal(custom.push("a;b\n"), [["a", "b"]])
+let limit = csv.decoder({maxFieldUnits: 3}); error("ARYA_CSV_LIMIT", fn() { limit.push("abcd") })
+let columns = csv.decoder({maxColumns: 1}); error("ARYA_CSV_LIMIT", fn() { columns.push("a,b\n") })
+let record = csv.decoder({maxRecordUnits: 3}); error("ARYA_CSV_LIMIT", fn() { record.push("a,bc") })
+let quoted = csv.decoder(); quoted.push('"unfinished'); error("ARYA_CSV_SYNTAX", fn() { quoted.finish() })
+let invalid = csv.decoder(); error("ARYA_CSV_SYNTAX", fn() { invalid.push('"closed"x') })
+let index = 0; let consuming = false; let rows: any = []
+async fn read() { debug.assert(not consuming); if index >= len(source) { return null }; let chunk = source.slice(index, index + 3); index += 3; return chunk }
+async fn consume(batch) { consuming = true; await tasks.sleep(0); rows = rows.concat(batch); runtime.collect(); consuming = false }
+equal(await csv.each(read, consume), 4); equal(rows, expected)
+let controller = new AbortController(); let pulls = 0
+async fn cancelledRead() { pulls += 1; return "a,b\n" }
+async fn cancelledConsume(batch) { controller.abort(); await tasks.sleep(0) }
+let cancelled = false
+try { await csv.each(cancelledRead, cancelledConsume, {signal: controller.signal}) } catch failure { equal(failure.name, "AbortError"); cancelled = true }
+debug.assert(cancelled); equal(pulls, 1)
+print("CSV: split Unicode, quoted records, limits, backpressure and cancellation passed")

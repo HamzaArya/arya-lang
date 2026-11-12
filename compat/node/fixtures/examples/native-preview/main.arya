@@ -1,0 +1,11 @@
+fn factorial(value: number): number {
+  if value <= 1 { return 1 }
+  return value * factorial(value - 1)
+}
+
+let value: number = 1
+while value <= 6 {
+  print("factorial", value, factorial(value))
+  value = value + 1
+}
+print("Hello from native Arya")

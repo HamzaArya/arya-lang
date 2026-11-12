@@ -1,0 +1,14 @@
+use std "accounting" as accounting
+use std "io" as io
+use std "json" as json
+while true {
+  let line = io.readLine()
+  if line == null { break }
+  try {
+    let request = json.parse(line)
+    let result = null
+    if request.kind == "ledger" { result = accounting.ledgerBatch(request.entries, request.options) }
+    else { result = accounting.invoiceBatch(request.lines, request.options) }
+    print(json.stringify({ok: true, result: result}))
+  } catch error { print(json.stringify({ok: false, code: error.code, row: error.row})) }
+}

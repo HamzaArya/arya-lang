@@ -1,0 +1,58 @@
+use std "runtime" as runtime
+use std "debug" as debug
+let checks = 0
+fn equal(left, right) { debug.assert(runtime.deepEqual(left, right), "Native data optimization changed a value"); checks += 1 }
+fn field(record) { return record.value }
+equal(field({first: 0, value: 2}), 2)
+equal(field({value: 3, second: 0}), 3)
+equal(field({other: 1}), undefined)
+let reads = 0
+let record = {}
+Object.defineProperty(record, "value", {get: fn() { reads += 1; runtime.collect(); return reads }, configurable: true})
+equal(field(record), 1); equal(field(record), 2)
+record = {value: "changed"}
+equal(field(record), "changed")
+let order = ""
+let holder = {}
+Object.defineProperty(holder, "run", {get: fn() { order += "get "; return fn(value) { return value.answer } }})
+fn argument() { order += "arg"; runtime.collect(); return {answer: 42} }
+equal(holder.run(argument()), 42); equal(order, "get arg")
+let values = []
+fn changePush() { values.push({kept: "nested"}); runtime.collect(); return {kept: true} }
+equal(values.push(changePush()), 2)
+equal(values.length, 2); equal(values[1].kept, true)
+equal(values.push(9), 3)
+let other = []; let detached = other.push
+runtime.collect(); equal(detached("saved"), 1); equal(other, ["saved"])
+let custom = {}
+Object.defineProperty(custom, "push", {get: fn() { return fn(item) { runtime.collect(); return item + 10 } }})
+equal(custom.push(5), 15); equal(custom.length, undefined)
+let mapping = new Map([["a", {value: 1}]])
+runtime.collect(); equal(mapping.get("a").value, 1)
+mapping.set("b", {value: 2}); equal(mapping.has("b"), true); equal(mapping.delete("a"), true)
+equal(mapping.keys(), ["b"])
+let group = new Set([1, 2]); group.add(3); equal(group.has(3), true); equal(group.delete(1), true)
+equal(group.values(), [2, 3])
+let closures = []
+for index in range(6) { let item = {name: "row-" + str(index)}; closures.push(fn() { runtime.collect(); return item.name }) }
+runtime.collect()
+equal(closures.map(fn(callback) { return callback() }), ["row-0", "row-1", "row-2", "row-3", "row-4", "row-5"])
+async fn preserve(value) {
+  try { let result = {value: value, text: "سلام \0🙂"}; return result }
+  finally { await Promise.resolve(0); runtime.collect() }
+}
+let first = preserve(1); let second = preserve(2)
+equal((await first).text, "سلام \0🙂"); equal((await second).value, 2)
+let text = "["
+for index in range(30) { if index > 0 { text += "," }; text += '{"key":' + str(index) + ',"escaped\\u006bey":"value","__proto__":7}' }
+text += "]"
+let decoded = JSON.parse(text, fn(key, value) { if key == "key" { runtime.collect() }; return value })
+runtime.collect()
+equal(decoded.length, 30); equal(decoded[0].key, 0); equal(decoded[29].key, 29)
+equal(decoded[0].escapedkey, "value"); equal(decoded[29]["__proto__"], 7)
+let many = {}
+for index in range(300) { many["field-" + str(index)] = {key: index} }
+let copied = JSON.parse(JSON.stringify(many)); many = null; runtime.collect()
+equal(copied["field-0"].key, 0); equal(copied["field-299"].key, 299)
+equal("duplicate literal", "duplicate literal"); equal("", ""); equal("x\0y".length, 3)
+print("native data checks:", checks)

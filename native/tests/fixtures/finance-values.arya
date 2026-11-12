@@ -1,0 +1,80 @@
+use std "decimal" as decimal
+use std "money" as money
+use std "finance" as finance
+use std "runtime" as runtime
+use std "json" as json
+use std "debug" as debug
+use std "async" as tasks
+use std "list" as list
+const v = decimal.values
+fn equal(a: any, b: any): void { debug.assert(runtime.deepEqual(a, b), "Exact value mismatch") }
+fn error(code: string, call: any): void { let caught = false; try { call() } catch failure { equal(failure.code, code); caught = true }; debug.assert(caught) }
+const a = v.parse("9007199254740993.005")
+const alias = a
+const b = v.parse("0.005")
+equal(v.format(v.add(a, b)), "9007199254740993.01")
+equal(v.format(alias), "9007199254740993.005")
+equal(v.compare(a, alias), 0)
+equal(v.format(v.quantize(v.parse("-0.004"), 2, "half-up")), "-0.00")
+equal(v.format(v.quantize(v.parse("-0"), 2, "half-up")), "0.00")
+equal(json.stringify([a, v.quantize(b, 2, "half-even")]), '["9007199254740993.005","0.00"]')
+runtime.collect(); equal(v.format(a), "9007199254740993.005")
+error("ARYA_DECIMAL_INPUT", fn() { v.add(a, "1") })
+error("ARYA_DECIMAL_ZERO", fn() { v.divide(a, v.parse("0"), 2, "half-up") })
+error("ARYA_DECIMAL_PLACES", fn() { v.quantize(a, 101, "half-up") })
+error("ARYA_DECIMAL_RANGE", fn() { v.add(v.parse("9".repeat(1024)), v.parse("1")) })
+error("ARYA_DECIMAL_RANGE", fn() { decimal.add("9".repeat(1024), "1") })
+error("ARYA_DECIMAL_INPUT", fn() { v.parse("1\u0000") })
+const usd = {currency: "USD", scale: 2, rounding: "half-up"}
+const original = money.create("100.005", usd)
+usd.currency = "AFN"
+equal(money.format(original), "100.01")
+equal(original.currency, "USD")
+equal(json.stringify(original), '{"amount":"100.01","currency":"USD","scale":2,"rounding":"half-up"}')
+const exact = {currency: "USD", scale: 2, rounding: "half-up"}
+equal(money.format(money.add(original, money.create("0.09", exact))), "100.10")
+equal(money.toMinorUnits(original), "10001")
+equal(money.format(money.fromMinorUnits("-10001", exact)), "-100.01")
+equal(money.format(money.convert(original, "AFN", "70.25", 2, "half-up")), "7025.70")
+error("ARYA_MONEY_CURRENCY", fn() { money.add(original, money.create("1", usd)) })
+error("ARYA_MONEY_SCALE", fn() { money.add(original, money.rescale(original, 3, "half-up")) })
+error("ARYA_DECIMAL_PRECISION", fn() { money.toNumber(money.create("9007199254740993", exact)) })
+try { original.amount = b; debug.assert(false) } catch failure { equal(failure.name, "TypeError") }
+let inputLine = {lineSubtotal: "100.005", taxAmount: "2.005"}
+let lines = [inputLine, {lineSubtotal: "1.005", taxAmount: "0.005"}]
+let invoice = finance.prepareInvoices(lines, "0.005", "1.25", exact)
+inputLine.lineSubtotal = "0"
+equal(invoice.calculate(), {subtotal: "101.01", taxTotal: "2.01", discountAmount: "0.005", totalAmount: "103.02", baseTotal: "128.78"})
+equal(await invoice.calculateAsync(), invoice.calculate())
+equal(finance.budgetVariance([{budget: "100", actual: "-125.005", revenue: true}], exact), [{budget: "100.00", actual: "125.01", variance: "25.01", variancePct: "25", favorable: true}])
+equal(finance.amountScores([{left: "100", right: "100.004"}, {left: "100", right: "99"}, {left: "100", right: "90"}]), [1, 0.85, 0])
+equal(finance.production("100.01", ["1", "1", "1"], "3", exact), ["33.34", "33.33", "33.34"])
+equal(finance.allocate("0.05", ["1", "1", "1"], exact), ["0.02", "0.01", "0.02"])
+equal(finance.straightLine("100", "0", 3, exact), ["33.33", "33.33", "33.34"])
+error("ARYA_FINANCE_INPUT", fn() { finance.straightLine("0", "0.001", 3, exact) })
+error("ARYA_FINANCE_INPUT", fn() { finance.straightLine("-1", "-2", 3, exact) })
+let controller = new AbortController(); controller.abort()
+let cancelled = false
+try { await invoice.calculateAsync({signal: controller.signal}) } catch failure { equal(failure.name, "AbortError"); cancelled = true }; debug.assert(cancelled)
+let first = invoice.calculateAsync(); let second = invoice.calculateAsync(); let third = invoice.calculateAsync()
+try { await third; debug.assert(false) } catch failure { equal(failure.code, "ARYA_FINANCE_BUSY") }
+await first; await second
+# Force cancellation after work starts and after a chunk has completed.
+let count = 8200; if args[0] == "--stress" { count = 128 }
+let many: any = []; for i in range(count) { many.push({lineSubtotal: "1", taxAmount: "0"}) }
+let large = finance.prepareInvoices(many, "0", "1", exact)
+let during = new AbortController(); let pending = large.calculateAsync({signal: during.signal})
+await tasks.sleep(0); during.abort()
+try { await pending; debug.assert(false) } catch failure { equal(failure.name, "AbortError") }
+let reserved: any = []; equal(list.reserve(reserved, 1000), reserved); equal(reserved.length, 0); reserved.push(a); runtime.collect(); equal(v.format(reserved[0]), v.format(a))
+let map = new Map(); let set = new Set(); let identities: any = []
+for i in range(150) { map.set("key:" + str(i), i); set.add(i); identities.push({index: i}); map.set(identities[i], i) }
+map.set(NaN, "nan"); map.set(-0, "zero"); set.add(-0); set.add(NaN)
+equal(map.get(NaN), "nan"); equal(map.get(0), "zero"); equal(set.has(0), true); equal(set.has(NaN), true)
+for i in range(150) { equal(map.get("key:" + str(i)), i); equal(map.get(identities[i]), i) }
+for i in range(40) { equal(map.delete("key:" + str(i)), true); set.delete(i) }
+for i in range(40) { map.set("key:" + str(i), i); set.add(i) }
+equal(map.keys()[0], identities[0]); equal(set.values()[0], 40)
+runtime.collect(); equal(map.get(identities[149]), 149)
+map.clear(); map.set("new", a); runtime.collect(); equal(v.format(map.get("new")), v.format(a))
+print("finance values: parsed decimals, Money, batches, cancellation, reservation and indexed collections passed")

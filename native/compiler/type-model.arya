@@ -1,0 +1,97 @@
+# Structural type contracts shared by the native checker and editor services.
+use std "runtime" as runtime
+
+export fn kind(value) {
+  if value == null or value == undefined { return "any" }
+  if value.kind != undefined { return value.kind }
+  return value
+}
+export fn text(value) {
+  let k = kind(value)
+  if k == "schema" { return "Schema<" + text(value.value) + ">" }
+  if k == "async-iterator" { return "AsyncIterator<" + text(value.value) + ">" }
+  if k == "array" { return text(value.value) + "[]" }
+  if k == "promise" { return "Promise<" + text(value.value) + ">" }
+  if k == "union" { let parts = []; for item in value.values { parts.push(text(item)) }; return parts.join(" | ") }
+  if k == "record" {
+    let parts = []
+    for key in runtime.keys(value.fields) { let field = value.fields[key]; let mark = ""; if field.optional { mark = "?" }; parts.push(key + mark + ": " + text(field.type)) }
+    return "{" + parts.join(", ") + "}"
+  }
+  if k == "function" { let parts = []; for item in value.parameters { parts.push(text(item)) }; return "fn(" + parts.join(", ") + "): " + text(value.result) }
+  return k
+}
+export fn union(values) {
+  let result = []; let names = []
+  for value in values {
+    let items = [value]; if kind(value) == "union" { items = value.values }
+    for item in items { let label = text(item); if kind(item) != "never" and not names.includes(label) { names.push(label); result.push(item) } }
+  }
+  if len(result) == 0 { return "never" }
+  if len(result) == 1 { return result[0] }
+  return {kind: "union", values: result}
+}
+export fn array(value) { return {kind: "array", value: value} }
+export fn promise(value) { return {kind: "promise", value: value} }
+export fn awaited(value, depth) {
+  if depth == undefined { depth = 0 }; if depth > 60 { return "any" }
+  if kind(value) == "promise" { return awaited(value.value, depth + 1) }
+  if kind(value) == "union" { let result = []; for item in value.values { result.push(awaited(item, depth + 1)) }; return union(result) }
+  return value
+}
+export fn present(value) {
+  if kind(value) == "union" { let values = []; for item in value.values { if kind(item) != "null" and kind(item) != "undefined" { values.push(item) } }; return union(values) }
+  if kind(value) == "null" or kind(value) == "undefined" { return "never" }
+  return value
+}
+export fn nullable(value) {
+  if kind(value) == "null" or kind(value) == "undefined" { return true }
+  if kind(value) == "union" { for item in value.values { if nullable(item) { return true } } }
+  return false
+}
+export fn required(signature) {
+  let count = 0; let i = 0
+  for parameter in signature.parameters { if not signature.optional[i] and not (signature.rest != undefined and i == len(signature.parameters) - 1) { count = i + 1 }; i += 1 }
+  return count
+}
+export fn parameter(signature, index) {
+  if signature.rest != undefined and index >= len(signature.parameters) - 1 { if kind(signature.rest) == "array" { return signature.rest.value }; return signature.rest }
+  return signature.parameters[index]
+}
+export fn assignable(from, to, invariant, depth) {
+  if depth == undefined { depth = 0 }; if depth > 60 { return false }
+  let a = kind(from); let b = kind(to)
+  if a == "any" or b == "any" or b == "unknown" or a == "never" { return true }
+  if a == "union" { for item in from.values { if not assignable(item, to, invariant, depth + 1) { return false } }; return true }
+  if b == "union" { for item in to.values { if assignable(from, item, invariant, depth + 1) { return true } }; return false }
+  if a != b { return b == "void" and (a == "undefined" or a == "void") }
+  if a == "array" or a == "promise" { return assignable(from.value, to.value, invariant, depth + 1) and (not invariant or a == "promise" or assignable(to.value, from.value, true, depth + 1)) }
+  if a == "record" {
+    for key in runtime.keys(to.fields) {
+      let expected = to.fields[key]; let actual = from.fields[key]
+      if actual == undefined { if not expected.optional { return false }; continue }
+      if actual.optional and not expected.optional { return false }
+      if not assignable(actual.type, expected.type, invariant, depth + 1) { return false }
+      if invariant and ((expected.optional and not actual.optional) or not assignable(expected.type, actual.type, true, depth + 1)) { return false }
+    }
+    return true
+  }
+  if a == "function" {
+    if required(from) > required(to) { return false }
+    let i = 0
+    for item in to.parameters { let target = parameter(from, i); if target != undefined and not assignable(parameter(to, i), target, false, depth + 1) { return false }; i += 1 }
+    return assignable(from.result, to.result, true, depth + 1)
+  }
+  return true
+}
+export fn callable(parameters, result, minimum, builtin) {
+  if minimum == undefined { minimum = len(parameters) }
+  let optional = []; let index = 0
+  for item in parameters { optional.push(index >= minimum); index += 1 }
+  return {kind: "function", parameters: parameters, optional: optional, result: result, builtin: builtin}
+}
+export fn record(fields, optional) {
+  let result = {}
+  for key in runtime.keys(fields) { result[key] = {type: fields[key], optional: optional == true} }
+  return {kind: "record", fields: result}
+}

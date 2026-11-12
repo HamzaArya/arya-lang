@@ -1,6 +1,6 @@
 # Arya roadmap
 
-Arya focuses on readable Node.js applications that connect JavaScript/npm and Python. The current published preview is **1.3.0-alpha.9** on `next`; the publication record retains **1.2.0-alpha.4** on `latest`. An alpha version remains experimental even when its numeric prefix is 1.x. The [stable release plan](stable-release-plan.md) tracks the next compatibility and qualification work; unreleased source changes require new artifacts.
+Arya focuses on readable Node.js applications that connect JavaScript/npm and Python. The current source candidate is **1.3.0-alpha.12**, with [candidate notes](releases/1.3.0-alpha.12.md). The current published preview is **1.3.0-alpha.9** on `next`; the publication record retains **1.2.0-alpha.4** on `latest`. An alpha version remains experimental even when its numeric prefix is 1.x. The [stable release plan](stable-release-plan.md) tracks the next compatibility and qualification work; unreleased source changes require new artifacts.
 
 Use [release readiness](release-readiness.md) for version-specific verification and [compatibility policy](compatibility-policy.md) for release promises. This roadmap distinguishes implemented features from work that still needs evidence; it does not set release dates.
 
@@ -20,6 +20,10 @@ Use [release readiness](release-readiness.md) for version-specific verification 
 
 The 1.3 source line retired native compilation in alpha.1. Native APIs, libraries, bootstrap tools, and project templates are historical work; [migration](node-runtime.md) gives current replacements. Published older packages retain their original behavior.
 
+## Native and financial modernization
+
+The [architecture audit and gap analysis](architecture-audit.md), [target architecture](architecture-target.md), and [staged implementation roadmap](implementation-roadmap.md) translate the [master requirements](arya-master-plan.md) into verified milestones. Alpha.11 adds a bounded exact accounting library and optional native kernel through the existing JavaScript boundary. Alpha.12 adds verified typed IR and independent native executables for a bounded scalar subset. Broader native coverage, currency-registry money types, C/Python native bindings and financial packages remain future work.
+
 ## Next qualification work
 
 | Work | Completion evidence |
@@ -35,7 +39,7 @@ Publishing the source candidate is a separate maintainer operation using reviewe
 
 ## Deferred work and known limits
 
-- The [business candidate](business-applications.md) implements conservative formatting, bounded recovery, snapshot references/rename/signatures, incremental builds and optional types. Closed-file editor discovery, richer analysis and interactive editor stepping still need qualification.
+- The [business candidate](business-applications.md) implements conservative formatting, bounded recovery, snapshot references/rename/signatures, incremental builds and optional types. The unreleased [editor/compiler improvements](editor-and-compiler-improvements.md) add closed-file discovery, incremental analysis and static namespace rename. Local VS Code and AryaCode host checks cover applied rename, unsaved/disk updates and Node breakpoint/step behavior. AryaCode needs a Node adapter in its test profile. Other platforms/editors and richer analysis remain qualification or future work.
 - Python clients manage fresh child processes; persistent cross-call Python state, callback transport, and live Python objects are outside the current bridge.
 - Advanced type analysis, Unicode identifiers/bidirectional editor support, direct bridges to other runtimes, and an Arya package registry are proposals rather than available features. Dari/Pashto learning material needs fluent review separately from identifier syntax.
 - Electron installers, signing, notarization, and automatic updates need application distribution work beyond `arya build`.

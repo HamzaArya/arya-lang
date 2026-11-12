@@ -1,0 +1,43 @@
+name: Optional native accounting qualification
+on:
+  push:
+    paths: ['src/accounting*.ts', 'native/accounting/**', 'scripts/*accounting*', 'scripts/benchmarks/accounting*', 'tests/accounting.test.ts', 'tests/fixtures/accounting-oracle.py', '.github/workflows/accounting-native.yml', 'package*.json']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: ['22.15.0', '24', '26']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run build:accounting-native -- --sanitize
+      - name: Require native execution and independent Decimal equivalence
+        run: npm run test:accounting
+        env:
+          ARYA_TEST_ACCOUNTING_NATIVE: '1'
+      - run: npm run package:accounting
+      - run: npm run package:accounting -- --native
+      - run: npm run test:accounting-package
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accounting-${{ matrix.os }}-node-${{ matrix.node }}
+          path: |
+            .build/accounting-native/**/build.json
+            artifacts/arya-accounting-*.tgz*

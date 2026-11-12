@@ -1,0 +1,24 @@
+use std "validate" as validate
+use std "json" as json
+use std "list" as list
+use std "debug" as debug
+use std "decimal" as decimal
+use std "fs" as fs
+use std "process" as process
+use std "web" as web
+const external: unknown = json.parse("{\"name\":\"Arya\",\"price\":\"19.95\"}")
+const schema = validate.object({name: validate.string(), price: validate.string(), quantity: validate.optional(validate.string(), "3")})
+const row = validate.parse(schema, external)
+const name: string = row.name
+const total: string = decimal.multiply(row.price, row.quantity)
+const names: string[] = list.map([{name: name}, {name: "Native"}], "name")
+debug.assert(total == "59.85" and names.join(",") == "Arya,Native")
+fn compute(value: string, callback: fn(string): string): string { return callback(value) }
+const amount: string = compute("1.20", fn(value: string): string { return decimal.add(value, "0.30") })
+debug.assert(amount == "1.5")
+let info = fs.infoSync(process.executable())
+debug.assert(info != null)
+if info != null { const modified: number = info.modified; const nanos: number = info.modifiedNanoseconds; debug.assert(modified > 0 and nanos >= 0) }
+let server = web.serve(0, {}, {host: "127.0.0.1", html: false, assets: false, maxConnections: 2, maxBodyBytes: 1024})
+await web.shutdown(server)
+print("native standard types: validated external values, generic selectors and higher-order decimal contracts passed")

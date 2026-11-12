@@ -1,0 +1,20 @@
+use std "debug" as debug
+use std "runtime" as runtime
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), JSON.stringify(actual)) }
+let expression = new RegExp("([a-z]+)([0-9]*)", "g")
+debug.assert(expression.test("test12 next3") and expression.lastIndex == 6)
+let matched = expression.exec("test12 next3"); equal(matched, ["next3", "next", "3"]); debug.assert(matched.index == 7 and matched.input == "test12 next3")
+debug.assert(expression.exec("test12 next3") == null and expression.lastIndex == 0)
+equal("a1 b2".match(new RegExp("[a-z][0-9]", "g")), ["a1", "b2"])
+let matches = "a1 b2".matchAll(expression); debug.assert(matches.length == 2 and matches[1].index == 3)
+debug.assert(expression.lastIndex == 0 and "text42".search(new RegExp("[0-9]+")) == 4)
+debug.assert("a1 b2".replace(expression, "$2-$1") == "1-a 2-b")
+debug.assert("a1 b2".replace(expression, fn(full, word, number, index, input) { debug.assert(input == "a1 b2"); return word.toUpperCase() + str(index) }) == "A0 B3")
+equal("a,b;c".split(new RegExp("([,;])")), ["a", ",", "b", ";", "c"])
+equal("abc".split(new RegExp("")), ["a", "b", "c"])
+debug.assert("<&>\u2028".replace(new RegExp("[<>&\\u2028\\u2029]", "g"), fn(char) { return "\\u" + char.charCodeAt(0).toString(16).padStart(4, "0") }) == "\\u003c\\u0026\\u003e\\u2028")
+equal("🌉".match(new RegExp("", "gu")), ["", ""])
+debug.assert(new RegExp("^https?:", "i").test("HTTPS://example.test"))
+let failed = false; try { new RegExp("(") } catch error { failed = error.name == "SyntaxError" }; debug.assert(failed)
+failed = false; try { "text".replaceAll(new RegExp("text"), "x") } catch error { failed = error.name == "TypeError" }; debug.assert(failed)
+print("native regex: UTF-16 captures, indexes, state, replacement callbacks, splitting and bounded errors passed")

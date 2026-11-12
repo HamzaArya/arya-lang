@@ -1,0 +1,10 @@
+use std "ui" as ui
+use std "debug" as debug
+let page = ui.page({nonce: "abcdefghijklmnop", state: {name: "<Arya>", count: 0}, body: [ui.heading("سلام 🌉"), ui.text(ui.bind("name")), ui.button("Increment", {action: ui.increment("count")}), ui.code("const value = \"<safe>\"\nprint(value)")]})
+debug.assert(page.includes("&lt;Arya&gt;") and page.includes("data-arya-action") and page.includes("arya-code-string"))
+debug.assert(page.includes("nonce-abcdefghijklmnop") and page.includes("سلام 🌉"))
+for template in ui.templates() { let output = ui.template(template, {nonce: "abcdefghijklmnop"}); debug.assert(output.startsWith("<!doctype html>") and output.includes("aria-")) }
+debug.assert(ui.preview({}).includes("<!doctype html>"))
+let rejected = false; try { ui.page({nonce: "abcdefghijklmnop", body: ui.element("a", {href: "javascript:alert(1)"}, "Unsafe")}) } catch error { rejected = error.code == "ARYA_UI" }; debug.assert(rejected)
+rejected = false; try { ui.set("__proto__", 1) } catch error { rejected = error.code == "ARYA_UI" }; debug.assert(rejected)
+print("native UI: components, escaping, bindings, actions, code highlighting, full templates, gallery and validation passed")

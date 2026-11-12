@@ -1,0 +1,17 @@
+use std "accounting" as accounting
+use std "json" as json
+use std "runtime" as runtime
+use std "debug" as debug
+let count = Number(args[0] ?? "100000")
+let repetitions = Number(args[1] ?? "5")
+debug.assert(Number.isSafeInteger(count) and count > 0 and count <= 1000000)
+debug.assert(Number.isSafeInteger(repetitions) and repetitions > 0 and repetitions <= 10000)
+let lines = Array(count).fill({price: "19.95", quantity: "2", discountBps: 1000, taxBps: 750})
+let started = performance.now()
+let batch = accounting.prepareInvoices(lines, {currency: "AFN", scale: 2, rounding: "half-even"})
+let prepareMs = performance.now() - started
+lines = null; runtime.collect()
+started = performance.now()
+let total = ""
+for iteration in range(repetitions) { total = batch.calculate().total }
+print(json.stringify({rows: count, repetitions: repetitions, prepareMs: prepareMs, calculateMs: performance.now() - started, total: total}))

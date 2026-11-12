@@ -1,0 +1,19 @@
+9007199254740993.4
+-1.25 0.02
+0.12
+-0.00
+up 0.03 -0.03
+down 0.02 -0.02
+ceil 0.03 -0.02
+floor 0.02 -0.03
+half-up 0.03 -0.03
+half-down 0.02 -0.02
+half-even 0.02 -0.02
+half-ceil 0.03 -0.02
+half-floor 0.02 -0.03
+1.25
+ARYA_DECIMAL_PRECISION
+ARYA_DECIMAL_ZERO
+ARYA_DECIMAL_INPUT
+1.00 3 -3 0.00
+0.1 -0 0.000001 1e+21

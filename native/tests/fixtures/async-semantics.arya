@@ -1,0 +1,64 @@
+use std "debug" as debug
+use std "async" as tasks
+use std "runtime" as runtime
+fn equal(left, right) { debug.assert(runtime.deepEqual(left, right), "Mismatch: " + str(left) + " vs " + str(right)) }
+let order = []
+let thenable = {then: fn(resolve, reject) { order.push("thenable"); resolve(7); reject("late"); throw "ignored" }}
+let promise = Promise.resolve(thenable)
+order.push("sync")
+queueMicrotask(fn() { order.push("microtask") })
+promise.then(fn(value) { debug.assert(value == 7); order.push("reaction") })
+await tasks.sleep(0)
+equal(order.join(","), "sync,thenable,microtask,reaction")
+
+let release = undefined
+let inner = new Promise(fn(resolve) { release = resolve })
+let outer = new Promise(fn(resolve, reject) { resolve(inner); reject("wrong"); throw "also ignored" })
+release(11)
+equal(await outer, 11)
+
+let releaseThenable = undefined
+let adoptedThenable = new Promise(fn(resolve, reject) {
+  resolve({then: fn(done) { releaseThenable = done }})
+  reject("wrong")
+})
+await Promise.resolve()
+releaseThenable(13)
+equal(await adoptedThenable, 13)
+
+let timerOrder = []
+setTimeout(fn() { timerOrder.push("timer") }, 0)
+queueMicrotask(fn() { timerOrder.push("microtask") })
+Promise.resolve().then(fn() { timerOrder.push("promise") })
+await tasks.sleep(1)
+equal(timerOrder.join(","), "microtask,promise,timer")
+
+let first = undefined; let second = undefined
+let a = new Promise(fn(resolve) { first = resolve })
+let b = new Promise(fn(resolve) { second = resolve })
+let race = Promise.race([a, b])
+second("second"); first("first")
+equal(await race, "second")
+equal(await Promise.race([Promise.resolve("left"), Promise.resolve("right")]), "left")
+equal(await Promise.any([Promise.reject("failure"), Promise.resolve("success")]), "success")
+equal(JSON.stringify(await Promise.allSettled([Promise.resolve(3), Promise.reject(4)])), "[{\"status\":\"fulfilled\",\"value\":3},{\"status\":\"rejected\",\"reason\":4}]")
+
+let completed = []
+let stream = tasks.map([1, 2, 3, 4], async fn(value) { await tasks.sleep(1); completed.push(value); return value }, {concurrency: 2})
+for value in stream { equal(value, 1); break }
+equal(completed.join(","), "1,2")
+debug.assert((await stream.next()).done)
+async fn leaveEarly() {
+  let stream = tasks.map([1, 2, 3], async fn(value) { await tasks.sleep(0); return value }, {concurrency: 2})
+  for value in stream { return stream }
+}
+debug.assert((await (await leaveEarly()).next()).done)
+let thrownStream = tasks.map([1, 2, 3], fn(value) { return value })
+try { for value in thrownStream { throw "body failure" } } catch error { equal(error, "body failure") }
+debug.assert((await thrownStream.next()).done)
+
+for value in range(2000) { await Promise.reject(value).catch(fn(error) { return error }) }
+fn handledError() { try { throw new Error("handled") } catch _error {} }
+async fn afterHandledError() { handledError(); runtime.collect(); await Promise.resolve(); runtime.collect(); return true }
+debug.assert(await afterHandledError())
+print("native async: microtask ordering, one-shot adoption, race order, iterator closing and rejection cleanup passed")

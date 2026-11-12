@@ -1,0 +1,27 @@
+use std "env" as env
+use std "datetime" as datetime
+use std "validate" as validate
+use std "debug" as debug
+use std "log" as log
+use std "runtime" as runtime
+fn equal(left, right) { debug.assert(runtime.deepEqual(left, right), "Native service value mismatch.") }
+equal(env.get("ARYA_NATIVE_ABSENT", "fallback"), "fallback")
+equal(env.int("ARYA_NATIVE_ABSENT", 42), 42); equal(env.bool("ARYA_NATIVE_ABSENT", true), true)
+let rejected = false; try { env.require("ARYA_NATIVE_ABSENT") } catch error { rejected = error.code == "ARYA_ENV_REQUIRED" }; debug.assert(rejected)
+equal(datetime.date("2024-02-29"), "2024-02-29")
+equal(datetime.instant("2024-02-29T23:30:00-04:30"), "2024-03-01T04:00:00.000Z")
+equal(datetime.zoned("2024-02-29T23:30:00Z", "Asia/Kabul"), {date: "2024-03-01", time: "04:00:00", timeZone: "Asia/Kabul"})
+equal(datetime.dateAt("2024-02-29T23:30:00Z", "Asia/Kabul"), "2024-03-01")
+equal(datetime.atOffset("2024-02-29", "23:30:00", "-04:30"), "2024-03-01T04:00:00.000Z")
+equal(datetime.fromDate(datetime.toDate("2024-02-29T23:30:00Z")), "2024-02-29T23:30:00.000Z")
+rejected = false; try { datetime.date("2023-02-29") } catch error { rejected = error.code == "ARYA_DATETIME" }; debug.assert(rejected)
+let schema = validate.object({name: validate.string({min: 1, trim: true}), age: validate.optional(validate.integer({min: 0, coerce: true}), 20), active: validate.boolean({coerce: true})})
+equal(validate.parse(schema, {name: " A ", active: "true"}), {name: "A", age: 20, active: true})
+debug.assert(not validate.check(schema, {name: "", age: -1, active: 3}).ok)
+rejected = false; try { validate.optional(validate.integer(), "invalid") } catch error { rejected = error.code == "ARYA_VALIDATION_SCHEMA" }; debug.assert(rejected)
+let logs = []; let logger = log.create({name: "native", sink: fn(line) { logs.push(JSON.parse(line)) }})
+let child = logger.child({account: "demo", password: "hidden"})
+child.info("ready", {nested: {api_key: "secret", value: 3}})
+equal([logs[0].message, logs[0].password, logs[0].nested.api_key, logs[0].nested.value], ["ready", "[Redacted]", "[Redacted]", 3])
+debug.assert(debug.inspect({answer: 42}).includes("42"))
+print("native services: environment, all datetime APIs, validation, logging and redaction passed")

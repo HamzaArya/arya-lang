@@ -4,7 +4,7 @@
 
 The project should observe people who did not implement Arya using a supplied candidate archive, its installation guide, and the beginner learning path. Include both beginners and programmers familiar with another language, and seek Afghan programmers/learners where possible. Invitations and participant coordination require a real project owner/reviewer; no messages or invitations are sent by this plan.
 
-Use the recorded published [1.2.0-alpha.4 baseline](releases/1.2.0-alpha.4.md) as the starting candidate, with an exact package pin and matching documentation revision. To evaluate 1.3 additions, supply its exact reviewed candidate archive and matching guides instead. Automated/public-install results are recorded separately; no participant observations are inferred from them.
+Use the [published alpha.9 baseline](releases/1.3.0-alpha.9.md) for a published-version study, or the matching reviewed alpha.10 compiler/creator archives to evaluate current source. The [participant exercise](../fixtures/examples/learner-review/README.md) and [session record](learner-review-session.md) are ready for five independent attempts. The number five is a recruitment target, not a claim of participation. Automated/package results remain separate; actual sessions and feedback are pending.
 
 ## Candidate and session setup
 

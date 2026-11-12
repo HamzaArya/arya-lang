@@ -1,0 +1,678 @@
+{
+  "recordedAt": "2026-11-12T14:18:37.900672+00:00",
+  "host": {
+    "platform": "Darwin",
+    "architecture": "arm64",
+    "logicalCpus": 8
+  },
+  "hostStart": {
+    "loadAverage": [
+      3.796875,
+      5.52197265625,
+      7.94189453125
+    ]
+  },
+  "hostEnd": {
+    "loadAverage": [
+      3.52734375,
+      5.20263671875,
+      7.67333984375
+    ]
+  },
+  "compilers": {
+    "advanced": {
+      "binarySha256": "77b1a4b2ad9454411cad0e2d72d1672e7604284b75a8e4f8fda6e8fd23d34297",
+      "version": "Arya native 2.0.0-alpha.2 (self-hosted)",
+      "sourceHashes": {
+        "lsp.arya": "30df055ccb1c7681cdd13a8a667b4dc1e4b5391aa18cf81a71881cae1b31ee62",
+        "scalar.arya": "b371fa703d7c5ae505bec22224d4e340a5bfee20cc82c52a77cfce4044bf7817",
+        "checker.arya": "9fe466de07de32e7580175522ecf72dea45334e8f66472507e9fb4eeb74b693f",
+        "build-cache.arya": "012be2f820df267c8b710faa6da7f6537687ec2b77628164d8b6ea1546f86141",
+        "type-model.arya": "fc32bb865eddb59f319373f655a589606d028304a48f74039ee07d4890f3bde8",
+        "compiler.arya": "5a85b2eb5275e5628a1e9780af490cded6eb7d4d9418773f748c106d0b18a007",
+        "standard-types.arya": "04c9dc8b7ba024d68f5c792d1971d85ac977db178e38cfeaca8c652fbc066909",
+        "editor.arya": "3a9101212da84c9784ff426e79fad67d346db8531b1a0b66e68cb3d8f5d67198",
+        "runtime-source.arya": "a7af692498eeb77b8df32490d14d9dfdcadd76fafef0a80a5bf5905037e3c2ee",
+        "project.arya": "dc5add5181116bdda5dce70e86cdba45adbed800779d9766fadbc3550b073942",
+        "views.arya": "f8acb099b87281d0a4d7debfac73ba0f7a9dd906edd2dd9f03199bd9fbd97d27",
+        "tooling.arya": "39d7f1fbc2e67111c993a7a281ae9964c06c5ce9e23ab888fb07fdcbc6c3979d"
+      },
+      "generatedCSha256": "be2124b78844d82b2f1798902b4234cbfef5a22fb506ce261fd98baf5f251b8c"
+    },
+    "previous": {
+      "binarySha256": "94036516b9ed99d5cf1be5a8924ba5284ea62787fb6c975397678b45de9c4ef4",
+      "version": "Arya native 2.0.0-alpha.2 (self-hosted)",
+      "sourceHashes": {
+        "compiler.arya": "c168031c603908401bd631fe6ede32c8e8ff3331d9a37b2f5cbf617a52ba0ef9"
+      },
+      "generatedCSha256": "fbad626b8f44caac2ea7008777abfbc66c03a5bb57da2c00e6af3c24db32c976"
+    }
+  },
+  "orchestratorSha256": "4d39fd79b2c81b0c9a4f04b67c2ae680ce441d3fb9efd253983da2d516af20cc",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+  "method": {
+    "previous": "Retained pre-change native compiler",
+    "timing": "C11 -O2 -ffp-contract=off. CPU from runtime.clock(), monotonic wall from performance.now(), per complete work call. No startup/build/warmup/output in measured region.",
+    "samples": "9 alternating fresh-process samples; >=150 ms CPU and eight warmup calls. Separately calibrated even batches target >=50 ms CPU; equal n/n+1 proportions.",
+    "correctness": "Independent expected n/n+1 outputs, checked instrumented outputs and every timing checksum.",
+    "counters": "Separate instrumented processes evaluate work(n) and work(n+1) once. calloc wrapper and managed-memory counters are not all system allocations or peak RSS.",
+    "scope": "Single development host under recorded load; microbenchmarks do not qualify arbitrary applications or other platforms."
+  },
+  "workloads": [
+    {
+      "name": "recursive-fibonacci",
+      "input": 24,
+      "expected": [
+        46368,
+        75025
+      ],
+      "source": "use std \"runtime\" as runtime\nfn fib(n) { if n < 2 { return n }; return fib(n - 1) + fib(n - 2) }\nfn work(n) => fib(n)\n\nconst n = number(args[0])\nconst repetitions = number(args[1])\nif repetitions == 0 { print(work(n), work(n + 1)) }\nelse {\n  const warmStart = runtime.clock()\n  let i = 0\n  let checksum = 0\n  while i < 8 or runtime.clock() - warmStart < 0.15 { checksum += work(n + i % 2); i += 1 }\n  i = 0\n  checksum = 0\n  const wallStart = performance.now()\n  const start = runtime.clock()\n  while i < repetitions { checksum += work(n + i % 2); i += 1 }\n  const elapsed = (runtime.clock() - start) * 1000\n  const wallElapsed = performance.now() - wallStart\n  print(checksum, elapsed, wallElapsed)\n}\n",
+      "kernelSource": "fn fib(n) { if n < 2 { return n }; return fib(n - 1) + fib(n - 2) }\nfn work(n) => fib(n)\n\nconst n = number(args[0])\nprint(work(n), work(n + 1))\n",
+      "repetitions": {
+        "advanced": 74,
+        "previous": 72
+      },
+      "variants": {
+        "advanced": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/recursive-fibonacci-advanced",
+          "binaryBytes": 475832,
+          "binarySha256": "dd39af67f024bff470eaa0495b2a469ff8c5f60fc93dc6dfac6365f3d39733b4",
+          "generatedCSha256": "c97a78816ab26f04cb115b0bc8b3410645a2afb4a6ab88569756ea20b1224fb2",
+          "buildWallMs": 1722.2206660007942,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 392836,
+            "numericCalls": 392836,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2774,
+            "scalarCalls": 392836,
+            "rootedCalls": 2,
+            "rootPushes": 10,
+            "environmentLookups": 16
+          },
+          "cpu": {
+            "medianMs": 0.6464864864864864,
+            "minMs": 0.6368918918918915,
+            "maxMs": 0.7926216216216218,
+            "samplesMs": [
+              0.6411486486486485,
+              0.6464864864864864,
+              0.6984324324324322,
+              0.6650540540540542,
+              0.6498378378378378,
+              0.6462027027027027,
+              0.7926216216216218,
+              0.6403513513513515,
+              0.6368918918918915
+            ]
+          },
+          "wall": {
+            "medianMs": 0.6488783783908632,
+            "minMs": 0.6373513513118834,
+            "maxMs": 1.3317837837479405,
+            "samplesMs": [
+              0.6433108108168518,
+              0.647094594616745,
+              0.7103243243150614,
+              0.6692297297051629,
+              0.6502297297120094,
+              0.6488783783908632,
+              1.3317837837479405,
+              0.641054054067747,
+              0.6373513513118834
+            ]
+          }
+        },
+        "previous": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/recursive-fibonacci-previous",
+          "binaryBytes": 475880,
+          "binarySha256": "529c6117d806d5cda3bf922a40951dd5148f1039fc9590b343d417b5d4382895",
+          "generatedCSha256": "31c0436b6a5e955d7dc9f3a1eadacaef4304164ad4f721aa1ba47e415ef9dbbc",
+          "buildWallMs": 1850.9137080000073,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 392836,
+            "numericCalls": 392836,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2774
+          },
+          "cpu": {
+            "medianMs": 0.7296111111111111,
+            "minMs": 0.7194305555555554,
+            "maxMs": 0.7595555555555554,
+            "samplesMs": [
+              0.7296111111111111,
+              0.7292916666666667,
+              0.7208472222222223,
+              0.742361111111111,
+              0.725597222222222,
+              0.7318055555555557,
+              0.7389027777777778,
+              0.7595555555555554,
+              0.7194305555555554
+            ]
+          },
+          "wall": {
+            "medianMs": 0.7315138888855776,
+            "minMs": 0.7208611110949682,
+            "maxMs": 0.7685555555961199,
+            "samplesMs": [
+              0.7314583333209157,
+              0.7315138888855776,
+              0.7212638889128963,
+              0.7441388888595005,
+              0.7265972222408487,
+              0.734874999978476,
+              0.7419722222516106,
+              0.7685555555961199,
+              0.7208611110949682
+            ]
+          }
+        }
+      },
+      "additionalCpuSpeedup": 1.12857905982906
+    },
+    {
+      "name": "boolean-calls",
+      "input": 100000,
+      "expected": [
+        100000,
+        -100001
+      ],
+      "source": "use std \"runtime\" as runtime\nfn flip(value) => not value\nfn work(n) { let value = false; let i = 0; while i < n { value = flip(value); i += 1 }; if value { return -i }; return i }\n\nconst n = number(args[0])\nconst repetitions = number(args[1])\nif repetitions == 0 { print(work(n), work(n + 1)) }\nelse {\n  const warmStart = runtime.clock()\n  let i = 0\n  let checksum = 0\n  while i < 8 or runtime.clock() - warmStart < 0.15 { checksum += work(n + i % 2); i += 1 }\n  i = 0\n  checksum = 0\n  const wallStart = performance.now()\n  const start = runtime.clock()\n  while i < repetitions { checksum += work(n + i % 2); i += 1 }\n  const elapsed = (runtime.clock() - start) * 1000\n  const wallElapsed = performance.now() - wallStart\n  print(checksum, elapsed, wallElapsed)\n}\n",
+      "kernelSource": "fn flip(value) => not value\nfn work(n) { let value = false; let i = 0; while i < n { value = flip(value); i += 1 }; if value { return -i }; return i }\n\nconst n = number(args[0])\nprint(work(n), work(n + 1))\n",
+      "repetitions": {
+        "advanced": 496,
+        "previous": 12
+      },
+      "variants": {
+        "advanced": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/boolean-calls-advanced",
+          "binaryBytes": 475800,
+          "binarySha256": "f16fcc3a71a366c3c8f47f416d22d55db28fddcb9ae26d8ebab363cecb221160",
+          "generatedCSha256": "41099d3da55a9a761ccd50b7bd508fff71c37c9d411b3d58caa5f1eb74505fb0",
+          "buildWallMs": 1492.8449589988304,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 200003,
+            "numericCalls": 2,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2784,
+            "scalarCalls": 200003,
+            "rootedCalls": 2,
+            "rootPushes": 10,
+            "environmentLookups": 16
+          },
+          "cpu": {
+            "medianMs": 0.09554032258064513,
+            "minMs": 0.0951350806451613,
+            "maxMs": 0.10850604838709674,
+            "samplesMs": [
+              0.09538911290322585,
+              0.09638104838709674,
+              0.09920161290322581,
+              0.0951350806451613,
+              0.0972923387096774,
+              0.10850604838709674,
+              0.09521370967741934,
+              0.09531250000000002,
+              0.09554032258064513
+            ]
+          },
+          "wall": {
+            "medianMs": 0.09603024193746669,
+            "minMs": 0.09535282258425028,
+            "maxMs": 0.11905443548194823,
+            "samplesMs": [
+              0.09567137096347587,
+              0.09712298387180894,
+              0.10010282257421603,
+              0.09535282258425028,
+              0.09779637097381055,
+              0.11905443548194823,
+              0.09535483870985767,
+              0.09538104838030713,
+              0.09603024193746669
+            ]
+          }
+        },
+        "previous": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/boolean-calls-previous",
+          "binaryBytes": 475768,
+          "binarySha256": "f0368b26e63fb9fc07096ff515c5def84870e6fdb9324c0e185d558900f04773",
+          "generatedCSha256": "7fb75f732842c3613d76d43e594a7a4be8197958e704cb0efccdf910859785ab",
+          "buildWallMs": 1501.8074170002365,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 200003,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2784
+          },
+          "cpu": {
+            "medianMs": 4.648499999999999,
+            "minMs": 4.6185833333333335,
+            "maxMs": 5.935250000000001,
+            "samplesMs": [
+              4.687083333333333,
+              4.632083333333333,
+              4.636166666666665,
+              4.621833333333334,
+              4.6185833333333335,
+              4.648499999999999,
+              4.705333333333335,
+              5.935250000000001,
+              4.668250000000001
+            ]
+          },
+          "wall": {
+            "medianMs": 4.653000000243385,
+            "minMs": 4.621750000243385,
+            "maxMs": 6.355999999990066,
+            "samplesMs": [
+              4.701750000317891,
+              4.644499999781449,
+              4.643083333348234,
+              4.6271666667113704,
+              4.621750000243385,
+              4.653000000243385,
+              4.715000000161429,
+              6.355999999990066,
+              4.68008333320419
+            ]
+          }
+        }
+      },
+      "additionalCpuSpeedup": 48.654849328944046
+    },
+    {
+      "name": "captured-dynamic-calls",
+      "input": 20000,
+      "expected": [
+        20000,
+        20001
+      ],
+      "source": "use std \"runtime\" as runtime\nfn factory() { let total = 0; return fn(step) { total += step; return total } }\nfn work(n) { const next = factory(); let i = 0; let value = 0; while i < n { value = next(1); i += 1 }; return value }\n\nconst n = number(args[0])\nconst repetitions = number(args[1])\nif repetitions == 0 { print(work(n), work(n + 1)) }\nelse {\n  const warmStart = runtime.clock()\n  let i = 0\n  let checksum = 0\n  while i < 8 or runtime.clock() - warmStart < 0.15 { checksum += work(n + i % 2); i += 1 }\n  i = 0\n  checksum = 0\n  const wallStart = performance.now()\n  const start = runtime.clock()\n  while i < repetitions { checksum += work(n + i % 2); i += 1 }\n  const elapsed = (runtime.clock() - start) * 1000\n  const wallElapsed = performance.now() - wallStart\n  print(checksum, elapsed, wallElapsed)\n}\n",
+      "kernelSource": "fn factory() { let total = 0; return fn(step) { total += step; return total } }\nfn work(n) { const next = factory(); let i = 0; let value = 0; while i < n { value = next(1); i += 1 }; return value }\n\nconst n = number(args[0])\nprint(work(n), work(n + 1))\n",
+      "repetitions": {
+        "advanced": 38,
+        "previous": 36
+      },
+      "variants": {
+        "advanced": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/captured-dynamic-calls-advanced",
+          "binaryBytes": 475848,
+          "binarySha256": "213d9956009878d25a9b9bcaf6affae4c595e5482775129757d7a2ab76b1576b",
+          "generatedCSha256": "4bb68fa522043df44e6181980baa866692951773c9804325d39f12136abb769e",
+          "buildWallMs": 1558.8145829988207,
+          "counters": {
+            "callocCalls": 35,
+            "heapObjects": 20,
+            "environments": 3,
+            "functions": 10,
+            "genericCalls": 40004,
+            "directCalls": 4,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 3404,
+            "scalarCalls": 0,
+            "rootedCalls": 40003,
+            "rootPushes": 40013,
+            "environmentLookups": 40021
+          },
+          "cpu": {
+            "medianMs": 1.3795526315789473,
+            "minMs": 1.3679736842105263,
+            "maxMs": 1.4545789473684207,
+            "samplesMs": [
+              1.4545789473684207,
+              1.387394736842105,
+              1.3813947368421056,
+              1.3777368421052627,
+              1.3745,
+              1.3962631578947373,
+              1.3752368421052632,
+              1.3795526315789473,
+              1.3679736842105263
+            ]
+          },
+          "wall": {
+            "medianMs": 1.3800789473676367,
+            "minMs": 1.3686578946286125,
+            "maxMs": 1.4726052631280924,
+            "samplesMs": [
+              1.4726052631280924,
+              1.3935000000423508,
+              1.3853947368303412,
+              1.3789736842246432,
+              1.3771842105412169,
+              1.3974210525813855,
+              1.3760789473982233,
+              1.3800789473676367,
+              1.3686578946286125
+            ]
+          }
+        },
+        "previous": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/captured-dynamic-calls-previous",
+          "binaryBytes": 475832,
+          "binarySha256": "b55ff01cb23bd02ef7553b36abafa52f4a04227932c20db0e559d39742e938e9",
+          "generatedCSha256": "4787dc96dac81abbdc2256d260b027790141beac680364be85dc6d42baac06b7",
+          "buildWallMs": 2094.685207999646,
+          "counters": {
+            "callocCalls": 35,
+            "heapObjects": 20,
+            "environments": 3,
+            "functions": 10,
+            "genericCalls": 40004,
+            "directCalls": 4,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 3404
+          },
+          "cpu": {
+            "medianMs": 1.4414166666666663,
+            "minMs": 1.4251666666666671,
+            "maxMs": 1.4901111111111112,
+            "samplesMs": [
+              1.4901111111111112,
+              1.447916666666667,
+              1.4288055555555559,
+              1.45475,
+              1.4651111111111108,
+              1.4393055555555554,
+              1.4414166666666663,
+              1.4300833333333334,
+              1.4251666666666671
+            ]
+          },
+          "wall": {
+            "medianMs": 1.443138888830112,
+            "minMs": 1.4267500000488427,
+            "maxMs": 1.5081111110953822,
+            "samplesMs": [
+              1.5081111110953822,
+              1.451555555479394,
+              1.4303888889650505,
+              1.4563888888806105,
+              1.4680833333275385,
+              1.4411944444808695,
+              1.443138888830112,
+              1.430972222238779,
+              1.4267500000488427
+            ]
+          }
+        }
+      },
+      "additionalCpuSpeedup": 1.0448435483153067
+    },
+    {
+      "name": "mixed-scalar-control",
+      "input": 50000,
+      "expected": [
+        -416658334,
+        -416708334
+      ],
+      "source": "use std \"runtime\" as runtime\nfn select(n, flag) { if flag { return n }; return -n }\nfn classify(n) => n % 3 == 0\nfn work(n) { let total = 0; let i = 0; while i < n { total += select(i, classify(i)); i += 1 }; return total }\n\nconst n = number(args[0])\nconst repetitions = number(args[1])\nif repetitions == 0 { print(work(n), work(n + 1)) }\nelse {\n  const warmStart = runtime.clock()\n  let i = 0\n  let checksum = 0\n  while i < 8 or runtime.clock() - warmStart < 0.15 { checksum += work(n + i % 2); i += 1 }\n  i = 0\n  checksum = 0\n  const wallStart = performance.now()\n  const start = runtime.clock()\n  while i < repetitions { checksum += work(n + i % 2); i += 1 }\n  const elapsed = (runtime.clock() - start) * 1000\n  const wallElapsed = performance.now() - wallStart\n  print(checksum, elapsed, wallElapsed)\n}\n",
+      "kernelSource": "fn select(n, flag) { if flag { return n }; return -n }\nfn classify(n) => n % 3 == 0\nfn work(n) { let total = 0; let i = 0; while i < n { total += select(i, classify(i)); i += 1 }; return total }\n\nconst n = number(args[0])\nprint(work(n), work(n + 1))\n",
+      "repetitions": {
+        "advanced": 74,
+        "previous": 8
+      },
+      "variants": {
+        "advanced": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/mixed-scalar-control-advanced",
+          "binaryBytes": 475800,
+          "binarySha256": "6d86505cf98685ce5fb92ea102ed9dd9e9eed906b66036d11a49c1cbceb0b79a",
+          "generatedCSha256": "b38e76134570e0b398435703ae5b1c91bb56cc330d8e25faa757e9789c96dbfe",
+          "buildWallMs": 1509.8919160009245,
+          "counters": {
+            "callocCalls": 30,
+            "heapObjects": 17,
+            "environments": 1,
+            "functions": 9,
+            "genericCalls": 3,
+            "directCalls": 200004,
+            "numericCalls": 2,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2958,
+            "scalarCalls": 200004,
+            "rootedCalls": 2,
+            "rootPushes": 10,
+            "environmentLookups": 17
+          },
+          "cpu": {
+            "medianMs": 0.6788108108108108,
+            "minMs": 0.674608108108108,
+            "maxMs": 0.6963918918918918,
+            "samplesMs": [
+              0.6779054054054056,
+              0.6788108108108108,
+              0.6785,
+              0.6963918918918918,
+              0.6861756756756755,
+              0.6795270270270274,
+              0.6753648648648648,
+              0.6808513513513514,
+              0.674608108108108
+            ]
+          },
+          "wall": {
+            "medianMs": 0.6792837837962685,
+            "minMs": 0.6751486486881166,
+            "maxMs": 0.6993648648966808,
+            "samplesMs": [
+              0.6783378378462952,
+              0.6792837837962685,
+              0.6789189189471103,
+              0.6993648648966808,
+              0.6891081081451597,
+              0.6801351351109711,
+              0.6761351351601046,
+              0.6813243243944,
+              0.6751486486881166
+            ]
+          }
+        },
+        "previous": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/mixed-scalar-control-previous",
+          "binaryBytes": 475800,
+          "binarySha256": "753d92624457a7dc2ec3ba904bd48f332f0145f2f350d8a68d4f8bcde9a0424b",
+          "generatedCSha256": "c9f3609f31882b0e9e9107a9c95c01cec0c5fe5b59ff00713a06a7ce32243f24",
+          "buildWallMs": 1476.7882919986732,
+          "counters": {
+            "callocCalls": 30,
+            "heapObjects": 17,
+            "environments": 1,
+            "functions": 9,
+            "genericCalls": 3,
+            "directCalls": 200004,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2958
+          },
+          "cpu": {
+            "medianMs": 7.541625,
+            "minMs": 7.480250000000001,
+            "maxMs": 7.663375,
+            "samplesMs": [
+              7.525375,
+              7.548124999999999,
+              7.522500000000002,
+              7.622875000000001,
+              7.560750000000001,
+              7.663375,
+              7.480250000000001,
+              7.541625,
+              7.480625000000001
+            ]
+          },
+          "wall": {
+            "medianMs": 7.543374999891967,
+            "minMs": 7.484749999828637,
+            "maxMs": 7.692875000182539,
+            "samplesMs": [
+              7.54300000006333,
+              7.554250000510365,
+              7.535874999593943,
+              7.692875000182539,
+              7.589499999769032,
+              7.683000000193715,
+              7.484749999828637,
+              7.543374999891967,
+              7.486625000368804
+            ]
+          }
+        }
+      },
+      "additionalCpuSpeedup": 11.110054347826086
+    },
+    {
+      "name": "general-fallback-calls",
+      "input": 100000,
+      "expected": [
+        100000,
+        -100001
+      ],
+      "source": "use std \"runtime\" as runtime\nfn flip(value) { try { return not value } finally { } }\nfn work(n) { let value = false; let i = 0; while i < n { value = flip(value); i += 1 }; if value { return -i }; return i }\n\nconst n = number(args[0])\nconst repetitions = number(args[1])\nif repetitions == 0 { print(work(n), work(n + 1)) }\nelse {\n  const warmStart = runtime.clock()\n  let i = 0\n  let checksum = 0\n  while i < 8 or runtime.clock() - warmStart < 0.15 { checksum += work(n + i % 2); i += 1 }\n  i = 0\n  checksum = 0\n  const wallStart = performance.now()\n  const start = runtime.clock()\n  while i < repetitions { checksum += work(n + i % 2); i += 1 }\n  const elapsed = (runtime.clock() - start) * 1000\n  const wallElapsed = performance.now() - wallStart\n  print(checksum, elapsed, wallElapsed)\n}\n",
+      "kernelSource": "fn flip(value) { try { return not value } finally { } }\nfn work(n) { let value = false; let i = 0; while i < n { value = flip(value); i += 1 }; if value { return -i }; return i }\n\nconst n = number(args[0])\nprint(work(n), work(n + 1))\n",
+      "repetitions": {
+        "advanced": 12,
+        "previous": 12
+      },
+      "variants": {
+        "advanced": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/general-fallback-calls-advanced",
+          "binaryBytes": 475800,
+          "binarySha256": "19288eb2b57dc959c6b1df940607872738415ed3c0a883f40a61f1d8679b8491",
+          "generatedCSha256": "aa7bd1ef4496187c0a54a40c456ab55f6156a034e585fd241e5ee9db87961d8b",
+          "buildWallMs": 1463.6564169995836,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 200003,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2784,
+            "scalarCalls": 0,
+            "rootedCalls": 2,
+            "rootPushes": 200011,
+            "environmentLookups": 18
+          },
+          "cpu": {
+            "medianMs": 4.8661666666666665,
+            "minMs": 4.668249999999999,
+            "maxMs": 6.037500000000001,
+            "samplesMs": [
+              4.68575,
+              4.6916666666666655,
+              4.668249999999999,
+              4.983250000000002,
+              5.278833333333334,
+              4.8661666666666665,
+              4.778583333333334,
+              6.037500000000001,
+              5.518833333333334
+            ]
+          },
+          "wall": {
+            "medianMs": 4.891250000024836,
+            "minMs": 4.67174999974668,
+            "maxMs": 9.054583333432674,
+            "samplesMs": [
+              4.68875000004967,
+              4.695916666649282,
+              4.67174999974668,
+              4.997999999982615,
+              5.571166666845481,
+              4.891250000024836,
+              4.802083333333333,
+              9.054583333432674,
+              6.0733333335568505
+            ]
+          }
+        },
+        "previous": {
+          "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-advanced-call-benchmark/run-cgn6v5gh/general-fallback-calls-previous",
+          "binaryBytes": 475768,
+          "binarySha256": "347b471929584fac0d51116bae66cb4e9b953accb5c3adf0bb5a9f34751bfb78",
+          "generatedCSha256": "e6dbbceceb43f8a85b33c70c0720a210607a5feeaf83442f69e4748b00c122f3",
+          "buildWallMs": 1412.9140419991018,
+          "counters": {
+            "callocCalls": 29,
+            "heapObjects": 16,
+            "environments": 1,
+            "functions": 8,
+            "genericCalls": 3,
+            "directCalls": 200003,
+            "numericCalls": 0,
+            "heapTemporaries": 0,
+            "gcCollections": 1,
+            "peakManagedBytes": 2784
+          },
+          "cpu": {
+            "medianMs": 4.776166666666668,
+            "minMs": 4.673583333333332,
+            "maxMs": 5.2964166666666666,
+            "samplesMs": [
+              4.703499999999999,
+              4.706833333333331,
+              4.8989166666666675,
+              4.673583333333332,
+              5.2964166666666666,
+              4.776166666666668,
+              5.2410000000000005,
+              5.110333333333332,
+              4.742000000000001
+            ]
+          },
+          "wall": {
+            "medianMs": 4.776333333303531,
+            "minMs": 4.677499999913077,
+            "maxMs": 5.462999999833603,
+            "samplesMs": [
+              4.710749999930461,
+              4.712416666559875,
+              4.922916666915019,
+              4.677499999913077,
+              5.462999999833603,
+              4.776333333303531,
+              5.435333333599071,
+              5.23450000025332,
+              4.750666666775942
+            ]
+          }
+        }
+      },
+      "additionalCpuSpeedup": 0.9815049491386103
+    }
+  ]
+}

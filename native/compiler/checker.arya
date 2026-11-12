@@ -1,0 +1,239 @@
+# Gradual structural checking with branch state, mutable aliases and call effects.
+use arya "./type-model.arya" as types
+use std "runtime" as runtime
+export fn check(ast, hooks) {
+  let state = []; let returns = []; let current = null; let checked = []; let effectSerial = 0
+  fn error(token, message) { hooks.fail(token, message, "ARYA_TYPE") }
+  fn declared(binding) { return hooks.declared(binding) }
+  fn read(binding, values) { if values == undefined { values = state }; let index = len(values) - 1; while index >= 0 { if values[index].binding == binding { return values[index].type }; index -= 1 }; return declared(binding) }
+  # Keep one immutable entry per lexical binding. Appending duplicate entries
+  # made invalidate() double mutable-capture history at every call. Replacing
+  # the entry (rather than mutating it) preserves slice-based branch snapshots.
+  fn write(binding, type) {
+    let index = len(state) - 1
+    while index >= 0 { if state[index].binding == binding { state[index] = {binding: binding, type: type}; return }; index -= 1 }
+    state.push({binding: binding, type: type})
+  }
+  fn compatible(actual, expected, node) { if not types.assignable(actual, expected, not hooks.fresh(node)) { error(node.token, "Type mismatch: expected " + types.text(expected) + ", received " + types.text(actual) + ".") } }
+  fn remember(node, value) { node.checkedType = value; return value }
+  fn join(left, right) {
+    let result = []; let names = []
+    for item in left.concat(right) { if names.includes(item.binding) { continue }; names.push(item.binding); result.push({binding: item.binding, type: types.union([read(item.binding, left), read(item.binding, right)])}) }
+    return result
+  }
+  fn filter(value, excluded, retain) { let values = [value]; if types.kind(value) == "union" { values = value.values }; let result = []; for item in values { if (types.kind(item) == excluded) == retain { result.push(item) } }; return types.union(result) }
+  fn nullish(node) { if node.kind == "literal" and node.value == null { return "null" }; if node.kind == "name" and node.name == "undefined" and hooks.global(node) { return "undefined" }; return null }
+  fn narrow(node, truth) {
+    if node.kind == "unary" and ["not", "!"].includes(node.operator) { narrow(node.value, not truth); return }
+    if node.kind == "binary" and ["and", "or"].includes(node.operator) {
+      let sequential = node.operator == "and"; let before = state.slice()
+      if truth == sequential { if not node.right.hasEffects { narrow(node.left, truth) }; narrow(node.right, truth) }
+      else { narrow(node.left, truth); let first = state; state = before; narrow(node.left, not truth); narrow(node.right, truth); state = join(first, state) }
+      return
+    }
+    if node.kind == "binary" and ["==", "!="].includes(node.operator) {
+      let name = node.left; let absent = nullish(node.right)
+      if absent == null { absent = nullish(node.left); name = node.right }
+      if absent != null and name.kind == "name" and not hooks.global(name) { let binding = hooks.lookup(name); write(binding, filter(read(binding), absent, truth == (node.operator == "=="))) }
+    } else if truth and node.kind == "name" and not hooks.global(node) { let binding = hooks.lookup(node); write(binding, types.present(read(binding))) }
+  }
+  fn invalidate() { effectSerial += 1; let values = state.slice(); for item in values { if item.binding.mutableCaptured { write(item.binding, declared(item.binding)) } } }
+  fn writes(body, result) {
+    if body == null { return }
+    for item in body.statements {
+      if item.kind == "assignment" and item.target.kind == "name" { let binding = hooks.lookup(item.target); if not result.includes(binding) { result.push(binding) } }
+      if ["if", "while", "for", "try"].includes(item.kind) { writes(item.body, result); if item.otherwise != undefined { writes(item.otherwise, result) }; if item.handler != undefined { writes(item.handler, result) }; if item.finalizer != undefined { writes(item.finalizer, result) } }
+    }
+  }
+  fn invalidateWrites(values) { for binding in values { write(binding, declared(binding)) } }
+  fn binary(operator, left, right, token) {
+    let a = types.kind(left); let b = types.kind(right)
+    if ["==", "!=", "<", "<=", ">", ">="].includes(operator) { if a == "unknown" or b == "unknown" { error(token, "Validate unknown values before comparing them.") }; return "boolean" }
+    if a == "any" or b == "any" { return "any" }
+    if operator == "+" and (a == "string" or b == "string") { return "string" }
+    if a != "number" or b != "number" { error(token, "Operator '" + operator + "' requires number operands; received " + types.text(left) + " and " + types.text(right) + ".") }
+    return "number"
+  }
+  fn member(base, key, token) { if types.kind(base) == "unknown" { hooks.fail(token, "Unknown external value: validate it before reading members.", "ARYA_TYPE_UNKNOWN") }; try { return hooks.member(base, key, token) } catch failure { error(token, failure.message ?? str(failure)) } }
+  fn invoke(signature, callArguments, values, token) {
+    let kind = types.kind(signature)
+    if kind == "any" { invalidate(); return "any" }
+    if kind != "function" { error(token, "Cannot call " + types.text(signature) + "; a function is required.") }
+    let expanded = []; let index = 0; let guaranteed = 0; let spreading = false
+    for argument in callArguments {
+      let actual = values[index]; index += 1
+      if argument.kind == "spread" and argument.value.kind == "list" and not argument.value.items.some(fn(item) { return item.kind == "spread" }) {
+        for item in argument.value.items { expanded.push({node: item, type: item.checkedType, spread: false}); guaranteed += 1 }
+      } else if argument.kind == "spread" { let element = "any"; if types.kind(actual) == "array" { element = actual.value } else if types.kind(actual) == "string" { element = "string" }; expanded.push({node: argument, type: element, spread: true}); spreading = true }
+      else { expanded.push({node: argument, type: actual, spread: false}); guaranteed += 1 }
+    }
+    if not signature.loose and (guaranteed < types.required(signature) or not spreading and signature.rest == undefined and guaranteed > len(signature.parameters)) { error(token, "Typed call has an incompatible argument count; spread arrays do not guarantee required values.") }
+    index = 0; let uncertain = false
+    for argument in expanded {
+      if argument.spread { uncertain = true }
+      let end = index + 1; if uncertain { end = len(signature.parameters); if end <= index { end = index + 1 } }
+      let position = index
+      while position < end { let expected = types.parameter(signature, position); if expected != undefined and not (signature.optional[position] and types.kind(argument.type) == "undefined") { compatible(argument.type, expected, argument.node) }; position += 1 }
+      if not argument.spread { index += 1 }
+    }
+    let result = signature.result
+    let builtin = signature.builtin ?? ""
+    if builtin.startsWith("validate.") and len(values) > 0 {
+      let method = builtin.slice(9); let schema = values[0]
+      if method == "object" and types.kind(schema) == "record" {
+        let fields = {}; for key in runtime.keys(schema.fields) { let child = schema.fields[key].type; if types.kind(child) != "schema" { error(token, "Object schemas require schema fields.") }; let optional = false; if types.kind(child.value) == "union" { for item in child.value.values { if types.kind(item) == "undefined" { optional = true } } }; fields[key] = {type: child.value, optional: optional} }; result = {kind: "schema", value: {kind: "record", fields: fields}}
+      } else if method == "enum" and types.kind(schema) == "array" { result = {kind: "schema", value: schema.value} }
+      else if types.kind(schema) == "schema" {
+        if method == "array" { result = {kind: "schema", value: types.array(schema.value)} }
+        if method == "nullable" { result = {kind: "schema", value: types.union([schema.value, "null"])} }
+        if method == "optional" { let optional = schema.value; if len(values) < 2 { optional = types.union([optional, "undefined"]) }; result = {kind: "schema", value: optional} }
+        if method == "parse" { result = schema.value }
+        if method == "check" { result = types.record({ok: "boolean", value: types.union([schema.value, "undefined"]), issues: types.array("any")}) }
+      }
+    }
+    if builtin.startsWith("list.") and len(values) > 0 and types.kind(values[0]) == "array" {
+      let method = builtin.slice(5); let input = values[0]
+      if ["filter", "sortBy", "take", "unique"].includes(method) { result = input }
+      if method == "find" { result = types.union([input.value, "null"]) }
+      if method == "reduce" and len(values) > 2 { result = values[2] }
+      if method == "map" or method == "flatMap" { let selected = "any"; if len(values) > 1 { if types.kind(values[1]) == "function" { selected = values[1].result }; if callArguments[1].kind == "literal" and callArguments[1].token.kind == "string" { selected = member(input.value, callArguments[1], token) } }; if method == "flatMap" and types.kind(selected) == "array" { selected = selected.value }; result = types.array(selected) }
+      if method != "map" and len(values) > 1 and types.kind(values[1]) == "function" and types.kind(values[1].result) == "promise" { error(token, "Synchronous list helpers require a synchronous callback.") }
+    }
+    invalidate(); return result
+  }
+  fn assigned(contract, actual) {
+    if types.kind(contract) == "any" or types.kind(contract) == "unknown" { return contract }
+    if types.kind(contract) == "record" or types.kind(contract) == "array" { return contract }
+    if types.kind(contract) == "union" { let result = []; for option in contract.values { if types.assignable(actual, option, false) { result.push(option) } }; if len(result) > 0 { return types.union(result) } }
+    return actual
+  }
+  fn returned(block) {
+    let result = []; if block == null { return result }
+    for item in block.statements {
+      if item.kind == "return" { if item.value == null { result.push("undefined") } else { result.push(item.value.checkedType ?? "any") } }
+      else if item.kind == "if" { result = result.concat(returned(item.body), returned(item.otherwise)) }
+      else if item.kind == "while" or item.kind == "for" { if not (item.kind == "while" and item.condition.kind == "literal" and item.condition.value == false) { result = result.concat(returned(item.body)) } }
+      else if item.kind == "try" {
+        let original = returned(item.body).concat(returned(item.handler))
+        if item.finalizer != null { if not hooks.outcomes(item.finalizer).includes("normal") { original = [] }; original = original.concat(returned(item.finalizer)) }
+        result = result.concat(original)
+      }
+      if not hooks.outcomes({statements: [item]}).includes("normal") { break }
+    }
+    return result
+  }
+  fn functionCheck(node) {
+    let signature = hooks.signature(node)
+    if checked.includes(node) { return signature }; checked.push(node)
+    let saved = state; let savedReturns = returns; let previous = current
+    state = state.slice(); invalidate(); returns = []; current = node
+    let index = 0
+    for parameter in node.params {
+      write(parameter, parameter.annotation ?? "any")
+      if node.defaults[index] != null { let value = expression(node.defaults[index]); if parameter.annotation != null { compatible(value, parameter.annotation, node.defaults[index]) } }
+      index += 1
+    }
+    if node.rest != null { write(node.rest, node.rest.annotation ?? types.array("any")) }
+    let continuing = body(node.body)
+    if node.returnType == null { let values = returned(node.body); if hooks.outcomes(node.body).includes("normal") { values.push("undefined") }; let value = types.union(values); if node.async { value = types.promise(types.awaited(value)) }; signature.result = value }
+    state = saved; returns = savedReturns; current = previous
+    node.checkedType = signature; return signature
+  }
+  fn view(children) { for child in children { if child.kind == "text" { expression(child.value) }; if child.attributes != undefined { for field in child.attributes { expression(field.value) } }; if child.children != undefined { view(child.children) } } }
+  fn expression(node) {
+    if node == null { return "void" }
+    let beforeEffects = effectSerial
+    let value = "any"
+    if node.kind == "name" { if hooks.global(node) { value = hooks.infer(node) } else { value = read(hooks.lookup(node)) } }
+    else if node.kind == "literal" { value = hooks.infer(node) }
+    else if node.kind == "function" { value = functionCheck(node) }
+    else if node.kind == "view" { view(node.children); value = "string" }
+    else if node.kind == "list" { let items = []; for item in node.items { let type = expression(item); if item.kind == "spread" and types.kind(type) == "array" { type = type.value }; items.push(type) }; value = types.array(types.union(items)) }
+    else if node.kind == "object" { let fields = {}; for field in node.fields { fields[field.key] = expression(field.value) }; value = types.record(fields) }
+    else if node.kind == "spread" { value = expression(node.value); if not ["array", "string", "any"].includes(types.kind(value)) { error(node.token, "Spread requires an array or string, received " + types.text(value) + ".") } }
+    else if node.kind == "member" { let base = expression(node.object); expression(node.key); value = member(base, node.key, node.token) }
+    else if node.kind == "binary" {
+      let left = expression(node.left)
+      if ["and", "or", "??"].includes(node.operator) {
+        let before = state.slice()
+        if node.operator == "and" { narrow(node.left, true) } else if node.operator == "or" { narrow(node.left, false) }
+        let right = expression(node.right); state = join(before, state)
+        if node.operator == "??" { value = types.union([types.present(left), right]) }
+        else if types.kind(left) == "boolean" and types.kind(right) == "boolean" { value = "boolean" }
+        else { value = types.union([left, right]) }
+      } else { value = binary(node.operator, left, expression(node.right), node.token) }
+    } else if node.kind == "unary" {
+      value = expression(node.value)
+      if node.operator == "await" { invalidate(); value = types.awaited(value) }
+      else if ["not", "!"].includes(node.operator) { value = "boolean" }
+      else { if not ["any", "number"].includes(types.kind(value)) { error(node.token, "Unary arithmetic requires a number.") }; value = "number" }
+    } else if node.kind == "call" or node.kind == "new" or node.kind == "pipe" {
+      let values = []; let callArguments = []
+      if node.kind == "pipe" { values.push(expression(node.value)); callArguments.push(node.value) }
+      let signature = expression(node.callee)
+      for argument in node.arguments { values.push(expression(argument)); callArguments.push(argument) }
+      value = invoke(signature, callArguments, values, node.token)
+      if node.kind == "pipe" and node.awaited { value = types.awaited(value) }
+    } else if node.kind == "chain" {
+      value = expression(node.base); let optional = false
+      for step in node.steps {
+        if step.optional { value = types.present(value); optional = true }
+        if step.kind == "member" { expression(step.key); value = member(value, step.key, step.token) }
+        else { let values = []; for argument in step.arguments { values.push(expression(argument)) }; value = invoke(value, step.arguments, values, step.token) }
+      }
+      if optional { value = types.union([value, "undefined"]) }
+    }
+    node.hasEffects = effectSerial != beforeEffects
+    return remember(node, value)
+  }
+  fn body(block) {
+    if block == null { return true }
+    let continuing = true
+    for item in block.statements {
+      if not continuing { break }
+      if item.kind == "function" { functionCheck(item.value) }
+      else if item.kind == "declaration" {
+        let value = expression(item.value); let contract = item.binding.annotation
+        if contract != null { compatible(value, contract, item.value); write(item.binding, assigned(contract, value)) }
+        else { item.binding.inferredType = value; write(item.binding, value) }
+      } else if item.kind == "assignment" {
+        let target = item.target; let binding = null; let expected = "any"; let before = "any"
+        if target.kind == "name" { binding = hooks.lookup(target); before = read(binding); expected = declared(binding) }
+        else { let base = expression(target.object); expression(target.key); before = member(base, target.key, target.token); expected = before; if types.kind(base) == "array" { if target.key.kind == "literal" and target.key.value == "length" { expected = "number" } else { expected = base.value } } }
+        let actual = expression(item.value); if item.operator != "=" { actual = binary(item.operator[0], before, actual, item.token) }
+        compatible(actual, expected, item.value)
+        if binding != null { write(binding, assigned(expected, actual)) }
+      } else if item.kind == "if" {
+        expression(item.condition); let before = state.slice(); narrow(item.condition, true); let yes = body(item.body); let yesState = state
+        state = before; narrow(item.condition, false); let no = body(item.otherwise); let noState = state
+        if yes and no { state = join(yesState, noState) } else if yes { state = yesState } else { state = noState }
+        continuing = yes or no
+      } else if item.kind == "while" or item.kind == "for" {
+        let changed = []; writes(item.body, changed); let before = state.slice()
+        let never = item.kind == "while" and item.condition.kind == "literal" and item.condition.value == false
+        if not never { invalidateWrites(changed) }
+        if item.kind == "while" { expression(item.condition); narrow(item.condition, true) }
+        else { let source = expression(item.iterable); let element = "any"; if types.kind(source) == "array" { element = source.value }; if types.kind(source) == "string" { element = "string" }; item.binding.inferredType = element; write(item.binding, element); if item.indexBinding != null { item.indexBinding.inferredType = "number"; write(item.indexBinding, "number") } }
+        body(item.body); state = before
+        if not never { invalidateWrites(changed); if item.kind == "while" { narrow(item.condition, false) } }
+      } else if item.kind == "try" {
+        let before = state.slice(); let changed = []; writes(item.body, changed)
+        let yes = body(item.body); let normal = state
+        state = before; invalidateWrites(changed); let no = false
+        if item.handler != null { if item.binding != null { write(item.binding, "any") }; no = body(item.handler) }
+        if yes and no { state = join(normal, state) } else if yes { state = normal }
+        continuing = yes or no
+        if item.finalizer != null { let finalContinues = body(item.finalizer); continuing = continuing and finalContinues }
+      } else if item.kind == "return" {
+        let value = expression(item.value)
+        if current != null and current.async and types.kind(value) == "promise" { value = value.value }
+        if current != null and current.returnType != null { compatible(value, current.returnType, item.value ?? item) }
+        returns.push(value); continuing = false
+      } else if item.kind == "throw" { expression(item.value); continuing = false }
+      else if item.kind == "break" or item.kind == "continue" { continuing = false }
+      else if item.kind == "expression" { expression(item.value) }
+    }
+    return continuing
+  }
+  body(ast)
+}

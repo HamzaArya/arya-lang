@@ -1,3 +1,5 @@
+> Historical implementation guide. The original is preserved in [compat/node/docs/business-applications.md](../compat/node/docs/business-applications.md). Current native behavior is defined by the [native profile](native-profile.md), [SDK guide](native-sdk.md) and [qualification report](native-independence-report.md).
+
 # Node business application APIs
 
 Available in **1.3.0-alpha.9**, published to npm’s `next` channel.
@@ -131,23 +133,19 @@ Truthy name checks and supported null/undefined equality guards narrow names;
 terminating guard fallbacks carry the surviving narrowing forward.
 
 JavaScript/Python imports are unknown in checked modules until given an explicit
-trusted shape. These declarations are a developer assertion, not runtime
-validation. Validate untrusted data with application schemas or `std validate`.
-`any` explicitly opts out of checking; unannotated function parameters and host/
-standard-library calls remain dynamic boundaries in this first version. Their
-results do not establish validation. There is no automatic `.d.ts` consumption or
-claim of TypeScript compatibility. Unsupported annotation syntax is rejected;
-conditional, mapped, generic, overload, alias and class types are not implemented.
+trusted shape, except supported declaration-backed JavaScript imports described
+below. These declarations are developer assertions, not runtime validation.
+Validate untrusted data with application schemas or `std validate`. `any` explicitly
+opts out of checking; unannotated parameters and undeclared host boundaries remain
+dynamic. Unsupported Arya annotation syntax is rejected.
 
-Unreleased stabilization change: checked `std decimal` and `std datetime` imports
-now use their documented argument/result signatures, including required rounding
-and time-zone arguments. Decimal arithmetic returns strings, `compare`/`toNumber`
-return numbers, and `zoned` returns a typed date/time/timeZone record. Those types
-also flow into generated declarations. JavaScript Date objects in `toDate` and
-`fromDate` remain dynamic, as do other standard libraries. Runtime validation still
-enforces calendar values, decimal grammar, rounding-mode names and numeric limits.
-Unannotated modules retain their prior behavior. This improvement is not present
-in the frozen alpha.7 package and requires the next reviewed compiler artifact.
+Decimal and datetime imports have documented checked signatures in alpha.9.
+The [unreleased editor/compiler work](editor-and-compiler-improvements.md) adds
+list, web, MySQL, Python, file, JSON and environment signatures, list element type
+propagation and a bounded JavaScript `.d.ts` reader. Its supported subset and
+fallback behavior are explicit; full TypeScript compatibility is not claimed.
+Unannotated modules retain dynamic behavior. Runtime validation still enforces
+calendar values, decimal grammar, rounding names, data shapes and numeric limits.
 
 Checked graph builds emit adjacent `.d.mts` files for exported bindings, including
 inferred return/record types. Unknown/dynamic parts remain unknown/any in those
@@ -155,7 +153,9 @@ files. The compiler API exposes `typing.exports`, `typing.bindings`,
 `typing.enabled` and `typing.declarations`. Project compilation propagates checked
 export contracts dependency-first without executing modules. Single-file analysis
 cannot validate another file's signatures; use project Check for that boundary.
-No full alias/control-flow/exception/overload analysis is claimed. String member
+The unreleased alpha.10 candidate adds conservative assignment/branch/loop checking,
+captured-write invalidation and mutable-container compatibility. Full host alias and
+exception analysis remain outside the checker; see [current limits](editor-and-compiler-improvements.md#mutation-and-control-flow). String member
 inference covers length, trim/case conversion, replace/slice/substring and split;
 other checked members need an explicit boundary.
 
@@ -225,12 +225,14 @@ bundled output. Dependencies resolve from the project ancestor node_modules tree
 Pass existing transaction/client objects into exported functions; no pool is
 created by this adapter. AsyncLocalStorage follows native Node async execution.
 
-The language service exports `analyzeWorkspace`, `referencesInWorkspace`, `renameInWorkspace`,
-`signatureAt` and `typedCompletions`. Workspace APIs take `{uri, source}` snapshots;
-only supplied documents participate. Lexical bindings and direct Arya namespace
-members are linked. Rename checks names, collisions and lexical capture. LSP
-exposes references/rename/signature help/formatting and typed member completion
-for open documents. Open-document diagnostics also propagate checked import contracts. In the unpublished alpha.8 candidate, opening/changing/closing a dependency revalidates importers, unchanged snapshots share an analysis, trailing-member completion and bounded unfinished end-of-file calls receive recovery, and editor rename refuses exported-symbol changes when unopened callers cannot be covered. The explicit snapshot rename API retains its supplied-document contract. Closed-file discovery, imported signatures/member inference, dynamic property rename and general incomplete-source recovery remain future work. Real editor-host qualification is separate.
+The language service exports `analyzeWorkspace`, `definitionInWorkspace`,
+`referencesInWorkspace`, `renameInWorkspace`, `signatureAt` and `typedCompletions`.
+Snapshot APIs take caller-supplied `{uri, source}` documents; optional `moduleTypes`
+metadata supplies trusted external contracts. Only supplied documents participate.
+The unreleased adapters add [bounded workspace discovery and incremental analysis](editor-and-compiler-improvements.md#project-wide-editor-behavior), including closed
+files, imported signatures and safe static namespace rename. Dynamic namespace
+rename and general incomplete-source recovery remain unsupported. Real editor-host
+qualification is separate from protocol and adapter tests.
 
 ## Streaming and cancellation
 

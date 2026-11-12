@@ -1,0 +1,58 @@
+# Explicit, bounded Python interoperability through native process pipes.
+use std "_python" as bridge
+use std "runtime" as runtime
+fn failure(code, message) { let value = new Error(message); value.code = code; return value }
+fn settings(value, keys) {
+  if runtime.kind(value) != "record" or runtime.hasAccessor(value) { throw failure("ARYA_PYTHON_OPTIONS", "Python options must be a record of data fields.") }
+  for key in Object.keys(value) { if not keys.includes(key) { throw failure("ARYA_PYTHON_OPTIONS", "Unknown Python option: " + key) } }
+  for bounds in [["timeoutMs", 2147483647], ["maxInputBytes", 16777216], ["maxOutputBytes", 16777216], ["maxConcurrency", 64], ["queueLimit", 10000]] { let item = value[bounds[0]]; let minimum = 1; if bounds[0] == "queueLimit" { minimum = 0 }; if item != undefined and (not Number.isSafeInteger(item) or item < minimum or item > bounds[1]) { throw failure("ARYA_PYTHON_OPTIONS", "Python " + bounds[0] + " is outside its supported integer range.") } }
+  if value.interpreter != undefined and (runtime.kind(value.interpreter) != "string" or value.interpreter == "" or value.interpreter.includes("\0")) { throw failure("ARYA_PYTHON_OPTIONS", "Python interpreter must be an executable name or path.") }
+  if value.signal != undefined and (value.signal == null or runtime.kind(value.signal.aborted) != "boolean" or runtime.kind(value.signal.addEventListener) != "function" or runtime.kind(value.signal.removeEventListener) != "function") { throw failure("ARYA_PYTHON_OPTIONS", "Python signal must be an AbortSignal.") }
+  if value.kwargs != undefined and (runtime.kind(value.kwargs) != "record" or runtime.hasAccessor(value.kwargs)) { throw failure("ARYA_PYTHON_ARGUMENTS", "Python kwargs must be a record of keyword arguments.") }
+  let result = {}; for key in Object.keys(value) { if value[key] != undefined { result[key] = value[key] } }; return result
+}
+fn target(value) { let metadata = bridge.metadata(value); if metadata.member.length == 0 { throw failure("ARYA_PYTHON_ARGUMENTS", "Pass a public Python function from a use python import.") }; return metadata }
+fn client(sourceDirectory, configuration = {}) {
+  let defaults = Object.assign({timeoutMs: 30000, maxInputBytes: 8388608, maxOutputBytes: 8388608, maxConcurrency: 4, queueLimit: 100}, settings(configuration, ["interpreter", "timeoutMs", "maxInputBytes", "maxOutputBytes", "maxConcurrency", "queueLimit"]))
+  let state = {active: 0, queue: [], closed: false, closing: undefined, drained: undefined}
+  async fn run(request, options, source = sourceDirectory) {
+    options = settings(options, ["interpreter", "timeoutMs", "maxInputBytes", "maxOutputBytes", "kwargs", "signal"])
+    if state.closed { throw failure("ARYA_PYTHON_CLOSED", "This Python client is closed.") }
+    let config = Object.assign({}, defaults, options)
+    if config.signal != undefined and config.signal.aborted { throw failure("ARYA_PYTHON_CANCELLED", "Python call was cancelled.") }
+    if request.mode == "info" and options.kwargs != undefined { throw failure("ARYA_PYTHON_OPTIONS", "python.info does not accept keyword arguments.") }
+    request = Object.assign({}, request, {async: true, kwargs: options.kwargs ?? {}})
+    if request.mode == "map" and request.values.length == 0 { return [] }
+    if state.active >= defaults.maxConcurrency {
+      if state.queue.length >= defaults.queueLimit { throw failure("ARYA_PYTHON_QUEUE_FULL", "Python client queue is full.") }
+      await new Promise(fn(resolve, reject) {
+        let waiting = {resolve: resolve, signal: config.signal, cancel: undefined}
+        if config.signal != undefined {
+          waiting.cancel = fn() {
+            let index = state.queue.indexOf(waiting)
+            if index < 0 { return }
+            state.queue = state.queue.slice(0, index).concat(state.queue.slice(index + 1))
+            config.signal.removeEventListener("abort", waiting.cancel)
+            reject(failure("ARYA_PYTHON_CANCELLED", "Python call was cancelled while queued."))
+            if state.closed and state.active == 0 and state.queue.length == 0 and state.drained != undefined { state.drained() }
+          }
+          config.signal.addEventListener("abort", waiting.cancel)
+        }
+        state.queue.push(waiting)
+      })
+    } else { state.active += 1 }
+    try { return await bridge.run(request, config, source) }
+    finally {
+      state.active -= 1
+      if state.queue.length > 0 { let next = state.queue[0]; state.queue = state.queue.slice(1); if next.cancel != undefined { next.signal.removeEventListener("abort", next.cancel) }; state.active += 1; next.resolve() }
+      if state.closed and state.active == 0 and state.queue.length == 0 and state.drained != undefined { state.drained() }
+    }
+  }
+  async fn call(callable, args = [], options = {}) { if not Array.isArray(args) { throw failure("ARYA_PYTHON_ARGUMENTS", "python.call expects a positional argument list.") }; let metadata = target(callable); return await run({mode: "call", module: metadata.module, member: metadata.member, args: args}, options, metadata.source) }
+  async fn map(callable, values, options = {}) { if not Array.isArray(values) or values.length > 10000 { throw failure("ARYA_PYTHON_ARGUMENTS", "python.map expects a list of at most 10000 values.") }; let metadata = target(callable); return await run({mode: "map", module: metadata.module, member: metadata.member, values: values}, options, metadata.source) }
+  async fn info(options = {}) { return await run({mode: "info"}, options) }
+  fn bind(namespace, options = {}) { bridge.metadata(namespace); let bound = settings(options, ["interpreter", "timeoutMs", "maxInputBytes", "maxOutputBytes", "kwargs", "signal"]); return bridge.bind(namespace, fn(callable, args, kwargs) { let options = bound; if kwargs != undefined { options = Object.assign({}, bound, {kwargs: kwargs}) }; return call(callable, args, options) }) }
+  fn close() { if state.closing == undefined { state.closed = true; state.closing = new Promise(fn(resolve) { state.drained = resolve; if state.active == 0 and state.queue.length == 0 { resolve() } }) }; return state.closing }
+  return Object.freeze({call: call, map: map, bind: bind, info: info, close: close, stats: fn() { return {active: state.active, queued: state.queue.length, closed: state.closed} }})
+}
+export fn forDirectory(sourceDirectory) { let result = Object.assign({}, client(sourceDirectory)); result.client = fn(options) { return client(sourceDirectory, options) }; return Object.freeze(result) }

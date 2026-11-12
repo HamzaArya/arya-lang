@@ -1,0 +1,112 @@
+[
+  {
+    "id": "formatting",
+    "name": "Formatter",
+    "status": "published",
+    "since": "1.3.0-alpha.7",
+    "scope": "Indentation and outer whitespace; preserves tokens and comments.",
+    "guide": "business-applications.md"
+  },
+  {
+    "id": "recovery",
+    "name": "Parser recovery",
+    "status": "published",
+    "since": "1.3.0-alpha.7",
+    "scope": "Up to 20 errors at top-level line boundaries.",
+    "guide": "business-applications.md"
+  },
+  {
+    "id": "types",
+    "name": "Optional types",
+    "status": "published",
+    "since": "1.3.0-alpha.7",
+    "scope": "Bounded checking, Arya module contracts and declaration output.",
+    "guide": "business-applications.md"
+  },
+  {
+    "id": "navigation",
+    "name": "Editor references, rename and signatures",
+    "status": "published",
+    "since": "1.3.0-alpha.7",
+    "scope": "Snapshot/open-document analysis; incomplete public renames are refused.",
+    "guide": "business-applications.md"
+  },
+  {
+    "id": "build-cache",
+    "name": "Incremental project builds",
+    "status": "published",
+    "since": "1.3.0-alpha.7",
+    "scope": "Contained graph builds with bounded compilation reuse.",
+    "guide": "business-applications.md"
+  },
+  {
+    "id": "workspace",
+    "name": "Closed-file workspace analysis",
+    "status": "unreleased",
+    "scope": "Discovery, cached dependency analysis and static namespace rename.",
+    "guide": "editor-and-compiler-improvements.md"
+  },
+  {
+    "id": "flow-types",
+    "name": "Mutation and control-flow checking",
+    "status": "unreleased",
+    "scope": "Declared versus flow types, branch joins, loop writes and conservative capture invalidation.",
+    "guide": "editor-and-compiler-improvements.md"
+  },
+  {
+    "id": "npm-types",
+    "name": "npm declaration imports",
+    "status": "unreleased",
+    "scope": "Bounded named/default/CommonJS exports and non-generic overloads.",
+    "guide": "editor-and-compiler-improvements.md"
+  },
+  {
+    "id": "testing",
+    "name": "Standard testing library",
+    "status": "unreleased",
+    "scope": "Node-backed suites, hooks, assertions and mocks.",
+    "guide": "testing-library.md"
+  },
+  {
+    "id": "security",
+    "name": "Standard security library",
+    "status": "unreleased",
+    "scope": "Password hashing, tokens, HMAC and authenticated encryption.",
+    "guide": "security-library.md"
+  },
+  {
+    "id": "editor-debug",
+    "name": "Node editor debugging",
+    "status": "unreleased",
+    "scope": "Arya source breakpoints, local inspection and stepping; requires a Node adapter and per-editor/platform qualification.",
+    "guide": "syntax-and-debugging.md"
+  },
+  {
+    "id": "accounting-batches",
+    "name": "Exact accounting batches",
+    "status": "unreleased",
+    "scope": "Bounded invoice/ledger library with portable BigInt, optional native kernel and exact strings; no ISO currency registry or standalone compiler.",
+    "guide": "accounting-engine.md"
+  },
+  {
+    "id": "native-preview",
+    "name": "Native scalar executable preview",
+    "status": "unreleased",
+    "scope": "Shared frontend, verified typed IR and host LLVM executable for annotated scalar functions; broader language/runtime and platform qualification remain incomplete.",
+    "guide": "native-preview.md"
+  },
+  {
+    "id": "persistent-python",
+    "name": "Persistent Python worker",
+    "status": "planned",
+    "scope": "Current calls and batches use fresh child processes.",
+    "guide": "python-async.md"
+  },
+  {
+    "id": "unicode",
+    "name": "Unicode identifiers and bidi editing",
+    "status": "planned",
+    "scope": "Needs a separately reviewed language/editor proposal.",
+    "guide": "arya-roadmap.md"
+  }
+]

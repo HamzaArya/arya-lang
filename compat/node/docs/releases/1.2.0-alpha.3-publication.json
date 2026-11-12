@@ -1,0 +1,38 @@
+{
+  "published": [
+    {
+      "name": "arya-language",
+      "version": "1.2.0-alpha.3",
+      "filename": "artifacts/arya-language-1.2.0-alpha.3.tgz",
+      "sha256": "1ecb1b9b3daaa4c8ccc74fd1c45dd26bbc81496a234217a35b8704a6e85e5c5f",
+      "integrity": "sha512-ojNTO6nvRPSCIDjSEl9j/nyjhkqiOkc3RJNNHzRvj1O4QY7QZ/d8ZYBRMyGdP9H8TdF6LCKO/L/tN4p3SQQTNw==",
+      "tag": "next",
+      "registryTarball": "https://registry.npmjs.org/arya-language/-/arya-language-1.2.0-alpha.3.tgz",
+      "integrityVerified": true,
+      "npmUrl": "https://www.npmjs.com/package/arya-language/v/1.2.0-alpha.3",
+      "verifiedDistTags": {
+        "latest": "0.2.0-alpha.3",
+        "next": "1.2.0-alpha.3"
+      }
+    },
+    {
+      "name": "create-arya-language",
+      "version": "1.2.0-alpha.3",
+      "filename": "artifacts/create-arya-language-1.2.0-alpha.3.tgz",
+      "sha256": "7031ce34a513bafb62620c70f7558d5170ae373d54c29aeb9edac42ab054ece7",
+      "integrity": "sha512-Pq5apnIat5KdKFncWzjS0rCVTjrV80FWWBZsBVp3M5fxoKl7ZmY5Qj7B4SQOVu5TjyZ+9aDCqJ8AeUN6Tcnc9w==",
+      "tag": "next",
+      "registryTarball": "https://registry.npmjs.org/create-arya-language/-/create-arya-language-1.2.0-alpha.3.tgz",
+      "integrityVerified": true,
+      "npmUrl": "https://www.npmjs.com/package/create-arya-language/v/1.2.0-alpha.3",
+      "verifiedDistTags": {
+        "latest": "1.2.0-alpha.3",
+        "next": "1.2.0-alpha.3"
+      }
+    }
+  ],
+  "publicNpmSmokeTest": true,
+  "publishedOn": "2026-11-09",
+  "registry": "https://registry.npmjs.org/",
+  "artifactsMustRemainFrozen": true
+}

@@ -1,81 +1,46 @@
-# Arya standard libraries
+# Native standard library
 
-**Published preview: 1.3.0-alpha.9.** Import a library with `use std "name" as alias`. All libraries below run on Node.js and are included in published alpha.9. The older 1.2 release on `latest` lacks `list`, `decimal`, `datetime` and `async`. Follow [candidate setup](node-runtime.md#try-the-candidate) for unreleased fixes.
+Import a module with `use std "name" as alias`. The native SDK implements all 18 standard modules from the retained language profile, plus native I/O, process/runtime, accounting, money, finance, CSV and desktop modules. Public module entry points are listed below; returned client/server/schema objects provide the associated methods described by their APIs.
 
-## JavaScript/Node profile
-
-| Library | Purpose | Contract / implementation |
-| --- | --- | --- |
-| `decimal`, `datetime`, `async` | Exact decimal strings, strict dates/instants/zones, bounded async streaming | [Business APIs](business-applications.md) |
-| `list` | Input-first filtering, mapping, sorting, grouping, uniqueness, and totals | [Flow syntax and list API](flow-syntax.md#list-library) |
-| `fs` | Async file reads/writes and directory listing | [Files](#files) |
-| `path` | Host path operations | [Paths and mathematics](#paths-and-mathematics) |
-| `math` | Mathematical functions/constants | [Paths and mathematics](#paths-and-mathematics) |
-| `json` | JSON parsing/stringification and file helpers | [JSON](#json) |
-| `web` | HTTP servers, responses, assets, routes, and lifecycle | [Web guide](arya-web.md), [service contract](services.md) |
-| `mysql` | Verified pools, prepared queries, transactions, and result helpers | [MySQL](mysql.md); requires the application's `mysql2` dependency and MySQL server |
-| `env` | Environment values and checked configuration | [Environment](#environment) |
-| `validate` | Runtime schemas and request validation | [Validation](services.md#validate-application-inputs) |
-| `log` | Structured logs and request correlation | [Service logging](services.md) |
-| `python` | Async bound calls, batching, clients, and interpreter selection | [Python API](python-async.md); requires Python for execution |
-| `debug` | Assertions, inspection, and source-positioned traces | [Debugging](syntax-and-debugging.md) |
-| `ui` | Components, browser state, forms, actions, and animations | [Library reference](ui-library.md), [UI/desktop starters](ui-apps.md) |
-
-Checking a standard import validates its library name without opening connections or executing dependency code. Install additional npm/Python packages normally. The libraries do not automatically load `.env` files or create databases. Source/environment examples show which configuration is required.
-
-## Files
-
-```arya
-use std "fs" as fs
-use std "json" as json
-
-await json.write("report.json", {completed: 2, total: 3})
-const report = await json.read("report.json")
-print(report.completed, report.total)
-print(await fs.exists("report.json"))
-```
-
-This writes `report.json` in the process working directory and prints `2 3` and `true`. File/JSON helpers resolve relative paths from that working directory, unlike source-relative import paths and the web library's default asset root.
-
-| Call | Result |
+| Module | Entry points |
 | --- | --- |
-| `await fs.readText(path)` | Read a UTF-8 file as text. |
-| `await fs.writeText(path, text)` | Create or replace a file with UTF-8 text; resolves to undefined. Parent directories must already exist. |
-| `await fs.list(path)` | Return directory entry names as a list of strings; ordering follows the host filesystem. |
-| `await fs.exists(path)` | Return true if Node can access the path, false for `ENOENT`; other access errors reject. |
+| `async` | `map`, `each`, `sleep` |
+| `decimal` | `from`, `add`, `subtract`, `multiply`, `compare`, `divide`, `quantize`, `toNumber`, `roundingModes`, `values` |
+| `datetime` | `date`, `instant`, `zoned`, `fromDate`, `toDate`, `dateAt`, `atOffset` |
+| `fs` | `readText`, `writeText`, `exists`, `list`, `readTextSync`, `writeTextSync`, `existsSync`, `listSync`, `appendText`, `makeDirectory`, `rename`, `remove`, `tempDirectory`, `removeDirectory`, `publish`, `publishDirectory`, `isFile`, `infoSync` |
+| `math` | `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`, `atan2`, `cbrt`, `ceil`, `clz32`, `cos`, `cosh`, `exp`, `expm1`, `floor`, `fround`, `f16round`, `hypot`, `imul`, `log`, `log10`, `log1p`, `log2`, `max`, `min`, `pow`, `random`, `round`, `sign`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `trunc`, `E`, `LN10`, `LN2`, `LOG10E`, `LOG2E`, `PI`, `SQRT1_2`, `SQRT2` |
+| `path` | `normalize`, `isAbsolute`, `join`, `resolve`, `relative`, `dirname`, `basename`, `extname`, `format`, `parse`, `toNamespacedPath`, `_makeLong`, `matchesGlob`, `sep`, `delimiter`, `posix`, `win32`, `realPath` |
+| `json` | `parse`, `stringify`, `read`, `write` |
+| `web` | `serve`, `route`, `response`, `error`, `health`, `shutdown` |
+| `mysql` | `connect` |
+| `env` | `get`, `require`, `int`, `bool` |
+| `validate` | `string`, `number`, `integer`, `boolean`, `enum`, `optional`, `nullable`, `array`, `object`, `check`, `parse` |
+| `log` | `create` |
+| `python` | `client`, `call`, `map`, `bind`, `info`, `close`, `stats` |
+| `debug` | `assert`, `inspect`, `trace` |
+| `list` | `map`, `flatMap`, `filter`, `find`, `reduce`, `groupBy`, `sortBy`, `take`, `unique`, `sum`, `reserve` |
+| `security` | `randomToken`, `uuid`, `generateKey`, `hash`, `hmac`, `verifyHmac`, `timingSafeEqual`, `hashPassword`, `verifyPassword`, `passwordNeedsUpgrade`, `verifyPasswordAndUpgrade`, `keyring`, `encrypt`, `decrypt` |
+| `testing` | `test`, `suite`, `skip`, `todo`, `before`, `after`, `beforeEach`, `afterEach`, `assert`, `equal`, `notEqual`, `deepEqual`, `notDeepEqual`, `throws`, `rejects`, `fail`, `mock` |
+| `ui` | `is`, `not`, `when`, `section`, `divider`, `link`, `code`, `preview`, `badge`, `alert`, `stat`, `avatar`, `textarea`, `slider`, `checkbox`, `radio`, `switch`, `field`, `progress`, `spinner`, `skeleton`, `empty`, `list`, `table`, `breadcrumbs`, `tabs`, `accordion`, `dialog`, `tooltip`, `open`, `close`, `copy`, `theme`, `toast`, `presets`, `keyframes`, `animate`, `pause`, `resume`, `cancel`, `parallel`, `container`, `buttonGroup`, `image`, `descriptionList`, `timeline`, `steps`, `pagination`, `segmented`, `search`, `meter`, `navbar`, `hero`, `features`, `pricing`, `testimonials`, `faq`, `cta`, `footer`, `templates`, `template`, `bind`, `motion`, `element`, `stack`, `row`, `grid`, `card`, `heading`, `text`, `button`, `input`, `label`, `form`, `select`, `set`, `toggle`, `increment`, `request`, `page` |
+| `io` | `print`, `readLine`, `write`, `readChunk` |
+| `process` | `run`, `exit`, `env`, `cwd`, `executable`, `error`, `onSignal` |
+| `runtime` | `clock`, `collect`, `codeUnit`, `keys`, `platform`, `kind`, `sameValue`, `deepEqual`, `freeze`, `context`, `exitCode`, `defer`, `onFinish`, `elapsed`, `fieldGetter`, `error`, `readFrame`, `writeFrame`, `tag`, `hasAccessor`, `errorMatches`, `stringFromCodes`, `randomUUID`, `isRecord`, `jsonParse`, `jsonStringify`, `uriEncode`, `uriDecode` |
+| `accounting` | `backendInfo`, `prepareInvoices`, `prepareLedger`, `invoiceBatch`, `ledgerBatch` |
+| `desktop` | `open` |
+| `money` | `create`, `add`, `subtract`, `compare`, `format`, `toNumber`, `rescale`, `convert`, `toMinorUnits`, `fromMinorUnits` |
+| `finance` | `prepareInvoices`, `invoiceTotals`, `prepareBudgets`, `budgetVariance`, `prepareScores`, `amountScores`, `prepareProduction`, `production`, `allocate`, `straightLine` |
+| `csv` | `decoder`, `each` |
 
-These helpers use Node's filesystem APIs and propagate their errors. For additional operations such as directory creation, appending, streaming, or removal, import `node:fs/promises` or `node:fs` explicitly. The implementation is in [src/standard.ts](../src/standard.ts).
+Math uses binary64; use decimal strings and `decimal` / `accounting` for exact financial values. [Accounting](accounting-engine.md) documents prepared batches and line rounding. Filesystem operations provide asynchronous read/write/list/exists entry points and explicit synchronous native tooling helpers. JSON supports reviver/replacer, indentation, toJSON, and asynchronous file read/write.
 
-## JSON
+`path.posix` and `path.win32` provide lexical path profiles; top-level behavior follows the host. Both profiles preserve their own cyclic identity. `realPath` uses the host filesystem. `matchesGlob` uses the native bounded matcher profile.
 
-| Call | Result |
-| --- | --- |
-| `json.parse(text)` | Parse JSON synchronously; invalid JSON throws. |
-| `json.stringify(value)` | Serialize synchronously with JavaScript's default JSON behavior. |
-| `await json.read(path)` | Read UTF-8 text and parse its JSON. |
-| `await json.write(path, value)` | Write JSON with two-space indentation and a final newline. |
+`mysql.connect` returns bounded-pool `rows`, `one`, `scalar`, `execute`, `transaction`, `ping`, `close` methods. Statements are prepared with positional parameters. Transactions keep their connection/context, reject expired scopes, and propagate failures. DECIMAL/BIGINT remain exact strings. A native MySQL C client SDK is an explicit external dependency.
 
-`parse`/`stringify` wrap the corresponding `JSON` methods with one argument; they do not accept reviver/replacer/spacing options. Use the host `JSON` binding directly for those options. Serialization follows JavaScript rules, including `toJSON`, omission of unsupported object members, nonfinite numbers becoming null, and errors for cycles or bigint. This is separate from the stricter Python transport contract. `json.write` inherits those rules and does not make an atomic file replacement.
+`python.client` provides `call`, `map`, `bind`, `info`, `close` and `stats`, with bounded queues, deadlines, cancellation and structured Python exceptions. Direct `use python` imports use the same explicit native bridge. An interpreter is needed only when invoking Python work.
 
-## Paths and mathematics
+The native web server provides HTTP/1 routing, responses, validation, health checks, static confinement, deadlines and graceful shutdown. `ui` builds validated HTML and browser assets; it has no Node backend. `desktop.open` uses macOS AppKit/WebKit only when imported.
 
-`path` exposes Node's `node:path` namespace, including `join`, `resolve`, `dirname`, `basename`, `extname`, `sep`, `posix`, and `win32`. Default operations follow the host OS. `path.resolve` uses the process working directory; it does not make a path relative to the Arya source file.
+The [native profile](native-profile.md) defines foreign/host compatibility boundaries, memory behavior, platforms and resource limits. The [SDK guide](native-sdk.md) explains linking and optional dependencies. Detailed historical source-profile guides are retained at [compat/node/docs](../compat/node/docs/README.md); native implementations and acceptance fixtures are under `native/runtime`, `native/libraries` and `native/tests`.
 
-`math` exposes JavaScript's `Math` object, including `sqrt`, `abs`, `floor`, `ceil`, `round`, `pow`, `min`, `max`, `random`, `PI`, and `E`. Numeric precision, nonfinite results, and random-number behavior follow the host JavaScript runtime.
-
-## Environment
-
-`env` reads the running process environment without loading `.env` files:
-
-| Call | Behavior |
-| --- | --- |
-| `env.get(name, fallback = null)` | Return text or the fallback when absent; preserve empty text. |
-| `env.require(name)` | Return the original text; reject absent, empty, or whitespace-only values. |
-| `env.int(name, fallback)` | Parse a signed decimal safe integer or a numeric fallback; reject whitespace, fractions, and unsafe integers. |
-| `env.bool(name, fallback)` | Accept boolean fallbacks or text `true`, `false`, `1`, or `0`, case-insensitively. |
-
-Names must match `[A-Za-z_][A-Za-z0-9_]*`. Codes are `ARYA_ENV_NAME`, `ARYA_ENV_REQUIRED`, and `ARYA_ENV_VALUE`; messages identify the name without exposing its value. Typed reads with no value or fallback fail. See [database configuration](mysql.md#configuration-and-errors) for an application example and [src/std/env.ts](../src/std/env.ts) for the implementation.
-
-## Runtime and migration
-
-The native compiler and its libraries are retired from the 1.3 source line. Use `print`, `use std "fs"`, `use std "env"`, and explicit `use js "node:..."` imports for application and operating-system work. See [runtime and migration](node-runtime.md) for replacements and compatibility details.
+`decimal.values` holds immutable parsed decimals between operations and formats only at explicit output boundaries. `money` checks currency/scale/rounding compatibility. `finance` supplies opt-in batch/allocation policies. `csv` decodes bounded incremental records and waits for consumers before pulling another chunk. These APIs do not migrate existing application policies.

@@ -1,0 +1,10 @@
+use std "io" as io
+use std "debug" as debug
+let text = ""
+while true {
+  let chunk = io.readChunk(1)
+  if chunk == null { break }
+  text += chunk
+}
+debug.assert(text == "name,amount\nفارسی 😀,12.50\n\0,end\n", "UTF-8 input chunks lost a code point or NUL")
+print("native input chunks: one-byte reads preserve Unicode, embedded NUL and EOF")

@@ -1,0 +1,15 @@
+use std "io" as io
+use std "web" as web
+use std "validate" as validate
+use std "async" as flow
+let server = undefined
+server = web.serve(0, {
+  "GET /health": fn() { return web.health({database: fn() => true}) },
+  "POST /invoice/:id": web.route(fn(request) { return {id: request.params.id, total: request.body.total, query: request.query, requestId: request.requestId} }, {body: validate.object({total: validate.string()})}),
+  "GET /slow": async fn(request) { await flow.sleep(80); request.signal.throwIfAborted(); return "late" },
+  "GET /shutdown-context": async fn() { try { await web.shutdown(server) } catch failure { return {code: failure.code} } },
+  "POST /stop": fn() { setTimeout(async fn() { await web.shutdown(server, {cleanup: fn() { print("cleaned") }}) }, 5); return {stopping: true} },
+  "/hello": "Hello native HTTP",
+  "GET /failure": fn() { throw new Error("private information") }
+}, {html: false, assets: false, maxBodyBytes: 1024, handlerTimeoutMs: 30, requestTimeoutMs: 2000, trustRequestId: true})
+io.write(str(server.address().port) + "\n")

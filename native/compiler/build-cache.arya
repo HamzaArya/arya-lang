@@ -1,0 +1,27 @@
+# Cache only compiler-owned run outputs, using exact generated C and build inputs.
+use std "fs" as fs
+use std "path" as path
+use std "process" as process
+use std "runtime" as runtime
+fn tree(directory, result, depth) {
+  if depth > 24 or len(result) > 8192 { throw "Native SDK cache fingerprint exceeds its file limit." }
+  let info = fs.infoSync(directory); result.push({file: directory, info: info})
+  if info == null or info.type != "directory" { return }
+  let names = fs.listSync(directory).sort()
+  for name in names { tree(path.join(directory, name), result, depth + 1) }
+}
+export fn configuration(compiler, library, mode, sanitize, mysql) {
+  let executable = compiler; let search = process.env("PATH") ?? ""
+  if not compiler.includes("/") { for directory in search.split(":") { let candidate = path.resolve(directory, compiler); if fs.isFile(candidate) { executable = path.realPath(candidate); break } } }
+  let files = []; tree(library, files, 0)
+  if mysql { tree(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "include"), files, 0); tree(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "lib"), files, 0) }
+  return {compiler: executable, compilerInfo: fs.infoSync(executable), library: library, mode: mode, sanitize: sanitize, platform: runtime.platform(), path: search, files: files, cpath: process.env("CPATH"), cIncludePath: process.env("C_INCLUDE_PATH"), libraryPath: process.env("LIBRARY_PATH"), sdkRoot: process.env("SDKROOT"), deploymentTarget: process.env("MACOSX_DEPLOYMENT_TARGET"), ccTarget: process.env("CCC_OVERRIDE_OPTIONS")}
+}
+export fn reusable(output, source, code, configuration) {
+  try {
+    let saved = runtime.jsonParse(fs.readTextSync(output + ".BUILD"))
+    if saved.nativeBuild != 1 or saved.source != source or not runtime.deepEqual(saved.configuration, configuration) or not runtime.deepEqual(saved.binary, fs.infoSync(output)) { return false }
+    return fs.isFile(output) and fs.readTextSync(output + ".c") == code
+  } catch _missing { return false }
+}
+export fn save(output, source, binary, configuration) { return runtime.jsonStringify({nativeBuild: 1, source: source, binary: fs.infoSync(binary), configuration: configuration}) + "\n" }

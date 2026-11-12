@@ -1,0 +1,177 @@
+# Native Language Server Protocol transport and workspace services.
+use std "runtime" as runtime
+use std "fs" as fs
+use std "path" as path
+use std "process" as process
+fn position(source, offset) { let line = 0; let column = 0; let index = 0; while index < offset and index < len(source) { if source[index] == "\n" { line += 1; column = 0 } else { column += 1 }; index += 1 }; return {line: line, character: column} }
+fn offset(source, point) { let index = 0; let line = 0; while index < len(source) and line < point.line { if source[index] == "\n" { line += 1 }; index += 1 }; let column = 0; while index < len(source) and source[index] != "\n" and column < point.character { index += 1; column += 1 }; return index }
+fn span(source, token) { return {start: position(source, token.start), end: position(source, token.end ?? (token.start + len(token.text)))} }
+fn filePath(uri) {
+  if not uri.startsWith("file://") { return null }
+  let value = uri.slice(7); if value.startsWith("localhost/") { value = value.slice(9) }; if not value.startsWith("/") or value.toLowerCase().includes("%2f") or value.toLowerCase().includes("%5c") { return null }
+  try { value = runtime.uriDecode(value); if value.includes(runtime.stringFromCodes([0])) { return null }; return path.resolve(value) } catch _failure { return null }
+}
+fn fileUri(filename) { return "file://" + runtime.uriEncode(filename).replaceAll("%2F", "/") }
+fn send(value) { runtime.writeFrame(runtime.jsonStringify(value)) }
+fn response(id, value) { send({jsonrpc: "2.0", id: id, result: value}) }
+fn failure(id, code, message) { send({jsonrpc: "2.0", id: id, error: {code: code, message: message}}) }
+fn inside(filename, root) { return filename == root or filename.startsWith(root + "/") or root == "/" }
+fn word(value) { if value == "" or value.startsWith("__arya") or not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_".includes(value[0]) { return false }; for letter in value { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789".includes(letter) { return false } }; return true }
+fn effective(scope, name, changed, replacement) { while scope != null { for binding in scope.bindings { let candidate = binding.name; if binding == changed { candidate = replacement }; if candidate == name { return binding } }; scope = scope.parent }; return null }
+export fn serve(version, analyze, describe, fields, format, keywords) {
+  let open = {}; let roots = []; let cached = undefined; let stopped = false; let initialized = false; let incomplete = false
+  let ignored = [".git", ".arya", ".build", "node_modules", "dist", "artifacts", "vendor", ".venv", "__pycache__", "target", "build"]
+  fn invalidate() { cached = undefined }
+  fn documentUri(filename) { for uri in runtime.keys(open) { if open[uri].filename == filename { return uri } }; return fileUri(filename) }
+  fn rootsForOpen() { let result = roots.slice(); for uri in runtime.keys(open) { let filename = open[uri].filename; let included = false; for root in result { if inside(filename, root) { included = true } }; if not included { result.push(path.dirname(filename)) } }; return result }
+  fn openingSize(uri, source) { let size = len(source); for key in runtime.keys(open) { if key != uri { size += len(open[key].source) } }; if size > 8388608 { throw "Open documents exceed 8 Mi UTF-16 units." } }
+  fn document(uri) { if runtime.kind(uri) != "string" { return undefined }; return open[uri] }
+  fn snapshots() {
+    let files = {}; let bytes = 0; let count = 0; incomplete = false
+    for uri in runtime.keys(open) { let item = open[uri]; files[item.filename] = item.source; bytes += len(item.source); count += 1 }
+    fn walk(directory, depth) {
+      if depth > 32 { incomplete = true; return }
+      let children = []; try { children = fs.listSync(directory) } catch _failure { incomplete = true; return }
+      for child in children {
+        if ignored.includes(child) or child.startsWith(".") { continue }
+        let filename = path.join(directory, child); let info = null; try { info = fs.infoSync(filename) } catch _failure { incomplete = true; continue }
+        if info == null { continue }
+        if info.type == "directory" { walk(filename, depth + 1) }
+        else if info.type == "file" and child.endsWith(".arya") and files[filename] == undefined {
+          if count >= 512 or info.size > 4194304 or bytes + info.size > 16777216 { incomplete = true; continue }
+          try { let source = fs.readTextSync(filename); files[filename] = source; bytes += len(source); count += 1 } catch _failure { incomplete = true }
+        }
+      }
+    }
+    for root in roots { walk(root, 0) }
+    let result = []; for filename in runtime.keys(files) { result.push({filename: filename, source: files[filename]}) }; return result
+  }
+  fn workspace() {
+    if cached != undefined { return cached }
+    let sources = snapshots(); let root = roots[0] ?? process.cwd()
+    for source in sources { while not inside(source.filename, root) and root != "/" { root = path.dirname(root) } }
+    cached = analyze(sources, root, rootsForOpen()); return cached
+  }
+  fn analyzed(uri) { let item = document(uri); if item == undefined { return null }; for result in workspace().documents { if result.filename == item.filename { return result } }; return null }
+  fn diagnostics() {
+    let state = workspace()
+    for uri in runtime.keys(open) {
+      let item = open[uri]; let values = []; let result = analyzed(uri)
+      if result != null { for entry in result.analysis.diagnostics { let severity = 1; if ["ARYA_UNUSED", "ARYA_UNREACHABLE", "ARYA_UNHANDLED_PROMISE"].includes(entry.code) { severity = 2 }; values.push({range: span(item.source, entry.token), severity: severity, code: entry.code, source: "Arya", message: entry.message}) } }
+      for entry in state.errors { if entry.filename == item.filename { let error = entry.error; let start = error.start ?? 0; let end = error.end ?? (start + 1); values.push({range: {start: position(item.source, start), end: position(item.source, end)}, severity: 1, code: error.code ?? "ARYA_NATIVE", source: "Arya", message: error.message ?? str(error)}) } }
+      send({jsonrpc: "2.0", method: "textDocument/publishDiagnostics", params: {uri: uri, version: item.version, diagnostics: values}})
+    }
+  }
+  fn selected(result, point) {
+    if result == null { return null }; let at = offset(result.source, point)
+    for value in result.analysis.bindings { if value.token.start <= at and at <= value.token.end { return value } }
+    for ref in result.analysis.references { if ref.token.start <= at and at <= ref.token.end { return ref.binding } }
+    return null
+  }
+  fn locations(value, includeDeclaration) {
+    let result = []
+    for item in workspace().documents {
+      if includeDeclaration and item.analysis.bindings.includes(value) { result.push({uri: documentUri(item.filename), range: span(item.source, value.token)}) }
+      for ref in item.analysis.references { if ref.binding == value { result.push({uri: documentUri(item.filename), range: span(item.source, ref.token)}) } }
+    }
+    return result
+  }
+  fn rename(value, replacement) {
+    if value == null or value.kind == "builtin" or value.kind == "standard" { throw "Choose a declared Arya name to rename." }
+    if incomplete { throw "Rename requires a complete workspace index; reduce the workspace or open a smaller project." }
+    if not word(replacement) or keywords.includes(replacement) { throw "Choose an Arya identifier that is not a reserved word." }
+    for sibling in value.scope.bindings { if sibling != value and sibling.name == replacement { throw "Rename would duplicate a declaration." } }
+    for item in workspace().documents { for ref in item.analysis.references {
+      if ref.access == "member" { continue }
+      let key = ref.binding.name; if ref.binding == value { key = replacement }
+      if effective(ref.node.scope, key, value, replacement) != ref.binding { throw "Rename would capture or shadow another reference." }
+    } }
+    let changes = []
+    for item in workspace().documents {
+      let edits = []; if item.analysis.bindings.includes(value) { edits.push({range: span(item.source, value.token), newText: replacement}) }
+      for ref in item.analysis.references { if ref.binding == value { let text = replacement; if ref.access == "member" and ref.token.kind == "string" { text = runtime.jsonStringify(replacement) }; edits.push({range: span(item.source, ref.token), newText: text}) } }
+      if edits.length > 0 { let uri = documentUri(item.filename); let revision = null; if open[uri] != undefined { revision = open[uri].version }; changes.push({textDocument: {uri: uri, version: revision}, edits: edits}) }
+    }
+    return {documentChanges: changes}
+  }
+  fn complete(item, result, point) {
+    let at = offset(item.source, point); let start = at
+    while start > 0 and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789".includes(item.source[start - 1]) { start -= 1 }
+    let prefix = item.source.slice(start, at); let values = []
+    if start > 0 and item.source[start - 1] == "." {
+      let end = start - 1; let begin = end; while begin > 0 and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789.".includes(item.source[begin - 1]) { begin -= 1 }
+      let names = item.source.slice(begin, end).split(".")
+      if result != null { let scope = result.ast.scope; for candidate in result.analysis.scopes { if candidate.start != undefined and candidate.start <= at and at <= candidate.end and candidate.start >= (scope.start ?? 0) { scope = candidate } }; let value = effective(scope, names[0], null, null); if value != null { for name in names.slice(1) { value = fields(value, name) }; for field in fields(value) { if field.startsWith(prefix) { values.push({label: field, kind: 10}) } } } }
+      return values
+    }
+    let seen = []
+    if result != null {
+      let scope = result.ast.scope
+      for candidate in result.analysis.scopes { if candidate.start != undefined and candidate.start <= at and at <= candidate.end { if candidate.start >= (scope.start ?? 0) { scope = candidate } } }
+      while scope != null { for value in scope.bindings { if value.name.startsWith(prefix) and not seen.includes(value.name) { seen.push(value.name); let kind = 6; if value.functionValue != undefined { kind = 3 }; if value.kind == "import" { kind = 9 }; values.push({label: value.name, kind: kind, detail: describe(value)}) } }; scope = scope.parent }
+    }
+    for name in keywords.concat(["print", "len", "str", "number", "range", "args", "undefined", "NaN", "Infinity", "Promise", "Date", "Math", "JSON", "Object", "Array", "Map", "Set", "URL", "Buffer", "AbortController"]) { if name.startsWith(prefix) and not seen.includes(name) { values.push({label: name, kind: 14}) } }
+    return values
+  }
+  fn request(method, params) {
+    let uri = params.textDocument?.uri; let item = document(uri); let result = null; if item != undefined { result = analyzed(uri) }
+    if method == "textDocument/completion" { if item == undefined { return [] }; return complete(item, result, params.position) }
+    if method == "textDocument/definition" { let value = selected(result, params.position); if value == null { return null }; for target in workspace().documents { if target.analysis.bindings.includes(value) { return {uri: documentUri(target.filename), range: span(target.source, value.token)} } }; return null }
+    if method == "textDocument/references" { let value = selected(result, params.position); if value == null { return [] }; return locations(value, params.context?.includeDeclaration ?? false) }
+    if method == "textDocument/rename" { return rename(selected(result, params.position), params.newName) }
+    if method == "textDocument/prepareRename" { let value = selected(result, params.position); if value == null or value.kind == "standard" or value.kind == "builtin" { return null }; let at = offset(item.source, params.position); for token in result.tokens { if token.start <= at and at <= token.end { return {range: span(item.source, token), placeholder: value.name} } }; return null }
+    if method == "textDocument/hover" { let value = selected(result, params.position); if value == null { return null }; return {contents: {kind: "markdown", value: "```arya\n" + value.name + ": " + describe(value) + "\n```"}} }
+    if method == "textDocument/documentSymbol" { let values = []; if result == null { return values }; for value in result.analysis.bindings { if ["parameter", "catch", "loop"].includes(value.kind) { continue }; let kind = 13; if value.functionValue != undefined { kind = 12 }; if value.kind == "import" { kind = 2 }; values.push({name: value.name, kind: kind, location: {uri: uri, range: span(item.source, value.token)}}) }; return values }
+    if method == "textDocument/formatting" { if item == undefined { return [] }; let text = format(item.source, item.filename); return [{range: {start: {line: 0, character: 0}, end: position(item.source, len(item.source))}, newText: text}] }
+    if method == "textDocument/signatureHelp" {
+      if item == undefined or result == null { return null }; let at = offset(item.source, params.position); let stack = []
+      for token in result.tokens { if token.start >= at { break }; if token.kind != "symbol" { continue }; if ["(", "[", "{"].includes(token.text) { stack.push({start: token.start, arguments: 0, delimiter: token.text}) }; if token.text == "," and stack.length > 0 and stack[stack.length - 1].delimiter == "(" { stack[stack.length - 1].arguments += 1 }; if [")", "]", "}"].includes(token.text) { stack.pop() } }
+      while stack.length > 0 and stack[stack.length - 1].delimiter != "(" { stack.pop() }
+      if stack.length == 0 { return null }; let call = stack[stack.length - 1]; let name = null; for token in result.tokens { if token.end <= call.start and token.kind != "newline" { name = token } }
+      if name == null { return null }; let value = selected(result, position(item.source, name.start)); if value == null { return null }; return {signatures: [{label: value.name + ": " + describe(value)}], activeSignature: 0, activeParameter: call.arguments}
+    }
+    if method == "textDocument/semanticTokens/full" {
+      if result == null { return {data: []} }; let items = []
+      fn put(token, value, declaration, access) { if token.kind != "word" { return }; let kind = 2; if value.kind == "import" { kind = 0 } else if value.kind == "parameter" { kind = 3 } else if value.functionValue != undefined { kind = 1 }; if access == "member" { kind = 4; if value.functionValue != undefined { kind = 5 } }; let modifiers = 0; if declaration { modifiers += 1 }; if value.kind == "const" or value.kind == "import" { modifiers += 2 }; if access == "write" or access == "readwrite" { modifiers += 8 }; items.push({token: token, kind: kind, modifiers: modifiers}) }
+      for value in result.analysis.bindings { put(value.token, value, true, "") }; for ref in result.analysis.references { put(ref.token, ref.binding, false, ref.access) }
+      items.sort(fn(a, b) { return a.token.start - b.token.start }); let data = []; let line = 0; let column = 0; let previous = -1
+      for entry in items { let token = entry.token; if token.start == previous { continue }; data.push(token.line - line); let delta = token.column; if token.line == line { delta -= column }; data.push(delta); data.push(token.end - token.start); data.push(entry.kind); data.push(entry.modifiers); line = token.line; column = token.column; previous = token.start }; return {data: data}
+    }
+    if method == "textDocument/codeAction" { let actions = []; if result == null { return actions }; for diagnostic in params.context?.diagnostics ?? [] { if diagnostic.code == "ARYA_UNUSED" { let value = selected(result, diagnostic.range.start); if value != null { try { actions.push({title: "Mark '" + value.name + "' as intentionally unused", kind: "quickfix", diagnostics: [diagnostic], edit: rename(value, "_" + value.name)}) } catch _failure { } } } }; return actions }
+    throw {rpc: -32601, message: "Unsupported native language-server method: " + method}
+  }
+  while true {
+    let frame = runtime.readFrame(); if frame == null { return }
+    let message = null; try { message = runtime.jsonParse(frame) } catch _failure { failure(null, -32700, "Invalid JSON request."); continue }
+    if message == null or runtime.kind(message) != "record" or message.jsonrpc != "2.0" or runtime.kind(message.method) != "string" { failure(message?.id ?? null, -32600, "Invalid JSON-RPC request."); continue }
+    let method = message.method; let params = message.params ?? {}; let hasId = runtime.keys(message).includes("id")
+    try {
+      if method == "initialize" {
+        if initialized { failure(message.id, -32600, "Language server is already initialized."); continue }; initialized = true
+        let folders = params.workspaceFolders; if folders == null or folders == undefined { folders = []; if params.rootUri != undefined and params.rootUri != null { folders.push({uri: params.rootUri}) } }
+        for folder in folders { let filename = filePath(folder.uri); if filename != null and not roots.includes(filename) { roots.push(filename) } }
+        response(message.id, {serverInfo: {name: "Arya Native Language Server", version: version}, capabilities: {positionEncoding: "utf-16", workspace: {workspaceFolders: {supported: true, changeNotifications: true}}, textDocumentSync: 2, completionProvider: {triggerCharacters: ["."]}, hoverProvider: true, documentSymbolProvider: true, definitionProvider: true, referencesProvider: true, renameProvider: {prepareProvider: true}, signatureHelpProvider: {triggerCharacters: ["(", ","]}, documentFormattingProvider: true, codeActionProvider: {codeActionKinds: ["quickfix"]}, semanticTokensProvider: {legend: {tokenTypes: ["namespace", "function", "variable", "parameter", "property", "method", "class"], tokenModifiers: ["declaration", "readonly", "defaultLibrary", "modification"]}, full: true}}}); continue
+      }
+      if method == "exit" { if not stopped { runtime.exitCode(1) }; return }
+      if not initialized { if hasId { failure(message.id, -32002, "Initialize the language server first.") }; continue }
+      if method == "shutdown" { stopped = true; response(message.id, null); continue }
+      if stopped { if hasId { failure(message.id, -32600, "Language server has shut down.") }; continue }
+      if method == "initialized" or method == "$/cancelRequest" { continue }
+      if method == "textDocument/didOpen" {
+        let value = params.textDocument; let filename = filePath(value.uri)
+        if filename == null and value.uri.startsWith("untitled:") { filename = path.join(roots[0] ?? process.cwd(), ".arya-unsaved-" + runtime.uriEncode(value.uri) + ".arya") }
+        if filename == null { continue }; if len(runtime.keys(open)) >= 128 and open[value.uri] == undefined { throw "Native language-server open-document limit is 128." }; if len(value.text) > 4194304 { throw "Source exceeds 4 Mi UTF-16 units." }; openingSize(value.uri, value.text)
+        open[value.uri] = {filename: filename, source: value.text, version: value.version}; invalidate(); diagnostics(); continue
+      }
+      if method == "textDocument/didChange" {
+        let value = document(params.textDocument.uri); if value == undefined or params.textDocument.version <= value.version { continue }; let source = value.source
+        for change in params.contentChanges { if change.range == undefined { source = change.text } else { let start = offset(source, change.range.start); let end = offset(source, change.range.end); if end < start { throw "Invalid document change range." }; source = source.slice(0, start) + change.text + source.slice(end) } }
+        if len(source) > 4194304 { throw "Source exceeds 4 Mi UTF-16 units." }; openingSize(params.textDocument.uri, source); value.source = source; value.version = params.textDocument.version; invalidate(); diagnostics(); continue
+      }
+      if method == "textDocument/didClose" { let value = document(params.textDocument.uri); if value != undefined { let next = {}; for uri in runtime.keys(open) { if uri != params.textDocument.uri { next[uri] = open[uri] } }; open = next; invalidate(); send({jsonrpc: "2.0", method: "textDocument/publishDiagnostics", params: {uri: params.textDocument.uri, diagnostics: []}}); diagnostics() }; continue }
+      if method == "workspace/didChangeWorkspaceFolders" { for removed in params.event.removed { let filename = filePath(removed.uri); roots = roots.filter(fn(root) { return root != filename }) }; for added in params.event.added { let filename = filePath(added.uri); if filename != null and not roots.includes(filename) { roots.push(filename) } }; invalidate(); diagnostics(); continue }
+      if method == "workspace/didChangeWatchedFiles" or method == "workspace/didChangeConfiguration" or method == "textDocument/didSave" { invalidate(); diagnostics(); continue }
+      if hasId { response(message.id, request(method, params)) }
+    } catch error { if hasId { failure(message.id, error.rpc ?? -32803, error.message ?? str(error)) } else { send({jsonrpc: "2.0", method: "window/logMessage", params: {type: 1, message: error.message ?? str(error)}}) } }
+  }
+}

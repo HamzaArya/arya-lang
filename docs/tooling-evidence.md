@@ -1,20 +1,40 @@
+> Historical implementation guide. The original is preserved in [compat/node/docs/tooling-evidence.md](../compat/node/docs/tooling-evidence.md). Current native behavior is defined by the [native profile](native-profile.md), [SDK guide](native-sdk.md) and [qualification report](native-independence-report.md).
+
 # Tooling selection record
 
 **Status, 9 November 2026:** no external learner feedback has been collected, as confirmed by the owner. M8's selection process is prepared. This record does not turn an engineering preference into a user finding or declare M8's evidence gate complete.
 
-M3 already introduced same-file lexical go-to-definition, multiple semantic diagnostics, and preservation of completion/Outline data when semantic errors exist. Those implemented features belong to M3's evidence and acceptance; do not count them as a newly validated external-user investment.
+M3 already introduced same-file lexical go-to-definition, multiple semantic diagnostics, and preservation of completion/Outline data when semantic errors exist. Those implemented features belong to M3's evidence and acceptance; do not count them as a external-user finding.
 
 M1–M9 refer to the [archived milestone roadmap](history/roadmap-through-1.3.0-alpha.3.md). Use the [current roadmap](arya-roadmap.md) for active scope and the [readiness record](release-readiness.md) for candidate results.
 
-## Current implementation update — 10 November 2026
+## Current implementation status
 
-The owner subsequently requested asynchronous Python integration, easier UI/animations, and richer editor setup. These shipped in 1.2.0-alpha.4. Their acceptance is engineering evidence from the [release record](release-readiness.md), not external learner observations.
+The table below is generated from [feature status](feature-status.json). Published
+behavior refers to the recorded alpha.9 baseline. Unreleased behavior belongs to
+the alpha.10 source candidate and requires fresh qualification. Engineering tests
+and the owner's requests justify this work; external learner findings are still
+pending. Managed async Python, UI/motion and editor setup shipped in alpha.4.
 
-- Managed/async Python clients and batches are implemented; direct calls retain their synchronous contract.
-- Standard-library hints, semantic token roles, offline extension installation, themes/icons, and spelling Quick Fixes are implemented. Arbitrary dependency introspection, rename, and signature help remain deferred.
-- UI components, forms/actions, motion, Electron starters, and an embedded implementation guide are implemented and have local browser/desktop checks.
-
-The tables below retain the original decision rationale. Managed async execution is implemented with fresh child processes; a persistent worker remains deferred. External-user selection gates remain open.
+<!-- feature-status:start -->
+| Feature | Availability | Scope |
+| --- | --- | --- |
+| [Formatter](business-applications.md) | Published since 1.3.0-alpha.7 | Indentation and outer whitespace; preserves tokens and comments. |
+| [Parser recovery](business-applications.md) | Published since 1.3.0-alpha.7 | Up to 20 errors at top-level line boundaries. |
+| [Optional types](business-applications.md) | Published since 1.3.0-alpha.7 | Bounded checking, Arya module contracts and declaration output. |
+| [Editor references, rename and signatures](business-applications.md) | Published since 1.3.0-alpha.7 | Snapshot/open-document analysis; incomplete public renames are refused. |
+| [Incremental project builds](business-applications.md) | Published since 1.3.0-alpha.7 | Contained graph builds with bounded compilation reuse. |
+| [Closed-file workspace analysis](editor-and-compiler-improvements.md) | Unreleased source | Discovery, cached dependency analysis and static namespace rename. |
+| [Mutation and control-flow checking](editor-and-compiler-improvements.md) | Unreleased source | Declared versus flow types, branch joins, loop writes and conservative capture invalidation. |
+| [npm declaration imports](editor-and-compiler-improvements.md) | Unreleased source | Bounded named/default/CommonJS exports and non-generic overloads. |
+| [Standard testing library](testing-library.md) | Unreleased source | Node-backed suites, hooks, assertions and mocks. |
+| [Standard security library](security-library.md) | Unreleased source | Password hashing, tokens, HMAC and authenticated encryption. |
+| [Node editor debugging](syntax-and-debugging.md) | Unreleased source | Arya source breakpoints, local inspection and stepping; requires a Node adapter and per-editor/platform qualification. |
+| [Exact accounting batches](accounting-engine.md) | Unreleased source | Bounded invoice/ledger library with portable BigInt, optional native kernel and exact strings; no ISO currency registry or standalone compiler. |
+| [Native scalar executable preview](native-preview.md) | Unreleased source | Shared frontend, verified typed IR and host LLVM executable for annotated scalar functions; broader language/runtime and platform qualification remain incomplete. |
+| [Persistent Python worker](python-async.md) | Planned / unqualified | Current calls and batches use fresh child processes. |
+| [Unicode identifiers and bidi editing](arya-roadmap.md) | Planned / unqualified | Needs a separately reviewed language/editor proposal. |
+<!-- feature-status:end -->
 
 ## Runtime focus decision — 10 November 2026
 
@@ -30,29 +50,32 @@ A tooling investment may be justified by an actual M7 observation or a release-c
 | ENG-002 | M2 documents lexical scope timing, unknown-name checks, const writes, and the host allowlist; M3 tests and LSP acceptance exercise these contracts. | Maintain one resolver and diagnostics/navigation data across clients. No separate editor-specific resolver is justified. |
 | ENG-003 | M4's required graph tests include containment, canonical file identity, cycles, dependency errors, and stale-output prevention. | Graph safety and dependency source locations are release-critical acceptance work, not optional performance features. |
 | ENG-004 | M5 requires a fresh Python process per call and documented JSON/process limits. | Provide and test batching examples first. A persistent worker needs measured workloads and a state/lifecycle specification before selection. |
-| ENG-005 | Linux/Windows qualification and external learner observations are unavailable. | Add/retain reproducible qualification jobs and evidence intake; do not infer editor or platform needs from missing evidence. |
+| ENG-005 | At the original review, Linux/Windows qualification and external observations were unavailable. Published alpha.9 now has its own platform evidence; changed source and learner sessions still need separate evidence. | Retain qualification jobs and evidence intake for the exact new revision. |
 
 These rows cite implementation requirements and tests, not fabricated production incidents. Confirm the current candidate's test results before describing a mitigation as qualified.
 
 ## Current decisions
 
-| Candidate | Decision | Reason / smallest current action | Revisit trigger |
-| --- | --- | --- | --- |
-| Shared lexical diagnostics and same-file navigation | Maintain completed M3 behavior | Existing engineering acceptance; preserve parity across compiler, CLI, LSP, and editor adapters. | Reproducible regression or actual navigation task failure. |
-| Module failure locations and safe graph publication | Required engineering work | Needed to prevent wrong/stale execution and explain dependency failures. | A failing graph/containment/source-map acceptance case. |
-| Clear bridge errors and batching guidance | Required engineering work | Directly supports documented process/JSON limits; does not require changing bridge architecture. | Reproduced bridge failure or repeated inefficient tutorial pattern. |
-| Formatter | Deferred | Formatting rules and preservation semantics are not yet specified; no external task evidence exists. | Repeated formatting confusion or a measured maintenance need with a minimal formatting contract. |
-| Parser recovery beyond one syntax error | Deferred | All independent semantic errors are already collected; syntax recovery adds grammar and editor complexity. | Observed syntax-repair bottleneck or a scoped recovery design with tests. |
-| References/rename, signature help, imported-library completion | Deferred | Same-file definitions already exist; broader tools need workspace/import semantics and reliable edit safety. | Actual repeated lookup/rename task failures after module usage is observed. |
-| Async Python calls and managed clients | Implemented experimentally in alpha.4 after owner request | Explicit opt-in clients define batch-local state, cancellation, queue bounds, interpreter selection, and draining; each call/batch starts a fresh process and direct calls stay synchronous. | Reproducible lifecycle, throughput, or cancellation failure; real workload/learner evidence. |
-| Persistent Python worker | Deferred | Cross-call state and object lifetime need a separate contract; batching already reduces repeated imports within a call. | Measured workloads showing that the existing process/batch API is insufficient. |
-| Incremental module cache | Deferred | Correct deterministic full builds take priority; no measured unacceptable build latency is recorded. | Representative timing data with a correctness-preserving invalidation design. |
-| Source-level debugger | Deferred | Source maps give runtime traces; stepping requires a separate launch/breakpoint/tooling contract. | Observed diagnosis tasks cannot be solved by mapped errors and smaller diagnostics improvements. |
-| Unicode identifiers / bidi editor support | Deferred | Requires lexer, normalization, ranges, security/display, fonts, and editor review; translated docs are a distinct project. | A separately approved proposal with fluent/script-expert review and conformance cases. |
+Maintain shared diagnostics, mapped module failures, contained graph publication
+and explicit bridge errors. Formatter, bounded recovery, snapshot navigation and
+incremental builds are implemented; their earlier deferral is superseded by the
+published alpha.7–alpha.9 work. Closed-file workspace analysis and broader typed
+boundaries are unreleased additions, not new external-user observations.
+
+Before expanding the declaration reader, add a representative package regression.
+The alpha.10 changes exercise pinned `escape-string-regexp` (ESM default export)
+and `fast-deep-equal` (ambient CommonJS export) without executing package code
+during analysis. Generic declarations still require an explicit trusted boundary.
+Mutation and branch regressions are in [flow checks](../tests/type-flow.test.ts);
+package contracts and overloads are in [declaration checks](../tests/declarations.test.ts).
+
+Persistent Python workers, Unicode identifiers and richer interactive debugging
+remain proposals or qualification work as shown above. Revisit them using a
+reproduced problem or learner observation with the acceptance criteria below.
 
 ## Required decision template
 
-Before selecting an additional pre-1.0 investment, fill in:
+Before selecting an additional language/tooling investment, fill in:
 
 ```text
 Decision ID / candidate version / date:

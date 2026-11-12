@@ -1,0 +1,15 @@
+export fn paidTotal(orders: {amount: number, paid: boolean}[]): number {
+  let total: number = 0
+  for order in orders {
+    if order.paid { total += order.amount }
+  }
+  return total
+}
+
+export fn unpaidCount(orders: {amount: number, paid: boolean}[]): number {
+  let count: number = 0
+  for order in orders {
+    if not order.paid { count += 1 }
+  }
+  return count
+}

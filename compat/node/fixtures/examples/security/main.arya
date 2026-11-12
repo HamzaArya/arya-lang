@@ -1,0 +1,36 @@
+use std "security" as security
+
+# Store this encoded hash in the user record, never the original password.
+const passwordHash = await security.hashPassword("example passphrase 🔐")
+print("Correct password:", await security.verifyPassword("example passphrase 🔐", passwordHash))
+print("Wrong password:", await security.verifyPassword("wrong passphrase", passwordHash))
+
+# The application persists login.hash with a compare-and-swap after success.
+const login = await security.verifyPasswordAndUpgrade("example passphrase 🔐", passwordHash, {profile: "strong"})
+print("Password accepted:", login.ok)
+print("Password upgraded:", login.upgraded)
+
+# Demo key only. Real applications keep a persistent key in a secret store.
+const previousKey = security.generateKey()
+const currentKey = security.generateKey()
+const context = {account: "tenant:1/user:42", purpose: "account-note"}
+const previous = security.keyring({active: "previous", keys: {previous: previousKey}})
+const encrypted = previous.encrypt("Private account note", context)
+
+# Keep the previous key until existing records and backups have been migrated.
+const vault = security.keyring({active: "current", keys: {previous: previousKey, current: currentKey}})
+const rotated = vault.rotate(encrypted, context)
+print("Rotated credential:", rotated.rotated)
+print("Decrypted note:", vault.decrypt(rotated.encrypted, context))
+
+try {
+  vault.decrypt(rotated.encrypted, {account: "tenant:1/user:99", purpose: "account-note"})
+} catch error {
+  print("Account swap blocked:", error.code == "ARYA_SECURITY_DECRYPT")
+}
+
+# Use separate keys for encryption and message authentication.
+const signingKey = security.generateKey()
+const signature = security.hmac(signingKey, "account:42")
+print("Valid signature:", security.verifyHmac(signingKey, "account:42", signature))
+print("Token length:", len(security.randomToken()))

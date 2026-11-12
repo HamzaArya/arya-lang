@@ -1,0 +1,8 @@
+use std "ui" as ui
+use std "debug" as debug
+for section in ["components", "sections", "templates", "motion", "guide"] {
+  let page = ui.preview({section: section, basePath: "/library", apiPath: "/api/preview"})
+  debug.assert(page.startsWith("<!doctype html>") and page.includes("/library/guide"))
+  if section == "guide" { debug.assert(page.includes("arya create my-app") and not page.includes("npm run dev")) }
+}
+print("native UI: all five gallery sections and native creator instructions passed")

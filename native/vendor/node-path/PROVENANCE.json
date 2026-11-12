@@ -1,0 +1,7 @@
+{
+  "origin": "Node.js v24.16.0 lib/path.js",
+  "source_sha256": "dd326ecdc2d6ad2025c4991f4b480d76a9f1d52b7f6d0988a5dc0a1d02de5209",
+  "native_port": "native/libraries/path.arya",
+  "license": "MIT",
+  "build_requires_node": false
+}

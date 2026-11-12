@@ -1,0 +1,30 @@
+# Pull a bounded chunk only after the preceding consumer has completed.
+use std "_csv" as native
+use std "async" as tasks
+use std "runtime" as runtime
+export fn decoder(options) { return native.decoder(options) }
+fn abort(signal) { if signal != undefined { signal.throwIfAborted() } }
+export async fn each(read, consume, options) {
+  if options == undefined { options = {} }
+  if not runtime.isRecord(options) or runtime.hasAccessor(options) { throw new TypeError("CSV execution options must be data fields.") }
+  for key in runtime.keys(options) { if key != "signal" and key != "decoder" { throw new TypeError("Unknown CSV execution option: " + key) } }
+  const signal = options.signal
+  abort(signal)
+  const parser = decoder(options.decoder)
+  let count = 0
+  while true {
+    abort(signal)
+    const chunk = await read()
+    abort(signal)
+    if chunk == null { break }
+    const rows = parser.push(chunk)
+    count += len(rows)
+    if len(rows) > 0 { await consume(rows) }
+    await tasks.sleep(0)
+  }
+  const rows = parser.finish()
+  count += len(rows)
+  if len(rows) > 0 { abort(signal); await consume(rows) }
+  abort(signal)
+  return count
+}

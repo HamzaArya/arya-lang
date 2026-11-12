@@ -1,20 +1,14 @@
+> Historical implementation guide. The original is preserved in [compat/node/docs/release-readiness.md](../compat/node/docs/release-readiness.md). Current native behavior is defined by the [native profile](native-profile.md), [SDK guide](native-sdk.md) and [qualification report](native-independence-report.md).
+
 # Release readiness and evidence
 
 ## Published reliability preview: 1.3.0-alpha.9
 
-Compiler/creator **1.3.0-alpha.9** are published on `next`; extension **1.3.4** is
-published to Marketplace and included in the offline package. The
-[publication record](releases/1.3.0-alpha.9-publication.json) identifies the clean
-source commit, exact archives, public checks and distribution status.
+<!-- release-status:start -->
+Published experimental preview: **1.3.0-alpha.9**, compiler and creator on npm’s `next` channel; editor extension **1.3.4**. The recorded release passed **12** Linux/Windows/macOS jobs on Node 22.15.0, 22, 24, 26. See the [publication record](releases/1.3.0-alpha.9-publication.json). This evidence describes the published artifacts; subsequent source changes require separate qualification.
+<!-- release-status:end -->
 
-The clean snapshot passed documentation, TypeScript and 296 tests with four optional
-skips, distribution packaging, installed-package acceptance and the release audit.
-All 12 Linux/macOS/Windows jobs passed on Node 22.15, 22, 24 and 26; live MySQL
-integration passed. Real VS Code and AryaCode hosts passed. Public registry hashes
-and a fresh public install were verified. `.gitattributes` and `.github` changes
-are included in the tagged source. Docker, signed installers, browser/Electron
-integration and external learner sessions remain separate qualification targets.
-This remains an experimental prerelease.
+Unreleased [editor/compiler improvements](editor-and-compiler-improvements.md) have separate local validation. The published record does not qualify the changed checkout. Browser/Electron integration and external learner sessions remain separate targets.
 
 ## Retained local reliability candidate: 1.3.0-alpha.8
 
@@ -137,7 +131,7 @@ See [alpha.4 release notes](releases/1.2.0-alpha.4.md) for feature and migration
 
 | Gate | Current state / next evidence |
 | --- | --- |
-| Current platforms and additional architectures | Linux/macOS passed on Node 22/24 for reviewed source 8ea5f94. Windows remains pending in the linked matrix; additional architectures remain unqualified. |
+| Current platforms and additional architectures | The published alpha.9 matrix is summarized above. Each subsequent source revision and additional architecture needs its own qualification. |
 | Other editor products/platforms | Adapters are supplied; each actual application/version remains its own qualification target. |
 | Live services | The disposable MySQL integration workflow passed for reviewed source 8ea5f94. Application-specific deployments and authentication chains remain separate checks. |
 | External learners | No real session results supplied. Follow [community review](community-review.md) and report observed failures and interventions. |

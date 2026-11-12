@@ -1,0 +1,9 @@
+["A","B","C"]
+["C","A"]
+10
+6
+[{"name":"A","active":true,"value":4},{"name":"B","active":false,"value":2}]
+{"A":[{"name":"A","active":true,"value":4}],"B":[{"name":"B","active":false,"value":2}],"C":[{"name":"C","active":true,"value":4}]}
+[1,2,2,4]
+B
+[1,2]

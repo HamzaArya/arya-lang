@@ -1,0 +1,16 @@
+use std "desktop" as desktop
+use std "web" as web
+use std "debug" as debug
+let window = undefined
+let loaded = false
+let server = web.serve(0, {
+  "GET /": fn() { return "<!doctype html><title>Arya native desktop</title><h1>Native window</h1><script>fetch('/ready',{method:'POST'})</script>" },
+  "POST /ready": fn() { loaded = true; setTimeout(fn() { window.close() }, 50); return {ok: true} }
+}, {host: "127.0.0.1", html: false, assets: false})
+window = desktop.open("http://127.0.0.1:" + str(server.address().port), {title: "Arya native desktop test", width: 640, height: 480})
+let deadline = setTimeout(fn() { window.close() }, 10000)
+await window.closed
+clearTimeout(deadline)
+await web.shutdown(server)
+debug.assert(loaded, "The platform web view did not load and call the native server.")
+print("native desktop: AppKit window, WebKit page, native route and graceful close passed")

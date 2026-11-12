@@ -1,0 +1,139 @@
+{
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "compilerSha256": "df53601534005344b8455aa374636555671576b0d920eab56a4e4b9b0ba49bc9",
+  "workload": "100000 identical exact invoice rows, line-v1 half-even, 5 prepared calculations per process",
+  "flags": "--release (-O2 -ffp-contract=off)",
+  "samples": {
+    "native": [
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 13.359000001102686,
+        "calculateMs": 18.980000000447035,
+        "total": "3860000.00",
+        "processWallMs": 506.81362499926763,
+        "maxRssBytes": 15204352
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 15.452999997884035,
+        "calculateMs": 20.939000003039837,
+        "total": "3860000.00",
+        "processWallMs": 45.42408300039824,
+        "maxRssBytes": 15204352
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 13.595000002533197,
+        "calculateMs": 20.028999999165535,
+        "total": "3860000.00",
+        "processWallMs": 41.77191700000549,
+        "maxRssBytes": 15204352
+      }
+    ],
+    "retained-node-bigint": [
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 137.639917,
+        "calculateMs": 48.90395800000002,
+        "total": "3860000.00",
+        "processWallMs": 243.32466600026237,
+        "maxRssBytes": 64323584
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 187.370708,
+        "calculateMs": 49.229292000000015,
+        "total": "3860000.00",
+        "processWallMs": 306.8650000004709,
+        "maxRssBytes": 60686336
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 133.442708,
+        "calculateMs": 60.35570799999999,
+        "total": "3860000.00",
+        "processWallMs": 243.23287500010338,
+        "maxRssBytes": 63651840
+      }
+    ],
+    "retained-node-native-addon": [
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 160.126,
+        "calculateMs": 21.400125000000003,
+        "total": "3860000.00",
+        "processWallMs": 237.06683400087059,
+        "maxRssBytes": 62455808
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 127.296125,
+        "calculateMs": 21.391999999999996,
+        "total": "3860000.00",
+        "processWallMs": 199.28191699909803,
+        "maxRssBytes": 62390272
+      },
+      {
+        "rows": 100000,
+        "repetitions": 5,
+        "prepareMs": 141.21033300000002,
+        "calculateMs": 22.17987499999998,
+        "total": "3860000.00",
+        "processWallMs": 216.3706250012183,
+        "maxRssBytes": 62586880
+      }
+    ]
+  },
+  "medians": {
+    "native": {
+      "prepareMs": 13.595000002533197,
+      "calculateMs": 20.028999999165535,
+      "processWallMs": 45.42408300039824,
+      "maxRssBytes": 15204352
+    },
+    "retained-node-bigint": {
+      "prepareMs": 137.639917,
+      "calculateMs": 49.229292000000015,
+      "processWallMs": 243.32466600026237,
+      "maxRssBytes": 63651840
+    },
+    "retained-node-native-addon": {
+      "prepareMs": 141.21033300000002,
+      "calculateMs": 21.400125000000003,
+      "processWallMs": 216.3706250012183,
+      "maxRssBytes": 62455808
+    }
+  },
+  "startup": {
+    "native": {
+      "samples": 20,
+      "medianProcessMs": 4.7687504993518814
+    },
+    "node": {
+      "samples": 20,
+      "medianProcessMs": 39.90462500041758
+    }
+  },
+  "executableBytes": {
+    "hello": 366968,
+    "accounting": 574456
+  },
+  "scope": "Single-host measurements under current machine load; no universal speed or application-size claim.",
+  "nodeVersion": "v24.16.0",
+  "baselineSha256": "524d0a4d840a2e89e44ec9774d430804d344198d1592b9472d724b3770b64404",
+  "hardware": {
+    "cpu": "Apple M1",
+    "logicalCPUs": 8,
+    "physicalMemoryBytes": 8589934592
+  },
+  "measurementConditions": "Interleaved fresh processes on one development host while qualification work was active. Times are medians of three samples; startup uses twenty samples."
+}

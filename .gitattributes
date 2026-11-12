@@ -2,3 +2,6 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+
+# Pinned vendor inputs retain the bytes recorded in provenance.
+native/vendor/** -text

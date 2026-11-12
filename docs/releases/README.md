@@ -6,6 +6,9 @@ The current published npm preview is **[1.3.0-alpha.9](1.3.0-alpha.9.md)** on `n
 
 | Version | Changes |
 | --- | --- |
+| [1.3.0-alpha.12](1.3.0-alpha.12.md) | Unpublished typed IR and LLVM scalar executable preview |
+| [1.3.0-alpha.11](1.3.0-alpha.11.md) | Unpublished exact accounting runtime, optional native batch kernel, architecture audit and staged native compiler plan |
+| [1.3.0-alpha.10](1.3.0-alpha.10.md) | Unpublished flow/npm typing, workspace/editor reliability, core maintenance and learner review candidate |
 | [1.3.0-alpha.9](1.3.0-alpha.9.md) | Reliability fixes, safer editor operations and consistent version/onboarding guidance; published on `next` |
 | [1.3.0-alpha.8](1.3.0-alpha.8.md) | Retained local reliability candidate; never published |
 | [1.3.0-alpha.7](1.3.0-alpha.7.md) | Checked rest parameter arrays and final business application artifact |

@@ -1,0 +1,60 @@
+use std "accounting" as accounting
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), "Accounting result differs") }
+fn error(code, callback, row) {
+  let caught = false
+  try { callback() } catch failure { equal(failure.code, code); if row != undefined { equal(failure.row, row) }; caught = true }
+  debug.assert(caught, "Accounting error was not raised: " + code)
+}
+let options = {currency: "AFN", scale: 2, rounding: "half-even"}
+let totals = accounting.invoiceBatch([{price: "19.95", quantity: "2", discountBps: 1000, taxBps: 750}], options)
+equal([totals.gross, totals.discount, totals.net, totals.tax, totals.total], ["39.90", "3.99", "35.91", "2.69", "38.60"])
+equal(totals.backend, "native")
+equal(accounting.invoiceBatch([], options).total, "0.00")
+let modes = ["up", "down", "ceil", "floor", "half-up", "half-down", "half-even", "half-ceil", "half-floor"]
+let positive = ["0.03", "0.02", "0.03", "0.02", "0.03", "0.02", "0.02", "0.03", "0.02"]
+let negative = ["-0.03", "-0.02", "-0.02", "-0.03", "-0.03", "-0.02", "-0.02", "-0.02", "-0.03"]
+for mode at index in modes {
+  let config = {currency: "AFN", scale: 2, rounding: mode}
+  equal(accounting.invoiceBatch([{price: "0.25", quantity: "0.1"}], config).gross, positive[index])
+  equal(accounting.invoiceBatch([{price: "-0.25", quantity: "0.1"}], config).gross, negative[index])
+}
+let maximum = "92233720368547758.07"; let minimum = "-92233720368547758.08"
+equal(accounting.invoiceBatch([{price: maximum}, {price: maximum}], options).total, "184467440737095516.14")
+equal(accounting.invoiceBatch([{price: minimum}], options).total, minimum)
+for line in [{price: maximum, quantity: "2"}, {price: minimum, quantity: "2"}, {price: maximum, taxBps: 1}] { error("ARYA_ACCOUNTING_RANGE", fn() { accounting.invoiceBatch([line], options) }, 0) }
+error("ARYA_ACCOUNTING_RANGE", fn() { accounting.prepareInvoices([{price: "92233720368547758.08"}], options) }, 0)
+for line in [{price: 0.1}, {price: "1e2"}, {price: "01"}, {price: "NaN"}, {price: "1", quantity: null}, {price: "1", quantity: "-0"}, {price: "1", typo: true}, null] { error("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareInvoices([line], options) }) }
+error("ARYA_ACCOUNTING_SCALE", fn() { accounting.prepareInvoices([{price: "0.001"}], options) }, 0)
+error("ARYA_ACCOUNTING_RATE", fn() { accounting.prepareInvoices([{price: "1", taxBps: 0.5}], options) }, 0)
+error("ARYA_ACCOUNTING_RATE", fn() { accounting.prepareInvoices([{price: "1", discountBps: 1, discountRate: "0.1"}], options) }, 0)
+let getter = {}; Object.defineProperty(getter, "price", {get: fn() { throw "An accounting getter ran" }, enumerable: true})
+error("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareInvoices([getter], options) }, 0)
+let lines = [{price: "2.5000", quantity: "2.0000000"}]
+let prepared = accounting.prepareInvoices(lines, options)
+lines[0].price = "999"; options.currency = "USD"; options.scale = 0
+equal(prepared.calculate().total, "5.00"); equal(prepared.currency, "AFN"); equal(prepared.length, 1)
+error("ARYA_ACCOUNTING_BACKEND", fn() { prepared.calculate({backend: "js"}) })
+let ledger = accounting.prepareLedger([
+  {account: "cash", debit: maximum, credit: "0"}, {account: "sales", debit: "0", credit: maximum},
+  {account: "cash", debit: maximum, credit: "0"}, {account: "__proto__", debit: "0", credit: maximum}
+], {currency: "AFN", scale: 2})
+let balance = ledger.calculate()
+equal(balance.balanced, true); equal(balance.debit, "184467440737095516.14")
+equal(balance.accounts.map(fn(item) { return item.account }), ["cash", "sales", "__proto__"])
+equal(balance.accounts[0].balance, balance.debit)
+equal(await ledger.calculateAsync(), balance)
+equal(await prepared.calculateAsync(), prepared.calculate())
+let controller = new AbortController(); controller.abort()
+let cancelled = false
+try { await prepared.calculateAsync({signal: controller.signal}) } catch failure { equal(failure.code, "ARYA_ACCOUNTING_ABORTED"); equal(failure.name, "AbortError"); cancelled = true }
+debug.assert(cancelled)
+let one = prepared.calculateAsync(); let two = prepared.calculateAsync(); let busy = prepared.calculateAsync()
+let busyCaught = false
+try { await busy } catch failure { equal(failure.code, "ARYA_ACCOUNTING_BUSY"); busyCaught = true }; debug.assert(busyCaught)
+await one; await two
+runtime.collect(); await tasks.sleep(0); runtime.collect()
+equal(accounting.backendInfo().nativeAvailable, true)
+print("native accounting: exact invoices, nine rounding rules, signed bounds, snapshots, ledgers, validation, cancellation and backpressure passed")

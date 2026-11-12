@@ -1,0 +1,12 @@
+use std "list" as list
+use std "json" as json
+const rows = [{name: "A", active: true, value: 4}, {name: "B", active: false, value: 2}, {name: "C", active: true, value: 4}]
+print(json.stringify(list.map(rows, "name")))
+print(json.stringify(rows |> list.filter("active") |> list.sortBy("name", "desc") |> list.map("name")))
+print(list.sum(rows, "value"))
+print(list.reduce([1,2,3], fn(a,b) => a + b, 0))
+print(json.stringify(list.unique(rows, "value")))
+print(json.stringify(list.groupBy(rows, "name")))
+print(json.stringify(list.flatMap([1,2], fn(n) => [n, n * 2])))
+print(list.find(rows, fn(row) => row.name == "B").name)
+print(json.stringify(list.take([1,2,3],2)))

@@ -1,0 +1,101 @@
+{
+  "name": "Arya Secure",
+  "revision": 1,
+  "warning": "PUBLIC TEST MATERIAL ONLY: fixed keys, salts, and nonces must never be used in applications.",
+  "passwords": [
+    {
+      "name": "legacy",
+      "password": "migration example",
+      "cost": 16384,
+      "salt": "AAECAwQFBgcICQoLDA0ODw",
+      "hash": "arya$scrypt$v1$16384$8$1$AAECAwQFBgcICQoLDA0ODw$-UcR7RnegX8rtewN6TGWEZa867uDMOMk_cEDdQ5p72w"
+    },
+    {
+      "name": "standard",
+      "password": "Arya سلام 🔐\u0000passphrase",
+      "cost": 131072,
+      "salt": "EBESExQVFhcYGRobHB0eHw",
+      "hash": "arya$scrypt$v1$131072$8$1$EBESExQVFhcYGRobHB0eHw$c1yYX222YHTyfEIion5AnmAKjHXn6dV6AdNGWnhyZjM"
+    },
+    {
+      "name": "strong",
+      "password": "strong profile example",
+      "cost": 262144,
+      "salt": "ICEiIyQlJicoKSorLC0uLw",
+      "hash": "arya$scrypt$v1$262144$8$1$ICEiIyQlJicoKSorLC0uLw$V5dmhV-SoS3OTF699EA_YcOduuDbaochl_YxdLvPK78"
+    }
+  ],
+  "encryption": [
+    {
+      "name": "v1-empty",
+      "version": "v1",
+      "key": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "nonce": "AAECAwQFBgcICQoL",
+      "keyId": null,
+      "context": null,
+      "plaintext": "",
+      "aadHex": "",
+      "encrypted": "arya$aes256gcm$v1$AAECAwQFBgcICQoL$9MLbHcOIBaN7khccXQqBzA$"
+    },
+    {
+      "name": "v1-unicode",
+      "version": "v1",
+      "key": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "nonce": "AAECAwQFBgcICQoL",
+      "keyId": null,
+      "context": null,
+      "plaintext": "Arya سلام 🔐\u0000credential",
+      "aadHex": "",
+      "encrypted": "arya$aes256gcm$v1$AAECAwQFBgcICQoL$EOygONWWKtdUgd4xjlbKrA$BnCveuU9ccIJmTBSNMmI8hdGh1eCHjsZVhOM5HE"
+    },
+    {
+      "name": "v2-unicode",
+      "version": "v2",
+      "key": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "nonce": "AAECAwQFBgcICQoL",
+      "keyId": "key-2026",
+      "context": {
+        "account": "tenant:1/user:سلام",
+        "purpose": "oauth:github"
+      },
+      "plaintext": "private credential 🔐",
+      "aadHex": "617279612461657332353667636d24763224000000086b65792d323032360000001674656e616e743a312f757365723ad8b3d984d8a7d9850000000c6f617574683a676974687562",
+      "encrypted": "arya$aes256gcm$v2$key-2026$AAECAwQFBgcICQoL$FWr-hpXNbiMOiS3TuSBhMQ$N3C_baSRpzvuM_Lv1IcMBOK6p8Rv788"
+    },
+    {
+      "name": "v2-empty",
+      "version": "v2",
+      "key": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "nonce": "AAECAwQFBgcICQoL",
+      "keyId": "key-2026",
+      "context": {
+        "account": "user:42",
+        "purpose": "api-token"
+      },
+      "plaintext": "",
+      "aadHex": "617279612461657332353667636d24763224000000086b65792d3230323600000007757365723a3432000000096170692d746f6b656e",
+      "encrypted": "arya$aes256gcm$v2$key-2026$AAECAwQFBgcICQoL$19RCmipDpu4Gl5tkj7drMg$"
+    }
+  ],
+  "digests": [
+    {
+      "text": "",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "text": "abc",
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "text": "Arya سلام 🔐",
+      "sha256": "130c340734e3edd062604237c0521110bb69f28767f2153ab1811d2cfd3f6207"
+    }
+  ],
+  "macs": [
+    {
+      "key": "CwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCws",
+      "text": "Arya سلام",
+      "hmacSha256": "aadf0ef373a6a71751f450617b7a878489294f06146f19adeb74cfa0143d4da0"
+    }
+  ]
+}

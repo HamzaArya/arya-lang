@@ -1,0 +1,35 @@
+use std "testing" as t
+use std "security" as security
+use arya "./invoice.arya" as invoice
+
+t.suite("invoice", fn() {
+  let item = {unitCents: 0, quantity: 0}
+  t.beforeEach(fn() { item = {unitCents: 1250, quantity: 2} })
+  t.afterEach(fn() { item = {unitCents: 0, quantity: 0} })
+
+  t.test("totals integer cents", fn() {
+    t.equal(invoice.total(item.unitCents, item.quantity), 2500)
+    t.deepEqual(item, {unitCents: 1250, quantity: 2})
+  })
+
+  t.test("rejects negative quantities", fn() {
+    t.throws(fn() { invoice.total(1250, -1) }, {code: "INVALID_QUANTITY"})
+  })
+
+  t.test("records dependency calls", fn() {
+    const send = t.mock(fn(totalCents) => {accepted: true, totalCents: totalCents})
+    t.deepEqual(send(2500), {accepted: true, totalCents: 2500})
+    t.deepEqual(send.mock.calls[0].arguments, [2500])
+  })
+})
+
+t.test("protects private invoice notes", fn() {
+  const key = security.generateKey()
+  const encrypted = security.encrypt(key, "Invoice 42")
+  t.equal(security.decrypt(key, encrypted), "Invoice 42")
+  t.throws(fn() { security.decrypt(security.generateKey(), encrypted) }, {code: "ARYA_SECURITY_DECRYPT"})
+})
+
+t.test("checks asynchronous failures", async fn() {
+  await t.rejects(async fn() { throw {code: "OFFLINE"} }, {code: "OFFLINE"})
+}, {timeoutMs: 1000})

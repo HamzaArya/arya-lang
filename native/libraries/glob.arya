@@ -1,0 +1,115 @@
+# Bounded, filesystem-independent glob matching for native path profiles.
+use std "runtime" as runtime
+fn text(value, label) { if runtime.kind(value) != "string" { let error = new TypeError(label + " must be a string."); error.code = "ERR_INVALID_ARG_TYPE"; throw error }; if value.length > 65536 { throw new RangeError("Glob input exceeds 65536 UTF-16 units.") }; return value }
+fn escape(value) { let result = ""; for letter in value { if "\\^$.*+?()[]{}|".includes(letter) { result += "\\" }; result += letter }; return result }
+fn integer(value) { let at = 0; if value[0] == "-" { at = 1 }; if at == value.length { return false }; while at < value.length { if not "0123456789".includes(value[at]) { return false }; at += 1 }; return true }
+fn alternatives(value, separator) {
+  let result = []; let start = 0; let braces = 0; let parentheses = 0; let bracket = false; let index = 0
+  while index < value.length {
+    let letter = value[index]
+    if letter == "[" { bracket = true }; if letter == "]" { bracket = false }
+    if not bracket {
+      if letter == "{" { braces += 1 }; if letter == "}" { braces -= 1 }
+      if letter == "(" { parentheses += 1 }; if letter == ")" { parentheses -= 1 }
+      if letter == separator and braces == 0 and parentheses == 0 { result.push(value.slice(start, index)); start = index + 1 }
+    }
+    index += 1
+  }
+  result.push(value.slice(start)); return result
+}
+fn braces(pattern, depth) {
+  if depth > 16 { throw new RangeError("Glob braces exceed 16 levels.") }
+  let start = 0
+  while start < pattern.length {
+    if pattern[start] != "{" { start += 1; continue }
+    let end = start + 1; let nesting = 1
+    while end < pattern.length and nesting > 0 { if pattern[end] == "{" { nesting += 1 }; if pattern[end] == "}" { nesting -= 1 }; end += 1 }
+    if nesting != 0 { start += 1; continue }
+    let content = pattern.slice(start + 1, end - 1); let options = alternatives(content, ",")
+    if options.length == 1 {
+      let parts = content.split(".."); let numeric = parts.length >= 2 and integer(parts[0]) and integer(parts[1]); let alphabetic = parts.length >= 2 and parts[0].length == 1 and parts[1].length == 1 and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".includes(parts[0]) and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".includes(parts[1])
+      if parts.length >= 2 and parts.length <= 3 and (numeric or alphabetic) and (parts.length == 2 or integer(parts[2])) {
+        let from = number(parts[0]); let to = number(parts[1]); if alphabetic { from = parts[0].charCodeAt(0); to = parts[1].charCodeAt(0) }
+        let step = 1; if parts.length == 3 { step = Math.abs(number(parts[2])) }; if step == 0 { step = 1 }
+        if not Number.isSafeInteger(from) or not Number.isSafeInteger(to) or not Number.isSafeInteger(step) { throw new RangeError("Glob range must use safe integers.") }
+        let count = Math.floor(Math.abs(to - from) / step) + 1; if count > 256 { throw new RangeError("Glob expansion exceeds 256 alternatives.") }
+        let padded = numeric and (parts[0][0] == "0" and parts[0].length > 1 or parts[0].startsWith("-0") and parts[0].length > 2 or parts[1][0] == "0" and parts[1].length > 1 or parts[1].startsWith("-0") and parts[1].length > 2)
+        let width = Math.max(parts[0].length, parts[1].length); options = []
+        for index in range(count) { let value = from + index * step; if to < from { value = from - index * step }; let rendered = str(value); if alphabetic { rendered = runtime.stringFromCodes([value]) } else if padded { let size = width; if value < 0 { size -= 1 }; rendered = str(Math.abs(value)).padStart(size, "0"); if value < 0 { rendered = "-" + rendered } }; options.push(rendered) }
+      }
+    }
+    if options.length > 1 or content.includes("..") and options[0] != content {
+      let result = []
+      for option in options { for expanded in braces(pattern.slice(0, start) + option + pattern.slice(end), depth + 1) { if result.length >= 256 { throw new RangeError("Glob expansion exceeds 256 alternatives.") }; result.push(expanded) } }
+      return result
+    }
+    start += 1
+  }
+  return [pattern]
+}
+fn segment(pattern, depth) {
+  if depth > 16 { throw new RangeError("Glob groups exceed 16 levels.") }
+  let result = ""; let magic = false; let index = 0
+  while index < pattern.length {
+    let letter = pattern[index]
+    if "?*+@!".includes(letter) and pattern[index + 1] == "(" {
+      let end = index + 2; let nesting = 1; let bracket = false
+      while end < pattern.length and nesting > 0 { let next = pattern[end]; if next == "[" { bracket = true }; if next == "]" { bracket = false }; if not bracket { if next == "(" { nesting += 1 }; if next == ")" { nesting -= 1 } }; end += 1 }
+      if nesting == 0 {
+        let choices = []; for option in alternatives(pattern.slice(index + 2, end - 1), "|") { let parsed = segment(option, depth + 1); let choice = parsed.value; if index == 0 and letter != "!" { if option == "" { continue }; if not option.startsWith(".") and not option.startsWith("[.]") and not ("?*+@".includes(option[0]) and option[1] == "(") { choice = "(?!\\.)" + choice }; if parsed.magic and not ("?*+@".includes(option[0]) and option[1] == "(") { choice = "(?!\\.{1,2}(?:/|$))" + choice }; if option == "*" { choice = "(?=[^/])" + choice } }; choices.push(choice) }
+        let group = "(?:" + choices.join("|") + ")"; let suffix = ""
+        if letter == "?" { suffix = "?" } else if letter == "*" { suffix = "*" } else if letter == "+" { suffix = "+" }
+        if letter == "!" { let tail = pattern.slice(end); let suffixPattern = segment(tail, depth + 1).value; if index == 0 and tail != "" and tail.replaceAll("*", "") == "" { suffixPattern = "[^/]+" }; result += "(?!" + group + suffixPattern + "(?:/|$))[^/]*" } else { result += group + suffix }
+        magic = true; index = end; continue
+      }
+    }
+    if letter == "*" { result += "[^/]*"; magic = true }
+    else if letter == "?" { result += "[^/]"; magic = true }
+    else if letter == "[" {
+      let end = index + 1; if pattern[end] == "!" or pattern[end] == "^" { end += 1 }; if pattern[end] == "]" { end += 1 }
+      while end < pattern.length and pattern[end] != "]" { if pattern[end] == "[" and pattern[end + 1] == ":" { let named = pattern.indexOf(":]", end + 2); if named >= 0 { end = named + 2; continue } }; end += 1 }
+      if end < pattern.length {
+        let content = pattern.slice(index + 1, end)
+        if content.length == 1 { result += escape(content) }
+        else { if content[0] == "!" { content = "^" + content.slice(1) }; let expression = "[" + content + "]"; try { new RegExp(expression); result += expression; magic = true } catch _failure { result += escape(pattern.slice(index, end + 1)) } }
+        index = end
+      } else { result += "\\[" }
+    } else { result += escape(letter) }
+    index += 1
+  }
+  return {value: result, magic: magic}
+}
+fn clean(value, windows, pattern) {
+  if windows or pattern { value = value.replaceAll("\\", "/") }
+  while value.includes("//") { value = value.replaceAll("//", "/") }
+  let parts = value.split("/"); let result = []
+  for part in parts { if part == "." and result.length > 0 { continue }; if part == ".." and result.length > 0 and not ["", ".", "..", "**"].includes(result[result.length - 1]) { result.pop() } else { result.push(part) } }
+  return result.join("/")
+}
+fn compile(pattern) {
+  let parts = pattern.split("/"); let result = "^"; let index = 0; let separator = false
+  for part in parts {
+    if part == "**" {
+      if index == 0 { result += "/?" }
+      if separator { result += "/" }
+      if index + 1 < parts.length { result += "(?:(?!\\.)[^/]+/)*"; separator = false }
+      else { result += "(?:(?!\\.)[^/]+(?:/(?!\\.)[^/]+)*)?"; separator = true }
+    } else {
+      if separator { result += "/" }
+      let value = segment(part, 0); let expression = value.value
+      if part != "" and not part.includes("(") { expression = "(?=[^/])" + expression }
+      if value.magic and not part.startsWith(".") and not part.startsWith("[.]") and not ("?*+@".includes(part[0]) and part[1] == "(") { expression = "(?!\\.)" + expression }
+      if value.magic and not ("?*+@".includes(part[0]) and part[1] == "(") { expression = "(?!\\.{1,2}(?:/|$))" + expression }
+      if value.magic and runtime.platform() == "darwin" { expression = "(?i:" + expression + ")" }
+      result += expression; separator = true
+    }
+    index += 1
+  }
+  if not pattern.endsWith("/") { result += "/?" }
+  return result + "$"
+}
+export fn match(value, pattern, windows) {
+  value = clean(text(value, "path"), windows, false); pattern = clean(text(pattern, "pattern"), true, true)
+  for option in braces(pattern, 0) { if value == "" and option == "*" { continue }; if new RegExp(compile(option)).test(value) { return true } }
+  return false
+}

@@ -1,0 +1,216 @@
+# Bounded, demand-driven scalar monomorphization for the independent backend.
+# A variant has exact parameter/result tags. Unsupported or unstable graphs keep
+# their dynamic entry; annotations never substitute for runtime tag guards.
+fn ctype(numeric) { if numeric { return "double" }; return "int" }
+fn key(kinds) { let text = ""; for numeric in kinds { if numeric { text += "n" } else { text += "b" } }; if text == "" { text = "v" }; return text }
+fn variantFor(program, node, kinds) {
+  if not node.scalarBase or len(kinds) != len(node.params) { return null }
+  let signature = key(kinds)
+  for variant in node.scalarVariants { if variant.key == signature { return variant } }
+  if len(node.scalarVariants) >= 4 or len(program.variants) >= 4096 { return null }
+  let variant = {node: node, kinds: kinds.slice(), key: signature, id: node.fid + "_scalar_" + signature, numeric: true, eligible: true, plan: null}
+  node.scalarVariants.push(variant); program.variants.push(variant)
+  return variant
+}
+fn location(state, token) { state.lines.push("fr.line=" + str(token.line + 1) + ";fr.column=" + str(token.column + 1) + ";") }
+fn temporary(state, code, numeric) {
+  let name = "sv" + str(state.count); state.count += 1
+  state.lines.push(ctype(numeric) + " " + name + "=" + code + ";")
+  return name
+}
+fn local(state, binding) {
+  for item in state.locals { if item.binding == binding { return item } }
+  return null
+}
+fn asNumber(value) { if value.numeric { return value.code }; return "((double)(" + value.code + "))" }
+fn expression(node, state) {
+  let hooks = state.program.hooks
+  if node.kind == "literal" {
+    if node.token.kind == "number" {
+      let text = str(node.value)
+      if not text.includes(".") and not text.includes("e") and not text.includes("E") { text += ".0" }
+      return {code: text, numeric: true}
+    }
+    if node.value != null and node.token.kind != "string" { let text = "0"; if node.value { text = "1" }; return {code: text, numeric: false} }
+    return null
+  }
+  if node.kind == "name" {
+    if hooks.global(node) {
+      if node.name == "NaN" { return {code: "NAN", numeric: true} }
+      if node.name == "Infinity" { return {code: "INFINITY", numeric: true} }
+      return null
+    }
+    let binding = hooks.lookup(node); let found = local(state, binding)
+    if found == null { return null }
+    return {code: hooks.local(binding), numeric: found.numeric}
+  }
+  if node.kind == "unary" and node.operator != "await" {
+    let value = expression(node.value, state)
+    if value == null { return null }
+    if node.operator == "not" or node.operator == "!" { return {code: "(!anumtruth(" + value.code + "))", numeric: false} }
+    return {code: "(" + node.operator + asNumber(value) + ")", numeric: true}
+  }
+  if node.kind == "binary" {
+    let left = expression(node.left, state)
+    if left == null { return null }
+    if node.operator == "??" { return left }
+    if node.operator == "and" or node.operator == "or" {
+      let result = temporary(state, left.code, left.numeric)
+      let invert = ""; if node.operator == "or" { invert = "!" }
+      state.lines.push("if(" + invert + "anumtruth(" + result + ")){")
+      let right = expression(node.right, state)
+      if right == null or left.numeric != right.numeric { return null }
+      state.lines.push(result + "=" + right.code + ";}")
+      return {code: result, numeric: left.numeric}
+    }
+    # Snapshot the left value before lowering calls in the right operand.
+    let saved = temporary(state, left.code, left.numeric)
+    left = {code: saved, numeric: left.numeric}
+    let right = expression(node.right, state)
+    if right == null { return null }
+    if node.operator == "==" or node.operator == "!=" {
+      if left.numeric != right.numeric { let text = "0"; if node.operator == "!=" { text = "1" }; return {code: text, numeric: false} }
+      return {code: "(" + left.code + node.operator + right.code + ")", numeric: false}
+    }
+    if node.operator == "**" { return {code: "apower(" + asNumber(left) + "," + asNumber(right) + ")", numeric: true} }
+    if node.operator == "%" { return {code: "fmod(" + asNumber(left) + "," + asNumber(right) + ")", numeric: true} }
+    return {code: "(" + asNumber(left) + node.operator + asNumber(right) + ")", numeric: ["+", "-", "*", "/"].includes(node.operator)}
+  }
+  if node.kind == "call" {
+    let target = hooks.stable(node.callee)
+    if target == null or hooks.lookup(node.callee).kind != "function" or len(node.arguments) != len(target.params) { return null }
+    let callArgs = []; let kinds = []
+    for arg in node.arguments {
+      let value = expression(arg, state)
+      if value == null { return null }
+      callArgs.push(temporary(state, value.code, value.numeric)); kinds.push(value.numeric)
+    }
+    let targetVariant = variantFor(state.program, target, kinds)
+    if targetVariant == null { return null }
+    state.dependencies.push(targetVariant)
+    let scope = hooks.lookup(node.callee).scope
+    let closure = "closure"
+    if scope != state.variant.node.definitionScope {
+      let name = "se" + str(scope.id)
+      if state.environments[name] == undefined { state.environments[name] = true; state.setup.push("AV " + name + "=ap(afind(closure," + str(scope.id) + "));") }
+      closure = name
+    }
+    location(state, node.token)
+    state.lines.push("ACOUNT(direct_calls);if(!acall_enter())goto failure;")
+    let suffix = ""; if len(callArgs) > 0 { suffix = "," + callArgs.join(",") }
+    let result = temporary(state, targetVariant.id + "(" + closure + suffix + ")", targetVariant.numeric)
+    state.lines.push("adepth--;if(afailed)goto failure;")
+    return {code: result, numeric: targetVariant.numeric}
+  }
+  return null
+}
+fn body(block, state) {
+  let previous = state.locals.slice()
+  for item in block.statements {
+    if not state.valid { break }
+    location(state, item.token)
+    if item.kind == "declaration" {
+      let value = expression(item.value, state)
+      if value == null { state.valid = false; break }
+      state.locals.push({binding: item.binding, numeric: value.numeric})
+      state.lines.push(ctype(value.numeric) + " " + state.program.hooks.local(item.binding) + "=" + value.code + ";")
+    } else if item.kind == "assignment" and item.target.kind == "name" {
+      let binding = state.program.hooks.lookup(item.target); let target = local(state, binding)
+      let value = expression(item.value, state)
+      if value == null or target == null or binding.kind == "const" { state.valid = false; break }
+      if item.operator == "=" {
+        if target.numeric != value.numeric { state.valid = false; break }
+      } else if not target.numeric { state.valid = false; break }
+      state.lines.push(state.program.hooks.local(binding) + item.operator + value.code + ";")
+    } else if item.kind == "return" and item.value != null {
+      let value = expression(item.value, state)
+      if value == null { state.valid = false; break }
+      if state.result != undefined and state.result != value.numeric { state.valid = false; break }
+      state.result = value.numeric; state.lines.push("result=" + value.code + ";goto done;")
+    } else if item.kind == "if" or item.kind == "while" {
+      if item.kind == "while" { state.lines.push("while(1){") }
+      let value = expression(item.condition, state)
+      if value == null { state.valid = false; break }
+      if item.kind == "while" { state.lines.push("if(!anumtruth(" + value.code + "))break;") }
+      else { state.lines.push("if(anumtruth(" + value.code + ")){") }
+      body(item.body, state); state.lines.push("}")
+      if item.kind == "if" and item.otherwise != null { state.lines.push("else{"); body(item.otherwise, state); state.lines.push("}") }
+    } else if item.kind == "break" or item.kind == "continue" { state.lines.push(item.kind + ";") }
+    else { state.valid = false }
+  }
+  state.locals = previous
+}
+fn plan(program, variant) {
+  let state = {program: program, variant: variant, valid: true, locals: [], result: undefined, lines: [], setup: [], environments: {}, dependencies: [], count: 0}
+  let index = 0
+  for binding in variant.node.params { state.locals.push({binding: binding, numeric: variant.kinds[index]}); index += 1 }
+  body(variant.node.body, state)
+  return state
+}
+export fn prepare(functions, hooks) {
+  let program = {hooks: hooks, variants: []}
+  for node in functions { node.scalarVariants = []; node.scalarBase = not node.async and node.rest == null and len(node.params) <= 8 and hooks.terminates(node.body); for value in node.defaults { if value != null { node.scalarBase = false } } }
+  for node in functions {
+    let kinds = []; let annotated = []; let mixed = false
+    for parameter in node.params { kinds.push(true); let numeric = parameter.annotation != "boolean"; annotated.push(numeric); if not numeric { mixed = true } }
+    variantFor(program, node, kinds)
+    if mixed { variantFor(program, node, annotated) }
+  }
+  let changed = true; let passes = 0
+  while changed and passes < 64 {
+    passes += 1; changed = false; let count = len(program.variants)
+    # A snapshot makes variant creation independent of list iterator mutation.
+    for variant in program.variants.slice() {
+      let state = plan(program, variant)
+      if state.result != undefined and variant.numeric != state.result { variant.numeric = state.result; changed = true }
+      variant.plan = state
+    }
+    if len(program.variants) != count { changed = true }
+  }
+  # An unstable graph is never emitted under an optimistic type assumption.
+  for variant in program.variants { variant.eligible = not changed and variant.plan != null and variant.plan.valid and variant.plan.result != undefined }
+  # Solve availability after result tags, retaining valid recursive components
+  # while pruning every caller of an unsupported variant.
+  let pruning = true
+  while pruning {
+    pruning = false
+    for variant in program.variants {
+      if variant.eligible {
+        for dependency in variant.plan.dependencies { if not dependency.eligible { variant.eligible = false; pruning = true; break } }
+      }
+    }
+  }
+}
+fn parameters(variant, hooks) {
+  let result = ["AV closure"]; let index = 0
+  for binding in variant.node.params { result.push(ctype(variant.kinds[index]) + " " + hooks.local(binding)); index += 1 }
+  return result.join(",")
+}
+export fn prototypes(node, hooks) {
+  let result = []
+  for variant in node.scalarVariants { if variant.eligible { result.push("static " + ctype(variant.numeric) + " " + variant.id + "(" + parameters(variant, hooks) + ");") } }
+  return result
+}
+export fn emit(node, hooks) {
+  let result = {definitions: [], entry: ""}
+  for variant in node.scalarVariants {
+    if not variant.eligible { continue }
+    let name = variant.id; let state = variant.plan
+    let frame = "ACOUNT(scalar_calls);"
+    let allNumeric = variant.numeric; for numeric in variant.kinds { if not numeric { allNumeric = false } }
+    if allNumeric { frame += "ACOUNT(numeric_calls);" }
+    frame += ctype(variant.numeric) + " result=0;AFrame fr;fr.prev=aframes;fr.file=" + hooks.quote(node.unit.filename) + ";fr.name=" + hooks.quote(node.displayName ?? "anonymous") + ";fr.line=" + str(node.token.line + 1) + ";fr.column=" + str(node.token.column + 1) + ";aframes=&fr;\n"
+    # Only primitive locals exist here. Every callee closure is the same lexical
+    # environment or an ancestor of the boundary-rooted entry closure.
+    result.definitions.push("static " + ctype(variant.numeric) + " " + name + "(" + parameters(variant, hooks) + "){\n" + frame + state.setup.join("\n") + "\n" + state.lines.join("\n") + "\ngoto done;failure:result=0;done:aframes=fr.prev;return result;\n}")
+    let entryGuard = "argc>=" + str(len(node.params)); let values = ["closure"]; let index = 0
+    for numeric in variant.kinds {
+      let tag = "ABOOL"; if numeric { tag = "ANUM" }
+      entryGuard += "&&argv[" + str(index) + "].t==" + tag
+      let value = "argv[" + str(index) + "].n"; if not numeric { value = "(int)" + value }; values.push(value); index += 1
+    }
+    let box = "ab"; if variant.numeric { box = "an" }
+    result.entry += "if(" + entryGuard + "){ARoot boundary;aroot(&boundary,&closure,1);" + ctype(variant.numeric) + " value=" + name + "(" + values.join(",") + ");aunroot(&boundary);return " + box + "(value);}\n"
+  }
+  return result
+}

@@ -12,3 +12,5 @@ packages/create-arya-language/THIRD-PARTY-NOTICES.txt
 .DS_Store
 **/.arya/
 **/__pycache__/
+
+native/accounting/build/

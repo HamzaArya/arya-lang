@@ -1,0 +1,83 @@
+{
+  "seed": {
+    "origin": "Historical generated stage3 C at .build/bootstrap-native/stage3.c (retained before native migration)",
+    "originalSha256": "bd322da736571f333217b3af249973c8685d491ac321786cfb3e9d050b2cc819",
+    "currentSha256": "18a58e40076f21e1324ecb341645d58581ad3d8160f2e78e33dfe1699c3af022",
+    "changes": [
+      "Single-allocation list.join in seed runtime",
+      "Safe NULL storage initialization in alist"
+    ],
+    "previousQualifiedSha256": "e59a0fbb1b5992441ff895953b59d4e98fe3bdfaba94a805fd4ad7d1d0dde942",
+    "qualification": "Build the retained C seed, rebase stage one onto the current C runtime, then compare independently emitted stage-two/stage-three C. The seed is a versioned bootstrap source, not a generated replacement from the current compiler."
+  },
+  "compilerSourceOrigin": {
+    "repositoryCommit": "1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda",
+    "compiler": "bootstrap/compiler.arya",
+    "runtime": "src/native/runtime.c"
+  },
+  "ryu": {
+    "url": "https://github.com/ulfjack/ryu",
+    "commit": "4c0618b0e44f7ef027ebae05d2cc7812048f7c8f",
+    "license": "Apache-2.0 option; upstream Boost license also retained"
+  },
+  "mpdecimal": {
+    "url": "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.1.tar.gz",
+    "version": "4.0.1",
+    "archiveSha256": "96d33abb4bb0070c7be0fed4246cd38416188325f820468214471938545b1ac8",
+    "license": "BSD-2-Clause",
+    "modifications": false
+  },
+  "openssl": {
+    "url": "https://www.openssl.org/source/openssl-3.6.4.tar.gz",
+    "version": "3.6.4",
+    "archiveSha256": "9bffaa1ad1e07b354c21bd3324ec02fa15579f45a7d0494b3e74bc449b7333ef",
+    "license": "Apache-2.0",
+    "configuration": "static libcrypto, no shared libraries, modules, engines, applications or tests; upstream Perl configuration only"
+  },
+  "llhttp": {
+    "version": "9.4.3",
+    "url": "https://github.com/nodejs/llhttp",
+    "license": "MIT",
+    "files": {
+      "native/vendor/llhttp/include/llhttp.h": "5bc82fa51b19aa8bee7d921038393fbfc74e8cc9bae0844c2d82c102fb8cfd68",
+      "native/vendor/llhttp/src/api.c": "0f8590206fe2f264db2825401b5fb856b979ee1363dc88b06f36dc9577afb941",
+      "native/vendor/llhttp/src/http.c": "a1f2b23168f8e9b5bfa464c89027d3ca259fc649ae3d7e72bfff997d1aeb5d72",
+      "native/vendor/llhttp/src/llhttp.c": "391e7c99912abf3b1c9dd8a9c85fdeaac2663e9fa55b6f3871154d16fef8b892"
+    }
+  },
+  "ada": {
+    "version": "4.0.0",
+    "url": "https://github.com/ada-url/ada",
+    "license": "MIT option; both upstream licenses retained",
+    "files": {
+      "native/vendor/ada/ada.cpp": "1c722f8f5355d6bf2bf3601870684edc875aa8f56b4d4735440d96263dd0207c",
+      "native/vendor/ada/ada.h": "0010b17b3ff489e13998e86d921b16e1643e370ee3276c584f1b0c4b72bdf628",
+      "native/vendor/ada/ada_c.h": "75641082708f01f61f4a8924ae6df19e172e737ced7265965b01a83ebec14f7c"
+    }
+  },
+  "unicode": {
+    "version": "17.0.0",
+    "url": "https://www.unicode.org/Public/17.0.0/ucd/",
+    "license": "Unicode-3.0",
+    "files": {
+      "native/vendor/unicode/UnicodeData.txt": "2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c",
+      "native/vendor/unicode/SpecialCasing.txt": "efc25faf19de21b92c1194c111c932e03d2a5eaf18194e33f1156e96de4c9588",
+      "native/vendor/unicode/DerivedCoreProperties.txt": "24c7fed1195c482faaefd5c1e7eb821c5ee1fb6de07ecdbaa64b56a99da22c08"
+    },
+    "generator": "native/bootstrap/unicode.c (C11); generated native/runtime/unicode-tables.h is committed"
+  },
+  "pcre2": {
+    "version": "10.49",
+    "url": "https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.49",
+    "archiveSha256": "929f0b20e62879252a15886b06c89f1edef61a363cbd5826fb041080a5e557ae",
+    "license": "BSD-3-Clause with upstream notices",
+    "configuration": "static 16-bit Unicode library; JIT disabled; bounded matching"
+  },
+  "pathAlgorithms": {
+    "origin": "Node.js v24.16.0 lib/path.js",
+    "source_sha256": "dd326ecdc2d6ad2025c4991f4b480d76a9f1d52b7f6d0988a5dc0a1d02de5209",
+    "native_port": "native/libraries/path.arya",
+    "license": "MIT",
+    "build_requires_node": false
+  }
+}

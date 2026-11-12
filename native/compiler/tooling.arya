@@ -1,0 +1,105 @@
+# Native source formatting and binding analysis, shared by the CLI and LSP.
+use std "runtime" as runtime
+export fn format(source, tokens) {
+  let protectedLines = []
+  for token in tokens {
+    if token.kind == "string" {
+      let original = source.slice(token.start, token.end)
+      if original.includes("\n") { for index in range(original.split("\n").length) { protectedLines.push(token.line + index) } }
+    }
+  }
+  let depth = 0; let result = []; let at = 0
+  let index = 0
+  for line in source.split("\n") {
+    let trimmed = line.trim(); let closing = 0
+    if ["}", "]", ")"].includes(trimmed[0]) { closing = 1 }
+    let indentation = depth - closing; if indentation < 0 { indentation = 0 }; let output = "  ".repeat(indentation) + trimmed
+    if protectedLines.includes(index) { output = line }
+    else if trimmed == "" { output = "" }
+    result.push(output)
+    while at < tokens.length and tokens[at].line <= index {
+      let token = tokens[at]; at += 1
+      if token.line == index and token.kind == "symbol" {
+        if ["{", "[", "("].includes(token.text) { depth += 1 }
+        if ["}", "]", ")"].includes(token.text) { depth -= 1 }
+      }
+    }
+    index += 1
+  }
+  while result.length > 0 and result[result.length - 1] == "" { result.pop() }
+  return result.join("\n") + "\n"
+}
+export fn inspect(ast, lookup, infer, member, referencesOnly) {
+  let state = {bindings: [], references: [], diagnostics: [], exports: [], scopes: [], members: [], calls: []}
+  fn diagnostic(token, code, message) { state.diagnostics.push({token: token, code: code, message: message}) }
+  fn names(scope) {
+    if scope == null or state.scopes.includes(scope) { return }
+    state.scopes.push(scope)
+    for value in scope.bindings { if value.kind != "builtin" { state.bindings.push(value) } }
+  }
+  fn expression(node, access) {
+    if access == undefined { access = "read" }
+    if node == null { return }
+    if node.kind == "name" {
+      try { let found = lookup(node); if found != null { state.references.push({binding: found, node: node, token: node.token, access: access}) } }
+      catch error { diagnostic(node.token, error.code ?? "ARYA_NAME", error.message ?? str(error)) }
+      return
+    }
+    if node.kind == "function" {
+      names(node.parameterScope)
+      for value in node.defaults { expression(value) }
+      body(node.body); return
+    }
+    if node.kind == "literal" { return }
+    if node.kind == "object" { for field in node.fields { expression(field.value) }; return }
+    if node.kind == "list" { for value in node.items { expression(value) }; return }
+    if node.kind == "binary" { expression(node.left); expression(node.right); return }
+    if node.kind == "member" { expression(node.object); expression(node.key); state.members.push(node); if member != undefined { let found = member(node); if found != null { state.references.push({binding: found, node: node, token: node.key.token, access: "member"}) } }; return }
+    if node.kind == "call" or node.kind == "new" { state.calls.push(node); expression(node.callee); for value in node.arguments { expression(value) }; return }
+    if node.kind == "pipe" { expression(node.value); expression(node.callee); for value in node.arguments { expression(value) }; return }
+    if node.kind == "chain" { expression(node.base); for step in node.steps { if step.kind == "member" { expression(step.key) } else { for value in step.arguments { expression(value) } } }; return }
+    if node.kind == "view" { view(node.children); return }
+    if node.value != undefined { expression(node.value) }
+  }
+  fn view(children) {
+    for child in children {
+      if child.kind == "text" { expression(child.value) }
+      if child.attributes != undefined { for field in child.attributes { expression(field.value) } }
+      if child.children != undefined { view(child.children) }
+    }
+  }
+  fn body(block) {
+    if block == null { return }
+    names(block.scope); let stopped = false
+    for item in block.statements {
+      if stopped and item.kind != "function" { diagnostic(item.token, "ARYA_UNREACHABLE", "Statement is unreachable after unconditional control flow.") }
+      if ["return", "throw", "break", "continue"].includes(item.kind) { stopped = true }
+      if item.exported { state.exports.push(item.binding) }
+      if item.kind == "declaration" or item.kind == "function" { expression(item.value) }
+      else if item.kind == "import" { }
+      else if item.kind == "assignment" { let access = "readwrite"; if item.operator == "=" { access = "write" }; expression(item.target, access); expression(item.value) }
+      else if item.kind == "expression" {
+        expression(item.value)
+        if item.value.kind == "call" {
+          try { let known = infer(item.value); if known != null and known.kind == "promise" { diagnostic(item.token, "ARYA_UNHANDLED_PROMISE", "Known promise result is ignored; await it or return it from an async function.") } } catch _failure { }
+        }
+      }
+      else if item.kind == "if" { expression(item.condition); body(item.body); body(item.otherwise) }
+      else if item.kind == "for" { names(item.binding.scope); expression(item.iterable); body(item.body) }
+      else if item.kind == "while" { expression(item.condition); body(item.body) }
+      else if item.kind == "try" { body(item.body); body(item.handler); body(item.finalizer) }
+      else if item.value != undefined { expression(item.value) }
+    }
+  }
+  body(ast)
+  if referencesOnly { return state }
+  let unused = []
+  for value in state.bindings {
+    if value.name.startsWith("_") or ["parameter", "catch", "loop"].includes(value.kind) or state.exports.includes(value) { continue }
+    let read = false
+    for ref in state.references { if ref.binding == value and ref.access != "write" { read = true; break } }
+    if not read { unused.push({token: value.token, code: "ARYA_UNUSED", message: "Binding '" + value.name + "' is never read."}) }
+  }
+  state.diagnostics = unused.concat(state.diagnostics)
+  return state
+}

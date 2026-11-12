@@ -1,0 +1,221 @@
+# Native test runner, assertions, hooks and scoped mocks.
+use std "runtime" as runtime
+use std "debug" as debug
+use std "math" as math
+
+let finished = false
+let runner = null
+let sequence = 0
+let passed = 0
+let failed = 0
+let skipped = 0
+let todos = 0
+let suites = 0
+fn safeInteger(value) { return runtime.kind(value) == "number" and value == value and math.floor(value) == value and math.abs(value) <= 9007199254740991 }
+fn options(value = {}) {
+  if runtime.kind(value) != "record" { throw new TypeError("Testing options must be an object.") }
+  for key in runtime.keys(value) { if not ["timeoutMs", "skip", "todo", "concurrency"].includes(key) { throw new TypeError("Unknown testing option: " + key) } }
+  if value.timeoutMs != undefined and (not safeInteger(value.timeoutMs) or value.timeoutMs < 1 or value.timeoutMs > 2147483647) { throw new TypeError("timeoutMs must be from 1 to 2147483647.") }
+  if value.concurrency != undefined and (not safeInteger(value.concurrency) or value.concurrency < 1) { throw new TypeError("concurrency must be a positive safe integer.") }
+  for key in ["skip", "todo"] { if value[key] != undefined and not ["boolean", "string"].includes(runtime.kind(value[key])) { throw new TypeError(key + " must be a boolean or reason string.") } }
+  return {timeoutMs: value.timeoutMs, skip: value.skip, todo: value.todo, concurrency: value.concurrency ?? 1}
+}
+fn callback(value) { if runtime.kind(value) != "function" { throw new TypeError("Test bodies and hooks must be functions.") }; return value }
+fn newScope(parent, name, body, settings, suite) {
+  let scope = {parent: parent, name: name, callback: body, options: settings, suite: suite, children: [], before: [], after: [], beforeEach: [], afterEach: [], restorers: [], active: 0, accepting: true, closed: false, started: false, failure: null, skipped: settings.skip, todo: settings.todo}
+  scope.changed = new Promise(fn(resolve) { scope.notify = resolve })
+  scope.start = new Promise(fn(resolve) { scope.release = resolve })
+  scope.done = new Promise(fn(resolve) { scope.complete = resolve })
+  return scope
+}
+const root = newScope(null, "", null, {concurrency: 1}, true)
+fn notify(scope) {
+  const wake = scope.notify
+  scope.changed = new Promise(fn(resolve) { scope.notify = resolve })
+  wake()
+}
+runtime.onFinish(fn() { finished = true; notify(root) })
+fn current() { return runtime.context(1) ?? root }
+fn noteFailure(scope, error) { if scope.failure == null { scope.failure = error } }
+fn fullName(scope) { if scope.parent == null or scope.parent == root { return scope.name }; return fullName(scope.parent) + " / " + scope.name }
+fn label(text) { return text.replaceAll("\n", "\\n").replaceAll("\r", "\\r") }
+fn report(scope) {
+  sequence += 1
+  if scope.suite { suites += 1 }
+  let suffix = ""
+  if scope.skipped { skipped += 1; suffix = " # SKIP " + str(scope.skipped) }
+  else if scope.todo { todos += 1; suffix = " # TODO " + str(scope.todo) }
+  else if scope.failure != null { failed += 1; runtime.exitCode(1) }
+  else if not scope.suite { passed += 1 }
+  let status = "ok "; if scope.failure != null and not scope.skipped and not scope.todo { status = "not ok " }
+  print(status + str(sequence) + " - " + label(fullName(scope)) + suffix)
+  if scope.failure != null {
+    const error = scope.failure
+    print("  ---")
+    print("  message: " + debug.inspect(error.message ?? error))
+    if error.expected != undefined { print("  expected: " + debug.inspect(error.expected)) }
+    if error.actual != undefined { print("  actual: " + debug.inspect(error.actual)) }
+    if error.stack != undefined { print("  stack: " + debug.inspect(error.stack)) }
+    print("  ...")
+  }
+}
+async fn hooks(scope, name, context) { for hook in scope[name] { await hook(context) } }
+async fn ancestorHooks(scope, name, context, reverse) {
+  let ancestors = []; let item = scope.parent
+  while item != null { ancestors.push(item); item = item.parent }
+  if reverse { for ancestor in ancestors { await hooks(ancestor, name, context) } }
+  else { let index = len(ancestors) - 1; while index >= 0 { await hooks(ancestors[index], name, context); index -= 1 } }
+}
+async fn bodyWithTimeout(scope, context) {
+  if scope.options.timeoutMs == undefined { return await scope.callback(context) }
+  let timer = undefined
+  const timeout = new Promise(fn(resolve, reject) { timer = setTimeout(fn() { reject(runtime.error("Error", "Test timed out after " + str(scope.options.timeoutMs) + " ms.", "ARYA_TEST_TIMEOUT")) }, scope.options.timeoutMs) })
+  try { return await Promise.race([Promise.resolve(scope.callback(context)), timeout]) }
+  finally { clearTimeout(timer) }
+}
+fn contextFor(scope) {
+  let context = {name: scope.name, fullName: fullName(scope)}
+  context.after = fn(body) { scope.after.push(callback(body)) }
+  context.before = fn(body) { scope.before.push(callback(body)) }
+  context.beforeEach = fn(body) { scope.beforeEach.push(callback(body)) }
+  context.afterEach = fn(body) { scope.afterEach.push(callback(body)) }
+  context.test = fn(name, body, settings = {}) { return register(name, body, settings, false, scope) }
+  context.skip = fn(reason = true) { scope.skipped = reason or true }
+  context.todo = fn(reason = true) { scope.todo = reason or true }
+  context.diagnostic = fn(message) { print("# " + label(str(message))) }
+  context.mock = {fn: mock, method: fn(object, name, implementation) {
+    const original = object[name]
+    const replacement = mock(implementation ?? original)
+    object[name] = replacement
+    scope.restorers.push(fn() { object[name] = original })
+    return replacement
+  }, restoreAll: fn() { for restore in scope.restorers { restore() }; scope.restorers.length = 0 }}
+  context.assert = {ok: assert, equal: equal, notEqual: notEqual, deepEqual: deepEqual, notDeepEqual: notDeepEqual, throws: throws, rejects: rejects, fail: fail}
+  return context
+}
+async fn execute(scope) {
+  await scope.parent.start
+  while scope.parent.active >= scope.parent.options.concurrency { await scope.parent.changed }
+  scope.parent.active += 1
+  const previous = runtime.context(1, scope)
+  const context = contextFor(scope)
+  try {
+    if scope.skipped { scope.accepting = false; return }
+    if scope.suite {
+      try { await scope.callback(context) } catch error { noteFailure(scope, error) }
+      scope.accepting = false
+      try { await hooks(scope, "before", context) } catch error { noteFailure(scope, error) }
+      scope.started = true; scope.release()
+    } else {
+      scope.started = true; scope.release()
+      try { await ancestorHooks(scope, "beforeEach", context, false); await bodyWithTimeout(scope, context) }
+      catch error { noteFailure(scope, error) }
+      scope.accepting = false
+    }
+    for child in scope.children { await child.done; if child.failure != null and not child.skipped and not child.todo { noteFailure(scope, runtime.error("Error", "A child test failed.", "ARYA_TEST_CHILD")) } }
+    if not scope.suite { try { await ancestorHooks(scope, "afterEach", context, true) } catch error { noteFailure(scope, error) } }
+    try { await hooks(scope, "after", context) } catch error { noteFailure(scope, error) }
+  } catch error { noteFailure(scope, error) }
+  finally {
+    scope.accepting = false; scope.closed = true; scope.release()
+    for restore in scope.restorers { try { restore() } catch error { noteFailure(scope, error) } }
+    runtime.context(1, previous)
+    report(scope); scope.complete()
+    scope.parent.active -= 1; notify(scope.parent)
+  }
+}
+async fn runRoot() {
+  try { await hooks(root, "before", contextFor(root)) } catch error { noteFailure(root, error) }
+  root.started = true; root.release()
+  let index = 0
+  while true {
+    while index < len(root.children) { await root.children[index].done; index += 1 }
+    if finished { break }
+    await root.changed
+  }
+  try { await hooks(root, "after", contextFor(root)) } catch error { noteFailure(root, error) }
+  if root.failure != null { runtime.exitCode(1); print("not ok - root hooks: " + debug.inspect(root.failure)) }
+  print("1.." + str(sequence))
+  print("# suites " + str(suites))
+  print("# pass " + str(passed))
+  print("# fail " + str(failed))
+  print("# skipped " + str(skipped))
+  print("# todo " + str(todos))
+}
+fn register(name, body, settings, suite, parent) {
+  if runtime.kind(name) != "string" or len(name.trim()) == 0 { throw new TypeError("Test names must be nonempty text.") }
+  callback(body); settings = options(settings)
+  if parent == undefined { parent = current() }
+  if not parent.accepting { throw runtime.error("Error", "Parent test has finished.", "ARYA_TEST_CLOSED") }
+  const scope = newScope(parent, name, body, settings, suite)
+  parent.children.push(scope)
+  if runner == null { runner = runtime.defer(runRoot) }
+  runtime.defer(async fn() { await execute(scope) })
+  notify(parent)
+  if parent.suite and parent != root { return Promise.resolve() }
+  return scope.done
+}
+export fn test(name, body, settings = {}) { return register(name, body, settings, false) }
+export fn suite(name, body, settings = {}) { return register(name, body, settings, true) }
+export fn skip(name, reason = true) { return register(name, fn() {}, {skip: reason or true}, false) }
+export fn todo(name, reason = true) { return register(name, fn() {}, {todo: reason or true}, false) }
+fn hook(name, body) { callback(body); const scope = current(); if scope.started and scope.suite { throw runtime.error("Error", "Register suite hooks before tests start.", "ARYA_TEST_HOOK") }; scope[name].push(body) }
+export fn before(body) { hook("before", body) }
+export fn after(body) { hook("after", body) }
+export fn beforeEach(body) { hook("beforeEach", body) }
+export fn afterEach(body) { hook("afterEach", body) }
+fn assertion(condition, actual, expected, operator, message) {
+  if condition { return }
+  if message != undefined and runtime.kind(message) != "string" { throw new TypeError("Assertion messages must be text.") }
+  const error = runtime.error("AssertionError", message ?? ("Expected " + debug.inspect(expected) + ", received " + debug.inspect(actual) + "."), "ERR_ASSERTION")
+  error.actual = actual; error.expected = expected; error.operator = operator
+  throw error
+}
+export fn assert(condition, message) { assertion(condition, condition, true, "ok", message) }
+export fn equal(actual, expected, message) { assertion(runtime.sameValue(actual, expected), actual, expected, "strictEqual", message) }
+export fn notEqual(actual, expected, message) { assertion(not runtime.sameValue(actual, expected), actual, expected, "notStrictEqual", message) }
+export fn deepEqual(actual, expected, message) { assertion(runtime.deepEqual(actual, expected), actual, expected, "deepStrictEqual", message) }
+export fn notDeepEqual(actual, expected, message) { assertion(not runtime.deepEqual(actual, expected), actual, expected, "notDeepStrictEqual", message) }
+export fn fail(message) { assertion(false, undefined, undefined, "fail", message ?? "Failed") }
+fn matcher(error, expected) {
+  if expected == undefined { return true }
+  if runtime.kind(expected) == "string" { throw new TypeError("Use an error matcher record or function, rather than a string.") }
+  if runtime.kind(expected) == "function" { return runtime.errorMatches(error, expected) or expected(error) == true }
+  if runtime.kind(expected) != "record" { throw new TypeError("Expected an error matcher record or function.") }
+  if error == null or error == undefined { return false }
+  for key in runtime.keys(expected) { if not runtime.deepEqual(error[key], expected[key]) { return false } }
+  return true
+}
+export fn throws(body, expected, message) {
+  callback(body)
+  if runtime.kind(expected) == "string" { throw new TypeError("Use an error matcher rather than a string.") }
+  let caught = false; let error = undefined
+  try { body() } catch value { caught = true; error = value }
+  assertion(caught and matcher(error, expected), error, expected, "throws", message ?? "Expected a matching exception.")
+}
+export async fn rejects(body, expected, message) {
+  callback(body)
+  if runtime.kind(expected) == "string" { throw new TypeError("Use an error matcher rather than a string.") }
+  let caught = false; let error = undefined
+  try { await body() } catch value { caught = true; error = value }
+  assertion(caught and matcher(error, expected), error, expected, "rejects", message ?? "Expected a matching rejection.")
+}
+export fn mock(implementation = fn() {}) {
+  callback(implementation)
+  const original = implementation
+  let calls = []; let once = []
+  const wrapper = fn(...values) {
+    let body = implementation; let index = len(calls)
+    for item in once { if item.index == index { body = item.callback } }
+    let result = undefined; let error = undefined; let didThrow = false
+    try { result = body(...values) } catch caught { error = caught; didThrow = true }
+    calls.push({arguments: values.slice(), result: result, error: error, this: undefined, target: undefined})
+    if didThrow { throw error }
+    return result
+  }
+  const metadata = {callCount: fn() => len(calls), resetCalls: fn() { calls = [] }, mockImplementation: fn(body) { implementation = callback(body) }, mockImplementationOnce: fn(body, onCall = len(calls)) { if not safeInteger(onCall) or onCall < len(calls) { throw new RangeError("Invalid mock call index.") }; once.push({index: onCall, callback: callback(body)}) }, restore: fn() { implementation = original; once = [] }}
+  runtime.fieldGetter(metadata, "calls", fn() => calls.slice())
+  runtime.freeze(metadata)
+  runtime.fieldGetter(wrapper, "mock", fn() => metadata)
+  return wrapper
+}

@@ -1,0 +1,21 @@
+use std "fs" as fs
+use std "path" as path
+use std "debug" as debug
+let directory = args[0]
+let name = path.join(directory, "text.txt")
+await fs.writeText(name, "hello\0سلام🌉")
+debug.assert(await fs.readText(name) == "hello\0سلام🌉")
+debug.assert(await fs.exists(name))
+debug.assert(not await fs.exists(path.join(directory, "absent")))
+let rejected = false
+try { await fs.exists(path.join(name, "child")) } catch error { rejected = error.code == "ENOTDIR" }
+debug.assert(rejected, "exists must propagate ENOTDIR.")
+rejected = false
+try { await fs.readText(path.join(directory, "absent")) } catch error { rejected = error.code == "ENOENT" and error.syscall == "open" }
+debug.assert(rejected, "File errors must retain their native cause.")
+for operation in [fn() { return fs.readText(name + "\0suffix") }, fn() { return fs.list(directory + "\0suffix") }, fn() { return path.realPath(name + "\0suffix") }, fn() { return fs.rename(name, name + "\0suffix") }] {
+  rejected = false; try { await operation() } catch error { rejected = error.name == "TypeError" }; debug.assert(rejected)
+}
+debug.assert((await fs.list(directory)).includes("text.txt"))
+fs.remove(name)
+print("native filesystem: Unicode/NUL text, errno propagation, missing paths and NUL path rejection passed")

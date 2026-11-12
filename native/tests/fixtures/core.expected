@@ -1,0 +1,9 @@
+41 43
+40320
+9
+0 A
+1 B
+8
+valid invalid
+{"text":"Arya","values":[true,null,1.25]}
+TypeError

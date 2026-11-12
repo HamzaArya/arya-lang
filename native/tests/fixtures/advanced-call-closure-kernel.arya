@@ -1,0 +1,10 @@
+fn factory() { let total = 0; return fn(step) { total += step; return total } }
+fn work(n) {
+  const next = factory()
+  let i = 0
+  let value = 0
+  while i < n { value = next(1); i += 1 }
+  return value
+}
+const n = number(args[0])
+print(work(n), work(n + 1))

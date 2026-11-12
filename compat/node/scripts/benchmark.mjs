@@ -1,0 +1,15 @@
+import {build} from 'esbuild';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {measure} from './benchmarks/compiler.mjs';
+const require=createRequire(import.meta.url);
+await mkdir('.build/performance',{recursive:true});
+const output='.build/performance/current.cjs';
+await build({stdin:{contents:"export {compile,analyzeSource} from './src/compiler.ts'; export {createWorkspaceAnalysisCache,referencesInWorkspace} from './src/workspace-service.ts';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',outfile:output});
+const args=process.argv.slice(2), compare=args.indexOf('--compare');
+const baseline=compare>=0?measure(require(resolve(args[compare+1]))):undefined;
+const current=measure(require(resolve(output)));
+const result={node:process.version,platform:process.platform,architecture:process.arch,modules:201,functionCount:200,statistic:'median of seven warmed samples; milliseconds per operation',...(baseline?{baseline}:{}),current,...(baseline?{speedup:Object.fromEntries(Object.entries(current).map(([key,value])=>[key,Number((baseline[key]/value).toFixed(2))]))}:{})};
+await writeFile('.build/performance/results.json',JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result,null,2));

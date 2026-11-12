@@ -1,0 +1,10 @@
+use std "process" as process
+use std "async" as tasks
+let timer = setInterval(fn() {}, 1000)
+let remove = process.onSignal("SIGTERM", async fn(name) {
+  clearInterval(timer)
+  await tasks.sleep(1)
+  print(name + " cleanup complete")
+}, {once: true})
+if args[0] == "dispose" { remove() }
+print("ready")

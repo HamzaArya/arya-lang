@@ -1,0 +1,82 @@
+use std "json" as json
+use std "runtime" as runtime
+use std "debug" as debug
+use std "async" as tasks
+let checks: number = 0
+fn equal(a: any, b: any): void { debug.assert(runtime.deepEqual(a, b), "Data path mismatch"); checks += 1 }
+fn syntax(text: string): void { let caught = false; try { json.parse(text) } catch error { equal(error.name, "SyntaxError"); caught = true }; debug.assert(caught) }
+let text = '"plain فارسی 😀 \\u0000 \\n \\uD800 \\uDC00 \\uD83D\\uDE00"'
+let value = json.parse(text)
+let serialized: any = json.stringify(value)
+let reparsed: any = json.parse(serialized)
+equal(json.stringify(reparsed), serialized)
+equal(runtime.codeUnit(json.parse('"\\ud800"'), 0), 55296)
+equal(runtime.codeUnit(json.parse('"a\\u0000b"'), 1), 0)
+equal(json.stringify(json.parse('{"z":1,"2":2,"1":1,"01":3,"z":4,"__proto__":5}')), '{"1":1,"2":2,"z":4,"01":3,"__proto__":5}')
+equal(Object.is(json.parse("-0"), -0), true)
+for bad in ['"bad', '"a\n"', '"\\x"', '"\\u123"', '[1,]', '{"a":1,}', '{a:1}', '01', '-01', '1.', '1e', '1e+', 'true false', '{"a" 1}', '[', '"\\'] { syntax(bad) }
+let rows: any = []
+for i in range(100) { rows.push({balance: "1.25", type: "asset", subtotal: "0", index: i}) }
+let encodedRows: any = json.stringify(rows)
+let decoded: any = json.parse(encodedRows)
+runtime.collect()
+decoded[0].balance = "9"
+equal(decoded[1].balance, "1.25")
+equal(json.stringify(decoded[99]), '{"balance":"1.25","type":"asset","subtotal":"0","index":99}')
+let reviverOrder = []
+let revived: any = json.parse('{"a":[1,2],"b":3}', fn(key, item) { reviverOrder.push(key); if key == "0" { return undefined }; return item })
+equal(reviverOrder, ["0", "1", "a", "b", ""])
+equal(json.stringify(revived), '{"a":[null,2],"b":3}')
+let observed: any = {a: 1, b: 2}
+runtime.fieldGetter(observed, "a", fn() { observed.b = 7; observed.c = 9; runtime.collect(); return 4 })
+equal(json.stringify(observed), '{"a":4,"b":7}')
+let custom = {toJSON: fn(key) { runtime.collect(); return {key: key, value: "ok"} }}
+equal(json.stringify([custom]), '[{"key":"0","value":"ok"}]')
+let replaceOrder = []
+equal(json.stringify({b: 2, a: [1, 2]}, fn(key, item) { replaceOrder.push(key); if key == "b" { return undefined }; return item }), '{"a":[1,2]}')
+equal(replaceOrder, ["", "b", "a", "0", "1"])
+equal(json.stringify({z: 1, a: 2}, ["a", "z", "a"]), '{"a":2,"z":1}')
+equal(json.stringify({a: [1]}, null, 2), '{\n  "a": [\n    1\n  ]\n}')
+let cycle: any = {}; cycle.self = cycle
+try { json.stringify(cycle); debug.assert(false) } catch error { equal(error.name, "TypeError") }
+let depth = "[".repeat(129) + "0" + "]".repeat(129)
+syntax(depth)
+syntax("[" + "0,".repeat(100000) + "0]")
+
+# Cache the same read across records with different orders, additions, getters,
+# and JSON reviver deletion. The cache never retains a collected object.
+fn field(row: any): any { return row.balance }
+for i in range(30) {
+  equal(field({balance: i, other: 1}), i)
+  equal(field({other: 1, balance: i + 1}), i + 1)
+  let record: any = {other: 2}; record.balance = i + 2; equal(field(record), i + 2)
+  runtime.fieldGetter(record, "balance", fn() { runtime.collect(); return i + 3 }); equal(field(record), i + 3)
+  let removed: any = json.parse('{"balance":2,"other":3}', fn(key, item) { if key == "balance" { return undefined }; return item })
+  equal(field(removed), undefined)
+  runtime.collect()
+}
+let events = []
+let target = {call: fn(value) { events.push("old"); return value }}
+fn argument() { events.push("argument"); target.call = fn(value) { events.push("new"); return value + 1 }; runtime.collect(); return 7 }
+equal(target.call(argument()), 7)
+equal(target.call(7), 8)
+equal(events, ["argument", "old", "new"])
+let first = []
+let selected = first
+fn move() { selected = []; runtime.collect(); return 5 }
+selected.push(move())
+equal(first, [5]); equal(selected, [])
+let detached = first.push
+runtime.collect(); detached(6); equal(first, [5, 6])
+equal(" A ".trim().toLowerCase(), "a")
+let map = new Map(); map.set("x", 3); equal(map.get("x"), 3)
+fn preserved() { try { return {text: "alive"} } finally { let garbage = [{a: "temporary"}]; runtime.collect() } }
+equal(preserved().text, "alive")
+async fn suspended() {
+  let shared = {text: "suspended"}
+  let saved = fn() { return shared.text }
+  for i in range(3) { let temporary = {index: i}; await tasks.sleep(0); runtime.collect(); if i == 1 { continue }; equal(temporary.index, i) }
+  return saved
+}
+let closure = await suspended(); runtime.collect(); equal(closure(), "suspended")
+print("data-path checks:", checks)

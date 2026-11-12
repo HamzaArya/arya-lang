@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0-alpha.2",
+  "status": "qualified-native-alpha",
+  "recordedAt": "2026-11-12T14:54:36.409994+00:00",
+  "scope": "Complete native execution/toolchain migration and 18 retained standard-module API implementations, with 26 native public modules. Native host/foreign profile limits are explicit; this is not a complete JavaScript environment or a stable production certification.",
+  "platform": {
+    "os": "darwin",
+    "architecture": "arm64",
+    "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)"
+  },
+  "compilerWrittenIn": "Arya",
+  "backend": "C11 ahead-of-time with native managed values and guarded scalar specialization",
+  "requiresNodeForCoreBuildOrExecution": false,
+  "requiresPythonForCoreBuildOrExecution": false,
+  "bootstrap": {
+    "generations": 3,
+    "stageTwoThreeCIdentical": true,
+    "generatedCSha256": "a2600bedc1a84d7e87cf5f8aa01c86ec0e1564ece4042ba895a70f17794d1ded",
+    "retainedSeedSha256": "18a58e40076f21e1324ecb341645d58581ad3d8160f2e78e33dfe1699c3af022",
+    "stageOneExplicitRuntimeRebase": true
+  },
+  "source": {
+    "manifest": "SOURCE-MANIFEST-2.0.0-alpha.2.json",
+    "manifestSha256": "d82c640f3ae3cc5781e92143feb51faaa976488a6d3e488ac63eb9a3031f4a2c",
+    "files": 372,
+    "baseGitRevision": "5ea5cdb52b665f2d02ab73483154f14555b79cc6",
+    "qualificationWorkspace": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.xQbg8j"
+  },
+  "nativeBinary": {
+    "sha256": "df53601534005344b8455aa374636555671576b0d920eab56a4e4b9b0ba49bc9",
+    "bytes": 5546040,
+    "versionOutput": "Arya native 2.0.0-alpha.2 (self-hosted)"
+  },
+  "gates": {
+    "freshSourceNodePythonAbsent": true,
+    "fullCoreConformance": true,
+    "functionCalls": 53,
+    "advancedCalls": 47,
+    "dataLifetimeChecks": 36,
+    "optimizedReferenceReleaseDebugSanitizerGC": true,
+    "standardRuntimeProfile": true,
+    "portablePathCases": 3254,
+    "globCases": 4368,
+    "flowTypeCases": 105,
+    "lspRecoveryAndWorkspaceSafety": true,
+    "allFiveProjectTemplatesAndCacheSafety": true,
+    "independentDecimalResults": 5352,
+    "independentAccountingBatches": 85,
+    "independentAccountingRows": 7600,
+    "largeAccountingRows": 100000,
+    "moneyFinanceParsedValuesIndexedCollections": true,
+    "csvBackpressureAndUTF8Chunks": true,
+    "streamingLedgerExample": true,
+    "fullHttpSocketOracle": true,
+    "explicitPythonBridge": true,
+    "privateFreshMySQL": true,
+    "macOSDesktop": true,
+    "isolatedVSIXInstallation": true,
+    "bundledNativeEditorProviders": 9,
+    "uiTemplatesAndFiveGallerySections": true,
+    "relocatedFullSDKAndSymlinkCompiler": true,
+    "sdkApplicationsRunWithEmptyPath": true,
+    "noEmbeddedJavaScriptOrPythonRuntimeInCompilerAndProbe": true
+  },
+  "preservation": {
+    "archivedSourceDocumentFiles": 825,
+    "archivedCacheFiles": 9278,
+    "priorArtifactFilesUnchanged": 186,
+    "ledgerInstallationsAndDataModified": false
+  },
+  "performanceReport": "docs/benchmarks/2.0.0-alpha.2-accounting-qualified.json",
+  "limitations": [
+    "darwin-arm64 locally qualified; other platform releases need separate gates",
+    "macOS leak detection not qualified",
+    "filesystem promise operations yield before bounded synchronous I/O",
+    "native host-style helpers are bounded compatibility subsets",
+    "Python/MySQL/desktop/editor retain only their explicit feature dependencies",
+    "stable embedding ABI, native debug adapter and registry are separate professionalization work"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "recordedDate": "2026-11-12",
+  "version": "Arya native 2.0.0-alpha.2 (self-hosted)",
+  "machine": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "25.5.0",
+    "cpu": "Apple M1",
+    "logicalCpus": 8,
+    "totalMemoryBytes": 8589934592
+  },
+  "originalCompilerSha256": "c42a08069cf8578d9953b06b5e235c177beab3930bdeb9d7100fd5e6ab4b45c4",
+  "baselineReport": "2.0.0-alpha.2-vs-node-2026-11-12.json",
+  "method": "Counters added to private copies of saved generated C, rebuilt with C11 -O2 -ffp-contract=off. Each process runs work(n) and work(n+1) once, without warmup. Counts include process setup, both evaluations, output and final GC. No instrumented timings are used as performance results. Production compiler and runtime sources are unchanged.",
+  "counterDefinitions": {
+    "heapObjects": "Calls to aalloc",
+    "environments": "aalloc with AENV",
+    "records": "aalloc with ARECORD",
+    "functions": "aalloc with AFUNC",
+    "strings": "aalloc with ASTR",
+    "callocCalls": "Calls to amemory, which calls calloc",
+    "requestedBytes": "Cumulative bytes requested through amemory; excludes realloc and other direct allocations; not peak memory or RSS",
+    "variableReads": "Calls to agetvar",
+    "propertyReads": "Calls to aget",
+    "dynamicOperations": "Calls to abin",
+    "gcCollections": "Runtime acollections after final process cleanup"
+  },
+  "workloads": [
+    {
+      "name": "numeric-sum",
+      "inputs": [
+        10000000,
+        10000001
+      ],
+      "outputs": [
+        12499998750000.0,
+        12500001250000.0
+      ],
+      "counts": {
+        "heapObjects": 21,
+        "environments": 2,
+        "records": 2,
+        "functions": 9,
+        "strings": 7,
+        "callocCalls": 41,
+        "requestedBytes": 5369,
+        "variableReads": 10,
+        "propertyReads": 2,
+        "dynamicOperations": 2,
+        "gcCollections": 1
+      },
+      "instrumentedSourceSha256": "71815c05b2c2a7c4617e588bc8bf0803dce2663ae28de9ebb3ec40e96cee2795",
+      "instrumentedBinarySha256": "71db50ae0a4901d136cfcad8f62872d4adc92cbf0437f3711c85a4524f3ead7f"
+    },
+    {
+      "name": "recursive-fibonacci",
+      "inputs": [
+        24,
+        25
+      ],
+      "outputs": [
+        46368.0,
+        75025.0
+      ],
+      "counts": {
+        "heapObjects": 589276,
+        "environments": 589256,
+        "records": 2,
+        "functions": 10,
+        "strings": 7,
+        "callocCalls": 1374968,
+        "requestedBytes": 207422309,
+        "variableReads": 1374930,
+        "propertyReads": 2,
+        "dynamicOperations": 982084,
+        "gcCollections": 63
+      },
+      "instrumentedSourceSha256": "70ccfb6144b6869c477713ecc14ed4dd7ab4e6ecd21bc0cdd438639903a43f4a",
+      "instrumentedBinarySha256": "b30e5bfb2d599cd316529323a7b00a0e33dcab98851db5326f15fb79a0d04d62"
+    },
+    {
+      "name": "array-records",
+      "inputs": [
+        20000,
+        20001
+      ],
+      "outputs": [
+        133326666.0,
+        133326666.0
+      ],
+      "counts": {
+        "heapObjects": 386702,
+        "environments": 93340,
+        "records": 40003,
+        "functions": 40010,
+        "strings": 173345,
+        "callocCalls": 680067,
+        "requestedBytes": 42369387,
+        "variableReads": 506700,
+        "propertyReads": 133339,
+        "dynamicOperations": 266680,
+        "gcCollections": 9
+      },
+      "instrumentedSourceSha256": "ee97b6cd75c1c1bfd438eaa384d2e9489b962137d53fb160475e7b385c27ea08",
+      "instrumentedBinarySha256": "8218ca5ab2d933c85c73bb9cde39e987623cc41cd0c02a3eaffe4e6d5f00e9b4"
+    }
+  ]
+}

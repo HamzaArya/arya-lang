@@ -1,0 +1,19 @@
+use std "testing" as testing
+use std "async" as tasks
+use std "debug" as debug
+let events = []
+testing.before(fn() { events.push("before") })
+testing.after(fn() { debug.assert(events.includes("afterEach") and events[0] == "before"); print("native testing: hooks, assertions, async children and scoped mocks passed") })
+testing.beforeEach(fn() { events.push("beforeEach") })
+testing.afterEach(fn() { events.push("afterEach") })
+testing.test("assertions and exception matching", async fn(t) {
+  t.assert.ok(true); t.assert.equal(1, 1); t.assert.notEqual(1, 2); t.assert.deepEqual({a: [1]}, {a: [1]}); t.assert.notDeepEqual({a: 1}, {a: 2})
+  t.assert.throws(fn() { throw new TypeError("expected") }, TypeError)
+  await t.assert.rejects(async fn() { throw new RangeError("expected") }, RangeError)
+  let mock = t.mock.fn(fn(value) { return value + 1 })
+  t.assert.equal(mock(2), 3); t.assert.equal(mock.mock.calls.length, 1)
+  let object = {read: fn() { return 1 }}
+  t.mock.method(object, "read", fn() { return 2 }); t.assert.equal(object.read(), 2)
+  await t.test("nested async child", async fn(child) { await tasks.sleep(0); child.assert.equal(2, 2) })
+})
+testing.suite("suite registration", async fn() { testing.test("suite child", fn(t) { t.assert.ok(true) }); testing.todo("planned case") })

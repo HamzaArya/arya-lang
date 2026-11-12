@@ -1,0 +1,192 @@
+{
+  "version": "1.3.0-alpha.9",
+  "verifiedAt": "2026-11-11T09:46:04.123Z",
+  "registry": "https://registry.npmjs.org/",
+  "packages": [
+    {
+      "name": "arya-language",
+      "version": "1.3.0-alpha.9",
+      "publishedAt": "2026-11-11T09:46:42.314Z",
+      "distTags": {
+        "latest": "1.2.0-alpha.4",
+        "next": "1.3.0-alpha.9"
+      },
+      "tarball": "https://registry.npmjs.org/arya-language/-/arya-language-1.3.0-alpha.9.tgz",
+      "sha256": "bc5fac1ef0efd74328922c2264413c7276474aa0142edb9d7dfc1b54ecc605c0",
+      "integrity": "sha512-xu6mM1K7unnS4Ek1flTAzrQkwaBU53R2s/qOhQabqdbgWsz2lsfiCow3ou14Vs4uUdZQplwF0mgkolhZdMoF9Q==",
+      "downloadMatchesReviewedArchive": true
+    },
+    {
+      "name": "create-arya-language",
+      "version": "1.3.0-alpha.9",
+      "publishedAt": "2026-11-11T09:44:56.453Z",
+      "distTags": {
+        "latest": "1.2.0-alpha.4",
+        "next": "1.3.0-alpha.9"
+      },
+      "tarball": "https://registry.npmjs.org/create-arya-language/-/create-arya-language-1.3.0-alpha.9.tgz",
+      "sha256": "22f6f75f732399481528b164ec6586be9a691c585108052178def39a22f847c1",
+      "integrity": "sha512-xp2oxgsn18qB+BptHrC/iwOirukEje1lAusu8yAqQOovIYvUrlrhibLdp7Q0JvJ9b0DkYRZUn/mN+Z0A315B0A==",
+      "downloadMatchesReviewedArchive": true
+    }
+  ],
+  "stableReleaseReady": false,
+  "consumer": {
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "freshCache": true,
+    "installFromPublicRegistry": true,
+    "compilerVersion": true,
+    "decimalDateHostIsolation": true,
+    "declarations": true,
+    "typeMismatch": true,
+    "creatorPinsExactCompiler": true,
+    "createdProjectCheck": true
+  },
+  "sourceCommit": "ebecd74d3569c61c24710b4f12a57134194c6fdd",
+  "sourceWorkingTreeDirty": false,
+  "sourceManifestSha256": "2d6960fd5d683b81edca7f2041901e4cff2fb47150485039a36cc97b30fb7a05",
+  "extension": {
+    "version": "1.3.4",
+    "languageVersion": "1.3.0-alpha.9",
+    "id": "aryacode.arya-language",
+    "preRelease": true,
+    "sha256": "00a7773076910e3cd716d4d63efae6efb02dee3ab3061aa51c5efed6172188a2",
+    "status": "published; Microsoft verification completed",
+    "url": "https://marketplace.visualstudio.com/items?itemName=aryacode.arya-language",
+    "sameVsixAsNpmAndGitHub": true,
+    "localInstall": [
+      {
+        "editor": "code",
+        "ok": true,
+        "message": "Installing extensions...\nExtension 'arya-language.vsix' was successfully installed."
+      },
+      {
+        "editor": "aryacode",
+        "ok": true,
+        "manager": "code",
+        "message": "Installed in AryaCode using code as the compatibility manager. Installing extensions...\nExtension 'arya-language.vsix' was successfully installed."
+      }
+    ],
+    "hostTests": [
+      {
+        "editor": "code",
+        "vscode": "1.143.1",
+        "extension": "aryacode.arya-language",
+        "languageVersion": "1.3.0-alpha.9",
+        "tokens": 10,
+        "fileIcons": "arya-file-icons",
+        "themes": [
+          "Arya Dark",
+          "Arya Light"
+        ],
+        "aryacodeBuiltin": false
+      },
+      {
+        "editor": "aryacode",
+        "vscode": "1.145.2",
+        "extension": "aryacode.arya-language",
+        "languageVersion": "1.3.0-alpha.9",
+        "tokens": 10,
+        "fileIcons": "arya-file-icons",
+        "themes": [
+          "Arya Dark",
+          "Arya Light"
+        ],
+        "aryacodeBuiltin": true
+      }
+    ],
+    "publicDownloadVerification": {
+      "version": "1.3.4",
+      "languageVersion": "1.3.0-alpha.9",
+      "url": "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/aryacode/vsextensions/arya-language/1.3.4/vspackage",
+      "sha256": "00a7773076910e3cd716d4d63efae6efb02dee3ab3061aa51c5efed6172188a2",
+      "publicDownloadMatches": true,
+      "verifiedAt": "2026-11-11T09:51:51.868Z"
+    },
+    "publisherDashboardVerifiedAt": "2026-11-11T09:53:40.716723+00:00",
+    "galleryVersionVerified": true,
+    "galleryHashMatched": true
+  },
+  "ci": {
+    "qualification": "https://github.com/HamzaArya/arya-lang/actions/runs/42997134329",
+    "matrixJobs": 12,
+    "matrixConclusion": "success",
+    "platforms": [
+      "Linux",
+      "Windows",
+      "macOS"
+    ],
+    "nodeVersions": [
+      "22.15.0",
+      "22",
+      "24",
+      "26"
+    ],
+    "mysql": "https://github.com/HamzaArya/arya-lang/actions/runs/42997134200",
+    "mysqlConclusion": "success"
+  },
+  "github": {
+    "url": "https://github.com/HamzaArya/arya-lang/releases/tag/v1.3.0-alpha.9",
+    "tag": "v1.3.0-alpha.9",
+    "isDraft": false,
+    "prerelease": true,
+    "serverAssetDigestsMatch": true,
+    "assets": [
+      {
+        "name": "arya-editor-kit-1.3.0-alpha.9.zip",
+        "size": 6889807,
+        "digest": "sha256:f89a86aa1095610109c2bc2f86631fc737136b23539b5a27017ec21ec67b55b0"
+      },
+      {
+        "name": "arya-language-1.3.0-alpha.9.tgz",
+        "size": 4340409,
+        "digest": "sha256:bc5fac1ef0efd74328922c2264413c7276474aa0142edb9d7dfc1b54ecc605c0"
+      },
+      {
+        "name": "arya-language-1.3.0-alpha.9.vsix",
+        "size": 901473,
+        "digest": "sha256:00a7773076910e3cd716d4d63efae6efb02dee3ab3061aa51c5efed6172188a2"
+      },
+      {
+        "name": "create-arya-language-1.3.0-alpha.9.tgz",
+        "size": 106883,
+        "digest": "sha256:22f6f75f732399481528b164ec6586be9a691c585108052178def39a22f847c1"
+      },
+      {
+        "name": "LICENSE",
+        "size": 11358,
+        "digest": "sha256:cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "name": "NOTICE",
+        "size": 266,
+        "digest": "sha256:082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30"
+      },
+      {
+        "name": "qualification.json",
+        "size": 2203,
+        "digest": "sha256:cb0abef949b96b448ed09622f3acee7e27d5cacd1073e346cf151c6135a95f7f"
+      },
+      {
+        "name": "SHA256SUMS",
+        "size": 402,
+        "digest": "sha256:aa91e07cb20b1865d124a98835410694a38b106bdde5839ea0e6a39db510d65f"
+      },
+      {
+        "name": "SOURCE-MANIFEST.json",
+        "size": 46474,
+        "digest": "sha256:2d6960fd5d683b81edca7f2041901e4cff2fb47150485039a36cc97b30fb7a05"
+      },
+      {
+        "name": "THIRD-PARTY-NOTICES.txt",
+        "size": 11289,
+        "digest": "sha256:dd1f3327aa518876095548658aa3642bca7e9ca8b5ea52150abc057c435739da"
+      }
+    ],
+    "publicDownloadsMatch": true,
+    "publicDownloadsVerifiedAt": "2026-11-11T09:51:57.608490+00:00"
+  },
+  "documentation": "Frozen archives retain their prepublication documentation; current installation and distribution status are recorded here and in the release guides."
+}

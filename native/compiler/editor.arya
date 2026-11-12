@@ -1,0 +1,44 @@
+# Optional editor installation uses the editor's existing command-line launcher.
+use std "fs" as fs
+use std "path" as path
+use std "process" as process
+use std "runtime" as runtime
+fn find(command) {
+  for directory in (process.env("PATH") ?? "").split(":") { let filename = path.resolve(directory, command); if fs.isFile(filename) { return filename } }
+  return null
+}
+fn clients() {
+  let taskHome = process.env("HOME") ?? ""
+  let definitions = [
+    {id: "code", command: "code", app: "Visual Studio Code", script: "code"},
+    {id: "aryacode", command: "aryacode", app: "AryaCode", script: "aryacode"},
+    {id: "cursor", command: "cursor", app: "Cursor", script: "cursor"},
+    {id: "codium", command: "codium", app: "VSCodium", script: "codium"},
+    {id: "windsurf", command: "windsurf", app: "Windsurf", script: "windsurf"}
+  ]
+  let result = []
+  for client in definitions {
+    let executable = find(client.command)
+    if executable == null and runtime.platform() == "darwin" { for directory in ["/Applications", path.join(taskHome, "Applications")] { let candidate = path.join(directory, client.app + ".app", "Contents/Resources/app/bin", client.script); if fs.isFile(candidate) { executable = candidate; break } } }
+    result.push({id: client.id, executable: executable})
+  }
+  return result
+}
+export fn run(options) {
+  let action = options[1] ?? "status"; let selected = "all"; let json = false; let index = 2
+  while index < len(options) { if options[index] == "--editor" { index += 1; selected = options[index] } else if options[index] == "--json" { json = true } else { throw "Use arya editor status|install|path [--editor all|code|aryacode|cursor|codium|windsurf] [--json]." }; index += 1 }
+  if not ["all", "code", "aryacode", "cursor", "codium", "windsurf"].includes(selected) { throw "Unknown editor: " + str(selected) }
+  let extension = path.join(path.dirname(process.executable()), "share", "editor", "arya-language.vsix")
+  if action == "path" { print(extension); return }
+  if not ["status", "install"].includes(action) { throw "Choose editor status, install, or path." }
+  let editors = clients().filter(fn(client) { return selected == "all" or selected == client.id })
+  if action == "status" {
+    if json { print(runtime.jsonStringify({compiler: process.executable(), extension: extension, packageAvailable: fs.isFile(extension), editors: editors})); return }
+    print("Native compiler: " + process.executable()); print("Editor package: " + extension)
+    for client in editors { print(client.id + " launcher: " + (client.executable ?? "not found")) }; return
+  }
+  if not fs.isFile(extension) { throw "Native editor package is missing. Build make native-editor or install the complete SDK." }
+  let count = 0
+  for client in editors { if client.executable == null { continue }; let status = process.run([client.executable, "--install-extension", extension, "--force"]); if status != 0 { throw "Editor installation failed: " + client.id + " (exit " + str(status) + ")" }; count += 1 }
+  if count == 0 { throw "No selected editor launcher was found. Install from the path printed by arya editor path." }
+}

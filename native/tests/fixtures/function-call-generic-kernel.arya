@@ -1,0 +1,10 @@
+fn flip(value) { try { return not value } finally { } }
+fn work(n) {
+  let value = false
+  let i = 0
+  while i < n { value = flip(value); i += 1 }
+  if value { return -i }
+  return i
+}
+const n = number(args[0])
+print(work(n), work(n + 1))

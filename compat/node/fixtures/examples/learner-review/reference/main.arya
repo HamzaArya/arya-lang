@@ -1,0 +1,12 @@
+use arya "./orders.arya" as orders
+use js "node:path" as path: {basename: fn(string): string}
+
+const items = [
+  {amount: 1200, paid: true},
+  {amount: 1200, paid: true},
+  {amount: 500, paid: false}
+]
+
+print("Paid total:", orders.paidTotal(items))
+print("Unpaid orders:", orders.unpaidCount(items))
+print("Module:", path.basename("reports/main.arya"))

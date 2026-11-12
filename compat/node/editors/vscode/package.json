@@ -1,0 +1,249 @@
+{
+  "name": "arya-language",
+  "displayName": "Arya Language",
+  "description": "Arya language support: syntax highlighting, diagnostics, completion, snippets, and run/check commands.",
+  "version": "1.3.7",
+  "publisher": "aryacode",
+  "license": "Apache-2.0",
+  "homepage": "https://hamzaarya.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HamzaArya/arya-lang.git"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Themes"
+  ],
+  "keywords": [
+    "arya",
+    "language",
+    "python",
+    "javascript"
+  ],
+  "icon": "media/arya-marketplace-icon.png",
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onLanguage:arya"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Editing and syntax diagnostics work; running and checking files require trust."
+    },
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Editor features work; execution requires a local file."
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "arya",
+        "aliases": [
+          "Arya",
+          "arya"
+        ],
+        "extensions": [
+          ".arya"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./media/arya-mark.svg",
+          "dark": "./media/arya-mark-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "arya",
+        "scopeName": "source.arya",
+        "path": "./syntaxes/arya.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.css.arya": "css",
+          "meta.embedded.block.javascript.arya": "javascript"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "arya",
+        "path": "./snippets/arya.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[arya]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.semanticHighlighting.enabled": true
+      }
+    },
+    "commands": [
+      {
+        "command": "aryaLanguage.run",
+        "title": "Arya: Run File",
+        "icon": "$(play)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "aryaLanguage.check",
+        "title": "Arya: Check File",
+        "icon": "$(check)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "aryaLanguage.stop",
+        "title": "Arya: Stop File",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "aryaLanguage.enableFileIcons",
+        "title": "Arya: Enable File Icons"
+      },
+      {
+        "command": "aryaLanguage.chooseTheme",
+        "title": "Arya: Choose Color Theme"
+      },
+      {
+        "command": "aryaLanguage.openExample",
+        "title": "Arya: Open Editor Tour"
+      },
+      {
+        "command": "aryaLanguage.gettingStarted",
+        "title": "Arya: Editor Setup Guide"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "aryaLanguage.run",
+          "when": "aryaLanguage.standalone && resourceLangId == arya && resourceScheme == file",
+          "group": "navigation@2"
+        },
+        {
+          "command": "aryaLanguage.check",
+          "when": "aryaLanguage.standalone && resourceLangId == arya && resourceScheme == file",
+          "group": "navigation@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Arya Language",
+      "properties": {
+        "aryaLanguage.nodePath": {
+          "type": "string",
+          "default": "node",
+          "scope": "machine-overridable",
+          "restricted": true,
+          "description": "Node.js 22.15+ executable used to run Arya programs."
+        },
+        "aryaLanguage.pythonPath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine-overridable",
+          "restricted": true,
+          "description": "Optional Python executable for bridge calls. Empty uses ARYA_PYTHON or python3 (python on Windows)."
+        }
+      }
+    },
+    "themes": [
+      {
+        "label": "Arya Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/arya-dark.json"
+      },
+      {
+        "label": "Arya Light",
+        "uiTheme": "vs",
+        "path": "./themes/arya-light.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "arya-file-icons",
+        "label": "Arya File Icons",
+        "path": "./icons/arya-file-icons.json"
+      }
+    ],
+    "semanticTokenScopes": [
+      {
+        "language": "arya",
+        "scopes": {
+          "namespace": [
+            "entity.name.namespace.arya"
+          ],
+          "function": [
+            "entity.name.function.arya"
+          ],
+          "method": [
+            "entity.name.function.member.arya"
+          ],
+          "parameter": [
+            "variable.parameter.arya"
+          ],
+          "property": [
+            "variable.other.property.arya"
+          ],
+          "variable.readonly": [
+            "variable.other.constant.arya"
+          ],
+          "class": [
+            "entity.name.type.class.arya"
+          ]
+        }
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "aryaLanguage.gettingStarted",
+        "title": "Build with Arya",
+        "description": "Recognize .arya files, choose clear colors, and start with a small example.",
+        "steps": [
+          {
+            "id": "icons",
+            "title": "Recognize Arya files",
+            "description": "The extension includes the Arya language icon. To use its complete file-icon set, [enable Arya File Icons](command:aryaLanguage.enableFileIcons). Existing icon themes may override language icons.",
+            "completionEvents": [
+              "onCommand:aryaLanguage.enableFileIcons"
+            ],
+            "media": {
+              "markdown": "walkthroughs/icons.md"
+            }
+          },
+          {
+            "id": "colors",
+            "title": "Choose your colors",
+            "description": "Use your current theme or [choose Arya Dark or Arya Light](command:aryaLanguage.chooseTheme). Semantic highlighting distinguishes parameters, imports, constants, functions, and properties.",
+            "completionEvents": [
+              "onCommand:aryaLanguage.chooseTheme"
+            ],
+            "media": {
+              "markdown": "walkthroughs/colors.md"
+            }
+          },
+          {
+            "id": "tour",
+            "title": "Try the editor tour",
+            "description": "[Open a small Arya example](command:aryaLanguage.openExample). Save it in your project before running.",
+            "completionEvents": [
+              "onCommand:aryaLanguage.openExample"
+            ],
+            "media": {
+              "markdown": "walkthroughs/tour.md"
+            }
+          }
+        ]
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "arya"
+      }
+    ]
+  },
+  "preview": true,
+  "aryaLanguageVersion": "1.3.0-alpha.12"
+}

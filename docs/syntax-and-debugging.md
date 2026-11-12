@@ -1,8 +1,11 @@
+> Historical implementation guide. The original is preserved in [compat/node/docs/syntax-and-debugging.md](../compat/node/docs/syntax-and-debugging.md). Current native behavior is defined by the [native profile](native-profile.md), [SDK guide](native-sdk.md) and [qualification report](native-independence-report.md).
+
 # Safer expressions and easier debugging
 
-The expression syntax and debugging tools below run on Node.js. They are available in the published 1.2.0-alpha.4 baseline and the Node.js-only 1.3.0-alpha.4 candidate.
-
-The current source also adds [pipelines, concise functions, guards, indexed iteration, and finally](flow-syntax.md). Those new forms require the candidate compiler.
+The expression syntax and debugging tools below run on Node.js and are available
+in the published alpha.9 preview. [Pipelines and other flow syntax](flow-syntax.md)
+are also included. The unpublished alpha.10 source adds the conservative typing
+and workspace behavior in [compiler/editor improvements](editor-and-compiler-improvements.md).
 
 ## Read missing data without losing valid values
 
@@ -61,7 +64,7 @@ For a misspelled name, the CLI now produces a source excerpt:
 
 ```text
 /project/main.arya:2:5: Unknown name 'totla'. Did you mean 'total'? [ARYA_UNKNOWN_NAME]
-  2 | say(totla)
+  2 | print(totla)
     |     ^^^^^
   help: Replace 'totla' with 'total', or declare the intended name.
 ```
@@ -105,3 +108,41 @@ Inspection options are `depth` (0–20, default 4), `maxArrayLength` (0–1000, 
 The CLI enables source maps automatically. When running generated JavaScript yourself, use `node --enable-source-maps output.mjs` and retain the adjacent map. Without source maps, trace locations refer to generated JavaScript. The debug library uses Node.js inspection and source maps.
 
 The [safe-access fixture](../fixtures/arya/conformance/safe-access.arya) runs through Node.js conformance checks. The [debugging example](../fixtures/examples/debugging/main.arya) demonstrates the helpers.
+
+## Breakpoints and stepping in VS Code-compatible editors
+
+Build `main.arya` first with the matching compiler. A Node debug adapter such as
+`ms-vscode.js-debug` must be available in the editor; some compatible editors do
+not bundle one. The alpha.10 extension enables
+Arya source breakpoints through VS Code's existing Node debugger. Keep the generated
+modules and adjacent source maps together. Add this configuration to your project's
+`.vscode/launch.json`, then set a breakpoint in `main.arya` and start Debug Arya:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Debug Arya",
+    "type": "node",
+    "request": "launch",
+    "program": "${workspaceFolder}/.arya/build/main.arya.mjs",
+    "cwd": "${workspaceFolder}",
+    "sourceMaps": true,
+    "outFiles": ["${workspaceFolder}/.arya/build/**/*.mjs"],
+    "skipFiles": ["<node_internals>/**"]
+  }]
+}
+```
+
+Use a supported Node executable on your PATH, or set `runtimeExecutable` to its
+absolute path. Rebuild after editing source. The optional host harness toggles a
+source breakpoint using the editor command, checks the mapped Arya stack frame,
+evaluates a local value and steps to the next Arya statement. It also applies a
+cross-file rename and checks unsaved buffers and disk changes. Run
+`npm run test:editors` against installed editor apps; `.build/evidence/editor-hosts.json`
+records actual versions, passes and failures. For an editor without a bundled
+adapter, set `ARYA_EDITOR_TEST_JS_DEBUG` to the directory of an installed
+`ms-vscode.js-debug` extension; the harness copies it only into its disposable
+AryaCode test profile and records that origin. It does not install it into your
+normal editor profile. Other editor/platform configurations
+need their own runs; Python stepping is not part of this Node workflow.

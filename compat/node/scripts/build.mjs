@@ -1,0 +1,52 @@
+import { build } from 'esbuild';
+import {copyNativeRuntime} from '../native/accounting/build.mjs';
+import { cp, chmod, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import {buildEditorPackage, buildPortableEditors} from './build-editor-package.mjs';
+const require = createRequire(import.meta.url);
+const manifest = JSON.parse(await readFile('package.json', 'utf8'));
+const editorVersion = manifest.aryaEditorVersion ?? manifest.version.split('-')[0];
+if (typeof editorVersion !== 'string' || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(editorVersion)) throw new Error('aryaEditorVersion must be a numeric major.minor.patch extension version.');
+const common = { bundle: true, platform: 'node', format: 'cjs', target: 'node22', logLevel: 'warning' };
+await rm('dist', { recursive: true, force: true });
+await mkdir('dist', { recursive: true });
+await writeFile('dist/features.json', JSON.stringify({ version: manifest.version, runtime: 'node', capabilities: ['arya.node.v1', 'arya.syntax.flow.v1', 'arya.list.v1', 'arya.ui.v1', 'arya.ui.library.v1', 'arya.ui.patterns.v1', 'arya.ui.motion.v1'] }, null, 2) + '\n');
+await mkdir('artifacts', { recursive: true });
+const entries = ['compiler', 'project', 'language-service', 'cli', 'lsp', 'create', 'editor', 'esbuild', 'accounting', 'native-preview'];
+await build({...common, entryPoints: entries.map(name => `src/${name}.ts`), outdir:'dist', outExtension:{'.js':'.cjs'}});
+for (const name of ['cli', 'lsp', 'create']) {
+  const filename = `dist/${name}.cjs`;
+  await writeFile(filename, '#!/usr/bin/env node\n'+await readFile(filename,'utf8'));
+  await chmod(filename, 0o755);
+}
+await copyNativeRuntime();
+execFileSync(process.execPath, ['node_modules/typescript/bin/tsc', '-p', 'tsconfig.build.json'], { stdio: 'inherit' });
+await build({ ...common, entryPoints: ['editors/vscode/src/extension.ts'], outfile: 'editors/vscode/dist/extension.cjs', external: ['vscode'] });
+await cp('dist/cli.cjs', 'editors/vscode/dist/arya.cjs');
+await cp('brand', 'editors/vscode/media', { recursive: true });
+const extension = JSON.parse(await readFile('editors/vscode/package.json', 'utf8'));
+extension.version = editorVersion;
+extension.preview = manifest.version.includes('-');
+extension.aryaLanguageVersion = manifest.version;
+await writeFile('editors/vscode/package.json', JSON.stringify(extension, null, 2) + '\n');
+const notices = [];
+for (const name of ['vscode-languageserver', 'vscode-languageserver-protocol', 'vscode-languageserver-types', 'vscode-jsonrpc', 'vscode-languageserver-textdocument', 'decimal.js', '@jridgewell/gen-mapping', '@jridgewell/sourcemap-codec', '@jridgewell/resolve-uri', '@jridgewell/trace-mapping']) {
+  const pkg = JSON.parse(await readFile(`node_modules/${name}/package.json`, 'utf8'));
+  notices.push(`${name} ${pkg.version}\n${await readFile(`node_modules/${name}/${name === 'decimal.js' ? 'LICENCE.md' : name.startsWith('@jridgewell/') ? 'LICENSE' : 'License.txt'}`, 'utf8')}`);
+}
+await writeFile('THIRD-PARTY-NOTICES.txt', notices.join('\n\n-----\n\n'));
+await cp('THIRD-PARTY-NOTICES.txt', 'editors/vscode/THIRD-PARTY-NOTICES.txt');
+for (const filename of ['LICENSE', 'NOTICE']) await cp(filename, `editors/vscode/${filename}`);
+const creatorRoot = 'packages/create-arya-language';
+const creator = JSON.parse(await readFile(`${creatorRoot}/package.json`, 'utf8'));
+creator.version = manifest.version;
+await writeFile(`${creatorRoot}/package.json`, JSON.stringify(creator, null, 2) + '\n');
+await mkdir(`${creatorRoot}/dist`, { recursive: true });
+await cp('dist/create.cjs', `${creatorRoot}/dist/create.cjs`);
+for (const filename of ['LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.txt']) await cp(filename, `${creatorRoot}/${filename}`);
+const { ARYA_VERSION, keywords, builtins } = require('../dist/compiler.cjs');
+if (ARYA_VERSION !== manifest.version) throw new Error('Compiler and package versions differ.');
+await buildEditorPackage();
+await buildPortableEditors(keywords, builtins);
+console.log(`Built Arya ${ARYA_VERSION}: compiler API, CLI, LSP, and portable extension.`);

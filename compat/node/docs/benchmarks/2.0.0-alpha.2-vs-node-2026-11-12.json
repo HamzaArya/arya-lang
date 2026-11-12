@@ -1,0 +1,661 @@
+{
+  "recordedAt": "2026-11-12T06:43:17.029Z",
+  "versions": {
+    "arya": "Arya native 2.0.0-alpha.2 (self-hosted)",
+    "node": "v24.16.0",
+    "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin"
+  },
+  "machine": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "25.5.0",
+    "cpu": "Apple M1",
+    "logicalCpus": 8,
+    "totalMemoryBytes": 8589934592
+  },
+  "gitHead": "5ea5cdb52b665f2d02ab73483154f14555b79cc6",
+  "dirtyWorkingTree": true,
+  "compilerSha256": "c42a08069cf8578d9953b06b5e235c177beab3930bdeb9d7100fd5e6ab4b45c4",
+  "sourceHashes": {
+    "native/compiler/compiler.arya": "d748378e6014063ef16ecb4eec733f0f8be60b543943f740e0816828e61e9c7b",
+    "native/runtime/core.c": "29e7d858ea8ac5c792f4352b23f15ca08cb5f65c3db2f9d0c043fd9f30434aaa",
+    "scripts/benchmark-native.mjs": "828c1b72b51c49a48dd37a672c0bd5b92e3605f5ef466a494551f6ac8cdf2994"
+  },
+  "method": {
+    "timing": "Wall and process CPU milliseconds per complete work() call. Both use Date.now() for batch wall time (1 ms resolution); native clock()/CLOCKS_PER_SEC vs Node process.cpuUsage() user+system for CPU. Excludes startup, compilation, warmup and output; includes allocations and GC during measured work.",
+    "samples": "Median of nine alternating fresh-process samples per backend and workload. Each process warms for at least 150 ms of CPU and eight calls. Pilot-calibrated batch sizes target 50 ms; inputs alternate between n and n+1.",
+    "correctness": "Both outputs are compared for n and n+1 before timing, then every measured checksum is checked. Workload definitions and generated programs are saved beside this report.",
+    "nativeMode": "C11 -O2 -ffp-contract=off; generated executable launched directly",
+    "nodeMode": "Default Node/V8 flags; handwritten equivalent JavaScript",
+    "ratio": "nodeOverArya > 1 means Arya is faster by wall time; < 1 means Node is faster. nodeOverAryaCpu gives the corresponding CPU-time ratio.",
+    "limitations": "Single host, microbenchmarks, no HTTP/database/I/O/application-throughput or memory qualification; does not establish universal performance superiority."
+  },
+  "hostStart": {
+    "loadAverage": [
+      6.94580078125,
+      4.71240234375,
+      4.068359375
+    ],
+    "freeMemoryBytes": 179847168
+  },
+  "hostEnd": {
+    "loadAverage": [
+      12.65283203125,
+      7.53857421875,
+      5.26708984375
+    ],
+    "freeMemoryBytes": 101040128
+  },
+  "startup": {
+    "description": "Wall time to launch, print 1, and exit; three warm launches, 15 alternating measured launches",
+    "arya": {
+      "medianMs": 3.2665420000002996,
+      "minMs": 2.495249999999942,
+      "maxMs": 10.976916999999958,
+      "samplesMs": [
+        3.2665420000002996,
+        10.976916999999958,
+        3.2155000000002474,
+        4.734750000000531,
+        3.919040999999197,
+        2.6627499999995052,
+        3.378458000000137,
+        2.668166999999812,
+        3.0074580000000424,
+        4.147624999999607,
+        3.1054590000003373,
+        2.769000000000233,
+        2.495249999999942,
+        3.777125000000524,
+        4.06866700000046
+      ]
+    },
+    "node": {
+      "medianMs": 65.87091700000019,
+      "minMs": 42.324249999999665,
+      "maxMs": 191.2876669999996,
+      "samplesMs": [
+        191.2876669999996,
+        63.57979199999954,
+        46.51729199999954,
+        181.9706669999996,
+        64.12933299999986,
+        68.73624999999993,
+        87.54799999999977,
+        65.87091700000019,
+        49.3188339999997,
+        73.38833400000021,
+        56.49666700000034,
+        107.32054100000005,
+        82.73891699999967,
+        42.324249999999665,
+        44.99333300000035
+      ]
+    },
+    "artifacts": {
+      "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/startup.arya",
+      "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/startup.mjs",
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/startup",
+      "compileMs": 3906.7541249999995,
+      "binaryBytes": 303336,
+      "sourceSha256": "cc42155088fca5730758db72b2a5bca33112a941dfaa2d43098ec422ce4ea213",
+      "javascriptSha256": "b603d946eb2b396ca4ecf65c223daff659dbe6f1cfeac235b7c61d3ba6964cae"
+    },
+    "nodeOverArya": 20.16533600363753
+  },
+  "workloads": [
+    {
+      "name": "numeric-sum",
+      "description": "10 million iterations of total += index * 0.25",
+      "size": 10000000,
+      "expectedOutputs": [
+        12499998750000,
+        12500001250000
+      ],
+      "repetitions": {
+        "arya": 6,
+        "node": 6
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 12.749500000000003,
+          "minMs": 11.142500000000005,
+          "maxMs": 14.412000000000004,
+          "samplesMs": [
+            11.142500000000005,
+            14.412000000000004,
+            13.537500000000003,
+            12.747833333333332,
+            12.913000000000004,
+            14.399000000000001,
+            12.134500000000003,
+            11.719666666666667,
+            12.749500000000003
+          ]
+        },
+        "wall": {
+          "medianMs": 25.166666666666668,
+          "minMs": 12.333333333333334,
+          "maxMs": 33.833333333333336,
+          "samplesMs": [
+            12.333333333333334,
+            33.833333333333336,
+            17.5,
+            29.5,
+            17.833333333333332,
+            25.5,
+            23.333333333333332,
+            29.5,
+            25.166666666666668
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 11.440500000000002,
+          "minMs": 11.157166666666667,
+          "maxMs": 11.987166666666665,
+          "samplesMs": [
+            11.308833333333327,
+            11.94566666666667,
+            11.554166666666667,
+            11.268333333333333,
+            11.157166666666667,
+            11.440500000000002,
+            11.987166666666665,
+            11.335666666666667,
+            11.511166666666666
+          ]
+        },
+        "wall": {
+          "medianMs": 17,
+          "minMs": 12.666666666666666,
+          "maxMs": 34.166666666666664,
+          "samplesMs": [
+            12.666666666666666,
+            18.5,
+            17,
+            13.833333333333334,
+            13.833333333333334,
+            34.166666666666664,
+            19.833333333333332,
+            17.5,
+            14.166666666666666
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-sum.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-sum.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-sum",
+        "compileMs": 5364.060041999999,
+        "binaryBytes": 389784,
+        "sourceSha256": "a999a220ddf04939b0274f68219764f443ec25759dfe31985058f8037b8b797e",
+        "javascriptSha256": "5d77f2b8051282d526bad638575151eb5daf82cb4fae03181a593aa51763757e"
+      },
+      "nodeOverArya": 0.6754966887417219,
+      "nodeOverAryaCpu": 0.8973293070316483
+    },
+    {
+      "name": "numeric-recurrence",
+      "description": "2 million dependent multiply/add/modulo steps (LCG)",
+      "size": 2000000,
+      "expectedOutputs": [
+        750095765,
+        2879226352
+      ],
+      "repetitions": {
+        "arya": 4,
+        "node": 2
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 15.469999999999997,
+          "minMs": 14.022,
+          "maxMs": 16.278749999999995,
+          "samplesMs": [
+            14.53525,
+            15.668999999999995,
+            14.8965,
+            15.740250000000005,
+            15.469999999999997,
+            16.278749999999995,
+            14.022,
+            15.63175,
+            14.88325
+          ]
+        },
+        "wall": {
+          "medianMs": 20,
+          "minMs": 14.5,
+          "maxMs": 23.75,
+          "samplesMs": [
+            17.5,
+            20,
+            16.5,
+            21,
+            23.75,
+            23.5,
+            14.5,
+            20.25,
+            19.25
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 108.74549999999999,
+          "minMs": 92.78049999999993,
+          "maxMs": 113.529,
+          "samplesMs": [
+            113.529,
+            109.33950000000003,
+            111.81299999999995,
+            109.48150000000001,
+            108.74549999999999,
+            104.2785,
+            98.41349999999998,
+            92.78049999999993,
+            101.69049999999996
+          ]
+        },
+        "wall": {
+          "medianMs": 165,
+          "minMs": 96.5,
+          "maxMs": 336.5,
+          "samplesMs": [
+            257.5,
+            205.5,
+            336.5,
+            157.5,
+            165,
+            130,
+            167.5,
+            96.5,
+            144.5
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-recurrence.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-recurrence.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/numeric-recurrence",
+        "compileMs": 5769.832290999999,
+        "binaryBytes": 389752,
+        "sourceSha256": "a77ba08be7271a0cbc243ae3cee089b883050f513869264e5841ce4bd64cdfa9",
+        "javascriptSha256": "be292b7e67969842ef2f3c6583e3628b08cbe368e63a4259277e366dee576b69"
+      },
+      "nodeOverArya": 8.25,
+      "nodeOverAryaCpu": 7.029444085326439
+    },
+    {
+      "name": "recursive-fibonacci",
+      "description": "Naive recursive Fibonacci of 24 (and 25 on alternate calls)",
+      "size": 24,
+      "expectedOutputs": [
+        46368,
+        75025
+      ],
+      "repetitions": {
+        "arya": 2,
+        "node": 80
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 62.40999999999997,
+          "minMs": 48.257999999999996,
+          "maxMs": 66.218,
+          "samplesMs": [
+            63.54349999999997,
+            57.54950000000003,
+            62.636000000000024,
+            55.798500000000026,
+            62.40999999999997,
+            64.81049999999999,
+            66.218,
+            58.853500000000004,
+            48.257999999999996
+          ]
+        },
+        "wall": {
+          "medianMs": 73,
+          "minMs": 49,
+          "maxMs": 156,
+          "samplesMs": [
+            80.5,
+            73,
+            71,
+            62,
+            73,
+            96.5,
+            156,
+            66,
+            49
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 0.8106749999999996,
+          "minMs": 0.7378624999999996,
+          "maxMs": 0.9557124999999995,
+          "samplesMs": [
+            0.9222500000000002,
+            0.9557124999999995,
+            0.7814249999999998,
+            0.7615625,
+            0.8106749999999996,
+            0.8726250000000002,
+            0.7378624999999996,
+            0.9158875,
+            0.7635375
+          ]
+        },
+        "wall": {
+          "medianMs": 1.3125,
+          "minMs": 0.8375,
+          "maxMs": 2.7375,
+          "samplesMs": [
+            2.3875,
+            2.7375,
+            1.3125,
+            0.8375,
+            1.0625,
+            1.325,
+            0.85,
+            1.425,
+            0.9375
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/recursive-fibonacci.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/recursive-fibonacci.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/recursive-fibonacci",
+        "compileMs": 3897.646084,
+        "binaryBytes": 389688,
+        "sourceSha256": "046df7479a14f3212bd47ed09c91b79234bce6a4a5d97d275939f6e82fe237b9",
+        "javascriptSha256": "22d6a1a0d00a166f121f840320df40bf93e7f261923d4e4026c82fd53994c141"
+      },
+      "nodeOverArya": 0.01797945205479452,
+      "nodeOverAryaCpu": 0.012989504887037333
+    },
+    {
+      "name": "array-records",
+      "description": "Build 20,000 two-field records, then sum selected values",
+      "size": 20000,
+      "expectedOutputs": [
+        133326666,
+        133326666
+      ],
+      "repetitions": {
+        "arya": 2,
+        "node": 364
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 40.904499999999985,
+          "minMs": 32.757000000000005,
+          "maxMs": 63.29400000000002,
+          "samplesMs": [
+            40.904499999999985,
+            43.269000000000005,
+            49.42150000000001,
+            32.757000000000005,
+            33.600500000000004,
+            36.316500000000005,
+            32.93700000000002,
+            63.29400000000002,
+            55.353000000000016
+          ]
+        },
+        "wall": {
+          "medianMs": 49.5,
+          "minMs": 33.5,
+          "maxMs": 327.5,
+          "samplesMs": [
+            49.5,
+            54,
+            53.5,
+            33.5,
+            34,
+            39.5,
+            33.5,
+            327.5,
+            201.5
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 0.1599340659340659,
+          "minMs": 0.14991758241758243,
+          "maxMs": 0.2655906593406594,
+          "samplesMs": [
+            0.1685686813186813,
+            0.1714258241758242,
+            0.1544093406593406,
+            0.14991758241758243,
+            0.15750549450549456,
+            0.1580851648351648,
+            0.1599340659340659,
+            0.2655906593406594,
+            0.20762087912087904
+          ]
+        },
+        "wall": {
+          "medianMs": 0.17032967032967034,
+          "minMs": 0.1510989010989011,
+          "maxMs": 0.5521978021978022,
+          "samplesMs": [
+            0.19230769230769232,
+            0.3901098901098901,
+            0.1565934065934066,
+            0.1510989010989011,
+            0.17032967032967034,
+            0.1620879120879121,
+            0.16758241758241757,
+            0.4340659340659341,
+            0.5521978021978022
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/array-records.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/array-records.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/array-records",
+        "compileMs": 6317.810750000004,
+        "binaryBytes": 389560,
+        "sourceSha256": "61a4a3d06d7cce77ea7ca908e431c3e50707d0ab2989055e81c2052fffb47858",
+        "javascriptSha256": "c8cf0f53a3ce2aeba90ca84d5198a2ef97f859bcbe22fce68e6d89c5368c4b19"
+      },
+      "nodeOverArya": 0.003441003441003441,
+      "nodeOverAryaCpu": 0.0039099381714497415
+    },
+    {
+      "name": "json-roundtrip",
+      "description": "Parse and stringify 1,000 small nested JSON documents",
+      "size": 1000,
+      "expectedOutputs": [
+        79000,
+        79079
+      ],
+      "repetitions": {
+        "arya": 6,
+        "node": 30
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 5.93,
+          "minMs": 5.5975,
+          "maxMs": 8.962666666666669,
+          "samplesMs": [
+            8.962666666666669,
+            8.656,
+            7.000666666666668,
+            5.5975,
+            5.926166666666667,
+            5.845999999999999,
+            6.479499999999999,
+            5.93,
+            5.77433333333333
+          ]
+        },
+        "wall": {
+          "medianMs": 6.166666666666667,
+          "minMs": 5.666666666666667,
+          "maxMs": 22.333333333333332,
+          "samplesMs": [
+            22.333333333333332,
+            10.166666666666666,
+            8.166666666666666,
+            5.666666666666667,
+            6.166666666666667,
+            6,
+            6.666666666666667,
+            6,
+            6
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 0.7339666666666671,
+          "minMs": 0.6780333333333333,
+          "maxMs": 1.1997333333333342,
+          "samplesMs": [
+            0.8877000000000005,
+            0.8144000000000003,
+            1.1997333333333342,
+            0.8114666666666668,
+            0.699666666666666,
+            0.7039666666666666,
+            0.7185666666666664,
+            0.7339666666666671,
+            0.6780333333333333
+          ]
+        },
+        "wall": {
+          "medianMs": 0.7666666666666667,
+          "minMs": 0.6666666666666666,
+          "maxMs": 2.6,
+          "samplesMs": [
+            1.1666666666666667,
+            1,
+            2.6,
+            0.8333333333333334,
+            0.7333333333333333,
+            0.7333333333333333,
+            0.7333333333333333,
+            0.7666666666666667,
+            0.6666666666666666
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/json-roundtrip.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/json-roundtrip.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/json-roundtrip",
+        "compileMs": 7357.475290999995,
+        "binaryBytes": 389608,
+        "sourceSha256": "d4fcc8f3d20b310b1cfddd75501ce2ecd69c30b88f3788ba84484d5e6cdf5ace",
+        "javascriptSha256": "3842c5f6ddf220b8d44c0b9969d2a7aa0e4bf123d94863538b2ae63aa00c7ab9"
+      },
+      "nodeOverArya": 0.12432432432432433,
+      "nodeOverAryaCpu": 0.12377178189994387
+    },
+    {
+      "name": "string-processing",
+      "description": "1,000 ASCII trim / uppercase / split / join operations",
+      "size": 1000,
+      "expectedOutputs": [
+        22000,
+        22022
+      ],
+      "repetitions": {
+        "arya": 12,
+        "node": 118
+      },
+      "arya": {
+        "cpu": {
+          "medianMs": 6.948333333333334,
+          "minMs": 5.245416666666666,
+          "maxMs": 9.070333333333336,
+          "samplesMs": [
+            5.245416666666666,
+            5.521083333333333,
+            8.57816666666667,
+            9.070333333333336,
+            7.316250000000001,
+            6.3560833333333315,
+            7.369416666666667,
+            6.948333333333334,
+            6.198583333333332
+          ]
+        },
+        "wall": {
+          "medianMs": 9.833333333333334,
+          "minMs": 5.25,
+          "maxMs": 33.416666666666664,
+          "samplesMs": [
+            5.25,
+            5.666666666666667,
+            32.75,
+            33.416666666666664,
+            13.5,
+            9.833333333333334,
+            9.833333333333334,
+            9.666666666666666,
+            6.666666666666667
+          ]
+        }
+      },
+      "node": {
+        "cpu": {
+          "medianMs": 0.47351694915254217,
+          "minMs": 0.31492372881355934,
+          "maxMs": 0.5201101694915253,
+          "samplesMs": [
+            0.31492372881355934,
+            0.3501610169491525,
+            0.5201101694915253,
+            0.4941016949152542,
+            0.37722881355932203,
+            0.47351694915254217,
+            0.45414406779661015,
+            0.5007118644067796,
+            0.47919491525423735
+          ]
+        },
+        "wall": {
+          "medianMs": 0.6864406779661016,
+          "minMs": 0.3220338983050847,
+          "maxMs": 2.26271186440678,
+          "samplesMs": [
+            0.3220338983050847,
+            0.3559322033898305,
+            0.9576271186440678,
+            0.7372881355932204,
+            0.6440677966101694,
+            0.6186440677966102,
+            0.6864406779661016,
+            0.7372881355932204,
+            2.26271186440678
+          ]
+        }
+      },
+      "artifacts": {
+        "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/string-processing.arya",
+        "javascript": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/string-processing.mjs",
+        "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT/string-processing",
+        "compileMs": 2256.011916000003,
+        "binaryBytes": 389752,
+        "sourceSha256": "63bb229b6c67d61a06e5e1c4002c1a4321b21d97012ed6abfee540ff7fc67f74",
+        "javascriptSha256": "7970ba5ddf489c71afee36a02afc1ff0c19ae67fe3f534fa89bd3fc63add4e74"
+      },
+      "nodeOverArya": 0.0698075265728239,
+      "nodeOverAryaCpu": 0.06814827764248627
+    }
+  ],
+  "directory": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-benchmark/run-BpB0rT"
+}

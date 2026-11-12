@@ -1,0 +1,80 @@
+# Contextual view syntax. Embedded expressions are parsed by the shared frontend.
+fn current(c) { return c.parser.tokens[c.parser.at] }
+fn take(c) { let token = current(c); c.parser.at += 1; return token }
+fn is(c, text) { return current(c).kind != "string" and current(c).text == text }
+fn match(c, text) { if is(c, text) { take(c); return true }; return false }
+fn fail(c, token, message) { c.raise(token, message) }
+fn expect(c, text) { if not match(c, text) { fail(c, current(c), "Expected '" + text + "'.") } }
+fn lines(c) { while current(c).kind == "newline" { take(c) } }
+fn separators(c) { while current(c).kind == "newline" or is(c, ";") { take(c) } }
+fn validPart(text) { for letter in text { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_".includes(letter) { return false } }; return len(text) > 0 }
+fn name(c, attribute, preserve) {
+  let token = current(c)
+  if token.kind != "word" { fail(c, token, "Expected an HTML name.") }
+  take(c); let text = token.text; let end = token.end
+  while (is(c, "-") or (attribute and is(c, ":"))) and current(c).start == end {
+    let separator = take(c); let part = current(c)
+    if (part.kind != "word" and part.kind != "number") or part.start != separator.end or not validPart(part.text) { fail(c, part, "Complete the HTML name after " + separator.text + ".") }
+    text += separator.text + take(c).text; end = part.end
+  }
+  if not attribute and not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".includes(text[0]) { fail(c, token, "Invalid HTML element name.") }
+  if not preserve { text = text.toLowerCase() }
+  return {text: text, end: end, token: token}
+}
+fn literal(token, text) { return {kind: "literal", type: "string", token: token, value: text} }
+fn dynamic(c) {
+  expect(c, "("); lines(c); let value = c.expression(c.parser); lines(c); expect(c, ")")
+  return {kind: "text", value: value}
+}
+fn children(c) {
+  expect(c, "{"); separators(c); let result = []
+  while not is(c, "}") {
+    if current(c).kind == "eof" { fail(c, current(c), "Expected '}' to close the view.") }
+    if current(c).kind == "string" { let token = take(c); result.push({kind: "text", value: literal(token, token.text)}) }
+    else if is(c, "(") { result.push(dynamic(c)) }
+    else { result.push(element(c)) }
+    separators(c)
+  }
+  expect(c, "}"); return result
+}
+fn rawClosing(text, tag) {
+  let source = text.toLowerCase(); let search = "</" + tag; let start = 0
+  while true { let found = source.indexOf(search, start); if found < 0 { return false }; let index = found + len(search); if index >= len(source) { return true }; let code = source.charCodeAt(index); if " \t\r\n/>".includes(source[index]) or (code >= 9 and code <= 13) or [160, 5760, 8232, 8233, 8239, 8287, 12288, 65279].includes(code) or (code >= 8192 and code <= 8202) { return true }; start = index }
+}
+fn element(c) {
+  c.depth += 1
+  if c.depth > 64 { fail(c, current(c), "View elements are nested too deeply.") }
+  let tag = name(c, false, false); let attributes = []; let names = []
+  if is(c, "(") and current(c).start == tag.end {
+    take(c); lines(c)
+    while not is(c, ")") {
+      let attribute = name(c, true, false)
+      if attribute.text.startsWith("on") or attribute.text == "srcdoc" { fail(c, attribute.token, "Inline event and srcdoc attributes are unavailable; use a literal script element.") }
+      if names.includes(attribute.text) { fail(c, attribute.token, "Duplicate HTML attribute: " + attribute.text) }
+      names.push(attribute.text); expect(c, "="); lines(c)
+      attributes.push({name: attribute.text, value: c.expression(c.parser)}); lines(c)
+      if not match(c, ",") { break }; lines(c)
+    }
+    expect(c, ")")
+  }
+  let classes = []
+  while current(c).kind == "word" { classes.push(name(c, true, true).text) }
+  if len(classes) > 0 { if names.includes("class") { fail(c, tag.token, "Choose a class attribute or shorthand classes.") }; attributes.push({name: "class", value: literal(tag.token, classes.join(" "))}) }
+  let content = []; let raw = null
+  if tag.text == "script" or tag.text == "style" {
+    if current(c).kind != "string" { fail(c, current(c), "Script and style elements require a literal string.") }
+    let token = take(c); if rawClosing(token.text, tag.text) { fail(c, token, "A raw view literal cannot contain its closing HTML tag.") }; raw = token.text
+  } else if is(c, "{") { content = children(c) }
+  else if current(c).kind == "string" { let token = take(c); content.push({kind: "text", value: literal(token, token.text)}) }
+  else if is(c, "(") { content.push(dynamic(c)) }
+  if ["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"].includes(tag.text) and len(content) > 0 { fail(c, tag.token, "Void HTML elements cannot contain children.") }
+  c.depth -= 1
+  return {kind: "element", tag: tag.text, attributes: attributes, children: content, raw: raw}
+}
+export fn parse(parser, expression, raise) {
+  let cursor = {parser: parser, expression: expression, raise: raise, depth: 0}
+  let root = children(cursor); let html = false
+  for item in root { if item.kind == "element" and item.tag == "html" { html = true } }
+  if html and (len(root) != 1 or root[0].kind != "element" or root[0].tag != "html") { fail(cursor, current(cursor), "An html element must be the only root in a view.") }
+  return {children: root, html: html}
+}

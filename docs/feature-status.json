@@ -1,0 +1,9 @@
+{
+  "profile": "native",
+  "status": "qualified-native-alpha",
+  "inventory": "../native/manifest.json",
+  "legacyInventory": "../compat/node/docs/feature-status.json",
+  "qualifiedPlatforms": [
+    "darwin-arm64"
+  ]
+}

@@ -1,0 +1,6 @@
+/* Explicitly upgrade the historical seed's generated runtime before stage 1 runs. */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+static char *read_all(const char *path,size_t *length){FILE *f=fopen(path,"rb");if(!f){perror(path);exit(1);}if(fseek(f,0,SEEK_END)||ftell(f)<0){perror(path);exit(1);}long size=ftell(f);if(size>32*1024*1024){fputs("bootstrap input too large\n",stderr);exit(1);}rewind(f);char *text=malloc((size_t)size+1);if(!text){fputs("bootstrap allocation failed\n",stderr);exit(1);}*length=fread(text,1,(size_t)size,f);if(*length!=(size_t)size){perror(path);exit(1);}text[*length]=0;fclose(f);return text;}
+int main(int argc,char **argv){if(argc!=4){fputs("usage: rebase generated.c runtime.c output.c\n",stderr);return 2;}size_t generated_length,runtime_length;char *generated=read_all(argv[1],&generated_length),*runtime=read_all(argv[2],&runtime_length);char *modules=strstr(generated,"static AV amod[");if(!modules){fputs("seed output lacks the expected module boundary\n",stderr);return 1;}FILE *out=fopen(argv[3],"wb");if(!out){perror(argv[3]);return 1;}int failed=fwrite(runtime,1,runtime_length,out)!=runtime_length;fputc('\n',out);size_t n=generated_length-(size_t)(modules-generated);failed|=fwrite(modules,1,n,out)!=n;failed|=fclose(out)!=0;free(generated);free(runtime);return failed;}

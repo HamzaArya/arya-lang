@@ -1,0 +1,2467 @@
+{
+  "version": "1.3.0-alpha.11",
+  "qualification": "Local exploratory measurements; correctness checks enforce matching output hashes. Heavy host load limits latency and startup conclusions.",
+  "hostObservation": {
+    "at": "2026-11-11T17:48:52.003Z",
+    "loadAverage": [
+      18.81787109375,
+      14.41650390625,
+      10.1630859375
+    ],
+    "freeMemoryBytes": 156532736,
+    "totalMemoryBytes": 8589934592,
+    "logicalCpus": 8,
+    "scope": "Observed during paired measurements; not a dedicated idle benchmark host."
+  },
+  "isolatedWorkers": {
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "cpu": "Apple M1",
+    "rounds": 7,
+    "statistic": "Median warmed per-call milliseconds; all raw samples retained",
+    "policy": "AFN tag, scale 2, half-even, per-line gross/discount/tax rounding; identical prepared inputs and output hashes",
+    "scope": "Decimal comparisons are arithmetic baselines on valid bounded data, not interchangeable public APIs. End-to-end comparison uses the same fully validated accounting API for JS and native. Fresh-process time includes the entire worker benchmark, not just startup.",
+    "bytes": {
+      "javascript": 18639,
+      "native": 55184,
+      "decimalProgram": 141074
+    },
+    "nativeBuild": {
+      "abi": 1,
+      "nodeApi": 9,
+      "tag": "darwin-arm64-napi9",
+      "sourceHash": "da079a0bc0d4ac8e1301d1edf1d7599ac4ae6951786daf2756a04965716b5c2f",
+      "sha256": "efb23bfe320b916b00d5459ed5aca3e148db398d0f480e9ba240eee9e4209e86",
+      "bytes": 55184,
+      "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+      "flags": [
+        "-std=c++17",
+        "-O3",
+        "-DNDEBUG",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DNAPI_VERSION=9",
+        "-I",
+        "/usr/local/include/node"
+      ],
+      "node": "v24.16.0",
+      "sanitizersPassed": true,
+      "leakSanitizer": "not-run"
+    },
+    "sourceHashes": {
+      "src/accounting.ts": "50a118edf859de113e824c1d048672593c3756a55950caea40c91dbac1d97164",
+      "src/accounting-core.ts": "37eb243a37ab4de7e2404517280747a99ca40d5478996ce365604a939a5b7467",
+      "native/accounting/kernel.h": "7f145b46dfd0f970e3498b89fa474ac1d6cd531f810f11543c1fc7ed8efe6606",
+      "native/accounting/addon.cc": "5191cc680ccb85e7f76380931ddc390d89eeed8c115e35748b41ceb4bab62ba0",
+      "scripts/benchmark-accounting.mjs": "b77cb141f2ff01820ffefb6209520a85f1fd09cd447768248071b4e52969893a",
+      "scripts/benchmarks/accounting-worker.mjs": "bbca14d7ee3e7fec20f2fc73ea377dd1de107427e4d3afac7b9bff8537b0f164",
+      "scripts/benchmarks/accounting-data.mjs": "88bd8304f9630b2072ac6b48f6b97cf4a47b36a6162d3eb6e736deb5ab0ad293"
+    },
+    "cold": [
+      {
+        "variant": "decimal-wrapper",
+        "samples": [
+          {
+            "kind": "invoice",
+            "variant": "decimal-wrapper",
+            "count": 1,
+            "importMs": 4.373290999999995,
+            "initialPreparationMs": 0.10362499999999386,
+            "firstExecutionMs": 2.678167000000002,
+            "rssBytes": 50774016,
+            "maxRssKiB": 49584,
+            "processMs": 157.67875000002095
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-wrapper",
+            "count": 1,
+            "importMs": 6.73599999999999,
+            "initialPreparationMs": 0.056708000000000425,
+            "firstExecutionMs": 6.578625000000002,
+            "rssBytes": 50839552,
+            "maxRssKiB": 49648,
+            "processMs": 259.584916999971
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-wrapper",
+            "count": 1,
+            "importMs": 11.227208999999988,
+            "initialPreparationMs": 0.11879200000001333,
+            "firstExecutionMs": 1.5456250000000011,
+            "rssBytes": 50888704,
+            "maxRssKiB": 49696,
+            "processMs": 270.6662500000093
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-wrapper",
+            "count": 1,
+            "importMs": 3.5302500000000094,
+            "initialPreparationMs": 0.15245799999999576,
+            "firstExecutionMs": 3.145792,
+            "rssBytes": 50593792,
+            "maxRssKiB": 49408,
+            "processMs": 181.13000000000466
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-wrapper",
+            "count": 1,
+            "importMs": 7.292583999999991,
+            "initialPreparationMs": 0.10179200000000321,
+            "firstExecutionMs": 2.931207999999998,
+            "rssBytes": 50774016,
+            "maxRssKiB": 49584,
+            "processMs": 214.3638749999809
+          }
+        ],
+        "medianProcessMs": 214.3638749999809
+      },
+      {
+        "variant": "decimal-batch",
+        "samples": [
+          {
+            "kind": "invoice",
+            "variant": "decimal-batch",
+            "count": 1,
+            "importMs": 11.668042,
+            "initialPreparationMs": 0.25762499999999733,
+            "firstExecutionMs": 2.2890409999999974,
+            "rssBytes": 51118080,
+            "maxRssKiB": 49936,
+            "processMs": 99.97737500001676
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-batch",
+            "count": 1,
+            "importMs": 20.626417000000004,
+            "initialPreparationMs": 0.06712500000000432,
+            "firstExecutionMs": 10.681042000000005,
+            "rssBytes": 51085312,
+            "maxRssKiB": 49904,
+            "processMs": 189.9529169999878
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-batch",
+            "count": 1,
+            "importMs": 6.782167000000015,
+            "initialPreparationMs": 0.10320799999999508,
+            "firstExecutionMs": 3.4432500000000346,
+            "rssBytes": 50675712,
+            "maxRssKiB": 49504,
+            "processMs": 338.00491700001294
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-batch",
+            "count": 1,
+            "importMs": 4.902792000000005,
+            "initialPreparationMs": 0.05345799999999201,
+            "firstExecutionMs": 0.8810000000000002,
+            "rssBytes": 51200000,
+            "maxRssKiB": 50016,
+            "processMs": 214.95866699999897
+          },
+          {
+            "kind": "invoice",
+            "variant": "decimal-batch",
+            "count": 1,
+            "importMs": 30.486999999999995,
+            "initialPreparationMs": 0.1265420000000006,
+            "firstExecutionMs": 1.709541999999999,
+            "rssBytes": 51216384,
+            "maxRssKiB": 50032,
+            "processMs": 237.9057919999468
+          }
+        ],
+        "medianProcessMs": 214.95866699999897
+      },
+      {
+        "variant": "js",
+        "samples": [
+          {
+            "kind": "invoice",
+            "variant": "js",
+            "count": 1,
+            "importMs": 4.28725,
+            "initialPreparationMs": 2.786833999999999,
+            "firstExecutionMs": 0.4684170000000023,
+            "rssBytes": 50528256,
+            "maxRssKiB": 49344,
+            "processMs": 175.18566700001247
+          },
+          {
+            "kind": "invoice",
+            "variant": "js",
+            "count": 1,
+            "importMs": 5.448875000000001,
+            "initialPreparationMs": 1.4508329999999887,
+            "firstExecutionMs": 0.27495800000001225,
+            "rssBytes": 50069504,
+            "maxRssKiB": 48896,
+            "processMs": 152.55987499997718
+          },
+          {
+            "kind": "invoice",
+            "variant": "js",
+            "count": 1,
+            "importMs": 5.182834,
+            "initialPreparationMs": 1.5128330000000005,
+            "firstExecutionMs": 0.31304100000001256,
+            "rssBytes": 50200576,
+            "maxRssKiB": 49024,
+            "processMs": 196.78958400001284
+          },
+          {
+            "kind": "invoice",
+            "variant": "js",
+            "count": 1,
+            "importMs": 2.2892920000000174,
+            "initialPreparationMs": 2.3248339999999814,
+            "firstExecutionMs": 1.170500000000004,
+            "rssBytes": 50069504,
+            "maxRssKiB": 48896,
+            "processMs": 201.48050000000512
+          },
+          {
+            "kind": "invoice",
+            "variant": "js",
+            "count": 1,
+            "importMs": 6.142417000000002,
+            "initialPreparationMs": 2.235875,
+            "firstExecutionMs": 6.47720799999999,
+            "rssBytes": 50331648,
+            "maxRssKiB": 49152,
+            "processMs": 110.95629100000951
+          }
+        ],
+        "medianProcessMs": 175.18566700001247
+      },
+      {
+        "variant": "native",
+        "samples": [
+          {
+            "kind": "invoice",
+            "variant": "native",
+            "count": 1,
+            "importMs": 1.1185410000000005,
+            "initialPreparationMs": 0.5342500000000001,
+            "firstExecutionMs": 7.592083000000002,
+            "rssBytes": 50167808,
+            "maxRssKiB": 49024,
+            "processMs": 99.97404199995799
+          },
+          {
+            "kind": "invoice",
+            "variant": "native",
+            "count": 1,
+            "importMs": 6.124000000000002,
+            "initialPreparationMs": 0.9660829999999976,
+            "firstExecutionMs": 1.8626250000000013,
+            "rssBytes": 50298880,
+            "maxRssKiB": 49152,
+            "processMs": 77.25283399998443
+          },
+          {
+            "kind": "invoice",
+            "variant": "native",
+            "count": 1,
+            "importMs": 1.9419580000000067,
+            "initialPreparationMs": 0.8456669999999988,
+            "firstExecutionMs": 3.001958000000002,
+            "rssBytes": 50397184,
+            "maxRssKiB": 49248,
+            "processMs": 94.73300000000745
+          },
+          {
+            "kind": "invoice",
+            "variant": "native",
+            "count": 1,
+            "importMs": 3.3533749999999998,
+            "initialPreparationMs": 1.7742079999999874,
+            "firstExecutionMs": 3.3603750000000048,
+            "rssBytes": 48873472,
+            "maxRssKiB": 47744,
+            "processMs": 319.78020899998955
+          },
+          {
+            "kind": "invoice",
+            "variant": "native",
+            "count": 1,
+            "importMs": 4.688541999999998,
+            "initialPreparationMs": 1.2496249999999947,
+            "firstExecutionMs": 2.5095000000000027,
+            "rssBytes": 50397184,
+            "maxRssKiB": 49248,
+            "processMs": 193.76141699997243
+          }
+        ],
+        "medianProcessMs": 99.97404199995799
+      }
+    ],
+    "results": [
+      {
+        "kind": "invoice",
+        "variant": "decimal-wrapper",
+        "count": 1,
+        "groups": 0,
+        "importMs": 2.153707999999998,
+        "initialPreparationMs": 0.03300000000000125,
+        "firstExecutionMs": 0.7861249999999984,
+        "prepared": {
+          "medianMs": 0.022245499999999994,
+          "samplesMs": [
+            0.02028,
+            0.014138416000000006,
+            0.027713083999999995,
+            0.022979333999999994,
+            0.01968141800000001,
+            0.025524,
+            0.022245499999999994
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.0003375819999999976,
+          "samplesMs": [
+            0.0006696680000000015,
+            0.039675749999999996,
+            0.0003779999999999859,
+            0.0003327500000000327,
+            0.0003375819999999976,
+            0.00032291799999995875,
+            0.00032358399999998257
+          ]
+        },
+        "checksum": "3fbb180385c255ab5dfb138c49fd096240fd114afc882cbaed3bccc1ecaf140c",
+        "rssBytes": 62226432,
+        "maxRssKiB": 60768,
+        "freshProcessMs": 185.74175
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-batch",
+        "count": 1,
+        "groups": 0,
+        "importMs": 4.695708,
+        "initialPreparationMs": 0.039332999999999174,
+        "firstExecutionMs": 0.6095000000000006,
+        "prepared": {
+          "medianMs": 0.005471165999999997,
+          "samplesMs": [
+            0.009843581999999998,
+            0.005733249999999998,
+            0.005614834000000002,
+            0.005258666000000006,
+            0.005335331999999994,
+            0.005471165999999997,
+            0.005155918
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.0005780840000000183,
+          "samplesMs": [
+            0.0012847500000000025,
+            0.000911832000000004,
+            0.0005275839999999902,
+            0.0007219160000000073,
+            0.0005380820000000029,
+            0.0005780840000000183,
+            0.0005374999999999944
+          ]
+        },
+        "checksum": "3fbb180385c255ab5dfb138c49fd096240fd114afc882cbaed3bccc1ecaf140c",
+        "rssBytes": 62963712,
+        "maxRssKiB": 61488,
+        "freshProcessMs": 84.21941699999999
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 1,
+        "groups": 0,
+        "importMs": 0.9690839999999987,
+        "initialPreparationMs": 0.4440419999999996,
+        "firstExecutionMs": 0.18604099999999946,
+        "prepared": {
+          "medianMs": 0.0021515820000000047,
+          "samplesMs": [
+            0.005250917999999992,
+            0.005724583999999993,
+            0.0021515820000000047,
+            0.001734415999999996,
+            0.002251416000000006,
+            0.0016700840000000029,
+            0.001577916000000002
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.002653168000000008,
+          "samplesMs": [
+            0.003849418,
+            0.0027201659999999918,
+            0.002653168000000008,
+            0.0029624160000000046,
+            0.002413249999999991,
+            0.002269915999999995,
+            0.00228658200000001
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.003700583999999992,
+          "samplesMs": [
+            0.003969084000000009,
+            0.0035548320000000047,
+            0.0036226660000000096,
+            0.0037405819999999893,
+            0.003906000000000006,
+            0.003640500000000003,
+            0.003700583999999992
+          ]
+        },
+        "checksum": "3fbb180385c255ab5dfb138c49fd096240fd114afc882cbaed3bccc1ecaf140c",
+        "rssBytes": 60817408,
+        "maxRssKiB": 59392,
+        "freshProcessMs": 102.94366699999995
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 1,
+        "groups": 0,
+        "importMs": 0.6803329999999974,
+        "initialPreparationMs": 0.3847920000000009,
+        "firstExecutionMs": 569.47575,
+        "prepared": {
+          "medianMs": 0.0024953340000001844,
+          "samplesMs": [
+            0.0036012499999999365,
+            0.0026646679999998923,
+            0.002453416000000061,
+            0.0024953340000001844,
+            0.0028579999999999474,
+            0.002437333999999964,
+            0.0023989160000000994
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.0036918339999999716,
+          "samplesMs": [
+            0.003990582000000131,
+            0.002683084000000008,
+            0.005206666000000041,
+            0.005317665999999917,
+            0.0025126659999998536,
+            0.00281049999999982,
+            0.0036918339999999716
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.006262249999999994,
+          "samplesMs": [
+            0.0071156679999999145,
+            0.005581918000000087,
+            0.007338834000000133,
+            0.006811999999999898,
+            0.006262249999999994,
+            0.005482168000000002,
+            0.005488167999999859
+          ]
+        },
+        "checksum": "3fbb180385c255ab5dfb138c49fd096240fd114afc882cbaed3bccc1ecaf140c",
+        "rssBytes": 59473920,
+        "maxRssKiB": 58080,
+        "freshProcessMs": 681.309542
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 1,
+        "groups": 1,
+        "importMs": 0.9792089999999973,
+        "initialPreparationMs": 0.31508300000000133,
+        "firstExecutionMs": 0.15841700000000003,
+        "prepared": {
+          "medianMs": 0.0016749159999999961,
+          "samplesMs": [
+            0.0031046660000000016,
+            0.001963416000000002,
+            0.0013802499999999896,
+            0.0018342499999999973,
+            0.0016749159999999961,
+            0.0013637500000000101,
+            0.001592665999999994
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.0020331680000000036,
+          "samplesMs": [
+            0.0035915820000000024,
+            0.0033840820000000066,
+            0.0022810839999999927,
+            0.0020331680000000036,
+            0.0019422500000000013,
+            0.0018349180000000018,
+            0.0016515839999999998
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.0034049159999999857,
+          "samplesMs": [
+            0.0036314160000000015,
+            0.004372500000000002,
+            0.003588916000000012,
+            0.003359582000000017,
+            0.003286750000000012,
+            0.0034049159999999857,
+            0.0031396660000000054
+          ]
+        },
+        "checksum": "e7a3af7efcab2cc229fc4c859812cd5c2aee2126bb051476af628352e0241e1d",
+        "rssBytes": 59588608,
+        "maxRssKiB": 58192,
+        "freshProcessMs": 96.7595839999999
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 1,
+        "groups": 1,
+        "importMs": 1.8341250000000002,
+        "initialPreparationMs": 0.3992500000000021,
+        "firstExecutionMs": 1.6052910000000011,
+        "prepared": {
+          "medianMs": 0.0024624159999999903,
+          "samplesMs": [
+            0.0039022500000000094,
+            0.0025840000000000034,
+            0.0023302499999999925,
+            0.0025060000000000004,
+            0.0024624159999999903,
+            0.0021495000000000034,
+            0.0021382499999999995
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.0019914159999999867,
+          "samplesMs": [
+            0.0030492500000000007,
+            0.0021611659999999943,
+            0.0019914159999999867,
+            0.0019339159999999822,
+            0.002108918000000017,
+            0.0018061659999999904,
+            0.0016643339999999967
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.004468250000000012,
+          "samplesMs": [
+            0.004619249999999994,
+            0.004297166000000004,
+            0.004387416000000002,
+            0.005230833999999987,
+            0.004995499999999993,
+            0.004468250000000012,
+            0.0044162499999999905
+          ]
+        },
+        "checksum": "e7a3af7efcab2cc229fc4c859812cd5c2aee2126bb051476af628352e0241e1d",
+        "rssBytes": 59686912,
+        "maxRssKiB": 58288,
+        "freshProcessMs": 116.08983400000011
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-wrapper",
+        "count": 256,
+        "groups": 0,
+        "importMs": 1.875625000000003,
+        "initialPreparationMs": 0.5410000000000004,
+        "firstExecutionMs": 7.035207999999997,
+        "prepared": {
+          "medianMs": 3.859258300000002,
+          "samplesMs": [
+            2.4145083000000005,
+            4.658708300000001,
+            3.859258300000002,
+            2.5953125,
+            4.278999999999999,
+            3.746745900000002,
+            4.2242416999999985
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.07723340000000008,
+          "samplesMs": [
+            0.06882090000000289,
+            0.0781833000000006,
+            0.07826670000000036,
+            0.07708750000000464,
+            0.07143749999999613,
+            0.07723340000000008,
+            0.08837499999999636
+          ]
+        },
+        "checksum": "8afb9dee66f20638cdd7d5e600e64f1836f518a6cf62708dbfd05ee6a72a34b9",
+        "rssBytes": 71237632,
+        "maxRssKiB": 69568,
+        "freshProcessMs": 337.24749999999995
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-batch",
+        "count": 256,
+        "groups": 0,
+        "importMs": 2.4356250000000017,
+        "initialPreparationMs": 0.7272079999999974,
+        "firstExecutionMs": 3.839624999999998,
+        "prepared": {
+          "medianMs": 0.839716700000001,
+          "samplesMs": [
+            0.9046999999999997,
+            0.8375084000000002,
+            0.8377458000000004,
+            0.8811250000000002,
+            0.839716700000001,
+            0.8388666999999999,
+            0.844558400000001
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.12759590000000004,
+          "samplesMs": [
+            0.1464250000000007,
+            0.12759590000000004,
+            0.1316874999999996,
+            0.13145000000000095,
+            0.10687079999999867,
+            0.12567909999999927,
+            0.12361249999999871
+          ]
+        },
+        "checksum": "8afb9dee66f20638cdd7d5e600e64f1836f518a6cf62708dbfd05ee6a72a34b9",
+        "rssBytes": 65191936,
+        "maxRssKiB": 63664,
+        "freshProcessMs": 136.88699999999994
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 256,
+        "groups": 0,
+        "importMs": 0.6862080000000006,
+        "initialPreparationMs": 1.457374999999999,
+        "firstExecutionMs": 0.683208999999998,
+        "prepared": {
+          "medianMs": 0.06544579999999982,
+          "samplesMs": [
+            0.13041659999999985,
+            0.11574170000000024,
+            0.07157499999999999,
+            0.06485410000000016,
+            0.06450409999999991,
+            0.0617167000000002,
+            0.06544579999999982
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.33561249999999987,
+          "samplesMs": [
+            0.39008329999999986,
+            0.3948875000000001,
+            0.3379749999999994,
+            0.33561249999999987,
+            0.3250166,
+            0.3212457999999998,
+            0.32202079999999994
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.35466669999999995,
+          "samplesMs": [
+            0.35466669999999995,
+            0.36140000000000044,
+            0.36458749999999895,
+            0.36385839999999947,
+            0.3166458000000006,
+            0.3129374999999996,
+            0.3074458000000007
+          ]
+        },
+        "checksum": "8afb9dee66f20638cdd7d5e600e64f1836f518a6cf62708dbfd05ee6a72a34b9",
+        "rssBytes": 60784640,
+        "maxRssKiB": 59360,
+        "freshProcessMs": 118.53516600000012
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 256,
+        "groups": 0,
+        "importMs": 0.6805839999999996,
+        "initialPreparationMs": 1.4385420000000018,
+        "firstExecutionMs": 0.7633340000000004,
+        "prepared": {
+          "medianMs": 0.018954199999999942,
+          "samplesMs": [
+            0.026170899999999976,
+            0.03386250000000004,
+            0.018954199999999942,
+            0.01767910000000015,
+            0.018345899999999915,
+            0.019537499999999854,
+            0.018462499999999694
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.3292917000000003,
+          "samplesMs": [
+            0.3852791999999994,
+            0.3841458000000003,
+            0.33186659999999935,
+            0.3292917000000003,
+            0.3156957999999996,
+            0.3217125000000003,
+            0.31580000000000014
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.33824170000000037,
+          "samplesMs": [
+            0.33824170000000037,
+            0.339425,
+            0.359075,
+            0.3498041999999998,
+            0.3013292000000007,
+            0.2918582999999998,
+            0.29632920000000096
+          ]
+        },
+        "checksum": "8afb9dee66f20638cdd7d5e600e64f1836f518a6cf62708dbfd05ee6a72a34b9",
+        "rssBytes": 60276736,
+        "maxRssKiB": 58864,
+        "freshProcessMs": 111.77716699999996
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 256,
+        "groups": 128,
+        "importMs": 0.8129170000000023,
+        "initialPreparationMs": 1.2142909999999993,
+        "firstExecutionMs": 0.31329200000000057,
+        "prepared": {
+          "medianMs": 0.05258330000000022,
+          "samplesMs": [
+            0.06557920000000017,
+            0.05258330000000022,
+            0.07468750000000028,
+            0.053104199999999935,
+            0.051449999999999815,
+            0.04932090000000002,
+            0.045658399999999946
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.2279874999999997,
+          "samplesMs": [
+            0.3036290999999999,
+            0.2760332999999996,
+            0.27539170000000013,
+            0.2279874999999997,
+            0.22541670000000025,
+            0.22792500000000046,
+            0.22687079999999965
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.29914590000000063,
+          "samplesMs": [
+            0.29914590000000063,
+            0.35280830000000096,
+            0.3067999999999998,
+            0.3472832999999994,
+            0.27874160000000076,
+            0.2913125000000008,
+            0.2723208
+          ]
+        },
+        "checksum": "404ec536303193305ec425ca4aecd8725b2c85b3e8c5349dd9904caaa95f76e8",
+        "rssBytes": 63389696,
+        "maxRssKiB": 61904,
+        "freshProcessMs": 110.24358300000017
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 256,
+        "groups": 128,
+        "importMs": 0.7972089999999987,
+        "initialPreparationMs": 1.1437920000000013,
+        "firstExecutionMs": 0.9819170000000028,
+        "prepared": {
+          "medianMs": 0.0686084000000001,
+          "samplesMs": [
+            0.08470000000000014,
+            0.06885829999999978,
+            0.07563749999999984,
+            0.06654160000000005,
+            0.0686084000000001,
+            0.05998749999999973,
+            0.06265410000000031
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.23354999999999962,
+          "samplesMs": [
+            0.29977500000000035,
+            0.2757916999999999,
+            0.2491416000000001,
+            0.23107919999999993,
+            0.23354999999999962,
+            0.23208750000000009,
+            0.2281375000000004
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 0.2930790999999999,
+          "samplesMs": [
+            0.2930790999999999,
+            0.321291699999999,
+            0.2992999999999995,
+            0.2931583000000003,
+            0.28717500000000057,
+            0.28462919999999914,
+            0.2873625000000004
+          ]
+        },
+        "checksum": "404ec536303193305ec425ca4aecd8725b2c85b3e8c5349dd9904caaa95f76e8",
+        "rssBytes": 60932096,
+        "maxRssKiB": 59504,
+        "freshProcessMs": 108.72045900000012
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-wrapper",
+        "count": 1000,
+        "groups": 0,
+        "importMs": 2.0737500000000004,
+        "initialPreparationMs": 0.9777079999999998,
+        "firstExecutionMs": 18.289291999999996,
+        "prepared": {
+          "medianMs": 19.61779100000001,
+          "samplesMs": [
+            10.805625000000006,
+            10.003457999999995,
+            22.006417,
+            20.01404199999999,
+            19.61779100000001,
+            11.107833,
+            20.603207999999995
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.33045799999999304,
+          "samplesMs": [
+            0.3954999999999984,
+            0.41866699999999923,
+            0.33045799999999304,
+            0.3435000000000059,
+            0.3293329999999912,
+            0.33029099999998834,
+            0.32954099999997766
+          ]
+        },
+        "checksum": "14a7dae3c7186daf41b851f18874d80700481732a5b18d81170241af3bbdf43e",
+        "rssBytes": 71057408,
+        "maxRssKiB": 69392,
+        "freshProcessMs": 217.639541
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-batch",
+        "count": 1000,
+        "groups": 0,
+        "importMs": 2.3729590000000016,
+        "initialPreparationMs": 1.3454590000000017,
+        "firstExecutionMs": 8.402416000000002,
+        "prepared": {
+          "medianMs": 4.174624999999992,
+          "samplesMs": [
+            3.944709000000003,
+            10.931790999999997,
+            12.242000000000004,
+            4.174624999999992,
+            5.994957999999997,
+            3.4126250000000056,
+            3.185541999999998
+          ]
+        },
+        "preparation": {
+          "medianMs": 0.49354200000000503,
+          "samplesMs": [
+            0.4853750000000048,
+            0.4832499999999982,
+            0.48612500000000125,
+            0.5207090000000107,
+            0.49354200000000503,
+            0.5087500000000205,
+            0.5069579999999974
+          ]
+        },
+        "checksum": "14a7dae3c7186daf41b851f18874d80700481732a5b18d81170241af3bbdf43e",
+        "rssBytes": 66240512,
+        "maxRssKiB": 64688,
+        "freshProcessMs": 147.909083
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 1000,
+        "groups": 0,
+        "importMs": 0.7856249999999996,
+        "initialPreparationMs": 2.7540419999999983,
+        "firstExecutionMs": 1.0554590000000026,
+        "prepared": {
+          "medianMs": 0.3428749999999994,
+          "samplesMs": [
+            0.5542920000000038,
+            0.5322500000000048,
+            0.39262500000000244,
+            0.3428749999999994,
+            0.3401669999999939,
+            0.11625000000000085,
+            0.1215830000000011
+          ]
+        },
+        "preparation": {
+          "medianMs": 1.4000419999999991,
+          "samplesMs": [
+            1.6065829999999934,
+            1.4557920000000024,
+            1.4000419999999991,
+            1.334583000000002,
+            1.245791000000004,
+            1.2866249999999937,
+            3.1157499999999985
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1.582540999999992,
+          "samplesMs": [
+            1.582540999999992,
+            1.5707089999999937,
+            1.6464580000000097,
+            1.775583999999995,
+            1.5505420000000072,
+            1.5562499999999915,
+            1.609375
+          ]
+        },
+        "checksum": "14a7dae3c7186daf41b851f18874d80700481732a5b18d81170241af3bbdf43e",
+        "rssBytes": 63143936,
+        "maxRssKiB": 61664,
+        "freshProcessMs": 109.6843329999997
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 1000,
+        "groups": 0,
+        "importMs": 1.9668330000000047,
+        "initialPreparationMs": 5.211625000000005,
+        "firstExecutionMs": 1.732750000000003,
+        "prepared": {
+          "medianMs": 0.18029200000000145,
+          "samplesMs": [
+            0.14050000000000296,
+            0.7176670000000058,
+            0.24908299999999883,
+            0.16724999999999568,
+            0.18029200000000145,
+            0.13729100000000471,
+            0.32458300000000406
+          ]
+        },
+        "preparation": {
+          "medianMs": 1.3981670000000008,
+          "samplesMs": [
+            1.705666000000008,
+            1.654875000000004,
+            1.6306249999999949,
+            1.3976669999999984,
+            1.3672499999999985,
+            1.3149169999999941,
+            1.3981670000000008
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1.3667920000000038,
+          "samplesMs": [
+            1.361666999999997,
+            1.3644159999999914,
+            1.3667920000000038,
+            1.3123749999999887,
+            1.4262910000000062,
+            1.6508749999999992,
+            1.4002920000000074
+          ]
+        },
+        "checksum": "14a7dae3c7186daf41b851f18874d80700481732a5b18d81170241af3bbdf43e",
+        "rssBytes": 61931520,
+        "maxRssKiB": 60480,
+        "freshProcessMs": 129.97516700000006
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 1000,
+        "groups": 128,
+        "importMs": 1.0256669999999986,
+        "initialPreparationMs": 2.8276670000000017,
+        "firstExecutionMs": 0.3895830000000018,
+        "prepared": {
+          "medianMs": 0.133459000000002,
+          "samplesMs": [
+            0.18470800000000054,
+            0.133459000000002,
+            0.2961250000000035,
+            0.26354200000000105,
+            0.10516700000000156,
+            0.10841700000000287,
+            0.10391599999999812
+          ]
+        },
+        "preparation": {
+          "medianMs": 1.4677920000000029,
+          "samplesMs": [
+            2.0473329999999947,
+            1.4677920000000029,
+            2.5017090000000053,
+            1.1843750000000028,
+            0.9701670000000036,
+            2.6047089999999997,
+            1.2914999999999992
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1.1748750000000001,
+          "samplesMs": [
+            1.8150830000000013,
+            1.1748750000000001,
+            1.2580410000000057,
+            1.221375000000009,
+            1.1312910000000045,
+            1.0442500000000052,
+            1.0440830000000005
+          ]
+        },
+        "checksum": "fa2a0e07b34e2d96c20ec7fe1840ceb5550fcea395709c177a4b113c97fe0359",
+        "rssBytes": 62160896,
+        "maxRssKiB": 60704,
+        "freshProcessMs": 135.76762499999995
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 1000,
+        "groups": 128,
+        "importMs": 1.0308329999999977,
+        "initialPreparationMs": 2.8577920000000034,
+        "firstExecutionMs": 0.921291999999994,
+        "prepared": {
+          "medianMs": 0.1078329999999994,
+          "samplesMs": [
+            0.1078329999999994,
+            0.11650000000000205,
+            0.09454099999999954,
+            0.08699999999999619,
+            0.09337499999999466,
+            0.11375000000000313,
+            0.11845900000000142
+          ]
+        },
+        "preparation": {
+          "medianMs": 1.6417500000000018,
+          "samplesMs": [
+            1.6417500000000018,
+            1.835250000000002,
+            2.227291000000001,
+            1.843207999999997,
+            1.376958000000002,
+            0.957958000000005,
+            0.881834000000012
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1.252207999999996,
+          "samplesMs": [
+            1.0706250000000068,
+            1.0433749999999975,
+            1.915582999999998,
+            1.8146250000000066,
+            1.9299589999999966,
+            1.252207999999996,
+            1.019790999999998
+          ]
+        },
+        "checksum": "fa2a0e07b34e2d96c20ec7fe1840ceb5550fcea395709c177a4b113c97fe0359",
+        "rssBytes": 62259200,
+        "maxRssKiB": 60800,
+        "freshProcessMs": 124.23000000000002
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-wrapper",
+        "count": 10000,
+        "groups": 0,
+        "importMs": 2.2364590000000035,
+        "initialPreparationMs": 3.114583000000003,
+        "firstExecutionMs": 154.76308300000002,
+        "prepared": {
+          "medianMs": 203.31583399999988,
+          "samplesMs": [
+            142.61516600000004,
+            199.11529199999995,
+            203.31583399999988,
+            290.38650000000007,
+            209.67333299999996,
+            164.45812499999988,
+            210.13070900000002
+          ]
+        },
+        "preparation": {
+          "medianMs": 3.352999999999838,
+          "samplesMs": [
+            3.69662500000004,
+            2.9954999999999927,
+            3.9204999999999472,
+            3.352999999999838,
+            3.546542000000045,
+            3.1505839999999807,
+            3.029125000000022
+          ]
+        },
+        "checksum": "ed1adc341ff8bea53ebce848f072e92e91aa9b5fa129344f75abd558d69aedf6",
+        "rssBytes": 130711552,
+        "maxRssKiB": 127648,
+        "freshProcessMs": 2031.0342920000003
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-batch",
+        "count": 10000,
+        "groups": 0,
+        "importMs": 3.568917000000006,
+        "initialPreparationMs": 9.627042000000003,
+        "firstExecutionMs": 55.101417000000005,
+        "prepared": {
+          "medianMs": 43.93504200000001,
+          "samplesMs": [
+            43.93504200000001,
+            50.35058299999997,
+            48.04620799999998,
+            38.750625000000014,
+            41.187415999999985,
+            47.950541999999984,
+            41.30279099999996
+          ]
+        },
+        "preparation": {
+          "medianMs": 4.928749999999923,
+          "samplesMs": [
+            5.3595000000000255,
+            4.951249999999959,
+            4.6072920000000295,
+            5.3093750000000455,
+            4.928749999999923,
+            4.916749999999979,
+            4.76520800000003
+          ]
+        },
+        "checksum": "ed1adc341ff8bea53ebce848f072e92e91aa9b5fa129344f75abd558d69aedf6",
+        "rssBytes": 90439680,
+        "maxRssKiB": 88320,
+        "freshProcessMs": 623.1009590000003
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 10000,
+        "groups": 0,
+        "importMs": 0.9438329999999979,
+        "initialPreparationMs": 15.659958000000003,
+        "firstExecutionMs": 4.188375000000001,
+        "prepared": {
+          "medianMs": 2.2949590000000057,
+          "samplesMs": [
+            2.849541000000002,
+            3.150500000000001,
+            2.2660840000000064,
+            2.2949590000000057,
+            2.6040419999999926,
+            0.9361250000000041,
+            0.9517500000000041
+          ]
+        },
+        "preparation": {
+          "medianMs": 12.88766600000001,
+          "samplesMs": [
+            12.88766600000001,
+            12.462374999999994,
+            12.806333999999993,
+            13.076750000000004,
+            12.969416999999993,
+            12.658124999999984,
+            13.41541699999999
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 14.996707999999984,
+          "samplesMs": [
+            15.061750000000018,
+            14.996707999999984,
+            15.435917000000018,
+            14.231291999999996,
+            13.47970799999996,
+            14.527834000000041,
+            18.17175000000003
+          ]
+        },
+        "checksum": "ed1adc341ff8bea53ebce848f072e92e91aa9b5fa129344f75abd558d69aedf6",
+        "rssBytes": 71172096,
+        "maxRssKiB": 69504,
+        "freshProcessMs": 374.5529999999999
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 10000,
+        "groups": 0,
+        "importMs": 1.203792,
+        "initialPreparationMs": 18.579875,
+        "firstExecutionMs": 2.186334000000002,
+        "prepared": {
+          "medianMs": 0.7217080000000067,
+          "samplesMs": [
+            0.7699170000000066,
+            0.8930000000000007,
+            0.7217080000000067,
+            0.653917000000007,
+            0.6424580000000049,
+            0.6648750000000092,
+            0.9994590000000017
+          ]
+        },
+        "preparation": {
+          "medianMs": 26.97625000000002,
+          "samplesMs": [
+            14.461124999999996,
+            26.97625000000002,
+            40.660082999999986,
+            48.734958000000006,
+            28.745625000000018,
+            16.66779200000002,
+            20.616832999999986
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 18.650374999999997,
+          "samplesMs": [
+            35.622457999999995,
+            25.22562499999998,
+            17.116832999999986,
+            19.46666700000003,
+            18.650374999999997,
+            14.621250000000032,
+            14.232665999999995
+          ]
+        },
+        "checksum": "ed1adc341ff8bea53ebce848f072e92e91aa9b5fa129344f75abd558d69aedf6",
+        "rssBytes": 66568192,
+        "maxRssKiB": 67776,
+        "freshProcessMs": 578.0752919999995
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 10000,
+        "groups": 128,
+        "importMs": 0.9486249999999998,
+        "initialPreparationMs": 18.68175,
+        "firstExecutionMs": 1.117875000000005,
+        "prepared": {
+          "medianMs": 0.37187500000000284,
+          "samplesMs": [
+            0.3435830000000024,
+            0.7832500000000024,
+            0.983708,
+            0.3113749999999982,
+            0.35925000000000296,
+            0.37187500000000284,
+            0.3859169999999992
+          ]
+        },
+        "preparation": {
+          "medianMs": 9.740125000000006,
+          "samplesMs": [
+            9.817334000000002,
+            9.158083000000005,
+            9.850832999999994,
+            10.080042000000006,
+            8.915707999999995,
+            9.432625000000002,
+            9.740125000000006
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 9.36708299999998,
+          "samplesMs": [
+            8.875166000000007,
+            9.199708999999984,
+            9.169250000000005,
+            9.389999999999986,
+            9.36708299999998,
+            9.98595899999998,
+            9.539125000000013
+          ]
+        },
+        "checksum": "5d29946583f6b2c91b6d29a501d4a602473ad9d69b6d3b5e36fae5d52b31e59e",
+        "rssBytes": 65503232,
+        "maxRssKiB": 63968,
+        "freshProcessMs": 267.09850000000006
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 10000,
+        "groups": 128,
+        "importMs": 0.9191660000000006,
+        "initialPreparationMs": 11.452000000000002,
+        "firstExecutionMs": 0.9960829999999987,
+        "prepared": {
+          "medianMs": 0.10283299999999684,
+          "samplesMs": [
+            0.13170800000000327,
+            0.11437500000000256,
+            0.10212500000000091,
+            0.10283299999999684,
+            0.09891700000000014,
+            0.09933300000000145,
+            0.11175000000000068
+          ]
+        },
+        "preparation": {
+          "medianMs": 10.123875000000012,
+          "samplesMs": [
+            9.074874999999992,
+            9.189249999999987,
+            12.101250000000007,
+            11.500374999999991,
+            10.729874999999993,
+            10.123875000000012,
+            9.745790999999997
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 9.755874999999975,
+          "samplesMs": [
+            9.043583999999981,
+            10.422541999999993,
+            10.165541000000019,
+            9.717749999999995,
+            9.568292000000014,
+            10.165917000000007,
+            9.755874999999975
+          ]
+        },
+        "checksum": "5d29946583f6b2c91b6d29a501d4a602473ad9d69b6d3b5e36fae5d52b31e59e",
+        "rssBytes": 65552384,
+        "maxRssKiB": 64016,
+        "freshProcessMs": 259.957625
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 10000,
+        "groups": 10000,
+        "importMs": 0.8803339999999977,
+        "initialPreparationMs": 13.0565,
+        "firstExecutionMs": 4.293832999999999,
+        "prepared": {
+          "medianMs": 3.363375000000005,
+          "samplesMs": [
+            2.8709169999999986,
+            4.0880829999999975,
+            3.686124999999997,
+            3.2621249999999975,
+            3.4028339999999986,
+            3.363375000000005,
+            3.110624999999999
+          ]
+        },
+        "preparation": {
+          "medianMs": 9.801917000000003,
+          "samplesMs": [
+            9.941457999999997,
+            9.330957999999995,
+            9.465457999999998,
+            9.804958999999997,
+            9.979000000000013,
+            9.801917000000003,
+            9.398917000000012
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 15.874750000000006,
+          "samplesMs": [
+            15.874750000000006,
+            15.798583000000008,
+            15.785708,
+            24.162082999999996,
+            14.072375000000022,
+            17.790707999999995,
+            19.806291999999985
+          ]
+        },
+        "checksum": "8e553d45881502da6cb07c983b15b7f88968017f80a9fef750f18a5dce0d2631",
+        "rssBytes": 93306880,
+        "maxRssKiB": 91120,
+        "freshProcessMs": 364.14354100000037
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 10000,
+        "groups": 10000,
+        "importMs": 1.343084000000001,
+        "initialPreparationMs": 21.792749999999998,
+        "firstExecutionMs": 10.108666999999997,
+        "prepared": {
+          "medianMs": 9.843957999999986,
+          "samplesMs": [
+            4.332792000000012,
+            11.012459000000007,
+            9.378958999999995,
+            12.468958,
+            14.444500000000005,
+            9.843957999999986,
+            7.436958000000004
+          ]
+        },
+        "preparation": {
+          "medianMs": 19.93270799999999,
+          "samplesMs": [
+            13.49516699999998,
+            17.336332999999996,
+            14.155167000000006,
+            20.74758300000002,
+            22.753582999999992,
+            23.496916,
+            19.93270799999999
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 16.425333000000023,
+          "samplesMs": [
+            19.848749999999995,
+            28.81820799999997,
+            15.96229199999999,
+            17.552832999999964,
+            16.139624999999967,
+            15.925208000000055,
+            16.425333000000023
+          ]
+        },
+        "checksum": "8e553d45881502da6cb07c983b15b7f88968017f80a9fef750f18a5dce0d2631",
+        "rssBytes": 90062848,
+        "maxRssKiB": 87952,
+        "freshProcessMs": 572.8715000000002
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-wrapper",
+        "count": 100000,
+        "groups": 0,
+        "importMs": 3.535958000000008,
+        "initialPreparationMs": 64.367583,
+        "firstExecutionMs": 3950.980083,
+        "prepared": {
+          "medianMs": 1899.0947079999987,
+          "samplesMs": [
+            1899.0947079999987,
+            1723.5316249999996,
+            1664.3131670000002,
+            1868.3742920000004,
+            2042.9897920000003,
+            2082.5462089999965,
+            2301.465
+          ]
+        },
+        "preparation": {
+          "medianMs": 37.47770799999853,
+          "samplesMs": [
+            55.8804999999993,
+            37.47770799999853,
+            41.79708400000163,
+            52.67387500000041,
+            36.38400000000183,
+            28.911791999998968,
+            28.765583000000333
+          ]
+        },
+        "checksum": "fe2a27e2e7f1dc767a18fbc96f39b853a036a8ea7a0f6bd2c3b8cfc6c27feea1",
+        "rssBytes": 408551424,
+        "maxRssKiB": 402176,
+        "freshProcessMs": 24948.463250000004
+      },
+      {
+        "kind": "invoice",
+        "variant": "decimal-batch",
+        "count": 100000,
+        "groups": 0,
+        "importMs": 4.606416000000003,
+        "initialPreparationMs": 84.43695799999999,
+        "firstExecutionMs": 497.362292,
+        "prepared": {
+          "medianMs": 500.66608300000007,
+          "samplesMs": [
+            468.5944999999999,
+            557.3739589999996,
+            607.1129169999999,
+            500.66608300000007,
+            484.26254199999994,
+            630.055292,
+            499.420333
+          ]
+        },
+        "preparation": {
+          "medianMs": 69.74045800000022,
+          "samplesMs": [
+            70.94420799999989,
+            55.877042000000074,
+            57.55358399999932,
+            55.3927079999994,
+            69.74045800000022,
+            82.88974999999937,
+            80.91825000000063
+          ]
+        },
+        "checksum": "fe2a27e2e7f1dc767a18fbc96f39b853a036a8ea7a0f6bd2c3b8cfc6c27feea1",
+        "rssBytes": 347848704,
+        "maxRssKiB": 351216,
+        "freshProcessMs": 6409.768540999998
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 100000,
+        "groups": 0,
+        "importMs": 1.9715419999999995,
+        "initialPreparationMs": 194.341375,
+        "firstExecutionMs": 21.11695900000001,
+        "prepared": {
+          "medianMs": 27.315666999999962,
+          "samplesMs": [
+            27.315666999999962,
+            30.832041000000004,
+            34.99279199999995,
+            30.274084000000016,
+            18.396124999999927,
+            16.95495799999992,
+            16.572750000000042
+          ]
+        },
+        "preparation": {
+          "medianMs": 159.75591599999984,
+          "samplesMs": [
+            162.3280410000001,
+            154.15141700000004,
+            132.3874159999998,
+            178.74862499999995,
+            215.8352500000001,
+            159.75591599999984,
+            134.5090419999999
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 213.19229199999972,
+          "samplesMs": [
+            166.4864160000002,
+            169.2707089999999,
+            223.12566700000025,
+            177.64274999999998,
+            214.22033299999975,
+            276.5975830000002,
+            213.19229199999972
+          ]
+        },
+        "checksum": "fe2a27e2e7f1dc767a18fbc96f39b853a036a8ea7a0f6bd2c3b8cfc6c27feea1",
+        "rssBytes": 117653504,
+        "maxRssKiB": 120128,
+        "freshProcessMs": 3954.7983750000058
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 100000,
+        "groups": 0,
+        "importMs": 4.138458,
+        "initialPreparationMs": 203.31854199999998,
+        "firstExecutionMs": 11.493833999999993,
+        "prepared": {
+          "medianMs": 7.515833999999984,
+          "samplesMs": [
+            8.691332999999986,
+            7.87420800000001,
+            7.65870799999999,
+            7.005083000000013,
+            7.515833999999984,
+            7.4354999999999905,
+            7.112625000000037
+          ]
+        },
+        "preparation": {
+          "medianMs": 160.1929580000001,
+          "samplesMs": [
+            169.35749999999996,
+            160.1929580000001,
+            198.0411670000001,
+            197.49695800000018,
+            130.8096250000001,
+            154.7170000000001,
+            158.14129100000014
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 196.90766699999995,
+          "samplesMs": [
+            195.45958400000018,
+            237.71858399999974,
+            253.2745,
+            196.90766699999995,
+            203.55691699999988,
+            135.96362499999987,
+            183.29641600000014
+          ]
+        },
+        "checksum": "fe2a27e2e7f1dc767a18fbc96f39b853a036a8ea7a0f6bd2c3b8cfc6c27feea1",
+        "rssBytes": 110444544,
+        "maxRssKiB": 110880,
+        "freshProcessMs": 3823.5783750000046
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 100000,
+        "groups": 128,
+        "importMs": 1.353583999999998,
+        "initialPreparationMs": 149.81125,
+        "firstExecutionMs": 3.1547499999999786,
+        "prepared": {
+          "medianMs": 4.76970799999998,
+          "samplesMs": [
+            3.619249999999994,
+            4.957583,
+            5.746583000000015,
+            4.087124999999986,
+            3.549833000000035,
+            4.76970799999998,
+            5.164125000000013
+          ]
+        },
+        "preparation": {
+          "medianMs": 116.51675,
+          "samplesMs": [
+            188.181959,
+            116.51675,
+            110.34129200000007,
+            135.7874159999999,
+            110.61483399999997,
+            130.3475410000001,
+            115.87466700000004
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 118.56545899999992,
+          "samplesMs": [
+            104.8834589999999,
+            112.52025000000003,
+            146.54866700000002,
+            151.3712919999998,
+            116.78604199999972,
+            120.7123330000004,
+            118.56545899999992
+          ]
+        },
+        "checksum": "e8a227c79cbc2da2bf782e9e90b6c6b8da2402a149680b6d333a9396da875c63",
+        "rssBytes": 112148480,
+        "maxRssKiB": 109520,
+        "freshProcessMs": 2728.2334589999955
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 100000,
+        "groups": 128,
+        "importMs": 2.414042000000009,
+        "initialPreparationMs": 146.26054200000002,
+        "firstExecutionMs": 3.3091249999999945,
+        "prepared": {
+          "medianMs": 0.2987500000000409,
+          "samplesMs": [
+            0.3336669999999913,
+            0.2987500000000409,
+            0.2737500000000068,
+            0.27291600000000926,
+            0.6456670000000031,
+            0.28487499999999955,
+            0.3047920000000204
+          ]
+        },
+        "preparation": {
+          "medianMs": 98.58562499999994,
+          "samplesMs": [
+            122.33120799999995,
+            98.58562499999994,
+            97.16545799999994,
+            98.45833400000004,
+            98.233792,
+            105.33754199999998,
+            101.42604200000005
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 141.16949999999997,
+          "samplesMs": [
+            148.52208399999995,
+            134.83895799999982,
+            141.16949999999997,
+            153.18379099999993,
+            104.1814159999999,
+            106.49154099999987,
+            153.16958299999988
+          ]
+        },
+        "checksum": "e8a227c79cbc2da2bf782e9e90b6c6b8da2402a149680b6d333a9396da875c63",
+        "rssBytes": 109854720,
+        "maxRssKiB": 107776,
+        "freshProcessMs": 2509.8543749999953
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 100000,
+        "groups": 100000,
+        "importMs": 4.678041999999998,
+        "initialPreparationMs": 211.93104200000002,
+        "firstExecutionMs": 57.628124999999955,
+        "prepared": {
+          "medianMs": 52.797708,
+          "samplesMs": [
+            37.24829199999999,
+            52.797708,
+            68.31954199999996,
+            67.85858299999995,
+            42.239417,
+            42.733499999999935,
+            56.51566600000001
+          ]
+        },
+        "preparation": {
+          "medianMs": 125.60058300000014,
+          "samplesMs": [
+            123.02183400000013,
+            148.43654199999992,
+            125.60058300000014,
+            120.98129100000006,
+            123.35812499999997,
+            166.42812500000014,
+            231.070917
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 222.69387499999993,
+          "samplesMs": [
+            175.99295799999982,
+            279.77975000000015,
+            261.4072920000003,
+            342.69620799999984,
+            222.69387499999993,
+            215.5747080000001,
+            190.26441599999998
+          ]
+        },
+        "checksum": "ea8693af503b562a6d781151895d19f0c4972934c45b6f47c77abc4e1d4ca05e",
+        "rssBytes": 274841600,
+        "maxRssKiB": 268400,
+        "freshProcessMs": 4962.694917000001
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 100000,
+        "groups": 100000,
+        "importMs": 1.7270830000000004,
+        "initialPreparationMs": 153.57129199999997,
+        "firstExecutionMs": 97.415167,
+        "prepared": {
+          "medianMs": 58.18408299999999,
+          "samplesMs": [
+            75.31645900000007,
+            76.08712500000001,
+            58.18408299999999,
+            48.607083999999986,
+            48.337833000000046,
+            47.307458,
+            59.334834
+          ]
+        },
+        "preparation": {
+          "medianMs": 183.542375,
+          "samplesMs": [
+            139.84500000000003,
+            209.64924999999994,
+            183.542375,
+            182.83379199999968,
+            196.00516700000026,
+            206.63870799999995,
+            130.1830420000001
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 229.72775000000001,
+          "samplesMs": [
+            199.75212500000043,
+            284.31283299999996,
+            222.118833,
+            258.146166,
+            319.2313750000003,
+            182.8547499999995,
+            229.72775000000001
+          ]
+        },
+        "checksum": "ea8693af503b562a6d781151895d19f0c4972934c45b6f47c77abc4e1d4ca05e",
+        "rssBytes": 275283968,
+        "maxRssKiB": 270896,
+        "freshProcessMs": 5014.1965409999975
+      },
+      {
+        "kind": "invoice",
+        "variant": "js",
+        "count": 1000000,
+        "groups": 0,
+        "importMs": 1.7774580000000242,
+        "initialPreparationMs": 1938.711417,
+        "firstExecutionMs": 261.63866700000017,
+        "prepared": {
+          "medianMs": 178.83275000000003,
+          "samplesMs": [
+            178.83275000000003,
+            166.66495799999984,
+            173.65208299999995,
+            248.67087500000025,
+            276.04429200000004,
+            239.31495799999993,
+            146.8774169999997
+          ]
+        },
+        "preparation": {
+          "medianMs": 2837.005291999998,
+          "samplesMs": [
+            1429.7039160000004,
+            1695.3995410000007,
+            2074.3879589999997,
+            4233.428958999999,
+            2837.005291999998,
+            2839.3564159999987,
+            5466.199625000001
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1551.9293749999997,
+          "samplesMs": [
+            1551.9293749999997,
+            1479.338208000001,
+            1566.2422920000026,
+            1795.1360840000052,
+            1710.1958330000052,
+            1492.9454579999947,
+            1424.3368750000009
+          ]
+        },
+        "checksum": "642501012f4408010756abfe5c74754913e478a140c0a4cbb48deddbdda73519",
+        "rssBytes": 355614720,
+        "maxRssKiB": 368112,
+        "freshProcessMs": 51283.92620899999
+      },
+      {
+        "kind": "invoice",
+        "variant": "native",
+        "count": 1000000,
+        "groups": 0,
+        "importMs": 2.4795420000000377,
+        "initialPreparationMs": 1396.7455409999998,
+        "firstExecutionMs": 74.81537500000013,
+        "prepared": {
+          "medianMs": 78.9386669999999,
+          "samplesMs": [
+            72.41895799999998,
+            67.97091599999976,
+            78.9386669999999,
+            126.4288749999996,
+            102.59450000000015,
+            79.57712500000025,
+            76.56279099999983
+          ]
+        },
+        "preparation": {
+          "medianMs": 1473.0385829999996,
+          "samplesMs": [
+            1697.9317090000004,
+            1634.0390000000007,
+            1473.0385829999996,
+            1452.0150840000006,
+            1364.5528750000012,
+            1503.415832999999,
+            1450.2895830000016
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1570.5076670000017,
+          "samplesMs": [
+            1570.5076670000017,
+            1532.2722080000021,
+            2007.0603340000016,
+            1812.694625,
+            1562.0345420000012,
+            1407.5506669999995,
+            1886.8799999999974
+          ]
+        },
+        "checksum": "642501012f4408010756abfe5c74754913e478a140c0a4cbb48deddbdda73519",
+        "rssBytes": 280150016,
+        "maxRssKiB": 385328,
+        "freshProcessMs": 33350.720790999985
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 1000000,
+        "groups": 128,
+        "importMs": 8.548249999999996,
+        "initialPreparationMs": 1208.506917,
+        "firstExecutionMs": 11.86587499999996,
+        "prepared": {
+          "medianMs": 18.542832999999973,
+          "samplesMs": [
+            17.562165999999934,
+            19.4978329999999,
+            18.542832999999973,
+            17.0802920000001,
+            21.06858299999999,
+            18.675250000000005,
+            17.198666999999887
+          ]
+        },
+        "preparation": {
+          "medianMs": 1107.0680840000005,
+          "samplesMs": [
+            1252.904083,
+            1107.0680840000005,
+            1088.6222909999997,
+            1384.9227090000004,
+            1353.8608749999985,
+            1099.72725,
+            1053.6589999999997
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1143.5846249999995,
+          "samplesMs": [
+            1126.1022089999988,
+            1358.6878750000014,
+            1109.4157500000001,
+            1143.5846249999995,
+            1060.7548750000024,
+            1480.1429590000007,
+            1154.5489579999994
+          ]
+        },
+        "checksum": "b29f57b04b8431a07080263ffa924975d84fadd99fd836a0eb103710514196e3",
+        "rssBytes": 327827456,
+        "maxRssKiB": 351184,
+        "freshProcessMs": 23485.0325
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 1000000,
+        "groups": 128,
+        "importMs": 3.5887089999999944,
+        "initialPreparationMs": 1433.0785420000002,
+        "firstExecutionMs": 6.202125000000024,
+        "prepared": {
+          "medianMs": 2.1607500000000073,
+          "samplesMs": [
+            1.5276249999999436,
+            2.9551249999999527,
+            1.5624589999999898,
+            4.014208999999937,
+            2.1607500000000073,
+            1.9849590000001172,
+            2.3554169999999885
+          ]
+        },
+        "preparation": {
+          "medianMs": 2216.8989579999998,
+          "samplesMs": [
+            1392.0294999999996,
+            2359.378040999999,
+            2041.1596250000002,
+            2216.8989579999998,
+            4225.169542,
+            4104.129125000003,
+            1826.0366250000006
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 1471.8643340000053,
+          "samplesMs": [
+            1305.1060419999994,
+            1278.385291999999,
+            1216.2104999999974,
+            1493.080667000002,
+            1844.963125000002,
+            1471.8643340000053,
+            2253.7265830000033
+          ]
+        },
+        "checksum": "b29f57b04b8431a07080263ffa924975d84fadd99fd836a0eb103710514196e3",
+        "rssBytes": 208617472,
+        "maxRssKiB": 337536,
+        "freshProcessMs": 39641.37349999999
+      },
+      {
+        "kind": "ledger",
+        "variant": "js",
+        "count": 1000000,
+        "groups": 100000,
+        "importMs": 8.595582999999976,
+        "initialPreparationMs": 2807.4439580000003,
+        "firstExecutionMs": 129.2362079999998,
+        "prepared": {
+          "medianMs": 120.20108299999993,
+          "samplesMs": [
+            261.7234589999998,
+            238.05604200000016,
+            120.20108299999993,
+            83.07787499999995,
+            122.77579200000037,
+            80.89520900000025,
+            113.03291699999954
+          ]
+        },
+        "preparation": {
+          "medianMs": 3326.7939589999987,
+          "samplesMs": [
+            4094.4382080000014,
+            3619.148250000002,
+            3305.598167,
+            3326.7939589999987,
+            2700.388791000001,
+            3681.862208999999,
+            3319.738041999997
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 4270.649707999997,
+          "samplesMs": [
+            4643.87025,
+            5314.432207999998,
+            3805.015916000004,
+            4270.649707999997,
+            4705.511624999999,
+            3296.296542000011,
+            3675.7595
+          ]
+        },
+        "checksum": "b33a5859af502f581688cd59db9c7ba2329d148c33c6ed6fe42b6dbcd3a95d10",
+        "rssBytes": 295829504,
+        "maxRssKiB": 381312,
+        "freshProcessMs": 83901.89416700002
+      },
+      {
+        "kind": "ledger",
+        "variant": "native",
+        "count": 1000000,
+        "groups": 100000,
+        "importMs": 4.215624999999989,
+        "initialPreparationMs": 3651.9933330000003,
+        "firstExecutionMs": 237.00933399999985,
+        "prepared": {
+          "medianMs": 161.95870800000012,
+          "samplesMs": [
+            272.8500409999997,
+            201.852167,
+            96.74404100000083,
+            96.52679199999966,
+            153.1659579999996,
+            176.0029169999998,
+            161.95870800000012
+          ]
+        },
+        "preparation": {
+          "medianMs": 5265.5924170000035,
+          "samplesMs": [
+            4408.543167000002,
+            7196.849459000001,
+            5534.007000000001,
+            5265.5924170000035,
+            2925.2293750000026,
+            6011.996459000002,
+            2977.308499999999
+          ]
+        },
+        "endToEnd": {
+          "medianMs": 4128.876541999998,
+          "samplesMs": [
+            4128.876541999998,
+            4163.338042000003,
+            3897.438500000004,
+            4122.693417000002,
+            3089.290458000003,
+            6083.367041999998,
+            4741.960749999998
+          ]
+        },
+        "checksum": "b33a5859af502f581688cd59db9c7ba2329d148c33c6ed6fe42b6dbcd3a95d10",
+        "rssBytes": 212582400,
+        "maxRssKiB": 385328,
+        "freshProcessMs": 90185.02595899999
+      }
+    ]
+  },
+  "alternatingSameProcess": {
+    "node": "v24.16.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "cpu": "Apple M1",
+    "rounds": 9,
+    "statistic": "Median of nine alternating same-process samples; preparation and calculation included; GC outside timing",
+    "sourceHashes": {
+      "scripts/benchmarks/accounting-paired.mjs": "a617113f8476384d0c26c8d22f5bdf350038a501639625d2ee85409fdf655c14",
+      "scripts/benchmarks/accounting-data.mjs": "88bd8304f9630b2072ac6b48f6b97cf4a47b36a6162d3eb6e736deb5ab0ad293",
+      "src/accounting.ts": "50a118edf859de113e824c1d048672593c3756a55950caea40c91dbac1d97164",
+      "src/accounting-core.ts": "37eb243a37ab4de7e2404517280747a99ca40d5478996ce365604a939a5b7467",
+      "dist/accounting.cjs": "524d0a4d840a2e89e44ec9774d430804d344198d1592b9472d724b3770b64404"
+    },
+    "nativeBuild": {
+      "abi": 1,
+      "nodeApi": 9,
+      "tag": "darwin-arm64-napi9",
+      "sourceHash": "da079a0bc0d4ac8e1301d1edf1d7599ac4ae6951786daf2756a04965716b5c2f",
+      "sha256": "efb23bfe320b916b00d5459ed5aca3e148db398d0f480e9ba240eee9e4209e86",
+      "bytes": 55184,
+      "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+      "flags": [
+        "-std=c++17",
+        "-O3",
+        "-DNDEBUG",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DNAPI_VERSION=9",
+        "-I",
+        "/usr/local/include/node"
+      ],
+      "node": "v24.16.0",
+      "sanitizersPassed": true,
+      "leakSanitizer": "not-run"
+    },
+    "results": [
+      {
+        "kind": "invoice",
+        "count": 256,
+        "groups": 0,
+        "checksum": "8afb9dee66f20638cdd7d5e600e64f1836f518a6cf62708dbfd05ee6a72a34b9",
+        "js": {
+          "medianMs": 3.3028290999999625,
+          "samplesMs": [
+            5.843041600000004,
+            44.92983340000001,
+            1.714841700000011,
+            1.4908083999999917,
+            21.313912499999994,
+            27.233316600000034,
+            2.4952583000000232,
+            3.3028290999999625,
+            1.5057624999999917
+          ]
+        },
+        "native": {
+          "medianMs": 4.408870900000011,
+          "samplesMs": [
+            15.006316700000003,
+            10.328545800000006,
+            3.282854099999986,
+            1.2870374999999967,
+            11.904612499999985,
+            4.408870900000011,
+            1.316775000000007,
+            1.6339542000000165,
+            5.918216699999993
+          ]
+        }
+      },
+      {
+        "kind": "ledger",
+        "count": 256,
+        "groups": 128,
+        "checksum": "404ec536303193305ec425ca4aecd8725b2c85b3e8c5349dd9904caaa95f76e8",
+        "js": {
+          "medianMs": 1.373324999999977,
+          "samplesMs": [
+            1.6195250000000214,
+            13.44319999999998,
+            1.101537499999995,
+            1.2178833999999825,
+            1.1721792000000277,
+            1.9964417000000139,
+            1.373324999999977,
+            5.230504199999996,
+            1.2626332999999703
+          ]
+        },
+        "native": {
+          "medianMs": 1.8894458000000214,
+          "samplesMs": [
+            5.143170799999962,
+            1.9833791999999903,
+            2.3145500000000085,
+            1.8894458000000214,
+            1.1154125000000021,
+            1.3813540999999987,
+            1.72390419999997,
+            1.2262832999999773,
+            8.024879099999998
+          ]
+        }
+      },
+      {
+        "kind": "invoice",
+        "count": 10000,
+        "groups": 0,
+        "checksum": "ed1adc341ff8bea53ebce848f072e92e91aa9b5fa129344f75abd558d69aedf6",
+        "js": {
+          "medianMs": 66.684166,
+          "samplesMs": [
+            66.684166,
+            60.991583999999875,
+            43.94499999999971,
+            192.63545900000008,
+            201.82474999999977,
+            37.90979099999913,
+            30.57658299999912,
+            506.8649999999998,
+            302.4666669999997
+          ]
+        },
+        "native": {
+          "medianMs": 92.7435000000005,
+          "samplesMs": [
+            80.61166599999979,
+            67.66966699999966,
+            57.590000000000146,
+            89.71158399999968,
+            142.4193750000004,
+            210.69795900000008,
+            159.5670829999999,
+            117.4741669999994,
+            92.7435000000005
+          ]
+        }
+      },
+      {
+        "kind": "ledger",
+        "count": 10000,
+        "groups": 128,
+        "checksum": "5d29946583f6b2c91b6d29a501d4a602473ad9d69b6d3b5e36fae5d52b31e59e",
+        "js": {
+          "medianMs": 34.82533299999977,
+          "samplesMs": [
+            11.896040999999968,
+            164.53254199999992,
+            178.97004199999992,
+            31.25025000000005,
+            34.82533299999977,
+            51.858290999999554,
+            35.007958999998664,
+            12.066124999999374,
+            13.476582999999664
+          ]
+        },
+        "native": {
+          "medianMs": 28.04816699999992,
+          "samplesMs": [
+            96.19883400000072,
+            68.32545800000025,
+            22.18762499999957,
+            30.016708000000108,
+            64.00579199999993,
+            28.04816699999992,
+            15.076000000000931,
+            12.01879100000042,
+            24.570417000000816
+          ]
+        }
+      },
+      {
+        "kind": "ledger",
+        "count": 10000,
+        "groups": 10000,
+        "checksum": "8e553d45881502da6cb07c983b15b7f88968017f80a9fef750f18a5dce0d2631",
+        "js": {
+          "medianMs": 41.562165999999706,
+          "samplesMs": [
+            100.69208399999843,
+            56.400666999999885,
+            41.562165999999706,
+            74.04791699999987,
+            43.67937500000153,
+            27.732958000000508,
+            29.829291000000012,
+            22.814125000000786,
+            28.614707999999155
+          ]
+        },
+        "native": {
+          "medianMs": 43.97900000000118,
+          "samplesMs": [
+            106.00933299999997,
+            35.18550000000141,
+            66.04604199999994,
+            89.44887500000004,
+            34.72120800000084,
+            40.99883299999965,
+            43.97900000000118,
+            55.54558399999951,
+            42.411167000000205
+          ]
+        }
+      },
+      {
+        "kind": "invoice",
+        "count": 100000,
+        "groups": 0,
+        "checksum": "fe2a27e2e7f1dc767a18fbc96f39b853a036a8ea7a0f6bd2c3b8cfc6c27feea1",
+        "js": {
+          "medianMs": 1058.3122079999994,
+          "samplesMs": [
+            1258.9087500000023,
+            2444.6966669999965,
+            1058.3122079999994,
+            2525.2891249999957,
+            1819.6882499999992,
+            194.88091700000223,
+            278.01337500000227,
+            934.193124999998,
+            230.64770799999678
+          ]
+        },
+        "native": {
+          "medianMs": 2040.297666999999,
+          "samplesMs": [
+            2040.297666999999,
+            2342.9756670000024,
+            2890.3992089999992,
+            2703.217792000003,
+            1622.7395830000023,
+            367.0999579999989,
+            298.75500000000466,
+            2380.344124999996,
+            241.5042089999988
+          ]
+        }
+      },
+      {
+        "kind": "ledger",
+        "count": 100000,
+        "groups": 128,
+        "checksum": "e8a227c79cbc2da2bf782e9e90b6c6b8da2402a149680b6d333a9396da875c63",
+        "js": {
+          "medianMs": 196.71216700000514,
+          "samplesMs": [
+            154.4406669999953,
+            161.16587499999878,
+            203.76195800000278,
+            150.5907920000027,
+            160.88562500000262,
+            196.71216700000514,
+            201.59220900000219,
+            272.2885840000017,
+            283.67858400000114
+          ]
+        },
+        "native": {
+          "medianMs": 150.43454100000235,
+          "samplesMs": [
+            209.93012500000623,
+            125.96670900000026,
+            139.79175000000396,
+            223.28370799999539,
+            116.96445799999492,
+            233.62024999999994,
+            150.43454100000235,
+            308.28179100000125,
+            149.94716700000572
+          ]
+        }
+      },
+      {
+        "kind": "ledger",
+        "count": 100000,
+        "groups": 100000,
+        "checksum": "ea8693af503b562a6d781151895d19f0c4972934c45b6f47c77abc4e1d4ca05e",
+        "js": {
+          "medianMs": 868.2407500000045,
+          "samplesMs": [
+            970.0165839999972,
+            2320.3912500000006,
+            868.2407500000045,
+            3219.2156660000037,
+            1097.3405409999978,
+            776.8262079999986,
+            270.89708399999654,
+            277.8364580000052,
+            562.8102090000029
+          ]
+        },
+        "native": {
+          "medianMs": 640.8385830000043,
+          "samplesMs": [
+            640.8385830000043,
+            1477.8818749999991,
+            2218.027707999994,
+            1536.2934999999998,
+            1463.6156670000055,
+            399.39866600000823,
+            234.34916700000758,
+            240.984375,
+            517.1201659999933
+          ]
+        }
+      }
+    ]
+  }
+}

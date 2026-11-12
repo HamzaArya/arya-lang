@@ -1,0 +1,29 @@
+use std "accounting" as accounting
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+let count = 100000
+let lines = Array(count).fill({price: "1.25", quantity: "1.1", taxBps: 750})
+let batch = accounting.prepareInvoices(lines, {currency: "AFN", scale: 2, rounding: "half-even"})
+lines = null
+runtime.collect()
+let synchronous = batch.calculate()
+debug.assert(synchronous.total == "148000.00")
+let yielded = false
+setTimeout(fn() { yielded = true }, 0)
+let asynchronous = await batch.calculateAsync()
+debug.assert(yielded and runtime.deepEqual(synchronous, asynchronous))
+let controller = new AbortController()
+let pending = batch.calculateAsync({signal: controller.signal})
+setTimeout(fn() { controller.abort() }, 0)
+let cancelled = false
+try { await pending } catch error { cancelled = error.code == "ARYA_ACCOUNTING_ABORTED" }
+debug.assert(cancelled)
+let entries = Array(count).fill({account: "cash", debit: "92233720368547758.07", credit: "92233720368547758.07"})
+let ledger = accounting.prepareLedger(entries, {currency: "AFN", scale: 2})
+entries = null
+runtime.collect()
+let balances = await ledger.calculateAsync()
+debug.assert(balances.balanced and balances.debit == "9223372036854775807000.00" and balances.accounts.length == 1)
+runtime.collect(); await tasks.sleep(0)
+print("native accounting: 100000-row prepared invoices and ledgers, exact wide totals, yielding, cancellation and retained batch ownership passed")

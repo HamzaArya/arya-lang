@@ -1,0 +1,17 @@
+use std "web" as web
+use std "async" as tasks
+use std "debug" as debug
+let first = web.serve(0, {}, {html: false, assets: false})
+let listening = 0; let closed = 0; let errors = 0
+first.once("listening", fn() { listening += 1 })
+first.once("close", fn() { closed += 1 })
+let second = web.serve(first.address().port, {}, {html: false, assets: false})
+second.once("error", fn(error) { debug.assert(error.message != undefined); errors += 1 })
+second.on("listening", fn() { throw "A failed server must not listen." })
+await tasks.sleep(0)
+debug.assert(listening == 1 and errors == 1 and first.listening and not second.listening and second.address() == null)
+await web.shutdown(second)
+await web.shutdown(first)
+await web.shutdown(first)
+debug.assert(closed == 1 and not first.listening)
+print("native HTTP events: listening, bind error, once listeners and idempotent close passed")

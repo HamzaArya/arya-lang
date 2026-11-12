@@ -1,0 +1,14 @@
+use js "arya-language/accounting" as accounting
+
+const batch = accounting.prepareInvoices([
+  {price: "19.95", quantity: "2", taxRate: "0.075"}
+], {currency: "AFN", scale: 2, rounding: "half-even"})
+
+const result = await batch.calculateAsync()
+print(result.total)
+
+const ledger = accounting.ledgerBatch([
+  {account: "cash", debit: "42.89", credit: "0"},
+  {account: "sales", debit: "0", credit: "42.89"}
+], {currency: "AFN", scale: 2})
+print(ledger.balanced, ledger.difference)

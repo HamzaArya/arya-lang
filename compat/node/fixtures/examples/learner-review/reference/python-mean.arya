@@ -1,0 +1,3 @@
+use python "statistics" as statistics: {mean: fn(number[]): number}
+
+print("Mean:", statistics.mean([20, 30]))

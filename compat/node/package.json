@@ -1,0 +1,139 @@
+{
+  "name": "arya-language",
+  "version": "1.3.0-alpha.12",
+  "private": false,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Hamza Arya",
+    "url": "https://hamzaarya.com"
+  },
+  "homepage": "https://hamzaarya.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamzaArya/arya-lang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HamzaArya/arya-lang/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "type": "module",
+  "description": "Arya programming language for Node.js applications, JavaScript/npm and Python integration, web UI, and desktop apps.",
+  "engines": {
+    "node": ">=22.15"
+  },
+  "main": "./dist/compiler.cjs",
+  "types": "./dist/types/compiler.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/compiler.d.ts",
+      "default": "./dist/compiler.cjs"
+    },
+    "./compiler": {
+      "types": "./dist/types/compiler.d.ts",
+      "default": "./dist/compiler.cjs"
+    },
+    "./language-service": {
+      "types": "./dist/types/language-service.d.ts",
+      "default": "./dist/language-service.cjs"
+    },
+    "./project": {
+      "types": "./dist/types/project.d.ts",
+      "default": "./dist/project.cjs"
+    },
+    "./cli": "./dist/cli.cjs",
+    "./lsp": "./dist/lsp.cjs",
+    "./package.json": "./package.json",
+    "./editor": {
+      "types": "./dist/types/editor.d.ts",
+      "default": "./dist/editor.cjs"
+    },
+    "./esbuild": {
+      "types": "./dist/types/esbuild.d.ts",
+      "default": "./dist/esbuild.cjs"
+    },
+    "./accounting": {
+      "types": "./dist/types/accounting.d.ts",
+      "default": "./dist/accounting.cjs"
+    },
+    "./native-preview": {
+      "types": "./dist/types/native-preview.d.ts",
+      "default": "./dist/native-preview.cjs"
+    }
+  },
+  "bin": {
+    "arya": "dist/cli.cjs",
+    "arya-lsp": "dist/lsp.cjs",
+    "arya-language": "dist/create.cjs",
+    "create-arya": "dist/create.cjs"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "fixtures",
+    "brand",
+    "editors",
+    "README.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD-PARTY-NOTICES.txt",
+    "SECURITY.md",
+    "native/accounting"
+  ],
+  "scripts": {
+    "ui:preview": "npm run build && node dist/cli.cjs build fixtures/examples/ui-library/main.arya && node fixtures/examples/ui-library/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node scripts/test.mjs",
+    "test:mysql": "node scripts/test-mysql.mjs",
+    "docs:check": "node scripts/sync-release-status.mjs --check && node scripts/sync-feature-status.mjs --check && node scripts/check-docs.mjs",
+    "check": "npm run docs:check && npm run format:check && npm run typecheck && npm test",
+    "arya": "node dist/cli.cjs",
+    "package": "npm run check && npm run package:editors",
+    "package:editors": "node scripts/package-editors.mjs",
+    "test:package": "node scripts/test-package.mjs",
+    "prepack": "npm run build",
+    "release:check": "node scripts/check-release.mjs",
+    "test:clean": "node scripts/verify-clean.mjs",
+    "test:editors": "npm run build && node scripts/test-editor-host.mjs",
+    "docs:sync": "node scripts/sync-release-status.mjs && node scripts/sync-feature-status.mjs",
+    "benchmark": "node scripts/benchmark.mjs",
+    "format": "node scripts/format-core.mjs --write",
+    "format:check": "node scripts/format-core.mjs",
+    "build:accounting-native": "node native/accounting/build.mjs",
+    "test:accounting": "node scripts/test-accounting.mjs",
+    "benchmark:accounting": "node scripts/benchmark-accounting.mjs",
+    "package:accounting": "node scripts/package-accounting.mjs",
+    "test:accounting-package": "node scripts/test-accounting-package.mjs",
+    "test:native-preview": "node scripts/test-native-preview.mjs",
+    "benchmark:native-preview": "node scripts/benchmark-native-preview.mjs"
+  },
+  "overrides": {
+    "@vscode/vsce": {
+      "minimatch": "11.0.7"
+    }
+  },
+  "devDependencies": {
+    "@jridgewell/gen-mapping": "0.3.13",
+    "@types/node": "22.20.5",
+    "@types/vscode": "1.145.0",
+    "@vscode/vsce": "4.1.0",
+    "decimal.js": "10.6.0",
+    "esbuild": "0.28.2",
+    "escape-string-regexp": "5.0.0",
+    "fast-deep-equal": "3.1.3",
+    "fflate": "0.8.3",
+    "prettier": "3.10.0",
+    "typescript": "7.0.2",
+    "vscode-languageserver": "9.0.1",
+    "vscode-languageserver-textdocument": "1.0.12",
+    "vscode-oniguruma": "2.0.1",
+    "vscode-textmate": "9.2.0"
+  },
+  "aryaEditorVersion": "1.3.7"
+}

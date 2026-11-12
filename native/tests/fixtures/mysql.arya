@@ -1,0 +1,36 @@
+use std "mysql" as mysql
+use std "debug" as debug
+use std "runtime" as runtime
+const db = await mysql.connect({socketPath: args[0], user: "root", connectionLimit: 2, queueLimit: 20, timezone: "Z"})
+debug.assert(await db.ping())
+await db.execute("CREATE DATABASE arya_native_acceptance")
+await db.execute("CREATE TABLE arya_native_acceptance.invoice (id BIGINT UNSIGNED PRIMARY KEY, amount DECIMAL(24,6), name VARCHAR(128), payload BLOB, created DATETIME(3))")
+await db.execute("INSERT INTO arya_native_acceptance.invoice VALUES (?, ?, ?, ?, ?)", ["18446744073709551615", "9007199254740991.123456", "O'Reilly; DROP TABLE invoice", Buffer.from([0, 255, 1]), new Date("2026-11-12T00:00:00.125Z")])
+let row = await db.one("SELECT * FROM arya_native_acceptance.invoice")
+debug.assert(row.id == "18446744073709551615" and row.amount == "9007199254740991.123456")
+debug.assert(row.name == "O'Reilly; DROP TABLE invoice" and row.payload.equals(Buffer.from([0, 255, 1])))
+debug.assert(row.created.toISOString() == "2026-11-12T00:00:00.125Z")
+debug.assert(await db.one("SELECT 1 WHERE FALSE") == null)
+debug.assert(await db.scalar("SELECT NULL") == null)
+let escaped = null
+let committed = await db.transaction(async fn(tx) { escaped = tx; await tx.execute("UPDATE arya_native_acceptance.invoice SET amount = amount + 1"); return await tx.scalar("SELECT amount FROM arya_native_acceptance.invoice") })
+debug.assert(committed == "9007199254740992.123456")
+let closedHandle = false
+try { await escaped.scalar("SELECT 1") } catch error { closedHandle = error.code == "ARYA_MYSQL_TRANSACTION_CLOSED" }
+debug.assert(closedHandle)
+let failed = false
+try { await db.transaction(async fn(tx) { await tx.execute("UPDATE arya_native_acceptance.invoice SET amount = 0"); try { await tx.execute("INSERT INTO arya_native_acceptance.invoice (id) VALUES (?)", ["18446744073709551615"]) } catch _failure {} }) } catch error { failed = error.code == "ARYA_MYSQL_QUERY" and error.driverCode == "ER_DUP_ENTRY" }
+debug.assert(failed and await db.scalar("SELECT amount FROM arya_native_acceptance.invoice") == committed)
+failed = false
+try { await db.transaction(async fn(tx) { tx.execute("SELECT * FROM arya_native_acceptance.missing") }) } catch error { failed = error.code == "ARYA_MYSQL_QUERY" }
+debug.assert(failed)
+await db.transaction(async fn(tx) { let rejected = false; try { await db.scalar("SELECT 1") } catch error { rejected = error.code == "ARYA_MYSQL_TRANSACTION" }; debug.assert(rejected, "pool was usable inside a transaction"); debug.assert(str(await tx.scalar("SELECT 2")) == "2", "transaction scalar result") })
+let operations = []
+for value in range(6) { operations.push(db.scalar("SELECT ? + SLEEP(0.01)", [value])) }
+debug.assert(runtime.deepEqual(await Promise.all(operations), [0, 1, 2, 3, 4, 5]))
+failed = false
+try { await db.execute("SELECT ?", [{}]) } catch error { failed = error.code == "ARYA_MYSQL_ARGUMENTS" }; debug.assert(failed)
+await db.execute("DROP DATABASE arya_native_acceptance")
+let pending = db.scalar("SELECT 7 + SLEEP(0.02)"); let closing = db.close(); debug.assert(str(await pending) == "7"); await closing
+failed = false; try { await db.ping() } catch error { failed = error.code == "ARYA_MYSQL_CLOSED" }; debug.assert(failed)
+print("native MySQL: prepared parameters, exact decimals/BIGINT, binary/date values, pooling, transaction rollback and drain passed")

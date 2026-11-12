@@ -1,0 +1,56 @@
+# Exact, reusable native invoice and ledger batches. Amounts remain strings.
+use std "_accounting" as native
+use std "runtime" as runtime
+use std "async" as tasks
+let activeAsync = 0
+fn failure(code, message) { let error = new Error(message); error.code = code; return error }
+fn execution(value, asynchronous) {
+  if value == undefined { value = {} }
+  if runtime.kind(value) != "record" or runtime.hasAccessor(value) { throw failure("ARYA_ACCOUNTING_INPUT", "Execution options must be a record of data fields.") }
+  for key in runtime.keys(value) { if key != "backend" and (key != "signal" or not asynchronous) { throw failure("ARYA_ACCOUNTING_INPUT", "Unknown execution option: " + key) } }
+  if value.backend != undefined and not ["auto", "native"].includes(value.backend) { throw failure("ARYA_ACCOUNTING_BACKEND", "Native Arya supports backend auto or native.") }
+  let signal = value.signal
+  if signal != undefined and (signal == null or runtime.kind(signal.aborted) != "boolean" or runtime.kind(signal.addEventListener) != "function" or runtime.kind(signal.removeEventListener) != "function") { throw failure("ARYA_ACCOUNTING_INPUT", "signal must be an AbortSignal.") }
+  return signal
+}
+fn abort(signal) {
+  if signal != undefined and signal.aborted { let error = failure("ARYA_ACCOUNTING_ABORTED", "Calculation aborted."); error.name = "AbortError"; throw error }
+}
+fn calculate(prepared, options) {
+  execution(options, false)
+  let state = native.begin(prepared)
+  native.step(state, 1000000)
+  return native.finish(state)
+}
+async fn calculateAsync(prepared, options) {
+  let signal = execution(options, true)
+  abort(signal)
+  if activeAsync >= 2 { throw failure("ARYA_ACCOUNTING_BUSY", "Two asynchronous calculations are active; apply backpressure.") }
+  activeAsync += 1
+  try {
+    await tasks.sleep(0)
+    abort(signal)
+    let state = native.begin(prepared)
+    while true {
+      abort(signal)
+      let done = native.step(state, 4096)
+      await tasks.sleep(0)
+      if done { break }
+    }
+    abort(signal)
+    return native.finish(state)
+  } finally { activeAsync -= 1 }
+}
+fn batch(prepared) {
+  let info = native.metadata(prepared)
+  return runtime.freeze({currency: info.currency, scale: info.scale, length: info.length,
+    calculate: fn(options) { return calculate(prepared, options) },
+    calculateAsync: fn(options) { return calculateAsync(prepared, options) }})
+}
+export fn prepareInvoices(lines, options) { return batch(native.prepareInvoices(lines, options)) }
+export fn prepareLedger(entries, options) { return batch(native.prepareLedger(entries, options)) }
+export fn invoiceBatch(lines, options, selected) { return prepareInvoices(lines, options).calculate(selected) }
+export fn ledgerBatch(entries, options, selected) { return prepareLedger(entries, options).calculate(selected) }
+export fn backendInfo() {
+  return runtime.freeze({nativeAvailable: true, nativeReason: null, nativeAbi: 2, platform: runtime.platform(), maxRows: 1000000, maxAccounts: 100000, maxAsyncJobs: 2})
+}

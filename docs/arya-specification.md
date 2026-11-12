@@ -1,8 +1,10 @@
+> Historical implementation guide. The original is preserved in [compat/node/docs/arya-specification.md](../compat/node/docs/arya-specification.md). Current native behavior is defined by the [native profile](native-profile.md), [SDK guide](native-sdk.md) and [qualification report](native-independence-report.md).
+
 # Arya language specification — Node.js runtime
 
 The 1.3 source line uses Node.js as its single execution runtime, retaining the core semantics and [1.2 amendments](#13-arya-12-preview-amendments). [Section 14](#14-nodejs-only-runtime-in-130-alpha1) records removal of the earlier experimental native profile.
 
-**Status:** normative experimental contract, reviewed 11 November 2026. **Current implementation:** `1.3.0-alpha.9`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
+**Status:** normative experimental contract, reviewed 11 November 2026. **Published baseline:** `1.3.0-alpha.9`, Node.js 22.15 or later, retaining the 0.2 core with the amendments in sections 13–17. Sections 19–22 describe unreleased source additions through `1.3.0-alpha.12`. This is a prerelease contract; changes require a decision record, conformance test, and migration note. The [reference](arya-language.md) and [tutorial](arya-tutorial.md) explain usage; this document decides language rules when their summaries are incomplete.
 
 “Must” identifies a requirement. Sections 1–10 describe the implemented core, including M3 lexical resolution. Section 11 defines the implemented Arya module graph and publication contract. Section 12 records implementation limits rather than language semantics. Host APIs follow the supported Node/ECMAScript implementation; their complete APIs and platform-dependent error wording are not redefined here.
 
@@ -227,7 +229,7 @@ The output directory is owned generated storage, never the project root or a dir
 
 ## 12. Implementation limits and conformance
 
-The compiler accepts at most 262,144 UTF-16 source units and 50,000 tokens excluding EOF, including newline tokens. The CLI's bounded reader separately accepts at most 262,144 UTF-8 bytes, so a Unicode file can reach the CLI limit sooner. Parser nesting is capped at 100 active guarded expression/unary/block operations, not 100 physical brace pairs. These defensive limits cause compile errors; they do not limit runtime recursion or list sizes generally. Projects are capped at 1024 canonical Arya modules and 16 MiB total UTF-8 source, in addition to per-file bounds. Runtime range/Python limits are described in their sections. Changes to limits must be documented without presenting them as new syntax or type rules.
+The compiler accepts at most 262,144 UTF-16 source units and 50,000 tokens excluding EOF, including newline tokens. The CLI's bounded reader separately accepts at most 262,144 UTF-8 bytes, so a Unicode file can reach the CLI limit sooner. Parser nesting is capped at 100 active guarded expression/unary/block operations, not 100 physical brace pairs. The unreleased compiler additionally bounds AST structure depth to 256, including left-associated expressions and plain member chains. These defensive limits cause compile errors; they do not limit runtime recursion or list sizes generally. Projects are capped at 1024 canonical Arya modules and 16 MiB total UTF-8 source, in addition to per-file bounds. Runtime range/Python limits are described in their sections. Changes to limits must be documented without presenting them as new syntax or type rules.
 
 **Runtime isolation:** module-level host declarations and import aliases are isolated from injected helper dependencies beginning with 1.3.0-alpha.7. User references retain lexical timing and shadowing. See section 17 and its conformance regressions.
 
@@ -349,3 +351,53 @@ Compiler version 1.3.0-alpha.9 and extension version 1.3.4 are distinct identiti
 The extension's `aryaLanguageVersion` identifies its bundled compiler; the root
 `aryaEditorVersion` selects its numeric extension release. See [candidate notes](releases/1.3.0-alpha.9.md)
 for actual verification. Neither version is published by a local build.
+
+
+## 19. Unreleased editor/compiler improvements
+
+The [source improvement contract](editor-and-compiler-improvements.md) extends the
+published R-002 open-buffer behavior with bounded closed-file discovery and
+per-module analysis reuse. Static namespace navigation/rename includes literal
+computed members; dynamic namespace use or incomplete discovery blocks public
+rename. The direct snapshot APIs retain their explicit document scope.
+
+Parsing and JavaScript emission are separate phases. Generated runtimes include
+only requested standard libraries and dependencies. Additional static standard
+signatures, list element propagation and a conservative declaration reader apply
+to checked modules; unsupported declarations remain unknown. No new syntax,
+runtime type validation or stable compatibility promise is introduced.
+
+## 20. Flow and npm typing — unreleased alpha.10
+
+Writes check the declared binding contract independently of a temporary narrowing.
+Assignments update subsequent reads; normally completing branch states join.
+Loop-body writes and potentially captured writes invalidate old narrowing at
+iteration, call and await boundaries. Exception/finally checking is conservative.
+Mutable record/array aliases cannot widen field/element contracts; fresh literals
+may initialize wider shapes. A const snapshot can retain a checked callback value.
+No runtime validators or general host effect/alias analysis are implied.
+
+The bounded declaration reader now accepts default/CommonJS exports, local export
+aliases, a single matching ambient module and up to 64 non-generic function
+overloads per binding. Calls select the first compatible overload. Unsupported
+syntax or unresolved aliases discard that file's inferred contract. Generic and
+advanced TypeScript declarations still need a trusted Arya import annotation.
+See [implementation, compatibility and limits](editor-and-compiler-improvements.md).
+
+## 21. Exact accounting library — unreleased alpha.11
+
+The optional [accounting batch library](accounting-engine.md) is imported through
+the existing JavaScript bridge as `arya-accounting` or `arya-language/accounting`.
+It introduces no language syntax, machine-width primitive or implicit conversion.
+Its explicit scale, rounding, checked bounds and `line-v1` calculation policy
+apply only to its APIs. Decimal inputs and monetary results are strings; ordinary
+Arya `number` expressions retain the existing JavaScript semantics.
+
+The portable implementation uses host BigInt. Its optional native calculation
+kernel still requires Node.js and does not change the `arya build` output contract.
+The [target architecture](architecture-target.md) and [staged roadmap](implementation-roadmap.md)
+describe future typed IR/native executable work without declaring it implemented.
+
+## 22. Native scalar executable preview — unreleased alpha.12
+
+The opt-in [native preview](native-preview.md) reuses the existing frontend and preserves binary64 number semantics for its supported subset. It introduces no integer/Money conversion or syntax change. Unsupported operations are diagnosed; native output has no Node/Python execution fallback. Default Node modules retain their contract. Broader native types, memory, modules and platform guarantees remain future work.

@@ -1,0 +1,34 @@
+use std "debug" as debug
+use std "runtime" as runtime
+fn equal(left, right) { debug.assert(runtime.deepEqual(left, right), "Native host value mismatch") }
+equal(Object.keys({b: 1, "10": 2, "2": 3}), ["2", "10", "b"])
+equal(Object.entries(Object.fromEntries([["__proto__", 7], ["value", 8]])), [["__proto__", 7], ["value", 8]])
+debug.assert(Object == Object and Number == Number)
+debug.assert(Number.isSafeInteger(9007199254740991) and not Number.isSafeInteger(9007199254740992))
+equal([parseInt(" -0xfZ", 0), parseInt("101junk", 2), parseFloat("1.25e2tail")], [-15, 5, 125])
+let map = new Map([["a", 1], [NaN, 4]])
+map.set("a", 2); debug.assert(map.get(NaN) == 4 and map.size == 2); equal(map.entries(), [["a", 2], [NaN, 4]])
+let set = new Set([1, 1, 2]); debug.assert(set.size == 2); set.delete(1); equal(set.values(), [2])
+let controller = new AbortController(); let called = 0
+controller.signal.addEventListener("abort", fn(event) { called += 1; debug.assert(event.target == controller.signal) })
+controller.abort("reason"); controller.abort("again")
+debug.assert(controller.signal.aborted and controller.signal.reason == "reason" and called == 1)
+try { controller.signal.throwIfAborted(); throw new Error("missing cancellation") } catch value { equal(value, "reason") }
+let bytes = Buffer.from("Hello 🙂"); equal(bytes.toString(), "Hello 🙂")
+equal(bytes.toString("base64"), "SGVsbG8g8J+Zgg==")
+equal(Buffer.from(bytes.toString("base64"), "base64").toString(), "Hello 🙂")
+let view = bytes.subarray(0, 5); view[0] = 104; equal(bytes.toString(), "hello 🙂")
+let binary = Buffer.alloc(16); binary.writeInt32BE(-1234, 0); binary.writeDoubleLE(1.25, 8)
+equal(binary.readInt32BE(0), -1234); equal(binary.readDoubleLE(8), 1.25)
+equal(JSON.stringify(Buffer.from([0, 255])), '{"type":"Buffer","data":[0,255]}')
+let url = new URL("../c?q=one&q=two", "https://user:pass@bücher.example:443/a/b")
+equal(url.href, "https://user:pass@xn--bcher-kva.example/c?q=one&q=two")
+equal(url.origin, "https://xn--bcher-kva.example"); equal(url.searchParams.getAll("q"), ["one", "two"])
+let params = url.searchParams; params.append("space", "a b"); debug.assert(url.search.endsWith("space=a+b"))
+url.search = "?x=1"; equal(params.get("x"), "1"); debug.assert(params == url.searchParams)
+debug.assert(URL.canParse("/relative", "https://example.com") and not URL.canParse("garbage"))
+equal(URL.parse("garbage"), null); equal(JSON.stringify(url), '"https://user:pass@xn--bcher-kva.example/c?x=1"')
+equal(encodeURIComponent("\0/🙂"), "%00%2F%F0%9F%99%82")
+equal(decodeURI("%00%2f%F0%9F%99%82"), "\0%2f🙂")
+for invalid in ["%c0%af", "%ed%a0%80", "%ff", "%e2%82"] { let failed = false; try { decodeURIComponent(invalid) } catch failure { failed = failure.name == "URIError" }; debug.assert(failed) }
+print("native host values passed")

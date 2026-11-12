@@ -1,0 +1,35 @@
+# CSV on stdin: account,amount. One explicit currency/policy for the entire
+# stream. Amounts and account names are data, including spreadsheet formulas.
+use std "io" as io
+use std "csv" as csv
+use std "decimal" as decimal
+use std "money" as money
+use std "json" as json
+use std "process" as process
+const values = decimal.values
+const policy = {currency: args[0] ?? "USD", scale: Number(args[1] ?? "2"), rounding: args[2] ?? "half-even"}
+money.create("0", policy)
+const zero = values.parse("0")
+const totals = new Map()
+const controller = new AbortController()
+let header = true
+let count = 0
+fn consume(rows: any) {
+  for row in rows {
+    if header { if len(row) != 2 or row[0] != "account" or row[1] != "amount" { throw new Error("Expected account,amount CSV header") }; header = false; continue }
+    if len(row) != 2 or len(row[0]) < 1 or len(row[0]) > 64 { throw new Error("Use two fields and an account name of 1 to 64 UTF-16 units") }
+    const amount = values.parse(row[1])
+    let previous = totals.get(row[0])
+    if previous == undefined { if totals.size >= 4096 { throw new Error("At most 4096 accounts may be grouped") }; previous = zero }
+    totals.set(row[0], values.add(previous, amount)); count += 1
+  }
+}
+const remove = process.onSignal("SIGINT", fn(signal) { controller.abort() })
+try {
+  # Allow three carried UTF-8 bytes while keeping each CSV push <=65536 units.
+  await csv.each(fn() { return io.readChunk(65532) }, consume, {signal: controller.signal})
+} finally { remove() }
+if header { throw new Error("CSV header is required") }
+let accounts: any = []
+for pair in totals { accounts.push({account: pair[0], total: money.create(values.format(pair[1]), policy)}) }
+print(json.stringify({rows: count, accounts: accounts}))

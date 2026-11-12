@@ -1,0 +1,118 @@
+# Opt-in decimal policies. Existing application policies are not migrated.
+use std "decimal" as decimal
+use std "money" as money
+use std "runtime" as runtime
+use std "async" as tasks
+const v = decimal.values
+const zero = v.parse("0")
+const hundred = v.parse("100")
+const nearRate = v.parse("0.01")
+const farRate = v.parse("0.1")
+const halfCent = v.parse("0.005")
+let active = 0
+fn fail(code, message) { let error = new RangeError(message); error.code = code; throw error }
+fn bounded(rows) { if runtime.kind(rows) != "list" or len(rows) > 100000 { fail("ARYA_FINANCE_LIMIT", "Use a batch of at most 100000 rows.") } }
+fn data(row) { if not runtime.isRecord(row) or runtime.hasAccessor(row) { fail("ARYA_FINANCE_INPUT", "Financial rows must contain data fields.") } }
+fn policy(selected) { money.create("0", selected); return runtime.freeze({currency: selected.currency, scale: selected.scale, rounding: selected.rounding}) }
+fn rounded(amount, selected) { return v.quantize(amount, selected.scale, selected.rounding) }
+fn absolute(amount) { if v.compare(amount, zero) < 0 { return v.subtract(zero, amount) }; return amount }
+fn abort(signal) { if signal != undefined { signal.throwIfAborted() } }
+fn signalOf(options) {
+  if options == undefined { return undefined }; data(options)
+  for key in runtime.keys(options) { if key != "signal" { fail("ARYA_FINANCE_INPUT", "Unknown execution option: " + key) } }
+  return options.signal
+}
+fn batch(rows, begin, step, finish) {
+  fn calculate() { let state = begin(); for row at index in rows { step(state, row, index) }; return finish(state) }
+  async fn calculateAsync(options) {
+    const signal = signalOf(options); abort(signal)
+    if active >= 2 { fail("ARYA_FINANCE_BUSY", "Two financial batches are active; apply backpressure.") }
+    active += 1
+    try {
+      await tasks.sleep(0); abort(signal)
+      let state = begin()
+      for row at index in rows {
+        if index % 4096 == 0 { abort(signal); await tasks.sleep(0); abort(signal) }
+        step(state, row, index)
+      }
+      abort(signal); return finish(state)
+    } finally { active -= 1 }
+  }
+  return runtime.freeze({length: len(rows), calculate: calculate, calculateAsync: calculateAsync})
+}
+export fn prepareInvoices(lines, discount, fxRate, options) {
+  bounded(lines); const selected = policy(options); const packed = []
+  for line in lines { data(line); packed.push({subtotal: v.parse(line.lineSubtotal), tax: v.parse(line.taxAmount)}) }
+  const reduction = v.parse(discount); const rate = v.parse(fxRate)
+  return batch(packed, fn() { return {subtotal: zero, tax: zero} },
+    fn(state, row, index) { state.subtotal = v.add(state.subtotal, row.subtotal); state.tax = v.add(state.tax, row.tax) },
+    fn(state) {
+      const subtotal = rounded(state.subtotal, selected); const tax = rounded(state.tax, selected)
+      const total = rounded(v.subtract(v.add(subtotal, tax), reduction), selected)
+      return {subtotal: v.format(subtotal), taxTotal: v.format(tax), discountAmount: discount,
+        totalAmount: v.format(total), baseTotal: v.format(rounded(v.multiply(total, rate), selected))}
+    })
+}
+export fn invoiceTotals(lines, discount, fxRate, options) { return prepareInvoices(lines, discount, fxRate, options).calculate() }
+export fn prepareBudgets(rows, options) {
+  bounded(rows); const selected = policy(options); const packed = []
+  for row in rows { data(row); if runtime.kind(row.revenue) != "boolean" { fail("ARYA_FINANCE_INPUT", "Budget revenue must be boolean.") }; packed.push({budget: v.parse(row.budget), actual: v.parse(row.actual), revenue: row.revenue}) }
+  return batch(packed, fn() { return {rows: []} }, fn(state, row, index) {
+    const planned = rounded(row.budget, selected)
+    let actual = row.actual; if row.revenue { actual = v.subtract(zero, actual) }; actual = rounded(actual, selected)
+    const variance = v.subtract(actual, planned); let percent = null
+    if v.compare(planned, zero) != 0 { percent = v.format(v.divide(v.multiply(variance, hundred), absolute(planned), 1, selected.rounding)) }
+    let favorable = v.compare(actual, planned) <= 0; if row.revenue { favorable = v.compare(actual, planned) >= 0 }
+    state.rows.push({budget: v.format(planned), actual: v.format(actual), variance: v.format(variance), variancePct: percent, favorable: favorable})
+  }, fn(state) { return state.rows })
+}
+export fn budgetVariance(rows, options) { return prepareBudgets(rows, options).calculate() }
+export fn prepareScores(rows) {
+  bounded(rows); const packed = []
+  for row in rows { data(row); packed.push({left: v.parse(row.left), right: v.parse(row.right)}) }
+  return batch(packed, fn() { return {rows: []} }, fn(state, row, index) {
+    const difference = absolute(v.subtract(row.left, row.right)); let score = 0
+    if v.compare(difference, halfCent) < 0 { score = 1 }
+    else {
+      let larger = absolute(row.left); let right = absolute(row.right); if v.compare(right, larger) > 0 { larger = right }
+      if v.compare(larger, zero) != 0 {
+        if v.compare(difference, v.multiply(larger, nearRate)) <= 0 { score = 0.85 }
+        else if v.compare(difference, v.multiply(larger, farRate)) < 0 {
+          # The score is binary64; exact amounts and threshold decisions are not.
+          const ratio = Number(v.format(v.divide(difference, larger, 30, "half-up")))
+          score = Math.max(0, 0.85 * (1 - (ratio - 0.01) / 0.09))
+        }
+      }
+    }
+    state.rows.push(score)
+  }, fn(state) { return state.rows })
+}
+export fn amountScores(rows) { return prepareScores(rows).calculate() }
+export fn prepareProduction(amount, units, totalUnits, options) {
+  bounded(units); const selected = policy(options); const parsed = v.parse(amount); const total = v.parse(totalUnits); const packed = []
+  if v.compare(total, zero) <= 0 { fail("ARYA_FINANCE_INPUT", "Total units must be positive.") }
+  for unit in units { let exact = v.parse(unit); if v.compare(exact, zero) < 0 { fail("ARYA_FINANCE_INPUT", "Production units must be nonnegative.") }; packed.push(exact) }
+  return batch(packed, fn() { return {cumulative: zero, previous: zero, rows: []} }, fn(state, unit, index) {
+    state.cumulative = v.add(state.cumulative, unit); if v.compare(state.cumulative, total) > 0 { state.cumulative = total }
+    const target = v.divide(v.multiply(parsed, state.cumulative), total, selected.scale, selected.rounding)
+    state.rows.push(v.format(v.subtract(target, state.previous))); state.previous = target
+  }, fn(state) { return state.rows })
+}
+export fn production(amount, units, totalUnits, options) { return prepareProduction(amount, units, totalUnits, options).calculate() }
+export fn allocate(amount, weights, options) {
+  bounded(weights); const selected = policy(options); let total = zero
+  for weight in weights { let exact = v.parse(weight); if v.compare(exact, zero) < 0 { fail("ARYA_FINANCE_INPUT", "Allocation weights must be nonnegative.") }; total = v.add(total, exact) }
+  if v.compare(total, zero) <= 0 { fail("ARYA_FINANCE_INPUT", "Allocation weights must have a positive total.") }
+  # Cumulative targets assign deterministic residuals in original input order.
+  return production(v.format(rounded(v.parse(amount), selected)), weights, v.format(total), selected)
+}
+export fn straightLine(cost, salvage, periods, options) {
+  const selected = policy(options)
+  if not Number.isInteger(periods) or periods < 1 or periods > 100000 { fail("ARYA_FINANCE_LIMIT", "Periods must be from 1 to 100000.") }
+  const exactCost = v.parse(cost); const exactSalvage = v.parse(salvage)
+  if v.compare(exactCost, zero) < 0 or v.compare(exactSalvage, zero) < 0 or v.compare(exactSalvage, exactCost) > 0 { fail("ARYA_FINANCE_INPUT", "Use nonnegative cost and salvage no greater than cost.") }
+  let remaining = rounded(v.subtract(exactCost, exactSalvage), selected)
+  const per = v.divide(remaining, v.parse(str(periods)), selected.scale, selected.rounding); const result = []
+  for index in range(periods) { let amount = per; if v.compare(amount, remaining) > 0 or index == periods - 1 { amount = remaining }; result.push(v.format(rounded(amount, selected))); remaining = v.subtract(remaining, amount) }
+  return result
+}

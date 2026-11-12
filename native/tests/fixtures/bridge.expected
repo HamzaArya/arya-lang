@@ -1,0 +1,3 @@
+{"id":"invoice-1","ok":true,"result":{"subtotal":"20.05","taxTotal":"1.50","totalAmount":"20.55","baseTotal":"1448.78"}}
+{"id":"large","ok":true,"result":{"subtotal":"9007199254740993.31","taxTotal":"0.09","totalAmount":"9007199254740993.40","baseTotal":"9007199254740993.40"}}
+{"id":"bad","ok":false,"error":{"code":"ARYA_OPERATION","message":"Unsupported operation."}}

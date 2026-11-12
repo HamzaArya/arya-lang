@@ -1,0 +1,5 @@
+# Work in integer cents for this small invoice example.
+export fn total(unitCents: number, quantity: number): number {
+  if quantity < 0 { throw {code: "INVALID_QUANTITY", message: "Quantity cannot be negative."} }
+  return unitCents * quantity
+}

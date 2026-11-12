@@ -1,0 +1,563 @@
+{
+  "name": "arya-native",
+  "version": "2.0.0-alpha.2",
+  "status": "qualified-native-alpha",
+  "compiler": "Self-hosted Arya frontend, C11 ahead-of-time backend, native managed value runtime",
+  "requiresNodeForCompiler": false,
+  "requiresNodeForPrograms": false,
+  "requiresPythonForBuildOrCorePrograms": false,
+  "legacyStandardModulesWithNativeImplementations": 18,
+  "publicNativeModules": 26,
+  "qualifiedPlatforms": [
+    "darwin-arm64"
+  ],
+  "build": {
+    "core": "POSIX shell, make, C11 compiler",
+    "fullSourceSDK": "core tools plus C++20 for Ada URL and Perl for OpenSSL configuration",
+    "commands": [
+      "make native",
+      "make native-editor",
+      "make native-test",
+      "make native-profile-test",
+      "make native-clean-test"
+    ]
+  },
+  "language": [
+    "binary64 numbers",
+    "booleans",
+    "UTF-16 strings",
+    "dense and sparse lists",
+    "records",
+    "functions and closures",
+    "relative modules with live exports",
+    "if/while/for-at",
+    "default/rest parameters and spread",
+    "concise functions and pipelines",
+    "guards",
+    "try/catch/finally",
+    "async/await and promises",
+    "flow-sensitive gradual types with array, record, function, union and promise contracts",
+    "native source locations and stack traces"
+  ],
+  "libraries": {
+    "async": {
+      "implementation": "native",
+      "members": [
+        "map",
+        "each",
+        "sleep"
+      ]
+    },
+    "decimal": {
+      "implementation": "native",
+      "members": [
+        "from",
+        "add",
+        "subtract",
+        "multiply",
+        "compare",
+        "divide",
+        "quantize",
+        "toNumber",
+        "roundingModes",
+        "values"
+      ],
+      "values": "Immutable parsed values: parse, format, add, subtract, multiply, compare, divide, quantize, toNumber. libmpdec owns exact coefficients; public layout remains opaque."
+    },
+    "datetime": {
+      "implementation": "native",
+      "members": [
+        "date",
+        "instant",
+        "zoned",
+        "fromDate",
+        "toDate",
+        "dateAt",
+        "atOffset"
+      ]
+    },
+    "fs": {
+      "implementation": "native",
+      "members": [
+        "readText",
+        "writeText",
+        "exists",
+        "list",
+        "readTextSync",
+        "writeTextSync",
+        "existsSync",
+        "listSync",
+        "appendText",
+        "makeDirectory",
+        "rename",
+        "remove",
+        "tempDirectory",
+        "removeDirectory",
+        "publish",
+        "publishDirectory",
+        "isFile",
+        "infoSync"
+      ]
+    },
+    "math": {
+      "implementation": "native",
+      "members": [
+        "abs",
+        "acos",
+        "acosh",
+        "asin",
+        "asinh",
+        "atan",
+        "atanh",
+        "atan2",
+        "cbrt",
+        "ceil",
+        "clz32",
+        "cos",
+        "cosh",
+        "exp",
+        "expm1",
+        "floor",
+        "fround",
+        "f16round",
+        "hypot",
+        "imul",
+        "log",
+        "log10",
+        "log1p",
+        "log2",
+        "max",
+        "min",
+        "pow",
+        "random",
+        "round",
+        "sign",
+        "sin",
+        "sinh",
+        "sqrt",
+        "tan",
+        "tanh",
+        "trunc",
+        "E",
+        "LN10",
+        "LN2",
+        "LOG10E",
+        "LOG2E",
+        "PI",
+        "SQRT1_2",
+        "SQRT2"
+      ]
+    },
+    "path": {
+      "implementation": "native",
+      "members": [
+        "normalize",
+        "isAbsolute",
+        "join",
+        "resolve",
+        "relative",
+        "dirname",
+        "basename",
+        "extname",
+        "format",
+        "parse",
+        "toNamespacedPath",
+        "_makeLong",
+        "matchesGlob",
+        "sep",
+        "delimiter",
+        "posix",
+        "win32",
+        "realPath"
+      ]
+    },
+    "json": {
+      "implementation": "native",
+      "members": [
+        "parse",
+        "stringify",
+        "read",
+        "write"
+      ]
+    },
+    "web": {
+      "implementation": "native",
+      "members": [
+        "serve",
+        "route",
+        "response",
+        "error",
+        "health",
+        "shutdown"
+      ]
+    },
+    "mysql": {
+      "implementation": "native",
+      "members": [
+        "connect"
+      ]
+    },
+    "env": {
+      "implementation": "native",
+      "members": [
+        "get",
+        "require",
+        "int",
+        "bool"
+      ]
+    },
+    "validate": {
+      "implementation": "native",
+      "members": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "enum",
+        "optional",
+        "nullable",
+        "array",
+        "object",
+        "check",
+        "parse"
+      ]
+    },
+    "log": {
+      "implementation": "native",
+      "members": [
+        "create"
+      ]
+    },
+    "python": {
+      "implementation": "native",
+      "members": [
+        "client",
+        "call",
+        "map",
+        "bind",
+        "info",
+        "close",
+        "stats"
+      ]
+    },
+    "debug": {
+      "implementation": "native",
+      "members": [
+        "assert",
+        "inspect",
+        "trace"
+      ]
+    },
+    "list": {
+      "implementation": "native",
+      "members": [
+        "map",
+        "flatMap",
+        "filter",
+        "find",
+        "reduce",
+        "groupBy",
+        "sortBy",
+        "take",
+        "unique",
+        "sum",
+        "reserve"
+      ]
+    },
+    "security": {
+      "implementation": "native",
+      "members": [
+        "randomToken",
+        "uuid",
+        "generateKey",
+        "hash",
+        "hmac",
+        "verifyHmac",
+        "timingSafeEqual",
+        "hashPassword",
+        "verifyPassword",
+        "passwordNeedsUpgrade",
+        "verifyPasswordAndUpgrade",
+        "keyring",
+        "encrypt",
+        "decrypt"
+      ]
+    },
+    "testing": {
+      "implementation": "native",
+      "members": [
+        "test",
+        "suite",
+        "skip",
+        "todo",
+        "before",
+        "after",
+        "beforeEach",
+        "afterEach",
+        "assert",
+        "equal",
+        "notEqual",
+        "deepEqual",
+        "notDeepEqual",
+        "throws",
+        "rejects",
+        "fail",
+        "mock"
+      ]
+    },
+    "ui": {
+      "implementation": "native",
+      "members": [
+        "is",
+        "not",
+        "when",
+        "section",
+        "divider",
+        "link",
+        "code",
+        "preview",
+        "badge",
+        "alert",
+        "stat",
+        "avatar",
+        "textarea",
+        "slider",
+        "checkbox",
+        "radio",
+        "switch",
+        "field",
+        "progress",
+        "spinner",
+        "skeleton",
+        "empty",
+        "list",
+        "table",
+        "breadcrumbs",
+        "tabs",
+        "accordion",
+        "dialog",
+        "tooltip",
+        "open",
+        "close",
+        "copy",
+        "theme",
+        "toast",
+        "presets",
+        "keyframes",
+        "animate",
+        "pause",
+        "resume",
+        "cancel",
+        "parallel",
+        "container",
+        "buttonGroup",
+        "image",
+        "descriptionList",
+        "timeline",
+        "steps",
+        "pagination",
+        "segmented",
+        "search",
+        "meter",
+        "navbar",
+        "hero",
+        "features",
+        "pricing",
+        "testimonials",
+        "faq",
+        "cta",
+        "footer",
+        "templates",
+        "template",
+        "bind",
+        "motion",
+        "element",
+        "stack",
+        "row",
+        "grid",
+        "card",
+        "heading",
+        "text",
+        "button",
+        "input",
+        "label",
+        "form",
+        "select",
+        "set",
+        "toggle",
+        "increment",
+        "request",
+        "page"
+      ]
+    },
+    "io": {
+      "implementation": "native",
+      "members": [
+        "print",
+        "readLine",
+        "write",
+        "readChunk"
+      ]
+    },
+    "process": {
+      "implementation": "native",
+      "members": [
+        "run",
+        "exit",
+        "env",
+        "cwd",
+        "executable",
+        "error",
+        "onSignal"
+      ]
+    },
+    "runtime": {
+      "implementation": "native",
+      "members": [
+        "clock",
+        "collect",
+        "codeUnit",
+        "keys",
+        "platform",
+        "kind",
+        "sameValue",
+        "deepEqual",
+        "freeze",
+        "context",
+        "exitCode",
+        "defer",
+        "onFinish",
+        "elapsed",
+        "fieldGetter",
+        "error",
+        "readFrame",
+        "writeFrame",
+        "tag",
+        "hasAccessor",
+        "errorMatches",
+        "stringFromCodes",
+        "randomUUID",
+        "isRecord",
+        "jsonParse",
+        "jsonStringify",
+        "uriEncode",
+        "uriDecode"
+      ]
+    },
+    "accounting": {
+      "implementation": "native",
+      "members": [
+        "backendInfo",
+        "prepareInvoices",
+        "prepareLedger",
+        "invoiceBatch",
+        "ledgerBatch"
+      ]
+    },
+    "desktop": {
+      "implementation": "native",
+      "members": [
+        "open"
+      ]
+    },
+    "money": {
+      "implementation": "native",
+      "members": [
+        "create",
+        "add",
+        "subtract",
+        "compare",
+        "format",
+        "toNumber",
+        "rescale",
+        "convert",
+        "toMinorUnits",
+        "fromMinorUnits"
+      ]
+    },
+    "finance": {
+      "implementation": "native",
+      "members": [
+        "prepareInvoices",
+        "invoiceTotals",
+        "prepareBudgets",
+        "budgetVariance",
+        "prepareScores",
+        "amountScores",
+        "prepareProduction",
+        "production",
+        "allocate",
+        "straightLine"
+      ]
+    },
+    "csv": {
+      "implementation": "native",
+      "members": [
+        "decoder",
+        "each"
+      ]
+    }
+  },
+  "optionalDependencies": {
+    "python": "An explicit Python import/call needs a separately installed Python interpreter. Core compilation/execution never launches it.",
+    "mysql": "A separately installed MySQL C client SDK selected by ARYA_MYSQL_PREFIX; not bundled. Prepared statements, exact DECIMAL/BIGINT strings and bounded pools.",
+    "desktop": "macOS AppKit/WebKit system frameworks, linked only by explicit desktop imports.",
+    "editor": "The editor supplies its own extension host. The extension transports requests to the bundled native LSP; it is not a Node language compiler."
+  },
+  "limits": {
+    "decimal": "4096 context digits; 1024-character canonical input/output; output scales 0–100; nine explicit rounding modes",
+    "accounting": "1000000 rows, 100000 accounts, signed 64-bit per-line minor units, checked signed 128-bit products/aggregates, scales 0–6, two active cooperative asynchronous calculations",
+    "strings": "16 Mi UTF-16 units",
+    "buffers": "16 MiB",
+    "asyncTasks": 512,
+    "calls": 512,
+    "modules": 1024,
+    "source": "16 Mi UTF-16 units per project",
+    "regex": "PCRE2 native semantics, no JIT, bounded execution; not a full ECMAScript engine",
+    "csv": "65536 UTF-16 units per push; defaults: field 65536 units, record 1048576 units, 1024 columns; field/record configurable up to 1048576, columns up to 1024; readChunk 1–1048576 input bytes plus at most three carried UTF-8 bytes",
+    "json": "16 Mi UTF-16 input units, 16 MiB UTF-8 output, 100000 value nodes and depth 128; JSON-lines io.readLine frames are 1 MiB",
+    "money": "Explicit three-letter uppercase currency tag, scale 0–100 and explicit rounding; exact parsed amount with decimal bounds",
+    "finance": "100000 rows/periods, two active cooperative prepared calculations, 4096-row cancellation chunks; decimal bounds for all intermediates"
+  },
+  "compatibility": {
+    "retainedImplementation": "compat/node",
+    "nodePackageImports": "use js / Node packages and JavaScript module emission remain in the retained 1.3 implementation; native code uses Arya modules or explicit foreign protocols.",
+    "hostGlobals": "Native Object/Array/Map/Set/Date/Buffer/AbortSignal compatibility APIs are bounded subsets, documented in docs/native-profile.md.",
+    "ledger": "No Ledger project, installed package, database or data was modified. Existing pinned 1.3 installations remain separate. The native JSON-lines financial worker is an opt-in integration path."
+  },
+  "unqualifiedTargets": [
+    "Windows",
+    "cross-compilation",
+    "WebAssembly",
+    "Linux/x64 platform release qualification"
+  ],
+  "provenance": "PROVENANCE.json",
+  "notices": "THIRD-PARTY-NOTICES.txt",
+  "nativeDataOptimizations": {
+    "status": "implemented; local Darwin ARM64 candidate qualification; not a platform release claim",
+    "compiler": [
+      "rooted immutable literal pool",
+      "guarded field offsets with generic fallback",
+      "immediate list/string/Map/Set method calls",
+      "statement-lifetime temporary reuse"
+    ],
+    "runtime": [
+      "bounded JSON string scratch and unescaped fast path",
+      "parser-local key reuse",
+      "guarded plain-data serialization",
+      "checked decimal integer operations with libmpdec fallback",
+      "opaque immutable parsed decimals",
+      "ordered Map/Set hash side indexes",
+      "list capacity reservation"
+    ],
+    "diagnostics": [
+      "allocation/string/fast-path counters",
+      "instrumented GC CPU time",
+      "bounded immutable checker binding state"
+    ],
+    "comparisonFlag": "--no-data-opt disables compiler data optimizations only",
+    "documentation": "docs/native-data-performance.md",
+    "contracts": "docs/native-finance-data.md"
+  },
+  "qualification": "qualification/2.0.0-alpha.2.json"
+}

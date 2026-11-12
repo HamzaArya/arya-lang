@@ -1,0 +1,37 @@
+# Native JSON-lines calculation bridge. Does not read/write Ledger data.
+use std "io" as io
+use std "json" as json
+use std "decimal" as decimal
+use std "accounting" as accounting
+
+fn invoice(request) {
+  const places = request.scale ?? 2
+  const rounding = request.rounding ?? "half-up"
+  let subtotal = "0"
+  let tax = "0"
+  for line in request.lines {
+    subtotal = decimal.add(subtotal, line.lineSubtotal)
+    tax = decimal.add(tax, line.taxAmount)
+  }
+  subtotal = decimal.quantize(subtotal, places, rounding)
+  tax = decimal.quantize(tax, places, rounding)
+  const total = decimal.quantize(decimal.subtract(decimal.add(subtotal, tax), request.discount ?? "0"), places, rounding)
+  const base = decimal.quantize(decimal.multiply(total, request.fxRate ?? "1"), places, rounding)
+  return {subtotal: subtotal, taxTotal: tax, totalAmount: total, baseTotal: base}
+}
+while true {
+  const text = io.readLine()
+  if text == null { break }
+  let request = null
+  try {
+    request = json.parse(text)
+    let result = null
+    if request.operation == "invoiceTotals" { result = invoice(request) }
+    else if request.operation == "invoiceBatch" { result = accounting.invoiceBatch(request.lines, request.options) }
+    else if request.operation == "ledgerBatch" { result = accounting.ledgerBatch(request.entries, request.options) }
+    else { throw {code: "ARYA_OPERATION", message: "Unsupported operation."} }
+    print(json.stringify({id: request.id, ok: true, result: result}))
+  } catch error {
+    print(json.stringify({id: request?.id ?? null, ok: false, error: {code: error.code ?? "ARYA_INPUT", message: error.message ?? str(error)}}))
+  }
+}

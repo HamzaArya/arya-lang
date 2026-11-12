@@ -1,0 +1,12 @@
+use std "decimal" as decimal
+print(decimal.add("9007199254740993.31", "0.09"))
+print(decimal.subtract("1.00", "2.25"), decimal.multiply("0.1", "0.2"))
+print(decimal.divide("1", "8", 2, "half-even"))
+print(decimal.quantize("-0.004", 2, "half-up"))
+for mode in decimal.roundingModes { print(mode, decimal.quantize("0.025", 2, mode), decimal.quantize("-0.025", 2, mode)) }
+print(decimal.toNumber("1.25"))
+try { decimal.toNumber("9007199254740993") } catch error { print(error.code) }
+try { decimal.divide("1", "0", 2, "half-even") } catch error { print(error.code) }
+try { decimal.from("1e2") } catch error { print(error.code) }
+print((1.005).toFixed(2), (2.5).toFixed(0), (-2.5).toFixed(0), (-0).toFixed(2))
+print(0.1, -0, 0.000001, 1e21)

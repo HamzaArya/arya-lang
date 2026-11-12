@@ -1,0 +1,23 @@
+name: Independent native toolchain
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fresh source build, tests and installed SDK without Node or Python
+        run: make native-clean-test
+      - name: Build local native compiler for optional arithmetic reference
+        run: make native
+      - name: Independent pure-Python decimal reference (test only)
+        run: python3 native/tests/decimal-reference.py

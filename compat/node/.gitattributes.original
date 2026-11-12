@@ -1,0 +1,4 @@
+# Preserve literal multiline source and fixture bytes across Git checkouts.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf

@@ -1,0 +1,37 @@
+use std "security" as safe
+use std "json" as json
+use std "fs" as fs
+use std "runtime" as runtime
+fn equal(actual, expected) { if not runtime.sameValue(actual, expected) { throw {message: "Security vector mismatch", actual: actual, expected: expected} } }
+const data = json.parse(await fs.readText(args[0]))
+let count = 0
+for vector in data.digests { equal(safe.hash(vector.text), vector.sha256); count += 1 }
+for vector in data.macs { equal(safe.hmac(vector.key, vector.text), vector.hmacSha256); equal(safe.verifyHmac(vector.key, vector.text, vector.hmacSha256), true); equal(safe.verifyHmac(vector.key, "changed", vector.hmacSha256), false); count += 1 }
+for vector in data.encryption {
+  let actual = ""
+  if vector.version == "v1" { actual = safe.decrypt(vector.key, vector.encrypted) }
+  else { let keys = {}; keys[vector.keyId] = vector.key; actual = safe.keyring({active: vector.keyId, keys: keys}).decrypt(vector.encrypted, vector.context) }
+  equal(actual, vector.plaintext); count += 1
+}
+for vector in data.passwords { equal(await safe.verifyPassword(vector.password, vector.hash), true); equal(await safe.verifyPassword("wrong", vector.hash), false); equal(safe.passwordNeedsUpgrade(vector.hash), vector.cost < 131072); count += 1 }
+const key = safe.generateKey()
+const text = json.parse('"private سلام 🔐\\u0000data"')
+const encrypted = safe.encrypt(key, text)
+equal(safe.decrypt(key, encrypted), text)
+equal(safe.decrypt(key, safe.encrypt(key, "")), "")
+let caught = false
+try { safe.decrypt(safe.generateKey(), encrypted) } catch error { equal(error.code, "ARYA_SECURITY_DECRYPT"); caught = true }
+equal(caught, true)
+const password = " native سلام 🔐 "
+const hashed = await safe.hashPassword(password)
+equal(await safe.verifyPassword(password, hashed), true)
+equal(await safe.verifyPassword(password.trim(), hashed), false)
+const ring = safe.keyring({active: "new", keys: {old: key, new: safe.generateKey()}})
+const oldRing = safe.keyring({active: "old", keys: {old: key}})
+const context = {account: "account-1", purpose: "notes"}
+const old = oldRing.encrypt(text, context)
+const rotated = ring.rotate(old, context)
+equal(rotated.rotated, true)
+equal(ring.decrypt(rotated.encrypted, context), text)
+equal(ring.rotate(rotated.encrypted, context).rotated, false)
+print("native security vectors", count, "and round trips passed")

@@ -1,0 +1,1330 @@
+# Native path algorithms adapted from Node.js v24.16.0, Joyent/Node contributors.
+# MIT license: native/vendor/node-path/LICENSE. No JavaScript runtime is used.
+use std "runtime" as runtime
+use std "process" as process
+use std "_path" as nativePath
+use arya "./glob.arya" as glob
+const isWindows = runtime.platform() == "win32"
+const CHAR_UPPERCASE_A = 65
+const CHAR_LOWERCASE_A = 97
+const CHAR_UPPERCASE_Z = 90
+const CHAR_LOWERCASE_Z = 122
+const CHAR_DOT = 46
+const CHAR_FORWARD_SLASH = 47
+const CHAR_BACKWARD_SLASH = 92
+const CHAR_COLON = 58
+const CHAR_QUESTION_MARK = 63
+fn pathChoose(condition, yes, no) { if condition { return yes() }; return no() }
+fn pathType(value) { let kind = runtime.kind(value); if ["list", "record", "null", "date", "promise"].includes(kind) { return "object" }; return kind }
+fn validateString(value, name) { if runtime.kind(value) != "string" { let error = new TypeError("The " + name + " argument must be a string."); error.code = "ERR_INVALID_ARG_TYPE"; throw error } }
+fn validateObject(value, name) { if not runtime.isRecord(value) { let error = new TypeError("The " + name + " argument must be a record."); error.code = "ERR_INVALID_ARG_TYPE"; throw error } }
+fn ArrayPrototypeIncludes(value, item) { return value.includes(item) }
+fn ArrayPrototypeJoin(value, separator) { return value.join(separator) }
+fn ArrayPrototypePush(value, ...items) { return value.push(...items) }
+fn ArrayPrototypeSlice(value, from, to) { return value.slice(from, to) }
+fn FunctionPrototypeBind(value, ignored, separator) { return fn(item) { return value(separator, item) } }
+fn StringPrototypeCharCodeAt(value, index) { return value.charCodeAt(index) }
+fn StringPrototypeIncludes(value, item) { return value.includes(item) }
+fn StringPrototypeIndexOf(value, item, from) { return value.indexOf(item, from) }
+fn StringPrototypeLastIndexOf(value, item, from) { return value.lastIndexOf(item, from) }
+fn StringPrototypeRepeat(value, count) { return value.repeat(count) }
+fn StringPrototypeReplace(value, pattern, replacement) { return value.replaceAll(pattern, replacement) }
+fn StringPrototypeSlice(value, from, to) { return value.slice(from, to) }
+fn StringPrototypeSplit(value, separator) { return value.split(separator) }
+fn StringPrototypeToLowerCase(value) { return value.toLowerCase() }
+fn StringPrototypeToUpperCase(value) { return value.toUpperCase() }
+fn lazyMatchGlobPattern() { return glob.match }
+fn isPathSeparator(code) {
+
+return ((code == CHAR_FORWARD_SLASH) or (code == CHAR_BACKWARD_SLASH))
+}
+
+fn isPosixPathSeparator(code) {
+
+return (code == CHAR_FORWARD_SLASH)
+}
+
+const WINDOWS_RESERVED_NAMES = ["CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "COM¹", "COM²", "COM³", "LPT¹", "LPT²", "LPT³"]
+
+fn isWindowsReservedName(path, colonIndex) {
+
+const devicePart = StringPrototypeToUpperCase(StringPrototypeSlice(path, 0, colonIndex))
+return ArrayPrototypeIncludes(WINDOWS_RESERVED_NAMES, devicePart)
+}
+
+fn isWindowsDeviceRoot(code) {
+
+return (((code >= CHAR_UPPERCASE_A) and (code <= CHAR_UPPERCASE_Z)) or ((code >= CHAR_LOWERCASE_A) and (code <= CHAR_LOWERCASE_Z)))
+}
+
+fn normalizeString(path, allowAboveRoot, separator, isPathSeparator) {
+
+let res = ""
+let lastSegmentLength = 0
+let lastSlash = (-1)
+let dots = 0
+let code = 0
+if true {
+let i = 0
+while (i <= path.length) {
+if (i < path.length) {
+code = StringPrototypeCharCodeAt(path, i)
+} else {
+if isPathSeparator(code) {
+break
+} else {
+code = CHAR_FORWARD_SLASH
+}
+}
+if isPathSeparator(code) {
+if ((lastSlash == (i - 1)) or (dots == 1)) {
+
+} else {
+if (dots == 2) {
+if ((((res.length < 2) or (lastSegmentLength != 2)) or (StringPrototypeCharCodeAt(res, (res.length - 1)) != CHAR_DOT)) or (StringPrototypeCharCodeAt(res, (res.length - 2)) != CHAR_DOT)) {
+if (res.length > 2) {
+const lastSlashIndex = ((res.length - lastSegmentLength) - 1)
+if (lastSlashIndex == (-1)) {
+res = ""
+lastSegmentLength = 0
+} else {
+res = StringPrototypeSlice(res, 0, lastSlashIndex)
+lastSegmentLength = ((res.length - 1) - StringPrototypeLastIndexOf(res, separator))
+}
+lastSlash = i
+dots = 0
+i += 1
+continue
+} else {
+if (res.length != 0) {
+res = ""
+lastSegmentLength = 0
+lastSlash = i
+dots = 0
+i += 1
+continue
+}
+}
+}
+if allowAboveRoot {
+res += pathChoose((res.length > 0), fn() { return (str(separator) + "..") }, fn() { return ".." })
+lastSegmentLength = 2
+}
+} else {
+if (res.length > 0) {
+res += (str(separator) + str(StringPrototypeSlice(path, (lastSlash + 1), i)))
+} else {
+res = StringPrototypeSlice(path, (lastSlash + 1), i)
+}
+lastSegmentLength = ((i - lastSlash) - 1)
+}
+}
+lastSlash = i
+dots = 0
+} else {
+if ((code == CHAR_DOT) and (dots != (-1))) {
+dots += 1
+} else {
+dots = (-1)
+}
+}
+i += 1
+}
+}
+return res
+}
+
+fn formatExt(ext) {
+
+return pathChoose(ext, fn() { return (str(pathChoose((ext[0] == "."), fn() { return "" }, fn() { return "." })) + str(ext)) }, fn() { return "" })
+}
+
+fn _format(sep, pathObject) {
+
+validateObject(pathObject, "pathObject")
+const dir = (pathObject.dir or pathObject.root)
+const base = (pathObject.base or (str((pathObject.name or "")) + str(formatExt(pathObject.ext))))
+if (not dir) {
+return base
+}
+return pathChoose((dir == pathObject.root), fn() { return (str(dir) + str(base)) }, fn() { return (str(dir) + str(sep) + str(base)) })
+}
+
+const forwardSlashRegExp = "/"
+
+const win32 = {"resolve": fn(...args) {
+
+let resolvedDevice = ""
+let resolvedTail = ""
+let resolvedAbsolute = false
+if true {
+let i = (args.length - 1)
+while (i >= (-1)) {
+let path = undefined
+if (i >= 0) {
+path = args[i]
+validateString(path, ("paths[" + str(i) + "]"))
+if (path.length == 0) {
+i -= 1
+continue
+}
+} else {
+if (resolvedDevice.length == 0) {
+path = process.cwd()
+if ((args.length == 0) or (((args.length == 1) and ((args[0] == "") or (args[0] == "."))) and isPathSeparator(StringPrototypeCharCodeAt(path, 0)))) {
+if (not isWindows) {
+path = StringPrototypeReplace(path, forwardSlashRegExp, "\\")
+}
+return path
+}
+} else {
+path = (process.env(("=" + str(resolvedDevice))) or process.cwd())
+if ((path == undefined) or ((StringPrototypeToLowerCase(StringPrototypeSlice(path, 0, 2)) != StringPrototypeToLowerCase(resolvedDevice)) and (StringPrototypeCharCodeAt(path, 2) == CHAR_BACKWARD_SLASH))) {
+path = (str(resolvedDevice) + "\\")
+}
+}
+}
+const len = path.length
+let rootEnd = 0
+let device = ""
+let isAbsolute = false
+const code = StringPrototypeCharCodeAt(path, 0)
+if (len == 1) {
+if isPathSeparator(code) {
+rootEnd = 1
+isAbsolute = true
+}
+} else {
+if isPathSeparator(code) {
+isAbsolute = true
+if isPathSeparator(StringPrototypeCharCodeAt(path, 1)) {
+let j = 2
+let last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+const firstPart = StringPrototypeSlice(path, last, j)
+last = j
+while ((j < len) and isPathSeparator(StringPrototypeCharCodeAt(path, j))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j == len) or (j != last)) {
+if ((firstPart != ".") and (firstPart != "?")) {
+device = ("\\\\" + str(firstPart) + "\\" + str(StringPrototypeSlice(path, last, j)))
+rootEnd = j
+} else {
+device = ("\\\\" + str(firstPart))
+rootEnd = 4
+}
+}
+}
+}
+} else {
+rootEnd = 1
+}
+} else {
+if (isWindowsDeviceRoot(code) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) {
+device = StringPrototypeSlice(path, 0, 2)
+rootEnd = 2
+if ((len > 2) and isPathSeparator(StringPrototypeCharCodeAt(path, 2))) {
+isAbsolute = true
+rootEnd = 3
+}
+}
+}
+}
+if (device.length > 0) {
+if (resolvedDevice.length > 0) {
+if (StringPrototypeToLowerCase(device) != StringPrototypeToLowerCase(resolvedDevice)) {
+i -= 1
+continue
+}
+} else {
+resolvedDevice = device
+}
+}
+if resolvedAbsolute {
+if (resolvedDevice.length > 0) {
+break
+}
+} else {
+resolvedTail = (str(StringPrototypeSlice(path, rootEnd)) + "\\" + str(resolvedTail))
+resolvedAbsolute = isAbsolute
+if (isAbsolute and (resolvedDevice.length > 0)) {
+break
+}
+}
+i -= 1
+}
+}
+resolvedTail = normalizeString(resolvedTail, (not resolvedAbsolute), "\\", isPathSeparator)
+return pathChoose(resolvedAbsolute, fn() { return (str(resolvedDevice) + "\\" + str(resolvedTail)) }, fn() { return ((str(resolvedDevice) + str(resolvedTail)) or ".") })
+}, "normalize": fn(path) {
+
+validateString(path, "path")
+const len = path.length
+if (len == 0) {
+return "."
+}
+let rootEnd = 0
+let device = undefined
+let isAbsolute = false
+const code = StringPrototypeCharCodeAt(path, 0)
+if (len == 1) {
+return pathChoose(isPosixPathSeparator(code), fn() { return "\\" }, fn() { return path })
+}
+if isPathSeparator(code) {
+isAbsolute = true
+if isPathSeparator(StringPrototypeCharCodeAt(path, 1)) {
+let j = 2
+let last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+const firstPart = StringPrototypeSlice(path, last, j)
+last = j
+while ((j < len) and isPathSeparator(StringPrototypeCharCodeAt(path, j))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j == len) or (j != last)) {
+if ((firstPart == ".") or (firstPart == "?")) {
+device = ("\\\\" + str(firstPart))
+rootEnd = 4
+const colonIndex = StringPrototypeIndexOf(path, ":")
+const possibleDevice = StringPrototypeSlice(path, 4, (colonIndex + 1))
+if isWindowsReservedName(possibleDevice, (possibleDevice.length - 1)) {
+device = ("\\\\?\\" + str(possibleDevice))
+rootEnd = (4 + possibleDevice.length)
+}
+} else {
+if (j == len) {
+return ("\\\\" + str(firstPart) + "\\" + str(StringPrototypeSlice(path, last)) + "\\")
+} else {
+device = ("\\\\" + str(firstPart) + "\\" + str(StringPrototypeSlice(path, last, j)))
+rootEnd = j
+}
+}
+}
+}
+}
+} else {
+rootEnd = 1
+}
+} else {
+const colonIndex = StringPrototypeIndexOf(path, ":")
+if (colonIndex > 0) {
+if (isWindowsDeviceRoot(code) and (colonIndex == 1)) {
+device = StringPrototypeSlice(path, 0, 2)
+rootEnd = 2
+if ((len > 2) and isPathSeparator(StringPrototypeCharCodeAt(path, 2))) {
+isAbsolute = true
+rootEnd = 3
+}
+} else {
+if isWindowsReservedName(path, colonIndex) {
+device = StringPrototypeSlice(path, 0, (colonIndex + 1))
+rootEnd = (colonIndex + 1)
+}
+}
+}
+}
+let tail = pathChoose((rootEnd < len), fn() { return normalizeString(StringPrototypeSlice(path, rootEnd), (not isAbsolute), "\\", isPathSeparator) }, fn() { return "" })
+if ((tail.length == 0) and (not isAbsolute)) {
+tail = "."
+}
+if ((tail.length > 0) and isPathSeparator(StringPrototypeCharCodeAt(path, (len - 1)))) {
+tail += "\\"
+}
+if (((not isAbsolute) and (device == undefined)) and StringPrototypeIncludes(path, ":")) {
+if (((tail.length >= 2) and isWindowsDeviceRoot(StringPrototypeCharCodeAt(tail, 0))) and (StringPrototypeCharCodeAt(tail, 1) == CHAR_COLON)) {
+return (".\\" + str(tail))
+}
+let index = StringPrototypeIndexOf(path, ":")
+while true {
+if ((index == (len - 1)) or isPathSeparator(StringPrototypeCharCodeAt(path, (index + 1)))) {
+return (".\\" + str(tail))
+}
+if not ((fn() { let pathLocal1 = StringPrototypeIndexOf(path, ":", (index + 1)); index = pathLocal1; return pathLocal1 })() != (-1)) { break }
+}
+}
+const colonIndex = StringPrototypeIndexOf(path, ":")
+if isWindowsReservedName(path, colonIndex) {
+return (".\\" + str((device ?? "")) + str(tail))
+}
+if (device == undefined) {
+return pathChoose(isAbsolute, fn() { return ("\\" + str(tail)) }, fn() { return tail })
+}
+return pathChoose(isAbsolute, fn() { return (str(device) + "\\" + str(tail)) }, fn() { return (str(device) + str(tail)) })
+}, "isAbsolute": fn(path) {
+
+validateString(path, "path")
+const len = path.length
+if (len == 0) {
+return false
+}
+const code = StringPrototypeCharCodeAt(path, 0)
+return (isPathSeparator(code) or ((((len > 2) and isWindowsDeviceRoot(code)) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) and isPathSeparator(StringPrototypeCharCodeAt(path, 2))))
+}, "join": fn(...args) {
+
+if (args.length == 0) {
+return "."
+}
+const path = []
+if true {
+let i = 0
+while (i < args.length) {
+const arg = args[i]
+validateString(arg, "path")
+if (arg.length > 0) {
+ArrayPrototypePush(path, arg)
+}
+i += 1
+}
+}
+if (path.length == 0) {
+return "."
+}
+const firstPart = path[0]
+let joined = ArrayPrototypeJoin(path, "\\")
+let needsReplace = true
+let slashCount = 0
+if isPathSeparator(StringPrototypeCharCodeAt(firstPart, 0)) {
+slashCount += 1
+const firstLen = firstPart.length
+if ((firstLen > 1) and isPathSeparator(StringPrototypeCharCodeAt(firstPart, 1))) {
+slashCount += 1
+if (firstLen > 2) {
+if isPathSeparator(StringPrototypeCharCodeAt(firstPart, 2)) {
+slashCount += 1
+} else {
+needsReplace = false
+}
+}
+}
+}
+if needsReplace {
+while ((slashCount < joined.length) and isPathSeparator(StringPrototypeCharCodeAt(joined, slashCount))) {
+slashCount += 1
+}
+if (slashCount >= 2) {
+joined = ("\\" + str(StringPrototypeSlice(joined, slashCount)))
+}
+}
+const parts = []
+let part = ""
+if true {
+let i = 0
+while (i < joined.length) {
+if (joined[i] == "\\") {
+if part {
+parts.push(part)
+}
+part = ""
+while (((i + 1) < joined.length) and (joined[(i + 1)] == "\\")) {
+i += 1
+}
+} else {
+part += joined[i]
+}
+i += 1
+}
+}
+if part {
+parts.push(part)
+}
+if parts.some(fn(p) {
+
+const colonIndex = StringPrototypeIndexOf(p, ":")
+return ((colonIndex != (-1)) and isWindowsReservedName(p, colonIndex))
+}) {
+let result = ""
+if true {
+let i = 0
+while (i < joined.length) {
+result += pathChoose((joined[i] == "/"), fn() { return "\\" }, fn() { return joined[i] })
+i += 1
+}
+}
+return result
+}
+return win32.normalize(joined)
+}, "relative": fn(from, to) {
+
+validateString(from, "from")
+validateString(to, "to")
+if (from == to) {
+return ""
+}
+const fromOrig = win32.resolve(from)
+const toOrig = win32.resolve(to)
+if (fromOrig == toOrig) {
+return ""
+}
+from = StringPrototypeToLowerCase(fromOrig)
+to = StringPrototypeToLowerCase(toOrig)
+if (from == to) {
+return ""
+}
+if ((fromOrig.length != from.length) or (toOrig.length != to.length)) {
+const fromSplit = StringPrototypeSplit(fromOrig, "\\")
+const toSplit = StringPrototypeSplit(toOrig, "\\")
+if (fromSplit[(fromSplit.length - 1)] == "") {
+fromSplit.pop()
+}
+if (toSplit[(toSplit.length - 1)] == "") {
+toSplit.pop()
+}
+const fromLen = fromSplit.length
+const toLen = toSplit.length
+const length = pathChoose((fromLen < toLen), fn() { return fromLen }, fn() { return toLen })
+let i = undefined
+if true {
+i = 0
+while (i < length) {
+if (StringPrototypeToLowerCase(fromSplit[i]) != StringPrototypeToLowerCase(toSplit[i])) {
+break
+}
+i += 1
+}
+}
+if (i == 0) {
+return toOrig
+} else {
+if (i == length) {
+if (toLen > length) {
+return ArrayPrototypeJoin(ArrayPrototypeSlice(toSplit, i), "\\")
+}
+if (fromLen > length) {
+return (StringPrototypeRepeat("..\\", ((fromLen - 1) - i)) + "..")
+}
+return ""
+}
+}
+return (StringPrototypeRepeat("..\\", (fromLen - i)) + ArrayPrototypeJoin(ArrayPrototypeSlice(toSplit, i), "\\"))
+}
+let fromStart = 0
+while ((fromStart < from.length) and (StringPrototypeCharCodeAt(from, fromStart) == CHAR_BACKWARD_SLASH)) {
+fromStart += 1
+}
+let fromEnd = from.length
+while (((fromEnd - 1) > fromStart) and (StringPrototypeCharCodeAt(from, (fromEnd - 1)) == CHAR_BACKWARD_SLASH)) {
+fromEnd -= 1
+}
+const fromLen = (fromEnd - fromStart)
+let toStart = 0
+while ((toStart < to.length) and (StringPrototypeCharCodeAt(to, toStart) == CHAR_BACKWARD_SLASH)) {
+toStart += 1
+}
+let toEnd = to.length
+while (((toEnd - 1) > toStart) and (StringPrototypeCharCodeAt(to, (toEnd - 1)) == CHAR_BACKWARD_SLASH)) {
+toEnd -= 1
+}
+const toLen = (toEnd - toStart)
+const length = pathChoose((fromLen < toLen), fn() { return fromLen }, fn() { return toLen })
+let lastCommonSep = (-1)
+let i = 0
+if true {
+
+while (i < length) {
+const fromCode = StringPrototypeCharCodeAt(from, (fromStart + i))
+if (fromCode != StringPrototypeCharCodeAt(to, (toStart + i))) {
+break
+} else {
+if (fromCode == CHAR_BACKWARD_SLASH) {
+lastCommonSep = i
+}
+}
+i += 1
+}
+}
+if (i != length) {
+if (lastCommonSep == (-1)) {
+return toOrig
+}
+} else {
+if (toLen > length) {
+if (StringPrototypeCharCodeAt(to, (toStart + i)) == CHAR_BACKWARD_SLASH) {
+return StringPrototypeSlice(toOrig, ((toStart + i) + 1))
+}
+if (i == 2) {
+return StringPrototypeSlice(toOrig, (toStart + i))
+}
+}
+if (fromLen > length) {
+if (StringPrototypeCharCodeAt(from, (fromStart + i)) == CHAR_BACKWARD_SLASH) {
+lastCommonSep = i
+} else {
+if (i == 2) {
+lastCommonSep = 3
+}
+}
+}
+if (lastCommonSep == (-1)) {
+lastCommonSep = 0
+}
+}
+let out = ""
+if true {
+i = ((fromStart + lastCommonSep) + 1)
+while (i <= fromEnd) {
+if ((i == fromEnd) or (StringPrototypeCharCodeAt(from, i) == CHAR_BACKWARD_SLASH)) {
+out += pathChoose((out.length == 0), fn() { return ".." }, fn() { return "\\.." })
+}
+i += 1
+}
+}
+toStart += lastCommonSep
+if (out.length > 0) {
+return (str(out) + str(StringPrototypeSlice(toOrig, toStart, toEnd)))
+}
+if (StringPrototypeCharCodeAt(toOrig, toStart) == CHAR_BACKWARD_SLASH) {
+toStart += 1
+}
+return StringPrototypeSlice(toOrig, toStart, toEnd)
+}, "toNamespacedPath": fn(path) {
+
+if ((pathType(path) != "string") or (path.length == 0)) {
+return path
+}
+const resolvedPath = win32.resolve(path)
+if (resolvedPath.length <= 2) {
+return path
+}
+if (StringPrototypeCharCodeAt(resolvedPath, 0) == CHAR_BACKWARD_SLASH) {
+if (StringPrototypeCharCodeAt(resolvedPath, 1) == CHAR_BACKWARD_SLASH) {
+const code = StringPrototypeCharCodeAt(resolvedPath, 2)
+if ((code != CHAR_QUESTION_MARK) and (code != CHAR_DOT)) {
+return ("\\\\?\\UNC\\" + str(StringPrototypeSlice(resolvedPath, 2)))
+}
+}
+} else {
+if ((isWindowsDeviceRoot(StringPrototypeCharCodeAt(resolvedPath, 0)) and (StringPrototypeCharCodeAt(resolvedPath, 1) == CHAR_COLON)) and (StringPrototypeCharCodeAt(resolvedPath, 2) == CHAR_BACKWARD_SLASH)) {
+return ("\\\\?\\" + str(resolvedPath))
+}
+}
+return resolvedPath
+}, "dirname": fn(path) {
+
+validateString(path, "path")
+const len = path.length
+if (len == 0) {
+return "."
+}
+let rootEnd = (-1)
+let offset = 0
+const code = StringPrototypeCharCodeAt(path, 0)
+if (len == 1) {
+return pathChoose(isPathSeparator(code), fn() { return path }, fn() { return "." })
+}
+if isPathSeparator(code) {
+rootEnd = (fn() { let pathLocal2 = 1; offset = pathLocal2; return pathLocal2 })()
+if isPathSeparator(StringPrototypeCharCodeAt(path, 1)) {
+let j = 2
+let last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and isPathSeparator(StringPrototypeCharCodeAt(path, j))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if (j == len) {
+return path
+}
+if (j != last) {
+rootEnd = (fn() { let pathLocal3 = (j + 1); offset = pathLocal3; return pathLocal3 })()
+}
+}
+}
+}
+} else {
+if (isWindowsDeviceRoot(code) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) {
+rootEnd = pathChoose(((len > 2) and isPathSeparator(StringPrototypeCharCodeAt(path, 2))), fn() { return 3 }, fn() { return 2 })
+offset = rootEnd
+}
+}
+let end = (-1)
+let matchedSlash = true
+if true {
+let i = (len - 1)
+while (i >= offset) {
+if isPathSeparator(StringPrototypeCharCodeAt(path, i)) {
+if (not matchedSlash) {
+end = i
+break
+}
+} else {
+matchedSlash = false
+}
+i -= 1
+}
+}
+if (end == (-1)) {
+if (rootEnd == (-1)) {
+return "."
+}
+end = rootEnd
+}
+return StringPrototypeSlice(path, 0, end)
+}, "basename": fn(path, suffix) {
+
+if (suffix != undefined) {
+validateString(suffix, "suffix")
+}
+validateString(path, "path")
+let start = 0
+let end = (-1)
+let matchedSlash = true
+if (((path.length >= 2) and isWindowsDeviceRoot(StringPrototypeCharCodeAt(path, 0))) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) {
+start = 2
+}
+if (((suffix != undefined) and (suffix.length > 0)) and (suffix.length <= path.length)) {
+if (suffix == path) {
+return ""
+}
+let extIdx = (suffix.length - 1)
+let firstNonSlashEnd = (-1)
+if true {
+let i = (path.length - 1)
+while (i >= start) {
+const code = StringPrototypeCharCodeAt(path, i)
+if isPathSeparator(code) {
+if (not matchedSlash) {
+start = (i + 1)
+break
+}
+} else {
+if (firstNonSlashEnd == (-1)) {
+matchedSlash = false
+firstNonSlashEnd = (i + 1)
+}
+if (extIdx >= 0) {
+if (code == StringPrototypeCharCodeAt(suffix, extIdx)) {
+if ((fn() { let pathLocal4 = extIdx; extIdx -= 1; return extIdx })() == (-1)) {
+end = i
+}
+} else {
+extIdx = (-1)
+end = firstNonSlashEnd
+}
+}
+}
+i -= 1
+}
+}
+if (start == end) {
+end = firstNonSlashEnd
+} else {
+if (end == (-1)) {
+end = path.length
+}
+}
+return StringPrototypeSlice(path, start, end)
+}
+if true {
+let i = (path.length - 1)
+while (i >= start) {
+if isPathSeparator(StringPrototypeCharCodeAt(path, i)) {
+if (not matchedSlash) {
+start = (i + 1)
+break
+}
+} else {
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+}
+i -= 1
+}
+}
+if (end == (-1)) {
+return ""
+}
+return StringPrototypeSlice(path, start, end)
+}, "extname": fn(path) {
+
+validateString(path, "path")
+let start = 0
+let startDot = (-1)
+let startPart = 0
+let end = (-1)
+let matchedSlash = true
+let preDotState = 0
+if (((path.length >= 2) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) and isWindowsDeviceRoot(StringPrototypeCharCodeAt(path, 0))) {
+start = (fn() { let pathLocal5 = 2; startPart = pathLocal5; return pathLocal5 })()
+}
+if true {
+let i = (path.length - 1)
+while (i >= start) {
+const code = StringPrototypeCharCodeAt(path, i)
+if isPathSeparator(code) {
+if (not matchedSlash) {
+startPart = (i + 1)
+break
+}
+i -= 1
+continue
+}
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+if (code == CHAR_DOT) {
+if (startDot == (-1)) {
+startDot = i
+} else {
+if (preDotState != 1) {
+preDotState = 1
+}
+}
+} else {
+if (startDot != (-1)) {
+preDotState = (-1)
+}
+}
+i -= 1
+}
+}
+if ((((startDot == (-1)) or (end == (-1))) or (preDotState == 0)) or (((preDotState == 1) and (startDot == (end - 1))) and (startDot == (startPart + 1)))) {
+return ""
+}
+return StringPrototypeSlice(path, startDot, end)
+}, "format": FunctionPrototypeBind(_format, null, "\\"), "parse": fn(path) {
+
+validateString(path, "path")
+const ret = {"root": "", "dir": "", "base": "", "ext": "", "name": ""}
+if (path.length == 0) {
+return ret
+}
+const len = path.length
+let rootEnd = 0
+let code = StringPrototypeCharCodeAt(path, 0)
+if (len == 1) {
+if isPathSeparator(code) {
+ret.root = (fn() { let pathLocal6 = path; ret.dir = pathLocal6; return pathLocal6 })()
+return ret
+}
+ret.base = (fn() { let pathLocal7 = path; ret.name = pathLocal7; return pathLocal7 })()
+return ret
+}
+if isPathSeparator(code) {
+rootEnd = 1
+if isPathSeparator(StringPrototypeCharCodeAt(path, 1)) {
+let j = 2
+let last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and isPathSeparator(StringPrototypeCharCodeAt(path, j))) {
+j += 1
+}
+if ((j < len) and (j != last)) {
+last = j
+while ((j < len) and (not isPathSeparator(StringPrototypeCharCodeAt(path, j)))) {
+j += 1
+}
+if (j == len) {
+rootEnd = j
+} else {
+if (j != last) {
+rootEnd = (j + 1)
+}
+}
+}
+}
+}
+} else {
+if (isWindowsDeviceRoot(code) and (StringPrototypeCharCodeAt(path, 1) == CHAR_COLON)) {
+if (len <= 2) {
+ret.root = (fn() { let pathLocal8 = path; ret.dir = pathLocal8; return pathLocal8 })()
+return ret
+}
+rootEnd = 2
+if isPathSeparator(StringPrototypeCharCodeAt(path, 2)) {
+if (len == 3) {
+ret.root = (fn() { let pathLocal9 = path; ret.dir = pathLocal9; return pathLocal9 })()
+return ret
+}
+rootEnd = 3
+}
+}
+}
+if (rootEnd > 0) {
+ret.root = StringPrototypeSlice(path, 0, rootEnd)
+}
+let startDot = (-1)
+let startPart = rootEnd
+let end = (-1)
+let matchedSlash = true
+let i = (path.length - 1)
+let preDotState = 0
+if true {
+
+while (i >= rootEnd) {
+code = StringPrototypeCharCodeAt(path, i)
+if isPathSeparator(code) {
+if (not matchedSlash) {
+startPart = (i + 1)
+break
+}
+i -= 1
+continue
+}
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+if (code == CHAR_DOT) {
+if (startDot == (-1)) {
+startDot = i
+} else {
+if (preDotState != 1) {
+preDotState = 1
+}
+}
+} else {
+if (startDot != (-1)) {
+preDotState = (-1)
+}
+}
+i -= 1
+}
+}
+if (end != (-1)) {
+if (((startDot == (-1)) or (preDotState == 0)) or (((preDotState == 1) and (startDot == (end - 1))) and (startDot == (startPart + 1)))) {
+ret.base = (fn() { let pathLocal10 = StringPrototypeSlice(path, startPart, end); ret.name = pathLocal10; return pathLocal10 })()
+} else {
+ret.name = StringPrototypeSlice(path, startPart, startDot)
+ret.base = StringPrototypeSlice(path, startPart, end)
+ret.ext = StringPrototypeSlice(path, startDot, end)
+}
+}
+if ((startPart > 0) and (startPart != rootEnd)) {
+ret.dir = StringPrototypeSlice(path, 0, (startPart - 1))
+} else {
+ret.dir = ret.root
+}
+return ret
+}, "matchesGlob": fn(path, pattern) {
+
+return lazyMatchGlobPattern()(path, pattern, true)
+}, "sep": "\\", "delimiter": ";", "win32": null, "posix": null}
+
+const posixCwd = fn() {
+
+if isWindows {
+const regexp = "\\"
+return fn() {
+
+const cwd = StringPrototypeReplace(process.cwd(), regexp, "/")
+return StringPrototypeSlice(cwd, StringPrototypeIndexOf(cwd, "/"))
+}
+}
+return fn() {
+
+return process.cwd()
+}
+}()
+
+const posix = {"resolve": fn(...args) {
+
+if ((args.length == 0) or ((args.length == 1) and ((args[0] == "") or (args[0] == ".")))) {
+const cwd = posixCwd()
+if (StringPrototypeCharCodeAt(cwd, 0) == CHAR_FORWARD_SLASH) {
+return cwd
+}
+}
+let resolvedPath = ""
+let resolvedAbsolute = false
+if true {
+let i = (args.length - 1)
+while ((i >= 0) and (not resolvedAbsolute)) {
+const path = args[i]
+validateString(path, ("paths[" + str(i) + "]"))
+if (path.length == 0) {
+i -= 1
+continue
+}
+resolvedPath = (str(path) + "/" + str(resolvedPath))
+resolvedAbsolute = (StringPrototypeCharCodeAt(path, 0) == CHAR_FORWARD_SLASH)
+i -= 1
+}
+}
+if (not resolvedAbsolute) {
+const cwd = posixCwd()
+resolvedPath = (str(cwd) + "/" + str(resolvedPath))
+resolvedAbsolute = (StringPrototypeCharCodeAt(cwd, 0) == CHAR_FORWARD_SLASH)
+}
+resolvedPath = normalizeString(resolvedPath, (not resolvedAbsolute), "/", isPosixPathSeparator)
+if resolvedAbsolute {
+return ("/" + str(resolvedPath))
+}
+return pathChoose((resolvedPath.length > 0), fn() { return resolvedPath }, fn() { return "." })
+}, "normalize": fn(path) {
+
+validateString(path, "path")
+if (path.length == 0) {
+return "."
+}
+const isAbsolute = (StringPrototypeCharCodeAt(path, 0) == CHAR_FORWARD_SLASH)
+const trailingSeparator = (StringPrototypeCharCodeAt(path, (path.length - 1)) == CHAR_FORWARD_SLASH)
+path = normalizeString(path, (not isAbsolute), "/", isPosixPathSeparator)
+if (path.length == 0) {
+if isAbsolute {
+return "/"
+}
+return pathChoose(trailingSeparator, fn() { return "./" }, fn() { return "." })
+}
+if trailingSeparator {
+path += "/"
+}
+return pathChoose(isAbsolute, fn() { return ("/" + str(path)) }, fn() { return path })
+}, "isAbsolute": fn(path) {
+
+validateString(path, "path")
+return ((path.length > 0) and (StringPrototypeCharCodeAt(path, 0) == CHAR_FORWARD_SLASH))
+}, "join": fn(...args) {
+
+if (args.length == 0) {
+return "."
+}
+const path = []
+if true {
+let i = 0
+while (i < args.length) {
+const arg = args[i]
+validateString(arg, "path")
+if (arg.length > 0) {
+path.push(arg)
+}
+i += 1
+}
+}
+if (path.length == 0) {
+return "."
+}
+return posix.normalize(ArrayPrototypeJoin(path, "/"))
+}, "relative": fn(from, to) {
+
+validateString(from, "from")
+validateString(to, "to")
+if (from == to) {
+return ""
+}
+from = posix.resolve(from)
+to = posix.resolve(to)
+if (from == to) {
+return ""
+}
+const fromStart = 1
+const fromEnd = from.length
+const fromLen = (fromEnd - fromStart)
+const toStart = 1
+const toLen = (to.length - toStart)
+const length = pathChoose((fromLen < toLen), fn() { return fromLen }, fn() { return toLen })
+let lastCommonSep = (-1)
+let i = 0
+if true {
+
+while (i < length) {
+const fromCode = StringPrototypeCharCodeAt(from, (fromStart + i))
+if (fromCode != StringPrototypeCharCodeAt(to, (toStart + i))) {
+break
+} else {
+if (fromCode == CHAR_FORWARD_SLASH) {
+lastCommonSep = i
+}
+}
+i += 1
+}
+}
+if (i == length) {
+if (toLen > length) {
+if (StringPrototypeCharCodeAt(to, (toStart + i)) == CHAR_FORWARD_SLASH) {
+return StringPrototypeSlice(to, ((toStart + i) + 1))
+}
+if (i == 0) {
+return StringPrototypeSlice(to, (toStart + i))
+}
+} else {
+if (fromLen > length) {
+if (StringPrototypeCharCodeAt(from, (fromStart + i)) == CHAR_FORWARD_SLASH) {
+lastCommonSep = i
+} else {
+if (i == 0) {
+lastCommonSep = 0
+}
+}
+}
+}
+}
+let out = ""
+if true {
+i = ((fromStart + lastCommonSep) + 1)
+while (i <= fromEnd) {
+if ((i == fromEnd) or (StringPrototypeCharCodeAt(from, i) == CHAR_FORWARD_SLASH)) {
+out += pathChoose((out.length == 0), fn() { return ".." }, fn() { return "/.." })
+}
+i += 1
+}
+}
+return (str(out) + str(StringPrototypeSlice(to, (toStart + lastCommonSep))))
+}, "toNamespacedPath": fn(path) {
+
+return path
+}, "dirname": fn(path) {
+
+validateString(path, "path")
+if (path.length == 0) {
+return "."
+}
+const hasRoot = (StringPrototypeCharCodeAt(path, 0) == CHAR_FORWARD_SLASH)
+let end = (-1)
+let matchedSlash = true
+if true {
+let i = (path.length - 1)
+while (i >= 1) {
+if (StringPrototypeCharCodeAt(path, i) == CHAR_FORWARD_SLASH) {
+if (not matchedSlash) {
+end = i
+break
+}
+} else {
+matchedSlash = false
+}
+i -= 1
+}
+}
+if (end == (-1)) {
+return pathChoose(hasRoot, fn() { return "/" }, fn() { return "." })
+}
+if (hasRoot and (end == 1)) {
+return "//"
+}
+return StringPrototypeSlice(path, 0, end)
+}, "basename": fn(path, suffix) {
+
+if (suffix != undefined) {
+validateString(suffix, "suffix")
+}
+validateString(path, "path")
+let start = 0
+let end = (-1)
+let matchedSlash = true
+if (((suffix != undefined) and (suffix.length > 0)) and (suffix.length <= path.length)) {
+if (suffix == path) {
+return ""
+}
+let extIdx = (suffix.length - 1)
+let firstNonSlashEnd = (-1)
+if true {
+let i = (path.length - 1)
+while (i >= 0) {
+const code = StringPrototypeCharCodeAt(path, i)
+if (code == CHAR_FORWARD_SLASH) {
+if (not matchedSlash) {
+start = (i + 1)
+break
+}
+} else {
+if (firstNonSlashEnd == (-1)) {
+matchedSlash = false
+firstNonSlashEnd = (i + 1)
+}
+if (extIdx >= 0) {
+if (code == StringPrototypeCharCodeAt(suffix, extIdx)) {
+if ((fn() { let pathLocal11 = extIdx; extIdx -= 1; return extIdx })() == (-1)) {
+end = i
+}
+} else {
+extIdx = (-1)
+end = firstNonSlashEnd
+}
+}
+}
+i -= 1
+}
+}
+if (start == end) {
+end = firstNonSlashEnd
+} else {
+if (end == (-1)) {
+end = path.length
+}
+}
+return StringPrototypeSlice(path, start, end)
+}
+if true {
+let i = (path.length - 1)
+while (i >= 0) {
+if (StringPrototypeCharCodeAt(path, i) == CHAR_FORWARD_SLASH) {
+if (not matchedSlash) {
+start = (i + 1)
+break
+}
+} else {
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+}
+i -= 1
+}
+}
+if (end == (-1)) {
+return ""
+}
+return StringPrototypeSlice(path, start, end)
+}, "extname": fn(path) {
+
+validateString(path, "path")
+let startDot = (-1)
+let startPart = 0
+let end = (-1)
+let matchedSlash = true
+let preDotState = 0
+if true {
+let i = (path.length - 1)
+while (i >= 0) {
+const char = path[i]
+if (char == "/") {
+if (not matchedSlash) {
+startPart = (i + 1)
+break
+}
+i -= 1
+continue
+}
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+if (char == ".") {
+if (startDot == (-1)) {
+startDot = i
+} else {
+if (preDotState != 1) {
+preDotState = 1
+}
+}
+} else {
+if (startDot != (-1)) {
+preDotState = (-1)
+}
+}
+i -= 1
+}
+}
+if ((((startDot == (-1)) or (end == (-1))) or (preDotState == 0)) or (((preDotState == 1) and (startDot == (end - 1))) and (startDot == (startPart + 1)))) {
+return ""
+}
+return StringPrototypeSlice(path, startDot, end)
+}, "format": FunctionPrototypeBind(_format, null, "/"), "parse": fn(path) {
+
+validateString(path, "path")
+const ret = {"root": "", "dir": "", "base": "", "ext": "", "name": ""}
+if (path.length == 0) {
+return ret
+}
+const isAbsolute = (StringPrototypeCharCodeAt(path, 0) == CHAR_FORWARD_SLASH)
+let start = undefined
+if isAbsolute {
+ret.root = "/"
+start = 1
+} else {
+start = 0
+}
+let startDot = (-1)
+let startPart = 0
+let end = (-1)
+let matchedSlash = true
+let i = (path.length - 1)
+let preDotState = 0
+if true {
+
+while (i >= start) {
+const code = StringPrototypeCharCodeAt(path, i)
+if (code == CHAR_FORWARD_SLASH) {
+if (not matchedSlash) {
+startPart = (i + 1)
+break
+}
+i -= 1
+continue
+}
+if (end == (-1)) {
+matchedSlash = false
+end = (i + 1)
+}
+if (code == CHAR_DOT) {
+if (startDot == (-1)) {
+startDot = i
+} else {
+if (preDotState != 1) {
+preDotState = 1
+}
+}
+} else {
+if (startDot != (-1)) {
+preDotState = (-1)
+}
+}
+i -= 1
+}
+}
+if (end != (-1)) {
+const start = pathChoose(((startPart == 0) and isAbsolute), fn() { return 1 }, fn() { return startPart })
+if (((startDot == (-1)) or (preDotState == 0)) or (((preDotState == 1) and (startDot == (end - 1))) and (startDot == (startPart + 1)))) {
+ret.base = (fn() { let pathLocal12 = StringPrototypeSlice(path, start, end); ret.name = pathLocal12; return pathLocal12 })()
+} else {
+ret.name = StringPrototypeSlice(path, start, startDot)
+ret.base = StringPrototypeSlice(path, start, end)
+ret.ext = StringPrototypeSlice(path, startDot, end)
+}
+}
+if (startPart > 0) {
+ret.dir = StringPrototypeSlice(path, 0, (startPart - 1))
+} else {
+if isAbsolute {
+ret.dir = "/"
+}
+}
+return ret
+}, "matchesGlob": fn(path, pattern) {
+
+return lazyMatchGlobPattern()(path, pattern, false)
+}, "sep": "/", "delimiter": ":", "win32": null, "posix": null}
+
+posix.win32 = (fn() { let pathLocal13 = win32; win32.win32 = pathLocal13; return pathLocal13 })()
+
+posix.posix = (fn() { let pathLocal14 = posix; win32.posix = pathLocal14; return pathLocal14 })()
+
+win32._makeLong = win32.toNamespacedPath
+
+posix._makeLong = posix.toNamespacedPath
+
+posix.realPath = nativePath.realPath
+win32.realPath = nativePath.realPath
+
+export const api = pathChoose(isWindows, fn() { return win32 }, fn() { return posix })

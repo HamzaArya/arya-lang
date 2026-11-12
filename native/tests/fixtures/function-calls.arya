@@ -1,0 +1,178 @@
+use std "runtime" as runtime
+
+let checks = 0
+fn equal(actual, expected, label) {
+  if actual != expected { throw label + ": expected " + str(expected) + ", received " + str(actual) }
+  checks += 1
+}
+fn fib(n) {
+  if n < 2 { return n }
+  return fib(n - 1) + fib(n - 2)
+}
+fn relay(n) => fib(n)
+equal(relay(12), 144, "recursive numeric calls")
+equal(runtime.kind(fib("1")), "string", "numeric guard preserves dynamic input")
+fn even(n) { if n == 0 { return 1 }; return odd(n - 1) }
+fn odd(n) { if n == 0 { return 0 }; return even(n - 1) }
+equal(even(23), 0, "mutual recursion")
+fn step(n) => n - 1
+fn loop(n) {
+  let total = 0
+  while step(n) >= 0 {
+    n = step(n)
+    if n == 3 { continue }
+    if n == 1 { break }
+    total += n
+  }
+  return total
+}
+equal(loop(6), 11, "calls in loop conditions and control flow")
+fn choose(n) { if n > 0 { return step(n) } else { return step(-n) } }
+equal(choose(-3), 2, "returning branches")
+fn negativeZero(n) => -n
+equal(1 / negativeZero(0), -Infinity, "signed zero")
+fn nanValue(n) => n / n
+equal(nanValue(0) != nanValue(0), true, "NaN")
+fn special(n) { let Infinity = n; return Infinity + 1 }
+equal(special(8), 9, "shadowed numeric globals")
+fn ieee(n) => (n % 3) + (n ** 2)
+equal(ieee(-4), 15, "remainder and exponent")
+equal(negativeZero(Infinity), -Infinity, "infinite arguments")
+
+fn identity(value) => value
+equal(identity(), undefined, "missing argument")
+equal(identity("text"), "text", "dynamic fallback")
+let order = ""
+fn mark(text, value) { order += text; return value }
+equal(identity(mark("a", 4), mark("b", 9)), 4, "extra arguments")
+equal(order, "ab", "argument evaluation order")
+equal(identity(...[6]), 6, "spread call")
+equal(7 |> identity(), 7, "pipeline call")
+const alias = identity
+equal(alias(8), 8, "dynamic alias")
+equal(alias?.(9), 9, "optional call")
+let absent = null
+equal(absent?.(mark("skipped", 1)), undefined, "optional argument short circuit")
+equal(order, "ab", "optional call skips arguments")
+const fixed = fn(value = 3, ...rest) => value + len(rest)
+equal(fixed(undefined, ...[1, 2]), 5, "const target with defaults and rest")
+fn defaults(first = second, second = 2) => first
+try { defaults(); throw "missing TDZ error" } catch error { equal(error.name, "ReferenceError", "parameter TDZ") }
+fn defaultCapture(first, read = fn() => first) { first += 1; return read }
+equal(defaultCapture(8)(), 9, "default closure shares mutable parameter")
+fn beforeConst() => later(3)
+try { beforeConst(); throw "missing const TDZ error" } catch error { equal(error.name, "ReferenceError", "const function TDZ") }
+const later = fn(n) => n * 2
+equal(beforeConst(), 6, "initialized const function")
+fn localTDZ() { try { const first = second; const second = 2 } catch error { return error.name }; return "missing" }
+equal(localTDZ(), "ReferenceError", "frame-local TDZ")
+fn assignmentTDZ() { try { value = 3; let value = 1 } catch error { return error.name }; return "missing" }
+equal(assignmentTDZ(), "ReferenceError", "frame-local assignment TDZ")
+
+fn replaceable(n) => n * 2
+fn throughMutable(n) => replaceable(n)
+equal(throughMutable(3), 6, "original target")
+replaceable = fn(n) => n + 10
+equal(throughMutable(3), 13, "reassigned declaration invalidates direct call")
+fn changeTarget() { replaceable = fn(n) => n + 100; return 1 }
+equal(replaceable(changeTarget()), 11, "callee evaluated before argument mutation")
+equal(replaceable(1), 101, "new target after argument mutation")
+let variable = fn(n) => n + 1
+equal(variable(2), 3, "mutable function variable")
+variable = fn(n) => n + 2
+equal(variable(2), 4, "reassigned function variable")
+fn nonnumeric(n) { if n == 0 { return "done" }; return nonnumeric(n - 1) }
+fn throughNonnumeric(n) => nonnumeric(n)
+equal(throughNonnumeric(4), "done", "call-graph specialization invalidation")
+
+fn factory(start) {
+  let current = start
+  const read = fn() => current
+  fn update(value) { current = value; return read }
+  return {read: read, update: update}
+}
+const counter = factory(4)
+equal(counter.update(12)(), 12, "shared mutable capture")
+runtime.collect()
+equal(counter.read(), 12, "escaping closure survives collection")
+fn outer(value) {
+  return fn() {
+    const middle = value + 1
+    return fn() => middle + value
+  }
+}
+const inner = outer(4)()
+runtime.collect()
+equal(inner(), 9, "transitive captures across omitted environments")
+fn nested(n) {
+  fn twice(value) => value * 2
+  fn recursive(value) { if value == 0 { return 0 }; return twice(value) + recursive(value - 1) }
+  return recursive(n)
+}
+equal(nested(4), 20, "nested sibling and recursive numeric calls")
+fn loopClosures() {
+  const readers = []
+  for value at index in [10, 20, 30] {
+    const offset = index
+    readers.push(fn() => value + offset)
+  }
+  return readers
+}
+const readers = loopClosures()
+runtime.collect()
+equal(readers[0](), 10, "first loop capture")
+equal(readers[2](), 32, "independent loop captures")
+fn blockClosures() {
+  const readers = []
+  let index = 0
+  while index < 3 {
+    const saved = index
+    readers.push(fn() => saved)
+    index += 1
+  }
+  return readers
+}
+equal(blockClosures()[1](), 1, "per-iteration captured block")
+fn constRecursion(n) {
+  const recurse = fn(value) { if value == 0 { return 0 }; return recurse(value - 1) + 1 }
+  return recurse(n)
+}
+equal(constRecursion(15), 15, "escaping const binding recursion")
+let cleanup = ""
+fn finalized(value) {
+  try { if value { return {answer: 42} }; throw "failure" }
+  catch error { return {answer: error} }
+  finally { runtime.collect(); cleanup += "f" }
+}
+equal(finalized(true).answer, 42, "return roots through finally")
+equal(finalized(false).answer, "failure", "caught error and finally")
+equal(cleanup, "ff", "cleanup order")
+
+fn depth(n) { if n == 0 { return 0 }; return depth(n - 1) }
+equal(depth(500), 0, "numeric depth below limit")
+try { depth(520); throw "missing depth error" } catch error { equal(error.name, "RangeError", "numeric depth limit") }
+equal(depth(3), 0, "numeric depth restored after exception")
+fn genericDepth(n = 0) { if n == 0 { return 0 }; return genericDepth(n - 1) }
+try { genericDepth(520); throw "missing generic depth error" } catch error { equal(error.name, "RangeError", "generic depth limit") }
+equal(genericDepth(3), 0, "generic depth restored after exception")
+
+async fn suspended(seed) {
+  const first = {value: seed}
+  await Promise.resolve(0)
+  runtime.collect()
+  return first.value + 1
+}
+const firstTask = suspended(10)
+const secondTask = suspended(20)
+equal(await firstTask, 11, "suspended frame roots")
+equal(await secondTask, 21, "independent suspended frames")
+async fn capturedTask(seed) {
+  let value = seed
+  await Promise.resolve(0)
+  value += 1
+  return fn() => value
+}
+const afterAwait = await capturedTask(30)
+runtime.collect()
+equal(afterAwait(), 31, "closure escapes suspended call")
+print("function-call checks:", checks)

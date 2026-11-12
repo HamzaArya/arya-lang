@@ -1,0 +1,30 @@
+# Full installed SDK smoke test; every dependency is supplied beside arya.
+use std "decimal" as decimal
+use std "accounting" as accounting
+use std "security" as security
+use std "path" as path
+use std "ui" as ui
+use std "web" as web
+use std "python" as python
+use std "debug" as debug
+use std "money" as money
+use std "finance" as finance
+use std "csv" as csv
+debug.assert(decimal.add("0.1", "0.2") == "0.3")
+debug.assert(accounting.invoiceBatch([{price: "19.95", quantity: "3"}], {currency: "AFN", scale: 2, rounding: "half-even"}).total == "59.85")
+debug.assert(security.hash("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+debug.assert(path.win32.join("C:\\a", "..", "b") == "C:\\b")
+debug.assert(path.matchesGlob("src/main.arya", "**/*.arya"))
+debug.assert(new RegExp("^سلام$", "u").test("سلام"))
+debug.assert(new URL("../b", "https://example.com/a/").href == "https://example.com/b")
+debug.assert(ui.page({nonce: "abcdefghijklmnop", body: ui.heading("Installed native SDK")}).includes("Installed native SDK"))
+debug.assert(python.client != undefined)
+let policy = {currency: "AFN", scale: 2, rounding: "half-even"}
+debug.assert(money.format(money.add(money.create("0.10", policy), money.create("0.20", policy))) == "0.30")
+debug.assert(finance.allocate("0.05", ["1", "1", "1"], policy).join(",") == "0.02,0.01,0.02")
+let parser = csv.decoder()
+debug.assert(parser.push("a,b\n")[0].join(",") == "a,b" and parser.finish().length == 0)
+let server = web.serve(0, {}, {html: false, assets: false})
+debug.assert(server.address().port > 0)
+await web.shutdown(server)
+print("native installed SDK: decimals, accounting, money, finance, CSV, crypto, paths, regex, URL, UI, HTTP and optional bridge imports passed")

@@ -1,0 +1,12 @@
+use std "path" as path
+use std "fs" as fs
+use std "debug" as debug
+let data = JSON.parse(await fs.readText(args[0]))
+let failures = []
+for vector in data.cases {
+  let actual = path[vector.flavor].matchesGlob(vector.value, vector.pattern)
+  if actual != vector.expected { failures.push({vector: vector, actual: actual}) }
+}
+for failure in failures.slice(0, 25) { print(JSON.stringify(failure)) }
+print("glob mismatches: " + str(failures.length) + " / " + str(data.cases.length))
+debug.assert(failures.length == 0)

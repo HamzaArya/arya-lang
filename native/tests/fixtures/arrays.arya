@@ -1,0 +1,30 @@
+use std "debug" as debug
+use std "runtime" as runtime
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), JSON.stringify(actual)) }
+equal(Array.from({length: 4}, fn(value, index) { return index * 2 }), [0, 2, 4, 6])
+equal(Array.from(new Set([1, 2, 2, 3])), [1, 2, 3])
+equal(Array.from(new Map([["a", 1], ["b", 2]])), [["a", 1], ["b", 2]])
+let values = [3, 1, 2]
+equal(values.map(fn(value, index, source) { debug.assert(source == values); return value + index }), [3, 2, 4])
+equal(values.filter(fn(value) { return value > 1 }), [3, 2])
+equal(values.flatMap(fn(value) { return [value, value] }), [3, 3, 1, 1, 2, 2])
+debug.assert(values.some(fn(value) { return value == 1 }) and values.every(fn(value) { return value > 0 }))
+debug.assert(values.find(fn(value) { return value < 3 }) == 1 and values.findLastIndex(fn(value) { return value > 1 }) == 2)
+debug.assert(values.reduce(fn(total, value) { return total + value }, 0) == 6)
+debug.assert(values.reduceRight(fn(text, value) { return text + str(value) }, "") == "213")
+equal(values.toSorted(fn(a, b) { return a - b }), [1, 2, 3]); equal(values, [3, 1, 2])
+values.sort(fn(a, b) { return a - b }); equal(values, [1, 2, 3])
+let stable = [{key: 1, id: "a"}, {key: 0, id: "b"}, {key: 1, id: "c"}]
+equal(stable.toSorted(fn(a, b) { return a.key - b.key }).map(fn(value) { return value.id }), ["b", "a", "c"])
+let sparse = new Array(3); sparse[1] = 8
+let mapped = sparse.map(fn(value) { return value + 1 }); debug.assert(not Object.hasOwn(mapped, "0") and mapped[1] == 9)
+equal(sparse.filter(fn(value) { return true }), [8]); debug.assert(sparse.includes(undefined) and sparse.indexOf(undefined) == -1)
+let seen = []; sparse.find(fn(value, index) { seen.push(index); return false }); equal(seen, [0, 1, 2])
+equal(values.toReversed(), [3, 2, 1]); equal(values.toSpliced(1, 1, 8, 9), [1, 8, 9, 3]); equal(values.with(-1, 7), [1, 2, 7])
+equal(values.splice(1, 1, 4), [2]); equal(values, [1, 4, 3])
+debug.assert(values.unshift(0) == 4 and values.shift() == 0 and values.pop() == 3)
+equal(values.concat([5, 6], 7), [1, 4, 5, 6, 7]); equal([[1], [2, [3]]].flat(2), [1, 2, 3])
+let copied = [0, 1, 2, 3]; copied.copyWithin(1, 0, 3); equal(copied, [0, 0, 1, 2]); copied.fill(9, -2); equal(copied, [0, 0, 9, 9])
+debug.assert([1, 2, 1].indexOf(1, 1) == 2 and [1, 2, 1].lastIndexOf(1, -2) == 0)
+let frozen = Object.freeze([1]); let rejected = false; try { frozen.reverse() } catch error { rejected = error.name == "TypeError" }; debug.assert(rejected)
+print("native arrays: callbacks, sparse values, stable sorting, mutation, copying and iterable construction passed")

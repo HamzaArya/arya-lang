@@ -1,0 +1,71 @@
+{
+  "version": "1.3.0-alpha.12",
+  "node": "v24.16.0",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "cpu": "Apple M1",
+  "statistic": "Median of nine alternating process launches after one untimed warmup; process startup plus one-million-iteration calculation; no pure kernel or universal performance claim",
+  "hostStart": {
+    "loadAverage": [
+      3.76708984375,
+      6.515625,
+      12.94873046875
+    ],
+    "freeMemoryBytes": 199966720,
+    "totalMemoryBytes": 8589934592
+  },
+  "hostEnd": {
+    "loadAverage": [
+      3.76708984375,
+      6.515625,
+      12.94873046875
+    ],
+    "freeMemoryBytes": 145752064
+  },
+  "source": "fn subtotal(count: number): number {\n let total: number = 0\n let index: number = 0\n while index < count {\n  total += index * 0.25\n  index += 1\n }\n return total\n}\nprint(subtotal(1000000))\n",
+  "sourceHashes": {
+    "src/native-ir.ts": "5faa75be3eef3c7abb4494edb5a6d354b9a041f0ae1eefc4a66ae319bcce9c57",
+    "src/native-lower.ts": "e6e41c5137e330a7a1f24f462b897d3052100c4afa874279ccbcabb574737a5c",
+    "src/native-backend.ts": "9dbb79e323e8f1625933872be0f5d53cc0739cf67c532d3f3a03ac75df3c114a",
+    "src/native-preview.ts": "2b7bbce66fbd40b1f46d1a30a24da2250a0fa6d6cf846db446450c876689aa51",
+    "src/compiler.ts": "05d7d33df4d3171e4c6aa5dbe70d3729efe3472111adc8f23ada21d34c74c1d7",
+    "src/emitter.ts": "7c217fbdb6215e12773db7d463a11b934a51bf5701720be87fdc855d2bbff40b",
+    "scripts/benchmark-native-preview.mjs": "44b1b9a5df96f3c80d758fab233d141d22331dc7ea78bc9754ea2b90369af8fe"
+  },
+  "output": "124999875000\n",
+  "javascript": {
+    "bytes": 1636,
+    "compileMs": 8.910958999999998,
+    "samplesMs": [
+      46.56670800000006,
+      43.70624999999973,
+      45.77037500000006,
+      37.83766699999978,
+      32.21279199999981,
+      49.97545899999977,
+      45.050832999999784,
+      33.707042,
+      33.852499999999964
+    ],
+    "medianMs": 43.70624999999973
+  },
+  "native": {
+    "bytes": 34456,
+    "sha256": "df040343ee1311db95130474fc9908384db87be2008384d7e218afc31b21a62b",
+    "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+    "compileMs": 1326.5068749999998,
+    "samplesMs": [
+      4.014709000000039,
+      4.190833999999995,
+      3.495416999999634,
+      3.34316600000011,
+      3.0288329999998496,
+      3.3994159999997464,
+      3.0049159999998665,
+      2.803542000000107,
+      3.4758750000000873
+    ],
+    "medianMs": 3.3994159999997464
+  },
+  "directory": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-preview-benchmark/run-Vdt5P7"
+}

@@ -1,0 +1,253 @@
+# Native HTTP services. The compiler binds static files to the importing source.
+use std "_http" as transport
+use std "path" as path
+use std "fs" as fs
+use std "runtime" as runtime
+use std "validate" as validate
+use std "list" as list
+
+fn object(value, label) {
+  if runtime.kind(value) != "record" or runtime.hasAccessor(value) { throw new TypeError(label + " must be a record with data fields.") }
+  return value
+}
+fn integer(value, low, high, label) { if not Number.isSafeInteger(value) or value < low or value > high { throw new TypeError(label + " must be an integer from " + str(low) + " to " + str(high) + ".") }; return value }
+fn timeout(value, label) { return integer(value, 1, 2147483647, label) }
+fn codeText(value) { if runtime.kind(value) != "string" or len(value) < 1 or len(value) > 64 or not "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(value[0]) { return false }; for c in value { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_".includes(c) { return false } }; return true }
+export fn error(status, message, code) {
+  integer(status, 400, 599, "HTTP error status")
+  if runtime.kind(message) != "string" or (code != undefined and not codeText(code)) { throw new TypeError("web.error expects a message and optional uppercase code.") }
+  let result = new Error(message); result.aryaHttpStatus = status
+  if code != undefined { result.code = code }
+  return result
+}
+fn tagged(value, name) { return value != null and runtime.kind(value) == "record" and runtime.tag(value, name) == true }
+export fn response(status, body, headers = {}) {
+  integer(status, 200, 599, "HTTP response status"); object(headers, "Response headers")
+  let result = {status: status, body: body, headers: headers}; runtime.tag(result, "web.response", true); return result
+}
+export fn route(handler, schemas = {}) {
+  if runtime.kind(handler) != "function" { throw new TypeError("web.route expects a handler function.") }
+  object(schemas, "Route schemas")
+  for key in Object.keys(schemas) { if not ["body", "query", "params"].includes(key) { throw new TypeError("Unknown route schema: " + key) }; validate.check(schemas[key], undefined) }
+  let result = {handler: handler, schemas: Object.freeze(Object.assign({}, schemas))}
+  runtime.tag(result, "web.route", true); return Object.freeze(result)
+}
+export async fn health(checks = {}, options = {}) {
+  object(checks, "Health checks"); object(options, "Health options")
+  let duration = timeout(options.timeoutMs ?? 1000, "Health timeoutMs")
+  let operations = []
+  for key in Object.keys(checks) {
+    if runtime.kind(checks[key]) != "function" { throw new TypeError("Health checks must be functions.") }
+    operations.push((async fn(name, check) {
+      let controller = new AbortController(); let timer = undefined
+      let deadline = new Promise(fn(resolve) { timer = setTimeout(fn() { controller.abort(); resolve("timeout") }, duration) })
+      try {
+        let work = Promise.resolve().then(fn() { return check(controller.signal) }).then(fn(value) { if value == false { return "failed" }; return "ok" }, fn() { return "failed" })
+        return [name, await Promise.race([work, deadline])]
+      } finally { clearTimeout(timer) }
+    })(key, checks[key]))
+  }
+  let results = await Promise.all(operations); let ready = true
+  for result in results { if result[1] != "ok" { ready = false } }
+  let status = "unready"; let number = 503
+  if ready { status = "ready"; number = 200 }
+  return response(number, {status: status, checks: Object.fromEntries(results)}, {"cache-control": "no-store"})
+}
+fn inside(root, file) { return file == root or file.startsWith(root + "/") or root == "/" and file.startsWith("/") }
+fn contained(root, name, label) { if runtime.kind(name) != "string" or name.startsWith("/") or name.includes("\0") or name.includes("\\") { throw new TypeError(label + " must be relative to the web root.") }; let file = path.resolve(root, name); if not inside(root, file) { throw new TypeError(label + " must stay inside the web root.") }; return file }
+fn matchesId(value) { if runtime.kind(value) != "string" or len(value) < 1 or len(value) > 128 { return false }; for c in value { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-".includes(c) { return false } }; return true }
+fn parameterName(value) { if len(value) == 0 or not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_".includes(value[0]) { return false }; for c in value { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789".includes(c) { return false } }; return true }
+fn patternsFor(routes) {
+  let patterns = []; let identities = new Set()
+  for key in Object.keys(routes) {
+    let method = undefined; let pathname = key; let space = key.indexOf(" ")
+    if space >= 0 { method = key.slice(0, space); pathname = key.slice(space + 1); if len(method) == 0 { throw new TypeError("Invalid route method.") }; for c in method { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(c) { throw new TypeError("Route methods must be uppercase.") } } }
+    if not pathname.startsWith("/") or pathname.includes("?") or pathname.includes("#") { throw new TypeError("Route keys must be paths or METHOD /path: " + key) }
+    let segments = pathname.split("/"); let names = new Set(); let identity = []; let score = 0
+    for segment in segments {
+      if segment.startsWith(":") { let name = segment.slice(1); if not parameterName(name) or names.has(name) { throw new TypeError("Route parameters must have unique names: " + key) }; names.add(name); identity.push(":") }
+      else { score += 1; identity.push(segment) }
+    }
+    if names.size > 0 {
+      let signature = (method ?? "*") + " " + identity.join("/")
+      if identities.has(signature) { throw new TypeError("Ambiguous parameter route: " + key) }; identities.add(signature)
+      patterns.push({method: method, segments: segments, value: routes[key], score: score * 2 + number(method != undefined)})
+    }
+  }
+  return list.sortBy(patterns, fn(pattern) => -pattern.score)
+}
+fn findRoute(routes, patterns, method, pathname) {
+  let candidates = [method]; if method == "HEAD" { candidates.push("GET") }
+  for candidate in candidates {
+    if Object.hasOwn(routes, candidate + " " + pathname) { return {value: routes[candidate + " " + pathname], params: {}} }
+    if Object.hasOwn(routes, pathname) { return {value: routes[pathname], params: {}} }
+    let segments = pathname.split("/")
+    for pattern in patterns {
+      if pattern.method != undefined and pattern.method != candidate or len(pattern.segments) != len(segments) { continue }
+      let params = {}; let matches = true
+      for expected at i in pattern.segments {
+        let actual = segments[i]
+        if expected.startsWith(":") {
+          if actual == "" { matches = false; break }
+          let decoded = undefined
+          try { decoded = decodeURIComponent(actual) } catch _failure { throw error(400, "Invalid URL encoding") }
+          if decoded.includes("/") or decoded.includes("\\") or decoded.includes("\0") { throw error(400, "Invalid route parameter") }
+          params[expected.slice(1)] = decoded
+        } else if expected != actual { matches = false; break }
+      }
+      if matches { return {value: pattern.value, params: params} }
+    }
+  }
+  return undefined
+}
+const mimeTypes = {html: "text/html; charset=utf-8", htm: "text/html; charset=utf-8", css: "text/css; charset=utf-8", js: "text/javascript; charset=utf-8", mjs: "text/javascript; charset=utf-8", json: "application/json; charset=utf-8", svg: "image/svg+xml", png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", ico: "image/x-icon", webp: "image/webp", wasm: "application/wasm", pdf: "application/pdf", mp4: "video/mp4", webm: "video/webm", mp3: "audio/mpeg", ogg: "audio/ogg"}
+fn staticFile(state, raw) {
+  let pathname = undefined
+  try { pathname = decodeURIComponent(raw.split("?")[0].split("#")[0]) } catch _failure { throw error(400, "Invalid URL encoding") }
+  if not pathname.startsWith("/") or pathname.includes("\\") or pathname.includes("\0") { throw error(400, "Invalid asset path") }
+  for segment in pathname.split("/") { if segment.startsWith(".") { throw error(400, "Invalid asset path") } }
+  let file = undefined; let boundary = undefined
+  if pathname == "/" and state.index != undefined { file = state.index; boundary = state.root }
+  else if state.assets != undefined {
+    try { boundary = path.realPath(state.assets) } catch _failure { return undefined }
+    if not inside(state.root, boundary) { return undefined }; file = path.resolve(boundary, "." + pathname)
+  } else { return undefined }
+  if not inside(boundary, file) { return undefined }
+  let bytes = transport.file(file, boundary)
+  if bytes == undefined { return undefined }
+  let extension = file.slice(file.lastIndexOf(".") + 1).toLowerCase()
+  return response(200, bytes, {"content-type": mimeTypes[extension] ?? "application/octet-stream"})
+}
+fn emit(state, level, message, fields) { try { if state.options.logger != undefined { state.options.logger[level](message, fields) } } catch _failure {} }
+async fn send(state, socket, value, method, requestId, keep) {
+  let status = 200; let headers = {}; let body = undefined; let type = undefined
+  if tagged(value, "web.response") { status = value.status; headers = Object.assign({}, value.headers); value = value.body }
+  if value == undefined { body = ""; if status == 200 { status = 204 } }
+  else if Buffer.isBuffer(value) { body = value; type = "application/octet-stream" }
+  else if runtime.kind(value) == "string" { body = value; type = "text/html; charset=utf-8" }
+  else { body = JSON.stringify(value); type = "application/json; charset=utf-8" }
+  let outgoing = {"x-content-type-options": "nosniff"}
+  if type != undefined { outgoing["content-type"] = type }
+  for name in Object.keys(headers) { outgoing[name.toLowerCase()] = headers[name] }
+  outgoing["x-request-id"] = requestId
+  await transport.send(socket.handle, status, body, outgoing, method == "HEAD", keep and not state.stopping)
+  return status
+}
+async fn applyRoute(state, selected, input) {
+  let context = {state: state, active: true}; runtime.context(2, context)
+  try {
+  if state.options.before != undefined { let value = await state.options.before(input); if value != undefined { return value } }
+  let value = selected.value
+  if tagged(value, "web.route") {
+    let issues = []
+    for name in Object.keys(value.schemas) {
+      let result = validate.check(value.schemas[name], input[name])
+      if result.ok { input[name] = result.value }
+      else { for issue in result.issues { issues.push(Object.assign({}, issue, {path: [name, ...issue.path]})) } }
+    }
+    if len(issues) > 0 { let failure = error(400, "Input validation failed.", "ARYA_VALIDATION"); failure.issues = issues.slice(0, 32); throw failure }
+    return await value.handler(input)
+  }
+  if runtime.kind(value) == "function" { return await value(input) }
+  return value
+  } finally { context.active = false }
+}
+async fn connection(state, socket) {
+  try {
+    while not state.stopping {
+      let request = undefined; let requestId = transport.requestId(); let method = "GET"; let pathname = "/"; let timer = undefined; let background = undefined; let controller = undefined; let started = performance.now(); let status = 500
+      try {
+        request = await transport.read(socket.handle, state.limit, state.requestTimeout)
+        if request == null { return }
+        socket.busy = true; method = request.method
+        if state.options.trustRequestId and matchesId(request.headers["x-request-id"]) { requestId = request.headers["x-request-id"] }
+        let url = undefined
+        try { url = new URL(request.url, "http://localhost") } catch _failure { throw error(400, "Invalid request URL") }
+        pathname = url.pathname
+        let selected = findRoute(state.routes, state.patterns, method, pathname); let value = undefined
+        if selected == undefined {
+          if method == "GET" or method == "HEAD" { value = staticFile(state, request.url) }
+          if value == undefined { value = response(404, {error: "Not found"}) }
+        } else {
+          let body = request.text
+          if (request.headers["content-type"] ?? "").split(";")[0].trim().toLowerCase() == "application/json" and body != "" { try { body = JSON.parse(body) } catch _failure { throw error(400, "Invalid JSON body") } }
+          controller = new AbortController(); socket.controller = controller
+          let input = {method: method, path: pathname, params: selected.params, query: Object.fromEntries(url.searchParams.entries()), headers: request.headers, body: body, requestId: requestId, signal: controller.signal}
+          if state.options.logger != undefined { input.log = state.options.logger.child({requestId: requestId}) }
+          background = applyRoute(state, selected, input); state.active.add(background)
+          background.then(fn() { state.active.delete(background) }, fn() { state.active.delete(background) })
+          let deadline = new Promise(fn(resolve, reject) { timer = setTimeout(fn() { controller.abort(); reject(error(504, "Request handler exceeded its deadline.", "ARYA_HTTP_TIMEOUT")) }, state.handlerTimeout) })
+          value = await Promise.race([background, deadline])
+        }
+        status = await send(state, socket, value, method, requestId, request.keepAlive)
+      } catch failure {
+        if failure.code == "ARYA_HTTP_DISCONNECTED" { if controller != undefined { controller.abort() }; return }
+        if Number.isInteger(failure.aryaHttpStatus) and failure.aryaHttpStatus >= 400 and failure.aryaHttpStatus <= 599 { status = failure.aryaHttpStatus }
+        let message = failure.message ?? "Request failed"
+        if status >= 500 { message = "Internal server error"; emit(state, "error", "http.error", {requestId: requestId, method: method, path: pathname, code: failure.code ?? "ARYA_HTTP_INTERNAL"}) }
+        let body = {error: message}; if codeText(failure.code) { body.code = failure.code }; if failure.code == "ARYA_VALIDATION" { body.issues = failure.issues }
+        try { await send(state, socket, response(status, body), method, requestId, false) } catch _failure {}
+        return
+      } finally {
+        clearTimeout(timer); socket.busy = false
+        emit(state, "info", "http.request", {requestId: requestId, method: method, path: pathname, status: status, durationMs: Math.max(0, performance.now() - started)})
+      }
+      if not request.keepAlive { return }
+    }
+  } finally { if socket.controller != undefined { socket.controller.abort() }; transport.close(socket.handle); state.sockets.delete(socket) }
+}
+async fn accept(state) {
+  while not state.stopping {
+    let handle = await transport.accept(state.listener)
+    if handle == null { return }
+    if state.stopping or state.sockets.size >= state.maxConnections { transport.close(handle); continue }
+    let socket = {handle: handle, busy: false}; state.sockets.add(socket)
+    socket.operation = connection(state, socket); socket.operation.catch(fn(failure) { emit(state, "error", "http.error", {code: failure.code ?? "ARYA_HTTP_INTERNAL"}) })
+  }
+}
+fn serverEvent(state, event, value) {
+  let listeners = state.events[event].slice()
+  if event == "error" and listeners.length == 0 { throw value }
+  for entry in listeners { if entry.once { let index = state.events[event].indexOf(entry); if index >= 0 { state.events[event].splice(index, 1) } }; entry.listener(value) }
+}
+export async fn shutdown(server, options = {}) {
+  if not tagged(server, "web.server") { throw new TypeError("web.shutdown expects a server returned by web.serve.") }
+  object(options, "Shutdown options"); let state = runtime.tag(server, "web.state")
+  let context = runtime.context(2)
+  if context != undefined and context.state == state and context.active { let failure = new Error("Call web.shutdown after the current request has finished."); failure.code = "ARYA_SHUTDOWN_CONTEXT"; throw failure }
+  if state.shutdown != undefined { return await state.shutdown }
+  let duration = timeout(options.timeoutMs ?? 10000, "Shutdown timeoutMs")
+  if options.cleanup != undefined and runtime.kind(options.cleanup) != "function" { throw new TypeError("Shutdown cleanup must be a function.") }
+  state.stopping = true; if state.listener != undefined { transport.close(state.listener) }
+  for socket in state.sockets.values() { if not socket.busy { transport.close(socket.handle) } }
+  state.shutdown = (async fn() {
+    let timer = undefined
+    let deadline = new Promise(fn(resolve, reject) { timer = setTimeout(fn() { state.timedOut = true; for socket in state.sockets.values() { if socket.controller != undefined { socket.controller.abort() }; transport.close(socket.handle) }; let failure = new Error("HTTP shutdown exceeded its deadline. Outstanding work must honor cancellation."); failure.code = "ARYA_SHUTDOWN_TIMEOUT"; reject(failure) }, duration) })
+    let drain = (async fn() { await state.accepting; for socket in state.sockets.values() { await socket.operation }; while state.active.size > 0 { await Promise.allSettled(state.active.values()) }; if not state.timedOut and options.cleanup != undefined { await options.cleanup() } })()
+    try { await Promise.race([drain, deadline]); serverEvent(state, "close") } finally { clearTimeout(timer) }
+  })()
+  return await state.shutdown
+}
+fn serve(sourceDirectory, port, routes = {}, options = {}) {
+  integer(port, 0, 65535, "Web port"); object(routes, "Routes"); object(options, "Web options")
+  let requestTimeout = timeout(options.requestTimeoutMs ?? 30000, "requestTimeoutMs"); let handlerTimeout = timeout(options.handlerTimeoutMs ?? 30000, "handlerTimeoutMs")
+  if options.trustRequestId != undefined and runtime.kind(options.trustRequestId) != "boolean" { throw new TypeError("trustRequestId must be a boolean.") }
+  if options.before != undefined and runtime.kind(options.before) != "function" { throw new TypeError("before must be a request function.") }
+  if options.logger != undefined { for key in ["info", "error", "child"] { if runtime.kind(options.logger[key]) != "function" { throw new TypeError("logger must provide info, error and child methods.") } } }
+  let root = path.realPath(path.resolve(sourceDirectory, options.root ?? ".")); let html = options.html ?? "index.html"; let assets = options.assets ?? "public"; let index = undefined; let assetPath = undefined
+  if html != false { if runtime.kind(html) != "string" or not (html.toLowerCase().endsWith(".html") or html.toLowerCase().endsWith(".htm")) { throw new TypeError("html must name an HTML file, or be false.") }; index = contained(root, html, "HTML entry"); if transport.file(index, root) == undefined { throw new Error("Arya web requires an HTML entry file: " + index) } }
+  if assets != false { if runtime.kind(assets) != "string" or len(assets) == 0 { throw new TypeError("assets must name a directory, or be false.") }; assetPath = contained(root, assets, "Assets directory") }
+  let limit = integer(options.maxBodyBytes ?? 1048576, 1, 16777216, "maxBodyBytes")
+  let state = {routes: routes, patterns: patternsFor(routes), options: options, root: root, index: index, assets: assetPath, limit: limit, requestTimeout: requestTimeout, handlerTimeout: handlerTimeout, maxConnections: integer(options.maxConnections ?? 32, 1, 32, "maxConnections"), stopping: false, timedOut: false, sockets: new Set(), active: new Set(), events: {listening: [], close: [], error: []}}
+  let failure = undefined
+  try { state.listener = transport.listen(port, options.host ?? "127.0.0.1") } catch error { failure = error }
+  fn register(event, listener, once) { if runtime.kind(listener) != "function" { throw new TypeError("Server listener must be a function.") }; if not ["listening", "close", "error"].includes(event) { throw new TypeError("Unknown native server event: " + event) }; state.events[event].push({listener: listener, once: once}); return server }
+  let server = {address: fn() { if state.listener == undefined { return null }; return transport.address(state.listener) }, close: fn(callback) { let work = shutdown(server); if callback != undefined { work.then(fn() { callback() }, callback) }; return server }, closeAllConnections: fn() { for socket in state.sockets.values() { if socket.controller != undefined { socket.controller.abort() }; transport.close(socket.handle) } }, on: fn(event, listener) { return register(event, listener, false) }, once: fn(event, listener) { return register(event, listener, true) }}
+  runtime.fieldGetter(server, "listening", fn() { return state.listener != undefined and not state.stopping })
+  runtime.tag(server, "web.server", true); runtime.tag(server, "web.state", state)
+  if failure != undefined { state.accepting = Promise.resolve(); runtime.defer(fn() { serverEvent(state, "error", failure) }) }
+  else { state.accepting = accept(state); state.accepting.catch(fn(failure) { emit(state, "error", "http.error", {code: failure.code ?? "ARYA_HTTP_INTERNAL"}); serverEvent(state, "error", failure) }); runtime.defer(fn() { if not state.stopping { serverEvent(state, "listening") } }) }
+
+  return server
+}
+export fn forDirectory(sourceDirectory) { return Object.freeze({error: error, response: response, route: route, health: health, shutdown: shutdown, serve: fn(port, routes, options) { return serve(sourceDirectory, port, routes, options) }}) }

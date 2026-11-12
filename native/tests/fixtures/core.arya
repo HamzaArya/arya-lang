@@ -1,0 +1,16 @@
+use std "json" as json
+fn factory(start) { let current = start; return fn(step = 1) { current += step; return current } }
+const next = factory(40)
+print(next(), next(2))
+fn factorial(n: number): number { if n <= 1 { return 1 }; return n * factorial(n - 1) }
+print(factorial(8))
+fn total(first = 2, ...rest) { let value = first; for item in rest { value += item }; return value }
+print(total(undefined, ...[3, 4]))
+const people = [{name: "A", active: true}, {name: "B", active: false}]
+for person at index in people { print(index, person.name) }
+fn doubled(n: number): number => n * 2
+print(4 |> doubled())
+fn guarded(value) { guard value > 0 else { return "invalid" }; return "valid" }
+print(guarded(2), guarded(-1))
+print(json.stringify({text: "Arya", values: [true, null, 1.25]}))
+try { const x: any = null; x.value } catch error { print(error.name) }

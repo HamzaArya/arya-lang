@@ -1,0 +1,1389 @@
+# Native UI component rendering and browser assets. No server JavaScript runtime.
+use std "runtime" as runtime
+fn uiType(value) { let kind = runtime.kind(value); if ["list", "record", "date", "promise", "null", "async-iterator"].includes(kind) { return "object" }; return kind }
+fn uiNullish(value) { return value == null or value == undefined }
+fn uiChoose(condition, yes, no) { if condition { return yes() }; return no() }
+fn uiDefault(value, fallback) { if value == undefined { return fallback() }; return value }
+fn uiRest(value, excluded) { let result = {}; for key in Object.keys(value) { if not excluded.includes(key) { result[key] = value[key] } }; return result }
+fn uiTag(value, key) { if uiNullish(value) or runtime.kind(value) != "record" { return undefined }; return runtime.tag(value, key) }
+fn uiTagged(value, tags) { for pair in tags { runtime.tag(value, pair[0], pair[1]) }; return value }
+fn uiMerge(...sources) { let result = Object.assign({}, ...sources); for source in sources { if source != null and runtime.kind(source) == "record" { for tag in ["arya.ui.node", "arya.ui.binding", "arya.ui.action", "arya.ui.motion"] { let value = runtime.tag(source, tag); if value != undefined { runtime.tag(result, tag, value) } } } }; return result }
+const uiNativeNode = "arya.ui.node"
+
+const uiNativeBinding = "arya.ui.binding"
+
+const uiNativeAction = "arya.ui.action"
+
+const uiNativeMotion = "arya.ui.motion"
+
+const uiNativeOwn = Object.hasOwn
+
+const uiNativeError = fn(message) {
+
+throw Object.assign(new TypeError(("ui: " + message)), {"code": "ARYA_UI"})
+}
+
+const uiNativeObject = fn(value) { return runtime.isRecord(value) and not runtime.hasAccessor(value) }
+
+const uiNativeKey = fn(value, path = false) {
+
+if ((((uiType(value) != "string") or (value.length > 256)) or (not uiChoose(path, fn() { return new RegExp("^[A-Za-z_][\\w-]*(?:\\.[A-Za-z_][\\w-]*)*$", "") }, fn() { return new RegExp("^[A-Za-z_][\\w-]*$", "") }).test(value))) or value.split(".").some(fn(part) {
+
+return ["__proto__", "prototype", "constructor"].includes(part)
+})) {
+uiNativeError("state keys must be simple names; bindings may read dotted paths.")
+}
+return value
+}
+
+const uiNativeEscape = fn(value) {
+
+return String(value).replace(new RegExp("[&<>\"']", "g"), fn(char) {
+
+return {"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"}[char]
+})
+}
+
+const uiNativeJSON = fn(value) {
+
+return JSON.stringify(value).replace(new RegExp("[<>&\\u2028\\u2029]", "g"), fn(char) {
+
+return ("\\u" + char.charCodeAt(0).toString(16).padStart(4, "0"))
+})
+}
+
+const uiNativeData = fn(value, bindings = false) {
+
+const seen = new Set()
+let count = 0
+const copy = fn(item, depth) {
+
+if (((fn() { count += 1; return count })() > 10000) or (depth > 32)) {
+uiNativeError("data exceeds the depth or item limit.")
+}
+if ((((item == null) or (uiType(item) == "string")) or (uiType(item) == "boolean")) or ((uiType(item) == "number") and Number.isFinite(item))) {
+return item
+}
+if (bindings and uiTag(item, uiNativeBinding)) {
+return {"$aryaBind": uiNativeBindingData(item)}
+}
+if (((not Array.isArray(item)) and (not uiNativeObject(item))) or seen.has(item)) {
+uiNativeError("state and action values must be finite JSON data without cycles.")
+}
+if ((not item) or (uiType(item) != "object")) {
+uiNativeError("state and action values must be JSON data.")
+}
+if (Array.isArray(item) and (item.length > 10000)) {
+uiNativeError("data arrays cannot exceed 10000 items.")
+}
+seen.add(item)
+const result = uiChoose(Array.isArray(item), fn() { return [] }, fn() { return Object.create(null) })
+for key in Object.keys(item) {
+const property = Object.getOwnPropertyDescriptor(item, key)
+if ((((not property) or (not Object.hasOwn(property, "value"))) or ["__proto__", "prototype", "constructor"].includes(key)) or (bindings and (key == "$aryaBind"))) {
+uiNativeError(("unsafe data property: " + key))
+}
+result[key] = copy(property.value, (depth + 1))
+}
+seen.delete(item)
+return result
+}
+const result = copy(value, 0)
+if (Buffer.byteLength(JSON.stringify(result), "utf8") > (1024 * 1024)) {
+uiNativeError("data exceeds 1 MiB.")
+}
+return result
+}
+
+const uiNativeOptions = fn(value, names, label) {
+
+if (not uiNativeObject(value)) {
+uiNativeError((label + " options must be an object."))
+}
+for key in Object.keys(value) {
+if (not names.includes(key)) {
+uiNativeError(((("unknown " + label) + " option: ") + key))
+}
+}
+return value
+}
+
+const uiNativeBind = fn(key, fallback = "") {
+
+uiNativeKey(key, true)
+if (((fallback != null) and (not ["string", "number", "boolean"].includes(uiType(fallback)))) or ((uiType(fallback) == "number") and (not Number.isFinite(fallback)))) {
+uiNativeError("binding fallback must be a finite primitive value.")
+}
+return Object.freeze(uiTagged({"key": key, "fallback": fallback}, [[uiNativeBinding, true]]))
+}
+
+const uiNativeRead = fn(state, binding) {
+
+if (binding.op == "not") {
+return (not uiNativeRead(state, binding.value))
+}
+if (binding.op == "equal") {
+return Object.is(uiNativeRead(state, binding.value), binding.compare)
+}
+let value = state
+for key in binding.key.split(".") {
+value = uiChoose((not uiNullish(value) and uiNativeOwn(value, key)), fn() { return value[key] }, fn() { return undefined })
+}
+return (value ?? binding.fallback)
+}
+
+const uiNativeText = fn(value) {
+
+return uiChoose(uiNullish(value), fn() { return "" }, fn() { return uiChoose((uiType(value) == "object"), fn() { return JSON.stringify(value) }, fn() { return String(value) }) })
+}
+
+const uiNativePresets = Object.freeze({"fade": [{"opacity": 0}, {"opacity": 1}], "rise": [{"opacity": 0, "transform": "translateY(18px)"}, {"opacity": 1, "transform": "translateY(0)"}], "slide": [{"opacity": 0, "transform": "translateX(-24px)"}, {"opacity": 1, "transform": "translateX(0)"}], "scale": [{"opacity": 0, "transform": "scale(.94)"}, {"opacity": 1, "transform": "scale(1)"}], "pulse": [{"transform": "scale(1)"}, {"transform": "scale(1.06)"}, {"transform": "scale(1)"}], "drop": [{"opacity": 0, "transform": "translateY(-24px)"}, {"opacity": 1, "transform": "translateY(0)"}], "slide-right": [{"opacity": 0, "transform": "translateX(24px)"}, {"opacity": 1, "transform": "translateX(0)"}], "fade-out": [{"opacity": 1}, {"opacity": 0}], "zoom-out": [{"opacity": 0, "transform": "scale(1.12)"}, {"opacity": 1, "transform": "scale(1)"}], "bounce": [{"transform": "translateY(0)"}, {"transform": "translateY(-20px)", "offset": 0.4}, {"transform": "translateY(0)", "offset": 0.7}, {"transform": "translateY(-7px)", "offset": 0.85}, {"transform": "translateY(0)"}], "shake": [{"transform": "translateX(0)"}, {"transform": "translateX(-8px)"}, {"transform": "translateX(8px)"}, {"transform": "translateX(-4px)"}, {"transform": "translateX(0)"}], "flip": [{"opacity": 0, "transform": "perspective(600px) rotateY(-65deg)"}, {"opacity": 1, "transform": "perspective(600px) rotateY(0deg)"}], "spin": [{"transform": "rotate(0deg)"}, {"transform": "rotate(360deg)"}], "wiggle": [{"transform": "rotate(0deg)"}, {"transform": "rotate(-8deg)"}, {"transform": "rotate(8deg)"}, {"transform": "rotate(0deg)"}], "blur": [{"opacity": 0, "filter": "blur(10px)"}, {"opacity": 1, "filter": "blur(0px)"}], "float": [{"transform": "translateY(0)"}, {"transform": "translateY(-12px)"}, {"transform": "translateY(0)"}]})
+
+const uiNativeTiming = fn(options) {
+
+uiNativeOptions(options, ["duration", "delay", "repeat", "easing", "direction", "fill", "trigger", "stagger"], "motion")
+const timing = {"duration": (options.duration ?? 400), "delay": (options.delay ?? 0), "repeat": (options.repeat ?? 1), "easing": (options.easing ?? "smooth"), "direction": (options.direction ?? "normal"), "fill": (options.fill ?? "none"), "trigger": (options.trigger ?? "load"), "stagger": (options.stagger ?? 0)}
+for key in ["duration", "delay", "stagger"] {
+if (((not Number.isInteger(timing[key])) or (timing[key] < 0)) or (timing[key] > 60000)) {
+uiNativeError((("motion " + key) + " must be 0–60000 milliseconds."))
+}
+}
+if ((timing.repeat != "infinite") and (((not Number.isInteger(timing.repeat)) or (timing.repeat < 1)) or (timing.repeat > 100))) {
+uiNativeError("motion repeat must be 1–100 or \"infinite\".")
+}
+if ((timing.repeat == "infinite") and (timing.duration == 0)) {
+uiNativeError("infinite motion needs a positive duration.")
+}
+if (not ["linear", "ease", "ease-in", "ease-out", "ease-in-out", "smooth", "snappy"].includes(timing.easing)) {
+uiNativeError("unsupported motion easing.")
+}
+if (not ["normal", "reverse", "alternate", "alternate-reverse"].includes(timing.direction)) {
+uiNativeError("unsupported motion direction.")
+}
+if (not ["none", "forwards", "backwards", "both"].includes(timing.fill)) {
+uiNativeError("unsupported motion fill.")
+}
+if (not ["load", "hover", "press", "visible"].includes(timing.trigger)) {
+uiNativeError("motion trigger must be load, hover, press, or visible.")
+}
+return timing
+}
+
+const uiNativeMotionSpec = fn(preset = "rise", options = {}) {
+
+if ((uiType(preset) != "string") or (not uiNativeOwn(uiNativePresets, preset))) {
+uiNativeError("unknown motion preset. Use ui.presets() for the supported names.")
+}
+return Object.freeze(uiTagged(uiMerge({"preset": preset}, uiNativeTiming(options)), [[uiNativeMotion, true]]))
+}
+
+const uiNativeKeyframes = fn(frames, options = {}) {
+
+if (((not Array.isArray(frames)) or (frames.length < 2)) or (frames.length > 32)) {
+uiNativeError("keyframes expects 2–32 frame objects.")
+}
+let previousOffset = 0
+const safe = frames.map(fn(frame) {
+
+uiNativeOptions(frame, ["opacity", "transform", "filter", "backgroundColor", "color", "borderRadius", "boxShadow", "letterSpacing", "offset"], "keyframe")
+const result = {}
+if (not Object.keys(frame).length) {
+uiNativeError("keyframes cannot be empty.")
+}
+for uiLocal1 in Object.entries(frame) {
+let uiLocal2 = uiLocal1
+const key = uiLocal2[0]
+const value = uiLocal2[1]
+if ((key == "offset") or (key == "opacity")) {
+if ((((uiType(value) != "number") or (not Number.isFinite(value))) or (value < 0)) or (value > 1)) {
+uiNativeError((("keyframe " + key) + " must be 0–1."))
+}
+if (key == "offset") {
+if (value < previousOffset) {
+uiNativeError("keyframe offsets must be ordered.")
+}
+previousOffset = value
+}
+} else {
+if (((uiType(value) != "string") or (value.length > 256)) or new RegExp("url\\s*\\(|expression\\s*\\(|[;{}<>]", "i").test(value)) {
+uiNativeError((("keyframe " + key) + " must be a CSS value without URLs or declarations."))
+}
+}
+result[key] = value
+}
+return Object.freeze(result)
+})
+return Object.freeze(uiTagged(uiMerge({"frames": Object.freeze(safe)}, uiNativeTiming(options)), [[uiNativeMotion, true]]))
+}
+
+const uiNativeTarget = fn(value) {
+
+if (((uiType(value) != "string") or (not new RegExp("^[A-Za-z][\\w:-]{0,127}$", "").test(value))) or value.startsWith("arya-ui-")) {
+uiNativeError("target must be a component id, without #.")
+}
+return value
+}
+
+const uiNativeGetMotion = fn(value) {
+
+const motion = uiChoose((uiType(value) == "string"), fn() { return uiNativeMotionSpec(value) }, fn() { return value })
+if (not uiTag(motion, uiNativeMotion)) {
+uiNativeError("animation expects ui.motion, ui.keyframes, or a preset name.")
+}
+return motion
+}
+
+const uiNativeMakeAction = fn(kind, values) {
+
+return Object.freeze(uiTagged(uiMerge({"kind": kind}, values), [[uiNativeAction, true]]))
+}
+
+const uiNativeActions = fn(value, depth = 0, budget = {"count": 0}) {
+
+if ((depth > 8) or ((fn() { budget.count += 1; return budget.count })() > 1000)) {
+uiNativeError("actions exceed the nesting or item limit.")
+}
+if Array.isArray(value) {
+if (value.length > 100) {
+uiNativeError("too many actions.")
+}
+return value.map(fn(item) {
+
+return uiNativeActions(item, (depth + 1), budget)
+})
+}
+if (not uiTag(value, uiNativeAction)) {
+uiNativeError("action expects a ui action or a list of actions. Server functions cannot run in the browser.")
+}
+return Object.fromEntries(Object.entries(value))
+}
+
+const uiNativeElement = fn(tag, props = {}, children = []) {
+
+if (not ["main", "section", "article", "header", "footer", "nav", "aside", "div", "span", "p", "h1", "h2", "h3", "h4", "h5", "h6", "a", "button", "input", "textarea", "select", "option", "label", "form", "ul", "ol", "li", "strong", "em", "small", "pre", "code", "hr", "br", "img", "table", "caption", "thead", "tbody", "tr", "th", "td", "details", "summary", "output", "progress", "dialog", "fieldset", "legend", "figure", "figcaption", "blockquote", "dl", "dt", "dd", "meter"].includes(tag)) {
+uiNativeError(("unsupported element: " + tag))
+}
+if (not uiNativeObject(props)) {
+uiNativeError("element properties must be an object.")
+}
+return Object.freeze(uiTagged({"tag": tag, "props": Object.freeze(props), "children": children}, [[uiNativeNode, true]]))
+}
+
+const uiNativeComponent = fn(tag, className, children, options = {}) {
+
+return uiNativeElement(tag, uiMerge(options, {"class": (className + uiChoose(options.class, fn() { return (" " + options.class) }, fn() { return "" }))}), children)
+}
+
+const uiNativeTone = fn(options, fallback = "neutral") {
+
+let uiLocal3 = options
+let uiLocal4 = uiLocal3["tone"]
+const tone = uiDefault(uiLocal4, fn() { return fallback })
+const props = uiRest(uiLocal3, ["tone"])
+
+if (not ["neutral", "success", "warning", "danger", "info"].includes(tone)) {
+uiNativeError("tone must be neutral, success, warning, danger, or info.")
+}
+return {"tone": tone, "props": props}
+}
+
+const uiNativeItems = fn(items, label, maximum = 1000) {
+
+if ((not Array.isArray(items)) or (items.length > maximum)) {
+uiNativeError((((label + " expects up to ") + maximum) + " items."))
+}
+return items
+}
+
+const uiNativeBindingData = fn(binding) {
+
+return Object.fromEntries(Object.entries(binding))
+}
+
+const uiNativeCondition = fn(value) {
+
+if (uiType(value) == "string") {
+return uiNativeBind(value)
+}
+if (not uiTag(value, uiNativeBinding)) {
+uiNativeError("condition expects a state key or ui.bind/ui.is/ui.not.")
+}
+return value
+}
+
+const uiNativeNot = fn(value) {
+
+return Object.freeze(uiTagged({"op": "not", "value": uiNativeBindingData(uiNativeCondition(value))}, [[uiNativeBinding, true]]))
+}
+
+const uiNativeComponents = {"is": fn(value, compare) {
+
+if (((compare != null) and (not ["string", "number", "boolean"].includes(uiType(compare)))) or ((uiType(compare) == "number") and (not Number.isFinite(compare)))) {
+uiNativeError("ui.is compares a finite primitive value.")
+}
+return Object.freeze(uiTagged({"op": "equal", "value": uiNativeBindingData(uiNativeCondition(value)), "compare": compare}, [[uiNativeBinding, true]]))
+}, "not": uiNativeNot, "when": fn(condition, children, props = {}) {
+
+return uiNativeElement("div", uiMerge(props, {"hidden": uiNativeNot(condition)}), children)
+}, "section": fn(children, props = {}) {
+
+return uiNativeComponent("section", "arya-stack", children, props)
+}, "divider": fn(props = {}) {
+
+return uiNativeComponent("hr", "arya-divider", [], props)
+}, "link": fn(label, href, props = {}) {
+
+return uiNativeComponent("a", "arya-link", label, uiMerge(props, {"href": href}))
+}, "code": fn(source, options = {}) {
+
+let uiLocal5 = options
+let uiLocal6 = uiLocal5["language"]
+const language = uiDefault(uiLocal6, fn() { return "arya" })
+const props = uiRest(uiLocal5, ["language"])
+
+if ((uiType(source) != "string") or (uiType(language) != "string")) {
+uiNativeError("code expects source text and an optional language label.")
+}
+const tokens = []
+const pattern = new RegExp("\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'|\\/\\/[^\\n]*|#[^\\n]*|\\b(?:use|std|as|const|let|fn|async|await|return|if|else|for|in|true|false|null|try|catch|finally|guard|while|break|continue|throw|export|new|and|or|not)\\b|\\b\\d+(?:\\.\\d+)?\\b", "g")
+let offset = 0
+if (language == "arya") {
+for match in source.matchAll(pattern) {
+tokens.push(source.slice(offset, match.index))
+const value = match[0]
+const kind = uiChoose(new RegExp("^[\"']", "").test(value), fn() { return "string" }, fn() { return uiChoose(new RegExp("^(?:#|\\/\\/)", "").test(value), fn() { return "comment" }, fn() { return uiChoose(new RegExp("^\\d", "").test(value), fn() { return "number" }, fn() { return "keyword" }) }) })
+tokens.push(uiNativeElement("span", {"class": ("arya-code-" + kind)}, value))
+offset = (match.index + value.length)
+}
+}
+tokens.push(source.slice(offset))
+return uiNativeComponent("pre", "arya-code", uiNativeElement("code", {"data-language": language}, tokens), props)
+}, "preview": fn(options) {
+
+return uiNativePreview(options)
+}, "badge": fn(label, options = {}) {
+
+let uiLocal7 = uiNativeTone(options)
+const tone = uiLocal7["tone"]
+const props = uiLocal7["props"]
+
+return uiNativeComponent("span", ("arya-badge arya-tone-" + tone), label, props)
+}, "alert": fn(title, message, options = {}) {
+
+let uiLocal8 = uiNativeTone(options, "info")
+const tone = uiLocal8["tone"]
+const props = uiLocal8["props"]
+
+return uiNativeComponent("div", ("arya-alert arya-stack arya-tone-" + tone), [uiNativeElement("strong", {}, title), uiNativeElement("div", {}, message)], uiMerge({"role": uiChoose((tone == "danger"), fn() { return "alert" }, fn() { return "status" })}, props))
+}, "stat": fn(label, value, options = {}) {
+
+let uiLocal9 = options
+const hint = uiLocal9["hint"]
+const props = uiRest(uiLocal9, ["hint"])
+
+return uiNativeComponent("div", "arya-stat arya-stack", [uiNativeElement("span", {"class": "arya-muted"}, label), uiNativeElement("strong", {"class": "arya-stat-value"}, value), uiChoose(uiNullish(hint), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, hint) })], props)
+}, "avatar": fn(initials, options = {}) {
+
+let uiLocal10 = options
+let uiLocal11 = uiLocal10["label"]
+const label = uiDefault(uiLocal11, fn() { return initials })
+const props = uiRest(uiLocal10, ["label"])
+
+return uiNativeComponent("span", "arya-avatar", initials, uiMerge({"role": "img", "aria-label": label}, props))
+}, "textarea": fn(props = {}) {
+
+return uiNativeElement("textarea", uiMerge({"rows": 4}, props))
+}, "slider": fn(props = {}) {
+
+return uiNativeElement("input", uiMerge({"min": 0, "max": 100, "step": 1}, props, {"type": "range"}))
+}, "checkbox": fn(label, props = {}) {
+
+return uiNativeComponent("label", "arya-check", [uiNativeElement("input", uiMerge(props, {"type": "checkbox"})), uiNativeElement("span", {}, label)])
+}, "radio": fn(label, value, props = {}) {
+
+if (uiType(value) != "string") {
+uiNativeError("radio value must be text.")
+}
+return uiNativeComponent("label", "arya-check", [uiNativeElement("input", uiMerge(props, {"type": "radio", "value": value})), uiNativeElement("span", {}, label)])
+}, "switch": fn(label, props = {}) {
+
+return uiNativeComponent("label", "arya-check arya-switch", [uiNativeElement("input", uiMerge(props, {"type": "checkbox", "role": "switch"})), uiNativeElement("span", {}, label)])
+}, "field": fn(label, control, options = {}) {
+
+let uiLocal12 = options
+const hint = uiLocal12["hint"]
+const error = uiLocal12["error"]
+const props = uiRest(uiLocal12, ["hint", "error"])
+
+if ((((not uiTag(control, uiNativeNode)) or (not ["input", "textarea", "select"].includes(control.tag))) or (uiType(control.props.id) != "string")) or (not control.props.id)) {
+uiNativeError("field needs an input, textarea, or select with an id.")
+}
+const id = control.props.id
+const descriptions = [control.props["aria-describedby"], uiChoose(uiNullish(hint), fn() { return null }, fn() { return (id + "-hint") }), uiChoose(uiNullish(error), fn() { return null }, fn() { return (id + "-error") })].filter(Boolean).join(" ")
+const input = uiNativeElement(control.tag, uiMerge(control.props, uiChoose(descriptions, fn() { return {"aria-describedby": descriptions} }, fn() { return {} }), uiChoose(((uiType(error) == "string") and error), fn() { return {"aria-invalid": true} }, fn() { return {} })), control.children)
+return uiNativeComponent("div", "arya-field arya-stack", [uiNativeElement("label", {"for": id}, label), input, uiChoose(uiNullish(hint), fn() { return null }, fn() { return uiNativeElement("small", {"id": (id + "-hint"), "class": "arya-muted"}, hint) }), uiChoose(uiNullish(error), fn() { return null }, fn() { return uiNativeElement("small", {"id": (id + "-error"), "class": "arya-field-error", "role": "alert"}, error) })], props)
+}, "progress": fn(value, options = {}) {
+
+let uiLocal13 = options
+let uiLocal14 = uiLocal13["max"]
+const max = uiDefault(uiLocal14, fn() { return 100 })
+let uiLocal15 = uiLocal13["label"]
+const label = uiDefault(uiLocal15, fn() { return "Progress" })
+const props = uiRest(uiLocal13, ["max", "label"])
+
+if (((uiType(max) != "number") or (not Number.isFinite(max))) or (max <= 0)) {
+uiNativeError("progress max must be positive.")
+}
+return uiNativeComponent("progress", "arya-progress", [], uiMerge(props, {"max": max, "value": value, "aria-label": label}))
+}, "spinner": fn(options = {}) {
+
+let uiLocal16 = options
+let uiLocal17 = uiLocal16["label"]
+const label = uiDefault(uiLocal17, fn() { return "Loading" })
+const props = uiRest(uiLocal16, ["label"])
+
+return uiNativeComponent("span", "arya-spinner", uiNativeElement("span", {"class": "arya-sr-only"}, label), uiMerge({"role": "status"}, props))
+}, "skeleton": fn(options = {}) {
+
+let uiLocal18 = options
+let uiLocal19 = uiLocal18["lines"]
+const lines = uiDefault(uiLocal19, fn() { return 3 })
+const props = uiRest(uiLocal18, ["lines"])
+
+if (((not Number.isInteger(lines)) or (lines < 1)) or (lines > 12)) {
+uiNativeError("skeleton lines must be 1–12.")
+}
+return uiNativeComponent("div", "arya-skeleton arya-stack", Array.from({"length": lines}, fn() {
+
+return uiNativeElement("span", {}, [])
+}), uiMerge({"aria-hidden": true}, props))
+}, "empty": fn(title, message, action = null) {
+
+return uiNativeComponent("div", "arya-empty arya-stack", [uiNativeElement("strong", {}, title), uiNativeElement("p", {"class": "arya-muted"}, message), action])
+}, "list": fn(items, props = {}) {
+
+return uiNativeComponent("ul", "arya-list", uiNativeItems(items, "list").map(fn(item) {
+
+return uiNativeElement("li", {}, item)
+}), props)
+}, "table": fn(columns, rows, options = {}) {
+
+uiNativeItems(columns, "table columns", 30)
+uiNativeItems(rows, "table rows")
+if (not columns.length) {
+uiNativeError("table needs at least one column.")
+}
+const names = new Set()
+for column in columns {
+uiNativeOptions(column, ["key", "label"], "table column")
+if (((uiType(column.key) != "string") or (not column.key)) or names.has(column.key)) {
+uiNativeError("table columns need unique keys.")
+}
+names.add(column.key)
+}
+let uiLocal20 = options
+const caption = uiLocal20["caption"]
+let uiLocal21 = uiLocal20["empty"]
+const empty = uiDefault(uiLocal21, fn() { return "No records yet." })
+const props = uiRest(uiLocal20, ["caption", "empty"])
+
+return uiNativeComponent("div", "arya-table-wrap", uiNativeElement("table", {}, [uiChoose(uiNullish(caption), fn() { return null }, fn() { return uiNativeElement("caption", {}, caption) }), uiNativeElement("thead", {}, uiNativeElement("tr", {}, columns.map(fn(column) {
+
+return uiNativeElement("th", {"scope": "col"}, column.label)
+}))), uiNativeElement("tbody", {}, uiChoose(rows.length, fn() { return rows.map(fn(row) {
+
+if (not uiNativeObject(row)) {
+uiNativeError("table rows must be objects.")
+}
+return uiNativeElement("tr", {}, columns.map(fn(column) {
+
+return uiNativeElement("td", {}, uiChoose(uiNativeOwn(row, column.key), fn() { return row[column.key] }, fn() { return "" }))
+}))
+}) }, fn() { return uiNativeElement("tr", {}, uiNativeElement("td", {"colspan": columns.length}, empty)) }))]), props)
+}, "breadcrumbs": fn(items, props = {}) {
+
+return uiNativeComponent("nav", "arya-breadcrumbs", uiNativeElement("ol", {}, uiNativeItems(items, "breadcrumbs", 20).map(fn(item, index) {
+
+uiNativeOptions(item, ["label", "href"], "breadcrumb")
+return uiNativeElement("li", {}, uiChoose(item.href, fn() { return uiNativeElement("a", uiMerge({"href": item.href}, uiChoose((index == (items.length - 1)), fn() { return {"aria-current": "page"} }, fn() { return {} })), item.label) }, fn() { return uiNativeElement("span", uiChoose((index == (items.length - 1)), fn() { return {"aria-current": "page"} }, fn() { return {} }), item.label) }))
+})), uiMerge({"aria-label": "Breadcrumb"}, props))
+}, "tabs": fn(items, options = {}) {
+
+let uiLocal22 = options
+const id = uiLocal22["id"]
+let uiLocal23 = uiLocal22["label"]
+const label = uiDefault(uiLocal23, fn() { return "Sections" })
+const active = uiLocal22["active"]
+const props = uiRest(uiLocal22, ["id", "label", "active"])
+
+uiNativeTarget(id)
+uiNativeItems(items, "tabs", 30)
+const keys = new Set()
+for item in items {
+uiNativeOptions(item, ["id", "label", "body", "disabled"], "tab")
+uiNativeTarget(item.id)
+if keys.has(item.id) {
+uiNativeError("tab ids must be unique.")
+}
+keys.add(item.id)
+if ((item.disabled != undefined) and (uiType(item.disabled) != "boolean")) {
+uiNativeError("tab disabled must be a boolean.")
+}
+}
+const selected = (active ?? items.find(fn(item) {
+
+return (not item.disabled)
+})?.id)
+if ((not selected) or (not items.some(fn(item) {
+
+return ((item.id == selected) and (not item.disabled))
+}))) {
+uiNativeError("tabs need an enabled active item.")
+}
+return uiNativeComponent("div", "arya-tabs", [uiNativeElement("div", {"role": "tablist", "aria-label": label}, items.map(fn(item) {
+
+return uiNativeElement("button", {"id": ((id + "-tab-") + item.id), "type": "button", "role": "tab", "disabled": (item.disabled ?? false), "aria-selected": (item.id == selected), "aria-controls": ((id + "-panel-") + item.id), "tabindex": uiChoose((item.id == selected), fn() { return 0 }, fn() { return (-1) })}, item.label)
+})), items.map(fn(item) {
+
+return uiNativeElement("div", {"id": ((id + "-panel-") + item.id), "role": "tabpanel", "aria-labelledby": ((id + "-tab-") + item.id), "tabindex": 0, "hidden": (item.id != selected)}, item.body)
+})], uiMerge(props, {"id": id}))
+}, "accordion": fn(items, options = {}) {
+
+let uiLocal24 = options
+let uiLocal25 = uiLocal24["multiple"]
+const multiple = uiDefault(uiLocal25, fn() { return true })
+const props = uiRest(uiLocal24, ["multiple"])
+
+if ((uiType(multiple) != "boolean") or ((not multiple) and (not props.id))) {
+uiNativeError("exclusive accordions need an id and multiple:false.")
+}
+return uiNativeComponent("div", "arya-accordion", uiNativeItems(items, "accordion", 50).map(fn(item) {
+
+uiNativeOptions(item, ["title", "body", "open"], "accordion item")
+return uiNativeElement("details", uiMerge({"open": (item.open ?? false)}, uiChoose((not multiple), fn() { return {"name": props.id} }, fn() { return {} })), [uiNativeElement("summary", {}, item.title), uiNativeElement("div", {"class": "arya-stack"}, item.body)])
+}), props)
+}, "dialog": fn(id, title, children, options = {}) {
+
+uiNativeTarget(id)
+let uiLocal26 = options
+const description = uiLocal26["description"]
+const props = uiRest(uiLocal26, ["description"])
+
+return uiNativeComponent("dialog", "arya-dialog", [uiNativeElement("header", {"class": "arya-row"}, [uiNativeElement("h2", {"id": (id + "-title")}, title), uiNativeAPI.button("Close", {"variant": "ghost", "aria-label": "Close dialog", "action": uiNativeAPI.close(id)})]), uiChoose(uiNullish(description), fn() { return null }, fn() { return uiNativeElement("p", {"id": (id + "-description"), "class": "arya-muted"}, description) }), uiNativeElement("div", {"class": "arya-stack"}, children)], uiMerge(props, {"id": id, "aria-labelledby": (id + "-title")}, uiChoose(uiNullish(description), fn() { return {} }, fn() { return {"aria-describedby": (id + "-description")} })))
+}, "tooltip": fn(label, child, options = {}) {
+
+let uiLocal27 = options
+const id = uiLocal27["id"]
+const props = uiRest(uiLocal27, ["id"])
+
+uiNativeTarget(id)
+if (not uiTag(child, uiNativeNode)) {
+uiNativeError("tooltip needs a component child.")
+}
+const target = uiNativeElement(child.tag, uiMerge(child.props, {"aria-describedby": [child.props["aria-describedby"], id].filter(Boolean).join(" ")}), child.children)
+return uiNativeComponent("span", "arya-tooltip", [target, uiNativeElement("span", {"id": id, "role": "tooltip"}, label)], props)
+}, "open": fn(id) {
+
+return uiNativeMakeAction("open", {"target": uiNativeTarget(id)})
+}, "close": fn(id) {
+
+return uiNativeMakeAction("close", {"target": uiNativeTarget(id)})
+}, "copy": fn(id) {
+
+return uiNativeMakeAction("copy", {"target": uiNativeTarget(id)})
+}, "theme": fn(value) {
+
+if (not ["light", "dark", "auto", "toggle"].includes(value)) {
+uiNativeError("theme expects light, dark, auto, or toggle.")
+}
+return uiNativeMakeAction("theme", {"value": value})
+}, "toast": fn(message, options = {}) {
+
+uiNativeOptions(options, ["tone", "duration"], "toast")
+let uiLocal28 = uiNativeTone(options)
+const tone = uiLocal28["tone"]
+
+const duration = (options.duration ?? 3500)
+if (((((uiType(message) != "string") or (message.length > 2000)) or (not Number.isInteger(duration))) or (duration < 0)) or (duration > 60000)) {
+uiNativeError("toast expects text and a 0–60000 ms duration.")
+}
+return uiNativeMakeAction("toast", {"message": message, "tone": tone, "duration": duration})
+}, "presets": fn() {
+
+return Object.keys(uiNativePresets)
+}, "keyframes": uiNativeKeyframes, "animate": fn(target, motion = "rise", options = {}) {
+
+uiNativeOptions(options, ["wait"], "animate")
+const spec = uiNativeGetMotion(motion)
+const wait = (options.wait ?? (spec.repeat != "infinite"))
+if ((uiType(wait) != "boolean") or (wait and (spec.repeat == "infinite"))) {
+uiNativeError("infinite animations require wait:false.")
+}
+return uiNativeMakeAction("animate", {"target": uiNativeTarget(target), "motion": Object.fromEntries(Object.entries(spec)), "wait": wait})
+}, "pause": fn(id) {
+
+return uiNativeMakeAction("pause", {"target": uiNativeTarget(id)})
+}, "resume": fn(id) {
+
+return uiNativeMakeAction("resume", {"target": uiNativeTarget(id)})
+}, "cancel": fn(id) {
+
+return uiNativeMakeAction("cancel", {"target": uiNativeTarget(id)})
+}, "parallel": fn(actions) {
+
+uiNativeItems(actions, "parallel actions", 100)
+return uiNativeMakeAction("parallel", {"actions": uiNativeActions(actions)})
+}}
+
+const uiNativeSectionHead = fn(title, description) {
+
+return uiChoose((uiNullish(title) and uiNullish(description)), fn() { return null }, fn() { return uiNativeComponent("header", "arya-stack arya-section-head", [uiChoose(uiNullish(title), fn() { return null }, fn() { return uiNativeAPI.heading(title, {"level": 2}) }), uiChoose(uiNullish(description), fn() { return null }, fn() { return uiNativeAPI.text(description, {"class": "arya-muted"}) })]) })
+}
+
+const uiNativeNavItems = fn(items, label) {
+
+return uiNativeItems(items, label, 30).map(fn(item) {
+
+uiNativeOptions(item, ["label", "href", "current", "disabled"], (label + " item"))
+if ((((uiType(item.href) != "string") or (not item.href)) or ((item.current != undefined) and (uiType(item.current) != "boolean"))) or ((item.disabled != undefined) and (uiType(item.disabled) != "boolean"))) {
+uiNativeError((label + " items need an href and optional boolean current/disabled."))
+}
+return uiNativeElement("li", {}, uiChoose(item.disabled, fn() { return uiNativeElement("span", {"aria-disabled": true}, item.label) }, fn() { return uiNativeAPI.link(item.label, item.href, uiChoose(item.current, fn() { return {"aria-current": "page"} }, fn() { return {} })) }))
+})
+}
+
+const uiNativePatterns = {"container": fn(children, options = {}) {
+
+let uiLocal29 = options
+let uiLocal30 = uiLocal29["size"]
+const size = uiDefault(uiLocal30, fn() { return "lg" })
+const props = uiRest(uiLocal29, ["size"])
+
+if (not ["sm", "md", "lg", "full"].includes(size)) {
+uiNativeError("container size must be sm, md, lg, or full.")
+}
+return uiNativeComponent("div", ("arya-container arya-container-" + size), children, props)
+}, "buttonGroup": fn(children, options = {}) {
+
+let uiLocal31 = options
+let uiLocal32 = uiLocal31["label"]
+const label = uiDefault(uiLocal32, fn() { return "Actions" })
+const props = uiRest(uiLocal31, ["label"])
+
+return uiNativeComponent("div", "arya-button-group", children, uiMerge({"role": "group", "aria-label": label}, props))
+}, "image": fn(src, alt, options = {}) {
+
+let uiLocal33 = options
+const caption = uiLocal33["caption"]
+const props = uiRest(uiLocal33, ["caption"])
+
+if (((uiType(src) != "string") or (not src)) or (uiType(alt) != "string")) {
+uiNativeError("image needs a source and explicit alternative text (empty for decoration).")
+}
+for key in ["width", "height"] {
+if ((props[key] != undefined) and (((not Number.isInteger(props[key])) or (props[key] < 1)) or (props[key] > 20000))) {
+uiNativeError("image dimensions must be integers from 1–20000.")
+}
+}
+return uiNativeComponent("figure", "arya-image", [uiNativeElement("img", uiMerge({"loading": "lazy", "decoding": "async"}, props, {"src": src, "alt": alt})), uiChoose(uiNullish(caption), fn() { return null }, fn() { return uiNativeElement("figcaption", {"class": "arya-muted"}, caption) })])
+}, "descriptionList": fn(items, props = {}) {
+
+return uiNativeComponent("dl", "arya-description-list", uiNativeItems(items, "description list", 100).map(fn(item) {
+
+uiNativeOptions(item, ["term", "detail"], "description item")
+return uiNativeElement("div", {}, [uiNativeElement("dt", {}, item.term), uiNativeElement("dd", {}, item.detail)])
+}), props)
+}, "timeline": fn(items, props = {}) {
+
+return uiNativeComponent("ol", "arya-timeline", uiNativeItems(items, "timeline", 100).map(fn(item) {
+
+uiNativeOptions(item, ["title", "body", "time"], "timeline item")
+return uiNativeElement("li", {}, [uiChoose(uiNullish(item.time), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, item.time) }), uiNativeElement("strong", {}, item.title), uiChoose(uiNullish(item.body), fn() { return null }, fn() { return uiNativeElement("div", {"class": "arya-muted"}, item.body) })])
+}), props)
+}, "steps": fn(items, options = {}) {
+
+let uiLocal34 = options
+let uiLocal35 = uiLocal34["current"]
+const current = uiDefault(uiLocal35, fn() { return 0 })
+let uiLocal36 = uiLocal34["label"]
+const label = uiDefault(uiLocal36, fn() { return "Progress" })
+const props = uiRest(uiLocal34, ["current", "label"])
+
+uiNativeItems(items, "steps", 20)
+if ((((not items.length) or (not Number.isInteger(current))) or (current < 0)) or (current >= items.length)) {
+uiNativeError("steps current must select an existing zero-based item.")
+}
+return uiNativeComponent("ol", "arya-steps", items.map(fn(item, index) {
+
+uiNativeOptions(item, ["title", "description"], "step")
+return uiNativeElement("li", uiMerge({"class": uiChoose((index < current), fn() { return "arya-step-complete" }, fn() { return "" })}, uiChoose((index == current), fn() { return {"aria-current": "step"} }, fn() { return {} })), [uiNativeElement("span", {"class": "arya-step-number", "aria-hidden": true}, uiChoose((index < current), fn() { return "✓" }, fn() { return (index + 1) })), uiNativeElement("div", {"class": "arya-stack"}, [uiNativeElement("strong", {}, item.title), uiChoose(uiNullish(item.description), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, item.description) })])])
+}), uiMerge({"aria-label": label}, props))
+}, "pagination": fn(items, options = {}) {
+
+let uiLocal37 = options
+let uiLocal38 = uiLocal37["label"]
+const label = uiDefault(uiLocal38, fn() { return "Pagination" })
+const props = uiRest(uiLocal37, ["label"])
+
+if (uiNativeItems(items, "pagination", 50).filter(fn(item) {
+
+return item?.current
+}).length > 1) {
+uiNativeError("pagination has at most one current item.")
+}
+return uiNativeComponent("nav", "arya-pagination", uiNativeElement("ul", {}, uiNativeNavItems(items, "pagination")), uiMerge({"aria-label": label}, props))
+}, "segmented": fn(items, options = {}) {
+
+let uiLocal39 = options
+const id = uiLocal39["id"]
+const bind = uiLocal39["bind"]
+let uiLocal40 = uiLocal39["label"]
+const label = uiDefault(uiLocal40, fn() { return "Choose an option" })
+const props = uiRest(uiLocal39, ["id", "bind", "label"])
+
+uiNativeTarget(id)
+uiNativeKey(bind)
+uiNativeItems(items, "segmented", 20)
+const values = new Set()
+if (not items.length) {
+uiNativeError("segmented needs at least one option.")
+}
+return uiNativeComponent("fieldset", "arya-segmented", [uiNativeElement("legend", {"class": "arya-sr-only"}, label), uiNativeElement("div", {}, items.map(fn(item, index) {
+
+uiNativeOptions(item, ["value", "label", "disabled"], "segmented item")
+if (((uiType(item.value) != "string") or values.has(item.value)) or ((item.disabled != undefined) and (uiType(item.disabled) != "boolean"))) {
+uiNativeError("segmented values must be distinct text, with optional boolean disabled.")
+}
+values.add(item.value)
+return uiNativeAPI.radio(item.label, item.value, {"id": ((id + "-") + index), "bind": bind, "disabled": (item.disabled ?? false)})
+}))], uiMerge(props, {"id": id}))
+}, "search": fn(options = {}) {
+
+let uiLocal41 = options
+const id = uiLocal41["id"]
+const bind = uiLocal41["bind"]
+let uiLocal42 = uiLocal41["label"]
+const label = uiDefault(uiLocal42, fn() { return "Search" })
+let uiLocal43 = uiLocal41["placeholder"]
+const placeholder = uiDefault(uiLocal43, fn() { return "Search…" })
+const props = uiRest(uiLocal41, ["id", "bind", "label", "placeholder"])
+
+uiNativeTarget(id)
+if (bind != undefined) {
+uiNativeKey(bind)
+}
+return uiNativeComponent("div", "arya-search", [uiNativeAPI.label(label, id), uiNativeElement("div", {"class": "arya-row"}, [uiNativeAPI.input(uiMerge(props, {"id": id, "type": "search", "placeholder": placeholder}, uiChoose((bind == undefined), fn() { return {} }, fn() { return {"bind": bind} }))), uiChoose((bind == undefined), fn() { return null }, fn() { return uiNativeAPI.button("Clear", {"variant": "ghost", "action": uiNativeAPI.set(bind, ""), "aria-label": ("Clear " + label)}) })])])
+}, "meter": fn(value, options = {}) {
+
+let uiLocal44 = options
+let uiLocal45 = uiLocal44["min"]
+const min = uiDefault(uiLocal45, fn() { return 0 })
+let uiLocal46 = uiLocal44["max"]
+const max = uiDefault(uiLocal46, fn() { return 100 })
+const low = uiLocal44["low"]
+const high = uiLocal44["high"]
+const optimum = uiLocal44["optimum"]
+let uiLocal47 = uiLocal44["label"]
+const label = uiDefault(uiLocal47, fn() { return "Usage" })
+const props = uiRest(uiLocal44, ["min", "max", "low", "high", "optimum", "label"])
+
+if ((((not Number.isFinite(min)) or (not Number.isFinite(max))) or (min >= max)) or ((not uiTag(value, uiNativeBinding)) and ((((uiType(value) != "number") or (not Number.isFinite(value))) or (value < min)) or (value > max)))) {
+uiNativeError("meter needs a finite increasing range and a value within it (or a binding).")
+}
+for item in [low, high, optimum] {
+if ((item != undefined) and ((((uiType(item) != "number") or (not Number.isFinite(item))) or (item < min)) or (item > max))) {
+uiNativeError("meter thresholds must be within its range.")
+}
+}
+if (((low != undefined) and (high != undefined)) and (low > high)) {
+uiNativeError("meter low cannot exceed high.")
+}
+return uiNativeComponent("meter", "arya-meter", [], uiMerge(props, {"min": min, "max": max, "low": low, "high": high, "optimum": optimum, "value": value, "aria-label": label}))
+}, "navbar": fn(options = {}) {
+
+let uiLocal48 = options
+let uiLocal49 = uiLocal48["brand"]
+const brand = uiDefault(uiLocal49, fn() { return "Workspace" })
+let uiLocal50 = uiLocal48["href"]
+const href = uiDefault(uiLocal50, fn() { return "/" })
+let uiLocal51 = uiLocal48["links"]
+const links = uiDefault(uiLocal51, fn() { return [] })
+let uiLocal52 = uiLocal48["actions"]
+const actions = uiDefault(uiLocal52, fn() { return [] })
+let uiLocal53 = uiLocal48["label"]
+const label = uiDefault(uiLocal53, fn() { return "Main navigation" })
+const props = uiRest(uiLocal48, ["brand", "href", "links", "actions", "label"])
+
+return uiNativeComponent("header", "arya-navbar", [uiNativeAPI.link(brand, href, {"class": "arya-brand"}), uiNativeElement("nav", {"aria-label": label}, uiNativeElement("ul", {}, uiNativeNavItems(links, "navbar"))), uiNativeComponent("div", "arya-row arya-navbar-actions", actions)], props)
+}, "hero": fn(options = {}) {
+
+let uiLocal54 = options
+const eyebrow = uiLocal54["eyebrow"]
+const title = uiLocal54["title"]
+const description = uiLocal54["description"]
+let uiLocal55 = uiLocal54["actions"]
+const actions = uiDefault(uiLocal55, fn() { return [] })
+const media = uiLocal54["media"]
+let uiLocal56 = uiLocal54["align"]
+const align = uiDefault(uiLocal56, fn() { return "left" })
+const props = uiRest(uiLocal54, ["eyebrow", "title", "description", "actions", "media", "align"])
+
+if (uiNullish(title) or (not ["left", "center"].includes(align))) {
+uiNativeError("hero needs a title and left/center alignment.")
+}
+return uiNativeComponent("section", (("arya-hero arya-hero-" + align) + uiChoose(uiNullish(media), fn() { return "" }, fn() { return " arya-hero-split" })), [uiNativeComponent("div", "arya-stack arya-hero-copy", [uiChoose(uiNullish(eyebrow), fn() { return null }, fn() { return uiNativeAPI.text(eyebrow, {"class": "arya-eyebrow"}) }), uiNativeAPI.heading(title), uiChoose(uiNullish(description), fn() { return null }, fn() { return uiNativeAPI.text(description, {"class": "arya-muted"}) }), uiNativeAPI.row(actions)]), uiChoose(uiNullish(media), fn() { return null }, fn() { return uiNativeComponent("div", "arya-hero-media", media) })], props)
+}, "features": fn(items, options = {}) {
+
+let uiLocal57 = options
+const title = uiLocal57["title"]
+const description = uiLocal57["description"]
+const props = uiRest(uiLocal57, ["title", "description"])
+
+return uiNativeComponent("section", "arya-pattern arya-stack", [uiNativeSectionHead(title, description), uiNativeAPI.grid(uiNativeItems(items, "features", 30).map(fn(item) {
+
+uiNativeOptions(item, ["title", "description", "icon"], "feature")
+return uiNativeAPI.card([uiChoose(uiNullish(item.icon), fn() { return null }, fn() { return uiNativeElement("span", {"class": "arya-feature-icon", "aria-hidden": true}, item.icon) }), uiNativeAPI.heading(item.title, {"level": 3}), uiNativeAPI.text(item.description, {"class": "arya-muted"})], {"class": "arya-feature"})
+}))], props)
+}, "pricing": fn(items, options = {}) {
+
+let uiLocal58 = options
+const title = uiLocal58["title"]
+const description = uiLocal58["description"]
+const props = uiRest(uiLocal58, ["title", "description"])
+
+return uiNativeComponent("section", "arya-pattern arya-stack", [uiNativeSectionHead(title, description), uiNativeAPI.grid(uiNativeItems(items, "pricing", 12).map(fn(item) {
+
+uiNativeOptions(item, ["title", "price", "interval", "description", "features", "action", "highlighted"], "pricing plan")
+if ((item.highlighted != undefined) and (uiType(item.highlighted) != "boolean")) {
+uiNativeError("pricing highlighted must be boolean.")
+}
+return uiNativeAPI.card([uiChoose(item.highlighted, fn() { return uiNativeAPI.badge("Recommended", {"tone": "info"}) }, fn() { return null }), uiNativeAPI.heading(item.title, {"level": 3}), uiChoose(uiNullish(item.description), fn() { return null }, fn() { return uiNativeAPI.text(item.description, {"class": "arya-muted"}) }), uiNativeElement("p", {"class": "arya-price"}, [uiNativeElement("strong", {}, item.price), uiChoose(uiNullish(item.interval), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, item.interval) })]), uiNativeAPI.list((item.features ?? [])), item.action], {"class": ("arya-pricing-card" + uiChoose(item.highlighted, fn() { return " arya-highlighted" }, fn() { return "" }))})
+}))], props)
+}, "testimonials": fn(items, options = {}) {
+
+let uiLocal59 = options
+const title = uiLocal59["title"]
+const description = uiLocal59["description"]
+const props = uiRest(uiLocal59, ["title", "description"])
+
+return uiNativeComponent("section", "arya-pattern arya-stack", [uiNativeSectionHead(title, description), uiNativeAPI.grid(uiNativeItems(items, "testimonials", 30).map(fn(item) {
+
+uiNativeOptions(item, ["quote", "name", "role", "initials"], "testimonial")
+return uiNativeComponent("figure", "arya-card arya-stack arya-testimonial", [uiNativeElement("blockquote", {}, item.quote), uiNativeElement("figcaption", {"class": "arya-row"}, [uiChoose(uiNullish(item.initials), fn() { return null }, fn() { return uiNativeAPI.avatar(item.initials, {"label": item.name}) }), uiNativeAPI.stack([uiNativeElement("strong", {}, item.name), uiChoose(uiNullish(item.role), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, item.role) })])])])
+}))], props)
+}, "faq": fn(items, options = {}) {
+
+let uiLocal60 = options
+let uiLocal61 = uiLocal60["title"]
+const title = uiDefault(uiLocal61, fn() { return "Frequently asked questions" })
+const description = uiLocal60["description"]
+const props = uiRest(uiLocal60, ["title", "description"])
+
+return uiNativeComponent("section", "arya-pattern arya-stack", [uiNativeSectionHead(title, description), uiNativeAPI.accordion(uiNativeItems(items, "faq", 50).map(fn(item) {
+
+uiNativeOptions(item, ["question", "answer", "open"], "faq item")
+return {"title": item.question, "body": item.answer, "open": (item.open ?? false)}
+}), props)])
+}, "cta": fn(options = {}) {
+
+let uiLocal62 = options
+const title = uiLocal62["title"]
+const description = uiLocal62["description"]
+let uiLocal63 = uiLocal62["actions"]
+const actions = uiDefault(uiLocal63, fn() { return [] })
+const props = uiRest(uiLocal62, ["title", "description", "actions"])
+
+if uiNullish(title) {
+uiNativeError("cta needs a title.")
+}
+return uiNativeComponent("section", "arya-cta arya-card", [uiNativeSectionHead(title, description), uiNativeAPI.row(actions)], props)
+}, "footer": fn(options = {}) {
+
+let uiLocal64 = options
+const brand = uiLocal64["brand"]
+const description = uiLocal64["description"]
+let uiLocal65 = uiLocal64["links"]
+const links = uiDefault(uiLocal65, fn() { return [] })
+const copyright = uiLocal64["copyright"]
+let uiLocal66 = uiLocal64["label"]
+const label = uiDefault(uiLocal66, fn() { return "Footer navigation" })
+const props = uiRest(uiLocal64, ["brand", "description", "links", "copyright", "label"])
+
+return uiNativeComponent("footer", "arya-footer arya-stack", [uiNativeAPI.row([uiNativeAPI.stack([uiChoose(uiNullish(brand), fn() { return null }, fn() { return uiNativeElement("strong", {"class": "arya-brand"}, brand) }), uiChoose(uiNullish(description), fn() { return null }, fn() { return uiNativeAPI.text(description, {"class": "arya-muted"}) })]), uiNativeElement("nav", {"aria-label": label}, uiNativeElement("ul", {}, uiNativeNavItems(links, "footer")))]), uiChoose(uiNullish(copyright), fn() { return null }, fn() { return uiNativeElement("small", {"class": "arya-muted"}, copyright) })], props)
+}}
+
+const uiNativeAPI = Object.freeze(uiMerge(uiNativeComponents, uiNativePatterns, {"templates": fn() {
+
+return uiNativeTemplateCatalog.map(fn(item) {
+
+return item.name
+})
+}, "template": fn(name, options = {}) {
+
+return uiNativeTemplate(name, options)
+}, "bind": uiNativeBind, "motion": uiNativeMotionSpec, "element": uiNativeElement, "stack": fn(children, options = {}) {
+
+return uiNativeComponent("div", "arya-stack", children, options)
+}, "row": fn(children, options = {}) {
+
+return uiNativeComponent("div", "arya-row", children, options)
+}, "grid": fn(children, options = {}) {
+
+return uiNativeComponent("div", "arya-grid", children, options)
+}, "card": fn(children, options = {}) {
+
+return uiNativeComponent("section", "arya-card arya-stack", children, options)
+}, "heading": fn(text, options = {}) {
+
+let uiLocal67 = options
+let uiLocal68 = uiLocal67["level"]
+const level = uiDefault(uiLocal68, fn() { return 1 })
+const props = uiRest(uiLocal67, ["level"])
+
+if (((not Number.isInteger(level)) or (level < 1)) or (level > 6)) {
+uiNativeError("heading level must be 1–6.")
+}
+return uiNativeElement(("h" + level), props, text)
+}, "text": fn(value, options = {}) {
+
+return uiNativeElement("p", options, value)
+}, "button": fn(label, options = {}) {
+
+let uiLocal69 = options
+let uiLocal70 = uiLocal69["variant"]
+const variant = uiDefault(uiLocal70, fn() { return "primary" })
+const props = uiRest(uiLocal69, ["variant"])
+
+if (not ["primary", "secondary", "ghost", "danger"].includes(variant)) {
+uiNativeError("button variant must be primary, secondary, ghost, or danger.")
+}
+return uiNativeComponent("button", ("arya-" + variant), label, uiMerge({"type": "button"}, props))
+}, "input": fn(options = {}) {
+
+return uiNativeElement("input", uiMerge({"type": "text"}, options))
+}, "label": fn(text, forId) {
+
+return uiNativeElement("label", {"for": forId}, text)
+}, "form": fn(children, options = {}) {
+
+return uiNativeComponent("form", "arya-stack", children, options)
+}, "select": fn(items, options = {}) {
+
+if ((not Array.isArray(items)) or (items.length > 1000)) {
+uiNativeError("select expects up to 1000 {value, label} options.")
+}
+return uiNativeElement("select", options, items.map(fn(item) {
+
+uiNativeOptions(item, ["value", "label"], "select item")
+return uiNativeElement("option", {"value": item.value}, item.label)
+}))
+}, "set": fn(key, value) {
+
+return uiNativeMakeAction("set", {"key": uiNativeKey(key), "value": uiNativeData(value, true)})
+}, "toggle": fn(key) {
+
+return uiNativeMakeAction("toggle", {"key": uiNativeKey(key)})
+}, "increment": fn(key, step = 1) {
+
+if ((uiType(step) != "number") or (not Number.isFinite(step))) {
+uiNativeError("increment step must be finite.")
+}
+return uiNativeMakeAction("increment", {"key": uiNativeKey(key), "step": step})
+}, "request": fn(path, options = {}) {
+
+uiNativeOptions(options, ["method", "body", "result", "pending", "error", "timeoutMs"], "request")
+if (((uiType(path) != "string") or (not new RegExp("^\\/(?!\\/)", "").test(path))) or new RegExp("[\\\\\\s\\u0000-\\u001f\\u007f#]", "").test(path)) {
+uiNativeError("request path must be an absolute same-origin path such as /api/report.")
+}
+const method = (options.method ?? "GET")
+const timeoutMs = (options.timeoutMs ?? 10000)
+if ((not ["GET", "POST", "PUT", "PATCH", "DELETE"].includes(method)) or ((method == "GET") and (options.body != undefined))) {
+uiNativeError("request method must be GET, POST, PUT, PATCH, or DELETE; GET cannot have a body.")
+}
+if (((not Number.isInteger(timeoutMs)) or (timeoutMs < 1)) or (timeoutMs > 120000)) {
+uiNativeError("request timeoutMs must be 1–120000.")
+}
+const spec = {"path": path, "method": method, "timeoutMs": timeoutMs}
+for key in ["result", "pending", "error"] {
+if (options[key] != undefined) {
+spec[key] = uiNativeKey(options[key])
+}
+}
+if (new Set(["result", "pending", "error"].map(fn(key) {
+
+return spec[key]
+}).filter(Boolean)).size != ["result", "pending", "error"].filter(fn(key) {
+
+return spec[key]
+}).length) {
+uiNativeError("request result, pending, and error must use different state keys.")
+}
+if (options.body != undefined) {
+spec.body = uiNativeData(options.body, true)
+}
+return uiNativeMakeAction("request", spec)
+}, "page": fn(options = {}) {
+
+uiNativeOptions(options, ["title", "description", "lang", "theme", "state", "body", "css", "nonce"], "page")
+const state = uiNativeData((options.state ?? {}))
+if (not uiNativeObject(state)) {
+uiNativeError("page state must be an object.")
+}
+for key in Object.keys(state) {
+uiNativeKey(key)
+}
+const theme = (options.theme ?? "auto")
+const lang = (options.lang ?? "en")
+if (((not ["dark", "light", "auto"].includes(theme)) or (uiType(lang) != "string")) or (not new RegExp("^[A-Za-z][A-Za-z0-9-]{0,34}$", "").test(lang))) {
+uiNativeError("invalid page theme or language.")
+}
+for key in ["title", "description", "css"] {
+if ((options[key] != undefined) and (uiType(options[key]) != "string")) {
+uiNativeError((("page " + key) + " must be text."))
+}
+}
+if new RegExp("<\\/style", "i").test((options.css ?? "")) {
+uiNativeError("page CSS cannot contain a closing style tag.")
+}
+const nonce = (options.nonce ?? runtime.randomUUID().replace(new RegExp("-", "g"), ""))
+if ((uiType(nonce) != "string") or (not new RegExp("^[A-Za-z0-9+/_-]{16,128}={0,2}$", "").test(nonce))) {
+uiNativeError("nonce must be 16–128 base64 or URL-safe characters.")
+}
+const ids = new Set(["arya-ui-state", "arya-ui-error", "arya-ui-toasts"])
+let nodes = 0
+const attr = fn(name, value) {
+
+if (uiNullish(value) or (((value == false) and (not name.startsWith("aria-"))) and (not name.startsWith("data-")))) {
+return ""
+}
+if ((value == true) and ["checked", "disabled", "hidden", "required", "multiple", "readonly", "selected", "open", "autofocus", "novalidate"].includes(name)) {
+return (" " + name)
+}
+if ((not ["string", "number", "boolean"].includes(uiType(value))) or ((uiType(value) == "number") and (not Number.isFinite(value)))) {
+uiNativeError((("attribute " + name) + " must be a finite primitive value."))
+}
+if (["href", "src"].includes(name) and ((new RegExp("^[\\s\\u0000-\\u001f]*[^/?#]*:", "i").test(String(value)) and (not new RegExp("^(?:https?:|mailto:|tel:)", "i").test(String(value)))) or new RegExp("[\\u0000-\\u001f\\u007f\\\\]", "").test(String(value)))) {
+uiNativeError((("unsupported URL in " + name) + "."))
+}
+return ((((" " + name) + "=\"") + uiNativeEscape(value)) + "\"")
+}
+const render = fn(value, depth = 0) {
+
+if (((fn() { nodes += 1; return nodes })() > 10000) or (depth > 64)) {
+uiNativeError("page exceeds the element or nesting limit.")
+}
+if Array.isArray(value) {
+return value.map(fn(item) {
+
+return render(item, (depth + 1))
+}).join("")
+}
+if (uiNullish(value) or (value == false)) {
+return ""
+}
+if uiTag(value, uiNativeBinding) {
+return (((("<span data-arya-text=\"" + uiNativeEscape(JSON.stringify(uiNativeBindingData(value)))) + "\">") + uiNativeEscape(uiNativeText(uiNativeRead(state, value)))) + "</span>")
+}
+if (not uiTag(value, uiNativeNode)) {
+if ((not ["string", "number", "boolean"].includes(uiType(value))) or ((uiType(value) == "number") and (not Number.isFinite(value)))) {
+uiNativeError("children must be components, bindings, or primitive text.")
+}
+return uiNativeEscape(value)
+}
+let attributes = ""
+let model = undefined
+const bindings = {}
+for uiLocal71 in Object.entries(value.props) {
+let uiLocal72 = uiLocal71
+const name = uiLocal72[0]
+const original = uiLocal72[1]
+if (name == "action") {
+if (not ["button", "form"].includes(value.tag)) {
+uiNativeError("actions are supported on buttons and forms.")
+}
+attributes += attr("data-arya-action", JSON.stringify(uiNativeActions(original)))
+continue
+}
+if (name == "animate") {
+const motion = uiNativeGetMotion(original)
+attributes += attr("data-arya-motion", JSON.stringify(motion))
+continue
+}
+if (name == "bind") {
+if (not ["input", "textarea", "select"].includes(value.tag)) {
+uiNativeError("bind is supported on input, textarea, and select.")
+}
+model = uiNativeKey(original)
+if (value.props.type == "radio") {
+bindings.checked = {"op": "equal", "value": {"key": model, "fallback": ""}, "compare": String((value.props.value ?? "on"))}
+if (value.props.name == undefined) {
+attributes += attr("name", model)
+}
+} else {
+bindings[uiChoose((value.props.type == "checkbox"), fn() { return "checked" }, fn() { return "value" })] = {"key": model, "fallback": ""}
+}
+attributes += attr("data-arya-model", model)
+continue
+}
+if ((((not new RegExp("^[a-z][a-z0-9-]*$", "").test(name)) or new RegExp("^on", "").test(name)) or ["style", "srcdoc", "formaction", "action", "http-equiv", "nonce"].includes(name)) or name.startsWith("data-arya-")) {
+uiNativeError(("unsupported attribute: " + name))
+}
+if (name == "id") {
+if (((uiType(original) != "string") or (not original)) or ids.has(original)) {
+uiNativeError("element ids must be unique nonempty text.")
+}
+ids.add(original)
+}
+if uiTag(original, uiNativeBinding) {
+if ((not ["value", "checked", "disabled", "hidden", "title"].includes(name)) and (not name.startsWith("aria-"))) {
+uiNativeError((("binding is not allowed on attribute " + name) + "."))
+}
+bindings[name] = uiNativeBindingData(original)
+const initial = uiNativeRead(state, original)
+attributes += attr(name, uiChoose(["checked", "disabled", "hidden"].includes(name), fn() { return Boolean(initial) }, fn() { return initial }))
+} else {
+attributes += attr(name, original)
+}
+}
+if (model and (((value.props.type != "radio") and (value.props.value != undefined)) or (value.props.checked != undefined))) {
+uiNativeError("use bind or a value/checked property, not both.")
+}
+if (model and (value.props.type == "file")) {
+uiNativeError("file inputs do not support JSON state binding.")
+}
+if ((model and (value.props.type == "password")) and (uiNativeRead(state, bindings.value) != "")) {
+uiNativeError("password bindings must start empty; never send an existing password in page state.")
+}
+if ((model and (value.tag == "select")) and value.props.multiple) {
+uiNativeError("bound selects support one selected value.")
+}
+if (model and (value.tag == "input")) {
+const name = uiChoose(["checkbox", "radio"].includes(value.props.type), fn() { return "checked" }, fn() { return "value" })
+const initial = uiNativeRead(state, bindings[name])
+attributes += attr(name, uiChoose((name == "checked"), fn() { return Boolean(initial) }, fn() { return initial }))
+}
+if Object.keys(bindings).length {
+attributes += attr("data-arya-bind", JSON.stringify(bindings))
+}
+const voidElement = ["input", "br", "hr", "img"].includes(value.tag)
+let childNodes = value.children
+if (model and (value.tag == "select")) {
+const selected = uiNativeText(uiNativeRead(state, bindings.value))
+const select = fn(child) {
+
+return uiChoose(Array.isArray(child), fn() { return child.map(select) }, fn() { return uiChoose((uiTag(child, uiNativeNode) and (child.tag == "option")), fn() { return uiNativeElement("option", uiMerge(child.props, {"selected": (uiNativeText(child.props.value) == selected)}), child.children) }, fn() { return child }) })
+}
+childNodes = select(childNodes)
+}
+const children = uiChoose((model and (value.tag == "textarea")), fn() { return uiNativeEscape(uiNativeText(uiNativeRead(state, bindings.value))) }, fn() { return render(childNodes, (depth + 1)) })
+if (voidElement and children) {
+uiNativeError((("void element " + value.tag) + " cannot have children."))
+}
+return (((("<" + value.tag) + attributes) + ">") + uiChoose(voidElement, fn() { return "" }, fn() { return (((children + "</") + value.tag) + ">") }))
+}
+const body = render((options.body ?? []))
+const policy = (((("default-src 'self'; script-src 'nonce-" + nonce) + "'; style-src 'nonce-") + nonce) + "'; img-src 'self' https:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'")
+return ((((((((((((((((((((((((("<!doctype html><html lang=\"" + uiNativeEscape(lang)) + "\" data-theme=\"") + theme) + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta http-equiv=\"Content-Security-Policy\" content=\"") + uiNativeEscape(policy)) + "\"><title>") + uiNativeEscape((options.title ?? "Arya App"))) + "</title><meta name=\"description\" content=\"") + uiNativeEscape((options.description ?? ""))) + "\"><style nonce=\"") + nonce) + "\">") + "\n:root { color-scheme: dark; --bg:#101416; --surface:#1a2124; --ink:#eff6f3; --muted:#adbdba; --line:#354643; --accent:#b6f2d1; --button-ink:#13251c; --code-keyword:#c4a9e9; --code-string:#8ad3a6; --code-number:#e3af77; font:16px/1.6 ui-sans-serif,system-ui,sans-serif; background:var(--bg); color:var(--ink); }\n:root[data-theme=\"light\"] { color-scheme:light; --bg:#f4f7f5; --surface:#fff; --ink:#162b24; --muted:#52675d; --line:#cbd9d0; --accent:#185d40; --button-ink:#fff; --code-keyword:#7044a0; --code-string:#23734c; --code-number:#96560f; }\n@media(prefers-color-scheme:light) { :root[data-theme=\"auto\"] { color-scheme:light; --bg:#f4f7f5; --surface:#fff; --ink:#162b24; --muted:#52675d; --line:#cbd9d0; --accent:#185d40; --button-ink:#fff; --code-keyword:#7044a0; --code-string:#23734c; --code-number:#96560f; } }\n* { box-sizing:border-box; } body { margin:0; } main.arya-page { width:min(100% - 3rem,68rem); margin:0 auto; padding:clamp(2rem,7vw,6rem) 0; }\nh1,h2,h3 { line-height:1.15; letter-spacing:-.04em; margin:0; } h1 { font-size:clamp(2.4rem,6vw,4.5rem); max-width:20ch; } h2 { font-size:1.7rem; } p { margin:0; } a { color:var(--accent); }\n.arya-stack { display:flex; flex-direction:column; gap:1.1rem; } .arya-row { display:flex; align-items:center; flex-wrap:wrap; gap:1rem; } .arya-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr)); gap:1.4rem; }\n.arya-card { background:var(--surface); border:1px solid var(--line); border-radius:1.2rem; padding:clamp(1.4rem,4vw,2.3rem); } .arya-muted { color:var(--muted); } .arya-eyebrow { font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; }\nbutton,input,select,textarea { font:inherit; } button { cursor:pointer; border:1px solid transparent; border-radius:.6rem; padding:.7rem 1.2rem; background:var(--accent); color:var(--button-ink); font-weight:650; } button.arya-secondary { background:transparent; color:var(--ink); border-color:var(--line); } button:hover { filter:brightness(1.08); } button:disabled { opacity:.55; cursor:wait; }\ninput:not([type=\"checkbox\"]):not([type=\"radio\"]),select,textarea { width:100%; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:.5rem; padding:.7rem .9rem; } input[type=\"checkbox\"],input[type=\"radio\"] { accent-color:var(--accent); } label { font-size:.9rem; font-weight:600; } :focus-visible { outline:3px solid var(--accent); outline-offset:4px; } [hidden] { display:none!important; }\n#arya-ui-error { border:1px solid #d98585; color:var(--ink); background:var(--surface); border-radius:.6rem; padding:1rem; margin-bottom:1.5rem; }\n.arya-ghost { background:transparent; color:var(--ink); border-color:transparent; } .arya-danger { background:#b73838; color:#fff; } .arya-link { text-underline-offset:.2em; font-weight:600; }\n.arya-divider { border:0; border-top:1px solid var(--line); width:100%; margin:1rem 0; }\n.arya-code { margin:0; padding:1.25rem; max-width:100%; overflow:auto; border:1px solid var(--line); border-radius:.75rem; background:var(--bg); font: .83rem/1.8 ui-monospace,SFMono-Regular,Consolas,monospace; tab-size:2; }\n.arya-code-keyword { color:var(--code-keyword); } .arya-code-string { color:var(--code-string); } .arya-code-number { color:var(--code-number); } .arya-code-comment { color:var(--muted); font-style:italic; }\n.arya-tone-neutral { --tone:var(--muted); } .arya-tone-success { --tone:#228159; } .arya-tone-warning { --tone:#a96c16; } .arya-tone-danger { --tone:#ce4e4e; } .arya-tone-info { --tone:#4686c8; }\n.arya-badge { display:inline-flex; align-items:center; width:fit-content; padding:.18rem .65rem; border-radius:2rem; border:1px solid color-mix(in srgb,var(--tone) 35%,transparent); color:var(--tone); background:color-mix(in srgb,var(--tone) 9%,transparent); font-size:.75rem; font-weight:650; white-space:nowrap; }\n.arya-alert { gap:.35rem; border:1px solid color-mix(in srgb,var(--tone) 45%,var(--line)); border-left:3px solid var(--tone); border-radius:.65rem; padding:1rem 1.2rem; background:color-mix(in srgb,var(--tone) 7%,var(--surface)); }\n.arya-stat { gap:.2rem; } .arya-stat-value { font-size:2.2rem; line-height:1.3; letter-spacing:-.05em; font-variant-numeric:tabular-nums; }\n.arya-avatar { display:inline-flex; align-items:center; justify-content:center; width:2.7rem; height:2.7rem; flex-shrink:0; border-radius:50%; border:1px solid var(--line); background:var(--accent); color:var(--button-ink); font-size:.8rem; font-weight:750; }\n.arya-field { gap:.5rem; } .arya-field small { font-size:.78rem; } .arya-field-error { color:#ce4e4e; } input[aria-invalid=\"true\"],textarea[aria-invalid=\"true\"],select[aria-invalid=\"true\"] { border-color:#ce4e4e; }\n.arya-check { display:flex; align-items:center; gap:.7rem; cursor:pointer; font-weight:450; } .arya-check input { width:1.1rem; height:1.1rem; flex-shrink:0; } input[type=\"range\"] { padding:.5rem 0; border:0; accent-color:var(--accent); }\n.arya-switch input { appearance:none; width:2.6rem; height:1.5rem; border-radius:2rem; border:1px solid var(--line); padding:2px; background:var(--line); cursor:pointer; } .arya-switch input::before { content:\"\"; display:block; width:1.1rem; height:1.1rem; border-radius:50%; background:var(--bg); } .arya-switch input:checked { background:var(--accent); } .arya-switch input:checked::before { transform:translateX(1.05rem); }\n.arya-progress { display:block; width:100%; height:.6rem; border:0; border-radius:1rem; overflow:hidden; accent-color:var(--accent); background:var(--line); } .arya-progress::-webkit-progress-bar { background:var(--line); } .arya-progress::-webkit-progress-value { background:var(--accent); border-radius:1rem; }\n.arya-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }\n.arya-spinner { display:inline-block; width:1.25rem; height:1.25rem; border:2px solid var(--line); border-top-color:var(--accent); border-radius:50%; animation:arya-spin .8s linear infinite; } @keyframes arya-spin { to { transform:rotate(360deg); } }\n.arya-skeleton { gap:.65rem; } .arya-skeleton>span { display:block; height:.9rem; border-radius:.3rem; background:var(--line); animation:arya-shimmer 1.8s ease-in-out infinite; } .arya-skeleton>span:last-child { width:65%; } @keyframes arya-shimmer { 50% { opacity:.4; } }\n.arya-empty { padding:2rem; align-items:center; text-align:center; border:1px dashed var(--line); border-radius:.75rem; } .arya-list { margin:0; padding-left:1.3rem; } .arya-list li { padding:.3rem 0; }\n.arya-table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:.75rem; } table { border-collapse:collapse; width:100%; text-align:left; font-size:.85rem; } caption { padding:.8rem 1rem; text-align:left; color:var(--muted); font-size:.75rem; } th,td { padding:.85rem 1rem; border-bottom:1px solid var(--line); } th { font-weight:650; background:var(--bg); } tbody tr:last-child td { border-bottom:0; }\n.arya-breadcrumbs ol { display:flex; flex-wrap:wrap; gap:.6rem; padding:0; margin:0; list-style:none; color:var(--muted); font-size:.8rem; } .arya-breadcrumbs li+li::before { content:\"/\"; margin-right:.6rem; color:var(--line); } .arya-breadcrumbs a { color:inherit; }\n.arya-tabs>[role=\"tablist\"] { display:flex; overflow-x:auto; gap:.25rem; border-bottom:1px solid var(--line); margin-bottom:1.25rem; } .arya-tabs [role=\"tab\"] { border-radius:.4rem .4rem 0 0; border-bottom:2px solid transparent; padding:.7rem 1rem; white-space:nowrap; background:transparent; color:var(--muted); font-size:.85rem; } .arya-tabs [role=\"tab\"][aria-selected=\"true\"] { color:var(--ink); border-bottom-color:var(--accent); } .arya-tabs>[role=\"tabpanel\"] { min-width:0; }\n.arya-accordion details { border-bottom:1px solid var(--line); padding:1rem 0; } .arya-accordion summary { cursor:pointer; font-weight:600; } .arya-accordion details>div { padding:1rem 0 .25rem; color:var(--muted); }\n.arya-dialog { width:min(36rem,calc(100% - 2rem)); color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:1rem; padding:1.5rem; } .arya-dialog::backdrop { background:#07110dcc; backdrop-filter:blur(4px); } .arya-dialog>header { justify-content:space-between; gap:1rem; margin-bottom:1rem; } .arya-dialog>p { margin-bottom:1rem; }\n.arya-tooltip { display:inline-flex; position:relative; } .arya-tooltip>[role=\"tooltip\"] { position:absolute; z-index:10; bottom:calc(100% + .5rem); left:50%; transform:translateX(-50%); width:max-content; max-width:min(18rem,80vw); padding:.45rem .7rem; border:1px solid var(--line); background:var(--ink); color:var(--bg); border-radius:.4rem; font-size:.75rem; visibility:hidden; pointer-events:none; } .arya-tooltip:hover>[role=\"tooltip\"],.arya-tooltip:focus-within>[role=\"tooltip\"] { visibility:visible; }\n#arya-ui-toasts { position:fixed; z-index:100; right:1.25rem; bottom:1.25rem; display:flex; flex-direction:column; gap:.6rem; width:min(24rem,calc(100% - 2.5rem)); } .arya-toast { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.8rem 1rem; background:var(--surface); color:var(--ink); border:1px solid var(--line); border-left:3px solid var(--tone); border-radius:.6rem; box-shadow:0 .5rem 2rem #0002; font-size:.85rem; } .arya-toast button { padding:.35rem .5rem; font-size:.7rem; }\n.arya-container { width:100%; margin-inline:auto; min-width:0; } .arya-container-sm { max-width:32rem; } .arya-container-md { max-width:48rem; } .arya-container-lg { max-width:68rem; } .arya-container-full { max-width:none; }\n.arya-button-group { display:flex; flex-wrap:wrap; gap:.5rem; } .arya-image { margin:0; display:grid; gap:.6rem; } .arya-image img { display:block; max-width:100%; height:auto; border-radius:.85rem; } .arya-image figcaption { font-size:.8rem; }\n.arya-description-list { margin:0; } .arya-description-list>div { display:grid; grid-template-columns:minmax(7rem,1fr) minmax(0,2fr); gap:1rem; padding:.9rem 0; border-bottom:1px solid var(--line); } .arya-description-list dt { color:var(--muted); } .arya-description-list dd { margin:0; overflow-wrap:anywhere; }\n.arya-timeline { list-style:none; padding:0 0 0 1.3rem; margin:0; } .arya-timeline li { position:relative; display:grid; gap:.3rem; padding:0 0 1.6rem 1.3rem; border-left:1px solid var(--line); } .arya-timeline li:last-child { padding-bottom:0; } .arya-timeline li::before { content:\"\"; position:absolute; left:-.3rem; top:.4rem; width:.55rem; height:.55rem; border-radius:50%; background:var(--accent); } .arya-timeline small { font-size:.75rem; }\n.arya-steps { display:flex; flex-wrap:wrap; gap:1.5rem; list-style:none; padding:0; margin:0; } .arya-steps li { display:flex; flex:1 1 10rem; align-items:flex-start; gap:.75rem; color:var(--muted); } .arya-steps li>div { gap:.2rem; } .arya-step-number { display:grid; place-items:center; width:2rem; height:2rem; flex-shrink:0; border:1px solid var(--line); border-radius:50%; font-size:.8rem; } .arya-steps [aria-current=\"step\"],.arya-step-complete { color:var(--ink); } .arya-steps [aria-current=\"step\"] .arya-step-number,.arya-step-complete .arya-step-number { background:var(--accent); color:var(--button-ink); border-color:var(--accent); }\n.arya-pagination ul,.arya-navbar ul,.arya-footer ul { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; list-style:none; margin:0; padding:0; } .arya-pagination a,.arya-pagination span { display:block; padding:.4rem .8rem; border:1px solid var(--line); border-radius:.5rem; text-decoration:none; } .arya-pagination [aria-current=\"page\"] { color:var(--button-ink); background:var(--accent); } [aria-disabled=\"true\"] { opacity:.6; }\n.arya-segmented { border:0; padding:0; margin:0; min-width:0; } .arya-segmented>div { display:flex; flex-wrap:wrap; width:fit-content; gap:.25rem; padding:.3rem; border:1px solid var(--line); border-radius:.7rem; background:var(--bg); } .arya-segmented .arya-check { gap:.45rem; padding:.45rem .7rem; border-radius:.4rem; } .arya-segmented .arya-check:has(input:checked) { background:var(--accent); color:var(--button-ink); } .arya-segmented .arya-check:has(input:disabled) { opacity:.55; } .arya-segmented input { width:.9rem; height:.9rem; } .arya-search { display:grid; gap:.5rem; } .arya-search input { flex:1 1 10rem; min-width:0; } .arya-meter { width:100%; height:.8rem; accent-color:var(--accent); }\n.arya-navbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1.2rem; padding:1.2rem 0; border-bottom:1px solid var(--line); } .arya-brand { font-weight:750; font-size:1.25rem; letter-spacing:-.05em; text-decoration:none; color:var(--ink); } .arya-navbar a:not(.arya-brand),.arya-footer a { font-size:.85rem; color:var(--muted); text-decoration:none; } .arya-navbar [aria-current=\"page\"] { color:var(--ink); } .arya-navbar-actions:empty { display:none; }\n.arya-hero { padding:clamp(2.5rem,8vw,6rem) 0; } .arya-hero-copy { gap:1.6rem; } .arya-hero-copy>p:not(.arya-eyebrow) { max-width:52ch; font-size:1.1rem; } .arya-hero-copy>.arya-row { gap:1.5rem; } .arya-hero-center { text-align:center; } .arya-hero-center .arya-hero-copy { align-items:center; } .arya-hero-split { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:center; gap:3rem; } .arya-hero-media { min-width:0; } .arya-hero-media .arya-card { box-shadow:0 1.5rem 4rem #0001; }\n.arya-pattern { padding:2.5rem 0; gap:1.8rem; } .arya-section-head { max-width:48rem; gap:.7rem; } .arya-feature h3 { font-size:1.15rem; letter-spacing:-.02em; } .arya-feature p { font-size:.9rem; } .arya-feature-icon { color:var(--accent); font:700 .9rem ui-monospace,monospace; } .arya-price { display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem; } .arya-price strong { font-size:2.6rem; letter-spacing:-.05em; line-height:1.2; } .arya-price small { font-size:.8rem; } .arya-pricing-card { align-items:flex-start; } .arya-pricing-card>.arya-list { flex:1; font-size:.9rem; } .arya-highlighted { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }\n.arya-testimonial { margin:0; justify-content:space-between; } .arya-testimonial blockquote { margin:0; font-size:1.05rem; line-height:1.7; } .arya-testimonial figcaption .arya-stack { gap:0; font-size:.85rem; } .arya-cta { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; margin:2rem 0; } .arya-cta .arya-section-head { max-width:38rem; }\n.arya-footer { padding:2rem 0 0; margin-top:2rem; border-top:1px solid var(--line); font-size:.85rem; } .arya-footer>.arya-row { justify-content:space-between; } .arya-template { gap:2rem; } .arya-template-settings,.arya-template-sign-in { gap:3rem; } .arya-template-sign-in { min-height:65vh; justify-content:center; } .arya-template-sign-in h1,.arya-template-settings h1 { font-size:clamp(2rem,5vw,3.2rem); } .arya-template .arya-card { min-width:0; }\n@media(max-width:680px) { .arya-hero-split { grid-template-columns:minmax(0,1fr); gap:1.5rem; } .arya-navbar nav { order:3; width:100%; } .arya-navbar-actions { margin-left:auto; } .arya-description-list>div { grid-template-columns:minmax(0,1fr); gap:.25rem; } .arya-steps { gap:1rem; } .arya-steps li { flex-basis:100%; } }\n@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition:none!important; } }\n") + (options.css ?? "")) + "</style></head><body><main class=\"arya-page\"><div id=\"arya-ui-error\" role=\"alert\" hidden></div>") + body) + "</main><script id=\"arya-ui-state\" type=\"application/json\" nonce=\"") + nonce) + "\">") + uiNativeJSON({"state": state})) + "</script><script nonce=\"") + nonce) + "\">") + "(() => {\n  'use strict';\n  const config = JSON.parse(document.getElementById('arya-ui-state').textContent);\n  const state = config.state;\n  const read = binding => {\n    if (binding.op === 'not') return !read(binding.value);\n    if (binding.op === 'equal') return Object.is(read(binding.value), binding.compare);\n    let value = state;\n    for (const part of binding.key.split('.')) value = value != null && Object.hasOwn(value, part) ? value[part] : undefined;\n    return value ?? binding.fallback;\n  };\n  const text = value => value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);\n  const resolve = value => {\n    if (!value || typeof value !== 'object') return value;\n    if (Object.hasOwn(value, '$aryaBind')) return read(value.$aryaBind);\n    if (Array.isArray(value)) return value.map(resolve);\n    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, resolve(item)]));\n  };\n  const render = () => {\n    for (const element of document.querySelectorAll('[data-arya-text]')) element.textContent = text(read(JSON.parse(element.dataset.aryaText)));\n    for (const element of document.querySelectorAll('[data-arya-bind]')) {\n      for (const [name, binding] of Object.entries(JSON.parse(element.dataset.aryaBind))) {\n        const value = read(binding);\n        if (['checked', 'disabled', 'hidden'].includes(name)) element[name] = Boolean(value);\n        else if (name === 'value') { const next = text(value); if (element.value !== next) element.value = next; }\n        else element.setAttribute(name, text(value));\n      }\n    }\n  };\n  const problem = error => {\n    const element = document.getElementById('arya-ui-error');\n    element.textContent = error.message || 'The action could not be completed.';\n    element.hidden = false;\n  };\n  const reduced = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };\n  const animations = new Set();\n  const active = new Map();\n  const presets = {\"fade\":[{\"opacity\":0},{\"opacity\":1}],\"rise\":[{\"opacity\":0,\"transform\":\"translateY(18px)\"},{\"opacity\":1,\"transform\":\"translateY(0)\"}],\"slide\":[{\"opacity\":0,\"transform\":\"translateX(-24px)\"},{\"opacity\":1,\"transform\":\"translateX(0)\"}],\"scale\":[{\"opacity\":0,\"transform\":\"scale(.94)\"},{\"opacity\":1,\"transform\":\"scale(1)\"}],\"pulse\":[{\"transform\":\"scale(1)\"},{\"transform\":\"scale(1.06)\"},{\"transform\":\"scale(1)\"}],\"drop\":[{\"opacity\":0,\"transform\":\"translateY(-24px)\"},{\"opacity\":1,\"transform\":\"translateY(0)\"}],\"slide-right\":[{\"opacity\":0,\"transform\":\"translateX(24px)\"},{\"opacity\":1,\"transform\":\"translateX(0)\"}],\"fade-out\":[{\"opacity\":1},{\"opacity\":0}],\"zoom-out\":[{\"opacity\":0,\"transform\":\"scale(1.12)\"},{\"opacity\":1,\"transform\":\"scale(1)\"}],\"bounce\":[{\"transform\":\"translateY(0)\"},{\"transform\":\"translateY(-20px)\",\"offset\":0.4},{\"transform\":\"translateY(0)\",\"offset\":0.7},{\"transform\":\"translateY(-7px)\",\"offset\":0.85},{\"transform\":\"translateY(0)\"}],\"shake\":[{\"transform\":\"translateX(0)\"},{\"transform\":\"translateX(-8px)\"},{\"transform\":\"translateX(8px)\"},{\"transform\":\"translateX(-4px)\"},{\"transform\":\"translateX(0)\"}],\"flip\":[{\"opacity\":0,\"transform\":\"perspective(600px) rotateY(-65deg)\"},{\"opacity\":1,\"transform\":\"perspective(600px) rotateY(0deg)\"}],\"spin\":[{\"transform\":\"rotate(0deg)\"},{\"transform\":\"rotate(360deg)\"}],\"wiggle\":[{\"transform\":\"rotate(0deg)\"},{\"transform\":\"rotate(-8deg)\"},{\"transform\":\"rotate(8deg)\"},{\"transform\":\"rotate(0deg)\"}],\"blur\":[{\"opacity\":0,\"filter\":\"blur(10px)\"},{\"opacity\":1,\"filter\":\"blur(0px)\"}],\"float\":[{\"transform\":\"translateY(0)\"},{\"transform\":\"translateY(-12px)\"},{\"transform\":\"translateY(0)\"}]};\n  const easing = {smooth: 'cubic-bezier(.2,.7,.2,1)', snappy: 'cubic-bezier(.2,.9,.3,1.2)'};\n  const controlMotion = (element, command) => {\n    for (const animation of active.get(element) ?? []) { animation[command](); if (command === 'cancel') animations.delete(animation); }\n    if (command === 'cancel') active.delete(element);\n  };\n  const playMotion = (element, motion) => {\n    controlMotion(element, 'cancel');\n    if (reduced.matches) return Promise.resolve(true);\n    const targets = motion.stagger > 0 ? Array.from(element.children) : [element];\n    const running = new Set();\n    active.set(element, running);\n    const jobs = targets.map((target, index) => {\n      if (typeof target.animate !== 'function') return Promise.resolve(true);\n      const animation = target.animate(motion.frames ?? presets[motion.preset], {\n        duration: motion.duration, delay: motion.delay + index * (motion.stagger ?? 0),\n        iterations: motion.repeat === 'infinite' ? Infinity : motion.repeat,\n        easing: easing[motion.easing] ?? motion.easing ?? easing.smooth,\n        direction: motion.direction ?? 'normal', fill: motion.fill ?? 'none'\n      });\n      animations.add(animation); running.add(animation);\n      const finished = animation.finished.then(() => true, () => false).finally(() => {\n        // A forwards-filled effect remains controllable until cancelled/replaced.\n        if (animation.playState !== 'finished' || !['forwards', 'both'].includes(motion.fill)) {\n          animations.delete(animation); running.delete(animation);\n          if (!running.size && active.get(element) === running) active.delete(element);\n        }\n      });\n      return finished;\n    });\n    return Promise.all(jobs).then(values => values.every(Boolean));\n  };\n  const cancelMotion = () => {\n    if (!reduced.matches) return;\n    for (const animation of animations) animation.cancel();\n    animations.clear(); active.clear();\n  };\n  reduced.addEventListener?.('change', cancelMotion);\n  const target = id => {\n    const element = document.getElementById(id);\n    if (!element) throw new Error('No component has id \"' + id + '\".');\n    return element;\n  };\n  const toast = action => {\n    let region = document.getElementById('arya-ui-toasts');\n    if (!region) { region = document.createElement('div'); region.id = 'arya-ui-toasts'; document.body.append(region); }\n    while (region.children.length >= 3) region.firstElementChild.remove();\n    const item = document.createElement('div');\n    item.className = 'arya-toast arya-tone-' + action.tone;\n    item.setAttribute('role', action.tone === 'danger' ? 'alert' : 'status');\n    const message = document.createElement('span'); message.textContent = action.message;\n    const dismiss = document.createElement('button'); dismiss.type = 'button'; dismiss.className = 'arya-ghost';\n    dismiss.textContent = 'Dismiss'; dismiss.addEventListener('click', () => item.remove());\n    item.append(message, dismiss); region.append(item);\n    if (action.duration) setTimeout(() => item.remove(), action.duration);\n  };\n  const act = async action => {\n    if (Array.isArray(action)) { for (const item of action) if (await act(item) === false) return false; return true; }\n    if (action.kind === 'parallel') {\n      const results = await Promise.allSettled(action.actions.map(act));\n      const failure = results.find(result => result.status === 'rejected');\n      if (failure) throw failure.reason;\n      return results.every(result => result.value !== false);\n    }\n    if (action.kind === 'animate') {\n      const finished = playMotion(target(action.target), action.motion);\n      if (action.wait) return finished;\n    } else if (['pause', 'resume', 'cancel'].includes(action.kind)) controlMotion(target(action.target), {pause: 'pause', resume: 'play', cancel: 'cancel'}[action.kind]);\n    else if (action.kind === 'open') { const dialog = target(action.target); if (dialog.tagName !== 'DIALOG') throw new Error('ui.open expects a dialog id.'); if (!dialog.open) dialog.showModal(); }\n    else if (action.kind === 'close') { const dialog = target(action.target); if (dialog.tagName !== 'DIALOG') throw new Error('ui.close expects a dialog id.'); dialog.close(); }\n    else if (action.kind === 'toast') toast(action);\n    else if (action.kind === 'copy') {\n      if (!navigator.clipboard?.writeText) throw new Error('Clipboard access needs HTTPS or localhost. Select the example and copy it with your keyboard.');\n      await navigator.clipboard.writeText(target(action.target).textContent);\n    } else if (action.kind === 'theme') {\n      const current = document.documentElement.dataset.theme;\n      document.documentElement.dataset.theme = action.value === 'toggle' ? (current === 'dark' || current === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark') : action.value;\n    } else if (action.kind === 'set') state[action.key] = resolve(action.value);\n    else if (action.kind === 'toggle') state[action.key] = !state[action.key];\n    else if (action.kind === 'increment') {\n      const next = (state[action.key] ?? 0) + action.step;\n      if (typeof next !== 'number' || !Number.isFinite(next)) throw new Error('Increment requires a finite numeric state value.');\n      state[action.key] = next;\n    } else if (action.kind === 'request') {\n      if (action.pending) state[action.pending] = true;\n      if (action.error) state[action.error] = '';\n      render();\n      const controller = new AbortController();\n      const timer = setTimeout(() => controller.abort(), action.timeoutMs);\n      try {\n        const response = await fetch(action.path, {\n          method: action.method, signal: controller.signal, credentials: 'same-origin', redirect: 'error',\n          headers: action.body === undefined ? { accept: 'application/json' } : { accept: 'application/json', 'content-type': 'application/json' },\n          ...(action.body === undefined ? {} : { body: JSON.stringify(resolve(action.body)) })\n        });\n        if (!response.ok) throw new Error('Request failed (HTTP ' + response.status + ').');\n        const value = response.status === 204 ? null : await response.json();\n        if (action.result) state[action.result] = value;\n      } catch (error) {\n        const message = controller.signal.aborted ? 'The request timed out.' : error.message;\n        if (action.error) state[action.error] = message;\n        else problem(new Error(message));\n        return false;\n      } finally {\n        clearTimeout(timer);\n        if (action.pending) state[action.pending] = false;\n        render();\n      }\n    }\n    render();\n    return true;\n  };\n  for (const element of document.querySelectorAll('[data-arya-model]')) {\n    element.addEventListener('input', () => {\n      if (element.type === 'radio' && !element.checked) return;\n      state[element.dataset.aryaModel] = element.type === 'checkbox' ? element.checked : ['number', 'range'].includes(element.type) ? (element.value === '' || !Number.isFinite(Number(element.value)) ? null : Number(element.value)) : element.value;\n      render();\n    });\n  }\n  for (const element of document.querySelectorAll('[data-arya-action]')) {\n    let busy = false;\n    element.addEventListener(element.tagName === 'FORM' ? 'submit' : 'click', async event => {\n      event.preventDefault();\n      if (busy) return;\n      busy = true;\n      const disabled = element.disabled;\n      if (element.tagName === 'BUTTON') element.disabled = true;\n      document.getElementById('arya-ui-error').hidden = true;\n      try { await act(JSON.parse(element.dataset.aryaAction)); }\n      catch (error) { problem(error); }\n      finally { busy = false; if (element.tagName === 'BUTTON') element.disabled = disabled; render(); }\n    });\n  }\n  for (const root of document.querySelectorAll('.arya-tabs')) {\n    const tabs = Array.from(root.querySelectorAll('[role=\"tab\"]')).filter(tab => tab.closest('.arya-tabs') === root);\n    const panels = Array.from(root.querySelectorAll('[role=\"tabpanel\"]')).filter(panel => panel.closest('.arya-tabs') === root);\n    const select = tab => {\n      for (const item of tabs) { const selected = item === tab; item.setAttribute('aria-selected', String(selected)); item.tabIndex = selected ? 0 : -1; }\n      for (const panel of panels) panel.hidden = panel.id !== tab.getAttribute('aria-controls');\n    };\n    for (const tab of tabs) {\n      tab.addEventListener('click', () => { if (!tab.disabled) select(tab); });\n      tab.addEventListener('keydown', event => {\n        const enabled = tabs.filter(item => !item.disabled), index = enabled.indexOf(tab);\n        const next = event.key === 'Home' ? enabled[0] : event.key === 'End' ? enabled.at(-1) : event.key === 'ArrowRight' ? enabled[(index + 1) % enabled.length] : event.key === 'ArrowLeft' ? enabled[(index - 1 + enabled.length) % enabled.length] : undefined;\n        if (next) { event.preventDefault(); select(next); next.focus(); }\n      });\n    }\n  }\n  for (const element of document.querySelectorAll('[data-arya-motion]')) {\n    const motion = JSON.parse(element.dataset.aryaMotion);\n    const play = () => { playMotion(element, motion).catch(problem); };\n    if (motion.trigger === 'hover') { element.addEventListener('pointerenter', play); element.addEventListener('focusin', play); }\n    else if (motion.trigger === 'press') { element.addEventListener('pointerdown', play); element.addEventListener('keydown', event => { if (['Enter', ' '].includes(event.key)) play(); }); }\n    else if (motion.trigger === 'visible' && typeof IntersectionObserver === 'function') {\n      const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); play(); } }, {threshold: .15});\n      observer.observe(element);\n    } else play();\n  }\n  render();\n})();") + "</script></body></html>")
+}}))
+
+const uiNativeTemplateCatalog = [{"name": "landing", "title": "Product landing", "description": "A complete product page with a hero, features, pricing, FAQs, and footer."}, {"name": "dashboard", "title": "Workspace dashboard", "description": "Navigation, metrics, a project table, and recent activity."}, {"name": "settings", "title": "Account settings", "description": "Profile fields, notifications, and an explicit save action."}, {"name": "sign-in", "title": "Sign in", "description": "A labelled sign-in form ready for your authentication endpoint."}]
+
+const uiNativeTemplate = fn(name, options = {}) {
+
+const descriptor = uiNativeTemplateCatalog.find(fn(item) {
+
+return (item.name == name)
+})
+if (not descriptor) {
+uiNativeError("unknown template. Use landing, dashboard, settings, or sign-in.")
+}
+const shared = ["title", "description", "theme", "lang", "css", "nonce", "state", "brand", "body"]
+const specific = {"landing": ["nav", "hero", "features", "pricing", "testimonials", "faq", "cta", "footer"], "dashboard": ["heading", "navigation", "actions", "metrics", "columns", "rows", "activity"], "settings": ["heading", "submitAction"], "sign-in": ["heading", "submitAction", "helpHref"]}
+uiNativeOptions(options, [...shared, ...specific[name]], ("template " + name))
+let uiLocal73 = options
+let uiLocal74 = uiLocal73["brand"]
+const brand = uiDefault(uiLocal74, fn() { return "Northstar" })
+let uiLocal75 = uiLocal73["body"]
+const body = uiDefault(uiLocal75, fn() { return [] })
+let uiLocal76 = uiLocal73["state"]
+const state = uiDefault(uiLocal76, fn() { return {} })
+const config = uiRest(uiLocal73, ["brand", "body", "state"])
+
+const ui = uiNativeAPI
+if ((uiType(brand) != "string") or (not brand.trim())) {
+uiNativeError("template brand must be nonempty text.")
+}
+const suppliedState = uiNativeData(state)
+if (not uiNativeObject(suppliedState)) {
+uiNativeError("template state must be an object.")
+}
+const initial = {}
+const content = []
+if (name == "landing") {
+const features = (options.features ?? [{"title": "One shared workspace", "description": "Keep your projects, people, and decisions together.", "icon": "01"}, {"title": "Less repetitive work", "description": "Build a workflow that gives your team time back.", "icon": "02"}, {"title": "Room to grow", "description": "Start small and shape the experience around your needs.", "icon": "03"}])
+const plans = (options.pricing ?? [{"title": "Personal", "price": "$0", "interval": "/ month", "features": ["A place to begin", "Your own workspace"], "action": ui.link("Explore the details", "#questions")}, {"title": "Team", "price": "$19", "interval": "/ month · sample price", "description": "Example content. Connect your own billing.", "features": ["Shared projects", "Team workflows"], "highlighted": true, "action": ui.link("Ask a question", "#questions")}])
+content.push(ui.navbar(uiMerge({"brand": brand, "href": "#top", "links": [{"label": "Features", "href": "#features"}, {"label": "Pricing", "href": "#pricing"}, {"label": "Questions", "href": "#questions"}]}, options.nav)), ui.hero(uiMerge({"id": "top", "eyebrow": "A LITTLE MORE SPACE TO DO YOUR BEST WORK", "title": "Good work starts with a clear workspace.", "description": "A calmer home for your projects. Bring your team together and move the work forward.", "actions": [ui.link("Explore features", "#features"), ui.link("See plans", "#pricing")]}, options.hero)), ui.features(features, {"title": "Everything you need. Space to focus.", "id": "features"}), ui.pricing(plans, {"title": "Choose your starting point.", "id": "pricing"}))
+if (options.testimonials != undefined) {
+content.push(ui.testimonials(options.testimonials, {"title": "From your community"}))
+}
+content.push(ui.faq((options.faq ?? [{"question": "Can I customize this page?", "answer": "Yes. Replace these sections, links, and sample prices with your own content."}, {"question": "Does this include a hosted service?", "answer": "This template supplies the interface. Your application supplies storage, accounts, and billing."}]), {"id": "questions"}))
+if (options.cta != undefined) {
+content.push(ui.cta(options.cta))
+}
+content.push(body, ui.footer(uiMerge({"brand": brand, "description": "Make a little room for better work.", "links": [{"label": "Back to top", "href": "#top"}]}, options.footer)))
+} else {
+if (name == "dashboard") {
+const metrics = uiNativeItems((options.metrics ?? [{"label": "Active projects", "value": 12, "hint": "Example workspace"}, {"label": "Completed tasks", "value": 48, "hint": "This month"}, {"label": "Team members", "value": 8, "hint": "Working together"}]), "dashboard metrics", 12)
+content.push(ui.navbar({"brand": brand, "links": (options.navigation ?? [{"label": "Overview", "href": "#overview", "current": true}, {"label": "Projects", "href": "#projects"}, {"label": "Activity", "href": "#activity"}]), "actions": (options.actions ?? [ui.button("Create project", {"variant": "secondary", "action": ui.toast("Preview only. Connect your project creation action.")})])}), ui.section([ui.text("WORKSPACE OVERVIEW", {"class": "arya-eyebrow"}), ui.heading((options.heading ?? "A clear view of your work.")), ui.text("A snapshot of your projects and the people moving them forward.", {"class": "arya-muted"})], {"id": "overview"}), ui.grid(metrics.map(fn(item) {
+
+uiNativeOptions(item, ["label", "value", "hint"], "dashboard metric")
+return ui.card(ui.stat(item.label, item.value, {"hint": item.hint}))
+})), ui.card([ui.heading("Projects", {"level": 2}), ui.table((options.columns ?? [{"key": "name", "label": "Project"}, {"key": "owner", "label": "Owner"}, {"key": "status", "label": "Status"}]), (options.rows ?? [{"name": "Website refresh", "owner": "Design", "status": ui.badge("In progress", {"tone": "info"})}, {"name": "Customer research", "owner": "Product", "status": ui.badge("Review", {"tone": "warning"})}]), {"caption": "Workspace projects"})], {"id": "projects"}), ui.card([ui.heading("Recent activity", {"level": 2}), ui.timeline((options.activity ?? [{"title": "Your workspace is ready", "time": "Today", "body": "This is sample activity. Supply records from your own application."}]))], {"id": "activity"}), body)
+} else {
+if (name == "settings") {
+Object.assign(initial, {"name": "", "email": "", "notifications": true})
+content.push(ui.navbar({"brand": brand, "links": [{"label": "Profile", "href": "#profile", "current": true}]}), ui.container(ui.stack([ui.heading((options.heading ?? "Make yourself at home.")), ui.text("Update your profile and choose how you hear from us.", {"class": "arya-muted"}), ui.card(ui.form([ui.field("Display name", ui.input({"id": "settings-name", "bind": "name", "required": true, "maxlength": 80, "autocomplete": "name"})), ui.field("Email address", ui.input({"id": "settings-email", "type": "email", "bind": "email", "required": true, "autocomplete": "email"})), ui.switch("Email notifications", {"bind": "notifications"}), ui.button("Save changes", {"type": "submit"}), ui.text(ui.bind("result.message", ""), {"role": "status", "aria-live": "polite"}), ui.text(ui.bind("problem", ""), {"role": "alert"})], {"action": (options.submitAction ?? ui.toast("Preview only. Changes were not saved."))}), {"id": "profile"}), body]), {"size": "sm"}))
+} else {
+Object.assign(initial, {"email": "", "password": "", "remember": false})
+content.push(ui.container(ui.stack([ui.text(brand, {"class": "arya-brand"}), ui.heading((options.heading ?? "Welcome back.")), ui.text("Use your account to continue.", {"class": "arya-muted"}), ui.card(ui.form([ui.field("Email address", ui.input({"id": "signin-email", "type": "email", "bind": "email", "required": true, "autocomplete": "username"})), ui.field("Password", ui.input({"id": "signin-password", "type": "password", "bind": "password", "required": true, "autocomplete": "current-password"})), ui.checkbox("Remember me", {"bind": "remember"}), ui.button("Sign in", {"type": "submit"}), ui.text(ui.bind("result.message", ""), {"role": "status", "aria-live": "polite"}), ui.text(ui.bind("problem", ""), {"role": "alert"})], {"action": (options.submitAction ?? ui.toast("Preview only. Sign-in is not connected."))})), uiChoose((options.helpHref == undefined), fn() { return null }, fn() { return ui.link("Need help signing in?", options.helpHref) }), ui.text("Preview only. Sign-in is not connected.", {"class": "arya-muted"}), body]), {"size": "sm"}))
+}
+}
+}
+return ui.page(uiMerge({"title": (config.title ?? ((descriptor.title + " · ") + brand)), "description": (config.description ?? descriptor.description), "theme": (config.theme ?? "auto"), "lang": (config.lang ?? "en"), "css": (config.css ?? "")}, uiChoose((config.nonce == undefined), fn() { return {} }, fn() { return {"nonce": config.nonce} }), {"state": uiMerge(initial, suppliedState), "body": ui.stack(content, {"class": ("arya-template arya-template-" + name)})}))
+}
+
+const uiNativePatternExamples = [{"id": "workflow", "title": "A clear path forward", "group": "components", "description": "Progress, activity, and labelled values with semantic HTML.", "code": "ui.stack([\n  ui.steps([{title: \"Details\"}, {title: \"Review\"}, {title: \"Finish\"}], {current: 1}),\n  ui.descriptionList([{term: \"Workspace\", detail: \"Northstar\"}, {term: \"Plan\", detail: \"Team\"}]),\n  ui.timeline([{title: \"Workspace created\", time: \"Today\", body: \"Ready for your first project.\"}]),\n  ui.pagination([{label: \"Previous\", href: \"?page=1\", disabled: true}, {label: \"1\", href: \"?page=1\", current: true}, {label: \"2\", href: \"?page=2\"}])\n])"}, {"id": "workspace-controls", "title": "Small controls. Useful details.", "group": "components", "description": "Native radio selection, a clearable search, and a bound measurement.", "code": "ui.stack([\n  ui.segmented([{value: \"personal\", label: \"Personal\"}, {value: \"team\", label: \"Team\"}], {id: \"workspace-mode\", bind: \"plan\", label: \"Workspace type\"}),\n  ui.search({id: \"project-search\", bind: \"query\", label: \"Find a project\"}),\n  ui.meter(ui.bind(\"capacity\", 65), {label: \"Storage used\"}),\n  ui.buttonGroup([ui.button(\"Save\", {action: ui.toast(\"Preview saved.\")}), ui.button(\"Cancel\", {variant: \"secondary\"})], {label: \"Edit actions\"})\n])"}, {"id": "navigation-section", "title": "Navigation that fits", "group": "sections", "description": "Brand, wrapping links, and room for your primary action.", "code": "ui.navbar({brand: \"Northstar\", href: \"#\", links: [{label: \"Overview\", href: \"#\", current: true}, {label: \"Projects\", href: \"#\"}], actions: [ui.button(\"New project\", {action: ui.toast(\"Connect your creation flow.\")})]})"}, {"id": "hero-section", "title": "Start with a clear introduction", "group": "sections", "description": "A spacious hero with optional media and ordinary action components.", "code": "ui.hero({eyebrow: \"YOUR NEXT CHAPTER\", title: \"A little more room for good work.\", description: \"Bring your projects and people together.\", actions: [ui.link(\"Explore the library\", \"#features-section\")], media: ui.card([ui.stat(\"Projects shipped\", 24), ui.badge(\"Ready for what is next\", {tone: \"success\"})])})"}, {"id": "features-section", "title": "Explain what matters", "group": "sections", "description": "Feature cards share consistent spacing, headings, and responsive layout.", "code": "ui.features([{icon: \"01\", title: \"One workspace\", description: \"Keep the work together.\"}, {icon: \"02\", title: \"Fewer repeated steps\", description: \"Make room for the important parts.\"}], {title: \"Built for everyday work.\"})"}, {"id": "pricing-section", "title": "Present a simple choice", "group": "sections", "description": "Sample plans with features and application-owned checkout actions.", "code": "ui.pricing([{title: \"Personal\", price: \"$0\", interval: \"/ month\", features: [\"Your own workspace\", \"A place to start\"], action: ui.link(\"Learn more\", \"#faq-section\")}, {title: \"Team\", price: \"$19\", interval: \"/ month · sample\", features: [\"Shared projects\", \"Team workflows\"], highlighted: true, action: ui.button(\"Choose team\", {action: ui.toast(\"Connect your billing flow.\")})}], {title: \"Choose your starting point.\"})"}, {"id": "quotes-section", "title": "Let your community speak", "group": "sections", "description": "Attributed quotes, initials, and readable content. These quotes are fictional examples.", "code": "ui.testimonials([{quote: \"Everything has a place. We can focus on the work.\", name: \"Samira\", role: \"Example team member\", initials: \"SA\"}], {title: \"Good work, together.\"})"}, {"id": "faq-section", "title": "Make the next step obvious", "group": "sections", "description": "Native disclosures keep answers accessible without another dependency.", "code": "ui.faq([{question: \"Can I customize these sections?\", answer: \"Yes. Use normal Arya values, components, and functions.\", open: true}, {question: \"Where does the data live?\", answer: \"In your application. Connect server routes for persistence.\"}], {title: \"A few helpful answers.\"})"}, {"id": "cta-section", "title": "One considered next step", "group": "sections", "description": "A compact call to action for a page or a product flow.", "code": "ui.cta({title: \"Ready for your next project?\", description: \"Start with the pieces that fit your work.\", actions: [ui.button(\"Get started\", {action: ui.toast(\"Your next step goes here.\")})]})"}, {"id": "footer-section", "title": "Finish with useful links", "group": "sections", "description": "A quiet footer with navigation and your own attribution.", "code": "ui.footer({brand: \"Northstar\", description: \"A calmer place for your work.\", links: [{label: \"Guide\", href: \"/guide\"}, {label: \"Templates\", href: \"/templates\"}], copyright: \"Your team · Your work\"})"}]
+
+const uiNativePatternSample = fn(id) {
+
+const ui = uiNativeAPI
+let uiLocal77 = id
+if uiLocal77 == "workflow" {
+return ui.stack([ui.steps([{"title": "Details"}, {"title": "Review"}, {"title": "Finish"}], {"current": 1}), ui.descriptionList([{"term": "Workspace", "detail": "Northstar"}, {"term": "Plan", "detail": "Team"}]), ui.timeline([{"title": "Workspace created", "time": "Today", "body": "Ready for your first project."}]), ui.pagination([{"label": "Previous", "href": "?page=1", "disabled": true}, {"label": "1", "href": "?page=1", "current": true}, {"label": "2", "href": "?page=2"}])])
+}
+if uiLocal77 == "workspace-controls" {
+return ui.stack([ui.segmented([{"value": "personal", "label": "Personal"}, {"value": "team", "label": "Team"}], {"id": "workspace-mode", "bind": "plan", "label": "Workspace type"}), ui.search({"id": "project-search", "bind": "query", "label": "Find a project"}), ui.meter(ui.bind("capacity", 65), {"label": "Storage used"}), ui.buttonGroup([ui.button("Save", {"action": ui.toast("Preview saved.")}), ui.button("Cancel", {"variant": "secondary"})], {"label": "Edit actions"})])
+}
+if uiLocal77 == "navigation-section" {
+return ui.navbar({"brand": "Northstar", "href": "#", "links": [{"label": "Overview", "href": "#", "current": true}, {"label": "Projects", "href": "#"}], "actions": [ui.button("New project", {"action": ui.toast("Connect your creation flow.")})]})
+}
+if uiLocal77 == "hero-section" {
+return ui.hero({"eyebrow": "YOUR NEXT CHAPTER", "title": "A little more room for good work.", "description": "Bring your projects and people together.", "actions": [ui.link("Explore the library", "#features-section")], "media": ui.card([ui.stat("Projects shipped", 24), ui.badge("Ready for what is next", {"tone": "success"})])})
+}
+if uiLocal77 == "features-section" {
+return ui.features([{"icon": "01", "title": "One workspace", "description": "Keep the work together."}, {"icon": "02", "title": "Fewer repeated steps", "description": "Make room for the important parts."}], {"title": "Built for everyday work."})
+}
+if uiLocal77 == "pricing-section" {
+return ui.pricing([{"title": "Personal", "price": "$0", "interval": "/ month", "features": ["Your own workspace", "A place to start"], "action": ui.link("Learn more", "#faq-section")}, {"title": "Team", "price": "$19", "interval": "/ month · sample", "features": ["Shared projects", "Team workflows"], "highlighted": true, "action": ui.button("Choose team", {"action": ui.toast("Connect your billing flow.")})}], {"title": "Choose your starting point."})
+}
+if uiLocal77 == "quotes-section" {
+return ui.testimonials([{"quote": "Everything has a place. We can focus on the work.", "name": "Samira", "role": "Example team member", "initials": "SA"}], {"title": "Good work, together."})
+}
+if uiLocal77 == "faq-section" {
+return ui.faq([{"question": "Can I customize these sections?", "answer": "Yes. Use normal Arya values, components, and functions.", "open": true}, {"question": "Where does the data live?", "answer": "In your application. Connect server routes for persistence."}], {"title": "A few helpful answers."})
+}
+if uiLocal77 == "cta-section" {
+return ui.cta({"title": "Ready for your next project?", "description": "Start with the pieces that fit your work.", "actions": [ui.button("Get started", {"action": ui.toast("Your next step goes here.")})]})
+}
+if uiLocal77 == "footer-section" {
+return ui.footer({"brand": "Northstar", "description": "A calmer place for your work.", "links": [{"label": "Guide", "href": "/guide"}, {"label": "Templates", "href": "/templates"}], "copyright": "Your team · Your work"})
+}
+
+}
+
+const uiNativeTemplateGallery = fn(path, demo) {
+
+return uiNativeAPI.stack([{"name": "landing", "title": "Product landing", "description": "A complete product page with a hero, features, pricing, FAQs, and footer."}, {"name": "dashboard", "title": "Workspace dashboard", "description": "Navigation, metrics, a project table, and recent activity."}, {"name": "settings", "title": "Account settings", "description": "Profile fields, notifications, and an explicit save action."}, {"name": "sign-in", "title": "Sign in", "description": "A labelled sign-in form ready for your authentication endpoint."}].map(fn(item) {
+
+return demo(("template-" + item.name), item.title, item.description, [uiNativeAPI.card([uiNativeAPI.text(("NORTHSTAR / " + item.name.toUpperCase()), {"class": "arya-eyebrow"}), uiNativeAPI.heading(item.title, {"level": 2}), uiNativeAPI.text(item.description, {"class": "arya-muted"}), uiNativeAPI.link((("Open " + item.title) + " ↗"), ((path + "/templates/") + item.name))]), uiNativeAPI.text("Customizable full-page HTML. Sample data and form actions are explicit.", {"class": "arya-muted"})], (("ui.template(\"" + item.name) + "\", {brand: \"My workspace\", theme: \"auto\"})"))
+}))
+}
+
+const uiNativePreview = fn(options = {}) {
+
+uiNativeOptions(options, ["section", "basePath", "apiPath"], "preview")
+const section = (options.section ?? "components")
+if (not ["components", "sections", "templates", "motion", "guide"].includes(section)) {
+uiNativeError("preview section must be components, sections, templates, motion, or guide.")
+}
+const base = (options.basePath ?? "/")
+if (((uiType(base) != "string") or (not new RegExp("^\\/(?!\\/)", "").test(base))) or new RegExp("[\\\\\\s?#\\u0000-\\u001f]", "").test(base)) {
+uiNativeError("preview basePath must be an absolute local path.")
+}
+const path = uiChoose((base == "/"), fn() { return "" }, fn() { return base.replace(new RegExp("\\/$", ""), "") })
+if (options.apiPath != undefined) {
+uiNativeAPI.request(options.apiPath, {"method": "POST"})
+}
+const ui = uiNativeAPI
+const catalog = [["page", "Layout", "page({title, state, body, theme, css})", "Render a complete interactive HTML document."], ["preview", "Layout", "preview({section, basePath, apiPath})", "Render component, section, and template galleries, the motion lab, or implementation guide."], ["element", "Layout", "element(tag, props = {}, children = [])", "Compose an escaped semantic HTML element."], ["section", "Layout", "section(children, props = {})", "Group a semantic section with vertical spacing."], ["stack", "Layout", "stack(children, props = {})", "Arrange components vertically."], ["row", "Layout", "row(children, props = {})", "Arrange a wrapping horizontal layout."], ["grid", "Layout", "grid(children, props = {})", "Arrange responsive columns."], ["card", "Layout", "card(children, props = {})", "Create a padded, bordered surface."], ["divider", "Layout", "divider(props = {})", "Separate content with a semantic horizontal rule."], ["heading", "Typography", "heading(text, {level = 1, ...props})", "Create a heading from level 1 to 6."], ["text", "Typography", "text(value, props = {})", "Display escaped text, components, or a state binding."], ["link", "Typography", "link(label, href, props = {})", "Create a styled navigation link."], ["code", "Typography", "code(source, {language = \"arya\", ...props})", "Display escaped, selectable source code with Arya highlighting."], ["button", "Forms", "button(label, {variant, action, ...props})", "Primary, secondary, ghost, or danger button; defaults to type button."], ["input", "Forms", "input({type = \"text\", bind, ...props})", "Create an optionally bound input."], ["label", "Forms", "label(text, inputId)", "Associate a visible label with an input."], ["form", "Forms", "form(children, {action, ...props})", "Handle a form submit action with browser constraint validation."], ["select", "Forms", "select([{value, label}], {bind, ...props})", "Create a selection control."], ["textarea", "Forms", "textarea({rows = 4, bind, ...props})", "Create a multiline text control."], ["field", "Forms", "field(label, control, {hint, error, ...props})", "Compose an associated label, control, hint, and error. Control needs an id."], ["checkbox", "Forms", "checkbox(label, {bind, ...props})", "Create a labelled boolean checkbox."], ["radio", "Forms", "radio(label, value, {bind, ...props})", "Create a labelled radio choice; sharing bind creates a group."], ["switch", "Forms", "switch(label, {bind, ...props})", "Create a labelled boolean switch."], ["slider", "Forms", "slider({min = 0, max = 100, step = 1, bind, ...props})", "Create a numeric range input."], ["badge", "Data", "badge(label, {tone = \"neutral\", ...props})", "Display a compact neutral/success/warning/danger/info label."], ["stat", "Data", "stat(label, value, {hint, ...props})", "Display a metric with an optional explanation."], ["avatar", "Data", "avatar(initials, {label, ...props})", "Display initials with an accessible label."], ["progress", "Data", "progress(value, {max = 100, label, ...props})", "Display native determinate progress, optionally bound to state."], ["list", "Data", "list(items, props = {})", "Display up to 1000 list items."], ["table", "Data", "table([{key, label}], rows, {caption, empty, ...props})", "Render an accessible, horizontally scrollable data table."], ["alert", "Feedback", "alert(title, message, {tone = \"info\", ...props})", "Display inline status or error feedback."], ["empty", "Feedback", "empty(title, message, action = null)", "Create an empty state with an optional action."], ["spinner", "Feedback", "spinner({label = \"Loading\", ...props})", "Display an accessible busy indicator."], ["skeleton", "Feedback", "skeleton({lines = 3, ...props})", "Display a decorative loading placeholder."], ["tooltip", "Feedback", "tooltip(text, child, {id, ...props})", "Add hover/focus help and an accessible description."], ["toast", "Feedback", "toast(message, {tone = \"neutral\", duration = 3500})", "Action: show dismissible text feedback; duration 0 stays until dismissed."], ["breadcrumbs", "Navigation", "breadcrumbs([{label, href}], props = {})", "Render breadcrumb navigation with a current-page label."], ["tabs", "Navigation", "tabs([{id, label, body, disabled}], {id, label, active})", "Render keyboard-accessible tabs with roving focus."], ["accordion", "Navigation", "accordion([{title, body, open}], {multiple = true, ...props})", "Render native details/summary disclosure panels."], ["dialog", "Navigation", "dialog(id, title, children, {description, ...props})", "Render a native modal dialog with an included close action."], ["open", "Actions", "open(dialogId)", "Action: open a native modal dialog."], ["close", "Actions", "close(dialogId)", "Action: close a dialog and restore focus."], ["copy", "Actions", "copy(componentId)", "Action: copy component text on HTTPS/localhost, subject to clipboard permission."], ["theme", "Actions", "theme(\"light\" | \"dark\" | \"auto\" | \"toggle\")", "Action: change the page theme for the current visit."], ["parallel", "Actions", "parallel(actions)", "Run actions concurrently and wait for them as a group."], ["bind", "State", "bind(statePath, fallback = \"\")", "Read browser state, including dotted JSON result paths."], ["is", "State", "is(statePathOrBinding, primitive)", "Compare state without evaluating source strings."], ["not", "State", "not(statePathOrBinding)", "Invert a binding as a boolean."], ["when", "State", "when(condition, children, props = {})", "Show or hide existing components from a state condition."], ["set", "State", "set(key, value)", "Action: assign JSON data or a value containing bindings."], ["toggle", "State", "toggle(key)", "Action: toggle a boolean state value."], ["increment", "State", "increment(key, step = 1)", "Action: add a finite number to numeric state."], ["request", "State", "request(path, {method, body, result, pending, error, timeoutMs})", "Action: call a same-origin JSON API with bounded time and busy/error state."], ["presets", "Motion", "presets()", "Return the available animation preset names."], ["motion", "Motion", "motion(preset = \"rise\", timing = {})", "Create a preset animation with timing, trigger, repeat, and stagger controls."], ["keyframes", "Motion", "keyframes(frames, timing = {})", "Create an animation from 2–32 validated keyframe objects."], ["animate", "Motion", "animate(componentId, motion = \"rise\", {wait})", "Action: play/replay animation; await finite playback by default."], ["pause", "Motion", "pause(componentId)", "Action: pause active animations for a target."], ["resume", "Motion", "resume(componentId)", "Action: resume paused animations."], ["cancel", "Motion", "cancel(componentId)", "Action: cancel active/filled effects and restore underlying styles."], ["container", "Layout", "container(children, {size = \"lg\", ...props})", "Center content with sm, md, lg, or full width."], ["buttonGroup", "Forms", "buttonGroup(children, {label = \"Actions\", ...props})", "Group related actions with an accessible label."], ["image", "Data", "image(src, alt, {caption, width, height, ...props})", "Render a responsive lazy-loaded image and optional caption."], ["descriptionList", "Data", "descriptionList([{term, detail}], props = {})", "Render semantic labelled values."], ["timeline", "Data", "timeline([{title, body, time}], props = {})", "Render an ordered activity timeline."], ["steps", "Navigation", "steps([{title, description}], {current = 0, label, ...props})", "Display a zero-based current step; navigation stays with the application."], ["pagination", "Navigation", "pagination([{label, href, current, disabled}], {label, ...props})", "Render page links with current-page and disabled semantics."], ["segmented", "Forms", "segmented([{value, label, disabled}], {id, bind, label, ...props})", "Render a labelled native radio group bound to a state key."], ["search", "Forms", "search({id, bind, label = \"Search\", placeholder, ...props})", "Render a labelled search input with an optional state-clearing action."], ["meter", "Data", "meter(value, {min = 0, max = 100, low, high, optimum, label, ...props})", "Display a native measurement, optionally bound to state."], ["navbar", "Sections", "navbar({brand, href, links, actions, label, ...props})", "Compose a responsive brand, navigation links, and actions."], ["hero", "Sections", "hero({eyebrow, title, description, actions, media, align, ...props})", "Create a landing introduction with optional media."], ["features", "Sections", "features([{title, description, icon}], {title, description, ...props})", "Compose a responsive feature-card section."], ["pricing", "Sections", "pricing([{title, price, interval, description, features, action, highlighted}], options = {})", "Compose pricing cards; checkout belongs to the application."], ["testimonials", "Sections", "testimonials([{quote, name, role, initials}], options = {})", "Compose attributed quotes and optional avatars."], ["faq", "Sections", "faq([{question, answer, open}], {title, description, id, multiple, ...props})", "Compose a heading and native disclosure answers."], ["cta", "Sections", "cta({title, description, actions, ...props})", "Compose a call-to-action surface."], ["footer", "Sections", "footer({brand, description, links, copyright, label, ...props})", "Compose footer navigation and attribution."], ["templates", "Templates", "templates()", "List the available full-page template names."], ["template", "Templates", "template(name, options = {})", "Render a customizable landing, dashboard, settings, or sign-in page."]]
+const guides = [{"title": "1. Import the library and serve a page", "text": "A page is an ordinary Arya value. Each visitor receives an independent copy of its initial state.", "code": "use std \"ui\" as ui\nuse std \"web\" as web\n\nfn page() {\n  return ui.page({\n    title: \"My first app\",\n    state: {count: 0},\n    body: ui.card([\n      ui.heading(\"Hello, Arya.\"),\n      ui.text(ui.bind(\"count\"), {role: \"status\", \"aria-live\": \"polite\"}),\n      ui.button(\"Add one\", {action: ui.increment(\"count\")})\n    ])\n  })\n}\n\nweb.serve(3000, {\"GET /\": page}, {html: false, assets: false})"}, {"title": "2. Compose reusable components", "text": "Use ordinary functions to build your own components. Layouts wrap and grids collapse automatically on smaller screens.", "code": "fn metric(label, value) {\n  return ui.card([\n    ui.stat(label, value, {hint: \"Updated just now\"}),\n    ui.badge(\"Healthy\", {tone: \"success\"})\n  ])\n}\n\nui.grid([\n  metric(\"Active projects\", 12),\n  metric(\"Completed tasks\", 48)\n])"}, {"title": "3. Bind inputs and conditional content", "text": "Declare name and advanced in page state. Bindings update existing controls and text; conditions do not execute browser source strings.", "code": "ui.stack([\n  ui.field(\"Your name\", ui.input({id: \"name\", bind: \"name\"}), {\n    hint: \"This value stays in your browser.\"\n  }),\n  ui.text(ui.bind(\"name\", \"Guest\")),\n  ui.switch(\"Advanced options\", {bind: \"advanced\"}),\n  ui.when(\"advanced\", ui.text(\"More options are visible.\")),\n  ui.button(\"Continue\", {disabled: ui.is(\"name\", \"\")})\n])"}, {"title": "4. Send form data to an API", "text": "Set initial state to {name: \"\", busy: false, result: null, problem: \"\"}. Forms use native constraint validation before running the submit action.", "code": "ui.form([\n  ui.field(\"Name\", ui.input({id: \"profile-name\", bind: \"name\", required: true})),\n  ui.button(\"Save profile\", {type: \"submit\", disabled: ui.bind(\"busy\", false)}),\n  ui.text(ui.bind(\"result.message\", \"Ready to save.\"), {role: \"status\", \"aria-live\": \"polite\"}),\n  ui.text(ui.bind(\"problem\"), {role: \"alert\"})\n], {action: ui.request(\"/api/profile\", {\n  method: \"POST\", body: {name: ui.bind(\"name\")},\n  result: \"result\", pending: \"busy\", error: \"problem\"\n})})"}, {"title": "5. Validate on the server", "text": "Keep Python, database access, and credentials on the server. Put this route alongside your page route; a UI request sends JSON to it. The example echoes a result and does not persist data.", "code": "use std \"web\" as web\nuse std \"validate\" as validate\n\nconst profile = validate.object({name: validate.string({min: 1, max: 80, trim: true})})\nweb.serve(3000, {\n  \"POST /api/profile\": web.route(fn(request) {\n    return {message: \"Saved for \" + request.body.name}\n  }, {body: profile})\n}, {html: false, assets: false})"}, {"title": "6. Add motion and playback controls", "text": "A component can animate on load, hover/focus, press, or first visibility. Finite animate actions wait for completion by default. Infinite motion defaults to wait:false.", "code": "ui.stack([\n  ui.card([ui.heading(\"Your report\", {level: 2})], {\n    id: \"report\", animate: ui.motion(\"rise\", {duration: 600, trigger: \"visible\"})\n  }),\n  ui.row([\n    ui.button(\"Replay\", {action: ui.animate(\"report\", \"rise\")}),\n    ui.button(\"Pause\", {action: ui.pause(\"report\")}),\n    ui.button(\"Resume\", {action: ui.resume(\"report\")}),\n    ui.button(\"Reset\", {action: ui.cancel(\"report\")})\n  ])\n])"}, {"title": "7. Compose keyframes, sequences, and parallel motion", "text": "An action list runs in order. parallel runs a group together. Cancelling awaited motion stops the containing sequence. Stagger applies to a target’s direct children.", "code": "const lift = ui.keyframes([\n  {opacity: 0, transform: \"translateY(24px) rotate(-3deg)\"},\n  {opacity: 1, transform: \"translateY(0) rotate(0deg)\"}\n], {duration: 700, easing: \"smooth\"})\n\nui.button(\"Play sequence\", {action: [\n  ui.animate(\"intro\", lift),\n  ui.parallel([\n    ui.animate(\"cards\", ui.motion(\"rise\", {stagger: 90})),\n    ui.animate(\"summary\", \"scale\")\n  ]),\n  ui.toast(\"Ready to explore.\", {tone: \"success\"})\n]})"}]
+const code = fn(id, source) {
+
+return ui.stack([ui.row([ui.element("small", {}, "ARYA"), ui.button("Copy code", {"variant": "ghost", "action": [ui.copy(id), ui.toast("Code copied.", {"tone": "success"})]})], {"class": "kit-example-head"}), ui.code(source, {"id": id})])
+}
+const demo = fn(id, title, description, children, source) {
+
+return ui.card([ui.heading(title, {"level": 3}), ui.text(description, {"class": "arya-muted"}), ui.tabs([{"id": "preview", "label": "Preview", "body": ui.stack(children, {"class": "kit-live"})}, {"id": "code", "label": "Arya", "body": code((id + "-source"), source)}], {"id": (id + "-tabs"), "label": (title + " example")})], {"class": "kit-demo", "id": id})
+}
+const patternDemos = fn(group) {
+
+return uiNativePatternExamples.filter(fn(item) {
+
+return (item.group == group)
+}).map(fn(item) {
+
+return demo(item.id, item.title, item.description, [uiNativePatternSample(item.id)], item.code)
+})
+}
+const sections = fn() {
+
+return ui.stack([heading("02 / PAGE SECTIONS", "Good pages start with good pieces.", "Compose navigation, heroes, features, plans, quotes, FAQs, calls to action, and footers. Each section is ordinary Arya code."), ...patternDemos("sections")])
+}
+const templates = fn() {
+
+return ui.stack([heading("03 / FULL-PAGE TEMPLATES", "Start a few steps ahead.", "Four complete pages you can make your own. Open a live template or copy its Arya call. Sample data and unconnected services stay explicit."), ui.alert("Native Arya templates", "Use the native Arya SDK from this checkout or a matching release."), uiNativeTemplateGallery(path, demo)])
+}
+const heading = fn(label, title, description) {
+
+return ui.stack([ui.text(label, {"class": "arya-eyebrow"}), ui.heading(title), ui.text(description, {"class": "arya-muted"})], {"class": "kit-hero"})
+}
+const components = fn() {
+
+return ui.stack([heading("01 / COMPONENT LIBRARY", "Less setup. More possibility.", "Thoughtful components, useful defaults, and clear Arya code. Explore the live examples, then take the parts your application needs."), ui.grid([ui.stat("Component APIs", catalog.filter(fn(item) {
+
+return (["Layout", "Typography", "Forms", "Data", "Feedback", "Navigation"].includes(item[1]) and (not ["page", "preview", "element", "toast"].includes(item[0])))
+}).length), ui.stat("Motion presets", ui.presets().length), ui.stat("Frontend packages", 0)], {"class": "kit-summary"}), ...patternDemos("components"), ui.section([ui.heading("Make the everyday feel effortless.", {"level": 2}), ui.grid([demo("buttons", "Buttons & actions", "A clear action, a quiet alternative, or a considered warning.", [ui.row([ui.button("Create project", {"action": ui.toast("Your new project is ready.", {"tone": "success"})}), ui.button("Secondary", {"variant": "secondary", "action": ui.toast("Secondary action selected.")}), ui.button("Remove", {"variant": "danger", "action": ui.open("remove-dialog")})]), ui.row([ui.button("Ghost action", {"variant": "ghost", "action": ui.toast("A little less emphasis.")}), ui.button("Unavailable", {"disabled": true})])], "ui.button(\"Create project\", {action: ui.toast(\"Ready.\", {tone: \"success\"})})\nui.button(\"Secondary\", {variant: \"secondary\"})\nui.button(\"Remove\", {variant: \"danger\", action: ui.open(\"confirm\")})"), demo("state", "State that stays simple", "A counter and a conditional section. No browser source strings.", [ui.text(ui.bind("count"), {"class": "kit-counter", "role": "status", "aria-live": "polite"}), ui.row([ui.button("Add one", {"action": ui.increment("count")}), ui.button("Reset", {"variant": "secondary", "action": ui.set("count", 0)})]), ui.switch("Show details", {"bind": "details"}), ui.when("details", ui.text("This section follows a boolean binding.", {"class": "arya-muted"}), {"id": "conditional-demo"})], "ui.text(ui.bind(\"count\"))\nui.button(\"Add one\", {action: ui.increment(\"count\")})\nui.switch(\"Show details\", {bind: \"details\"})\nui.when(\"details\", ui.text(\"More information.\"))")])], {"class": "kit-section"}), ui.section([ui.heading("Forms with room to breathe.", {"level": 2}), ui.grid([demo("forms", "A useful form", "Labels, hints, validation, and a result that stays in view.", [ui.form([ui.field("Full name", ui.input({"id": "demo-name", "bind": "name", "required": true, "maxlength": 80, "placeholder": "Your name"}), {"hint": "How you would like to be addressed."}), ui.field("Email address", ui.input({"id": "demo-email", "type": "email", "bind": "email", "required": true, "placeholder": "you@example.com"})), ui.field("Workspace", ui.select([{"value": "personal", "label": "Personal"}, {"value": "team", "label": "Team"}, {"value": "company", "label": "Company"}], {"id": "demo-plan", "bind": "plan"})), ui.checkbox("Send me product updates", {"bind": "updates"}), ui.button("Preview save", {"type": "submit", "disabled": ui.bind("busy", false)}), ui.text(ui.bind("result.message", "Ready when you are."), {"role": "status", "aria-live": "polite", "id": "form-result"}), ui.text(ui.bind("problem"), {"role": "alert"})], {"action": uiChoose(options.apiPath, fn() { return ui.request(options.apiPath, {"method": "POST", "body": {"name": ui.bind("name"), "email": ui.bind("email"), "plan": ui.bind("plan"), "updates": ui.bind("updates")}, "result": "result", "pending": "busy", "error": "problem"}) }, fn() { return [ui.set("result", {"message": "Your local preview has been updated."}), ui.toast("Preview updated.", {"tone": "success"})] })})], "ui.form([\n  ui.field(\"Name\", ui.input({id: \"name\", bind: \"name\", required: true})),\n  ui.button(\"Save\", {type: \"submit\", disabled: ui.bind(\"busy\", false)})\n], {action: ui.request(\"/api/profile\", {\n  method: \"POST\", body: {name: ui.bind(\"name\")},\n  result: \"result\", pending: \"busy\", error: \"problem\"\n})})"), demo("controls", "Comfortable controls", "A range, progress, switches, and multiline text share page state.", [ui.field("Monthly capacity", ui.slider({"id": "capacity", "bind": "capacity"}), {"hint": "Drag the slider or use your arrow keys."}), ui.row([ui.badge("Capacity"), ui.text(ui.bind("capacity"))]), ui.progress(ui.bind("capacity"), {"label": "Monthly capacity"}), ui.switch("Notifications", {"bind": "notifications"}), ui.row([ui.radio("Personal", "personal", {"bind": "plan"}), ui.radio("Team", "team", {"bind": "plan"})]), ui.field("Project notes", ui.textarea({"id": "notes", "bind": "notes", "placeholder": "A little context goes a long way."}))], "ui.field(\"Capacity\", ui.slider({id: \"capacity\", bind: \"capacity\"}))\nui.progress(ui.bind(\"capacity\"), {label: \"Capacity\"})\nui.switch(\"Notifications\", {bind: \"notifications\"})\nui.textarea({id: \"notes\", bind: \"notes\"})")])], {"class": "kit-section"}), ui.section([ui.heading("Information, with a little hierarchy.", {"level": 2}), demo("data", "Data & identity", "Readable tables, compact status, and a few numbers that matter.", [ui.grid([ui.stat("Active projects", 12, {"hint": "Across your workspace"}), ui.stat("Tasks completed", 48, {"hint": "This month"}), ui.row([ui.avatar("HA", {"label": "Hamza Arya"}), ui.stack([ui.element("strong", {}, "Your workspace"), ui.badge("All systems ready", {"tone": "success"})])])]), ui.table([{"key": "project", "label": "Project"}, {"key": "owner", "label": "Owner"}, {"key": "status", "label": "Status"}], [{"project": "Workspace", "owner": "Design team", "status": ui.badge("Active", {"tone": "success"})}, {"project": "Activity report", "owner": "Engineering", "status": ui.badge("Review", {"tone": "warning"})}], {"caption": "Example projects"})], "ui.stat(\"Active projects\", 12, {hint: \"This month\"})\nui.avatar(\"HA\", {label: \"Hamza Arya\"})\nui.badge(\"Active\", {tone: \"success\"})\nui.table([{key: \"name\", label: \"Project\"}], [{name: \"Workspace\"}], {caption: \"Projects\"})")], {"class": "kit-section"}), ui.section([ui.heading("Give every interaction an answer.", {"level": 2}), ui.grid([demo("feedback", "Feedback & loading", "Inline messages, quiet placeholders, and dismissible toasts.", [ui.alert("Everything is up to date.", "Your latest changes are ready.", {"tone": "success"}), ui.row([ui.spinner({"label": "Loading your projects"}), ui.text("Preparing your workspace…", {"class": "arya-muted"})]), ui.skeleton({"lines": 2}), ui.button("Show notification", {"variant": "secondary", "action": ui.toast("Your changes have been saved.", {"tone": "success"})})], "ui.alert(\"Saved\", \"Your changes are ready.\", {tone: \"success\"})\nui.spinner({label: \"Loading projects\"})\nui.skeleton({lines: 2})\nui.button(\"Notify\", {action: ui.toast(\"Saved.\", {tone: \"success\"})})"), demo("navigation", "Navigation & disclosure", "Use arrow keys in tabs. Open details with the keyboard.", [ui.breadcrumbs([{"label": "Workspace", "href": "#data"}, {"label": "Settings"}]), ui.accordion([{"title": "Can I reuse these components?", "body": ui.text("Yes. Compose them in ordinary Arya functions.")}, {"title": "Does this work on desktop?", "body": ui.text("The same interface can run inside the Electron starter.")}]), ui.row([ui.button("Open dialog", {"action": ui.open("welcome-dialog")}), ui.tooltip("Dialogs support Escape and return focus to the opener.", ui.button("Helpful hint", {"variant": "secondary"}), {"id": "dialog-hint"})])], "ui.accordion([{title: \"More details\", body: ui.text(\"Hello.\")}])\nui.button(\"Open\", {action: ui.open(\"welcome\")})\nui.dialog(\"welcome\", \"Welcome\", [ui.text(\"Your content here.\")])\nui.tooltip(\"A helpful description\", ui.button(\"Help\"), {id: \"help-tip\"})"), demo("empty", "Empty states & lists", "Keep a blank surface useful, with a clear next step.", [ui.empty("A fresh start.", "Your first project belongs here.", ui.button("Create a project", {"action": ui.toast("You are ready to begin.")})), ui.list(["Readable defaults", "Keyboard-friendly controls", "Components you can compose"])], "ui.empty(\"No projects yet\", \"Start with your first idea.\",\n  ui.button(\"Create project\", {action: ui.open(\"create\")})\n)\nui.list([\"One useful thing\", \"Another useful thing\"])")])], {"class": "kit-section"})])
+}
+const motion = fn() {
+
+return ui.stack([heading("02 / MOTION LIBRARY", "A little movement. A clear intention.", "Replay a preset, build a sequence, or shape your own keyframes. Motion respects reduced-motion preferences, including changes during playback."), ui.alert("Try the controls.", "Hover or focus a sample, or select Replay. Your system’s reduced-motion setting takes priority.", {"tone": "info"}), ui.grid(ui.presets().map(fn(preset) {
+
+return ui.card([ui.row([ui.element("strong", {}, preset), ui.badge("700 ms")], {"class": "kit-motion-label"}), ui.element("div", {"class": "kit-motion-stage"}, ui.element("div", {"class": "kit-motion-object", "id": ("motion-" + preset), "tabindex": 0, "aria-label": (preset + " sample"), "animate": ui.motion(preset, {"duration": 700, "trigger": "hover"})}, "a.")), ui.button(("Replay " + preset), {"variant": "secondary", "action": ui.animate(("motion-" + preset), ui.motion(preset, {"duration": 700}), {"wait": false})})], {"class": "kit-motion-card"})
+}), {"class": "kit-motion-grid"}), ui.section([ui.heading("Control the whole performance.", {"level": 2}), ui.grid([ui.card([ui.heading("Playback", {"level": 3}), ui.text("Run a loop, pause it, resume it, or restore its original styles.", {"class": "arya-muted"}), ui.element("div", {"class": "kit-orbit", "id": "orbit"}, "✦"), ui.row([ui.button("Play loop", {"id": "play-loop", "action": ui.animate("orbit", ui.motion("spin", {"duration": 2400, "easing": "linear", "repeat": "infinite"}))}), ui.button("Pause", {"id": "pause-loop", "variant": "secondary", "action": ui.pause("orbit")}), ui.button("Resume", {"id": "resume-loop", "variant": "secondary", "action": ui.resume("orbit")}), ui.button("Cancel", {"id": "cancel-loop", "variant": "ghost", "action": ui.cancel("orbit")})]), code("loop-source", "ui.animate(\"orbit\", ui.motion(\"spin\", {\n  duration: 2400, easing: \"linear\", repeat: \"infinite\"\n}))\nui.pause(\"orbit\")\nui.resume(\"orbit\")\nui.cancel(\"orbit\")")]), ui.card([ui.heading("Stagger & sequence", {"level": 3}), ui.text("Animate direct children together, with a little space between each start.", {"class": "arya-muted"}), ui.element("div", {"id": "stagger-group", "class": "kit-stagger"}, ["01", "02", "03", "04"].map(fn(label) {
+
+return ui.element("div", {}, label)
+})), ui.element("div", {"id": "sequence-summary", "class": "kit-transport"}, "One coherent finish."), ui.row([ui.button("Play sequence", {"id": "play-sequence", "action": [ui.animate("stagger-group", ui.motion("rise", {"duration": 450, "stagger": 100})), ui.animate("sequence-summary", "pulse"), ui.toast("Sequence completed.", {"tone": "success"})]}), ui.button("Play together", {"id": "play-parallel", "variant": "secondary", "action": ui.parallel([ui.animate("stagger-group", ui.motion("rise", {"stagger": 80})), ui.animate("sequence-summary", "scale")])}), ui.button("Stop sequence", {"id": "stop-sequence", "variant": "ghost", "action": [ui.cancel("stagger-group"), ui.cancel("sequence-summary")]})]), code("sequence-source", "ui.button(\"Play\", {action: [\n  ui.animate(\"cards\", ui.motion(\"rise\", {stagger: 100})),\n  ui.animate(\"summary\", \"pulse\"),\n  ui.toast(\"Ready.\")\n]})")])])], {"class": "kit-section"}), ui.card([ui.heading("Your own keyframes", {"level": 2}), ui.text("Use validated transforms, opacity, colors, filters, and spacing. Choose easing, direction, fill, repeat, and trigger without adding another package.", {"class": "arya-muted"}), ui.element("div", {"id": "custom-motion", "class": "kit-orbit"}, "a."), ui.button("Play custom motion", {"id": "play-custom", "action": ui.animate("custom-motion", ui.keyframes([{"transform": "translateX(-30px) rotate(-12deg)", "opacity": 0.2}, {"transform": "translateX(0) rotate(0deg)", "opacity": 1}], {"duration": 850, "easing": "snappy"}))}), code("keyframes-source", guides[6].code)])])
+}
+const guide = fn() {
+
+return ui.stack([heading("03 / IMPLEMENTATION GUIDE", "From the first import to a working app.", "Start small, compose your own components, then add state and server actions. Every example below uses the same library as this preview."), ui.alert("Use a matching compiler.", "These components and templates are included in the native Arya SDK. Build this checkout or use a matching native release.", {"tone": "info"}), ui.element("nav", {"aria-label": "Guide sections", "class": "kit-guide-nav"}, guides.map(fn(item, index) {
+
+return ui.link(((item.title.split(". ")[0] + ". ") + item.title.split(". ").slice(1).join(". ")), ("#step-" + (index + 1)))
+})), ...guides.map(fn(item, index) {
+
+return ui.card([ui.heading(item.title, {"level": 2}), ui.text(item.text, {"class": "arya-muted"}), code(("guide-source-" + index), item.code)], {"class": "kit-guide-step", "id": ("step-" + (index + 1))})
+}), ui.card([ui.heading("8. Run on the web or desktop", {"level": 2}), ui.text("The generated UI project compiles to a native HTTP application. The desktop project opens its local interface in a macOS AppKit/WebKit window. Run again after source changes; unchanged builds are reused. Application signing and installers are separate distribution steps.", {"class": "arya-muted"}), ui.code("arya create my-app --template ui\ncd my-app\narya run main.arya", {"language": "shell"}), ui.text("Choose --template desktop for a macOS window. Install the native desktop SDK when building from source with make native-desktop.", {"class": "arya-muted"})], {"class": "kit-guide-step"}), ui.card([ui.heading("9. Make it your own", {"level": 2}), ui.text("Use page theme: light, dark, or auto. Override --bg, --surface, --ink, --muted, --line, --accent, and --button-ink in page css. Component class attributes let you scope your styles. Keep keyboard focus visible and give inputs labels.", {"class": "arya-muted"}), code("theme-source", "ui.page({\n  title: \"My app\", theme: \"light\",\n  css: \":root { --accent: #215c47; --button-ink: #fff; }\",\n  body: ui.card([ui.heading(\"Make it yours.\")])\n})")], {"class": "kit-guide-step"}), ui.card([ui.heading("10. Start with sections or a full page", {"level": 2}), ui.text("Compose ui.hero, ui.features, ui.pricing, and the other sections inside ui.page. ui.template returns a complete document, so serve it directly. Override sample content and connect submitAction to your own validated routes."), code("patterns-guide-source", "ui.template(\"dashboard\", {\n  brand: \"My workspace\",\n  metrics: [{label: \"Open tasks\", value: 12}],\n  rows: []\n})"), ui.link("Explore sections", (path + "/sections")), ui.link("Open the templates", (path + "/templates"))], {"class": "kit-guide-step"}), ui.section([ui.heading("The complete API at a glance.", {"level": 2}), ui.text("Snippets assume use std \"ui\" as ui unless they show their own imports. Components render on the server; actions run in the browser. State is public JSON. No server closures or arbitrary source evaluation are sent to the client.", {"class": "arya-muted"}), ui.table([{"key": "group", "label": "Group"}, {"key": "signature", "label": "API"}, {"key": "description", "label": "Purpose"}], catalog.map(fn(item) {
+
+return {"group": ui.badge(item[1]), "signature": ("ui." + item[2]), "description": item[3]}
+}), {"caption": (catalog.length + " documented APIs"), "class": "kit-reference"})], {"id": "api-reference", "class": "kit-section"})])
+}
+return ui.page({"title": ("Arya UI — " + section), "theme": "light", "css": "\nmain.arya-page { width:100%; max-width:none; padding:0; } .kit-shell { display:grid; grid-template-columns:235px minmax(0,1fr); min-height:100vh; } .kit-sidebar { position:sticky; top:0; height:100vh; padding:2rem 1.65rem; border-right:1px solid var(--line); display:flex; flex-direction:column; gap:2rem; background:var(--surface); } .kit-brand { font-size:1.7rem; font-weight:780; letter-spacing:-.09em; text-decoration:none; color:var(--ink); } .kit-brand span { color:var(--accent); } .kit-brand small { margin-left:.8rem; font-size:.7rem; letter-spacing:0; font-weight:500; color:var(--muted); } .kit-nav { display:flex; flex-direction:column; gap:.35rem; } .kit-nav a { display:block; padding:.65rem .8rem; border-radius:.4rem; color:var(--muted); text-decoration:none; font-size:.85rem; } .kit-nav a[aria-current=\"page\"] { color:var(--ink); background:var(--bg); font-weight:650; } .kit-sidebar .kit-bottom { margin-top:auto; font-size:.72rem; color:var(--muted); } .kit-content { width:100%; max-width:1240px; margin:0 auto; padding:2rem clamp(1.25rem,4vw,4.5rem) 5rem; min-width:0; } .kit-top { justify-content:space-between; padding-bottom:2.2rem; border-bottom:1px solid var(--line); margin-bottom:3rem; } .kit-top button { font-size:.75rem; padding:.45rem .7rem; } .kit-hero { gap:1.4rem; margin-bottom:3rem; } .kit-hero h1 { font-size:clamp(2.5rem,5.2vw,4.6rem); font-weight:550; max-width:18ch; line-height:1.06; } .kit-hero>p { max-width:44rem; font-size:.95rem; } .kit-summary { grid-template-columns:repeat(3,minmax(0,1fr)); padding:1.5rem 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:3rem; } .kit-summary .arya-stat-value { font-size:1.65rem; } .kit-summary .arya-muted { font-size:.75rem; } .kit-section { gap:1.4rem; margin-bottom:2.5rem; scroll-margin-top:2rem; } .kit-section>h2 { font-size:1.8rem; font-weight:550; } .kit-demo { padding:1.5rem; min-width:0; background:var(--surface); } .kit-demo>h3 { font-size:1rem; font-weight:650; letter-spacing:-.02em; margin:0; } .kit-demo>p { font-size:.8rem; } .kit-demo .arya-tabs { margin-top:.25rem; } .kit-demo [role=\"tabpanel\"] { padding:.5rem 0; } .kit-example-head { justify-content:space-between; } .kit-example-head button { padding:.3rem .65rem; font-size:.7rem; } .kit-example-head small { color:var(--muted); font: .7rem ui-monospace,monospace; } .kit-live { min-height:8rem; justify-content:center; } .kit-counter { font-size:2.5rem; font-weight:600; font-variant-numeric:tabular-nums; } .kit-motion-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); } .kit-motion-card { padding:1.1rem; } .kit-motion-stage { display:flex; align-items:center; justify-content:center; height:9rem; border:1px solid var(--line); border-radius:.65rem; background:var(--bg); overflow:hidden; } .kit-motion-object { display:flex; align-items:center; justify-content:center; width:3.6rem; height:3.6rem; border-radius:1rem; background:var(--accent); color:var(--button-ink); font-size:1.8rem; font-weight:750; letter-spacing:-.1em; box-shadow:0 .5rem 1.5rem #0001; } .kit-motion-label { justify-content:space-between; } .kit-motion-label strong { font-size:.85rem; } .kit-motion-card button { padding:.45rem .7rem; font-size:.75rem; } .kit-transport { padding:1.25rem; border:1px solid var(--line); border-radius:.75rem; } .kit-orbit { display:flex; align-items:center; justify-content:center; width:5rem; height:5rem; border:1px solid var(--accent); border-radius:1.25rem; color:var(--accent); font-size:2.5rem; margin:1rem auto; } .kit-stagger { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; } .kit-stagger>div { border-radius:.5rem; padding:1rem; text-align:center; background:var(--accent); color:var(--button-ink); font-size:.75rem; font-weight:650; } .kit-guide-step { margin-bottom:1.5rem; } .kit-guide-step>h2 { font-size:1.3rem; letter-spacing:-.025em; } .kit-guide-step>p { font-size:.9rem; max-width:50rem; } .kit-guide-nav { display:flex; gap:.75rem; flex-wrap:wrap; margin:1rem 0 2rem; font-size:.8rem; } .kit-guide-nav a { color:var(--muted); } .kit-reference th,.kit-reference td { font-size:.75rem; } .kit-reference td:nth-child(2) { font-family:ui-monospace,monospace; } .kit-reference .arya-badge { font-size:.65rem; } .kit-footer { margin-top:4rem; padding-top:1.25rem; border-top:1px solid var(--line); justify-content:space-between; color:var(--muted); font-size:.7rem; }\n@media(max-width:900px) { .kit-shell { grid-template-columns:190px minmax(0,1fr); } .kit-sidebar { padding:1.5rem 1rem; } .kit-content { padding-left:1.5rem; padding-right:1.5rem; } }\n@media(max-width:680px) { .kit-shell { display:block; } .kit-sidebar { position:static; height:auto; padding:1rem 1.25rem; border-right:0; border-bottom:1px solid var(--line); gap:.8rem; } .kit-nav { flex-direction:row; flex-wrap:wrap; gap:.25rem; } .kit-nav a { padding:.4rem .65rem; font-size:.75rem; } .kit-sidebar>.arya-badge,.kit-bottom { display:none; } .kit-content { padding:1.5rem 1.25rem 3rem; } .kit-top { margin-bottom:2rem; padding-bottom:1.2rem; } .kit-hero { margin-bottom:2rem; } .kit-summary { gap:.7rem; } .kit-summary .arya-stat-value { font-size:1.35rem; } .kit-stagger { gap:.35rem; } .kit-stagger>div { padding:1rem .3rem; } }\n", "state": {"query": "", "count": 0, "details": false, "name": "", "email": "", "plan": "personal", "updates": true, "capacity": 65, "notifications": true, "notes": "", "busy": false, "result": null, "problem": ""}, "body": ui.element("div", {"class": "kit-shell"}, [ui.element("aside", {"class": "kit-sidebar"}, [ui.element("a", {"class": "kit-brand", "href": (path + "/")}, ["arya", ui.element("span", {}, "."), ui.element("small", {}, "UI LIBRARY")]), ui.badge("ALPHA PREVIEW", {"tone": "success"}), ui.element("nav", {"class": "kit-nav", "aria-label": "Library"}, [["components", "Components", "/"], ["sections", "Page sections", "/sections"], ["templates", "Templates", "/templates"], ["motion", "Motion library", "/motion"], ["guide", "Implementation guide", "/guide"]].map(fn(uiLocal78) {
+let uiLocal79 = uiLocal78
+let key = uiLocal79[0]
+let label = uiLocal79[1]
+let suffix = uiLocal79[2]
+return ui.element("a", uiMerge({"href": (path + suffix)}, uiChoose((section == key), fn() { return {"aria-current": "page"} }, fn() { return {} })), label)
+})), ui.text("Readable code. Useful interfaces. Made with Arya.", {"class": "kit-bottom"})]), ui.element("div", {"class": "kit-content"}, [ui.row([ui.breadcrumbs([{"label": "Library", "href": (path + "/")}, {"label": {"components": "Components", "sections": "Sections", "templates": "Templates", "motion": "Motion", "guide": "Guide"}[section]}]), ui.button("Switch theme", {"id": "switch-theme", "variant": "secondary", "action": ui.theme("toggle")})], {"class": "kit-top"}), {"components": components, "sections": sections, "templates": templates, "motion": motion, "guide": guide}[section](), ui.row([ui.text("ARYA UI / A LIBRARY TO BUILD WITH"), ui.link("Read the implementation guide ↗", (path + "/guide"))], {"class": "kit-footer"})]), ui.dialog("welcome-dialog", "A little space to focus.", [ui.text("Native dialogs keep focus inside, support Escape, and return focus when closed."), ui.button("Continue", {"action": [ui.close("welcome-dialog"), ui.toast("You are ready to continue.", {"tone": "success"})]})], {"description": "One clear step at a time."}), ui.dialog("remove-dialog", "Remove this draft?", [ui.text("This is a preview. No files or records will be removed."), ui.row([ui.button("Keep draft", {"variant": "secondary", "action": ui.close("remove-dialog")}), ui.button("Remove draft", {"variant": "danger", "action": [ui.close("remove-dialog"), ui.toast("Demo draft removed.", {"tone": "success"})]})])])])})
+}
+
+export const api = uiNativeAPI

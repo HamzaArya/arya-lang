@@ -1,0 +1,94 @@
+# Bounded native connection pool, prepared queries and transaction contexts.
+use std "_mysql" as driver
+use std "runtime" as runtime
+
+fn failure(code, message, cause) { let value = new Error(message); value.code = code; if cause != undefined { value.cause = cause; if cause.driverCode != undefined { value.driverCode = cause.driverCode }; if cause.sqlState != undefined { value.sqlState = cause.sqlState } }; return value }
+fn options(value) {
+  if runtime.kind(value) != "record" or runtime.hasAccessor(value) { throw failure("ARYA_MYSQL_CONFIG", "mysql.connect expects options with data fields.") }
+  for key in ["host", "user", "database", "socketPath", "charset"] { if value[key] != undefined and (runtime.kind(value[key]) != "string" or value[key].trim() == "") { throw failure("ARYA_MYSQL_CONFIG", "MySQL " + key + " must be nonempty text.") } }
+  if value.password != undefined and runtime.kind(value.password) != "string" { throw failure("ARYA_MYSQL_CONFIG", "MySQL password must be text.") }
+  for bounds in [["port", 1, 65535], ["connectionLimit", 1, 64], ["queueLimit", 0, 10000], ["connectTimeout", 1, 2147483647]] { let item = value[bounds[0]]; if item != undefined and (not Number.isSafeInteger(item) or item < bounds[1] or item > bounds[2]) { throw failure("ARYA_MYSQL_CONFIG", "MySQL " + bounds[0] + " is outside its supported integer range.") } }
+  if value.multipleStatements == true or value.namedPlaceholders == true { throw failure("ARYA_MYSQL_CONFIG", "Use positional ? placeholders and separate prepared calls inside db.transaction.") }
+  if value.timezone != undefined and value.timezone != "local" and value.timezone != "Z" {
+    let zone = value.timezone
+    if runtime.kind(zone) != "string" or len(zone) != 6 or not ["+", "-"].includes(zone[0]) or zone[3] != ":" or not Number.isInteger(number(zone.slice(1, 3))) or not Number.isInteger(number(zone.slice(4))) or number(zone.slice(1, 3)) > 23 or number(zone.slice(4)) > 59 { throw failure("ARYA_MYSQL_CONFIG", "timezone must be local, Z or a signed HH:MM offset.") }
+  }
+  if value.dateStrings != undefined and runtime.kind(value.dateStrings) != "boolean" { if not Array.isArray(value.dateStrings) { throw failure("ARYA_MYSQL_CONFIG", "dateStrings must be a boolean or date type list.") }; for name in value.dateStrings { if not ["DATE", "DATETIME", "TIMESTAMP"].includes(name) { throw failure("ARYA_MYSQL_CONFIG", "Unknown dateStrings type.") } } }
+  if value.ssl != undefined {
+    if runtime.kind(value.ssl) != "record" or runtime.hasAccessor(value.ssl) { throw failure("ARYA_MYSQL_CONFIG", "ssl must be a record of TLS credentials.") }
+    for key in Object.keys(value.ssl) { if not ["ca", "cert", "key", "rejectUnauthorized"].includes(key) { throw failure("ARYA_MYSQL_CONFIG", "Unknown native TLS option: " + key) }; if key == "rejectUnauthorized" { if runtime.kind(value.ssl[key]) != "boolean" { throw failure("ARYA_MYSQL_CONFIG", "rejectUnauthorized must be a boolean.") } } else if runtime.kind(value.ssl[key]) != "string" { throw failure("ARYA_MYSQL_CONFIG", "TLS credentials must be PEM text.") } }
+  }
+  for key in Object.keys(value) { if not ["host", "user", "password", "database", "socketPath", "port", "connectionLimit", "queueLimit", "connectTimeout", "charset", "timezone", "dateStrings", "ssl", "multipleStatements", "namedPlaceholders", "supportBigNumbers", "bigNumberStrings"].includes(key) { throw failure("ARYA_MYSQL_CONFIG", "Unknown native MySQL option: " + key) } }
+  return Object.assign({}, value)
+}
+fn validate(sql, parameters) {
+  if runtime.kind(sql) != "string" or sql.trim() == "" or sql.length > 1048576 or not Array.isArray(parameters) or parameters.length > 65535 { throw failure("ARYA_MYSQL_ARGUMENTS", "Database queries expect SQL text and a parameter list. Use ? placeholders for values.") }
+  for value in parameters { let kind = runtime.kind(value); if value == null or kind == "string" or kind == "boolean" or Number.isFinite(value) or Buffer.isBuffer(value) or kind == "date" and Number.isFinite(value.getTime()) { continue }; throw failure("ARYA_MYSQL_ARGUMENTS", "SQL parameters must be null, text, booleans, finite numbers, valid dates or buffers. Serialize JSON explicitly.") }
+}
+fn track(set, action, rejected = fn() {}) { let operation = Promise.resolve().then(action); set.add(operation); operation.then(fn() { set.delete(operation) }, fn(error) { set.delete(operation); rejected(error) }); return operation }
+async fn acquire(state) {
+  if len(state.idle) > 0 { return state.idle.pop() }
+  if state.connections.size + state.creating < state.limit {
+    state.creating += 1; let opened = false
+    try { let connection = await driver.open(state.options); opened = true; state.connections.add(connection); return connection }
+    finally { state.creating -= 1; if not opened and state.waiting.length > 0 { let waiting = state.waiting[0]; state.waiting = state.waiting.slice(1); acquire(state).then(waiting.resolve, waiting.reject) } }
+  }
+  if state.waiting.length >= state.queueLimit and state.queueLimit != 0 { throw failure("ARYA_MYSQL_QUERY", "MySQL pool queue is full.") }
+  if state.waiting.length >= 10000 { throw failure("ARYA_MYSQL_QUERY", "Native MySQL queue exceeds 10000 requests.") }
+  return await new Promise(fn(resolve, reject) { state.waiting.push({resolve: resolve, reject: reject}) })
+}
+async fn release(state, connection, reusable = true) {
+  if not reusable { state.connections.delete(connection); try { await driver.close(connection) } catch _failure {} }
+  if state.waiting.length > 0 {
+    let waiting = state.waiting[0]; state.waiting = state.waiting.slice(1)
+    if reusable { waiting.resolve(connection) }
+    else { acquire(state).then(waiting.resolve, waiting.reject) }
+  } else if reusable { state.idle.push(connection) }
+}
+fn session(target, run) {
+  async fn execute(sql, parameters = []) { validate(sql, parameters); return await driver.execute(target, sql, parameters) }
+  async fn rows(sql, parameters = []) { let value = await execute(sql, parameters); if not Array.isArray(value) { throw failure("ARYA_MYSQL_RESULT", "This query returned a statement result. Use execute for INSERT, UPDATE or DELETE.") }; return value }
+  async fn one(sql, parameters = []) { let value = await rows(sql, parameters); return value[0] ?? null }
+  async fn scalar(sql, parameters = []) { let row = await one(sql, parameters); if row == null { return null }; return Object.values(row)[0] ?? null }
+  return {execute: fn(sql, parameters) { return run(fn() { return execute(sql, parameters) }) }, rows: fn(sql, parameters) { return run(fn() { return rows(sql, parameters) }) }, one: fn(sql, parameters) { return run(fn() { return one(sql, parameters) }) }, scalar: fn(sql, parameters) { return run(fn() { return scalar(sql, parameters) }) }}
+}
+export async fn connect(settings = {}) {
+  settings = options(settings)
+  let state = {options: settings, limit: settings.connectionLimit ?? 10, queueLimit: settings.queueLimit ?? 100, connections: new Set(), creating: 0, idle: [], waiting: [], pending: new Set(), closing: false, closed: false}
+  let first = await acquire(state); await release(state, first)
+  fn open() { if runtime.context(0) != undefined { throw failure("ARYA_MYSQL_TRANSACTION", "Use the transaction handle inside db.transaction; the pool cannot be used or closed there.") }; if state.closing { throw failure("ARYA_MYSQL_CLOSED", "This MySQL pool is closing or closed.") } }
+  fn run(action) { try { open() } catch error { return Promise.reject(error) }; return track(state.pending, action) }
+  fn pooled(method, sql, parameters) { return run(async fn() { let connection = await acquire(state); let reusable = true; try { return await session(connection, fn(action) { return action() })[method](sql, parameters) } catch error { if error.driverCode == "PROTOCOL_CONNECTION_LOST" { reusable = false }; throw error } finally { await release(state, connection, reusable) } }) }
+  fn transaction(callback) { return run(async fn() {
+    if runtime.kind(callback) != "function" { throw failure("ARYA_MYSQL_ARGUMENTS", "db.transaction expects a function receiving a transaction handle.") }
+    let connection = await acquire(state); let scope = {accepting: true, failed: false, failure: undefined, queries: new Set(), serial: Promise.resolve()}; let reusable = true
+    fn scoped(action) {
+      if not scope.accepting { return Promise.reject(failure("ARYA_MYSQL_TRANSACTION_CLOSED", "This transaction has finished.")) }
+      if runtime.context(0) != scope { return Promise.reject(failure("ARYA_MYSQL_TRANSACTION", "Use this transaction handle only from its own callback.")) }
+      let previous = scope.serial
+      let operation = track(scope.queries, async fn() { await previous; return await action() }, fn(error) { if not scope.failed { scope.failed = true; scope.failure = error } })
+      scope.serial = operation.catch(fn() {}); return operation
+    }
+    let handle = Object.freeze(session(connection, scoped))
+    try {
+      await driver.begin(connection)
+      let prior = runtime.context(0, scope); let result = undefined
+      try { result = await callback(handle) } finally { runtime.context(0, prior); scope.accepting = false }
+      await Promise.allSettled(scope.queries.values()); if scope.failed { throw scope.failure }
+      await driver.commit(connection); return result
+    } catch error {
+      scope.accepting = false; await Promise.allSettled(scope.queries.values())
+      try { await driver.rollback(connection) } catch _rollback { reusable = false }
+      if error.driverCode == "PROTOCOL_CONNECTION_LOST" { reusable = false }; throw error
+    } finally { scope.accepting = false; await release(state, connection, reusable) }
+  }) }
+  fn ping() { return run(async fn() { let connection = await acquire(state); try { return await driver.ping(connection) } finally { await release(state, connection) } }) }
+  fn close() {
+    if runtime.context(0) != undefined { return Promise.reject(failure("ARYA_MYSQL_TRANSACTION", "Close the pool after the transaction callback has finished.")) }
+    if state.closingPromise != undefined { return state.closingPromise }
+    state.closing = true
+    state.closingPromise = (async fn() { await Promise.allSettled(state.pending.values()); for connection in state.connections.values() { await driver.close(connection) }; state.connections.clear(); state.idle = []; state.closed = true })()
+    return state.closingPromise
+  }
+  return Object.freeze({execute: fn(sql, parameters) { return pooled("execute", sql, parameters) }, rows: fn(sql, parameters) { return pooled("rows", sql, parameters) }, one: fn(sql, parameters) { return pooled("one", sql, parameters) }, scalar: fn(sql, parameters) { return pooled("scalar", sql, parameters) }, transaction: transaction, ping: ping, close: close})
+}

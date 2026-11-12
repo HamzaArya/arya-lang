@@ -1,0 +1,34 @@
+use std "path" as path
+use std "fs" as fs
+use std "debug" as debug
+use std "runtime" as runtime
+use std "io" as io
+use std "process" as process
+let failures = 0
+let count = 0
+fn check(vector) {
+  let index = count; count += 1
+  let namespace = path[vector.flavor]; let value = undefined; let caught = undefined
+  try { value = namespace[vector.method](...vector.args) } catch error { caught = {name: error.name, code: error.code} }
+  let valid = false
+  if vector.error != undefined { valid = runtime.deepEqual(caught, vector.error) }
+  else { valid = caught == undefined and runtime.deepEqual(value, vector.value) }
+  if not valid { print(JSON.stringify({index: index, vector: vector, actual: value, error: caught})); failures += 1; debug.assert(failures < 10) }
+}
+if args[0] == "--stream" { while true { let line = io.readLine(); if line == null { break }; check(JSON.parse(line)) } }
+else { for vector in JSON.parse(await fs.readText(args[0])).cases { check(vector) } }
+debug.assert(failures == 0, "Native path profile diverged from reference vectors.")
+let cwd = process.cwd()
+debug.assert(path.posix.resolve(".") == cwd)
+if runtime.platform() != "win32" {
+  let parent = path.win32.dirname(cwd.replaceAll("/", "\\"))
+  debug.assert(path.win32.resolve("C:\\arya\\reference", "C:", "a:b\\..\\..") == "a:" + parent)
+}
+debug.assert(path.posix == path.posix.posix and path.win32 == path.posix.win32)
+debug.assert(path.matchesGlob("report.csv", "*.{csv,tsv}") and not path.matchesGlob(".env", "*"))
+debug.assert(path.posix.matchesGlob("src/nested/main.arya", "**/*.arya"))
+debug.assert(path.win32.matchesGlob("C:\\src\\main.arya", "C:/**/*.arya"))
+debug.assert(path.matchesGlob("item-003.txt", "item-{001..005}.txt"))
+debug.assert(path.matchesGlob("report.csv", "@(*.csv|*.tsv)"))
+debug.assert(path.matchesGlob("report.csv", "!(*.txt)"))
+print("native path: " + str(count) + " independent POSIX/Windows vectors, glob patterns and namespace identities passed")

@@ -1,0 +1,11 @@
+{
+  "profile": "native",
+  "status": "qualified-native-alpha",
+  "version": "2.0.0-alpha.2",
+  "qualification": "native-independence-report.md",
+  "previousNativeQualification": "../artifacts/QUALIFICATION-2.0.0-alpha.1.json",
+  "legacyStatus": "../compat/node/docs/release-status.json",
+  "qualifiedPlatforms": [
+    "darwin-arm64"
+  ]
+}

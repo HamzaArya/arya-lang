@@ -1,0 +1,121 @@
+use std "runtime" as runtime
+let checks = 0
+fn equal(actual, expected, label) {
+  if actual != expected { throw label + ": expected " + str(expected) + ", received " + str(actual) }
+  checks += 1
+}
+fn flip(value) => not value
+fn spin(n) {
+  let value = false
+  let i = 0
+  while i < n { value = flip(value); i += 1 }
+  return value
+}
+equal(spin(100), false, "unboxed boolean loop")
+equal(spin(101), true, "boolean result tag")
+equal(runtime.kind(spin(1)), "boolean", "result boxing")
+equal(flip(0), true, "number parameter boolean result")
+equal(flip(NaN), true, "NaN truthiness")
+equal(flip("text"), false, "string fallback")
+equal(flip(null), true, "null fallback")
+fn select(n, flag) { if flag { return n }; return -n }
+fn mixed(n) => select(n, n > 0)
+equal(mixed(5), 5, "mixed number boolean parameters")
+equal(mixed(-5), 5, "mixed false branch")
+fn negative(flag) => -flag
+fn promote(n) => negative(n == 0)
+equal(1 / promote(1), -Infinity, "boolean negative zero")
+equal(promote(0), -1, "boolean numeric conversion")
+fn negativeFalse() => -false
+fn negativeComparison(n) => -(n > 0)
+equal(1 / negativeFalse(), -Infinity, "literal boolean negative zero")
+equal(1 / negativeComparison(-1), -Infinity, "comparison negative zero")
+fn divide(a, b) => a / b
+fn booleanDivision(n) => divide(n > 0, n < 0)
+equal(booleanDivision(1), Infinity, "boolean floating division")
+equal(booleanDivision(0) != booleanDivision(0), true, "boolean zero divided by zero")
+fn compare(a, b) => a == b
+fn mixedCompare(n) => compare(n, n > 0)
+equal(mixedCompare(1), false, "strict scalar tags")
+equal(compare(true, true), true, "boolean equality fallback or variant")
+fn logical(n) { const value = n > 0; return value and flip(value) }
+equal(logical(0), false, "and short circuit")
+equal(logical(1), false, "and evaluates right")
+fn logicalNumber(n) => n or -n
+equal(1 / logicalNumber(-0), Infinity, "or preserves numeric result and signed zero")
+fn nullish(n) => n ?? missingAtRuntime()
+fn missingAtRuntime() { throw "unreachable nullish operand" }
+equal(nullish(0), 0, "scalar nullish short circuit")
+fn numericAnd(n) => n and (n * 2)
+equal(numericAnd(3), 6, "logical operators return values")
+fn resultForward(n) => isEven(n)
+fn isEven(n) { if n == 0 { return true }; return isOdd(n - 1) }
+fn isOdd(n) { if n == 0 { return false }; return isEven(n - 1) }
+equal(resultForward(12), true, "mutual recursion boolean return")
+equal(resultForward(13), false, "boolean return propagation")
+fn dynamicKind(n) { let value = n; if n > 0 { value = true }; return value }
+equal(runtime.kind(dynamicKind(0)), "number", "changing local kind fallback")
+equal(runtime.kind(dynamicKind(1)), "boolean", "changing local kind result")
+fn mixedResult(n) { if n > 0 { return true }; return n }
+equal(runtime.kind(mixedResult(1)), "boolean", "mixed return fallback")
+equal(runtime.kind(mixedResult(0)), "number", "mixed return number branch")
+
+fn tally(a, b, c) {
+  let total = 0
+  if a == true { total += 1 }
+  if b == true { total += 1 }
+  if c == true { total += 1 }
+  return total
+}
+fn case0(n) => tally(n, n, n)
+fn case1(n) => tally(n > 0, n, n)
+fn case2(n) => tally(n, n > 0, n)
+fn case3(n) => tally(n, n, n > 0)
+fn case4(n) => tally(n > 0, n > 0, n)
+fn case5(n) => tally(n > 0, n, n > 0)
+fn case6(n) => tally(n, n > 0, n > 0)
+fn case7(n) => tally(n > 0, n > 0, n > 0)
+equal(case0(1), 0, "variant nnn")
+equal(case1(1), 1, "variant bnn")
+equal(case2(1), 1, "variant nbn")
+equal(case3(1), 1, "variant nnb")
+equal(case4(1), 2, "variant budget fallback bbn")
+equal(case5(1), 2, "variant budget fallback bnb")
+equal(case6(1), 2, "variant budget fallback nbb")
+equal(case7(1), 3, "variant budget fallback bbb")
+
+fn factory(start) { let value = start; return fn(step) { value += step; return value } }
+const first = factory(5)
+const second = factory(50)
+equal(first(1), 6, "first cached environment")
+equal(second(2), 52, "same code distinct closure")
+runtime.collect()
+equal(first(3), 9, "cached environments preserve mutable cells")
+fn layers(start) {
+  let value = start
+  return fn() {
+    const offset = 2
+    return fn(step) { value += step; return value + offset }
+  }
+}
+const layered = layers(10)()
+runtime.collect()
+equal(layered(3), 15, "multiple lexical environment caches")
+fn echo(value) { runtime.collect(); return value }
+fn invoke(callback, value) { runtime.collect(); return callback(value) }
+equal(invoke(echo, {answer: 42}).answer, 42, "already rooted dynamic call arguments")
+const callbacks = [echo]
+equal(callbacks[0]({answer: 43}).answer, 43, "member call roots")
+equal(callbacks[0]?.({answer: 44}).answer, 44, "optional call roots")
+async fn delayed(value) { await Promise.resolve(0); runtime.collect(); return value }
+equal((await delayed({answer: 45})).answer, 45, "async dynamic dispatch roots")
+fn createDepth() {
+  fn recurse(n) { if n == 0 { return true }; return recurse(n - 1) }
+  return recurse
+}
+const depth = createDepth()
+equal(depth(500), true, "boolean recursion below depth limit")
+try { depth(520); throw "missing depth error" } catch error { equal(error.name, "RangeError", "scalar boundary root on depth failure") }
+runtime.collect()
+equal(depth(4), true, "root chain restored after depth failure")
+print("advanced-call checks:", checks)
