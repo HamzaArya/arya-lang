@@ -1,0 +1,38 @@
+{
+  "status": "passed-with-qualified-macOS-SDK",
+  "compilerSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+  "host": "macOS26.5.2 ARM64",
+  "log": ".build/release-2.0.0/web-relocation-qualified-sdk.log",
+  "modes": [
+    "release",
+    "ASan/UBSan"
+  ],
+  "gcStress": true,
+  "startupTimeoutSeconds": 15,
+  "scenariosPerMode": [
+    "API-only relocated binary and removed source folder",
+    "explicit ignored static root for API-only mode",
+    "external static root",
+    "HTML requires missing source root",
+    "assets require missing source root",
+    "invalid option type"
+  ],
+  "earlierAttempts": [
+    {
+      "log": ".build/release-2.0.0/web-relocation-stage1.log",
+      "result": "startup timeout",
+      "compiler": "preliminary local stage1",
+      "cause": "unestablished; memory/disk pressure was observed concurrently, but causation was not demonstrated"
+    },
+    {
+      "log": ".build/release-2.0.0/web-relocation-qualified-sdk-path-error.log",
+      "result": "controller invoked nonexistent bin/arya path; corrected to the SDK root executable"
+    }
+  ],
+  "linuxHarnessCorrection": "The final runtime exited successfully but the controller rejected the exact GCC ASan makecontext/swapcontext capability warning. The controller now logs that exact warning for sanitizer mode only and rejects all other stderr. Rerun pending.",
+  "filterReview": {
+    "cases": 15,
+    "result": "passed",
+    "evidence": ".build/release-2.0.0/web-stderr-filter-review.json"
+  }
+}

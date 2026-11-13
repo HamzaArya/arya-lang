@@ -104,3 +104,21 @@ unavailable fault injection, not a passing injection result. Byte fidelity,
 atomic replacement, target rejection and preservation tests remain enabled.
 Windows independent gates now all run and retain their individual logs before
 returning a failing status if any gate fails.
+
+## Preserving Windows bootstrap work
+
+A successful fresh Windows bootstrap is now captured before later gates as
+`windows-bootstrap-sdk-unqualified`. This internal artifact contains the SDK,
+both generated-C stages and origin metadata. Its name and metadata explicitly
+do not claim a passing Windows release. The empty-PATH GCC compile/link/execute
+probe runs before bootstrap, so a loader or toolchain isolation failure is
+reported without first spending another complete bootstrap.
+
+A manual desktop workflow with `target=windows` may supply the original run ID,
+exact source SHA and immutable artifact ID using `windows_bootstrap_run`,
+`windows_bootstrap_sha` and `windows_bootstrap_artifact`. Reuse requires a
+successful original bootstrap/capture, the GitHub artifact digest, complete SDK
+checksums, both generated-C identities, matching Cygwin/GCC versions and equal
+native build inputs in the new checkout. Tests, documentation and packaging
+metadata may change and are recorded separately. Every current Windows gate
+still runs before the ordinary release SDK artifact can be produced.

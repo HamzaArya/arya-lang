@@ -1,6 +1,7 @@
 # Exact decimal remainder
 
-Status: preliminary local regression passed; final SDK qualification pending.
+Status: final macOS SDK and migrated calculator suites passed; Linux and Windows
+platform qualification remains pending.
 
 The Finance and Precision calculator work reports identified a missing public native integer remainder API. Their correct workaround computed `a - truncate(a / b) * b` from three decimal operations. Both GCD helpers now call `decimal.remainder(a, b)` directly.
 
@@ -12,7 +13,10 @@ The runtime dispatch, optimized standard-call recognition, checker contracts, pu
 
 `native/tests/decimal-remainder.sh` runs optimized release, optimizer-disabled reference, and sanitizer builds with garbage collection stress. It checks both APIs against every vector, parsed-operand immutability, canonical zero, fixed-scale input behavior, zero divisors, malformed/nonstring/oversized input, missing arguments, invalid opaque values and typed call rejection. An explicitly recorded Cygwin sanitizer-toolchain limitation selects debug plus GC stress there; it is not reported as sanitizer coverage.
 
-The first 2.0.0 calculator archive predates this narrow API migration and is preserved. The final calculator rebuild must produce new evidence and a separate immutable archive after the new compiler passes its gates.
+The first 2.0.0 calculator archive predates this narrow API migration and is
+preserved. The final calculator rebuild passed in
+[application CI 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800)
+using the qualified macOS SDK, producing a separate immutable archive.
 
 ## Initial fixture correction
 
@@ -21,3 +25,13 @@ The first Linux and macOS CI builds rejected the typed fixture before execution:
 ## Preliminary native execution
 
 The corrected fixture passed **869 checks in each of optimized release, optimizer-disabled reference, and ASan/UBSan builds**, all with garbage collection stress. All typed-negative call checks passed too. The native compiler used was the completed local bootstrap `stage1`, SHA-256 `da60e17ea3169986c23a6362ccf627be8150014821bb0047a1d1917ffd90c942`. The full later bootstrap stages were stopped separately because of disk pressure, so this is explicitly preliminary API validation rather than final SDK self-hosting qualification. Log: `.build/release-2.0.0/decimal-remainder-stage1.log`.
+
+## Final macOS qualification
+
+[Mac qualification job 132039162194](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848/job/132039162194)
+repeated all 869 assertions per mode and the typed rejections with the final
+self-hosted compiler, SHA-256
+`fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`.
+Generated C from bootstrap stages two and three was identical. The final
+Finance and Precision application suites subsequently passed with this compiler;
+their GCD helpers call the new native remainder API directly.

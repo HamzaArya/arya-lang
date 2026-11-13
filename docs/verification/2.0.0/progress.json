@@ -1,18 +1,25 @@
 {
   "version": "2.0.0",
   "status": "qualification-in-progress",
-  "localPassed": [
-    "API contracts: 17 typed checks, byte oracle, atomic failure preservation, ASan/UBSan and GC stress",
-    "20 application check/build/smoke suites, .tmp sentinels and 60 storage entry checks",
+  "qualificationBranch": "release/2.0.0-native",
+  "passed": [
+    "macOS final native SDK bootstrap, core, API, relocated HTTP, AppKit, distribution and independent fresh-source/reference gates",
+    "20 application check/build/smoke suites, .tmp sentinels and 60 storage-entry checks",
     "TextVault binary SHA-256 oracle and corruption detection",
-    "AppKit eight-control state and native-action gate",
-    "Six migrated desktop bundles: worker identity, deep/strict signatures, extracted ZIP checks"
+    "12 final macOS application check/build/smoke/protocol/signature/archive suites",
+    "Actual macOS versioned SDK installation and installed CLI create/check/build/run",
+    "Bundled and portable VSIX actual VS Code host gates: ten checks each",
+    "Local macOS26 relocated HTTP regression using qualified compiler: release and sanitizer modes"
   ],
   "pending": [
-    "Final grouped native bootstrap and regression suites",
-    "Native Linux and Windows/Cygwin qualification",
-    "Final SDK installation and VSIX host gate",
-    "Stable release and portfolio publication"
+    "Complete Linux and Windows/Cygwin platform gates",
+    "Final artifact metadata/checksums and source archive",
+    "Stable GitHub release and portfolio publication"
   ],
-  "qualificationBranch": "release/2.0.0-native"
+  "records": {
+    "platforms": "platform-qualification.md",
+    "applications": "application-release-ci.md",
+    "distribution": "distribution.json",
+    "localHTTP": "http-relocation.json"
+  }
 }

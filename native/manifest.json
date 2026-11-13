@@ -8,7 +8,9 @@
   "requiresPythonForBuildOrCorePrograms": false,
   "legacyStandardModulesWithNativeImplementations": 18,
   "publicNativeModules": 28,
-  "qualifiedPlatforms": [],
+  "qualifiedPlatforms": [
+    "darwin-arm64"
+  ],
   "build": {
     "core": "POSIX shell, make, C11 compiler",
     "fullSourceSDK": "core tools plus C++20 for Ada URL and Perl for OpenSSL configuration",

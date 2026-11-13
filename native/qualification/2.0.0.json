@@ -1,6 +1,68 @@
 {
   "version": "2.0.0",
-  "status": "in-progress",
-  "qualifiedPlatforms": [],
-  "note": "Release qualification is being rerun for current sources. Prior alpha evidence is not proof of this release or new native GUI backends."
+  "status": "qualification-in-progress",
+  "published": false,
+  "nativeSourceCommit": "0dc38b789df2840aa2977769065479c578e70649",
+  "qualifiedPlatforms": [
+    "darwin-arm64"
+  ],
+  "platforms": {
+    "darwin-arm64": {
+      "status": "passed",
+      "minimumOS": "macOS 15.0",
+      "localValidationOS": "macOS 26.5.2",
+      "compilerSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+      "generatedCSHA256": "d91325d76368cc98b319cf397f7949d65b2151cb541fb0b29b46e3b2b7945ce1",
+      "stageTwoThreeCIdentical": true,
+      "qualificationRun": 43470021848,
+      "qualificationJob": 132039162194,
+      "independentRun": 43470021846,
+      "independentJob": 132039161663,
+      "sdkArtifact": 14061468049,
+      "sdkFilesVerified": 561,
+      "originalSDKArchiveSHA256": "04f8a197effdcde731bfb11447736c0cf779255f35a1d356c1066841dff2a6b5",
+      "gates": [
+        "self-hosted full SDK bootstrap",
+        "native core and regressions",
+        "API contracts and relocated HTTP service",
+        "AppKit controls and native GUI project template",
+        "SDK distribution and packaging",
+        "fresh source with no Node/Python",
+        "independent language and library references",
+        "installed CLI project check/build/run",
+        "bundled and portable VSIX actual editor hosts"
+      ]
+    },
+    "linux-x64": {
+      "status": "in-progress",
+      "note": "Full core/fresh-source gates passed; HTTP harness now retains the exact nonfatal ASan context-switch warning. Complete platform rerun pending."
+    },
+    "windows-cygwin-x64": {
+      "status": "in-progress",
+      "note": "Native PE SDK bootstrap passed. Corrected Cygwin loader isolation, native widgets, editor transport and installed SDK gates require a complete passing rerun."
+    }
+  },
+  "applications": {
+    "platform": "darwin-arm64",
+    "minimumOS": "macOS 26.0",
+    "count": 12,
+    "status": "CI-passed",
+    "run": 43475142800,
+    "job": 132056918377,
+    "sourceCommit": "5d3286445587fec596b76f912f70cc1575679c75",
+    "signing": "ad-hoc; not Developer ID signed or notarized",
+    "evidence": "docs/verification/2.0.0/application-release-ci.md"
+  },
+  "editorAndInstallerEvidence": "docs/verification/2.0.0/distribution.json",
+  "requiresNodeForCompilerOrCorePrograms": false,
+  "requiresPythonForBuildOrCorePrograms": false,
+  "limitations": [
+    "Windows requires the matching Cygwin runtime; standalone MinGW is unqualified.",
+    "Python interoperability is optional and unavailable on Windows/Cygwin in 2.0.0.",
+    "Native GUI controls use AppKit, GTK 3 or Win32; the twelve supplied application bundles currently target macOS only.",
+    "Cygwin sanitizer libraries and RLIMIT_FSIZE write-failure injection are unavailable; those omissions are not passing results.",
+    "macOS leak detection is not qualified.",
+    "Cross-compilation and WebAssembly are not qualified."
+  ],
+  "note": "Only completed platform gates are qualified. Release publication and final metadata assembly remain pending; historical alpha evidence does not qualify this release."
 }
