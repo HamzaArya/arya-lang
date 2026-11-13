@@ -101,6 +101,10 @@ jobs:
       - name: Empty-PATH native compiler and DLL loading
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-path-test.sh
+      - name: Binary checksum format and installer fixture
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: |
+          python3 native/tests/windows-checksum-formats.py 2>&1 | tee .build/release-evidence/windows-checksum-formats.log
       - name: Direct Win32 backend action probe
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
@@ -118,14 +122,16 @@ jobs:
       - name: Preserve unqualified Windows bootstrap SDK
         id: capture
         if: steps.bootstrap.outcome == 'success'
+        continue-on-error: true
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: python3 native/bootstrap/windows-bootstrap-artifact.py capture
       - uses: actions/upload-artifact@v4
-        if: always() && steps.capture.outcome == 'success'
+        if: always() && steps.bootstrap.outcome == 'success'
+        continue-on-error: true
         with:
           name: windows-bootstrap-sdk-unqualified
           path: .build/windows-bootstrap-capture/windows-bootstrap-sdk.tar.gz*
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
       - name: Restore verified Windows bootstrap bytes for current gates
         if: env.BOOTSTRAP_ARTIFACT != ''

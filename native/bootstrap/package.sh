@@ -21,8 +21,8 @@ trap 'rm -rf "$stage"' EXIT HUP INT TERM
 sh "$root/native/bootstrap/stage-sdk.sh" "$stage/$name"
 case "$("$stage/$name/$executable" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK binary and source version differ' >&2; exit 1;; esac
 COPYFILE_DISABLE=1 tar -czf "$stage/$name.tar.gz" -C "$stage" "$name"
-digest=$(shasum -a 256 "$stage/$name.tar.gz" | awk '{print $1}')
-printf '%s  %s.tar.gz\n' "$digest" "$name" > "$stage/checksum"
+digest=$(shasum -a 256 -b "$stage/$name.tar.gz" | awk '{print $1}')
+printf '%s *%s.tar.gz\n' "$digest" "$name" > "$stage/checksum"
 ln "$stage/$name.tar.gz" "$output"
 if ! ln "$stage/checksum" "$output.sha256"; then
   if test "$output" -ef "$stage/$name.tar.gz"; then rm "$output"; fi

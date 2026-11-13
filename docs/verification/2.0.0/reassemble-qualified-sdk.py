@@ -131,7 +131,7 @@ def main():
     assert packaging_snapshot(metadata_sources) == packaging_inputs, 'Packaging inputs changed during assembly'
     assert controller.verify_sources(ROOT, sdk) == source_identity, 'Native source inputs changed during assembly'
     (destination / 'ASSEMBLY-SOURCE-SHA256SUMS').write_text(''.join(
-        f'{digest}  {name}\n' for name, digest in packaging_inputs.items()))
+        f'{digest} *{name}\n' for name, digest in packaging_inputs.items()))
 
     after = files(destination)
     protected_before = {name: digest for name, digest in before.items() if not metadata_path(name)}
@@ -169,7 +169,7 @@ def main():
     }
     (destination / 'ASSEMBLY-INFO.json').write_text(json.dumps(record, indent=2) + '\n')
     final = files(destination)
-    (destination / 'SHA256SUMS').write_text(''.join(f'{digest}  ./{name}\n'
+    (destination / 'SHA256SUMS').write_text(''.join(f'{digest} *./{name}\n'
         for name, digest in sorted(final.items()) if name != 'SHA256SUMS'))
     verified = controller.verify_sdk(destination, executable=executable)
     print(json.dumps({'destination': str(destination), 'verifiedFiles': verified['fileCount'],

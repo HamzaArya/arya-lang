@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location('windows_bootstrap', ROOT / 'native/bootstrap/windows-bootstrap-artifact.py')
@@ -30,6 +31,31 @@ class BootstrapBoundaries(unittest.TestCase):
         result = bootstrap.identity(run, jobs, artifact, 1, head, 3)
         self.assertEqual(result['jobConclusion'], 'failure')
         self.assertIn('All current gates must run again', result['note'])
+        jobs[0]['steps'][1]['conclusion'] = 'failure'
+        self.assertEqual(bootstrap.identity(run, jobs, artifact, 1, head, 3)['captureConclusion'], 'failure')
+
+    def test_capture_retains_immutable_archive_before_validation_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            build = root / '.build/independent'; build.mkdir(parents=True)
+            (root / '.build/release-evidence').mkdir()
+            for name in ('arya.c', 'stage2.c'): (build / name).write_text('C fixture')
+            def stage(arguments, **kwargs):
+                sdk = Path(arguments[2]); sdk.mkdir()
+                (sdk / 'raw-data').write_bytes(b'preserved\r\n\x00')
+            environment = {'GITHUB_REPOSITORY': bootstrap.shared.REPOSITORY, 'GITHUB_RUN_ID': '1',
+                           'GITHUB_SHA': 'a' * 40, 'GITHUB_RUN_ATTEMPT': '1'}
+            with patch.object(bootstrap, 'ROOT', root), patch.object(bootstrap.subprocess, 'run', side_effect=stage), \
+                 patch.object(bootstrap, 'host', return_value={}), patch.dict(bootstrap.os.environ, environment), \
+                 patch.object(bootstrap, 'verify_payload', side_effect=AssertionError('fixture validation failure')):
+                with self.assertRaises(AssertionError): bootstrap.capture()
+            archive = root / '.build/windows-bootstrap-capture/windows-bootstrap-sdk.tar.gz'
+            self.assertTrue(archive.is_file())
+            self.assertEqual(bootstrap.shared.checksums(Path(str(archive) + '.sha256')),
+                             {archive.name: bootstrap.shared.sha(archive)})
+            record = json.loads((root / '.build/release-evidence/windows-bootstrap-capture.json').read_text())
+            self.assertFalse(record['verified'])
+            self.assertFalse(record['qualified'])
 
     def test_wrong_run_head_artifact_or_failed_bootstrap_rejected(self):
         run, jobs, artifact, head = self.records()

@@ -30,7 +30,7 @@ else printf '%s\n' 'Install shasum or sha256sum to verify the SDK.' >&2; exit 1;
 verify() {
   folder=$1
   test -z "$(find "$folder" -type l -print)" || { printf '%s\n' 'SDK symlinks are not accepted.' >&2; return 1; }
-  awk 'length(substr($0,1,64))!=64 || substr($0,1,64) ~ /[^0-9a-f]/ || substr($0,65,4)!="  ./" || substr($0,67) ~ /(^|\/)\.\.(\/|$)|\\/ || seen[substr($0,67)]++ { exit 1 } END { if(NR==0) exit 1 }' "$folder/SHA256SUMS" || { printf '%s\n' 'Invalid SDK checksum manifest.' >&2; return 1; }
+  awk 'length(substr($0,1,64))!=64 || substr($0,1,64) ~ /[^0-9a-f]/ || substr($0,65,4) !~ /^ [ *]\.\// || substr($0,67) ~ /(^|\/)\.\.(\/|$)|\\/ || seen[substr($0,67)]++ { exit 1 } END { if(NR==0) exit 1 }' "$folder/SHA256SUMS" || { printf '%s\n' 'Invalid SDK checksum manifest.' >&2; return 1; }
   (cd "$folder" && if test "$checksum" = shasum; then shasum -a 256 -c SHA256SUMS >/dev/null; else sha256sum -c SHA256SUMS >/dev/null; fi) || return 1
   (cd "$folder" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort) > "$stage/actual-files"
   awk '{print substr($0,67)}' "$folder/SHA256SUMS" | LC_ALL=C sort > "$stage/listed-files"

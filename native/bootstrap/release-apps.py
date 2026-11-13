@@ -88,8 +88,8 @@ def unpack_tar(archive, destination):
 def checksums(path):
     values = {}
     for line in path.read_text().splitlines():
-        match = re.fullmatch(r'([0-9a-f]{64})  (.+)', line)
-        assert match, 'Invalid checksum row'
+        match = re.fullmatch(r'([0-9a-f]{64}) [ *](.+)', line)
+        assert match, 'Invalid checksum row: ' + repr(line[:160])
         name = safe_name(match[2]).as_posix()
         assert name not in values, 'Duplicate checksum path'
         values[name] = match[1]

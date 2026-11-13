@@ -1,0 +1,40 @@
+{
+  "format": "SHA-256 explicit binary marker",
+  "fixtureVerification": {
+    "status": "passed",
+    "fixtureChecks": [
+      "atomic sidecar rewrite preserves hardlinked historical checksum and binary bytes",
+      "binary marker verifies a CRLF/NUL/control-byte payload with shasum",
+      "different existing asset identity rejected",
+      "unsafe filenames rejected",
+      "complete plan writes binary global inventory and sidecars; actual shasum verifies both payloads",
+      "missing planned release asset rejects checksum generation"
+    ],
+    "scope": "Local metadata fixture; actual Cygwin binary checksum gate is recorded separately."
+  },
+  "existingFinalAssetConversion": {
+    "format": "SHA-256 binary marker",
+    "assets": {
+      "arya-language-2.0.0-darwin-arm64.vsix": "ad67bbf7d8b70fe641aa1c71f3131ea047423b4004348dd58e4149339beea0c7",
+      "arya-language-2.0.0-portable.vsix": "3f14e6cab04c0d50bd297906e0229bdc5dcf66ee2787bb78ef9d62548baef783",
+      "arya-native-calculators-2.0.0-darwin-arm64.zip": "e2851b0f0cd7b925b412dbac12189d533d2fa67fca3bcdd694f01bd1fc567f0b",
+      "arya-native-desktop-apps-2.0.0-darwin-arm64.zip": "71d74735771bac3c727736e2fb943a83446b0afc6cba0122ea4b1d80233ab6a7"
+    },
+    "globalInventoryWritten": false,
+    "assetBytesChanged": false,
+    "historicalChecksumPreservation": [
+      {
+        "sidecar": "arya-native-calculators-2.0.0-darwin-arm64.sha256",
+        "historicalUnchanged": true,
+        "finalBinaryMarker": true
+      },
+      {
+        "sidecar": "arya-native-desktop-apps-2.0.0-darwin-arm64.zip.sha256",
+        "historicalUnchanged": true,
+        "finalBinaryMarker": true
+      }
+    ],
+    "actualFinalSidecarsShasumCheck": "passed: all five current sidecars"
+  },
+  "note": "Final archive/VSIX bytes and historical checksum files are unchanged. Full release global inventory is generated only after every planned asset exists. Actual Cygwin behavior is qualified by its separate native runner probe."
+}

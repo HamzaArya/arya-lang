@@ -30,6 +30,18 @@ def manifest(root, names, destination):
 
 
 class ReleaseBoundaries(unittest.TestCase):
+    def test_standard_text_and_binary_checksum_markers(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            inventory = Path(temporary) / 'SHA256SUMS'
+            digest = 'a' * 64
+            inventory.write_text(digest + '  ./text\n' + digest + ' *./binary\n')
+            self.assertEqual(release.checksums(inventory), {'text': digest, 'binary': digest})
+            for row in (digest + ' U./binary\n', digest + '*./binary\n',
+                        digest + ' *../outside\n', digest + ' *C:/outside\n',
+                        digest + '  ./same\n' + digest + ' *./same\n'):
+                inventory.write_text(row)
+                with self.assertRaises(AssertionError): release.checksums(inventory)
+
     def test_windows_sdk_requires_explicit_executable_and_matching_identity(self):
         with tempfile.TemporaryDirectory() as temporary:
             sdk = Path(temporary)
@@ -214,6 +226,9 @@ class AssemblyBoundaries(unittest.TestCase):
             self.assertEqual(record['protectedFiles'][name], original[name], name)
         self.assertEqual((self.destination / 'docs/current.md').read_text(), 'Updated fixture documentation.\n')
         self.assertEqual(record['executable'], 'arya.exe')
+        for name in ('SHA256SUMS', 'ASSEMBLY-SOURCE-SHA256SUMS'):
+            for line in (self.destination / name).read_text().splitlines():
+                self.assertEqual(line[64:66], ' *', (name, line))
         self.assertEqual(record['installerIdentity'], {
             'qualifiedSHA256': original['install.sh'], 'assembledSHA256': original['install.sh'],
             'matchesQualified': True, 'qualifiedMatchRequired': True})

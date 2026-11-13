@@ -34,11 +34,12 @@ def identity(run, jobs, artifact, run_id, head, artifact_id):
     selected = [job for job in jobs if job['name'] == 'windows-cygwin']
     assert len(selected) == 1, 'Ambiguous Windows bootstrap job'
     job = selected[0]
-    for name in (BUILD_STEP, CAPTURE_STEP):
-        steps = [step for step in job['steps'] if step['name'] == name]
-        assert len(steps) == 1 and steps[0]['conclusion'] == 'success', 'Original bootstrap/capture did not pass'
+    steps = [step for step in job['steps'] if step['name'] == BUILD_STEP]
+    assert len(steps) == 1 and steps[0]['conclusion'] == 'success', 'Original bootstrap did not pass'
+    capture_steps = [step for step in job['steps'] if step['name'] == CAPTURE_STEP]
+    assert len(capture_steps) == 1 and capture_steps[0]['conclusion'] in ('success', 'failure'), 'Capture did not complete'
     return {'run': run_id, 'headSHA': head, 'runAttempt': run['run_attempt'], 'job': job['id'],
-            'jobConclusion': job['conclusion'], 'artifact': artifact,
+            'jobConclusion': job['conclusion'], 'captureConclusion': capture_steps[0]['conclusion'], 'artifact': artifact,
             'note': 'Bootstrap succeeded; later qualification gates may have failed. All current gates must run again.'}
 
 
@@ -71,11 +72,18 @@ def capture():
                 'runAttempt': int(os.environ['GITHUB_RUN_ATTEMPT']), 'host': host()}
     assert metadata['repository'] == shared.REPOSITORY
     shared.save(payload / 'bootstrap.json', metadata)
-    verified = verify_payload(payload)
     archive = work / 'windows-bootstrap-sdk.tar.gz'
     with tarfile.open(archive, 'w:gz') as output:
         output.add(payload, arcname='windows-bootstrap')
-    Path(str(archive) + '.sha256').write_text(shared.sha(archive) + '  ' + archive.name + '\n')
+    Path(str(archive) + '.sha256').write_text(shared.sha(archive) + ' *' + archive.name + '\n')
+    # Preserve immutable bytes before optional validation. A parser failure must
+    # not erase a successful bootstrap or stop independent runtime gates.
+    try:
+        verified = verify_payload(payload)
+    except Exception as error:
+        shared.save(ROOT / '.build/release-evidence/windows-bootstrap-capture.json',
+                    {'verified': False, 'qualified': False, 'error': str(error), 'metadata': metadata})
+        raise
     shared.save(ROOT / '.build/release-evidence/windows-bootstrap-capture.json', verified)
     print('Preserved bootstrap bytes for test-only reuse; Windows qualification is still pending.')
 

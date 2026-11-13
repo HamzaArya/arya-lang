@@ -97,6 +97,29 @@ CI packaging and installer gates pass. That profile additionally pins the exact
 native-tested installer; assembly rejects any installer change and preserves
 `arya.exe`, the Windows dependency record and platform README byte-for-byte.
 
+## Release checksum format
+
+Release `SHA256SUMS` and `.sha256` sidecars use the standard explicit binary
+marker: `SHA256 *filename`. This makes verification operate on the original
+bytes on Cygwin as well as Unix, including PE executables and compressed archives.
+SDK parsers also accept the standard two-space text marker in retained older
+evidence. The [release checksum writer](write-release-checksums.py) requires all
+planned assets before writing the global inventory and refuses an existing
+checksum that identifies different bytes:
+
+```sh
+python3 docs/verification/2.0.0/write-release-checksums.py \
+  --directory /path/to/final-assets --plan /path/to/reviewed-asset-plan.json
+```
+
+An asset plan contains an `artifacts` array with `filename` and `kind` fields;
+the `checksums` entry is the output inventory. Explicit filename arguments write
+sidecars only during preparation. Writes replace checksum files atomically so
+historical hardlinked sidecars remain unchanged. [Format evidence](checksum-format.json)
+records binary/control-byte fixtures, identity rejection, global inventory
+verification and the unchanged four prepared application/VSIX assets. The full
+release inventory and actual Cygwin probe are qualified separately.
+
 ## Problems found and resolved
 
 The first portable host attempt exceeded macOS's Unix-domain socket path limit

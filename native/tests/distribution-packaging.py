@@ -112,6 +112,18 @@ with tempfile.TemporaryDirectory(prefix='arya-distribution-test-') as temporary:
     assert run(explicit_prefix / 'bin/arya', '--version').stdout.strip() == 'Arya native 2.0.0 fixture'
     run('sh', installer, source, env=without_home, good=False)
     run('sh', installer, source, '--prefix', '', env=without_home, good=False)
+    binary_sdk = base / 'binary-marker-sdk'
+    shutil.copytree(source, binary_sdk)
+    raw = b'CRLF\r\nNUL\x00DOS\x1aHIGH\xff\r\n'
+    (binary_sdk / 'lib/raw.bin').write_bytes(raw)
+    files = sorted(file for file in binary_sdk.rglob('*') if file.is_file() and file.name != 'SHA256SUMS')
+    (binary_sdk / 'SHA256SUMS').write_text(''.join(hashlib.sha256(file.read_bytes()).hexdigest() + ' *./' + file.relative_to(binary_sdk).as_posix() + '\n' for file in files))
+    binary_prefix = base / 'binary-marker-install'
+    run('sh', installer, binary_sdk, '--prefix', binary_prefix)
+    binary_target = (binary_prefix / 'bin/arya').readlink().parent
+    assert (binary_target / 'lib/raw.bin').read_bytes() == raw
+    (binary_sdk / 'SHA256SUMS').write_text((binary_sdk / 'SHA256SUMS').read_text().replace(' *./', ' U./', 1))
+    run('sh', installer, binary_sdk, '--prefix', base / 'invalid-marker-install', good=False)
     assert not list(prefix.glob('.arya-install*'))
     # Host-routing fixtures only: shell scripts named .exe do not qualify Windows.
     tools = base / 'cygwin fixture tools'

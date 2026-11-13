@@ -117,7 +117,7 @@ reported without first spending another complete bootstrap.
 A manual desktop workflow with `target=windows` may supply the original run ID,
 exact source SHA and immutable artifact ID using `windows_bootstrap_run`,
 `windows_bootstrap_sha` and `windows_bootstrap_artifact`. Reuse requires a
-successful original bootstrap/capture, the GitHub artifact digest, complete SDK
+successful original bootstrap and completed capture, the GitHub artifact digest, complete SDK
 checksums, both generated-C identities, matching Cygwin/GCC versions and equal
 native build inputs in the new checkout. Tests, documentation and packaging
 metadata may change and are recorded separately. Every current Windows gate
@@ -163,3 +163,29 @@ converged, and all 260 selected native build inputs matched the later `9aa0575`
 checkout. Three differences were confined to packaging/test-controller files.
 This qualifies the measured Ubuntu 24.04 x64 target; it does not establish a
 minimum Linux kernel, glibc or GTK version for every distribution.
+
+[Independent workflow 43479940689](https://github.com/HamzaArya/arya-lang/actions/runs/43479940689)
+also completed successfully on both Linux and macOS. It rebuilt from a fresh
+source snapshot with Node/Python absent from executable search paths, ran the
+full native and profile gates, and exercised the actual managed installer with
+an explicit prefix while HOME was unset. All subsequent reference gates passed.
+
+## Windows bootstrap capture checksum failure
+
+The Windows job in [run 43478802288](https://github.com/HamzaArya/arya-lang/actions/runs/43478802288)
+completed bootstrap, then its new SDK preservation helper rejected a checksum
+row. Cygwin's `shasum` defaults to the standard binary marker (`*`); the helper
+and installer had accepted only the text marker (a space). The failed helper
+did not preserve its SDK archive, and the later runtime gates were skipped.
+The run's logs remain available as evidence artifact `14067398172`.
+
+The corrected parser and installer accept both standard markers without
+relaxing path, inventory or digest validation. New inventories and archive
+sidecars explicitly use binary mode, avoiding CRLF conversion when verifying
+PE executables or gzip archives. An early actual Cygwin fixture now tests
+CRLF/NUL/high-byte data, a compiled PE fixture and the installer route before
+bootstrap. Preservation writes its raw archive before optional verification;
+verification failure is retained in evidence and no longer skips independent
+runtime gates. Reuse still validates every recorded byte and native input
+before accepting those raw bootstrap bytes. These fixes require a new Windows
+run; they do not retroactively qualify the skipped gates.

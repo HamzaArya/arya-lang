@@ -46,15 +46,15 @@ sh "$root/native/bootstrap/copy-documentation.sh" sdk "$root" "$destination"
   printf '%s\n' Makefile LICENSE NOTICE native/VERSION native/manifest.json native/PROVENANCE.json native/THIRD-PARTY-NOTICES.txt native/DOCUMENTATION
   find native/compiler native/runtime native/libraries native/bootstrap native/tests native/vendor native/python native/desktop native/gui bin \
     -type f ! -name '*.pyc' ! -path '*/__pycache__/*' -print
-} | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 "$filename"; done) > "$destination/SOURCE-SHA256SUMS"
+} | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 -b "$filename"; done) > "$destination/SOURCE-SHA256SUMS"
 {
   printf '%s\n' 'Native Arya SDK assembly identities'
   printf 'assembledAtUtc: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf 'host: %s\n' "$(uname -srm)"
   printf 'version: %s\n' "$(cat "$root/native/VERSION")"
-  printf 'compilerSha256: %s\n' "$(shasum -a 256 "$destination/$executable" | awk '{print $1}')"
-  printf 'generatedCSha256: %s\n' "$(shasum -a 256 "$root/.build/independent/arya.c" | awk '{print $1}')"
-  printf 'stageTwoCSha256: %s\n' "$(shasum -a 256 "$root/.build/independent/stage2.c" | awk '{print $1}')"
+  printf 'compilerSha256: %s\n' "$(shasum -a 256 -b "$destination/$executable" | awk '{print $1}')"
+  printf 'generatedCSha256: %s\n' "$(shasum -a 256 -b "$root/.build/independent/arya.c" | awk '{print $1}')"
+  printf 'stageTwoCSha256: %s\n' "$(shasum -a 256 -b "$root/.build/independent/stage2.c" | awk '{print $1}')"
   if cmp -s "$root/.build/independent/stage2.c" "$root/.build/independent/arya.c"; then
     printf '%s\n' 'stageTwoThreeCIdentical: true'
   else
@@ -95,4 +95,4 @@ by the installer, not the Cygwin-only command symlink. This package is not an
 MSVC or standalone MinGW SDK. Platform qualification remains in the manifest.
 WINDOWS
 fi
-(cd "$destination" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 "$filename"; done > SHA256SUMS)
+(cd "$destination" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 -b "$filename"; done > SHA256SUMS)

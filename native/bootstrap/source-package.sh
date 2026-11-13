@@ -44,10 +44,10 @@ Source checksums identify this snapshot; qualification records state exactly
 which sources and platforms were tested. A source archive does not establish
 that an untested target is supported.
 TEXT
-(cd "$source" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 "$filename"; done > SHA256SUMS)
+(cd "$source" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 -b "$filename"; done > SHA256SUMS)
 COPYFILE_DISABLE=1 tar -czf "$work/$name.tar.gz" -C "$work" "$name"
-digest=$(shasum -a 256 "$work/$name.tar.gz" | awk '{print $1}')
-printf '%s  %s.tar.gz\n' "$digest" "$name" > "$work/checksum"
+digest=$(shasum -a 256 -b "$work/$name.tar.gz" | awk '{print $1}')
+printf '%s *%s.tar.gz\n' "$digest" "$name" > "$work/checksum"
 ln "$work/$name.tar.gz" "$destination/$name.tar.gz"
 if ! ln "$work/checksum" "$destination/$name.tar.gz.sha256"; then
   if test "$destination/$name.tar.gz" -ef "$work/$name.tar.gz"; then rm "$destination/$name.tar.gz"; fi
