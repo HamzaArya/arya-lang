@@ -1,6 +1,8 @@
 use std "gui" as gui
 use std "runtime" as runtime
+const typed: boolean = true
 fn expect(value, message) { if not value { throw message } }
+fn callWithoutArguments(action) { return action() }
 fn rejects(action) { let failed = false; try { action() } catch _error { failed = true }; expect(failed, "Expected GUI validation error") }
 const window = gui.window({title: "Arya native widget acceptance", width: 760, height: 600})
 window.add({id: "label", type: "label", text: "Native 😀", x: 20, y: 20, width: 300, height: 24})
@@ -37,6 +39,8 @@ expect(window.get("choice").text == "new" and window.get("choice").index == 1, "
 rejects(fn() { window.set("input", {checked: true}) })
 rejects(fn() { window.set("progress", {value: 1.01}) })
 rejects(fn() { window.get("missing") })
+rejects(fn() { callWithoutArguments(window.get) })
+rejects(fn() { window.set("input", runtime.jsonParse('{"surprise":true}')) })
 rejects(fn() { window.add({id: "bad id", type: "label", x: 1, y: 1, width: 20, height: 20}) })
 window.set("choice", {items: []})
 expect(window.get("choice").index == -1 and window.get("choice").text == "", "Empty choices clear selection")

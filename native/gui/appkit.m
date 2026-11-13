@@ -18,6 +18,7 @@
 @property(nonatomic,strong) NSWindow *window;
 @property(nonatomic,strong) NSMutableDictionary<NSString *,AGControl *> *controls;
 @property(nonatomic) BOOL closed;
+@property(nonatomic) BOOL counted;
 @property(nonatomic) BOOL updating;
 - (void)emit:(NSString *)type control:(AGControl *)control;
 @end
@@ -45,7 +46,7 @@ static AGuiState ag_state(AGControl *control){
 @end
 @implementation AGWindow
 - (void)emit:(NSString *)type control:(AGControl *)control { if(self.updating||self.closed)return;AGuiState state=ag_state(control);ag_push(&_queue,type.UTF8String,control.identifier.UTF8String,&state);arya_gui_dispose_state(&state); }
-- (void)windowWillClose:(NSNotification *)notification { (void)notification;if(!self.closed){self.closed=YES;AGuiState state={0};state.index=-1;ag_push(&_queue,"close","",&state);} }
+- (void)windowWillClose:(NSNotification *)notification { (void)notification;if(!self.closed){self.closed=YES;if(self.counted){self.counted=NO;if(ag_windows)ag_windows--;}AGuiState state={0};state.index=-1;ag_push(&_queue,"close","",&state);} }
 - (void)windowDidResize:(NSNotification *)notification { (void)notification;if(self.closed)return;AGuiState state={0};state.index=-1;state.width=(int)self.window.contentView.bounds.size.width;state.height=(int)self.window.contentView.bounds.size.height;ag_push(&_queue,"resize","",&state); }
 @end
 @interface AGApplication : NSObject <NSApplicationDelegate> @end
@@ -59,7 +60,7 @@ void *arya_gui_window(const char *title,int width,int height){@autoreleasepool{
   [NSApplication sharedApplication];if(!ag_application){ag_application=[AGApplication new];NSApp.delegate=ag_application;[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
     NSMenu *menu=[NSMenu new];NSMenuItem *app=[NSMenuItem new];[menu addItem:app];NSMenu *actions=[NSMenu new];[actions addItemWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];app.submenu=actions;
     NSMenuItem *edit=[NSMenuItem new];edit.title=@"Edit";[menu addItem:edit];NSMenu *editing=[[NSMenu alloc]initWithTitle:@"Edit"];[editing addItemWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];[editing addItemWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];[editing addItemWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];[editing addItemWithTitle:@"Paste" action:@selector(paste:) keyEquivalent:@"v"];[editing addItemWithTitle:@"Select All" action:@selector(selectAll:) keyEquivalent:@"a"];edit.submenu=editing;NSApp.mainMenu=menu;[NSApp finishLaunching];}
-  AGWindow *holder=[AGWindow new];holder.controls=[NSMutableDictionary new];holder.window=[[NSWindow alloc]initWithContentRect:NSMakeRect(0,0,width,height) styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];holder.window.releasedWhenClosed=NO;holder.window.delegate=holder;holder.window.title=ag_string(title);holder.window.contentMinSize=NSMakeSize(240,160);holder.window.contentView=[[AGFlipped alloc]initWithFrame:NSMakeRect(0,0,width,height)];[holder.window center];[holder.window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];ag_windows++;return (__bridge_retained void *)holder;
+  AGWindow *holder=[AGWindow new];holder.controls=[NSMutableDictionary new];holder.window=[[NSWindow alloc]initWithContentRect:NSMakeRect(0,0,width,height) styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];holder.window.releasedWhenClosed=NO;holder.window.delegate=holder;holder.window.title=ag_string(title);holder.window.contentMinSize=NSMakeSize(240,160);holder.window.contentView=[[AGFlipped alloc]initWithFrame:NSMakeRect(0,0,width,height)];[holder.window center];[holder.window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];ag_windows++;holder.counted=YES;return (__bridge_retained void *)holder;
 }}
 static int ag_alive(AGWindow *window){return window&&!window.closed?1:ag_fail("Native window is closed.");}
 static int ag_apply(AGWindow *window,AGControl *control,const AGuiSpec *spec){
@@ -79,10 +80,10 @@ int arya_gui_add(void *pointer,const AGuiSpec *spec){@autoreleasepool{AGWindow *
   AGControl *control=[AGControl new];control.owner=window;control.identifier=identifier;control.kind=spec->kind;control.items=@[];NSRect rect=NSMakeRect(spec->x,spec->y,spec->width,spec->height);
   switch(spec->kind){
     case AG_LABEL:control.widget=[NSTextField labelWithString:ag_string(spec->text)];break;
-    case AG_BUTTON:case AG_CHECKBOX:{NSButton *button=[NSButton new];button.buttonType=spec->kind==AG_CHECKBOX?NSButtonTypeSwitch:NSButtonTypeMomentaryPushIn;button.bezelStyle=NSBezelStyleRounded;button.target=control;button.action=@selector(activate:);control.widget=button;break;}
+    case AG_BUTTON:case AG_CHECKBOX:{NSButton *button=[NSButton new];button.title=@"";button.buttonType=spec->kind==AG_CHECKBOX?NSButtonTypeSwitch:NSButtonTypeMomentaryPushIn;button.bezelStyle=NSBezelStyleRounded;button.target=control;button.action=@selector(activate:);control.widget=button;break;}
     case AG_INPUT:{NSTextField *field=[NSTextField new];field.delegate=control;field.target=control;field.action=@selector(activate:);control.widget=field;break;}
     case AG_TEXTAREA:{NSScrollView *scroll=[[NSScrollView alloc]initWithFrame:rect];scroll.borderType=NSBezelBorder;scroll.hasVerticalScroller=YES;NSTextView *text=[[NSTextView alloc]initWithFrame:scroll.contentView.bounds];text.richText=NO;text.allowsUndo=YES;text.font=[NSFont systemFontOfSize:13];text.verticallyResizable=YES;text.horizontallyResizable=NO;text.autoresizingMask=NSViewWidthSizable;text.textContainer.widthTracksTextView=YES;text.delegate=control;scroll.documentView=text;control.widget=text;control.view=scroll;break;}
-    case AG_SELECT:{NSPopUpButton *popup=[[NSPopUpButton alloc]initWithFrame:rect pullsDown:NO];popup.target=control;popup.action=@selector(activate:);control.widget=popup;break;}
+    case AG_SELECT:{NSPopUpButton *popup=[[NSPopUpButton alloc]initWithFrame:rect pullsDown:NO];[popup removeAllItems];popup.target=control;popup.action=@selector(activate:);control.widget=popup;break;}
     case AG_LIST:{NSScrollView *scroll=[[NSScrollView alloc]initWithFrame:rect];scroll.hasVerticalScroller=YES;scroll.borderType=NSBezelBorder;NSTableView *table=[[NSTableView alloc]initWithFrame:scroll.contentView.bounds];NSTableColumn *column=[[NSTableColumn alloc]initWithIdentifier:@"value"];column.width=MAX(40,spec->width-4);[table addTableColumn:column];table.headerView=nil;table.allowsEmptySelection=YES;table.allowsMultipleSelection=NO;table.delegate=control;table.dataSource=control;scroll.documentView=table;control.widget=table;control.view=scroll;break;}
     case AG_PROGRESS:{NSProgressIndicator *progress=[NSProgressIndicator new];progress.indeterminate=NO;progress.minValue=0;progress.maxValue=1;control.widget=progress;break;}
     default:return ag_fail("Unknown widget type.");
@@ -93,4 +94,4 @@ int arya_gui_set(void *pointer,const char *id,const AGuiSpec *spec){@autorelease
 int arya_gui_get(void *pointer,const char *id,AGuiState *state){@autoreleasepool{AGWindow *window=(__bridge AGWindow *)pointer;if(!ag_alive(window))return 0;AGControl *control=window.controls[ag_string(id)];if(!control)return ag_fail("Unknown control id.");*state=ag_state(control);return state->text?1:ag_fail("Cannot allocate control state.");}}
 int arya_gui_poll(void *pointer,AGuiEvent *event){@autoreleasepool{AGWindow *window=(__bridge AGWindow *)pointer;for(unsigned i=0;i<32;i++){NSEvent *next=[NSApp nextEventMatchingMask:NSEventMaskAny untilDate:NSDate.distantPast inMode:NSDefaultRunLoopMode dequeue:YES];if(!next)break;[NSApp sendEvent:next];}CFRunLoopRunInMode(kCFRunLoopDefaultMode,0,true);[NSApp updateWindows];int result=ag_pop(&window->_queue,event);return result?result:window.closed?-1:0;}}
 void arya_gui_close(void *pointer){@autoreleasepool{AGWindow *window=(__bridge AGWindow *)pointer;if(!window.closed)[window.window close];}}
-void arya_gui_release(void *pointer){@autoreleasepool{AGWindow *window=(__bridge_transfer AGWindow *)pointer;if(!window.closed)[window.window close];ag_clear(&window->_queue);window.window.delegate=nil;[window.controls removeAllObjects];if(ag_windows)ag_windows--;}}
+void arya_gui_release(void *pointer){@autoreleasepool{AGWindow *window=(__bridge_transfer AGWindow *)pointer;if(!window.closed)[window.window close];ag_clear(&window->_queue);window.window.delegate=nil;[window.controls removeAllObjects];}}

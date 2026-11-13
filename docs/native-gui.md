@@ -11,6 +11,9 @@ available separately for compatibility.
 ```sh
 make native native-gui
 ./bin/arya run native/examples/native-task-desk.arya
+# Or create a new direct-native order-total project:
+./bin/arya create my-native-app --template native-gui
+./bin/arya run my-native-app/main.arya
 ```
 
 The example is a native task editor with search, title/notes editing, completion,

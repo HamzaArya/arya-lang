@@ -34,7 +34,7 @@ function workspaceEdit(value) {
 class NativeClient {
   constructor(output, diagnostics) {
     this.output = output; this.diagnostics = diagnostics; this.next = 0; this.pending = new Map(); this.documents = new Map(); this.buffer = Buffer.alloc(0); this.bytes = null; this.writes = Promise.resolve(); this.closed = false;
-    this.child = spawn(compilerExecutable(), ['lsp', '--stdio'], {cwd: tmpdir(), stdio: ['pipe','pipe','pipe'], windowsHide: true, shell: false});
+    this.child = spawn(compilerExecutable(), ['lsp', '--stdio'], {cwd: tmpdir(), stdio: ['pipe','pipe','pipe'], windowsHide: true, shell: false, ...(process.platform === 'win32' ? {env: {...process.env, LC_ALL: 'C.UTF-8'}} : {})});
     this.child.on('error', error => this.fail(new Error(`Cannot start native Arya: ${error.message}. Set arya.compilerPath to the native SDK executable.`)));
     this.child.on('exit', (code, signal) => this.fail(new Error(`Native Arya language server stopped (${signal ?? code}).`)));
     this.child.stdin.on('error', error => this.fail(error));
@@ -139,7 +139,8 @@ function activate(context) {
         const document=vscode.workspace.textDocuments.find(value=>value.uri.toString()===key);if(document?.isDirty&&!await document.save())throw new Error('Save this file first.');
         if(!vscode.workspace.isTrusted)throw new Error('Workspace trust changed.');
         const folder=vscode.workspace.getWorkspaceFolder(selected),python=setting('pythonPath','');
-        const task=new vscode.Task({type:'arya-native',path:key},folder??vscode.TaskScope.Global,`${action==='run'?'Run':'Check'} ${vscode.workspace.asRelativePath(selected)}`,'Arya',new vscode.ProcessExecution(compilerExecutable(),[action,selected.fsPath],{cwd:folder?.uri.fsPath??dirname(selected.fsPath),...(python?{env:{ARYA_PYTHON:python}}:{})}),[]);
+        const environment={...(process.platform==='win32'?{LC_ALL:'C.UTF-8'}:{}),...(python?{ARYA_PYTHON:python}:{})};
+        const task=new vscode.Task({type:'arya-native',path:key},folder??vscode.TaskScope.Global,`${action==='run'?'Run':'Check'} ${vscode.workspace.asRelativePath(selected)}`,'Arya',new vscode.ProcessExecution(compilerExecutable(),[action,selected.fsPath],{cwd:folder?.uri.fsPath??dirname(selected.fsPath),env:environment}),[]);
         task.presentationOptions={reveal:vscode.TaskRevealKind.Always,panel:vscode.TaskPanelKind.Dedicated,clear:true};const execution=await vscode.tasks.executeTask(task);if(vscode.tasks.taskExecutions.includes(execution))running.set(key,execution);
       } finally {starting.delete(key);}
     } catch(error) {vscode.window.showErrorMessage(error.message);}

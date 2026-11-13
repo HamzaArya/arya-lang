@@ -82,7 +82,8 @@ export fn moduleType(name) {
   if name == "debug" { return record({assert: fnType(["any", "string"], "void", 1), inspect: fnType(["any", "any"], "string", 1), trace: fnType(["string", "any"], "any", 1)}) }
   if name == "math" {
     let fields = {}; for key in ["abs", "acos", "acosh", "asin", "asinh", "atan", "atanh", "cbrt", "ceil", "clz32", "cos", "cosh", "exp", "expm1", "floor", "fround", "f16round", "log", "log1p", "log2", "log10", "round", "sign", "sin", "sinh", "sqrt", "tan", "tanh", "trunc"] { fields[key] = fnType(["number"], "number") }
-    for key in ["atan2", "imul", "pow"] { fields[key] = fnType(["number", "number"], "number") }
+    fields.not32 = fnType(["number"], "number")
+    for key in ["atan2", "imul", "pow", "and32", "or32", "xor32", "shiftLeft32", "shiftRight32"] { fields[key] = fnType(["number", "number"], "number") }
     let variadic = fnType([], "number", 0); variadic.rest = array("number"); for key in ["min", "max", "hypot"] { fields[key] = variadic }; fields.random = fnType([], "number")
     for key in ["E", "LN10", "LN2", "LOG10E", "LOG2E", "PI", "SQRT1_2", "SQRT2"] { fields[key] = "number" }; return record(fields)
   }

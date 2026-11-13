@@ -1,0 +1,26 @@
+use std "runtime" as runtime
+use std "path" as path
+use std "process" as process
+use std "_path" as nativePath
+use arya "./file-uri.arya" as fileUri
+fn expect(value, message) { if not value { throw message } }
+let filename = path.join(process.cwd(), "file space-é-😀.arya")
+let uri = fileUri.toUri(filename)
+expect(uri.startsWith("file:///"), "absolute local file URI")
+expect(uri.includes("%20") and uri.includes("%C3%A9") and uri.includes("%F0%9F%98%80"), "URI UTF-8 escaping")
+expect(fileUri.fromUri(uri) == filename, "URI/path Unicode roundtrip")
+expect(fileUri.fromUri(uri.replace("file:///", "file://localhost/")) == filename, "localhost URI")
+for invalid in ["http://example.com/x", "file:///tmp/a%2Fb", "file:///tmp/a%5Cb", "file:///tmp/a%00b", "file:///tmp/a%ZZ", "file:///tmp/a?query", "file:///tmp/a#fragment"] { expect(fileUri.fromUri(invalid) == null, "Reject invalid URI: " + invalid) }
+if runtime.platform() == "cygwin" {
+  let win = nativePath.toWindows(filename)
+  expect(path.resolve(win) == filename, "Windows absolute resolve")
+  expect(path.dirname(win) == path.dirname(filename), "Windows dirname")
+  expect(path.basename(win) == path.basename(filename), "Windows basename")
+  expect(path.join(nativePath.toWindows(path.dirname(filename)), path.basename(filename)) == filename, "Windows path join")
+  expect(path.posix.basename("a\\b") == "a\\b", "Explicit POSIX semantics preserved")
+  expect(fileUri.fromUri(uri.replace("%20", " ")) == filename, "Drive URI path")
+  let network = "//example.invalid/share/folder/file.arya"
+  expect(path.resolve(network) == network, "UNC root preserved")
+  expect(fileUri.fromUri("file://example.invalid/share/folder/file.arya") == network, "UNC URI conversion")
+}
+print("file URI and native editor path contracts PASS (" + runtime.platform() + ")")

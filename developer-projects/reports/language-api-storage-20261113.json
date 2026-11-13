@@ -1,0 +1,136 @@
+{
+  "host": "darwin",
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+  "compiler_version": "Arya native 2.0.0 (self-hosted)",
+  "projects": [
+    {
+      "path": "developer-projects/01-beginner/cli-expenses",
+      "status": "passed",
+      "source_sha256": "dd38b28e568c944fce039c944e783bf35e987d108a21a871a49fda9e361a49bc",
+      "smoke_sha256": "cf0f389ff28cbe576af5bb5271c4c54ce1493612458bfdb73010949dc6e4f7bc",
+      "binary_sha256": "4cd04124911f1299ccd1d9f7cee6dee938dce9a7d23be8e4308fe0af8402fb40",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/01-beginner/gui-study-planner",
+      "status": "passed",
+      "source_sha256": "2505d168162cbeda00bf2a1bacb98249f7757237b4acf5a2f25d8cc83710f4fa",
+      "smoke_sha256": "193caf8e0170105eec32d9caa324232840824ae04d783ef1e6c05302b5118b40",
+      "binary_sha256": "5c949c6da16a10b16d457e45fa4435b59f767fb561507dc02b2d258c0eb09f12",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/01-beginner/service-notes",
+      "status": "passed",
+      "source_sha256": "34ace5e4cdfbca8b3654d79e7d097e09a5e0881eb455d34c88ebe676d20b7e98",
+      "smoke_sha256": "819857961f09130938a09bd1de78010adbeaadbccd7a842004d3b0c38a889b82",
+      "binary_sha256": "a67e7d4c7f410b0266e48a5855ff7a0a126490df0ae9624152d5d4e5f013ced3",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/02-better/cli-inventory",
+      "status": "passed",
+      "source_sha256": "3354b4ebfa937458add1b0cc5ff2bb1730e18c512145e7f94bbe6c0cf82d9023",
+      "smoke_sha256": "ae5f3b4173528edf43e3a5cd0b057420b09fd261e869dba12a52706fa6fc08ec",
+      "binary_sha256": "0994a9692e983c4a7a5a87662c0ec56aaf9fd4c5c094830205505088064c5710",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/02-better/gui-habit-tracker",
+      "status": "passed",
+      "source_sha256": "4a61011a4f5c9344c56c009684e5ba424ecf452a0502ebebbe06188ede204004",
+      "smoke_sha256": "e0417ecd4a9f56bf514c571f65e2ba2f5e7e6aaf1974a27a2099e7a89500f55a",
+      "binary_sha256": "dc75003faaf2a8579de3e9c83e8b05cea32168cd54efe875a28712c17d7b344b",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/02-better/service-bookmarks",
+      "status": "passed",
+      "source_sha256": "561fbde6acd85d295a6f75bd75f2b4351754460b4aad2e130c872ce5ad6f8a56",
+      "smoke_sha256": "7ef31a55d7b67fd860c2fb9ffb198f6efb86ecfe97ea42c262cb9e7340282e04",
+      "binary_sha256": "d39f3b32a38a6a1ff32498268a2535d42a2afb8888e3ace14cb1595acf644677",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/03-intermediate/gui-support-desk",
+      "status": "passed",
+      "source_sha256": "8f92bf49bf327870943928068f3ee5a0f53d7fee0bb6d5db7679190840278605",
+      "smoke_sha256": "e8353c93b477d76f4b9a75f9654d6b7fe851015feb21ab10882b6614d6dd6ce4",
+      "binary_sha256": "98b477589bb133cd64ae2a528703ce986f997e92cf70fd08ccc81a271e462838",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/03-intermediate/service-reservations",
+      "status": "passed",
+      "source_sha256": "ef46c908afad8c2b208dfb1861735e3e45234e43d8a953beece9ddf05ac385ff",
+      "smoke_sha256": "5c3375822515fcb6a431c4352a92c4484378d0e3d0f27fc2e1222348aff2c86f",
+      "binary_sha256": "7c9ed1fe419774d2752eec144402885ffaa6903a19f29d9654ba6fdb4017f6ee",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/04-advanced/gui-project-board",
+      "status": "passed",
+      "source_sha256": "84ada6fddc8b30debd9c35c7894e4ecff4abf3339da90381509ca29085bb3ec8",
+      "smoke_sha256": "3b98bf35ba29b0f39777402fa26cad751ef3a14efa1fef7616784e2d89b53009",
+      "binary_sha256": "89b86f0b88a2e6b2e818d5ebb0a0b6b01295b7644cf9baf4f988c2f4cf68dab3",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/04-advanced/service-job-queue",
+      "status": "passed",
+      "source_sha256": "e166bf9b311e9cb6e7bd9fc693c8144da92fbadd3ae91494e22c6ef5d4ab7f72",
+      "smoke_sha256": "a0f18ca94ee4bff0ce6d6b47fc6d49fdc549d52bab75ed39824d25320903e227",
+      "binary_sha256": "0b8395769e7bb4a82488557a2577e7f26758cf6301954310b2c571cbc0214a18",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/05-pro/gui-incident-console",
+      "status": "passed",
+      "source_sha256": "4f0f85c61f3a3a360c28f5bab6b3ab2b3456ed23afabf6b7f1ade9bef62480d2",
+      "smoke_sha256": "28e8fd5129a8e866725d449090ffb1496f0a74e248565a6210dc2db778115133",
+      "binary_sha256": "c240d58488a6d0f42ccd5085e8f26adec221beec9441a400b9d512d0f35078f4",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/05-pro/service-feature-flags",
+      "status": "passed",
+      "source_sha256": "707c5555656d56f1ca9786aeac3e9bd17a6d36babe1d26d951805571e2237536",
+      "smoke_sha256": "cc5ffb67729bb65107f0fd62ab538e037fdb42c0d625cb42fe21f5a8117795de",
+      "binary_sha256": "1ac0770a4b9031dd80010a29b9f602eb30bf2a908a328862eaa4f45da51b1daa",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/06-world-class/gui-reconciliation",
+      "status": "passed",
+      "source_sha256": "682218e70fc92e0204ebbe566412158e283dcb1cdd7c48e459eb6ee5230355d7",
+      "smoke_sha256": "c70cd7f9c422037349c596b3ca9b9517b00533e741cdf14fa18d97aeb41833d7",
+      "binary_sha256": "f9d0f175fccb433e1f42bdff2692ab435b84cacbf2404ee0cc7c029ae21a976f",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "developer-projects/06-world-class/service-idempotent-ledger",
+      "status": "passed",
+      "source_sha256": "e662924541655f993c02abafb5afdf48b57f3b1a4c7ce31e2faf9d21385aa096",
+      "smoke_sha256": "8a568c8510564d3ce19a773a747074c56e4576dd855371d2dcc126de285ad263",
+      "binary_sha256": "373f4e332bc40aad964f0c83b9c41b8e617722673d4ba5dac3290d145ee1ab5c",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    }
+  ],
+  "test_driver_sha256": "1453a295031f7ef1f69d32164ee64a5d33a85e2bd705c5dd833c1275162cbff7",
+  "logs": ".build/language-api-repairs/applications-20261113T153233Z",
+  "scope": "Worker/source verification; existing desktop app bundle signatures require repackaging after worker changes."
+}

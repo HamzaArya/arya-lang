@@ -67,6 +67,8 @@ native-test: native native-crypto native-auth
 	sh native/tests/accounting-journal.sh
 	sh native/tests/security-diagnostics.sh
 	sh native/tests/security-bytes.sh
+	sh native/tests/bitwise32.sh
+	sh native/tests/editor-paths.sh
 	sh native/tests/auth.sh
 	sh native/tests/number-format.sh
 	sh native/tests/numeric-calls.sh

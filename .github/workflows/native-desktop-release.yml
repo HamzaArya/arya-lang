@@ -61,6 +61,12 @@ jobs:
         run: |
           sh native/tests/run.sh
           sh native/tests/gui.sh
+          sh native/tests/editor-paths.sh
+      - name: Native Windows editor paths and protocol
+        shell: pwsh
+        run: |
+          $env:PATH = "C:\cygwin\bin;" + $env:PATH
+          node native/tests/windows-editor-reference.cjs "$env:GITHUB_WORKSPACE\.build\independent\arya.exe"
       - name: Record dependency requirements
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
         run: |

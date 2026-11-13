@@ -33,7 +33,7 @@ Python is test tooling only; it is not an application dependency.
 
 ## Storage and limits
 
-The host sets the per-app Application Support data path and a single-instance lock. `DATA_FILE` overrides the store for isolated testing. The worker validates the file and referential integrity before commands. It stages replacements in a private sibling directory before rename. Failed validation or writes preserve the previous file; no fsync-level power-loss guarantee is claimed.
+The host sets the per-app Application Support data path and a single-instance lock. `DATA_FILE` overrides the store for isolated testing. The worker validates the file and referential integrity before commands. It stages replacements in a private random sibling file before rename. Failed validation or writes preserve the previous file; no fsync-level power-loss guarantee is claimed.
 
 Limits: 100 projects, 500 tasks, the latest 1000 history events, and 4 MiB of JSON. WIP limits range from 1 to 20. Overdue means an unfinished task's calendar due date is before the current UTC date. Progress is done tasks divided by all tasks, rounded to a whole percent; empty projects show 0%. History records events and selected details, not reversible snapshots. This is a local single-operator application without cloud sync, login, dependency graphs, attachments, reminders, or external issue integrations. Corrupt data is surfaced rather than reset.
 

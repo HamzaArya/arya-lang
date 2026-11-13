@@ -24,3 +24,7 @@ All implemented arithmetic semantics and limits are specified in [README.md](REA
 Final native checking, release builds, and reference/integration tests all passed. [verification.json](verification.json) records compiler, source, form configuration, test and worker hashes. Retained logs: [check](evidence/check.log), [build](evidence/build.log), [smoke](evidence/smoke.log). Tests execute a separate native process for each operation and verify invalid operations and read-only-parent write failures leave saved bytes unchanged. Native GUI interaction testing belongs to the collection host report and is not inferred from engine tests.
 
 The programmer suite includes 18 named cases and 280 deterministic Python integer reference comparisons across arithmetic, bit operations and shifts. Full-width multiplication agrees with exact Python integers after modulo 2³². Arya has no source bitwise operators, so explicit arithmetic bit loops implement the documented model.
+
+## 2.0.0 language integration
+
+The earlier manual bit-operation implementation is replaced with native `math.and32`, `or32`, `xor32`, `not32`, `shiftLeft32` and `shiftRight32`. The calculator retains its documented strict UInt32, wrapping/checked arithmetic and 0–31 shift-count semantics. This resolves the missing bit-operation API while leaving Arya source-operator syntax unchanged. Updated release validation is recorded separately from the original evidence above.

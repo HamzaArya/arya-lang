@@ -9,12 +9,15 @@ trap 'rm -rf "$tmp"' EXIT HUP INT TERM
 "$compiler" check "$root/native/tests/fixtures/gui.arya"
 "$compiler" build "$root/native/tests/fixtures/gui.arya" -o "$tmp/widgets" --release > "$tmp/build.log" 2>&1 || { cat "$tmp/build.log" >&2; exit 1; }
 ARYA_GC_STRESS=1 "$tmp/widgets"
-printf 'use std "gui" as gui\nconst w = gui.window({width: "wrong"})\n' > "$tmp/invalid.arya"
+printf 'use std "gui" as gui\nconst typed: boolean = true\nconst w = gui.window({width: "wrong"})\n' > "$tmp/invalid.arya"
 if "$compiler" check "$tmp/invalid.arya" > "$tmp/check.log" 2>&1; then printf '%s\n' 'GUI invalid width escaped type checking.' >&2; exit 1; fi
 grep -q 'Type mismatch' "$tmp/check.log"
-printf 'use std "gui" as gui\nconst w = gui.window()\nw.set("x", {enabled: "wrong"})\n' > "$tmp/invalid.arya"
+printf 'use std "gui" as gui\nconst typed: boolean = true\nconst w = gui.window()\nw.set("x", {enabled: "wrong"})\n' > "$tmp/invalid.arya"
 if "$compiler" check "$tmp/invalid.arya" > "$tmp/check.log" 2>&1; then printf '%s\n' 'GUI invalid enabled escaped type checking.' >&2; exit 1; fi
 grep -q 'Type mismatch' "$tmp/check.log"
+"$compiler" create "$tmp/project" --template native-gui
+"$compiler" check "$tmp/project/main.arya"
+"$compiler" build "$tmp/project/main.arya" -o "$tmp/template" --release > "$tmp/template.log" 2>&1 || { cat "$tmp/template.log" >&2; exit 1; }
 if test "$(uname -s)" = Darwin; then
   cc -fobjc-arc -Wall -Wextra "$root/native/gui/appkit-test.m" -framework Cocoa -o "$tmp/actions"
   "$tmp/actions"

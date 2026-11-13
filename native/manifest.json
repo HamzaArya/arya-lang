@@ -7,7 +7,7 @@
   "requiresNodeForPrograms": false,
   "requiresPythonForBuildOrCorePrograms": false,
   "legacyStandardModulesWithNativeImplementations": 18,
-  "publicNativeModules": 27,
+  "publicNativeModules": 28,
   "qualifiedPlatforms": [],
   "build": {
     "core": "POSIX shell, make, C11 compiler",
@@ -153,7 +153,13 @@
         "LOG2E",
         "PI",
         "SQRT1_2",
-        "SQRT2"
+        "SQRT2",
+        "and32",
+        "or32",
+        "xor32",
+        "not32",
+        "shiftLeft32",
+        "shiftRight32"
       ]
     },
     "path": {
@@ -494,7 +500,10 @@
     },
     "gui": {
       "implementation": "native",
-      "members": ["window", "platform"]
+      "members": [
+        "window",
+        "platform"
+      ]
     },
     "desktop": {
       "implementation": "native",

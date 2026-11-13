@@ -4,6 +4,7 @@ use std "fs" as fs
 use std "path" as path
 use std "process" as process
 use std "math" as math
+use arya "./file-uri.arya" as fileUriCodec
 # A bounded block index keeps arbitrary UTF-16 positions cheap, even for a
 # single very long line or a malformed file containing millions of newlines.
 let indexedSource = null
@@ -37,12 +38,8 @@ fn span(source, token) {
   if token.kind == "word" { return {start: {line: token.line, character: token.column}, end: {line: token.line, character: token.column + (token.end ?? (token.start + len(token.text))) - token.start}} }
   return {start: position(source, token.start), end: position(source, token.end ?? (token.start + len(token.text)))}
 }
-fn filePath(uri) {
-  if not uri.startsWith("file://") { return null }
-  let value = uri.slice(7); if value.startsWith("localhost/") { value = value.slice(9) }; if not value.startsWith("/") or value.toLowerCase().includes("%2f") or value.toLowerCase().includes("%5c") { return null }
-  try { value = runtime.uriDecode(value); if value.includes(runtime.stringFromCodes([0])) { return null }; return path.resolve(value) } catch _failure { return null }
-}
-fn fileUri(filename) { return "file://" + runtime.uriEncode(filename).replaceAll("%2F", "/") }
+fn filePath(uri) { return fileUriCodec.fromUri(uri) }
+fn fileUri(filename) { return fileUriCodec.toUri(filename) }
 fn send(value) { runtime.writeFrame(runtime.jsonStringify(value)) }
 fn response(id, value) { send({jsonrpc: "2.0", id: id, result: value}) }
 fn failure(id, code, message) { send({jsonrpc: "2.0", id: id, error: {code: code, message: message}}) }

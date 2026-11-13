@@ -35,7 +35,7 @@ Python is integration-test tooling only. The delivered app runs its compiled nat
 
 ## Storage and limits
 
-The packaged app stores data in the host's Application Support directory. `DATA_FILE` overrides the location for isolated testing. Every invocation loads and validates the persisted snapshot. Mutations stage a new file in a private sibling directory and rename it into place; rejected operations and failed writes preserve the previous file. No fsync-level power-loss guarantee is claimed. The host provides a single-instance store lock.
+The packaged app stores data in the host's Application Support directory. `DATA_FILE` overrides the location for isolated testing. Every invocation loads and validates the persisted snapshot. Mutations stage a private random sibling file and rename it into place; rejected operations and failed writes preserve the previous file. No fsync-level power-loss guarantee is claimed. The host provides a single-instance store lock.
 
 Limits: 300 tickets, the most recent 1000 history events, and 4 MiB total JSON. Oldest history is removed when its limit is reached. History records events and selected change details; it is not a complete reversible audit snapshot. This is a local single-operator application, without email delivery, authentication, attachments, team synchronization, or service-level timers. Corrupt storage is reported instead of reset.
 

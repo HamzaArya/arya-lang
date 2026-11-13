@@ -1733,7 +1733,7 @@ fn main() {
   }
   if len(args) < 2 or not has(["check", "build", "run", "test", "native"], args[0]) {
     print("Arya native " + VERSION + " — self-hosted C11 compiler")
-    print("arya create [directory] [--template web|api|cli|ui|desktop]")
+    print("arya create [directory] [--template web|api|cli|ui|desktop|native-gui]")
     print("arya init [directory] --web")
     print("arya editor status|install|path [--editor all|code|aryacode|cursor|codium|windsurf]")
     print("arya check|build|run source.arya [-o executable] [-- program arguments]")

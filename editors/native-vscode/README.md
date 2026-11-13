@@ -48,3 +48,11 @@ its extracted directory. This verifies its checksum manifest and installs under
 versions and switch only the managed `arya` launcher. The installer refuses to
 overwrite an unrelated executable. Checksums establish file integrity, not the
 publisher's identity; obtain archives from the official release page.
+
+For the Windows Cygwin target, choose the actual Windows path to `arya.exe`
+(e.g. the path printed by `cygpath -w /path/to/arya.exe`), and retain its runtime
+DLL dependencies. The extension starts Windows compiler processes with a UTF-8
+locale so Unicode filenames use the same encoding as the language protocol.
+The native language server maps drive/UNC file URIs through Cygwin's mount table.
+Windows release qualification, including native editor-host path tests, is
+recorded separately from the portable VSIX's successful packaging tests.

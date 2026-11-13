@@ -71,15 +71,12 @@ fn multiply(a, b): number {
   while right > 0 { if right % 2 == 1 { value = (value + left) % modulus }; right = math.floor(right / 2); left = (left + left) % modulus }; return value
 }
 fn bits(a, b, op): number {
-  let left = a; let right = b; let result = 0; let place = 1
-  for index in range(32) {
-    const x = left % 2; const y = right % 2
-    if op == "AND" and x == 1 and y == 1 or op == "OR" and (x == 1 or y == 1) or op == "XOR" and x != y { result += place }
-    left = math.floor(left / 2); right = math.floor(right / 2); place *= 2
-  }; return result
+  if op == "AND" { return math.and32(a, b) }
+  if op == "OR" { return math.or32(a, b) }
+  return math.xor32(a, b)
 }
 fn primary(depth): number { nesting(depth); const token = take(); if token.type == "number" { return token.value }; if token.text == "(" { const value = bitOr(depth + 1); need(")"); return value }; return fail("Expected an integer or parenthesized expression.") }
-fn unary(depth): number { nesting(depth); if accept("NOT") { return maximum - unary(depth + 1) }; if accept("+") { return unary(depth + 1) }; if accept("-") { return subtract(0, unary(depth + 1)) }; return primary(depth) }
+fn unary(depth): number { nesting(depth); if accept("NOT") { return math.not32(unary(depth + 1)) }; if accept("+") { return unary(depth + 1) }; if accept("-") { return subtract(0, unary(depth + 1)) }; return primary(depth) }
 fn product(depth): number {
   let value = unary(depth)
   while ["*", "/", "%"].includes(peek().text) { const op = take().text; const right = unary(depth); if op == "*" { value = multiply(value, right) } else { if right == 0 { fail("Division or remainder by zero is undefined.") }; if op == "/" { value = math.floor(value / right) } else { value = value % right } } }; return value
@@ -89,7 +86,8 @@ fn shift(depth): number {
   let value = sum(depth)
   while peek().text == "<<" or peek().text == ">>" {
     const op = take().text; const count = sum(depth); if count > 31 { fail("Shift counts must be between 0 and 31.") }
-    if op == ">>" { value = math.floor(value / math.pow(2, count)) }
+    if op == ">>" { value = math.shiftRight32(value, count) }
+    else if overflow == "wrap" { value = math.shiftLeft32(value, count) }
     else { for index in range(count) { value = add(value, value) } }
   }; return value
 }

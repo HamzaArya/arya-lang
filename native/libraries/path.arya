@@ -1327,4 +1327,29 @@ posix._makeLong = posix.toNamespacedPath
 posix.realPath = nativePath.realPath
 win32.realPath = nativePath.realPath
 
-export const api = pathChoose(isWindows, fn() { return win32 }, fn() { return posix })
+# A native Windows editor sends drive paths to Cygwin processes. Convert them
+# through the mount table while retaining Cygwin's POSIX filesystem semantics.
+# Explicit path.posix and path.win32 remain the unmodified lexical profiles.
+let cygwinPath = {}
+if runtime.platform() == "cygwin" {
+  for key in runtime.keys(posix) { cygwinPath[key] = posix[key] }
+  fn compose(operation, segments, resolving) {
+    let converted = segments.map(fn(value) { return nativePath.toPosix(value) })
+    let anchor = ""
+    if resolving { for value in converted { if value.startsWith("/") { anchor = value } } }
+    else { for value in converted { if value != "" { anchor = value; break } } }
+    let result = operation(...converted)
+    if anchor.startsWith("//") and not anchor.startsWith("///") and result.startsWith("/") and not result.startsWith("//") { result = "/" + result }
+    return result
+  }
+  cygwinPath.resolve = fn(...segments) { return compose(posix.resolve, segments, true) }
+  cygwinPath.join = fn(...segments) { return compose(posix.join, segments, false) }
+  cygwinPath.normalize = fn(value) { return compose(posix.normalize, [value], false) }
+  cygwinPath.dirname = fn(value) { return posix.dirname(nativePath.toPosix(value)) }
+  cygwinPath.basename = fn(value, suffix) { return posix.basename(nativePath.toPosix(value), suffix) }
+  cygwinPath.extname = fn(value) { return posix.extname(nativePath.toPosix(value)) }
+  cygwinPath.parse = fn(value) { return posix.parse(nativePath.toPosix(value)) }
+  cygwinPath.isAbsolute = fn(value) { return posix.isAbsolute(nativePath.toPosix(value)) }
+  cygwinPath.relative = fn(from, to) { return posix.relative(nativePath.toPosix(from), nativePath.toPosix(to)) }
+}
+export const api = pathChoose(runtime.platform() == "cygwin", fn() { return cygwinPath }, fn() { return pathChoose(isWindows, fn() { return win32 }, fn() { return posix }) })

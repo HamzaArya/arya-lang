@@ -20,7 +20,7 @@ Precedence, highest first: parentheses; unary `NOT`, `+`, `-`; `*` `/` `%`; `+` 
 
 **Wrap** arithmetic reduces each result modulo 2³². Unary `-1` consequently becomes 4294967295. **Checked** arithmetic rejects addition/multiplication/left-shift overflow and subtraction or unary-negation underflow at the operation that causes it. For example, checked `1-2+3` fails at subtraction. Bit operations and right shifts work in both modes.
 
-Although Arya's ordinary number is binary64, this engine keeps integer intermediates within exact range. Wrap multiplication uses bounded modular doubling/addition instead of multiplying two full-width operands as a floating value. AND/OR/XOR use exactly 32 bit iterations. Results are exact for the documented UInt32 model.
+Although Arya's ordinary number is binary64, this engine keeps integer intermediates within exact range. Wrap multiplication uses bounded modular doubling/addition instead of multiplying two full-width operands as a floating value. AND/OR/XOR/NOT and logical shifts use native UInt32 standard-library operations. Results are exact for the documented UInt32 model.
 
 The main result is decimal. Hexadecimal and a padded 32-bit binary representation appear in the calculation details and persistent summary. History and last result survive restarts; clearing history preserves the last result. Memory controls are intentionally disabled for this model.
 

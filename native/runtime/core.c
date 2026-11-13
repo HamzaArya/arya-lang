@@ -22,6 +22,10 @@
 #ifndef MAP_ANONYMOUS
 #define MAP_ANONYMOUS MAP_ANON
 #endif
+#ifdef __CYGWIN__
+#include <sys/cygwin.h>
+#include <wchar.h>
+#endif
 #ifdef __linux__
 #include <sys/syscall.h>
 #endif
@@ -479,6 +483,7 @@ static AV abuiltin(AV env,int argc,AV *argv) {
 }
 static AV abuilt(int id) { AV env=an(id); return afunction(abuiltin,env,"builtin"); }
 #include "helpers.c"
+#include "path-cygwin.c"
 static AV aappend_value(AV list,AV value);
 static AV aiternext(AV iterable,AV *position);
 #include "text.c"
@@ -510,11 +515,15 @@ static AV aprocess(int id,int argc,AV *argv) {
 #endif
     char *canonical=realpath(buffer,NULL);if(!canonical)return aio_error(errno,"realpath",av(AUNDEF));AV executable=astr(canonical);free(canonical);return executable;
   }
+  if(id==55||id==56)return apath_convert(argc?argv[0]:av(AUNDEF),id==56);
   if(id>=50&&id<=54) {
     if(!argc||!apath_argument(argv[0]))return av(AUNDEF);for(int i=1;i<argc;i++)if(!apath_argument(argv[i]))return av(AUNDEF);
     if(id==54) {char *path=autf8(argv[0]);char *canonical=realpath(path,NULL);free(path);if(!canonical)return aio_error(errno,"realpath",argv[0]);AV result=astr(canonical);free(canonical);return result;}
     AV roots[2]={argv[0],av(AUNDEF)}; ARoot r;aroot(&r,roots,2);
-    if(id==50||id==53) {for(int i=1;i<argc;i++){roots[1]=astr("/");roots[0]=aconcat(roots[0],roots[1]);roots[0]=aconcat(roots[0],argv[i]);}}
+#ifdef __CYGWIN__
+    roots[0]=apath_convert(roots[0],0);if(afailed){aunroot(&r);return av(AUNDEF);}
+#endif
+    if(id==50||id==53) {for(int i=1;i<argc;i++){roots[1]=astr("/");roots[0]=aconcat(roots[0],roots[1]);roots[1]=apath_convert(argv[i],0);if(afailed){aunroot(&r);return av(AUNDEF);}roots[0]=aconcat(roots[0],roots[1]);}}
     char *text=autf8(roots[0]);
     if(id==51||id==52){char *slash=strrchr(text,'/');if(id==51){if(slash){if(slash==text)slash[1]=0;else *slash=0;}else {free(text);text=strdup(".");}}else if(slash)memmove(text,slash+1,strlen(slash+1)+1);}
     if(id==53 && text[0]!='/') {char *cwd=getcwd(NULL,0);if(!cwd){free(text);aunroot(&r);return afail("IOError",strerror(errno));}size_t n=strlen(cwd)+strlen(text)+2;char *next=(char*)amemory(n);snprintf(next,n,"%s/%s",cwd,text);free(cwd);free(text);text=next;}
@@ -652,7 +661,7 @@ static AV astdcall(AV env,int argc,AV *argv) {
 #ifdef ARYA_CRYPTO
   if(env.n>=1200&&env.n<=1214)return asecurity((int)env.n,argc,argv);
 #endif
-  if(env.n>=1000&&env.n<=1025)return amath((int)env.n,argc,argv);
+  if(env.n>=1000&&env.n<=1031)return amath((int)env.n,argc,argv);
   if(env.n>=400&&env.n<=402)return aasync_library((int)env.n,argc,argv);
   if(env.n==202||env.n==203){AV r[3]={av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,3);if(env.n==202){r[0]=astdcall(an(10),argc,argv);if(!afailed)r[1]=ajson(200,1,r);}else{r[0]=argc>1?argv[1]:av(AUNDEF);AV args[3]={r[0],av(ANULL),an(2)};r[1]=ajson(201,3,args);if(!afailed){r[1]=aconcat(r[1],astr("\n"));AV write[2]={argc?argv[0]:av(AUNDEF),r[1]};r[1]=astdcall(an(11),2,write);}}AV result=r[1];aunroot(&root);return result;}
   if(env.n==14){if(!argc||!apath_argument(argv[0]))return av(AUNDEF);char *path=autf8(argv[0]);DIR *directory=opendir(path);int openedError=errno;free(path);if(!directory)return aio_error(openedError,"scandir",argv[0]);AV r[2]={alist(0,NULL),av(AUNDEF)};ARoot root;aroot(&root,r,2);struct dirent *item;errno=0;while((item=readdir(directory))){if(!strcmp(item->d_name,".")||!strcmp(item->d_name,".."))continue;r[1]=astr(item->d_name);aappend_value(r[0],r[1]);if(afailed)break;}int saved=errno;closedir(directory);if(saved&&!afailed)aio_error(saved,"scandir",argv[0]);AV result=r[0];aunroot(&root);return afailed?av(AUNDEF):result;}
@@ -726,6 +735,8 @@ static AV astd(const char *name) {
 #endif
 #ifdef ARYA_DESKTOP
   else if(!strcmp(name,"desktop")){astdfield(roots[0],"open",1700);}
+#endif
+#ifdef ARYA_GUI
   else if(!strcmp(name,"gui")){astdfield(roots[0],"window",1710);astdfield(roots[0],"platform",1711);}
 #endif
 #ifdef ARYA_PYTHON
@@ -754,10 +765,10 @@ static AV astd(const char *name) {
   else if(!strcmp(name,"io")) { astdfield(roots[0],"print",0); astdfield(roots[0],"readLine",1); astdfield(roots[0],"write",2);astdfield(roots[0],"readChunk",3); }
   else if(!strcmp(name,"_csv")){astdfield(roots[0],"decoder",1900);}
   else if(!strcmp(name,"fs")) { astdasyncfield(roots[0],"readText",10);astdfield(roots[0],"readTextSync",10);astdasyncfield(roots[0],"writeText",11);astdfield(roots[0],"writeTextSync",11);astdasyncfield(roots[0],"list",14);astdfield(roots[0],"listSync",14);astdfield(roots[0],"appendText",12);astdasyncfield(roots[0],"readBytes",15);astdfield(roots[0],"readBytesSync",15);astdasyncfield(roots[0],"writeBytes",16);astdfield(roots[0],"writeBytesSync",16);astdasyncfield(roots[0],"appendBytes",17);astdfield(roots[0],"appendBytesSync",17);astdfield(roots[0],"writeTextAtomicSync",18);astdfield(roots[0],"writeBytesAtomicSync",19);astdasyncfield(roots[0],"exists",13);astdfield(roots[0],"existsSync",13); astdfield(roots[0],"makeDirectory",60); astdfield(roots[0],"rename",61); astdfield(roots[0],"remove",62); astdfield(roots[0],"tempDirectory",63); astdfield(roots[0],"removeDirectory",64); astdfield(roots[0],"publish",65); astdfield(roots[0],"isFile",66);astdfield(roots[0],"infoSync",67);astdfield(roots[0],"publishDirectory",68);astdfield(roots[0],"_treeInfoSync",69); }
-  else if(!strcmp(name,"math")) { const char *names[]={"sqrt","abs","floor","ceil","round","pow","sin","cos","min","max"}; for(int i=0;i<10;i++) astdfield(roots[0],names[i],20+i);const char *extra[]={"acos","acosh","asin","asinh","atan","atanh","atan2","cbrt","clz32","cosh","exp","expm1","fround","f16round","hypot","imul","log","log10","log1p","log2","random","sign","sinh","tan","tanh","trunc"};for(int i=0;i<26;i++)astdfield(roots[0],extra[i],1000+i);const char *constants[]={"PI","E","LN2","LN10","LOG2E","LOG10E","SQRT1_2","SQRT2"};double values[]={3.14159265358979323846,2.71828182845904523536,0.69314718055994530942,2.30258509299404568402,1.44269504088896340736,0.43429448190325182765,0.70710678118654752440,1.41421356237309504880};for(int i=0;i<8;i++)aput(roots[0],constants[i],an(values[i])); }
+  else if(!strcmp(name,"math")) { const char *names[]={"sqrt","abs","floor","ceil","round","pow","sin","cos","min","max"}; for(int i=0;i<10;i++) astdfield(roots[0],names[i],20+i);const char *extra[]={"acos","acosh","asin","asinh","atan","atanh","atan2","cbrt","clz32","cosh","exp","expm1","fround","f16round","hypot","imul","log","log10","log1p","log2","random","sign","sinh","tan","tanh","trunc","and32","or32","xor32","not32","shiftLeft32","shiftRight32"};for(int i=0;i<32;i++)astdfield(roots[0],extra[i],1000+i);const char *constants[]={"PI","E","LN2","LN10","LOG2E","LOG10E","SQRT1_2","SQRT2"};double values[]={3.14159265358979323846,2.71828182845904523536,0.69314718055994530942,2.30258509299404568402,1.44269504088896340736,0.43429448190325182765,0.70710678118654752440,1.41421356237309504880};for(int i=0;i<8;i++)aput(roots[0],constants[i],an(values[i])); }
   else if(!strcmp(name,"runtime")) { astdfield(roots[0],"clock",30); astdfield(roots[0],"collect",31); astdfield(roots[0],"codeUnit",32);astdfield(roots[0],"keys",34);astdfield(roots[0],"platform",35);const char *names[]={"kind","sameValue","deepEqual","freeze","context","exitCode","defer","onFinish","elapsed","fieldGetter","error","readFrame","writeFrame","tag","hasAccessor","errorMatches","stringFromCodes","randomUUID","isRecord","jsonParse","jsonStringify","uriEncode","uriDecode"};for(int i=0;i<23;i++)astdfield(roots[0],names[i],1300+i); }
   else if(!strcmp(name,"process")) { astdfield(roots[0],"run",40); astdfield(roots[0],"exit",41); astdfield(roots[0],"env",42); astdfield(roots[0],"cwd",43); astdfield(roots[0],"executable",44); astdfield(roots[0],"error",45);astdfield(roots[0],"onSignal",46); }
-  else if((!strcmp(name,"path")||!strcmp(name,"_path"))) {astdfield(roots[0],"join",50);astdfield(roots[0],"dirname",51);astdfield(roots[0],"basename",52);astdfield(roots[0],"resolve",53);astdfield(roots[0],"realPath",54);}
+  else if((!strcmp(name,"path")||!strcmp(name,"_path"))) {astdfield(roots[0],"join",50);astdfield(roots[0],"dirname",51);astdfield(roots[0],"basename",52);astdfield(roots[0],"resolve",53);astdfield(roots[0],"realPath",54);astdfield(roots[0],"toPosix",55);astdfield(roots[0],"toWindows",56);}
   else afail("ImportError","Unknown native standard library.");
   roots[0].p->scope=-2;
   AV result=roots[0]; aunroot(&r); return result;

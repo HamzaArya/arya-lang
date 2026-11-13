@@ -26,6 +26,18 @@ Atomic visibility is not power-loss durability: these APIs do not call `fsync`. 
 
 On 2026-11-13, `make native` passed all bootstrap stages and the generated-C fixed-point comparison (`stage2.c` equals `arya.c`). `python3 native/tests/api-contracts.py` passed all 17 typed checks, dynamic compatibility, both native optimized/reference builds, independent byte checks, and the sanitizer/GC-stress and forced-write-failure cases on macOS arm64. Logs are `.build/language-api-repairs/bootstrap.log` and `.build/language-api-repairs/tests.log`. Qualification is limited to this host; these changes do not establish Windows/Linux GUI qualification.
 
+An independent read-only review of `fs-atomic.c` and the binary filesystem worker found no concrete rooting, byte-view, partial-write, destination-preservation, or symlink-following defect. That review did not repeat the dynamic test suite.
+
+## Migration of the earlier application stores
+
+All 20 stateful applications in the earlier collections now use `fs.writeTextAtomicSync`: 14 developer projects and six native desktop workers. Loaders inspect `infoSync` directly, so existing and dangling symlinks cannot be mistaken for absent stores. Existing safe manual staging in two desktop workers was consolidated into the same native API. The four intermediate/advanced web applications no longer need `serverOptions: any`.
+
+`python3 native/tests/application-storage.py --build` passed checks, fresh release builds, and the full existing smoke suite for all 20 applications. The test driver injects a `data.json.tmp` symlink sentinel into each smoke-test directory and verifies preservation after actual application operations. It additionally passed 60 separate-process cases rejecting a real symlink, dangling symlink, and directory as each application's data store. Failed-save smoke cases now deny parent-directory staging permissions instead of blocking an obsolete `.tmp` path. All source/test/executable hashes matched after the run.
+
+Results: [developer applications](../developer-projects/reports/language-api-storage-20261113.json), [desktop workers](../native-desktop-projects/reports/language-api-storage-20261113.json). Detailed logs are under `.build/language-api-repairs/applications-20261113T153233Z`. This evidence verifies worker binaries, not re-signing or packaging of older `.app` bundles. The release packaging step must use these rebuilt workers.
+
+The build controller was temporarily stopped between compilations at the coordinator's request when concurrent compilers caused macOS swap pressure; it resumed after the compiler window cleared. No application failed its migration tests or was abandoned. Historical files were not deleted to recover space. The stateless CLIs and the separately owned TextVault upgrade were outside this migration.
+
 ## Files owned by this repair
 
 - `native/compiler/standard-types.arya`: only fs members and web option contracts.
@@ -34,8 +46,11 @@ On 2026-11-13, `make native` passed all bootstrap stages and the generated-C fix
 - `native/runtime/fs-atomic.c`: new synchronous atomic replacement helper.
 - `native/runtime/decimal.c`: missing-rounding diagnostics in string/parsed paths.
 - `native/tests/api-contracts.py` and `native/tests/fixtures/api-contracts.arya`: new regression suite.
+- `native/tests/application-storage.py`: application migration regression driver.
 - `native/manifest.json`: only added fs members.
 - `docs/standard-library.md`: fs contracts and decimal/web clarification.
 - This report.
+
+Application migration edits are the `main.arya`, `README.md`, and `REPORT.md` files in the 20 projects identified in the linked result manifests, plus smoke drivers with obsolete `.tmp` blockers and the two suite reports/manifests. Original application files are preserved in `.build/language-api-repairs/migration-before/`.
 
 Compiler/checker/type-model algorithms were not edited. Native widgets, security hashing, version metadata and release tooling are separately owned work. No commits were made by this repair task.

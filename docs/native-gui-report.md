@@ -20,6 +20,18 @@ this new direct language API.
   property; C functions could not access that ivar. `clang -fsyntax-only`
   reported two private-ivar errors. The queue now has an explicit public ivar
   inside the private implementation class; the public Arya API remains opaque.
+- The first integrated Arya gate built but failed at import: the new export
+  branch was nested under the legacy desktop feature guard. It now uses its
+  own `ARYA_GUI` guard. The original failure is retained in
+  `.build/gui/acceptance.log`; the final gate uses a separate log.
+- The Task Desk checker inferred a growing unannotated labels array as
+  `never[]`; explicit `string[]`/`number[]` annotations clarify the native
+  list boundary. Negative checker probes include an annotation to enable
+  Arya's opt-in type checking.
+- Source review found closed windows retained their live-window allowance until
+  garbage collection. Each backend now releases that allowance when the OS
+  window actually closes; disposal does not decrement it twice. The native
+  action harness includes 20 successive close cycles with handles retained.
 - Native popup construction uses explicit `NSMenuItem` objects so duplicate
   labels remain separate choices. This prevents the duplicate-title collapse
   already reproduced in the earlier worker-host project.
@@ -43,3 +55,27 @@ runners. No substitute backend or fake successful platform result is used.
 The API intentionally stops at eight direct controls and explicit geometry.
 Unimplemented advanced widgets and native application packaging are documented
 in the API guide; no task was abandoned or silently redirected to a webview.
+
+## Local integrated result
+
+The corrected compiler passed a full self-host bootstrap and byte comparison
+of stage-two/stage-three generated C. `.build/gui/bootstrap-final.log` retains
+that run. `sh native/tests/gui.sh` then passed all eight real widget types,
+Unicode, duplicate labels, state updates, invalid-mutation preservation, close
+lifecycle, GC stress, public type errors and AppKit native actions; output is
+in `.build/gui/acceptance-final.log`. The AppKit action run includes 20 closed
+windows retained until final release.
+
+After that baseline pass, source review tightened missing-id validation for
+untyped `get()` calls and added the `native-gui` project template. Their extra
+checks are included in the final GUI gate and require the coordinated release
+compiler rebuild. Do not treat the earlier baseline log as verification of
+these later additions. A peer source review found no concrete GC/root or
+AppKit lifetime defect; it was not an independent dynamic test run.
+
+The native Task Desk example passed `arya check` and a release build to
+`.build/gui/task-desk` (log `.build/gui/task-desk-build.log`). A Python
+subprocess probe launched that actual executable with isolated `DATA_FILE`
+paths containing malformed JSON, an invalid task row, and a directory. Each
+exited nonzero before opening a window and preserved its input. This verifies
+startup rejection, not interactive CRUD; interaction is a separate GUI check.

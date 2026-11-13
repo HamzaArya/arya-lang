@@ -1,0 +1,40 @@
+# File URI transport conversion. Filesystem paths use the target's native mount
+# table; URIs sent to Windows editors use Windows drive/UNC notation.
+use std "runtime" as runtime
+use std "path" as path
+use std "_path" as nativePath
+fn drivePath(value, offset) {
+  return len(value) >= offset + 3 and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".includes(value[offset]) and value[offset + 1] == ":" and value[offset + 2] == "/"
+}
+export fn fromUri(uri) {
+  if runtime.kind(uri) != "string" or not uri.startsWith("file://") { return null }
+  let value = uri.slice(7)
+  if value.toLowerCase().startsWith("localhost/") { value = value.slice(9) }
+  if value.includes("?") or value.includes("#") or value.includes("\\") or value.toLowerCase().includes("%2f") or value.toLowerCase().includes("%5c") { return null }
+  let windows = runtime.platform() == "cygwin"
+  if not value.startsWith("/") {
+    if not windows { return null }
+    let slash = value.indexOf("/"); if slash <= 0 { return null }
+    let host = value.slice(0, slash)
+    for letter in host { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-".includes(letter) { return null } }
+    value = "//" + value
+  }
+  try {
+    value = runtime.uriDecode(value)
+    if value.includes(runtime.stringFromCodes([0])) { return null }
+    if windows and value.startsWith("/") and drivePath(value, 1) { value = value.slice(1) }
+    return path.resolve(value)
+  } catch _failure { return null }
+}
+export fn toUri(filename) {
+  if runtime.platform() == "cygwin" {
+    let value = nativePath.toWindows(filename).replaceAll("\\", "/")
+    # Extended-length drive paths normalize to ordinary file URI paths.
+    if value.startsWith("//?/UNC/") { value = "//" + value.slice(8) }
+    else if value.startsWith("//?/") { value = value.slice(4) }
+    let encoded = runtime.uriEncode(value).replaceAll("%2F", "/").replaceAll("%3A", ":")
+    if value.startsWith("//") { return "file:" + encoded }
+    return "file:///" + encoded
+  }
+  return "file://" + runtime.uriEncode(filename).replaceAll("%2F", "/")
+}

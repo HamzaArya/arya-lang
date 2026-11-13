@@ -34,7 +34,7 @@ let routes = {
 }
 
 const appRoot = process.cwd()
-const serverOptions: any = {host: "127.0.0.1", root: appRoot, html: false, assets: false, maxBodyBytes: 65536}
+const serverOptions = {host: "127.0.0.1", root: appRoot, html: false, assets: false, maxBodyBytes: 65536}
 let server = web.serve(env.int("PORT", 4313), routes, serverOptions)
 print("Roomkeeper: http://127.0.0.1:" + str(server.address().port))
 for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

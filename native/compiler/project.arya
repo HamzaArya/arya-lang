@@ -5,6 +5,30 @@ use std "process" as process
 use std "runtime" as runtime
 
 fn commonMain(template) {
+  if template == "native-gui" { return """use std "gui" as gui
+use std "decimal" as decimal
+const window = gui.window({title: "Arya Native Order Total", width: 560, height: 360})
+window.add({id: "heading", type: "label", text: "Order total", x: 24, y: 24, width: 500, height: 28})
+window.add({id: "priceLabel", type: "label", text: "Unit price", x: 24, y: 72, width: 230, height: 24})
+window.add({id: "quantityLabel", type: "label", text: "Quantity", x: 290, y: 72, width: 230, height: 24})
+window.add({id: "price", type: "input", text: "19.95", x: 24, y: 104, width: 230, height: 32})
+window.add({id: "quantity", type: "input", text: "3", x: 290, y: 104, width: 230, height: 32})
+window.add({id: "calculate", type: "button", text: "Calculate", x: 24, y: 160, width: 180, height: 36})
+window.add({id: "result", type: "label", text: "Enter a price and quantity.", x: 24, y: 224, width: 500, height: 72})
+while true {
+  const event = await window.nextEvent()
+  if event == null or event.type == "close" { break }
+  if event.type == "submit" or event.id == "calculate" and event.type == "click" {
+    try {
+      const price = decimal.from(window.get("price").text)
+      const quantity = decimal.from(window.get("quantity").text)
+      const total = decimal.quantize(decimal.multiply(price, quantity), 2, "half-even")
+      window.set("result", {text: "Order total: " + total})
+    } catch error { window.set("result", {text: "Error: " + str(error.message ?? error)}) }
+  }
+}
+window.close()
+""" }
   if template == "cli" { return """use std "decimal" as decimal
 use std "io" as io
 let amount = args[0] ?? "19.95"
@@ -71,7 +95,7 @@ let server = web.serve(env.int("PORT", 3000), {
 }
 fn templateFiles(template) {
   let main = commonMain(template)
-  if template != "cli" {
+  if template != "cli" and template != "native-gui" {
     let cleanup = "for signal in [\"SIGINT\", \"SIGTERM\"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }\n"
     if template == "desktop" { cleanup = "for signal in [\"SIGINT\", \"SIGTERM\"] { process.onSignal(signal, async fn() { window.close(); await web.shutdown(server) }, {once: true}) }\n"; main = main.replaceAll("await window.closed\n", cleanup + "await window.closed\n") }
     else { main += cleanup }
@@ -81,6 +105,7 @@ fn templateFiles(template) {
   files["arya.json"] = runtime.jsonStringify({name: "arya-app", entry: "main.arya", target: "native", template: template}, null, 2) + "\n"
   files["Makefile"] = "ARYA ?= arya\n.PHONY: run build check test fmt\nrun:\n\t$(ARYA) run main.arya\nbuild:\n\t$(ARYA) build main.arya -o .arya/app --release --force\ncheck:\n\t$(ARYA) check main.arya\ntest:\n\t$(ARYA) test main.test.arya\nfmt:\n\t$(ARYA) fmt main.arya\n"
   files["README.md"] = "# Arya application\n\nRun `arya run main.arya`, build with `make build`, and run tests with `make test`.\nA C11 toolchain and the native Arya SDK are required to build; the compiled app runs directly.\n\n" + "This project uses the `" + template + "` template. Monetary inputs are decimal strings; calculations use `std decimal`.\n"
+  if template == "native-gui" { files["README.md"] += "\nThis app uses direct native OS controls through `std gui`: AppKit on macOS, GTK 3 on Linux, and Win32 on Windows/Cygwin. From source build `make native-gui`. No browser, webview, HTTP server or external application host is used. See the SDK docs/native-gui.md for platform qualification and limits.\n" }
   if template == "desktop" { files["README.md"] += "\nThe desktop window uses the optional macOS AppKit/WebKit SDK. From the Arya source, build it with `make native-desktop`. Web content calls the local native HTTP application. Closing the window drains the server.\n" }
   if template == "web" {
     files["index.html"] = "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Arya application</title><link rel=\"stylesheet\" href=\"/style.css\"></head><body><main id=\"root\"><p>MADE WITH ARYA</p><h1>Make something useful.</h1><p id=\"message\">A native Arya server, ready for your ideas.</p><button id=\"hello\">Say hello</button></main><script src=\"/app.js\" defer></script></body></html>\n"
@@ -105,7 +130,7 @@ export fn create(options) {
     else { throw "Choose one project directory." }
     index += 1
   }
-  if not ["web", "api", "cli", "ui", "desktop"].includes(template) { throw "Choose --template web, api, cli, ui, or desktop." }
+  if not ["web", "api", "cli", "ui", "desktop", "native-gui"].includes(template) { throw "Choose --template web, api, cli, ui, desktop, or native-gui." }
   if directory == undefined { if options[0] == "init" { directory = "." } else { directory = "arya-app" } }
   let destination = path.resolve(directory); let existing = fs.infoSync(destination)
   if existing != null and (existing.type != "directory" or len(fs.listSync(destination)) != 0) { throw "Choose a new or empty project directory: " + destination }

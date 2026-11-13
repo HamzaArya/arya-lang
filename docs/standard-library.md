@@ -21,7 +21,7 @@ These modules ship with the SDK; they are not npm installations. Python, MySQL a
 | `decimal` | `from`, `add`, `subtract`, `multiply`, `compare`, `divide`, `quantize`, `toNumber`, `roundingModes`, `values` |
 | `datetime` | `date`, `instant`, `zoned`, `fromDate`, `toDate`, `dateAt`, `atOffset` |
 | `fs` | `readText`, `writeText`, `exists`, `list`, `readTextSync`, `writeTextSync`, `existsSync`, `listSync`, `appendText`, `readBytes`, `readBytesSync`, `writeBytes`, `writeBytesSync`, `appendBytes`, `appendBytesSync`, `writeTextAtomicSync`, `writeBytesAtomicSync`, `makeDirectory`, `rename`, `remove`, `tempDirectory`, `removeDirectory`, `publish`, `publishDirectory`, `isFile`, `infoSync` |
-| `math` | `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`, `atan2`, `cbrt`, `ceil`, `clz32`, `cos`, `cosh`, `exp`, `expm1`, `floor`, `fround`, `f16round`, `hypot`, `imul`, `log`, `log10`, `log1p`, `log2`, `max`, `min`, `pow`, `random`, `round`, `sign`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `trunc`, `E`, `LN10`, `LN2`, `LOG10E`, `LOG2E`, `PI`, `SQRT1_2`, `SQRT2` |
+| `math` | `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`, `atan2`, `cbrt`, `ceil`, `clz32`, `cos`, `cosh`, `exp`, `expm1`, `floor`, `fround`, `f16round`, `hypot`, `imul`, `log`, `log10`, `log1p`, `log2`, `max`, `min`, `pow`, `random`, `round`, `sign`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `trunc`, `E`, `LN10`, `LN2`, `LOG10E`, `LOG2E`, `PI`, `SQRT1_2`, `SQRT2`, `and32`, `or32`, `xor32`, `not32`, `shiftLeft32`, `shiftRight32` |
 | `path` | `normalize`, `isAbsolute`, `join`, `resolve`, `relative`, `dirname`, `basename`, `extname`, `format`, `parse`, `toNamespacedPath`, `_makeLong`, `matchesGlob`, `sep`, `delimiter`, `posix`, `win32`, `realPath` |
 | `json` | `parse`, `stringify`, `read`, `write` |
 | `web` | `serve`, `route`, `response`, `error`, `health`, `shutdown` |
@@ -40,6 +40,7 @@ These modules ship with the SDK; they are not npm installations. Python, MySQL a
 | `process` | `run`, `exit`, `env`, `cwd`, `executable`, `error`, `onSignal` |
 | `runtime` | `clock`, `collect`, `codeUnit`, `keys`, `platform`, `kind`, `sameValue`, `deepEqual`, `freeze`, `context`, `exitCode`, `defer`, `onFinish`, `elapsed`, `fieldGetter`, `error`, `readFrame`, `writeFrame`, `tag`, `hasAccessor`, `errorMatches`, `stringFromCodes`, `randomUUID`, `isRecord`, `jsonParse`, `jsonStringify`, `uriEncode`, `uriDecode` |
 | `accounting` | `backendInfo`, `prepareInvoices`, `prepareLedger`, `invoiceBatch`, `ledgerBatch`, `validateTransaction`, `prepareJournal`, `journalBatch`, `trialBalance`, `financialStatements` |
+| `gui` | `window`, `platform` |
 | `desktop` | `open` |
 | `money` | `create`, `add`, `subtract`, `compare`, `format`, `toNumber`, `rescale`, `convert`, `toMinorUnits`, `fromMinorUnits` |
 | `finance` | `prepareInvoices`, `invoiceTotals`, `prepareBudgets`, `budgetVariance`, `prepareScores`, `amountScores`, `prepareProduction`, `production`, `allocate`, `straightLine` |
@@ -68,3 +69,5 @@ The [native profile](native-profile.md) defines foreign/host compatibility bound
 Logger objects expose `enabled(level)` so callers can guard expensive trace payload construction. Inspection supports `maxObjectKeys` as well as depth and array limits. See [native security and debugging](native-security-debugging.md) for validation, redaction, diagnostic budgets and tests.
 
 The [authentication guide](native-auth.md) documents opaque sessions, one-use challenges, TOTP/recovery replay handling, PKCE, attempt limits and native macOS biometrics/Keychain storage. Session stores and limiters are process-local. Other hosts explicitly report unavailable local authentication; passwords, sessions and MFA retain their native crypto implementation.
+
+`math.and32`, `or32`, `xor32`, `not32`, `shiftLeft32` and `shiftRight32` operate on exact unsigned 32-bit integers (0–4294967295). Shift counts are integers 0–31. Left shifts wrap to 32 bits; right shifts fill with zero. Invalid types, fractional/out-of-range operands, missing arguments and invalid shift counts throw. These explicit functions supply bit operations without adding implicit integer coercion or new source operators.

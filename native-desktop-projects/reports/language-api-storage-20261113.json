@@ -1,0 +1,64 @@
+{
+  "host": "darwin",
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+  "compiler_version": "Arya native 2.0.0 (self-hosted)",
+  "projects": [
+    {
+      "path": "native-desktop-projects/01-beginner-study-desk",
+      "status": "passed",
+      "source_sha256": "dc5cbdd245d9016b735735e12ac53b0a881d87713e0ea270320f694838fc88f0",
+      "smoke_sha256": "f51eb416d86e0c10f1757340e7b2135ecf7548cdc7c48e15d57ee80ed8bb6b8d",
+      "binary_sha256": "45852e9c29c0cf896b1519397e71ec0f8910bba015d9f2625d8a0efedb5773af",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "native-desktop-projects/02-better-stockroom",
+      "status": "passed",
+      "source_sha256": "f3dca992a6e4ca2e533379e4145e165c674be6794bf69534eb72e71bde7aa28c",
+      "smoke_sha256": "e6b6197ec6ee44383eb7c49a719e367e7cd44957bb84be3bb4676c6e59fbb1e4",
+      "binary_sha256": "07a08ba652ed0b620f8ee6d9afa66edf092e096a67b9652332ece6381e94f82d",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "native-desktop-projects/03-intermediate-support-desk",
+      "status": "passed",
+      "source_sha256": "e7f51372c49f33ec1654884ec02bde1b0925ccda1d9a492ac152c7be62ff42aa",
+      "smoke_sha256": "0536c4305f31c8b398c5ad08e80e8b53467b97e11067943cc79117b0111468ef",
+      "binary_sha256": "5ad087f82105febe4efbac28f0d454a49da4dc38cc3ad9f3239e406948b0ac08",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "native-desktop-projects/04-advanced-project-studio",
+      "status": "passed",
+      "source_sha256": "ef9dda9de59060c0740add0b5e798dde17337944577b747461fac72bd6f59972",
+      "smoke_sha256": "18373bc286de003a5f2e62970769f73459a035b144733bd0debd971889e0e07e",
+      "binary_sha256": "db3515beee2c396089721324d98062f342f0ef57129cabe68dd1722d1697b279",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "native-desktop-projects/05-pro-incident-center",
+      "status": "passed",
+      "source_sha256": "47b2c3eefc5225f9c05866d2eb5651d27c90df502cc168b39a237af5fc0b2847",
+      "smoke_sha256": "2523deab5b24f808191e23cd52f63630e576a28c683cde769ea83f90b183a0d9",
+      "binary_sha256": "2b736db2234564bc615387cd7ebece945c2a34dee132b499c074d1ae3b27e28d",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    },
+    {
+      "path": "native-desktop-projects/06-world-class-ledger-studio",
+      "status": "passed",
+      "source_sha256": "f4c0253b355d84b6d81ecf7d3ab5b34b753788eea724f8d0a8fd04a6db3d8e22",
+      "smoke_sha256": "dbf109439fbc83ce968e072af4fa27dc57b0722523b74f4ca31ebfb558222d8f",
+      "binary_sha256": "1bf7734840cd917497cc1edf5bf8e336a91fce63935108cb9f0be2bc56bb579f",
+      "boundary_cases": 3,
+      "tmp_sentinel_instrumented_smoke": true
+    }
+  ],
+  "test_driver_sha256": "1453a295031f7ef1f69d32164ee64a5d33a85e2bd705c5dd833c1275162cbff7",
+  "logs": ".build/language-api-repairs/applications-20261113T153233Z",
+  "scope": "Worker/source verification; existing desktop app bundle signatures require repackaging after worker changes."
+}

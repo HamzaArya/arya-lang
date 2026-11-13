@@ -13,7 +13,31 @@ static int arandom_number(uint64_t *value) {
   }
   *value=pool[--available];pool[available]=0;return 1;
 }
-static AV amath(int id,int argc,AV *argv){double n=argc?atonumber(argv[0]):NAN,y=argc>1?atonumber(argv[1]):NAN;id-=1000;
+/* Strict unsigned operations avoid floating-point emulation in programmer
+ * software. Validate before integer conversion; every result is exact in
+ * binary64 and no C shift ever receives a negative or width-sized count. */
+static AV abit32(int id,int argc,AV *argv) {
+  int unary=id==1029;
+  if(argc!=(unary?1:2))return afail("TypeError","UInt32 operation received the wrong number of arguments.");
+  for(int i=0;i<argc;i++) {
+    if(argv[i].t!=ANUM)return afail("TypeError","UInt32 operands must be numbers.");
+    double maximum=(id>=1030&&i==1)?31.0:4294967295.0;
+    if(!isfinite(argv[i].n)||argv[i].n<0||argv[i].n>maximum||trunc(argv[i].n)!=argv[i].n)
+      return afail("RangeError",id>=1030&&i==1?"Shift count must be an integer from 0 to 31.":"UInt32 operand must be an integer from 0 to 4294967295.");
+  }
+  uint32_t left=(uint32_t)argv[0].n,right=unary?0:(uint32_t)argv[1].n,result;
+  switch(id) {
+    case 1026:result=left&right;break;
+    case 1027:result=left|right;break;
+    case 1028:result=left^right;break;
+    case 1029:result=~left;break;
+    case 1030:result=left<<right;break;
+    case 1031:result=left>>right;break;
+    default:return afail("TypeError","Unknown UInt32 operation.");
+  }
+  return an((double)result);
+}
+static AV amath(int id,int argc,AV *argv){if(id>=1026)return abit32(id,argc,argv);double n=argc?atonumber(argv[0]):NAN,y=argc>1?atonumber(argv[1]):NAN;id-=1000;
  switch(id){case 0:return an(acos(n));case 1:return an(acosh(n));case 2:return an(asin(n));case 3:return an(asinh(n));case 4:return an(atan(n));case 5:return an(atanh(n));case 6:return an(atan2(n,y));case 7:return an(cbrt(n));
  case 8:{uint32_t value=auint32(n);int count=0;for(uint32_t mask=0x80000000;mask&&!(value&mask);mask>>=1)count++;return an(count);}
  case 9:return an(cosh(n));case 10:return an(exp(n));case 11:return an(expm1(n));case 12:return an((double)(float)n);case 13:return an(ahalf(n));

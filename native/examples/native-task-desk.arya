@@ -5,7 +5,7 @@ use std "fs" as fs
 use std "process" as process
 use std "runtime" as runtime
 const filename = process.env("DATA_FILE") ?? "native-task-desk.json"
-let tasks = []
+let tasks: any = []
 let nextId = 1
 const info = fs.infoSync(filename)
 if info != null {
@@ -36,10 +36,10 @@ window.add({id: "confirm", type: "button", text: "Confirm delete", enabled: fals
 window.add({id: "summary", type: "label", x: 24, y: 570, width: 780, height: 24})
 window.add({id: "status", type: "label", text: "Create a task or select one to edit. Changes are saved only with Save task.", x: 24, y: 602, width: 780, height: 24})
 let selectedId = 0
-let visible = []
+let visible: number[] = []
 fn status(text: string) { window.set("status", {text: text}) }
 fn render() {
-  visible = []; let labels = []; let completed = 0; let selected = -1
+  visible = []; let labels: string[] = []; let completed = 0; let selected = -1
   const query = window.get("search").text.toLowerCase()
   for task in tasks {
     if task.done { completed += 1 }
