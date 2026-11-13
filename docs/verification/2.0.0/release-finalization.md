@@ -7,7 +7,12 @@ earlier application archives and all failed-attempt logs.
 
 ## Freeze inputs
 
-Record the final checkout commit and require a clean working tree. Add the
+Create a reviewed freeze commit, called **M1** below, containing the stable
+qualification metadata and the accurately unpublished state at assembly time.
+Record its full commit and tree IDs and require a clean working tree, including
+untracked files outside ignored build directories.
+Tag `v2.0.0` at M1; never move that tag to incorporate later delivery evidence.
+Add the
 qualified Windows SDK pins only after its complete native gates pass. Keep the
 macOS and Linux original compiler/source identities in
 [sdk-assembly-inputs.json](sdk-assembly-inputs.json). The Linux original installer
@@ -90,7 +95,11 @@ applicable to their unchanged VSIX bytes.
 
 ## Source archive and release inventory
 
-From the same frozen source checkout:
+From the same frozen source checkout, first record `git rev-parse HEAD` and
+`git rev-parse HEAD^{tree}` and assert that both equal M1's recorded identities.
+Require empty `git status --porcelain` output immediately
+before staging. The generated files under ignored `.build` are expected and
+are not release source edits.
 
 ```sh
 ARYA_PACKAGE_DIRECTORY="$task_root/.build/release-2.0.0/final" \
@@ -102,6 +111,16 @@ python3 docs/verification/2.0.0/write-release-checksums.py \
 
 Verify the source archive's complete checksum coverage, pinned native build
 inputs, installer, documentation catalog and absence of generated build caches.
+Repeat the commit, tree and clean-tree assertions immediately after
+staging. The external final delivery inventory must bind the source archive's
+filename, byte count and SHA-256, its internal `SHA256SUMS` digest and complete
+verified file count to M1's full commit and tree IDs, together with both clean-tree
+assertions. Verify archived source inputs against the recorded checkout and
+identify generated README/checksum files separately. This evidence supplies the
+source checkout identity without modifying
+the qualified source packaging helper or adding a generated Git dependency to
+the archive. Retain the verification log; do not claim that the archive embeds a
+commit field it does not contain.
 Do not repeat a compiler bootstrap just to check an unchanged source archive.
 The final upload set is **17 files**: three SDK archives, one source archive, two
 application ZIPs, two VSIX files, each payload's conventional `.sha256` sidecar,
@@ -128,7 +147,13 @@ fresh generated C for the ordinary `stage-sdk.sh`/`native-package` workflow.
 ## Publication and portfolio
 
 Review the final versioned release body and qualification record. Tag the exact
-reviewed source commit and attach the explicit immutable asset set to `v2.0.0`.
+reviewed M1 source commit and attach the explicit immutable asset set to `v2.0.0`.
+The release body must identify M1 and the source archive binding, while preserving
+each SDK compiler's original qualified build origin. A later additive commit
+**M2** on main records final artifact identities, public verification and deployment
+outcomes. Link its immutable evidence from the release body when available. M2
+does not change the tag, rebuild the payloads or relabel their source identities;
+the archived unpublished flag describes the assembly-time state.
 After publication, retrieve every public asset, including all eight sidecars,
 and compare the actual bytes with the local inventory. Only then generate the
 portfolio manifest with `--published` and actual measured file identities.
