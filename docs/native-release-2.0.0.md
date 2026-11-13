@@ -101,6 +101,18 @@ language defects and are not reported as newly implemented.
   Ordinary and beyond-binary64 exact decimal outputs both matched. The
   [immutable run and artifact evidence](verification/2.0.0/linux-installer-recheck.json)
   records the current installer digest and preserves the earlier SDK identity.
+- Windows run `43488694656` then passed eleven of its twelve runtime groups,
+  including the public Win32 GUI, typed API contracts and relocated HTTP service.
+  The byte-security program exposed a real compiler link defect: OpenSSL's
+  Cygwin certificate-store implementation requires `-lcrypt32`. The compiler now
+  adds that dependency for crypto builds on Cygwin, matching the vendored
+  OpenSSL configuration. This changes compiler source, so the earlier SDK,
+  application and bundled-editor results remain historical; final artifacts
+  require fresh qualification. No source-identity exception permits their reuse.
+  The next Windows run also exercises security diagnostics and crypto from a
+  relocated SDK. Its workflow collects runtime, editor, installation and
+  dependency results independently, then rejects qualification unless every
+  required group passed.
 
 ## Release gates and publication
 
@@ -109,7 +121,14 @@ release. [Machine-readable qualification](../native/qualification/2.0.0.json) is
 updated only from actual results. Prior alpha evidence is not reused as proof of
 this release.
 
-The frozen compiler/runtime/library snapshot is commit
+Fresh qualification of the corrected compiler at
+`ce80487668e082ffd263c5239d737de7074e4dc4` is in progress in
+[desktop workflow 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933)
+and [independent workflow 43495958819](https://github.com/HamzaArya/arya-lang/actions/runs/43495958819).
+The results below identify the preceding generation and do not qualify the
+changed compiler. New artifacts are staged separately; earlier files remain intact.
+
+The preceding compiler/runtime/library snapshot is commit
 `0dc38b789df2840aa2977769065479c578e70649`.
 [Desktop workflow 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848)
 passed every macOS gate, including core regressions, API contracts, HTTP relocation,

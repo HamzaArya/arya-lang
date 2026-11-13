@@ -5,6 +5,13 @@ release documentation is committed. It is preparation guidance, not evidence
 that assembly or publication has happened. Preserve the original qualified SDKs,
 earlier application archives and all failed-attempt logs.
 
+The Cygwin crypto linker correction requires a second qualification generation.
+Use `.build/release-2.0.0/generation-2/final/`, `generation-2/assembled/` and
+`generation-2/evidence/`. The earlier `final/` directory and its SDK/application/
+editor records remain historical evidence. Do not substitute their compiler pins
+for the new qualification or overwrite their payloads. The generation-two local
+asset plan is `.build/release-distribution/generation-2-asset-plan.json`.
+
 ## Freeze inputs
 
 Create a reviewed freeze commit, called **M1** below, containing the stable
@@ -21,27 +28,33 @@ qualified by [linux-installer-recheck.json](linux-installer-recheck.json).
 Require the checkout's installer to match that recheck before copying it into
 the final Linux SDK. The final macOS installer is exercised locally below.
 
-The two VSIX packages and two application ZIPs already have their exact tested
-bytes. SDK metadata changes do not affect the bundled VSIX's compiler, libraries
-or adapter. Reuse those packages and verify their retained hashes. Do not build a
-Windows/Linux bundled VSIX on the Mac; the portable VSIX uses each separately
-installed native SDK.
+Rebuild all twelve applications using the newly qualified macOS SDK and the
+existing strict application controller. Repackage the bundled Mac VSIX with that
+compiler. Retain the portable VSIX's exact bytes only after verifying its adapter
+inputs remain unchanged. Exercise both actual editor hosts against the new SDK.
+Preserve the earlier results under their original identities. Once those new
+packages pass, later SDK metadata-only changes do not require another application
+or editor package rebuild when protected payload bytes remain identical. Do not
+build a Windows/Linux bundled VSIX on the Mac; the portable VSIX uses each
+separately installed native SDK.
 
 ## Assemble and archive SDKs
 
 Use a fresh assembly parent and one exact directory name per target. For example,
-from the frozen repository checkout:
+from the frozen repository checkout. Set `qualified_macos_sdk` and
+`qualified_linux_sdk` to the exact newly verified extracted SDK paths recorded
+in the generation-two evidence; the controller must match the new pinned profiles:
 
 ```sh
 task_root="$PWD"
-assembly_root="$task_root/.build/release-2.0.0/assembled"
+assembly_root="$task_root/.build/release-2.0.0/generation-2/assembled"
 python3 docs/verification/2.0.0/reassemble-qualified-sdk.py \
   --platform darwin-arm64 \
-  --sdk "$task_root/.build/release-2.0.0/ci-0dc38b7-macos/arya-native-2.0.0-darwin-arm64" \
+  --sdk "${qualified_macos_sdk:?Set the newly qualified macOS SDK path}" \
   --destination "$assembly_root/arya-native-2.0.0-darwin-arm64"
 python3 docs/verification/2.0.0/reassemble-qualified-sdk.py \
   --platform linux-x64 \
-  --sdk "$task_root/.build/release-2.0.0/ci-25f1915-linux/extracted/arya-native-2.0.0-linux-x64" \
+  --sdk "${qualified_linux_sdk:?Set the newly qualified Linux SDK path}" \
   --destination "$assembly_root/arya-native-2.0.0-linux-x64"
 ```
 
@@ -69,7 +82,7 @@ with HOME unset and spaces/apostrophe in its installation path:
 
 ```sh
 final_sdk="$assembly_root/arya-native-2.0.0-darwin-arm64"
-smoke_root="$task_root/.build/release-2.0.0/final-mac-install"
+smoke_root="$task_root/.build/release-2.0.0/generation-2/final-mac-install"
 test ! -e "$smoke_root" && test ! -L "$smoke_root"
 install_prefix="$smoke_root/Mac's SDK prefix"
 project_dir="$smoke_root/CLI project with spaces"
@@ -87,8 +100,8 @@ env -i PATH=/nonexistent "$smoke_root/native CLI program" 9007199254740993.01 3
 ```
 
 Require exact output `Total: 59.85` and `Total: 27021597764222979.03`, respectively,
-with trailing newlines. Require compiler SHA-256
-`fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`, correct managed
+with trailing newlines. Require the newly qualified macOS compiler SHA-256 from
+the frozen generation-two SDK profile, correct managed
 launcher target and matching installed SDK payload. No library/compiler override
 may supply missing SDK files. The existing actual editor-host checks remain
 applicable to their unchanged VSIX bytes.
@@ -102,11 +115,11 @@ before staging. The generated files under ignored `.build` are expected and
 are not release source edits.
 
 ```sh
-ARYA_PACKAGE_DIRECTORY="$task_root/.build/release-2.0.0/final" \
+ARYA_PACKAGE_DIRECTORY="$task_root/.build/release-2.0.0/generation-2/final" \
   sh native/bootstrap/source-package.sh
 python3 docs/verification/2.0.0/write-release-checksums.py \
-  --directory "$task_root/.build/release-2.0.0/final" \
-  --plan "$task_root/.build/release-distribution/final-asset-plan.json"
+  --directory "$task_root/.build/release-2.0.0/generation-2/final" \
+  --plan "$task_root/.build/release-distribution/generation-2-asset-plan.json"
 ```
 
 Verify the source archive's complete checksum coverage, pinned native build
