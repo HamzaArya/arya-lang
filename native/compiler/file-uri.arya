@@ -2,7 +2,6 @@
 # table; URIs sent to Windows editors use Windows drive/UNC notation.
 use std "runtime" as runtime
 use std "path" as path
-use std "_path" as nativePath
 fn drivePath(value, offset) {
   return len(value) >= offset + 3 and "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".includes(value[offset]) and value[offset + 1] == ":" and value[offset + 2] == "/"
 }
@@ -28,7 +27,7 @@ export fn fromUri(uri) {
 }
 export fn toUri(filename) {
   if runtime.platform() == "cygwin" {
-    let value = nativePath.toWindows(filename).replaceAll("\\", "/")
+    let value = path._toWindows(filename).replaceAll("\\", "/")
     # Extended-length drive paths normalize to ordinary file URI paths.
     if value.startsWith("//?/UNC/") { value = "//" + value.slice(8) }
     else if value.startsWith("//?/") { value = value.slice(4) }

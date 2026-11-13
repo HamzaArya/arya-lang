@@ -63,10 +63,14 @@ printf '%s\n' 'canonical syntax and default-parameter TDZ passed'
 mkdir "$tmp/sdk" "$tmp/sdk/lib" "$tmp/tools"
 cp "$compiler" "$tmp/sdk/arya"
 cp "$root/.build/independent/lib/libmpdec.a" "$root/.build/independent/lib/mpdecimal.h" "$tmp/sdk/lib/"
-cc_path=$(command -v cc)
-ln -s "$cc_path" "$tmp/tools/cc"
+# GCC invokes native assembler/linker subprocesses; the restricted PATH still
+# excludes Node/Python, but must retain the complete C toolchain.
+for native_tool in cc as ld; do
+  native_path=$(command -v "$native_tool")
+  ln -s "$native_path" "$tmp/tools/$native_tool"
+done
 cp "$root/native/tests/fixtures/decimal.arya" "$tmp/sdk/main.arya"
-env -i PATH="$tmp/tools" "$tmp/sdk/arya" build "$tmp/sdk/main.arya" -o "$tmp/sdk/application" --release > "$tmp/sdk/build.log" 2>&1
+env -i PATH="$tmp/tools" "$tmp/sdk/arya" build "$tmp/sdk/main.arya" -o "$tmp/sdk/application" --release > "$tmp/sdk/build.log" 2>&1 || { cat "$tmp/sdk/build.log" >&2; exit 1; }
 env -i PATH=/nonexistent "$tmp/sdk/application" > "$tmp/sdk/actual"
 diff -u "$root/native/tests/fixtures/decimal.expected" "$tmp/sdk/actual"
 printf '%s\n' 'relocation: compiler and decimal program work without Node/Python'

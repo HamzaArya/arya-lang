@@ -1326,6 +1326,8 @@ posix._makeLong = posix.toNamespacedPath
 
 posix.realPath = nativePath.realPath
 win32.realPath = nativePath.realPath
+posix._toWindows = nativePath.toWindows
+win32._toWindows = nativePath.toWindows
 
 # A native Windows editor sends drive paths to Cygwin processes. Convert them
 # through the mount table while retaining Cygwin's POSIX filesystem semantics.

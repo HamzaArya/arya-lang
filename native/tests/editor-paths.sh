@@ -8,4 +8,4 @@ cp "$root/native/compiler/file-uri.arya" "$work/file-uri.arya"
 cp "$root/native/tests/fixtures/file-uri.arya" "$work/main.arya"
 "$compiler" check "$work/main.arya"
 "$compiler" build "$work/main.arya" -o "$work/paths" --release
-"$work/paths"
+(cd "$work" && "$work/paths")

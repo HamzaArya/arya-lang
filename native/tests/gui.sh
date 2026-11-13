@@ -18,8 +18,11 @@ grep -q 'Type mismatch' "$tmp/check.log"
 "$compiler" create "$tmp/project" --template native-gui
 "$compiler" check "$tmp/project/main.arya"
 "$compiler" build "$tmp/project/main.arya" -o "$tmp/template" --release > "$tmp/template.log" 2>&1 || { cat "$tmp/template.log" >&2; exit 1; }
-if test "$(uname -s)" = Darwin; then
-  cc -fobjc-arc -Wall -Wextra "$root/native/gui/appkit-test.m" -framework Cocoa -o "$tmp/actions"
-  "$tmp/actions"
-fi
+case $(uname -s) in
+  Darwin) cc -fobjc-arc -Wall -Wextra "$root/native/gui/appkit-test.m" -framework Cocoa -o "$tmp/actions" ;;
+  Linux) cc -std=c11 -Wall -Wextra $(pkg-config --cflags gtk+-3.0) "$root/native/gui/platform-test.c" $(pkg-config --libs gtk+-3.0) -o "$tmp/actions" ;;
+  CYGWIN*|MINGW*|MSYS*) cc -std=c11 -Wall -Wextra "$root/native/gui/platform-test.c" -lcomctl32 -lgdi32 -luser32 -o "$tmp/actions" ;;
+  *) printf '%s\n' 'No native toolkit action probe for this platform.' >&2; exit 1 ;;
+esac
+"$tmp/actions"
 printf '%s\n' 'native gui: public types and real platform controls passed'

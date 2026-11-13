@@ -24,3 +24,32 @@ static AV apath_convert(AV value,int windows) {
   (void)windows;return value;
 #endif
 }
+#ifdef __CYGWIN__
+/* MoveFileEx without REPLACE_EXISTING is an exclusive same-volume publication.
+   Cygwin rename() replaces existing destinations and cannot supply this API. */
+static int acygwin_publish_directory(const char *from,const char *to) {
+  ssize_t from_size=cygwin_conv_path(CCP_POSIX_TO_WIN_W,from,NULL,0);
+  if(from_size<0)return -1;
+  ssize_t to_size=cygwin_conv_path(CCP_POSIX_TO_WIN_W,to,NULL,0);
+  if(to_size<0)return -1;
+  wchar_t *source=malloc((size_t)from_size),*destination=malloc((size_t)to_size);
+  if(!source||!destination){free(source);free(destination);errno=ENOMEM;return -1;}
+  if(cygwin_conv_path(CCP_POSIX_TO_WIN_W,from,source,(size_t)from_size)||cygwin_conv_path(CCP_POSIX_TO_WIN_W,to,destination,(size_t)to_size)){int saved=errno;free(source);free(destination);errno=saved;return -1;}
+  BOOL ok=MoveFileExW(source,destination,0);DWORD error=ok?ERROR_SUCCESS:GetLastError();
+  free(source);free(destination);if(ok)return 0;
+  switch(error){
+    case ERROR_ALREADY_EXISTS:case ERROR_FILE_EXISTS:errno=EEXIST;break;
+    case ERROR_FILE_NOT_FOUND:case ERROR_PATH_NOT_FOUND:errno=ENOENT;break;
+    case ERROR_ACCESS_DENIED:errno=EACCES;break;
+    case ERROR_SHARING_VIOLATION:case ERROR_LOCK_VIOLATION:errno=EBUSY;break;
+    case ERROR_NOT_SAME_DEVICE:errno=EXDEV;break;
+    case ERROR_DIRECTORY:errno=ENOTDIR;break;
+    case ERROR_DIR_NOT_EMPTY:errno=ENOTEMPTY;break;
+    case ERROR_INVALID_NAME:case ERROR_INVALID_PARAMETER:errno=EINVAL;break;
+    case ERROR_FILENAME_EXCED_RANGE:errno=ENAMETOOLONG;break;
+    case ERROR_DISK_FULL:errno=ENOSPC;break;
+    default:errno=EIO;break;
+  }
+  return -1;
+}
+#endif

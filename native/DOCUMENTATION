@@ -82,3 +82,5 @@ file|native/examples/stream-ledger.arya|stream-ledger.arya
 file|docs/native-gui.md|docs/native-gui.md
 file|docs/native-gui-report.md|docs/native-gui-report.md
 file|native/examples/native-task-desk.arya|examples/native-task-desk.arya
+file|docs/native-release-2.0.0.md|docs/native-release-2.0.0.md
+tree|docs/verification/2.0.0|docs/verification/2.0.0

@@ -1,6 +1,7 @@
 use std "runtime" as runtime
 use std "path" as path
 use std "process" as process
+use std "fs" as fs
 use std "_path" as nativePath
 use arya "./file-uri.arya" as fileUri
 fn expect(value, message) { if not value { throw message } }
@@ -22,5 +23,16 @@ if runtime.platform() == "cygwin" {
   let network = "//example.invalid/share/folder/file.arya"
   expect(path.resolve(network) == network, "UNC root preserved")
   expect(fileUri.fromUri("file://example.invalid/share/folder/file.arya") == network, "UNC URI conversion")
+  let source = path.join(process.cwd(), "publish-source")
+  let destination = path.join(process.cwd(), "publish-target")
+  fs.makeDirectory(source); fs.writeTextSync(path.join(source, "value"), "original")
+  fs.publishDirectory(source, destination)
+  expect(fs.readTextSync(path.join(destination, "value")) == "original", "Windows directory publication")
+  fs.makeDirectory(source); fs.writeTextSync(path.join(source, "value"), "replacement")
+  let refused = false
+  try { fs.publishDirectory(source, destination) } catch _error { refused = true }
+  expect(refused and fs.readTextSync(path.join(destination, "value")) == "original" and fs.readTextSync(path.join(source, "value")) == "replacement", "Exclusive directory publication preserves both on collision")
+  fs.remove(path.join(source, "value")); fs.removeDirectory(source)
+  fs.remove(path.join(destination, "value")); fs.removeDirectory(destination)
 }
 print("file URI and native editor path contracts PASS (" + runtime.platform() + ")")

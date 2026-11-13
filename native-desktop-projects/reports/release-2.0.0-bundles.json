@@ -1,0 +1,422 @@
+{
+  "version": "2.0.0",
+  "platform": "macOS 26 ARM64",
+  "mode": "package-only, no compiler",
+  "created_utc": "2026-11-13T15:51:58.842324+00:00",
+  "signing": "ad-hoc; not Developer ID signed or notarized",
+  "host_evidence": "reports/20261113T140548.407270Z/results.json",
+  "host_source_sha256": "6e9b3d7676f1e324dac99da17ef3b3f3f3a5c59e7ef319b7b7177908727d6e07",
+  "host_input_sha256": "17c7506a57cfb63c518aa0167c87eece511e797807f4eba4c21c941ffac0a71f",
+  "worker_evidence": "reports/language-api-storage-20261113.json",
+  "projects": [
+    {
+      "project": "01-beginner-study-desk",
+      "name": "Study Desk",
+      "app": "Study Desk.app",
+      "status": "passed",
+      "tested_worker_sha256": "45852e9c29c0cf896b1519397e71ec0f8910bba015d9f2625d8a0efedb5773af",
+      "packaged_worker_sha256": "45852e9c29c0cf896b1519397e71ec0f8910bba015d9f2625d8a0efedb5773af",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"sessions\",\n      \"response\" : {\n        \"message\" : \"Ready. Changes are saved on this computer.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 planned \u00b7 0 minutes remaining \u00b7 0 overdue \u00b7 0 completed\"\n      }\n    },\n    {\n      \"view\" : \"notes\",\n      \"response\" : {\n        \"message\" : \"Ready. Changes are saved on this computer.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 saved notes \u00b7 Select a note to read, edit or delete it.\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "ca669141bb949182db32c62836d8b85b936be27af85c69ebf39ce7f375befe7a",
+        "Contents/MacOS/NativeHost": "beeab74a807e4181f3569308667875a0782b41a464c0fc64a4ed5a25352b1b2c",
+        "Contents/MacOS/arya-worker": "45852e9c29c0cf896b1519397e71ec0f8910bba015d9f2625d8a0efedb5773af",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "aceb1071a3f699e91136bca8aa8da21a26f92624039b47eda73cdc011280022a",
+        "Contents/Resources/REPORT.md": "0334982bb86ba3101649ea614f029b281211386f43d9a37c74c22ab0c431ed0f",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "541c1e643b3e3b5d17352129a3cf47a2b936ec258dae6fbce3fab59df071c207"
+      }
+    },
+    {
+      "project": "02-better-stockroom",
+      "name": "Stockroom",
+      "app": "Stockroom.app",
+      "status": "passed",
+      "tested_worker_sha256": "07a08ba652ed0b620f8ee6d9afa66edf092e096a67b9652332ece6381e94f82d",
+      "packaged_worker_sha256": "07a08ba652ed0b620f8ee6d9afa66edf092e096a67b9652332ece6381e94f82d",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"products\",\n      \"response\" : {\n        \"message\" : \"Ready. Select a product to edit it or record stock.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 products \u00b7 0 units \u00b7 0 low stock \u00b7 Inventory value 0.00 (one currency)\"\n      }\n    },\n    {\n      \"view\" : \"movements\",\n      \"response\" : {\n        \"message\" : \"Ready. Select a product to edit it or record stock.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 stock movements \u00b7 History is read-only and survives product deletion.\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "068e59db0f671abec7a7beca76907eedd56c7c51f609908cca88b729f47a0eb4",
+        "Contents/MacOS/NativeHost": "c12e632a16256011bc589b2a21828b66e3f1114db6ef619da9574cda052a5c73",
+        "Contents/MacOS/arya-worker": "07a08ba652ed0b620f8ee6d9afa66edf092e096a67b9652332ece6381e94f82d",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "a4397c8ff8f6b4765e96a18c1acef75c2204099720c88b29a0171e18e7f4b5fc",
+        "Contents/Resources/REPORT.md": "af6050d81109e5ad6cec22dc137a68beb00e0bda2952a3cdb880e6702410576b",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "116073d8eedf6de566e75fae653e3777d23c9fa66d9c0689c194dc0858ed97bb",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "5a5224ea8a16b0093820e35291ce617adabd0c810952a9dffdd9fdab12480d60"
+      }
+    },
+    {
+      "project": "03-intermediate-support-desk",
+      "name": "Harbor Support Desk",
+      "app": "Harbor Support Desk.app",
+      "status": "passed",
+      "tested_worker_sha256": "5ad087f82105febe4efbac28f0d454a49da4dc38cc3ad9f3239e406948b0ac08",
+      "packaged_worker_sha256": "5ad087f82105febe4efbac28f0d454a49da4dc38cc3ad9f3239e406948b0ac08",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"active\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 tickets \u00b7 0 active \u00b7 0 urgent \u00b7 0 recent history events\"\n      }\n    },\n    {\n      \"view\" : \"tickets\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 tickets \u00b7 0 active \u00b7 0 urgent \u00b7 0 recent history events\"\n      }\n    },\n    {\n      \"view\" : \"history\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 tickets \u00b7 0 active \u00b7 0 urgent \u00b7 0 recent history events\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "e5c80952186cb7825dd9cf05f9a7dfd877889c326aac9b1eea9aed28c52ffda3",
+        "Contents/MacOS/NativeHost": "6c7f4e233399cec54195bf924061c7b60e1747db1113b2365e9f43296e01a793",
+        "Contents/MacOS/arya-worker": "5ad087f82105febe4efbac28f0d454a49da4dc38cc3ad9f3239e406948b0ac08",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "9392f521a78bad801a055654cb396da8ac2172df16da74b99642d9e8f45485d0",
+        "Contents/Resources/REPORT.md": "19dd71c6e5ef5cf9e47d4b514794a838fbe6159eb09b77c0201a5f3b6ae952b2",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7ea22870d034975d3678d13d4acbefa720a139d151a788090f7d78bf1cfb400c",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "6c2918e79c0215f579088aa82b60284438fc6b406c6d8f54812738b7d90c3c7e"
+      }
+    },
+    {
+      "project": "04-advanced-project-studio",
+      "name": "Project Studio",
+      "app": "Project Studio.app",
+      "status": "passed",
+      "tested_worker_sha256": "db3515beee2c396089721324d98062f342f0ef57129cabe68dd1722d1697b279",
+      "packaged_worker_sha256": "db3515beee2c396089721324d98062f342f0ef57129cabe68dd1722d1697b279",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"projects\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 projects \u00b7 0 tasks \u00b7 0 active \u00b7 0 done\"\n      }\n    },\n    {\n      \"view\" : \"tasks\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 projects \u00b7 0 tasks \u00b7 0 active \u00b7 0 done\"\n      }\n    },\n    {\n      \"view\" : \"overdue\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 projects \u00b7 0 tasks \u00b7 0 active \u00b7 0 done\"\n      }\n    },\n    {\n      \"view\" : \"history\",\n      \"response\" : {\n        \"message\" : \"Ready\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 projects \u00b7 0 tasks \u00b7 0 active \u00b7 0 done\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "2925d0296786329e885eed5e36823c5a7d192325c804aa2bdec80b31d3cc17c4",
+        "Contents/MacOS/NativeHost": "b58eefada5d6bd4f442f5a818db99228a94bd2028d66f3d98d9ff19a0aa0c4eb",
+        "Contents/MacOS/arya-worker": "db3515beee2c396089721324d98062f342f0ef57129cabe68dd1722d1697b279",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "582ceee6a1003a488d3652f87ad8520ebbccacddc23153f291f50c99897e83d5",
+        "Contents/Resources/REPORT.md": "712ee2e79dcd343684e6923bc8a1a7e92a9f002b062168e39a784a25bf77cd2b",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "9707961adc46defdf2fa7e39ae79b5a4cdd1ec996bd5c6512fec7cd7663d01ed"
+      }
+    },
+    {
+      "project": "05-pro-incident-center",
+      "name": "Incident Center",
+      "app": "Incident Center.app",
+      "status": "passed",
+      "tested_worker_sha256": "2b736db2234564bc615387cd7ebece945c2a34dee132b499c074d1ae3b27e28d",
+      "packaged_worker_sha256": "2b736db2234564bc615387cd7ebece945c2a34dee132b499c074d1ae3b27e28d",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"incidents\",\n      \"response\" : {\n        \"message\" : \"Current data loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 active incidents \u00b7 0 urgent P1 \u00b7 0 services \u00b7 0 activity entries\"\n      }\n    },\n    {\n      \"view\" : \"services\",\n      \"response\" : {\n        \"message\" : \"Current data loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 active incidents \u00b7 0 urgent P1 \u00b7 0 services \u00b7 0 activity entries\"\n      }\n    },\n    {\n      \"view\" : \"timeline\",\n      \"response\" : {\n        \"message\" : \"Current data loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 active incidents \u00b7 0 urgent P1 \u00b7 0 services \u00b7 0 activity entries\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "0ba6063beea9d9ca3d3c0956e6066e8cd44ece90db2eab3edec02656c34fceaf",
+        "Contents/MacOS/NativeHost": "f44e5121aee5ebda2d11bbe080fde85cbd08028df22b26f4fbb2a8e1deb1037c",
+        "Contents/MacOS/arya-worker": "2b736db2234564bc615387cd7ebece945c2a34dee132b499c074d1ae3b27e28d",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "1513dcb03b9e3e721b4726fa1c33ad388805451d7afb33a7da996dcd5d498625",
+        "Contents/Resources/REPORT.md": "906b6884065d65684458b74946fc932ebca1c45bd6dbc367e7f1b68a31a91229",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "6e36219d6c2f2bd07983070b871a90d22df43122efb4883afc8c050eaf8dab12"
+      }
+    },
+    {
+      "project": "06-world-class-ledger-studio",
+      "name": "Ledger Studio",
+      "app": "Ledger Studio.app",
+      "status": "passed",
+      "tested_worker_sha256": "1bf7734840cd917497cc1edf5bf8e336a91fce63935108cb9f0be2bc56bb579f",
+      "packaged_worker_sha256": "1bf7734840cd917497cc1edf5bf8e336a91fce63935108cb9f0be2bc56bb579f",
+      "checks": [
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app: replacing existing signature\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/desktop-release-stage-762drb38/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"views\" : [\n    {\n      \"view\" : \"accounts\",\n      \"response\" : {\n        \"message\" : \"Current ledger loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 accounts \u00b7 0 journals \u00b7 total debits = credits 0.00 \u00b7 0 reconciliations\"\n      }\n    },\n    {\n      \"view\" : \"journals\",\n      \"response\" : {\n        \"message\" : \"Current ledger loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 accounts \u00b7 0 journals \u00b7 total debits = credits 0.00 \u00b7 0 reconciliations\"\n      }\n    },\n    {\n      \"view\" : \"reconciliations\",\n      \"response\" : {\n        \"message\" : \"Current ledger loaded.\",\n        \"rows\" : [\n\n        ],\n        \"ok\" : true,\n        \"summary\" : \"0 accounts \u00b7 0 journals \u00b7 total debits = credits 0.00 \u00b7 0 reconciliations\"\n      }\n    }\n  ],\n  \"ok\" : true\n}\n",
+          "stderr": ""
+        }
+      ],
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "1264063452c45334047f51131cc3c593b4f49beb409dfc476604d4599450e5c1",
+        "Contents/MacOS/NativeHost": "9030082f116f144e90d0c95d3709eb7afa7a001b53cb9605807d4150a54f1c4a",
+        "Contents/MacOS/arya-worker": "1bf7734840cd917497cc1edf5bf8e336a91fce63935108cb9f0be2bc56bb579f",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "45bfde779178b7b7d8719380e309f89e1b7a911df83916811bdcfc542e00a6ec",
+        "Contents/Resources/REPORT.md": "61b38e1b1468769611c8da0099944cf756e8cd92f458aedd0241fa823c682883",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "2e91c915f13389948778331cb2a50f53d8d9ea0daec1b17bd03ccbe6edf99ce9"
+      }
+    }
+  ],
+  "passed": 6,
+  "failed": 0,
+  "archive": ".build/release-2.0.0/arya-native-desktop-apps-2.0.0-darwin-arm64.zip",
+  "archive_bytes": 7014436,
+  "archive_sha256": "d07108890f87c6859b6af8528826929a88f8a603541983e03deb989377c86dcc",
+  "archive_roundtrip_verified": true,
+  "historical_dist_and_acceptance_preserved": true
+}

@@ -23,6 +23,9 @@
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 #ifdef __CYGWIN__
+#define WIN32_LEAN_AND_MEAN 1
+#define NOMINMAX 1
+#include <windows.h>
 #include <sys/cygwin.h>
 #include <wchar.h>
 #endif
@@ -537,6 +540,8 @@ static AV aprocess(int id,int argc,AV *argv) {
     status=renameatx_np(AT_FDCWD,from,AT_FDCWD,to,RENAME_EXCL);
 #elif defined(__linux__) && defined(SYS_renameat2)
     status=(int)syscall(SYS_renameat2,AT_FDCWD,from,AT_FDCWD,to,1);
+#elif defined(__CYGWIN__)
+    status=acygwin_publish_directory(from,to);
 #else
     errno=ENOSYS;status=-1;
 #endif
@@ -768,7 +773,7 @@ static AV astd(const char *name) {
   else if(!strcmp(name,"math")) { const char *names[]={"sqrt","abs","floor","ceil","round","pow","sin","cos","min","max"}; for(int i=0;i<10;i++) astdfield(roots[0],names[i],20+i);const char *extra[]={"acos","acosh","asin","asinh","atan","atanh","atan2","cbrt","clz32","cosh","exp","expm1","fround","f16round","hypot","imul","log","log10","log1p","log2","random","sign","sinh","tan","tanh","trunc","and32","or32","xor32","not32","shiftLeft32","shiftRight32"};for(int i=0;i<32;i++)astdfield(roots[0],extra[i],1000+i);const char *constants[]={"PI","E","LN2","LN10","LOG2E","LOG10E","SQRT1_2","SQRT2"};double values[]={3.14159265358979323846,2.71828182845904523536,0.69314718055994530942,2.30258509299404568402,1.44269504088896340736,0.43429448190325182765,0.70710678118654752440,1.41421356237309504880};for(int i=0;i<8;i++)aput(roots[0],constants[i],an(values[i])); }
   else if(!strcmp(name,"runtime")) { astdfield(roots[0],"clock",30); astdfield(roots[0],"collect",31); astdfield(roots[0],"codeUnit",32);astdfield(roots[0],"keys",34);astdfield(roots[0],"platform",35);const char *names[]={"kind","sameValue","deepEqual","freeze","context","exitCode","defer","onFinish","elapsed","fieldGetter","error","readFrame","writeFrame","tag","hasAccessor","errorMatches","stringFromCodes","randomUUID","isRecord","jsonParse","jsonStringify","uriEncode","uriDecode"};for(int i=0;i<23;i++)astdfield(roots[0],names[i],1300+i); }
   else if(!strcmp(name,"process")) { astdfield(roots[0],"run",40); astdfield(roots[0],"exit",41); astdfield(roots[0],"env",42); astdfield(roots[0],"cwd",43); astdfield(roots[0],"executable",44); astdfield(roots[0],"error",45);astdfield(roots[0],"onSignal",46); }
-  else if((!strcmp(name,"path")||!strcmp(name,"_path"))) {astdfield(roots[0],"join",50);astdfield(roots[0],"dirname",51);astdfield(roots[0],"basename",52);astdfield(roots[0],"resolve",53);astdfield(roots[0],"realPath",54);astdfield(roots[0],"toPosix",55);astdfield(roots[0],"toWindows",56);}
+  else if((!strcmp(name,"path")||!strcmp(name,"_path"))) {astdfield(roots[0],"join",50);astdfield(roots[0],"dirname",51);astdfield(roots[0],"basename",52);astdfield(roots[0],"resolve",53);astdfield(roots[0],"realPath",54);astdfield(roots[0],"toPosix",55);astdfield(roots[0],"toWindows",56);astdfield(roots[0],"_toWindows",56);}
   else afail("ImportError","Unknown native standard library.");
   roots[0].p->scope=-2;
   AV result=roots[0]; aunroot(&r); return result;

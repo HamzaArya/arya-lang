@@ -16,6 +16,7 @@ export fn moduleType(name) {
   if name == "path" {
     let variadic = fnType([], "string", 0); variadic.rest = array("string")
     let profile = {normalize: fnType(["string"], "string"), isAbsolute: fnType(["string"], "boolean"), join: variadic, resolve: variadic, relative: fnType(["string", "string"], "string"), dirname: fnType(["string"], "string"), basename: fnType(["string", "string"], "string", 1), extname: fnType(["string"], "string"), format: fnType([record({root: "string", dir: "string", base: "string", name: "string", ext: "string"}, true)], "string"), parse: fnType(["string"], record({root: "string", dir: "string", base: "string", name: "string", ext: "string"})), toNamespacedPath: fnType(["any"], "any"), _makeLong: fnType(["any"], "any"), matchesGlob: fnType(["string", "string"], "boolean"), sep: "string", delimiter: "string", realPath: fnType(["string"], "string")}
+    profile._toWindows = fnType(["string"], "string")
     let nested = record(profile); nested.fields.posix = {type: "any", optional: false}; nested.fields.win32 = {type: "any", optional: false}; profile = ObjectAssign(profile); profile.posix = nested; profile.win32 = nested; return record(profile)
   }
   if name == "python" {
