@@ -939,8 +939,8 @@ fn standardTarget(node) {
   if imported.kind != "import" or imported.imported.bridge != "std" or imported.imported.unit != undefined { return null }
   let module = imported.imported.specifier; let names = []; let first = 0
   if module == "decimal" {
-    if parsed { names = ["parse", "format", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber"]; first = 110 }
-    else { names = ["from", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber"]; first = 100 }
+    if parsed { names = ["parse", "format", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber", "remainder"]; first = 110 }
+    else { names = ["from", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber", "remainder"]; first = 100 }
   } else if module == "json" and not parsed { names = ["parse", "stringify"]; first = 200 }
   let index = names.indexOf(node.key.value)
   if index < 0 { return null }; return first + index

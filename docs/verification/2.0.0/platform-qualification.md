@@ -24,3 +24,26 @@ behavior only; they are not evidence of Windows execution.
 checksum verification, managed installers, immutable archive outputs and
 platform-specific SDK/VSIX handling. Actual Windows package and installer
 qualification requires the Windows runner gates above.
+
+## Candidate `1ab2e35`
+
+[Desktop workflow 43466397607](https://github.com/HamzaArya/arya-lang/actions/runs/43466397607)
+confirmed that the CRLF correction allowed the Win32 backend and native action
+probe to compile. The probe then failed an event assertion before bootstrap;
+its original assertion did not identify the missing event. Review found that
+the multiline text probe used `WM_SETTEXT`, which [does not send `EN_CHANGE`
+for multiline Win32 controls](https://learn.microsoft.com/en-us/windows/win32/controls/en-change).
+The next probe uses an edit replacement message, activates the button's window
+before a synthetic click, and prints the event identity on success or failure.
+These are test-driver changes; the runtime and Win32 backend are unchanged.
+This entry does not claim that the revised probe passed.
+
+## Candidate `96e4b60`
+
+[Desktop workflow 43466983858](https://github.com/HamzaArya/arya-lang/actions/runs/43466983858)
+passed the revised direct Win32 toolkit action step on an actual Windows runner.
+Its checks include button events, duplicate selection labels, text changes,
+input submission, multiline editing, window close events and retained closed
+window lifetime. The subsequent native compiler bootstrap and full public GUI,
+SDK and editor gates were still running or pending at this entry. This toolkit
+step alone does not qualify the complete Windows distribution.

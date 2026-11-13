@@ -1,6 +1,6 @@
 # Native standard library
 
-Import a module with `use std "name" as alias`. The native SDK has **27 public modules**, including all 18 modules from the retained language profile. The catalog below matches [the native manifest](../native/manifest.json). Returned client/server/schema objects provide additional methods described by their APIs; this table lists module entry points.
+Import a module with `use std "name" as alias`. The native SDK has **28 public modules**, including all 18 modules from the retained language profile. The catalog below matches [the native manifest](../native/manifest.json). Returned client/server/schema objects provide additional methods described by their APIs; this table lists module entry points.
 
 | Task | Modules to start with |
 | --- | --- |
@@ -11,6 +11,7 @@ Import a module with `use std "name" as alias`. The native SDK has **27 public m
 | Files, paths, JSON, CSV and console streams | `fs`, `path`, `json`, `csv`, `io` |
 | Collections, ordinary arithmetic, dates and async work | `list`, `math`, `datetime`, `async` |
 | HTTP, HTML and optional desktop windows | `web`, `ui`, `desktop` |
+| Direct native desktop controls | `gui` |
 | Host processes, runtime diagnostics and explicit foreign services | `process`, `runtime`, `python`, `mysql` |
 
 These modules ship with the SDK; they are not npm installations. Python, MySQL and desktop functionality retain their explicit feature dependencies, documented below and in [installation](installing.md).
@@ -18,7 +19,7 @@ These modules ship with the SDK; they are not npm installations. Python, MySQL a
 | Module | Entry points |
 | --- | --- |
 | `async` | `map`, `each`, `sleep` |
-| `decimal` | `from`, `add`, `subtract`, `multiply`, `compare`, `divide`, `quantize`, `toNumber`, `roundingModes`, `values` |
+| `decimal` | `from`, `add`, `subtract`, `multiply`, `compare`, `divide`, `quantize`, `toNumber`, `remainder`, `roundingModes`, `values` |
 | `datetime` | `date`, `instant`, `zoned`, `fromDate`, `toDate`, `dateAt`, `atOffset` |
 | `fs` | `readText`, `writeText`, `exists`, `list`, `readTextSync`, `writeTextSync`, `existsSync`, `listSync`, `appendText`, `readBytes`, `readBytesSync`, `writeBytes`, `writeBytesSync`, `appendBytes`, `appendBytesSync`, `writeTextAtomicSync`, `writeBytesAtomicSync`, `makeDirectory`, `rename`, `remove`, `tempDirectory`, `removeDirectory`, `publish`, `publishDirectory`, `isFile`, `infoSync` |
 | `math` | `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`, `atan2`, `cbrt`, `ceil`, `clz32`, `cos`, `cosh`, `exp`, `expm1`, `floor`, `fround`, `f16round`, `hypot`, `imul`, `log`, `log10`, `log1p`, `log2`, `max`, `min`, `pow`, `random`, `round`, `sign`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `trunc`, `E`, `LN10`, `LN2`, `LOG10E`, `LOG2E`, `PI`, `SQRT1_2`, `SQRT2`, `and32`, `or32`, `xor32`, `not32`, `shiftLeft32`, `shiftRight32` |
@@ -60,9 +61,13 @@ Math uses binary64; use decimal strings and `decimal` / `accounting` for exact f
 
 The native web server provides HTTP/1 routing, responses, validation, health checks, static confinement, deadlines and graceful shutdown. `ui` builds validated HTML and browser assets; it has no Node backend. `desktop.open` uses macOS AppKit/WebKit only when imported.
 
+For an API-only executable, use `web.serve(port, routes, {html: false, assets: false})`. This configuration does not resolve or require a static root, so a compiled service keeps working after relocation or removal of its original source directory. Enabling HTML or assets retains source-relative defaults and canonical filesystem confinement; deployed static sites can supply an absolute `root`.
+
 The [native profile](native-profile.md) defines foreign/host compatibility boundaries, memory behavior, platforms and resource limits. The [SDK guide](native-sdk.md) explains linking and optional dependencies. Detailed historical source-profile guides are retained at [compat/node/docs](../compat/node/docs/README.md); native implementations and acceptance fixtures are under `native/runtime`, `native/libraries` and `native/tests`.
 
 `decimal.values` holds immutable parsed decimals between operations and formats only at explicit output boundaries. `money` checks currency/scale/rounding compatibility. `finance` supplies opt-in batch/allocation policies. `csv` decodes bounded incremental records and waits for consumers before pulling another chunk. These APIs do not migrate existing application policies.
+
+`decimal.remainder(dividend, divisor)` returns the exact remainder as a canonical decimal string. It computes `dividend - truncate(dividend / divisor) * divisor`, so a nonzero result has the dividend's sign: `remainder("-7", "3")` is `"-1"`, and `remainder("5.5", "2")` is `"1.5"`. Division by zero raises `ARYA_DECIMAL_ZERO`; invalid or missing decimal operands raise `ARYA_DECIMAL_INPUT`. No rounding argument is needed. The ordinary finite plain-decimal input/output limits apply (at most 1024 characters, no exponent/grouping notation); zero is normalized to `"0"`. `decimal.values.remainder(left, right)` accepts immutable parsed decimals and returns a new parsed value without changing either operand. Integer GCD and fraction reduction can use the same operation directly.
 
 `decimal.quantize(value, places, rounding)` and `decimal.divide(left, right, places, rounding)` require an explicit supported rounding mode, as do their `decimal.values` equivalents. Typed code rejects omitted arguments. Unannotated code remains dynamic; a missing/invalid mode raises `ARYA_DECIMAL_ROUNDING`, while missing/invalid places raises `ARYA_DECIMAL_PLACES`. The checker accepts inferred option records for `web.serve`, `web.health`, and `web.shutdown` because these library operations read their input fields without assigning them; invalid field types remain errors.
 

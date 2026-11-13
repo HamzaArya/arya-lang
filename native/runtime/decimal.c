@@ -78,7 +78,7 @@ static int adsmall_round(int64_t numerator,int64_t denominator,int rounding,int6
   if(away&&__builtin_add_overflow(quotient,negative?-1LL:1LL,&quotient))return 0;*out=quotient;return 1;
 }
 static int adsmall_decimal(int id,int argc,AV *argv,AV *out) {
-  if(id==107)return 0;
+  if(id==107||id==108)return 0;
   int binary=id>=101&&id<=105;ADSmall a,b={0};if(argc<(binary?2:1)||!adsmall(argv[0],&a)||(binary&&!adsmall(argv[1],&b)))return 0;
   int64_t left=a.units,right=b.units,result=0;int scale=a.scale;
   if(id==100){*out=adsmall_text(left,scale,0,0);return 1;}
@@ -109,7 +109,7 @@ static int adsmall_decimal(int id,int argc,AV *argv,AV *out) {
 static AV adecimal(int id,int argc,AV *argv) {
   AV fast;if(adsmall_decimal(id,argc,argv,&fast)){ACOUNT(decimal_fast_paths);return fast;}
   mpd_context_t ctx;adcontext(&ctx);uint32_t status=0;
-  int binary=id==101||id==102||id==103||id==104||id==105;
+  int binary=id==101||id==102||id==103||id==104||id==105||id==108;
   if(argc<(binary?2:1))return acoded_error("ARYA_DECIMAL_INPUT","Missing decimal argument.");
   mpd_t *a=adread(argv[0],&ctx),*b=NULL,*result=NULL;
   if(!a)return av(AUNDEF);
@@ -122,6 +122,12 @@ static AV adecimal(int id,int argc,AV *argv) {
   else if(id==101)mpd_qadd(result,a,b,&ctx,&status);
   else if(id==102)mpd_qsub(result,a,b,&ctx,&status);
   else if(id==103)mpd_qmul(result,a,b,&ctx,&status);
+  else if(id==108){
+    if(mpd_iszero(b)){output=acoded_error("ARYA_DECIMAL_ZERO","Decimal remainder by zero.");goto done;}
+    /* qrem uses an integer quotient truncated toward zero. With bounded
+     * plain-decimal inputs the 4096-digit context retains the exact result. */
+    mpd_qrem(result,a,b,&ctx,&status);
+  }
   else if(id==105||id==106){
     int place_at=id==105?2:1,mode_at=place_at+1;
     if(argc<=place_at||argv[place_at].t!=ANUM||argv[place_at].n<0||argv[place_at].n>100||floor(argv[place_at].n)!=argv[place_at].n){output=acoded_error("ARYA_DECIMAL_PLACES","Decimal places must be an integer from 0 to 100.");goto done;}
@@ -175,13 +181,17 @@ static AV adecimal_values(int id,int argc,AV *argv) {
   mpd_t *a=advalue_get(argv[0]);if(!a)return av(AUNDEF);
   if(id==111)return advalue_json(argv[0],0,NULL);
   if(id==118){AV text=advalue_json(argv[0],0,NULL);ARoot root;aroot(&root,&text,1);AV result=afailed?av(AUNDEF):adecimal(107,1,&text);aunroot(&root);return result;}
-  int binary=id>=112&&id<=116;mpd_t *b=NULL;
+  int binary=(id>=112&&id<=116)||id==119;mpd_t *b=NULL;
   if(binary){if(argc<2)return acoded_error("ARYA_DECIMAL_INPUT","Missing decimal argument.");b=advalue_get(argv[1]);if(!b)return av(AUNDEF);}
   if(id==115){int order=mpd_qcmp(a,b,&status);return status&MPD_Errors?acoded_error("ARYA_DECIMAL_RANGE","Decimal comparison failed."):an(order);}
   int fixed=0,negative_zero=0;mpd_t *result=mpd_qnew();if(!result)return acoded_error("ARYA_DECIMAL_RANGE","Cannot allocate decimal result.");
   if(id==112)mpd_qadd(result,a,b,&ctx,&status);
   else if(id==113)mpd_qsub(result,a,b,&ctx,&status);
   else if(id==114)mpd_qmul(result,a,b,&ctx,&status);
+  else if(id==119){
+    if(mpd_iszero(b)){mpd_del(result);return acoded_error("ARYA_DECIMAL_ZERO","Decimal remainder by zero.");}
+    mpd_qrem(result,a,b,&ctx,&status);
+  }
   else if(id==116||id==117){int place=id==116?2:1,mode=place+1;
     if(argc<=place||argv[place].t!=ANUM||!isfinite(argv[place].n)||argv[place].n<0||argv[place].n>100||floor(argv[place].n)!=argv[place].n){mpd_del(result);return acoded_error("ARYA_DECIMAL_PLACES","Decimal places must be an integer from 0 to 100.");}
     int negative=mpd_isnegative(a)^(id==116?mpd_isnegative(b):0),round=adround(argc>mode?argv[mode]:av(AUNDEF),negative);

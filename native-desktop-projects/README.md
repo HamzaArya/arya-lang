@@ -1,6 +1,6 @@
 # Six native Arya desktop applications
 
-Six developer tracks now have real macOS desktop applications. The interface uses AppKit windows, tables, menus, text controls, dropdowns and native file dialogs. Domain logic, validation, exact arithmetic and persistence compile from Arya. A shared Objective-C bridge supplies the OS controls because Arya's existing desktop API only hosts WebKit content.
+Six developer tracks now have real macOS desktop applications. The interface uses AppKit windows, tables, menus, text controls, dropdowns and native file dialogs. Domain logic, validation, exact arithmetic and persistence compile from Arya. These applications retain their shared Objective-C AppKit bridge, built before Arya gained the direct `std gui` widget library.
 
 The delivered apps use no web pages, HTTP server, WebKit, Electron, Node or Python runtime. Each `.app` contains two native executables: its AppKit interface and its compiled Arya engine. Python is used only for building and testing.
 
@@ -50,5 +50,12 @@ python3 native-desktop-projects/build.py --filter 04-advanced
 The builder checks and compiles each Arya engine, runs its integration tests, packages the native host and engine, signs and verifies the bundle, and checks every view through the packaged host/engine boundary. A candidate replaces an existing bundle only after validation succeeds. Logs and hashes go to timestamped folders under `reports/`.
 
 `--package-only` reuses existing compiled engines during native UI development; it does not claim new engine checks. `--compiler /absolute/path/to/arya` selects another compiler. Build/test controllers require Python 3; compiled applications do not.
+
+For a release rebuild, use `--output /absolute/path/to/a/new/bundle-directory`
+and `--app-version 2.0.0` to preserve the historical `dist/` bundles. The builder
+records the compiler hash and keeps each smoke-tested worker byte-for-byte intact
+when signing its enclosing app. `package-release.py --help` describes archiving
+the complete successful build report; it verifies extracted signatures and
+refuses to replace an existing archive or evidence file.
 
 [REPORT.md](REPORT.md) records actual work, failures, fixes, final evidence and remaining limits. Every application has its own work report and integration tests. The six levels are simulated development tracks; they do not certify production readiness or represent human study participants.

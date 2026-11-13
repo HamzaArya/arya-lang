@@ -1,0 +1,16 @@
+use std "web" as web
+use std "process" as process
+let options = {html: false, assets: false}
+if args[0] == "explicit" { options.root = "/arya-missing-static-root-for-api-test" }
+if args[0] == "html" { options.html = "index.html" }
+if args[0] == "assets" { options.assets = "public" }
+if args[0] == "invalid" { options.root = 42 }
+if args[0] == "external" { options.html = "index.html"; options.root = args[1] }
+let server = undefined
+try {
+  server = web.serve(0, {
+    "GET /health": fn() { return {ok: true} },
+    "POST /stop": fn() { setTimeout(async fn() { await web.shutdown(server) }, 5); return {stopping: true} }
+  }, options)
+} catch failure { print("startup-error", failure.name); process.exit(3) }
+print(server.address().port)

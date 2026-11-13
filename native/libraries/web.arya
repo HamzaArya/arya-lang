@@ -234,7 +234,10 @@ fn serve(sourceDirectory, port, routes = {}, options = {}) {
   if options.trustRequestId != undefined and runtime.kind(options.trustRequestId) != "boolean" { throw new TypeError("trustRequestId must be a boolean.") }
   if options.before != undefined and runtime.kind(options.before) != "function" { throw new TypeError("before must be a request function.") }
   if options.logger != undefined { for key in ["info", "error", "child"] { if runtime.kind(options.logger[key]) != "function" { throw new TypeError("logger must provide info, error and child methods.") } } }
-  let root = path.realPath(path.resolve(sourceDirectory, options.root ?? ".")); let html = options.html ?? "index.html"; let assets = options.assets ?? "public"; let index = undefined; let assetPath = undefined
+  let html = options.html ?? "index.html"; let assets = options.assets ?? "public"; let root = undefined; let index = undefined; let assetPath = undefined
+  if options.root != undefined and runtime.kind(options.root) != "string" { throw new TypeError("root must name a directory.") }
+  # API-only executables have no static files and may outlive their source directory.
+  if html != false or assets != false { root = path.realPath(path.resolve(sourceDirectory, options.root ?? ".")) }
   if html != false { if runtime.kind(html) != "string" or not (html.toLowerCase().endsWith(".html") or html.toLowerCase().endsWith(".htm")) { throw new TypeError("html must name an HTML file, or be false.") }; index = contained(root, html, "HTML entry"); if transport.file(index, root) == undefined { throw new Error("Arya web requires an HTML entry file: " + index) } }
   if assets != false { if runtime.kind(assets) != "string" or len(assets) == 0 { throw new TypeError("assets must name a directory, or be false.") }; assetPath = contained(root, assets, "Assets directory") }
   let limit = integer(options.maxBodyBytes ?? 1048576, 1, 16777216, "maxBodyBytes")

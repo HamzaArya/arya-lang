@@ -8,7 +8,7 @@ fn absInt(value) { if value.startsWith("-") { return value.slice(1) }; return va
 fn neg(value) { if value == "0" { return "0" }; if value.startsWith("-") { return value.slice(1) }; return "-" + value }
 fn gcd(a,b) {
   a = absInt(a); b = absInt(b)
-  while b != "0" { spend(); let q = decimal.divide(a,b,0,"down"); let remainder = decimal.subtract(a,decimal.multiply(q,b)); a = b; b = remainder }
+  while b != "0" { spend(); let remainder = decimal.remainder(a,b); a = b; b = remainder }
   return a
 }
 fn quotient(a,b) { return decimal.divide(a,b,0,"down") }

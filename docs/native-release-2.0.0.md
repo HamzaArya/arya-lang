@@ -15,6 +15,8 @@ reports remain historical records; this release does not relabel their old binar
 | Valid inferred HTTP options rejected | Readonly input records for server options; four application `any` workarounds removed | Typed positive/negative tests and actual rebuilt server applications |
 | Missing decimal rounding produced wrong diagnostic | Missing mode now reports the rounding error; typed arity remains enforced | API contract and native decimal tests |
 | Programmer calculator manually emulated bit operations | Strict native UInt32 AND/OR/XOR/NOT and logical shifts in `math`; calculator migrated | 798 independently generated expected operation values plus invalid argument tests; final execution pending |
+| Finance calculators composed integer remainder from several operations | Exact `decimal.remainder` and parsed-value equivalent; both rational GCD helpers migrated | 184 independent scaled-integer reference vectors; rebuilt execution pending |
+| API-only services required their original source folder | `web.serve` resolves a static root only when HTML or assets are enabled | Relocated executable/source-removal HTTP regression prepared; execution pending |
 | Windows editor paths mixed native and POSIX forms | Cygwin mount-aware conversions and Windows file-URI transport | Unix URI and real Windows editor tests; final qualification pending |
 | No versioned installation and stable editor package | Checksum-verified macOS/Linux installer; bundled and portable VSIX modes derive stable metadata from version | Packaging fixture checks passed; final SDK/host checks pending |
 

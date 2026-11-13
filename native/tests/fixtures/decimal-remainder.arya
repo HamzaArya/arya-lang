@@ -1,0 +1,50 @@
+use std "decimal" as decimal
+use std "debug" as debug
+use std "runtime" as runtime
+use arya "./decimal-remainder-vectors.arya" as reference
+let checks: number = 0
+fn equal(actual: any, expected: any): void {
+  debug.assert(actual == expected, "Decimal remainder mismatch at check " + str(checks))
+  checks += 1
+}
+let dynamic: any = decimal
+fn fails(operation: any, code: string): void {
+  let caught = false
+  try { operation() } catch error { caught = true; equal(error.code, code); equal(error.name, "RangeError") }
+  debug.assert(caught, "Expected decimal remainder rejection")
+}
+for row in reference.vectors {
+  equal(decimal.remainder(row[0], row[1]), row[2])
+  let left = decimal.values.parse(row[0]); let right = decimal.values.parse(row[1])
+  let originalLeft = decimal.values.format(left); let originalRight = decimal.values.format(right)
+  let result = decimal.values.remainder(left, right)
+  runtime.collect()
+  equal(decimal.values.format(result), row[2])
+  equal(decimal.values.format(left), originalLeft)
+  equal(decimal.values.format(right), originalRight)
+}
+let parsedOne = decimal.values.parse("1")
+for zero in ["0", "-0", "0.00", "-0.00"] {
+  fails(fn() { dynamic.remainder("1", zero) }, "ARYA_DECIMAL_ZERO")
+  fails(fn() { dynamic.values.remainder(parsedOne, dynamic.values.parse(zero)) }, "ARYA_DECIMAL_ZERO")
+}
+for invalid in ["", "01", "-01", "+1", "1e3", "1.", ".1", "NaN", "Infinity", " 1", "1 ", "1\0", "١", "9".repeat(1025)] {
+  fails(fn() { dynamic.remainder(invalid, "1") }, "ARYA_DECIMAL_INPUT")
+  fails(fn() { dynamic.remainder("1", invalid) }, "ARYA_DECIMAL_INPUT")
+}
+for invalid in [undefined, null, true, 1, {}, []] {
+  fails(fn() { dynamic.remainder(invalid, "1") }, "ARYA_DECIMAL_INPUT")
+  fails(fn() { dynamic.remainder("1", invalid) }, "ARYA_DECIMAL_INPUT")
+  fails(fn() { dynamic.values.remainder(invalid, parsedOne) }, "ARYA_DECIMAL_INPUT")
+  fails(fn() { dynamic.values.remainder(parsedOne, invalid) }, "ARYA_DECIMAL_INPUT")
+}
+fails(fn() { dynamic.remainder() }, "ARYA_DECIMAL_INPUT")
+fails(fn() { dynamic.remainder("1") }, "ARYA_DECIMAL_INPUT")
+fails(fn() { dynamic.values.remainder() }, "ARYA_DECIMAL_INPUT")
+fails(fn() { dynamic.values.remainder(parsedOne) }, "ARYA_DECIMAL_INPUT")
+fails(fn() { dynamic.values.remainder("1", parsedOne) }, "ARYA_DECIMAL_INPUT")
+let fixed = decimal.values.quantize(decimal.values.parse("-5.50"), 4, "half-even")
+equal(decimal.values.format(decimal.values.remainder(fixed, decimal.values.parse("2"))), "-1.5")
+equal(decimal.values.format(fixed), "-5.5000")
+equal(decimal.values.format(decimal.values.remainder(fixed, fixed)), "0")
+print("decimal remainder checks:", checks)

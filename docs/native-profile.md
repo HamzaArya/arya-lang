@@ -1,6 +1,6 @@
 # Native language profile
 
-Arya's native implementation provides 27 public standard modules through C/Arya implementations, including all 18 modules from the retained source profile. It includes native process/runtime helpers, authentication with macOS biometric/Keychain integration, project tooling, desktop hosting, fixed-point accounting, parsed decimal values, money/finance policies and incremental CSV decoding. Version 2.0.0-alpha.3 adds record composition to the existing grammar. The retained 1.3 implementation provides JavaScript module output and Node package imports separately.
+Arya's native implementation provides 28 public standard modules through C/Arya implementations, including all 18 modules from the retained source profile. It includes native process/runtime helpers, authentication with macOS biometric/Keychain integration, project tooling, direct native GUI controls, desktop hosting, fixed-point accounting, parsed decimal values, money/finance policies and incremental CSV decoding. Record composition added in 2.0.0-alpha.3 remains part of the 2.0.0 grammar. The retained 1.3 implementation provides JavaScript module output and Node package imports separately.
 
 ## Language and numeric behavior
 

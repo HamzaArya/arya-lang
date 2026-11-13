@@ -695,7 +695,7 @@ static AV astdcall(AV env,int argc,AV *argv) {
   if(env.n>=700&&env.n<=710)return avalidation((int)env.n,argc,argv);
   if(env.n>=510&&env.n<=516)return adateline((int)env.n,argc,argv);
   if(env.n>=500&&env.n<=503)return aenvironment((int)env.n,argc,argv);
-  int id=(int)env.n; if(id>=300&&id<=310)return alist_standard(id,argc,argv); if(id>=200&&id<=201)return ajson(id,argc,argv); if(id>=110&&id<=118)return adecimal_values(id,argc,argv); if(id>=100&&id<=107)return adecimal(id,argc,argv); if(id>=40)return aprocess(id,argc,argv); AV x=argc?argv[0]:av(AUNDEF); double n=argc && id>=20 && id<30?atonumber(x):NAN;
+  int id=(int)env.n; if(id>=300&&id<=310)return alist_standard(id,argc,argv); if(id>=200&&id<=201)return ajson(id,argc,argv); if(id>=110&&id<=119)return adecimal_values(id,argc,argv); if(id>=100&&id<=108)return adecimal(id,argc,argv); if(id>=40)return aprocess(id,argc,argv); AV x=argc?argv[0]:av(AUNDEF); double n=argc && id>=20 && id<30?atonumber(x):NAN;
   if(id==0) return abuiltin(an(0),argc,argv);
   if(id==3)return aread_chunk(argc,argv);
   if(id==1){if(ainput_mode==2)return afail("TypeError","Do not mix readLine and readChunk on stdin.");ainput_mode=1;}
@@ -747,7 +747,7 @@ static AV astdcall(AV env,int argc,AV *argv) {
 static AV astandard_call(AV fn,int id,int argc,AV *argv) {
   if(fn.t!=AFUNC||fn.p->code!=astdcall||(fn.p->flags&1)||fn.p->parent.t!=ANUM||fn.p->parent.n!=id)return acall_rooted(fn,argc,argv);
   ACOUNT(direct_calls);if(!acall_enter())return av(AUNDEF);
-  AV result=id>=100&&id<=107?adecimal(id,argc,argv):id>=110&&id<=118?adecimal_values(id,argc,argv):astdcall(an(id),argc,argv);
+  AV result=id>=100&&id<=108?adecimal(id,argc,argv):id>=110&&id<=119?adecimal_values(id,argc,argv):astdcall(an(id),argc,argv);
   adepth--;return result;
 }
 static void astdfield(AV obj,const char *key,int id) { AV roots[3]={obj,av(AUNDEF),av(AUNDEF)}; ARoot r; aroot(&r,roots,3); roots[1]=astr(key); roots[2]=afunction(astdcall,an(id),key); aset(obj,roots[1],roots[2]); aunroot(&r); }
@@ -786,7 +786,7 @@ static AV astd(const char *name) {
   else if(!strcmp(name,"debug")){const char *names[]={"assert","inspect","trace"};for(int i=0;i<3;i++)astdfield(roots[0],names[i],800+i);}
   else if(!strcmp(name,"log")){astdfield(roots[0],"create",810);}
   else if(!strcmp(name,"json")) {astdfield(roots[0],"parse",200);astdfield(roots[0],"stringify",201);astdasyncfield(roots[0],"read",202);astdasyncfield(roots[0],"write",203);}
-  else if(!strcmp(name,"decimal")) {const char *names[]={"from","add","subtract","multiply","compare","divide","quantize","toNumber"};for(int i=0;i<8;i++)astdfield(roots[0],names[i],100+i);const char *modes[]={"up","down","ceil","floor","half-up","half-down","half-even","half-ceil","half-floor"};roots[2]=alist(9,NULL);for(int i=0;i<9;i++)roots[2].p->data[i]=astr(modes[i]);roots[2].p->scope=-2;roots[1]=astr("roundingModes");aset(roots[0],roots[1],roots[2]);roots[2]=arecord();const char *values[]={"parse","format","add","subtract","multiply","compare","divide","quantize","toNumber"};for(int i=0;i<9;i++)astdfield(roots[2],values[i],110+i);roots[2].p->scope=-2;roots[1]=astr("values");aset(roots[0],roots[1],roots[2]);}
+  else if(!strcmp(name,"decimal")) {const char *names[]={"from","add","subtract","multiply","compare","divide","quantize","toNumber","remainder"};for(int i=0;i<9;i++)astdfield(roots[0],names[i],100+i);const char *modes[]={"up","down","ceil","floor","half-up","half-down","half-even","half-ceil","half-floor"};roots[2]=alist(9,NULL);for(int i=0;i<9;i++)roots[2].p->data[i]=astr(modes[i]);roots[2].p->scope=-2;roots[1]=astr("roundingModes");aset(roots[0],roots[1],roots[2]);roots[2]=arecord();const char *values[]={"parse","format","add","subtract","multiply","compare","divide","quantize","toNumber","remainder"};for(int i=0;i<10;i++)astdfield(roots[2],values[i],110+i);roots[2].p->scope=-2;roots[1]=astr("values");aset(roots[0],roots[1],roots[2]);}
   else if(!strcmp(name,"io")) { astdfield(roots[0],"print",0); astdfield(roots[0],"readLine",1); astdfield(roots[0],"write",2);astdfield(roots[0],"readChunk",3); }
   else if(!strcmp(name,"_csv")){astdfield(roots[0],"decoder",1900);}
   else if(!strcmp(name,"fs")) { astdasyncfield(roots[0],"readText",10);astdfield(roots[0],"readTextSync",10);astdasyncfield(roots[0],"writeText",11);astdfield(roots[0],"writeTextSync",11);astdasyncfield(roots[0],"list",14);astdfield(roots[0],"listSync",14);astdfield(roots[0],"appendText",12);astdasyncfield(roots[0],"readBytes",15);astdfield(roots[0],"readBytesSync",15);astdasyncfield(roots[0],"writeBytes",16);astdfield(roots[0],"writeBytesSync",16);astdasyncfield(roots[0],"appendBytes",17);astdfield(roots[0],"appendBytesSync",17);astdfield(roots[0],"writeTextAtomicSync",18);astdfield(roots[0],"writeBytesAtomicSync",19);astdasyncfield(roots[0],"exists",13);astdfield(roots[0],"existsSync",13); astdfield(roots[0],"makeDirectory",60); astdfield(roots[0],"rename",61); astdfield(roots[0],"remove",62); astdfield(roots[0],"tempDirectory",63); astdfield(roots[0],"removeDirectory",64); astdfield(roots[0],"publish",65); astdfield(roots[0],"isFile",66);astdfield(roots[0],"infoSync",67);astdfield(roots[0],"publishDirectory",68);astdfield(roots[0],"_treeInfoSync",69); }

@@ -33,6 +33,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build-report', type=Path, required=True)
     parser.add_argument('--historical-inventory', type=Path, required=True)
+    parser.add_argument('--evidence-output', type=Path,
+                        help='Distinct evidence path when preserving an earlier preparation archive')
     options = parser.parse_args()
     build_report = options.build_report.resolve()
     verified = json.loads(build_report.read_text())
@@ -43,7 +45,8 @@ def main():
     package = Path(verified['output']).resolve()
     assert package.name == stem, 'Use the versioned output directory for release bundles'
     archive = package.parent / (stem + '.zip')
-    evidence_path = ROOT / 'reports' / ('release-' + version + '-bundles.json')
+    evidence_path = (options.evidence_output.resolve() if options.evidence_output else
+                     ROOT / 'reports' / ('release-' + version + '-bundles.json'))
     assert not archive.exists() and not evidence_path.exists(), 'Preserve previous release evidence and archives'
     baseline = json.loads(options.historical_inventory.read_text())
     assert inventory(ROOT / 'dist') == baseline['dist']
@@ -78,7 +81,8 @@ def main():
         'Each app includes its usage guide in Contents/Resources/README.md.\n'
         'Move an app to Applications or another writable location, then open it.\n\n'
         'All six workers were rebuilt and smoke-tested with Arya ' + version + '.\n'
-        'Programmer now uses the native validated UInt32 bitwise functions.\n'
+        'Programmer uses native validated UInt32 bitwise functions.\n'
+        'Finance and Precision use exact native decimal remainder for fraction reduction.\n'
         'These applications are ad-hoc signed, not Developer ID signed or notarized.\n'
         'macOS Gatekeeper may require an explicit Open action for downloaded apps.\n'
         'These macOS bundles do not run on Windows or Linux.\n')
@@ -98,6 +102,7 @@ def main():
     result.update(passed=6, failed=0, archive=os.path.relpath(archive, REPO),
                   archive_bytes=archive.stat().st_size, archive_sha256=sha(archive),
                   archive_roundtrip_verified=True, historical_bundles_and_archives_preserved=True)
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
     evidence_path.write_text(json.dumps(result, indent=2) + '\n')
     (package.parent / (stem + '.sha256')).write_text(result['archive_sha256'] + '  ' + archive.name + '\n')
     print(json.dumps({key: result[key] for key in ('archive', 'archive_bytes', 'archive_sha256', 'passed', 'failed')}, indent=2))

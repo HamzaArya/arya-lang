@@ -18,9 +18,11 @@ else
   printf '%s\n' 'ASan/UBSan unavailable: Windows gates use release/debug + GC stress. Instrumentation is qualified separately on macOS/Linux.' >> .build/release-evidence/windows-sanitizer-capability.log
 fi
 cat .build/release-evidence/windows-sanitizer-capability.log
-for gate in run array-empty collection-mutation process-run bitwise32 security-bytes editor-paths gui; do
+for gate in run array-empty collection-mutation process-run bitwise32 decimal-remainder security-bytes editor-paths gui; do
   sh "native/tests/$gate.sh" > ".build/release-evidence/windows-$gate.log" 2>&1 || { cat ".build/release-evidence/windows-$gate.log" >&2; exit 1; }
   cat ".build/release-evidence/windows-$gate.log"
 done
 python3 native/tests/api-contracts.py > .build/release-evidence/windows-api-contracts.log 2>&1 || { cat .build/release-evidence/windows-api-contracts.log >&2; exit 1; }
 cat .build/release-evidence/windows-api-contracts.log
+python3 native/tests/web-relocation.py > .build/release-evidence/windows-web-relocation.log 2>&1 || { cat .build/release-evidence/windows-web-relocation.log >&2; exit 1; }
+cat .build/release-evidence/windows-web-relocation.log

@@ -58,6 +58,7 @@ native-test: native native-crypto native-auth
 	native/tests/run.sh
 	sh native/tests/array-empty.sh
 	sh native/tests/collection-mutation.sh
+	sh native/tests/decimal-remainder.sh
 	sh native/tests/process-run.sh
 	sh native/tests/function-calls.sh
 	sh native/tests/advanced-calls.sh
@@ -166,3 +167,4 @@ native-sdk: native native-crypto native-http native-url native-regex native-auth
 .PHONY: native-api-test
 native-api-test: native-sdk
 	python3 native/tests/api-contracts.py
+	python3 native/tests/web-relocation.py

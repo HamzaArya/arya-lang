@@ -59,10 +59,11 @@
         "divide",
         "quantize",
         "toNumber",
+        "remainder",
         "roundingModes",
         "values"
       ],
-      "values": "Immutable parsed values: parse, format, add, subtract, multiply, compare, divide, quantize, toNumber. libmpdec owns exact coefficients; public layout remains opaque."
+      "values": "Immutable parsed values: parse, format, add, subtract, multiply, compare, divide, quantize, toNumber, remainder. Remainder uses a quotient truncated toward zero. libmpdec owns exact coefficients; public layout remains opaque."
     },
     "datetime": {
       "implementation": "native",
