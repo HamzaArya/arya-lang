@@ -20,13 +20,14 @@ Record its full commit and tree IDs and require a clean working tree, including
 untracked files outside ignored build directories.
 Tag `v2.0.0` at M1; never move that tag to incorporate later delivery evidence.
 Add the
-qualified Windows SDK pins only after its complete native gates pass. Keep the
-macOS and Linux original compiler/source identities in
-[sdk-assembly-inputs.json](sdk-assembly-inputs.json). The Linux original installer
-hash belongs to that original snapshot; the current installer is separately
-qualified by [linux-installer-recheck.json](linux-installer-recheck.json).
-Require the checkout's installer to match that recheck before copying it into
-the final Linux SDK. The final macOS installer is exercised locally below.
+qualified Windows SDK pins only after its complete native gates pass. Use the
+generation-two compiler/source/installer identities in
+[sdk-assembly-inputs.json](sdk-assembly-inputs.json). The preceding pins remain in
+[generation-1-sdk-assembly-inputs.json](generation-1-sdk-assembly-inputs.json);
+the earlier [Linux installer recheck](linux-installer-recheck.json) retains its
+own original SDK identity. Both newly qualified Unix SDKs contain the current
+installer. Require the checkout and assembled installer to match their new
+qualified pins. The final macOS installation is exercised locally below.
 
 Rebuild all twelve applications using the newly qualified macOS SDK and the
 existing strict application controller. Repackage the bundled Mac VSIX with that
