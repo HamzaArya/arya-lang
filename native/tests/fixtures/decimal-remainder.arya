@@ -14,12 +14,14 @@ fn fails(operation: any, code: string): void {
   debug.assert(caught, "Expected decimal remainder rejection")
 }
 for row in reference.vectors {
-  equal(decimal.remainder(row[0], row[1]), row[2])
-  let left = decimal.values.parse(row[0]); let right = decimal.values.parse(row[1])
+  debug.assert(row.length == 3, "Malformed decimal remainder reference vector")
+  let dividend = row[0] ?? ""; let divisor = row[1] ?? ""; let expected = row[2] ?? ""
+  equal(decimal.remainder(dividend, divisor), expected)
+  let left = decimal.values.parse(dividend); let right = decimal.values.parse(divisor)
   let originalLeft = decimal.values.format(left); let originalRight = decimal.values.format(right)
   let result = decimal.values.remainder(left, right)
   runtime.collect()
-  equal(decimal.values.format(result), row[2])
+  equal(decimal.values.format(result), expected)
   equal(decimal.values.format(left), originalLeft)
   equal(decimal.values.format(right), originalRight)
 }
