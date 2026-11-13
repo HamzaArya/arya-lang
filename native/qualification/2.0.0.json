@@ -33,7 +33,8 @@
         "installed CLI project check/build/run",
         "bundled and portable VSIX actual editor hosts"
       ],
-      "additionalInstallerIndependentRun": 43479940689
+      "additionalInstallerIndependentRun": 43479940689,
+      "signing": "Ad-hoc linker signature; codesign --verify --strict passed. No Developer ID identity or Apple notarization."
     },
     "linux-x64": {
       "status": "passed",

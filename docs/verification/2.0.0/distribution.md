@@ -14,6 +14,11 @@ The installer was exercised on macOS 26.5.2 under an isolated prefix containing
 spaces. It verified the SDK, created a versioned directory and managed launcher,
 and retained the compiler's exact hash.
 
+The exact compiler also passed `codesign --verify --strict`; its signature is
+ad-hoc and linker-signed, with no Team Identifier. This is a binary-integrity
+check, not Developer ID identity or Apple notarization. Local execution evidence
+does not establish approval of a browser-quarantined download.
+
 The installed launcher then created a CLI project, checked annotated source,
 built a native executable and ran it successfully. Both project and output paths
 contained spaces. No library-directory or C-compiler override was configured.

@@ -82,6 +82,12 @@ Obtain both archive and expected checksum from the official release. You can
 also keep the extracted SDK in place and use `./arya` directly without installing.
 Continue with [your first project](getting-started.md).
 
+The macOS compiler has a verified ad-hoc linker signature, without Developer ID
+signing or Apple notarization. A browser-downloaded copy may need macOS's
+per-file approval before it runs; the [downloaded binary guidance](#downloaded-macos-applications)
+also applies to the compiler. Building from the verified source archive is
+another installation route. No system-wide Gatekeeper setting is changed.
+
 ## Build from source
 
 Verify the source archive before extraction:
