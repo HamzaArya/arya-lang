@@ -7,7 +7,7 @@
 - Correct readonly HTTP-server option contracts and missing decimal rounding diagnostics.
 - Add exact `decimal.remainder` and parsed-value remainder, and native UInt32 bitwise operations; migrate the finance, precision and programmer calculators to these APIs.
 - Repair mutation during Map/Set iteration, empty-array undefined behavior and API-only HTTP service relocation after source removal.
-- Repair Cygwin process launching and native Windows editor paths; keep the optional Windows Python bridge explicitly unsupported.
+- Repair Cygwin process launching, native Windows editor paths and OpenSSL system-library linkage; keep the optional Windows Python bridge explicitly unsupported.
 - Add checksum-verified versioned installation and bundled/portable stable VSIX packaging.
 - Rebuild all twelve native macOS applications with the qualified SDK, correct About versions and preserve earlier artifacts and work reports.
 - Verify actual installation paths containing spaces, explicit prefixes without HOME, and both standard checksum markers; new release checksums explicitly use binary mode.
