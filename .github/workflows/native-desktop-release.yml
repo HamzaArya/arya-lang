@@ -68,18 +68,18 @@ jobs:
             gcc-core gcc-g++ make perl libcrypt-devel libiconv-devel
             pkg-config zip unzip diffutils patch tar gzip bzip2 xz coreutils python3
       - name: Direct Win32 backend action probe
-        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
           make native-gui CC=gcc
           gcc -std=c11 native/gui/platform-test.c -lcomctl32 -lgdi32 -luser32 -o .build/gui/platform-actions.exe
           .build/gui/platform-actions.exe
       - name: Build native Windows PE toolchain with explicit Cygwin dependency
-        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
           mkdir -p .build/release-evidence
           make native-sdk CC=gcc CXX=g++ 2>&1 | tee .build/release-evidence/windows-bootstrap.log
       - name: Core and Win32 widget checks
-        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-runtime-test.sh
       - name: Native Windows editor paths and protocol
         shell: pwsh
@@ -87,14 +87,14 @@ jobs:
           $env:PATH = "C:\cygwin\bin;" + $env:PATH
           node native/tests/windows-editor-reference.cjs "$env:GITHUB_WORKSPACE\.build\independent\arya.exe"
       - name: Package and relocate the tested Windows Cygwin SDK
-        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-sdk-test.sh
       - uses: actions/upload-artifact@v4
         with:
           name: native-sdk-windows-cygwin-x64
           path: artifacts/arya-native-*-windows-cygwin-x64.tar.gz*
       - name: Record dependency requirements
-        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
           mkdir -p .build/release-evidence
           cygcheck .build/independent/arya.exe > .build/release-evidence/windows-dependencies.txt
