@@ -35,6 +35,20 @@ Fields evaluate left to right. Keys must be strings, spread accepts records only
 
 Use binary64 `number` for ordinary arithmetic and explicit decimal strings/values for exact money. The SDK has [28 public standard modules](docs/standard-library.md), including [accounting](docs/accounting-engine.md), [money/finance/CSV](docs/native-finance-data.md), [authentication and native biometrics](docs/native-auth.md), and [security/debugging](docs/native-security-debugging.md). Templates cover CLI, web, API, UI and optional macOS WebKit desktop projects. The new `gui` module uses AppKit, GTK 3 or Win32 controls directly.
 
+## Native application collections
+
+The repository includes [six native desktop applications](native-desktop-projects/README.md)
+and [six native calculators](native-calculators/README.md), organized by the six
+developer tracks. Their AppKit interfaces and compiled Arya engines run without
+a browser, Node or Python. The supplied bundles target Apple Silicon macOS 26+;
+[application qualification](docs/verification/2.0.0/application-release.md) records
+their final archive hashes, tests and signing limits.
+
+The earlier [18 CLI, browser GUI and service projects](developer-projects/README.md)
+remain available with their individual work reports. The
+[2.0.0 release report](docs/native-release-2.0.0.md) connects the reported language
+problems to their repairs and verification results.
+
 ## Documentation and tools
 
 - [Documentation index](docs/README.md): current guides and versioned evidence.

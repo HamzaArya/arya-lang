@@ -4,6 +4,12 @@
 
 Date: 2026-11-13. Platform tested: macOS 26.5.2 ARM64. Compiler: Arya native 2.0.0-alpha.3, SHA-256 `a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771`.
 
+This opening record identifies the original 18-project delivery. Later API and
+storage migrations are recorded at the end. The subsequent native-software
+requests produced separate [desktop applications](../native-desktop-projects/REPORT.md)
+and [calculators](../native-calculators/REPORT.md); their final 2.0.0 bundles have
+their own compiler and archive identities.
+
 The six skill levels are simulated developer tracks, not a claim that six human participants were observed. The labels describe increasing application complexity; “world class” does not mean production certification. The projects implement complete bounded workflows described in their READMEs.
 
 Start with the [project catalog and run instructions](README.md). The [final acceptance record](reports/acceptance.json) links exact per-project check/build/test logs and executable/source hashes. [Browser evidence](reports/browser-qa.md) records the actual actions and the limits of GUI verification.
@@ -62,7 +68,7 @@ Each project contains `main.arya`, `arya.json`, `README.md`, `REPORT.md`, and a 
 | Character-count storage limits could exceed byte-based load limits for Unicode. | Beginner/better stores enforce UTF-8 byte limits. |
 | Reconciliation totals sometimes serialized whole numbers without `.00`, then failed strict validation after restart. | Quantizes saved totals to two places. Restart and totals beyond 18 integer digits pass. |
 | Feature-flag hashing skipped the low surrogate of emoji despite documenting UTF-16 code-unit iteration. | Uses indexed code-unit iteration. Regression verifies `new-dashboard` plus `😀` gives bucket 4678 and is disabled at 30% rollout; previous result 1866 was wrong. |
-| The default web root can depend on the original source directory, even with static assets disabled. | All web apps set an explicit working-directory root. The dependency was identified by source inspection; removal of the original source directory was not separately simulated. |
+| The default web root depended on the original source directory, even with static assets disabled. | The original apps used an explicit working-directory root. Arya 2.0.0 now resolves static roots only when HTML/assets are enabled; actual moved-binary/source-removal HTTP tests passed on macOS and Linux. See [release repair evidence](../docs/native-release-2.0.0.md). |
 | Native compilation emitted macOS `ucontext` deprecation warnings. | Builds succeeded. No runtime/compiler rewrite was attempted in this task. |
 | Browser tab automation host unavailable; native browser control had ambiguous app IDs and intermittent focus/accessibility failures. | Used the full installed Edge app path, refreshed state, and direct field setting. Actual GUI outcomes are documented separately; no GUI was abandoned. |
 
@@ -73,12 +79,12 @@ The reports distinguish observed failures from source-review findings and test-h
 **Abandoned applications: 0. Unfinished required application workflows: 0.** The following capabilities were outside the implemented briefs or unavailable through the chosen public APIs:
 
 - TextVault now verifies binary and text integrity manifests using the 2.0.0 byte-file and byte-hash APIs. Its earlier text-only language blocker is resolved. It does not copy or restore files; size and concurrency limits remain explicit.
-- The six GUIs are functional browser applications built with Arya UI and native HTTP servers. Native AppKit windows and OS installers were not attempted.
+- These six GUIs remain browser applications built with Arya UI and native HTTP servers. Later native AppKit applications and calculators are in the separate collections linked above; the language now also supplies direct `std gui` controls.
 - Several boards deliberately use explicit Refresh links for their card/table lists. Form feedback updates immediately; there is no invented claim of reactive list rendering or drag-and-drop.
 - The job service exposes durable claim/finish/retry operations with leases. It does not execute arbitrary commands or supply a hosted worker fleet.
 - The release gate evaluates supplied local evidence and does not deploy or attest remote systems. The ledger service implements scoped exact postings and idempotency; it is not a banking system or full double-entry accounting product.
 - Stateful apps use bounded local JSON snapshots and one process per data file. They do not promise cross-process locking, power-loss durability, public hosting authentication/TLS, or production-scale storage. Exact per-app limits are documented.
-- No Linux/Windows or mobile/cross-browser qualification was performed. The native checker findings above were worked around in applications and remain open for separate language work.
+- This original application delivery did not qualify Linux/Windows or mobile/cross-browser behavior. Its reported native checker defects were subsequently fixed in the language and the affected workarounds removed, as recorded below. Language platform qualification is separate from qualification of these 18 application workflows.
 
 ## Reproduction
 

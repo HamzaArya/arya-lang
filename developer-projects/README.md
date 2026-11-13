@@ -16,6 +16,12 @@ Open the printed loopback URL for a GUI. Use each service's documented endpoints
 
 These GUIs are browser applications. Native AppKit windows, installers, cloud deployment, authentication for public hosting, and other-platform qualification are not included. Services bind to loopback and use local JSON storage where persistence is needed. Read each README for exact limits.
 
+The later native-software requests are delivered separately as
+[six native desktop applications](../native-desktop-projects/README.md) and
+[six native calculators](../native-calculators/README.md). The
+[release work report](../docs/native-release-2.0.0.md) records the language repairs
+that followed this original collection.
+
 ## Project catalog
 
 | Developer track | CLI | GUI | Service |

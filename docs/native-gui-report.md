@@ -99,9 +99,13 @@ DLL loader directory. That isolation probe passed on an actual Windows runner
 in [run 43478802288](https://github.com/HamzaArya/arya-lang/actions/runs/43478802288).
 The final public GUI and Windows distribution gates are still pending.
 
-Linux SDK builds compiled the GTK backend and the independent fresh-source
-suite passed in [run 43474217260](https://github.com/HamzaArya/arya-lang/actions/runs/43474217260).
-The desktop workflow stopped at an HTTP test harness assertion before GTK
-execution: ASan emitted its documented cooperative-stack warning while the
-server exited successfully. The corrected harness retains that exact warning
-and rejects other stderr. The final Linux direct GUI gate is still pending.
+The Linux independent fresh-source suite passed in
+[run 43474217260](https://github.com/HamzaArya/arya-lang/actions/runs/43474217260).
+After the HTTP harness learned to retain the exact cooperative-stack sanitizer
+warning while rejecting other stderr,
+[desktop run 43478801468](https://github.com/HamzaArya/arya-lang/actions/runs/43478801468)
+passed every bootstrap/core/API/HTTP, GTK and SDK distribution gate on Ubuntu
+24.04 x64. GTK execution used Xvfb and passed all eight public widget types,
+Unicode, state/validation/lifecycle cases, real toolkit events and retained
+closed handles. A later run separately checks the final managed installer;
+the GTK result already comes from actual Linux execution.

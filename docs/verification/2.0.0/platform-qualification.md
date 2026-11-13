@@ -137,3 +137,12 @@ other stderr; it does not suppress runtime sanitizer errors.
 passed the early empty-PATH C compiler/linker/PE execution probe and the direct
 Win32 action harness before entering full bootstrap. This is measured evidence
 for the loader-isolation fix, not yet a complete Windows qualification result.
+
+[Linux desktop retry 43478801468](https://github.com/HamzaArya/arya-lang/actions/runs/43478801468)
+passed every gate on Ubuntu 24.04 x64: self-hosted bootstrap, full core suite,
+17 typed API checks and independent byte oracle, all 12 HTTP relocation cases,
+actual GTK controls/actions under Xvfb, SDK distribution and packaging. The
+SDK artifact is `14064643844`, whose ZIP SHA-256 is
+`cb946e824b24c079fb4ce985875c904d571476aeb684302efd4b7adb876b24a4`.
+The newer `25f1915` Linux run adds a real versioned installer/create/build/run
+gate; that extra gate was pending at this entry.
