@@ -68,6 +68,12 @@ SDK installer and documentation files are not embedded in these VSIX packages.
 
 ## Refreshing final SDK metadata
 
+The later [Linux installer recheck](linux-installer-recheck.json) also passed
+with the corrected binary-checksum parser and writer. It reused the exact
+qualified Linux compiler, installed with HOME unset into a path containing
+spaces and an apostrophe, and built/reran exact-decimal CLI cases. Its tested
+installer hash is distinct from the original Linux archive's historical installer.
+
 The release can refresh installer, qualification and documentation files around
 an existing qualified SDK without rebuilding its runtime. The retained
 [assembly controller](reassemble-qualified-sdk.py) uses explicit

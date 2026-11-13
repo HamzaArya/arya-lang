@@ -189,3 +189,22 @@ verification failure is retained in evidence and no longer skips independent
 runtime gates. Reuse still validates every recorded byte and native input
 before accepting those raw bootstrap bytes. These fixes require a new Windows
 run; they do not retroactively qualify the skipped gates.
+
+## Current Linux installer with binary checksums
+
+[Installer recheck 43489334671](https://github.com/HamzaArya/arya-lang/actions/runs/43489334671)
+passed on Ubuntu 24.04.5 x64 at `e6ffbdb`. It verified the immutable Linux
+`25f1915` SDK artifact and all 260 native build inputs, preserved the qualified
+compiler/library bytes, refreshed the installer and metadata, and checked the
+binary-mode checksum inventory. The actual managed installer succeeded with
+HOME unset and paths containing spaces and an apostrophe. The installed compiler
+created, checked and compiled a CLI project; execution returned `59.85` for
+`19.95 × 3` and `27021597764222979.03` for `9007199254740993.01 × 3`.
+
+The tested current installer SHA-256 is
+`1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df`.
+Evidence artifact `14069546003` has verified ZIP SHA-256
+`96e85860cda319f9de211139d968a49d2d5a191ec86f3d706fb986a3faac4f6e`;
+the compact identity and result record is [linux-installer-recheck.json](linux-installer-recheck.json).
+This requalifies the changed installer and checksum format. The compiler/runtime
+and GTK qualification remains the separately recorded original Linux job.

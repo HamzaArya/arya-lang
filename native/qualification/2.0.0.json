@@ -52,7 +52,7 @@
       "sdkArtifact": 14067305675,
       "sdkFilesVerified": 563,
       "originalSDKArchiveSHA256": "2cfe1195fc1a94a043a4ddbf1292d4616227978f0743b6b3de410c46ff98853c",
-      "installerSHA256": "670c593ab923ffae12f26b892897185b9f7f386697cbb9a869dd501c0f01f277",
+      "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
       "matchedNativeBuildInputs": 260,
       "gates": [
         "self-hosted full SDK bootstrap",
@@ -64,7 +64,11 @@
         "installed CLI create/check/build/run",
         "independent fresh-source and reference gates"
       ],
-      "note": "The exact known ASan makecontext/swapcontext capability warning is retained; every other HTTP stderr diagnostic still fails."
+      "note": "The exact known ASan makecontext/swapcontext capability warning is retained; every other HTTP stderr diagnostic still fails.",
+      "originalInstallerSHA256": "670c593ab923ffae12f26b892897185b9f7f386697cbb9a869dd501c0f01f277",
+      "installerQualificationRun": 43489334671,
+      "installerQualificationJob": 132106018034,
+      "installerEvidence": "docs/verification/2.0.0/linux-installer-recheck.json"
     },
     "windows-cygwin-x64": {
       "status": "in-progress",

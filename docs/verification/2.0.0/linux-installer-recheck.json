@@ -1,0 +1,60 @@
+{
+  "status": "passed",
+  "scope": "Current Linux installer and installed CLI using the byte-preserved qualified Linux25 SDK; no compiler rebuild or new GUI qualification.",
+  "sourceCommit": "e6ffbdb11075d8fdc5602555576d307a1a9b1255",
+  "workflowRun": 43489334671,
+  "job": 132106018034,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43489334671/job/132106018034",
+  "host": "Linux 7.0.0-1017-azure x86_64",
+  "runnerImage": "Ubuntu 24.04.5 LTS",
+  "originalQualification": {
+    "sourceCommit": "25f1915af4886f3b61c35aa753cd1defe78c1f3a",
+    "run": 43480059478,
+    "job": 132073915697,
+    "artifact": 14067305675,
+    "compilerSHA256": "06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694",
+    "inventorySHA256": "c43448408a69693292a6ddaeb689c0b0c31fd5a20f8a3120b2934878f66a0742",
+    "archiveSHA256": "2cfe1195fc1a94a043a4ddbf1292d4616227978f0743b6b3de410c46ff98853c",
+    "installerSHA256": "670c593ab923ffae12f26b892897185b9f7f386697cbb9a869dd501c0f01f277"
+  },
+  "evidenceArtifact": {
+    "id": 14069546003,
+    "name": "linux-installer-requalification-evidence",
+    "sizeBytes": 106303,
+    "sha256": "96e85860cda319f9de211139d968a49d2d5a191ec86f3d706fb986a3faac4f6e",
+    "downloadVerified": true
+  },
+  "compilerSHA256": "06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "matchedBuildInputs": 260,
+  "checks": [
+    "Immutable original run/job/artifact identities and successful native gates",
+    "Artifact/archive/compiler/inventory checksums",
+    "All selected native build inputs unchanged",
+    "Binary-mode checksum inventory",
+    "Managed installation with HOME unset and spaces/apostrophe in paths",
+    "Installed compiler version, create, check and native release build"
+  ],
+  "executionResults": [
+    {
+      "arguments": [
+        "19.95",
+        "3"
+      ],
+      "stdout": "Total: 59.85\n",
+      "exitCode": 0
+    },
+    {
+      "arguments": [
+        "9007199254740993.01",
+        "3"
+      ],
+      "stdout": "Total: 27021597764222979.03\n",
+      "exitCode": 0
+    }
+  ],
+  "applicationSHA256": "862b006657336c3f80d0e321413905d40d316ca55aa3238039c855a4d3bd884c",
+  "applicationSourceSHA256": "2857464ed1fa14a4f0b8d4e4898f10b683bf67089458560c9ab8e42cc525c208",
+  "jobLogSHA256": "c45164945faa68244f124b72ce33572447211503e77a775f9c547a7d0844cd10",
+  "fullResultSHA256": "5f7747210104e085c02491ae3a81394b1cd5efde42c40fe0bee0baaa14b529ab"
+}
