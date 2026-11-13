@@ -27,6 +27,7 @@
 #define NOMINMAX 1
 #include <windows.h>
 #include <sys/cygwin.h>
+#include <process.h>
 #include <wchar.h>
 #endif
 #ifdef __linux__
@@ -456,7 +457,7 @@ static AV abound(AV env,int argc,AV *argv) {
   if(akey(key,"push") && object.t==ALIST) { aresize(object.p,n+(size_t)argc); for(int i=0;i<argc;i++) object.p->data[object.p->len++]=argv[i]; return an((double)object.p->len); }
   if(akey(key,"pop") && object.t==ALIST) return n?object.p->data[--object.p->len]:av(AUNDEF);
   if(akey(key,"includes") || akey(key,"indexOf")) { long found=-1; if(object.t==ALIST) { for(size_t i=0;i<n;i++) if(aeq(object.p->data[i],first) || (akey(key,"includes") && object.p->data[i].t==ANUM && first.t==ANUM && isnan(first.n) && isnan(object.p->data[i].n))) { found=(long)i; break; } } else { AV s=atostring(first); size_t len=(size_t)s.p->scope; for(size_t i=0;i+len<=n;i++) if(!memcmp(object.p->chars+i,s.p->chars,len*sizeof(uint16_t))) { found=(long)i; break; } } return akey(key,"includes")?ab(found>=0):an((double)found); }
-  if(akey(key,"slice")) { double from=argc?atonumber(argv[0]):0,to=argc>1?atonumber(argv[1]):(double)n; if(isnan(from)) from=0; if(isnan(to)) to=0; if(from<0) from=fmax(0,(double)n+trunc(from)); if(to<0) to=fmax(0,(double)n+trunc(to)); from=fmin((double)n,fmax(0,trunc(from))); to=fmin((double)n,fmax(from,trunc(to))); return object.t==ALIST?alist((int)(to-from),object.p->data+(size_t)from):as16(object.p->chars+(size_t)from,(size_t)(to-from)); }
+  if(akey(key,"slice")) { double from=argc?atonumber(argv[0]):0,to=argc>1?atonumber(argv[1]):(double)n; if(isnan(from)) from=0; if(isnan(to)) to=0; if(from<0) from=fmax(0,(double)n+trunc(from)); if(to<0) to=fmax(0,(double)n+trunc(to)); from=fmin((double)n,fmax(0,trunc(from))); to=fmin((double)n,fmax(from,trunc(to))); return object.t==ALIST?alist((int)(to-from),to>from?object.p->data+(size_t)from:NULL):as16(object.p->chars+(size_t)from,(size_t)(to-from)); }
   if(akey(key,"join") && object.t==ALIST) {
     AV roots[4]={object,av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot r;aroot(&r,roots,4);
     roots[1]=argc&&first.t!=AUNDEF?atostring(first):astr(",");roots[2]=alist((int)n,NULL);
@@ -488,6 +489,8 @@ static AV abuilt(int id) { AV env=an(id); return afunction(abuiltin,env,"builtin
 #include "helpers.c"
 #include "path-cygwin.c"
 static AV aappend_value(AV list,AV value);
+static AV aiteropen(AV iterable);
+static void aiterrelease(AV iterable);
 static AV aiternext(AV iterable,AV *position);
 #include "text.c"
 #include "array.c"
@@ -502,8 +505,25 @@ static AV aprocess(int id,int argc,AV *argv) {
     if(!argc || argv[0].t!=ALIST || !argv[0].p->len) return afail("TypeError","process.run expects a nonempty argument list.");
     size_t n=argv[0].p->len; char **args=(char**)amemory((n+1)*sizeof(char*));
     for(size_t i=0;i<n;i++) { AV value=argv[0].p->data[i]; if(value.t!=ASTR) { for(size_t j=0;j<i;j++)free(args[j]);free(args);return afail("TypeError","Process arguments must be strings."); } for(int j=0;j<value.p->scope;j++) if(!value.p->chars[j]) {for(size_t k=0;k<i;k++)free(args[k]);free(args);return afail("TypeError","Process arguments cannot contain NUL.");} args[i]=autf8(value); }
-    fflush(NULL); pid_t pid=fork(); if(pid==0) {execvp(args[0],args);fprintf(stderr,"Cannot start %s: %s\n",args[0],strerror(errno));_exit(127);} for(size_t i=0;i<n;i++)free(args[i]);free(args);
-    if(pid<0)return afail("IOError",strerror(errno));int status=0;while(waitpid(pid,&status,0)<0){if(errno!=EINTR)return afail("IOError",strerror(errno));}return an(WIFEXITED(status)?WEXITSTATUS(status):128+WTERMSIG(status));
+    fflush(NULL);
+#ifdef __CYGWIN__
+    /* Cygwin fork cannot clone a makecontext heap stack. Its native spawn
+     * family starts the executable directly; posix_spawn also forks there. */
+    pid_t pid=(pid_t)spawnvp(_P_NOWAIT,args[0],(const char *const *)args);
+    int problem=errno;
+    if(pid<0&&problem!=ENOMEM&&problem!=EAGAIN)fprintf(stderr,"Cannot start %s: %s\n",args[0],strerror(problem));
+#else
+    pid_t pid=fork();int problem=errno;
+    if(pid==0) {execvp(args[0],args);fprintf(stderr,"Cannot start %s: %s\n",args[0],strerror(errno));_exit(127);}
+#endif
+    for(size_t i=0;i<n;i++)free(args[i]);free(args);
+    if(pid<0){
+#ifdef __CYGWIN__
+      if(problem!=ENOMEM&&problem!=EAGAIN)return an(127);
+#endif
+      return afail("IOError",strerror(problem));
+    }
+    int status=0;while(waitpid(pid,&status,0)<0){if(errno!=EINTR)return afail("IOError",strerror(errno));}return an(WIFEXITED(status)?WEXITSTATUS(status):128+WTERMSIG(status));
   }
   if(id==45) {AV text=atostring(argc?argv[0]:av(AUNDEF));size_t size;char *bytes=autf8bytes(text,&size);fwrite(bytes,1,size,stderr);fputc('\n',stderr);free(bytes);return av(AUNDEF);}
   if(id==41) { double n=argc?atonumber(argv[0]):0; exit(isfinite(n)?(int)fmod(trunc(n),256):1); }
@@ -780,15 +800,47 @@ static AV astd(const char *name) {
 }
 static AV aexport(AV env,int scope,size_t slot) { AH *h=aalloc(AREF,0); h->parent=ap(afind(env,scope)); AV result=ap(h); result.n=(double)slot; return result; }
 static int areport(void) { if(!afailed) return 0; AV root=aerror; ARoot r; aroot(&r,&root,1); if(root.t==ARECORD) { AV keys[2]={astr("name"),av(AUNDEF)}; ARoot k; aroot(&k,keys,2); keys[1]=aget(root,keys[0]); AV msg=atostring(keys[1]); char *s=autf8(msg); fputs(s,stderr); free(s); keys[0]=astr("message"); keys[1]=aget(root,keys[0]); msg=atostring(keys[1]); s=autf8(msg); fprintf(stderr,": %s",s); free(s); aunroot(&k); } else { AV msg=atostring(root); char *s=autf8(msg); fprintf(stderr,"Uncaught: %s",s); free(s); } fprintf(stderr,"%s\n",atrace); aunroot(&r); return 1; }
+/* Each collection traversal owns its guard, including nested loops. The
+ * collection is older than this handle and is retained through parent, so
+ * newest-first GC finalization also releases abandoned guards before their
+ * collection. Explicit close drops that reference immediately. */
+static void acollection_iter_finalize(AH *iterator) {
+  if(iterator->parent.t==AUNDEF)return;
+  AH *collection=iterator->parent.p;
+  if(collection->keys&&collection->keys->iterating)collection->keys->iterating--;
+  iterator->parent=av(AUNDEF);
+}
+static void aiterrelease(AV iterable) {
+  if(iterable.t==AHANDLE&&iterable.p->finalize==acollection_iter_finalize)acollection_iter_finalize(iterable.p);
+}
+static AV aiteropen(AV iterable) {
+  if(iterable.t!=AHANDLE||!iterable.p->name||
+     (strcmp(iterable.p->name,"arya.map")&&strcmp(iterable.p->name,"arya.set")))return iterable;
+  ARoot root;aroot(&root,&iterable,1);
+  if(!iterable.p->keys)akey_rebuild(iterable.p,!strcmp(iterable.p->name,"arya.set")?1:2);
+  AH *iterator=aalloc(AHANDLE,0);iterator->name="arya.collection.iterator";
+  iterator->parent=iterable;iterator->finalize=acollection_iter_finalize;
+  iterable.p->keys->iterating++;
+  aunroot(&root);return ap(iterator);
+}
 static AV aiternext(AV iterable, AV *position) {
   if(iterable.t==AAITER){AV r[3]={iterable,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,3);r[1]=aprop(iterable,"next");r[2]=acall(r[1],0,NULL);if(!afailed)r[2]=aawait(r[2]);AV result=av(AUNDEF);if(!afailed){r[1]=aprop(r[2],"done");result=atruth(r[1])?av(AUINIT):aprop(r[2],"value");}aunroot(&root);return result;}
   size_t i=(size_t)position->n;
-  if(iterable.t==AHANDLE&&iterable.p->name&&(!strcmp(iterable.p->name,"arya.map")||!strcmp(iterable.p->name,"arya.set"))){int set=!strcmp(iterable.p->name,"arya.set");size_t step=set?1:2;while(i<iterable.p->len/step&&iterable.p->data[i*step].t==AUINIT)i++;if(i>=iterable.p->len/step)return av(AUINIT);position->n=(double)i+1;if(set)return iterable.p->data[i];AV r[2]={iterable,av(AUNDEF)};ARoot root;aroot(&root,r,2);r[1]=alist(2,iterable.p->data+2*i);AV result=r[1];aunroot(&root);return result;}
+  if(iterable.t==AHANDLE&&iterable.p->finalize==acollection_iter_finalize){
+    AV collection=iterable.p->parent;if(collection.t==AUNDEF)return av(AUINIT);
+    int set=!strcmp(collection.p->name,"arya.set");size_t step=set?1:2;
+    while(i<collection.p->len/step&&collection.p->data[i*step].t==AUINIT)i++;
+    if(i>=collection.p->len/step){aiterrelease(iterable);return av(AUINIT);}
+    position->n=(double)i+1;if(set)return collection.p->data[i];
+    AV r[2]={iterable,av(AUNDEF)};ARoot root;aroot(&root,r,2);
+    r[1]=alist(2,collection.p->data+2*i);AV result=r[1];aunroot(&root);return result;
+  }
   if(iterable.t==ALIST) { if(i>=iterable.p->len) return av(AUINIT); position->n++; return iterable.p->data[i].t==AUINIT?av(AUNDEF):iterable.p->data[i]; }
   if(iterable.t==ASTR) { if(i>=(size_t)iterable.p->scope) return av(AUINIT); size_t count=1; unsigned c=iterable.p->chars[i]; if(c>=0xd800 && c<=0xdbff && i+1<(size_t)iterable.p->scope && iterable.p->chars[i+1]>=0xdc00 && iterable.p->chars[i+1]<=0xdfff) count=2; position->n+=(double)count; return as16(iterable.p->chars+i,count); }
   return afail("TypeError","Value is not iterable.");
 }
 static AV aiterclose(AV iterable) {
+  aiterrelease(iterable);
   if(iterable.t!=AAITER)return av(AUNDEF);
   AV r[2]={iterable,av(AUNDEF)};ARoot root;aroot(&root,r,2);r[1]=aprop(iterable,"return");
   if(!afailed&&r[1].t!=AUNDEF){r[1]=acall(r[1],0,NULL);if(!afailed)r[1]=aawait(r[1]);}
@@ -803,6 +855,8 @@ static AV aappend_value(AV list,AV value) {
 }
 static AV aspread_into(AV list,AV iterable) {
   AV values[3]={list,iterable,av(AUNDEF)};ARoot r;aroot(&r,values,3);AV position=an(0);
-  while(!afailed){values[2]=aiternext(iterable,&position);if(values[2].t==AUINIT)break;aappend_value(list,values[2]);}
+  values[1]=aiteropen(values[1]);
+  while(!afailed){values[2]=aiternext(values[1],&position);if(values[2].t==AUINIT)break;aappend_value(list,values[2]);}
+  aiterrelease(values[1]);
   aunroot(&r);return list;
 }

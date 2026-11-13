@@ -36,9 +36,22 @@ language defects and are not reported as newly implemented.
   no force push or history rewrite was used.
 - Concurrent compilation increased macOS swap use and reduced free disk space.
   Compilation was serialized; historical evidence and artifacts were preserved.
+  A later full local check exhausted disk while compiling the accounting-journal
+  sanitizer binary. Earlier suites passed, but that incomplete run is not counted
+  as a full pass. Free space subsequently recovered and qualification resumed.
 - The first Ubuntu SDK built successfully, including GTK 3. A relocated-compiler
   test then exposed a test environment missing GCC's assembler/linker tools.
   The restricted PATH test is being repaired while keeping Node/Python absent.
+- Linux and macOS CI caught undefined C behavior when concatenating empty lists:
+  zero-length storage was passed through null pointer arithmetic and `memcpy`.
+  Empty `slice`, `unshift`, `splice`, `copyWithin` and `sort` paths received the
+  same guard, with a focused fresh/retained-storage sanitizer regression.
+- Review found native Map/Set `for` iteration could skip remaining entries after
+  deletion triggered storage compaction. Active-iterator lifetime and mutation
+  regressions are being repaired before release qualification.
+- Windows reached the second self-hosting stage but Cygwin `fork` could not clone
+  the compiler's managed execution stack. A Windows process-launch repair and
+  actual Windows SDK qualification are in progress.
 
 ## Release gates and publication
 

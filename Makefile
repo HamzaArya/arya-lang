@@ -56,6 +56,9 @@ clean-native:
 .PHONY: native-test
 native-test: native native-crypto native-auth
 	native/tests/run.sh
+	sh native/tests/array-empty.sh
+	sh native/tests/collection-mutation.sh
+	sh native/tests/process-run.sh
 	sh native/tests/function-calls.sh
 	sh native/tests/advanced-calls.sh
 	sh native/tests/record-literals.sh

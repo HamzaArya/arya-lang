@@ -1329,6 +1329,7 @@ fn emitStatement(e, s, env) {
   if s.kind == "for" {
     let header = enterScope(e, env, s.binding.scope)
     let iterable = expr(e, s.iterable, header)
+    iterable = temp(e, "aiteropen(" + iterable + ")")
     let position = temp(e, "an(0)")
     let index = temp(e, "an(0)")
     let id = str(e.labels); e.labels += 1

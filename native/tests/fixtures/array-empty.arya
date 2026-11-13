@@ -1,0 +1,38 @@
+use std "debug" as debug
+use std "runtime" as runtime
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), JSON.stringify(actual)) }
+fn unused(value) { throw Error("An empty array must not call its callback") }
+
+// Fresh zero-capacity lists exercise null storage; cleared lists cover retained storage.
+for retained in [false, true] {
+  let values = []
+  if retained { values = [1, 2, 3] }
+  if retained { values.length = 0 }
+  debug.assert(values.push() == 0 and values.unshift() == 0)
+  debug.assert(values.pop() == undefined and values.shift() == undefined)
+  equal(values.slice(), []); equal(values.slice(1, -1), [])
+  equal(values.concat([], []), []); equal(values.concat([], [1], [], 2, []), [1, 2])
+  equal(values.copyWithin(0, 0), []); equal(values.fill(1), [])
+  equal(values.splice(), []); equal(values.splice(0, 0), [])
+  equal(values.toSpliced(), []); equal(values.toSpliced(0, 0), [])
+  equal(values.toSpliced(0, 0, 1, 2), [1, 2]); equal(values, [])
+  equal(values.sort(unused), []); equal(values.toSorted(unused), [])
+  equal(values.reverse(), []); equal(values.toReversed(), [])
+  equal(values.flat(), []); equal(values.flatMap(unused), [])
+  equal(values.map(unused), []); equal(values.filter(unused), [])
+  debug.assert(values.reduce(unused, 7) == 7 and values.reduceRight(unused, 9) == 9)
+  debug.assert(not values.some(unused) and values.every(unused))
+  values.forEach(unused)
+  equal(values.keys(), []); equal(values.values(), []); equal(values.entries(), [])
+  let boundSlice = values.slice; equal(boundSlice(), [])
+  let boundConcat = values.concat; equal(boundConcat([]), [])
+  debug.assert(values.unshift(8) == 1); equal(values, [8])
+  equal(values.splice(0, 1), [8]); equal(values, [])
+  equal(values.splice(0, 0, 4), []); equal(values, [4])
+  equal(values.slice(1), []); equal(values.copyWithin(1, 0), [4])
+}
+// Holes produce zero present elements in the sorting copy.
+let holes = new Array(3)
+holes.sort(unused)
+debug.assert(holes.length == 3 and not Object.hasOwn(holes, "0"))
+print("empty arrays: fresh and retained storage, zero-count copying and callbacks passed")

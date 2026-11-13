@@ -11,8 +11,13 @@ if test -z "$expected_crypto" || test ! -f "$root/.build/independent/lib/openssl
   printf '%s\n' 'SDK crypto source identity differs from the pinned archive; rebuild make native-crypto.' >&2
   exit 1
 fi
+executable=arya
+case $(uname -s) in CYGWIN*) executable=arya.exe;; esac
 mkdir -p "$destination/docs"
-cp "$root/.build/independent/arya" "$destination/arya"
+cp "$root/.build/independent/$executable" "$destination/$executable"
+if test "$executable" = arya.exe; then
+  cygcheck "$destination/$executable" > "$destination/WINDOWS-DEPENDENCIES.txt"
+fi
 cp -R "$root/.build/independent/lib" "$root/.build/independent/stdlib" "$destination/"
 # Editor transports execute in their host's JavaScript environment. Keep them
 # outside the standalone SDK, even if native-editor was built in this checkout.
@@ -47,7 +52,7 @@ sh "$root/native/bootstrap/copy-documentation.sh" sdk "$root" "$destination"
   printf 'assembledAtUtc: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf 'host: %s\n' "$(uname -srm)"
   printf 'version: %s\n' "$(cat "$root/native/VERSION")"
-  printf 'compilerSha256: %s\n' "$(shasum -a 256 "$destination/arya" | awk '{print $1}')"
+  printf 'compilerSha256: %s\n' "$(shasum -a 256 "$destination/$executable" | awk '{print $1}')"
   printf 'generatedCSha256: %s\n' "$(shasum -a 256 "$root/.build/independent/arya.c" | awk '{print $1}')"
   printf 'stageTwoCSha256: %s\n' "$(shasum -a 256 "$root/.build/independent/stage2.c" | awk '{print $1}')"
   if cmp -s "$root/.build/independent/stage2.c" "$root/.build/independent/arya.c"; then
@@ -73,4 +78,21 @@ Native editor protocol: ./arya lsp --stdio
 The optional VS Code adapter is a separately built VSIX, outside this SDK.
 Read docs/README.md and manifest.json for the native profile and limits.
 TEXT
+if test "$executable" = arya.exe; then
+  cat >> "$destination/README.txt" <<'WINDOWS'
+
+Windows/Cygwin package
+
+The compiler is arya.exe, a native Windows PE executable. Use a matching
+installed Cygwin environment with gcc-core/gcc-g++ for compilation. Keep its
+runtime DLLs (including cygwin1.dll) reachable through the native Windows PATH;
+this archive does not redistribute those DLLs. WINDOWS-DEPENDENCIES.txt records
+the build host dependency inspection; run cygcheck arya.exe on your machine.
+
+From a Cygwin shell: sh install.sh "$PWD" --prefix "$HOME/.local"
+For native Windows editors configure the real installed arya.exe path printed
+by the installer, not the Cygwin-only command symlink. This package is not an
+MSVC or standalone MinGW SDK. Platform qualification remains in the manifest.
+WINDOWS
+fi
 (cd "$destination" && find . -type f ! -path './SHA256SUMS' -print | LC_ALL=C sort | while IFS= read -r filename; do shasum -a 256 "$filename"; done > SHA256SUMS)

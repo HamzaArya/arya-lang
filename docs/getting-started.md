@@ -53,7 +53,7 @@ Run `arya check main.arya`, then `arya run main.arya`. Imports stay within the e
 
 ## Compose records
 
-The alpha.3 SDK supports shorthand fields, string computed keys and record spread:
+The 2.0.0 SDK supports shorthand fields, string computed keys and record spread:
 
 ```arya
 const currency = "AFN"
@@ -87,7 +87,10 @@ print(JSON.stringify(options))
 | HTTP API | `arya create my-api --template api` | Validated native HTTP endpoints |
 | Website | `arya create my-web --template web` | Native HTTP backend with browser assets |
 | UI | `arya create my-ui --template ui` | Declarative browser UI with native routes |
-| macOS desktop | `arya create my-desktop --template desktop` | AppKit/WebKit window with native routes |
+| Native GUI | `arya create my-desktop --template native-gui` | Direct AppKit, GTK 3 or Win32 controls with an exact-decimal form |
+| macOS webview | `arya create my-desktop --template desktop` | AppKit/WebKit window with native routes |
+
+For direct native software, run `arya create my-desktop --template native-gui`, enter the folder and run `arya build main.arya -o my-desktop --release`. Launch that executable to use the native order-total form. The [GUI guide](native-gui.md) covers controls, events, dependencies and the larger persistent Task Desk example.
 
 Network starters handle shutdown signals. Browser content can include HTML, CSS and JavaScript; the Arya compiler and native server do not execute through Node. Desktop has additional macOS requirements, and the native HTTP server is not a complete TLS deployment solution.
 

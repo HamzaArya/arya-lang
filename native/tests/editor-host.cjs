@@ -6,6 +6,15 @@ const path = require('path');
 exports.run = async () => {
   const extension = vscode.extensions.getExtension('aryacode.arya-language');
   assert.ok(extension); await extension.activate();
+  assert.equal(vscode.workspace.getConfiguration('arya').get('compilerPath', ''), '');
+  const {resolveCompiler} = require(path.join(extension.extensionPath, 'compiler-path.cjs'));
+  const selectedCompiler = resolveCompiler({directory: extension.extensionPath});
+  if (process.env.ARYA_NATIVE_EDITOR_MODE === 'portable') {
+    assert.equal(selectedCompiler, process.platform === 'win32' ? 'arya.exe' : 'arya');
+    assert.equal(process.env.PATH.split(path.delimiter)[0], process.env.ARYA_NATIVE_EDITOR_BIN);
+  } else {
+    assert.equal(selectedCompiler, path.join(extension.extensionPath, 'native', process.platform === 'win32' ? 'arya.exe' : 'arya'));
+  }
   const root = process.env.ARYA_NATIVE_EDITOR_WORKSPACE;
   const filename = path.join(root, 'main.arya');
   const source = 'use std "ui" as ui\nconst value: number = 4   \nfn twice(n: number): number => n * 2\nprint(twice(value))\nui.text("Hello")\n';
@@ -35,5 +44,5 @@ exports.run = async () => {
   const deadline = Date.now() + 15000;
   while (Date.now() < deadline && !vscode.languages.getDiagnostics(document.uri).some(value => String(value.code).startsWith('ARYA_TYPE'))) await new Promise(resolve => setTimeout(resolve, 100));
   assert.ok(vscode.languages.getDiagnostics(document.uri).some(value => String(value.code).startsWith('ARYA_TYPE')));
-  await fs.writeFile(process.env.ARYA_NATIVE_EDITOR_REPORT, JSON.stringify({passed: true, provider: 'native Arya LSP', checks: ['hover', 'UI completion', 'definition', 'references', 'rename', 'format', 'semantic tokens', 'symbols', 'live type diagnostics']}));
+  await fs.writeFile(process.env.ARYA_NATIVE_EDITOR_REPORT, JSON.stringify({passed: true, provider: 'native Arya LSP', selectedCompiler, checks: ['default compiler selection', 'hover', 'UI completion', 'definition', 'references', 'rename', 'format', 'semantic tokens', 'symbols', 'live type diagnostics']}));
 };

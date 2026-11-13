@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "status": "qualification-in-progress",
+  "localPassed": [
+    "API contracts: 17 typed checks, byte oracle, atomic failure preservation, ASan/UBSan and GC stress",
+    "20 application check/build/smoke suites, .tmp sentinels and 60 storage entry checks",
+    "TextVault binary SHA-256 oracle and corruption detection",
+    "AppKit eight-control state and native-action gate",
+    "Six migrated desktop bundles: worker identity, deep/strict signatures, extracted ZIP checks"
+  ],
+  "pending": [
+    "Final grouped native bootstrap and regression suites",
+    "Native Linux and Windows/Cygwin qualification",
+    "Final SDK installation and VSIX host gate",
+    "Stable release and portfolio publication"
+  ],
+  "qualificationBranch": "release/2.0.0-native"
+}

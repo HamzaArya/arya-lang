@@ -24,7 +24,11 @@ for directory in /bin /usr/bin; do
 done
 env -i PATH="$workspace/tools" /bin/sh -c 'for engine in node nodejs npm npx python python3 bun deno qjs jsc js; do if command -v "$engine" >/dev/null 2>&1; then exit 1; fi; done; exit 0'
 cd "$workspace/source"
-env -i PATH="$workspace/tools" CC=/usr/bin/cc "$workspace/tools/make" native-sdk native-test native-profile-test native-distribution-test > "$workspace/verification.log" 2>&1
+if ! env -i PATH="$workspace/tools" CC=/usr/bin/cc "$workspace/tools/make" native-sdk native-test native-profile-test native-distribution-test > "$workspace/verification.log" 2>&1; then
+  tail -n 160 "$workspace/verification.log" >&2
+  printf 'Full fresh-source log: %s\n' "$workspace/verification.log" >&2
+  exit 1
+fi
 cmp .build/independent/stage2.c .build/independent/arya.c
 env -i PATH="$workspace/tools" native/bootstrap/package.sh > "$workspace/package.log" 2>&1
 mkdir "$workspace/installed SDK's location"

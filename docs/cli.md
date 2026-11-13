@@ -5,7 +5,7 @@
 | Command | Behavior |
 | --- | --- |
 | `arya --version` | Report the native compiler version |
-| `arya create folder --template cli` | Create a new or empty project; templates: cli, web, api, ui, desktop |
+| `arya create folder --template cli` | Create a new or empty project; templates: cli, native-gui, web, api, ui, desktop |
 | `arya init [folder] --template web` | Initialize a new/empty project, defaulting to the current directory |
 | `arya check file.arya [--json]` | Parse and analyze the project without executing imports |
 | `arya build file.arya -o app --release` | Generate C11, compile and publish an executable |

@@ -12,12 +12,14 @@ while test "$#" -gt 0; do
 done
 case "$prefix" in /*) ;; *) printf '%s\n' 'Installation prefix must be absolute.' >&2; exit 2;; esac
 sdk=$(CDPATH= cd -- "$sdk" && pwd)
-for file in VERSION SHA256SUMS arya; do test -f "$sdk/$file" || { printf '%s\n' "Missing SDK file: $file" >&2; exit 1; }; done
+os=$(uname -s | tr '[:upper:]' '[:lower:]')
+executable=arya
+case "$os" in darwin|linux) ;; cygwin*) os=windows-cygwin; executable=arya.exe;; *) printf '%s\n' 'Use macOS, Linux, or a Cygwin shell on Windows for this installer.' >&2; exit 1;; esac
+
+for file in VERSION SHA256SUMS "$executable"; do test -f "$sdk/$file" || { printf '%s\n' "Missing SDK file: $file" >&2; exit 1; }; done
 test -d "$sdk/lib" && test -d "$sdk/stdlib" || { printf '%s\n' 'SDK lib/ and stdlib/ are required.' >&2; exit 1; }
 version=$(cat "$sdk/VERSION")
 case "$version" in ''|*[!0-9A-Za-z.+-]*) printf '%s\n' 'Invalid SDK version.' >&2; exit 1;; esac
-os=$(uname -s | tr '[:upper:]' '[:lower:]')
-case "$os" in darwin|linux) ;; *) printf '%s\n' 'This installer supports macOS and Linux. Use the platform-specific Windows installation instructions.' >&2; exit 1;; esac
 arch=$(uname -m)
 case "$arch" in aarch64) arch=arm64;; x86_64) arch=x64;; esac
 if command -v shasum >/dev/null 2>&1; then checksum=shasum
@@ -42,19 +44,25 @@ stage=$(mktemp -d "$prefix/.arya-install.XXXXXX")
 verify "$sdk"
 mkdir -p "$prefix/lib/arya" "$prefix/bin"
 target=$prefix/lib/arya/$version-$os-$arch
+native_editor_path=
+if test "$os" = windows-cygwin; then native_editor_path=$(cygpath -w "$target/$executable"); fi
 launcher=$prefix/bin/arya
 if test -e "$target" || test -L "$target"; then printf '%s\n' "SDK version is already installed: $target" >&2; exit 1; fi
 if test -L "$launcher"; then
-  case "$(readlink "$launcher")" in "$prefix/lib/arya/"*/arya) ;; *) printf '%s\n' "Refusing to replace an unmanaged launcher: $launcher" >&2; exit 1;; esac
+  case "$(readlink "$launcher")" in "$prefix/lib/arya/"*/arya|"$prefix/lib/arya/"*/arya.exe) ;; *) printf '%s\n' "Refusing to replace an unmanaged launcher: $launcher" >&2; exit 1;; esac
 elif test -e "$launcher"; then printf '%s\n' "Refusing to replace an existing file: $launcher" >&2; exit 1; fi
 cp -R "$sdk" "$stage/sdk"
 verify "$stage/sdk"
-case "$("$stage/sdk/arya" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK executable failed its version check on this host.' >&2; exit 1;; esac
+case "$("$stage/sdk/$executable" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK executable failed its version check on this host.' >&2; exit 1;; esac
 mv "$stage/sdk" "$target"
-ln -s "$target/arya" "$stage/arya"
+ln -s "$target/$executable" "$stage/arya"
 if ! mv -f "$stage/arya" "$launcher"; then
   printf '%s\n' "SDK installed at $target but launcher update failed. Existing command was preserved." >&2
   exit 1
 fi
 printf 'Installed Arya %s at %s\n' "$version" "$target"
 printf 'Run: "%s" --version\nAdd %s to PATH if needed.\n' "$launcher" "$prefix/bin"
+if test "$os" = windows-cygwin; then
+  printf 'Native Windows editor compiler: %s\n' "$native_editor_path"
+  printf '%s\n' 'Keep the matching Cygwin bin directory on the native Windows PATH for runtime DLLs.'
+fi

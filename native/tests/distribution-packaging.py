@@ -12,9 +12,9 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 checks = 0
 
-def run(*args, good=True):
+def run(*args, good=True, env=None):
     global checks
-    result = subprocess.run([str(arg) for arg in args], text=True, capture_output=True, timeout=40)
+    result = subprocess.run([str(arg) for arg in args], text=True, capture_output=True, timeout=40, env=env)
     assert (result.returncode == 0) == good, result.stdout + result.stderr
     checks += 1
     return result
@@ -107,4 +107,30 @@ with tempfile.TemporaryDirectory(prefix='arya-distribution-test-') as temporary:
     assert (unmanaged / 'bin/arya').read_text() == 'preserve me'
     run('sh', installer, source, '--prefix', 'relative', good=False)
     assert not list(prefix.glob('.arya-install*'))
+    # Host-routing fixtures only: shell scripts named .exe do not qualify Windows.
+    tools = base / 'cygwin fixture tools'
+    tools.mkdir()
+    (tools / 'uname').write_text('#!/bin/sh\ncase "$1" in -m) printf "%s\\n" x86_64;; *) printf "%s\\n" CYGWIN_NT-10.0-20348;; esac\n')
+    (tools / 'cygpath').write_text('#!/bin/sh\nprintf "%s\\n" "C:/fixture/arya.exe"\n')
+    for tool in tools.iterdir(): tool.chmod(0o755)
+    cygwin_env = {**os.environ, 'PATH': str(tools) + os.pathsep + os.environ['PATH']}
+    windows_prefix = base / 'Windows Cygwin installation'
+    previous = None
+    for version in ['2.0.0', '2.0.1']:
+        windows_sdk = base / ('Windows SDK ' + version)
+        sdk(windows_sdk, version)
+        (windows_sdk / 'arya').rename(windows_sdk / 'arya.exe')
+        checksum(windows_sdk)
+        result = run('sh', installer, windows_sdk, '--prefix', windows_prefix, env=cygwin_env)
+        assert 'Native Windows editor compiler: C:/fixture/arya.exe' in result.stdout
+        windows_launcher = windows_prefix / 'bin/arya'
+        active_windows = windows_launcher.readlink()
+        assert active_windows.name == 'arya.exe'
+        assert active_windows.parent.name == version + '-windows-cygwin-x64'
+        if previous is not None: assert previous.is_file()
+        previous = active_windows
+    run('sh', installer, windows_sdk, '--prefix', windows_prefix, env=cygwin_env, good=False)
+    assert windows_launcher.readlink() == active_windows
+    assert not list(windows_prefix.glob('.arya-install*'))
+
 print(json.dumps({'passed': True, 'commands': checks, 'fixturesOnly': True}))

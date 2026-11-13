@@ -1,0 +1,30 @@
+use std "process" as process
+use std "debug" as debug
+use std "async" as tasks
+
+if args[0] == "child" {
+  debug.assert(args[1] == "space and 'quote' and \"double\"")
+  debug.assert(args[2] == "کابل café")
+  debug.assert(args[3] == "")
+  debug.assert(process.env("ARYA_PROCESS_PROBE") == "inherited")
+  process.exit(number(args[4]))
+}
+
+fn child(executable, status) {
+  return process.run([executable, "child", "space and 'quote' and \"double\"", "کابل café", "", str(status)])
+}
+debug.assert(child(process.executable(), 7) == 7)
+debug.assert(child(args[0], 0) == 0)
+async fn fromTask() {
+  await tasks.sleep(0)
+  for index in range(4) { debug.assert(child(process.executable(), index) == index) }
+  return child(args[0], 23)
+}
+debug.assert(await fromTask() == 23)
+debug.assert(process.run(["/arya-nonexistent-process-for-test"]) == 127)
+for input in [[], [42], ["invalid\0command"]] {
+  let rejected = false
+  try { process.run(input) } catch error { rejected = error.name == "TypeError" }
+  debug.assert(rejected)
+}
+print("process.run: argv, Unicode, PATH, environment, exit status and async task spawning passed")

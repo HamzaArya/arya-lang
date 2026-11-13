@@ -1,0 +1,104 @@
+use std "debug" as debug
+use std "runtime" as runtime
+let checks: number = 0
+fn equal(actual: any, expected: any): void {
+  debug.assert(runtime.deepEqual(actual, expected), "Collection mutation mismatch: " + str(checks))
+  checks += 1
+}
+fn mapOf(count) { let map = new Map(); for value in range(count) { map.set(value, value * 10) }; return map }
+
+// Insertion must not compact entries behind a live numeric loop cursor.
+let set = new Set(range(64))
+let seen = []
+for value in set {
+  seen.push(value)
+  if value == 40 { for key in range(41) { set.delete(key) }; set.add(64) }
+  runtime.collect()
+}
+equal(seen, range(65)); equal(set.size, 24)
+let map = mapOf(64)
+seen = []
+for pair in map {
+  seen.push(pair)
+  if pair[0] == 40 { for key in range(41) { map.delete(key) }; map.set(64, 640); map.set(50, 999) }
+  runtime.collect()
+}
+let expected = []
+for key in range(65) { let value = key * 10; if key == 50 { value = 999 }; expected.push([key, value]) }
+equal(seen, expected); equal(map.size, 24)
+
+// clear removes pending entries, while new entries remain visible to this loop.
+set = new Set([0, 1, 2]); seen = []
+for value in set { seen.push(value); if value == 0 { set.clear(); set.add(3); set.add(4) } }
+equal(seen, [0, 3, 4]); equal(set.values(), [3, 4])
+map = mapOf(3); seen = []
+for pair in map { seen.push(pair); if pair[0] == 0 { map.clear(); map.set(3, 30); map.set(4, 40) } }
+equal(seen, [[0, 0], [3, 30], [4, 40]])
+set = new Set([1, 2]); seen = []
+for value in set { seen.push(value); if seen.length == 1 { set.delete(1); set.add(1) } }
+equal(seen, [1, 2, 1])
+
+// Closing an inner traversal must not release the outer traversal's guard.
+set = new Set(range(64)); seen = []
+for value in set {
+  seen.push(value)
+  if value == 40 {
+    for inner in set { if inner == 2 { break } }
+    for key in range(41) { set.delete(key) }; set.add(64)
+  }
+}
+equal(seen, range(65))
+set = new Set(range(64)); seen = []
+for value in set {
+  if value < 40 { seen.push(value); continue }
+  seen.push(value)
+  if value == 40 {
+    try { for inner in set { throw "inner failure" } } catch error { equal(error, "inner failure") }
+    for key in range(41) { set.delete(key) }; set.add(64)
+  }
+}
+equal(seen, range(65))
+fn returnFrom(values) { for value in values { return value }; return -1 }
+set = new Set(range(64)); seen = []
+for value in set {
+  seen.push(value)
+  if value == 40 { equal(returnFrom(set), 0); for key in range(41) { set.delete(key) }; set.add(64) }
+}
+equal(seen, range(65))
+set = new Set(range(64)); seen = []
+set.forEach(fn(value) {
+  seen.push(value)
+  if value == 40 { for inner in set { break }; for key in range(41) { set.delete(key) }; set.add(64) }
+})
+equal(seen, range(65))
+
+// Array.from invokes user code while its input iterator remains active.
+set = new Set(range(64))
+let converted = Array.from(set, fn(value) {
+  if value == 40 { for key in range(41) { set.delete(key) }; set.add(64) }
+  runtime.collect(); return value
+})
+equal(converted, range(65))
+map = mapOf(3)
+converted = Array.from(map, fn(pair) { if pair[0] == 0 { map.clear(); map.set(9, 90) }; return pair })
+equal(converted, [[0, 0], [9, 90]])
+try { Array.from(map, fn(pair) { throw "mapper failure" }) } catch error { equal(error, "mapper failure") }
+map.clear(); map.set(5, 50); equal(Array.from(map), [[5, 50]])
+equal(new Set(set).values(), range(41, 65)); equal(new Map(map).entries(), [[5, 50]])
+equal([...set], range(41, 65)); equal([...map], [[5, 50]])
+equal(Array.from(new Set()), []); equal([...new Map()], [])
+
+// A completed or broken loop still has compiler temporaries in this frame.
+// Closed traversals must permit tombstone reclamation without waiting for GC.
+fn releasedStorage(stopEarly) {
+  let values = new Set(range(64))
+  for value in values { if stopEarly { break } }
+  values.clear(); values.add(0)
+  let before = runtime.collect()
+  for index in range(1024) { values.clear(); values.add(index) }
+  let after = runtime.collect()
+  debug.assert(after <= before + 4096, "Closed collection loop retains tombstones")
+  equal(values.values(), [1023])
+}
+releasedStorage(false); releasedStorage(true)
+print("collection mutation checks:", checks)

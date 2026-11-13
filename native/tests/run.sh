@@ -77,11 +77,16 @@ printf '%s\n' 'relocation: compiler and decimal program work without Node/Python
 if command -v otool >/dev/null 2>&1; then otool -L "$tmp/sdk/arya" "$tmp/sdk/application" > "$tmp/dependencies"; else ldd "$tmp/sdk/arya" "$tmp/sdk/application" > "$tmp/dependencies"; fi
 if grep -Ei 'libnode|libpython|libv8|quickjs|javascriptcore' "$tmp/dependencies"; then exit 1; fi
 printf '%s\n' 'native dependencies: no embedded JavaScript or Python runtime'
-# Exercise the same generated code with memory/UB instrumentation.
-"$compiler" build "$root/native/tests/fixtures/core.arya" -o "$tmp/sanitized" --sanitize --debug > "$tmp/sanitize.log" 2>&1
+# Exercise memory/UB instrumentation, or the explicitly recorded Cygwin debug gate.
+. "$root/native/tests/sanitizer-options.sh"
+set -- --debug --sanitize
+if test "$arya_test_second_mode" = debug; then set -- --debug; fi
+"$compiler" build "$root/native/tests/fixtures/core.arya" -o "$tmp/sanitized" "$@" > "$tmp/sanitize.log" 2>&1 || { cat "$tmp/sanitize.log" >&2; exit 1; }
 env -i PATH=/nonexistent ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 ARYA_GC_STRESS=1 "$tmp/sanitized" > "$tmp/sanitized.actual"
 diff -u "$root/native/tests/fixtures/core.expected" "$tmp/sanitized.actual"
-printf '%s\n' 'ASan/UBSan with GC stress passed (leak detection not run)'
+if test "$arya_test_second_mode" = sanitized; then
+  printf '%s\n' 'ASan/UBSan with GC stress passed (leak detection not run)'
+else printf '%s\n' 'Core debug with GC stress passed; sanitizer instrumentation unavailable on this Cygwin toolchain.'; fi
 
 "$compiler" build "$root/native/examples/calculation-worker.arya" -o "$tmp/worker" --release > "$tmp/worker.log" 2>&1
 env -i PATH=/nonexistent "$tmp/worker" < "$root/native/tests/fixtures/bridge.input" > "$tmp/worker.actual"

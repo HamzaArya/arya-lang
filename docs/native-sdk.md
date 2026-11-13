@@ -8,7 +8,8 @@ Use [Install Arya](installing.md) for platform status, source builds, transferri
 
 | Path in an extracted SDK | Purpose |
 | --- | --- |
-| `arya` | Native compiler and development tools |
+| `arya` (`arya.exe` on Windows) | Native compiler and development tools |
+| `install.sh` | Checksum-verified versioned macOS/Linux SDK installation |
 | `lib/` | Native archives and headers used when building applications |
 | `stdlib/` | Arya standard-library modules |
 | `docs/` | Guides, API contracts and recorded evidence |
@@ -38,12 +39,21 @@ A normal build produces the executable, generated `.c` source and a `.NOTICE` fi
 | Web/UI | Application assets and a browser where appropriate; the native server is HTTP/1 without built-in TLS |
 | Python bridge | Explicitly selected Python interpreter and required Python modules |
 | MySQL | Separately supplied MySQL C client libraries and application connection configuration |
-| Desktop | macOS AppKit/WebKit system frameworks |
+| Direct GUI (`gui`) | AppKit/Cocoa on macOS; GTK 3 on Linux; Win32 controls and Cygwin runtime on Windows |
+| Webview desktop (`desktop`) | macOS AppKit/WebKit system frameworks |
 | Authentication | Bundled OpenSSL; macOS local authentication additionally uses Foundation/LocalAuthentication/Security and the application's signing/Keychain configuration |
 
 A release executable does not need the Arya compiler, SDK, Node or a C compiler just to run. It still needs its application files, working directory and selected external dependencies. The compiler embeds imported Arya module code into the program; arbitrary assets and foreign modules are separate deployment concerns. A binary for one OS/CPU is not a portable replacement for builds on other targets.
 
 MySQL builds select the C client SDK with `ARYA_MYSQL_PREFIX`; its `include/mysql.h` and `lib/` layout must match the compiler's requirements. Explicit Python calls can select an interpreter through `ARYA_PYTHON` or the bridge options. Read each feature's contract in the [standard library](standard-library.md) and [native profile](native-profile.md).
+
+The optional Python bridge is not qualified on Windows/Cygwin. Its subprocess
+setup still uses `fork`, which cannot safely clone Arya's asynchronous task
+stack on that platform. Native compiler, CLI and GUI programs do not use this
+bridge; `process.run` uses Cygwin's direct process-spawn API. Windows release
+gates record sanitizer availability separately, because the Cygwin GCC package
+may not supply ASan/UBSan. In that case, its focused gates run release/debug
+builds with GC stress and explicitly report the instrumentation limitation.
 
 ## Editors
 
@@ -63,7 +73,7 @@ make native-editor
 ./bin/arya editor install --editor code
 ```
 
-The editor selector also accepts `aryacode`, `cursor`, `codium` and `windsurf`; see [CLI options](cli.md). The separately built adapter includes a native SDK and calls `arya lsp --stdio`. Set the editor's `arya.compilerPath` to use another native compiler. Its transport runs in the editor's JavaScript host and is excluded from the standalone SDK. An SDK without that separate adapter can still serve any compatible LSP client.
+The editor selector also accepts `aryacode`, `cursor`, `codium` and `windsurf`; see [CLI options](cli.md). The bundled adapter includes a platform-matching native SDK; the portable adapter resolves an installed compiler. Both call `arya lsp --stdio`. Set the editor's `arya.compilerPath` to use another native compiler. Its transport runs in the editor's JavaScript host and is excluded from the standalone SDK. An SDK without that separate adapter can still serve any compatible LSP client.
 
 ## Exact data and boundaries
 

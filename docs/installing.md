@@ -158,8 +158,19 @@ controls; the runtime also depends on Cygwin DLLs, including `cygwin1.dll`.
 Use `cygcheck` on each executable to identify its complete dependency set.
 An installed matching Cygwin environment supplies those dependencies. Do not
 copy an arbitrary DLL version into a release and assume it is compatible.
-No standalone Windows installer is qualified yet; the POSIX SDK installer above
-intentionally accepts only macOS and Linux.
+The SDK installer also has an explicit Cygwin-shell route. After extracting a
+`windows-cygwin-x64` archive and verifying its checksum, run from that SDK:
+
+```sh
+sh install.sh "$PWD" --prefix "$HOME/.local"
+```
+
+It installs the actual `arya.exe` under a versioned `windows-cygwin` directory
+and creates a Cygwin command symlink. It prints the real Windows executable
+path for native editors. The archive does not bundle Cygwin DLLs; keep the
+matching Cygwin `bin` directory on the native Windows PATH. This is not an
+MSVC, standalone MinGW, or DLL-free installer. Qualification remains pending
+until the Windows release runner passes its installation/relocation gate.
 
 For native Windows VS Code, set `arya.compilerPath` to the actual Windows path
 of `arya.exe`, not a Cygwin-only symlink or `/cygdrive/...` path. In Cygwin,

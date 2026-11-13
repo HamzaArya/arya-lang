@@ -10,6 +10,9 @@ import tempfile
 
 root = Path(__file__).resolve().parents[2]
 compiler = Path(os.environ.get('ARYA_NATIVE_BIN', root / '.build/independent/arya')).resolve()
+sanitizers = os.environ.get('ARYA_TEST_SANITIZERS') != 'unavailable'
+if not sanitizers and sys.platform != 'cygwin':
+    raise SystemExit('Sanitizer fallback requires the recorded Cygwin capability gate.')
 prefix = 'const typed: boolean = true\n'
 decimal = 'use std "decimal" as decimal\n'
 web = 'use std "web" as web\nuse std "process" as process\n'
@@ -56,7 +59,7 @@ with tempfile.TemporaryDirectory(prefix='api-contracts-', dir=root / '.build') a
     assert json.loads(run([compiler, 'check', probe, '--json']).stdout)['ok']
     for variant in ('optimized', 'reference'):
         binary = temporary / variant
-        options = ['--debug', '--sanitize']
+        options = ['--debug', *(['--sanitize'] if sanitizers else [])]
         if variant == 'reference':
             options += ['--no-data-opt']
         run([compiler, 'build', root / 'native/tests/fixtures/api-contracts.arya', '-o', binary, *options])
@@ -92,4 +95,5 @@ with tempfile.TemporaryDirectory(prefix='api-contracts-', dir=root / '.build') a
         assert (data / 'atomic-failed.bin').read_bytes() == b'preserve'
         assert not list(data.glob('*.stage-*'))
         print(f'{variant}: {result.stdout.strip()}')
-print(f'API contracts: {len(cases)} typed checks, dynamic compatibility, independent byte oracle; ASan/UBSan + GC stress passed')
+instrumentation = 'ASan/UBSan + GC stress' if sanitizers else 'debug + GC stress (Cygwin ASan/UBSan unavailable)'
+print(f'API contracts: {len(cases)} typed checks, dynamic compatibility, independent byte oracle; {instrumentation} passed')

@@ -5,6 +5,8 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
 version=$(cat "$root/native/VERSION")
 case "$version" in ''|*[!0-9A-Za-z.+-]*) printf '%s\n' 'Invalid native version' >&2; exit 1;; esac
 os=$(uname -s | tr '[:upper:]' '[:lower:]')
+executable=arya
+case "$os" in cygwin*) os=windows-cygwin; executable=arya.exe;; esac
 arch=$(uname -m)
 case "$arch" in aarch64) arch=arm64;; x86_64) arch=x64;; esac
 name=arya-native-$version-$os-$arch
@@ -17,7 +19,7 @@ mkdir -p "$root/.build" "$package_directory"
 stage=$(mktemp -d "$root/.build/native-package.XXXXXX")
 trap 'rm -rf "$stage"' EXIT HUP INT TERM
 sh "$root/native/bootstrap/stage-sdk.sh" "$stage/$name"
-case "$("$stage/$name/arya" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK binary and source version differ' >&2; exit 1;; esac
+case "$("$stage/$name/$executable" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK binary and source version differ' >&2; exit 1;; esac
 COPYFILE_DISABLE=1 tar -czf "$stage/$name.tar.gz" -C "$stage" "$name"
 digest=$(shasum -a 256 "$stage/$name.tar.gz" | awk '{print $1}')
 printf '%s  %s.tar.gz\n' "$digest" "$name" > "$stage/checksum"
