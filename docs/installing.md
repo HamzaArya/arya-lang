@@ -103,7 +103,8 @@ compilation does not need Node, npm or Python. Optional reference-test controlle
 can require Python. The source archive excludes the optional editor-host adapter;
 use a published VSIX, native LSP, or a full repository checkout to package it.
 
-Before distributing a build, run the required checks on the target:
+Before distributing a macOS or Linux build, run the required checks on that target.
+Windows/Cygwin uses the separate capability-aware route below.
 
 ```sh
 make check
@@ -135,7 +136,7 @@ compilers, development headers, make, Perl, checksum tools and GTK 3 packages.
 Building on a newer distribution does not establish compatibility with every
 older libc or GTK version. Linux GUI applications need a graphical display.
 
-### Windows x64 with Cygwin — qualification pending
+### Windows x64 with Cygwin
 
 Use the official [Cygwin installer](https://www.cygwin.com/install.html) and select
 `gcc-core`, `gcc-g++`, `make`, `perl`, `libcrypt-devel`, `libiconv-devel`,
@@ -143,15 +144,29 @@ Use the official [Cygwin installer](https://www.cygwin.com/install.html) and sel
 and `coreutils`. The base install alone does not contain every build dependency.
 The setup program installs and updates these packages.
 
+Install Cygwin `python3` as well to run the release test controllers below.
+Python is a test dependency here; the native compiler and native CLI/GUI
+applications do not need it.
+
 Open a Cygwin terminal in the source directory, then run:
 
 ```sh
 make native-sdk CC=gcc CXX=g++
 ./.build/independent/arya.exe --version
-sh native/tests/run.sh
-sh native/tests/gui.sh
+sh native/bootstrap/windows-path-test.sh
+sh native/bootstrap/windows-runtime-test.sh
+sh native/bootstrap/windows-sdk-test.sh
 cygcheck .build/independent/arya.exe
 ```
+
+These checks exercise the actual Cygwin DLL/toolchain search path, core and
+direct Win32 behavior, API contracts, SDK archive relocation and installation.
+The controller probes sanitizer support and records release/debug plus GC
+stress when Cygwin's GCC lacks ASan/UBSan. It also records unsupported file-size
+fault injection separately; these are not claimed as Windows sanitizer or
+fault-injection passes. Use this route instead of the Unix `make check` and
+`make native-clean-test` targets. The full release workflow additionally checks
+the native Windows editor transport using its separate Node test controller.
 
 The compiler and applications are Windows `.exe` files. `std gui` uses Win32
 controls; the runtime also depends on Cygwin DLLs, including `cygwin1.dll`.

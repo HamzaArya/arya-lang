@@ -2,7 +2,7 @@
 
 Build the standalone SDK with `make native-sdk`. Build the optional editor-host adapter separately with `make native-editor`. The primary implementation is `native/compiler` (Arya frontend and tooling), `native/runtime` (C runtime), and `native/libraries` (Arya standard modules). `bin/arya` launches the checkout's native compiler. The `compat/node` tree preserves the prior implementation and does not participate in native builds.
 
-Run `make native-test` for core execution, publication safety, the financial protocol and optimized/reference function calls. Run `make native-profile-test` for standard-library ASan/UBSan and collector-stress checks. `make native-clean-test` rebuilds a source-only snapshot, excludes Node/Python from PATH, compares compiler generations, packages the standalone SDK (without editor-host JavaScript) and builds/runs relocated applications. Keep those tools absent from native build scripts.
+On macOS/Linux, run `make native-test` for core execution, publication safety, the financial protocol and optimized/reference function calls. Run `make native-profile-test` for standard-library ASan/UBSan and collector-stress checks. `make native-clean-test` rebuilds a source-only snapshot, excludes Node/Python from PATH, compares compiler generations, packages the standalone SDK (without editor-host JavaScript) and builds/runs relocated applications. Keep those tools absent from native build scripts. Windows contributors use the [Cygwin validation route](docs/installing.md#windows-x64-with-cygwin), which probes platform capabilities before running its core, GUI and SDK installation gates.
 
 Optional independent controllers use Python as a test oracle:
 

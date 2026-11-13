@@ -1,0 +1,20 @@
+[
+  {
+    "filename": "arya-language-2.0.0-darwin-arm64.vsix",
+    "sha256": "ad67bbf7d8b70fe641aa1c71f3131ea047423b4004348dd58e4149339beea0c7",
+    "bytes": 6837742,
+    "editorSourceFilesMatched": 37,
+    "qualifiedSDKPayloadFilesMatched": 169,
+    "unchangedActualHostQualification": true,
+    "nativeNoticesMatched": 3,
+    "platformMetadataMatched": true
+  },
+  {
+    "filename": "arya-language-2.0.0-portable.vsix",
+    "sha256": "3f14e6cab04c0d50bd297906e0229bdc5dcf66ee2787bb78ef9d62548baef783",
+    "bytes": 668490,
+    "editorSourceFilesMatched": 37,
+    "qualifiedSDKPayloadFilesMatched": 0,
+    "unchangedActualHostQualification": true
+  }
+]

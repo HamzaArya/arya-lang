@@ -1,0 +1,11 @@
+{
+  "darwin-arm64": {
+    "sourceCommit": "0dc38b789df2840aa2977769065479c578e70649",
+    "run": 43470021848,
+    "job": 132039162194,
+    "artifact": 14061468049,
+    "compilerSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+    "inventorySHA256": "ea02ce36da1fb40b2f84432a42726e937176a14ec0374af89b4a3fa4468d665f",
+    "archiveSHA256": "04f8a197effdcde731bfb11447736c0cf779255f35a1d356c1066841dff2a6b5"
+  }
+}

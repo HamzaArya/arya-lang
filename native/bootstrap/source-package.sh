@@ -25,7 +25,8 @@ cat > "$source/README.txt" <<'TEXT'
 Arya native source distribution
 
 Build: make native-sdk
-Check: make check && make native-clean-test
+Check (macOS/Linux): make check && make native-clean-test
+Check (Windows/Cygwin): use the platform-specific validation in docs/installing.md
 Run:   ./bin/arya --version
 
 Read docs/installing.md for prerequisites, other-computer workflows and the

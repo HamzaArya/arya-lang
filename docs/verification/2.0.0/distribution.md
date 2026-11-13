@@ -37,6 +37,40 @@ same editor adapter bytes as the checkout. The bundled compiler exactly matches
 the qualified SDK. Package SHA-256 hashes, measured byte sizes, installed editor
 version and individual gate results are recorded in the JSON evidence.
 
+The exact host-tested VSIX bytes were retained for final publication instead of
+repacking them with new ZIP timestamps. [Final payload comparison](vsix-payload-verification.json)
+matched all 37 editor source files in each package and all 169 compiler/library
+files in the bundled package, plus its notices and platform/version metadata.
+SDK installer and documentation files are not embedded in these VSIX packages.
+
+## Refreshing final SDK metadata
+
+The release can refresh installer, qualification and documentation files around
+an existing qualified SDK without rebuilding its runtime. The retained
+[assembly controller](reassemble-qualified-sdk.py) uses explicit
+[qualified SDK pins](sdk-assembly-inputs.json), verifies the original complete
+checksum inventory and every selected native build input, then copies into a
+new destination. It rejects changes to compiler, libraries, standard libraries,
+examples, original `BUILD-INFO.txt` or original `SOURCE-SHA256SUMS`.
+
+From the frozen full repository checkout:
+
+```sh
+python3 docs/verification/2.0.0/reassemble-qualified-sdk.py \
+  --platform darwin-arm64 \
+  --sdk /path/to/qualified/arya-native-2.0.0-darwin-arm64 \
+  --destination /new/stage/arya-native-2.0.0-darwin-arm64
+```
+
+Linux uses `--platform linux-x64` with its separately qualified input profile.
+The controller does not execute a foreign binary. Packaging inputs must have
+identical inventories and hashes before and after the copy. Separate
+`ASSEMBLY-INFO.json` and `ASSEMBLY-SOURCE-SHA256SUMS` record the later packaging
+source, while the original compiler-build evidence remains unchanged. The new
+SDK checksum inventory covers every final file. A native installer smoke and
+archive verification are still required separately; assembly alone does not
+claim those results. Windows uses its native CI packaging and installer gates.
+
 ## Problems found and resolved
 
 The first portable host attempt exceeded macOS's Unix-domain socket path limit
