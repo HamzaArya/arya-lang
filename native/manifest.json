@@ -551,7 +551,7 @@
     }
   },
   "optionalDependencies": {
-    "python": "An explicit Python import/call needs a separately installed Python interpreter. Core compilation/execution never launches it.",
+    "python": "An explicit Python import/call needs a separately installed Python interpreter. Core compilation/execution never launches it. Windows/Cygwin Python interoperability is unsupported in 2.0.0 and raises ARYA_PYTHON_PLATFORM before process launch.",
     "mysql": "A separately installed MySQL C client SDK selected by ARYA_MYSQL_PREFIX; not bundled. Prepared statements, exact DECIMAL/BIGINT strings and bounded pools.",
     "desktop": "macOS AppKit/WebKit system frameworks, linked only by explicit desktop imports.",
     "gui": "Direct native controls, linked only by explicit gui imports: AppKit/Cocoa on macOS, GTK 3 on Linux, Win32 user32/gdi32/comctl32 on Windows. Windows Cygwin builds additionally depend on cygwin1.dll; a standalone MinGW runtime is not qualified. See docs/native-gui.md for measured platform status.",

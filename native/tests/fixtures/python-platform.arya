@@ -1,0 +1,25 @@
+use python "math" as math
+use std "python" as python
+use std "debug" as debug
+
+fn expected(error) {
+  debug.assert(error.code == "ARYA_PYTHON_PLATFORM", "Expected explicit platform error")
+  debug.assert(error.message.includes("Windows/Cygwin"))
+}
+let caught = false
+try { math.sqrt(9) } catch error { expected(error); caught = true }
+debug.assert(caught)
+async fn rejects(work) {
+  let failed = false
+  try { await work() } catch error { expected(error); failed = true }
+  debug.assert(failed)
+}
+let client = python.client({interpreter: args[0]})
+await rejects(fn() { return client.info() })
+await rejects(fn() { return client.call(math.sqrt, [9]) })
+await rejects(fn() { return client.map(math.sqrt, [9, 16]) })
+let bound = client.bind(math)
+await rejects(fn() { return bound.sqrt(9) })
+debug.assert(client.stats().active == 0 and client.stats().queued == 0)
+await client.close()
+print("Windows Python bridge: five entry paths rejected clearly before process launch")

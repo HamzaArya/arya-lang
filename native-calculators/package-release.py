@@ -58,9 +58,13 @@ def main():
               'build_report': os.path.relpath(build_report, ROOT),
               'build_report_sha256': sha(build_report),
               'compiler_version': verified['compiler_version'],
-              'compiler_sha256': verified['compiler_sha256'], 'projects': []}
+              'compiler_command': verified.get('compiler_command'),
+              'compiler_command_sha256': verified.get('compiler_command_sha256', verified.get('compiler_sha256')),
+              'projects': []}
     for row in verified['projects']:
         assert row['status'] == 'passed'
+        for filename, digest in row['inputs_sha256'].items():
+            assert sha(ROOT / row['path'] / filename) == digest, 'Source changed after calculator verification'
         app = (ROOT / row['app']).resolve()
         assert app.parent == package
         with (app / 'Contents/Info.plist').open('rb') as handle:

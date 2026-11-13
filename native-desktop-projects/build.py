@@ -39,8 +39,8 @@ def main():
     stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ'); logs=ROOT/'reports'/stamp;logs.mkdir(parents=True)
     build=ROOT/'.build';build.mkdir(exist_ok=True);dist=opt.output.expanduser().resolve() if opt.output else ROOT/'dist';dist.mkdir(parents=True,exist_ok=True)
     host=build/'NativeHost';host_source=ROOT/'shared/NativeHost.m'
-    compiler=pathlib.Path(opt.compiler).resolve()
-    result={'date_utc':stamp,'mode':'package-only' if opt.package_only else 'check-build-test-package','app_version':opt.app_version,'output':str(dist),'host_source_sha256':sha(host_source),'compiler_version':subprocess.check_output([opt.compiler,'--version'],text=True).strip(),'compiler_sha256':sha(compiler),'projects':[]}
+    compiler_command=pathlib.Path(shutil.which(opt.compiler) or opt.compiler).resolve()
+    result={'date_utc':stamp,'mode':'package-only' if opt.package_only else 'check-build-test-package','app_version':opt.app_version,'output':str(dist),'host_source_sha256':sha(host_source),'compiler_version':subprocess.check_output([opt.compiler,'--version'],text=True).strip(),'compiler_command':str(compiler_command),'compiler_command_sha256':sha(compiler_command),'projects':[]}
     result['host_build']=call(['clang','-fobjc-arc','-fmodules','-Wall','-Wextra',str(host_source),'-framework','Cocoa','-framework','UniformTypeIdentifiers','-o',str(host)],logs/'appkit-host.log')
     result['host_binary_sha256']=sha(host)
     for project in projects:
@@ -77,7 +77,7 @@ def main():
                     row['steps'].append({'command':cmd,'exit_code':r.returncode,'log':str(log.relative_to(ROOT))})
                 assert all(sha(project/name)==value for name,value in inputs.items()), 'Source changed during verification'
                 assert sha(host_source)==result['host_source_sha256'], 'Host source changed during verification'
-                assert sha(compiler)==result['compiler_sha256'], 'Compiler changed during verification'
+                assert sha(compiler_command)==result['compiler_command_sha256'], 'Compiler command changed during verification'
                 assert sha(mac/'arya-worker')==tested_worker_sha, 'Signing changed the tested worker'
                 destination=dist/app.name
                 backup=pathlib.Path(staging)/'previous.app'

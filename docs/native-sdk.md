@@ -47,10 +47,11 @@ A release executable does not need the Arya compiler, SDK, Node or a C compiler 
 
 MySQL builds select the C client SDK with `ARYA_MYSQL_PREFIX`; its `include/mysql.h` and `lib/` layout must match the compiler's requirements. Explicit Python calls can select an interpreter through `ARYA_PYTHON` or the bridge options. Read each feature's contract in the [standard library](standard-library.md) and [native profile](native-profile.md).
 
-The optional Python bridge is not qualified on Windows/Cygwin. Its subprocess
-setup still uses `fork`, which cannot safely clone Arya's asynchronous task
-stack on that platform. Native compiler, CLI and GUI programs do not use this
-bridge; `process.run` uses Cygwin's direct process-spawn API. Windows release
+The optional Python bridge is unsupported on Windows/Cygwin in 2.0.0. Python
+invocations return `ARYA_PYTHON_PLATFORM` before launching a process: its
+subprocess setup uses `fork`, which cannot safely clone an asynchronous task
+stack there. Native compiler, CLI and GUI programs do not use this bridge;
+`process.run` uses Cygwin's direct process-spawn API. Windows release
 gates record sanitizer availability separately, because the Cygwin GCC package
 may not supply ASan/UBSan. In that case, its focused gates run release/debug
 builds with GC stress and explicitly report the instrumentation limitation.
