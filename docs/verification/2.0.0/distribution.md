@@ -39,8 +39,9 @@ then the compiled program ran with the expected output.
 The downloaded [Linux SDK inspection](linux-sdk.json) records the exact compiler,
 archive, installer and checksum inventory identities. All 563 SDK files and all
 260 selected native build inputs were verified locally without executing the
-Linux binary on macOS. The installer bytes match the current checkout. This
-qualifies the Ubuntu 24.04 x64 runner environment; an ELF ABI note alone does not
+Linux binary on macOS. That inspection identifies the original archive's installer;
+the [later installer recheck](linux-installer-recheck.json) qualifies the current
+installer bytes. These results qualify the Ubuntu 24.04 x64 runner environment; an ELF ABI note alone does not
 establish compatibility with older distributions. GUI programs require GTK 3
 and a graphical display. Final metadata assembly and publication remain separate.
 

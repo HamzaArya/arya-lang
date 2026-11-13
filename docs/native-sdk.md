@@ -9,14 +9,16 @@ Use [Install Arya](installing.md) for platform status, source builds, transferri
 | Path in an extracted SDK | Purpose |
 | --- | --- |
 | `arya` (`arya.exe` on Windows) | Native compiler and development tools |
-| `install.sh` | Checksum-verified versioned macOS/Linux SDK installation |
+| `install.sh` | Checksum-verified versioned installation on macOS, Linux or Windows through a Cygwin shell |
 | `lib/` | Native archives and headers used when building applications |
 | `stdlib/` | Arya standard-library modules |
 | `docs/` | Guides, API contracts and recorded evidence |
 | `VERSION`, `manifest.json` | Version, profile, capabilities and platform limits |
-| `BUILD-INFO.txt` | Assembly and compiler/generated-C identities |
-| `SOURCE-SHA256SUMS` | Hashes of repository inputs; the source files themselves are not all bundled |
+| `BUILD-INFO.txt` | Original SDK assembly and compiler/generated-C identities |
+| `SOURCE-SHA256SUMS` | Original repository-input hashes; the source files themselves are not all bundled |
+| `ASSEMBLY-INFO.json`, `ASSEMBLY-SOURCE-SHA256SUMS` (when present) | Later installer/documentation/qualification assembly inputs and preservation checks |
 | `SHA256SUMS` | Hashes of the actual installed SDK files |
+| `WINDOWS-DEPENDENCIES.txt` (Windows) | Build-host DLL inspection; use `cygcheck arya.exe` to verify dependencies on the destination machine |
 | `LICENSE`, `NOTICE`, `THIRD-PARTY-NOTICES.txt` | Distribution and dependency notices |
 | `qualification/` | Current and historical qualification records; match their platform and snapshot identities to the installed artifact |
 | `examples/` | Complete native example sources, including record composition, financial workers and streaming reports |
@@ -25,6 +27,8 @@ Use [Install Arya](installing.md) for platform status, source builds, transferri
 Keep `lib/` and `stdlib/` beside the matching `arya` executable. A compiler symlink resolves resources through the executable's canonical location. `ARYA_NATIVE_LIBDIR` is an advanced library-directory override; avoid a stale override when switching SDKs. Choose another C compiler with `--cc`, `ARYA_CC` or `CC`. This selects a toolchain; it does not establish cross-compilation support.
 
 Development snapshots may share a version string. Use compiler hashes, source identities and the corresponding verification record to distinguish them. An archive's checksum detects changes to that archive; it is not a substitute for obtaining the archive and expected digest from a trusted source. Source changes require rebuilding applications; switching PATH does not update previously compiled programs.
+
+A metadata refresh preserves the compiler, libraries and original `BUILD-INFO.txt`/`SOURCE-SHA256SUMS` bytes. Separate `ASSEMBLY-*` records identify the later installer, documentation and qualification inputs; their source commit does not replace the compiler's build identity. The final `SHA256SUMS` covers both sets of records. Installer execution and release publication are recorded separately from these preservation checks.
 
 The SDK includes the current documentation index, guides, examples and selected measurement records. Links marked `source checkout` identify implementation or historical material that belongs to the complete source checkout rather than the installed SDK. In source, `native/DOCUMENTATION` is the shared inventory used for SDK assembly and the fresh-source verification gate.
 

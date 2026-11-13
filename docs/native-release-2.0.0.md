@@ -85,6 +85,22 @@ language defects and are not reported as newly implemented.
   focused acceptance/rejection cases passed. The same final macOS HTTP test also
   passed locally with the original 15-second startup bound; an earlier preliminary
   stage-one timeout has no established cause and remains in the evidence.
+- A later Windows bootstrap completed, but its artifact controller rejected
+  Cygwin's standard binary checksum marker (`hash *filename`). The installer and
+  controller now accept both standard text and binary markers, and all new
+  inventories explicitly use binary hashing. The actual Cygwin fixture passed
+  with CRLF, NUL, control bytes and a compiled PE file before the current bootstrap.
+  The original controller validated before preserving the archive, so that runner's
+  completed bootstrap could not be recovered. Capture now preserves the archive
+  before optional validation; reuse checks its immutable GitHub origin, full
+  inventory, compiler convergence, toolchain and all 260 native build inputs.
+- The revised installer was separately requalified on Ubuntu using the exact
+  previously qualified Linux SDK, without rebuilding or relabeling its compiler.
+  Installation with `HOME` unset and a path containing spaces and an apostrophe
+  passed, followed by actual CLI creation, checking, compilation and execution.
+  Ordinary and beyond-binary64 exact decimal outputs both matched. The
+  [immutable run and artifact evidence](verification/2.0.0/linux-installer-recheck.json)
+  records the current installer digest and preserves the earlier SDK identity.
 
 ## Release gates and publication
 
