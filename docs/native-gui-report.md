@@ -107,5 +107,9 @@ warning while rejecting other stderr,
 passed every bootstrap/core/API/HTTP, GTK and SDK distribution gate on Ubuntu
 24.04 x64. GTK execution used Xvfb and passed all eight public widget types,
 Unicode, state/validation/lifecycle cases, real toolkit events and retained
-closed handles. A later run separately checks the final managed installer;
-the GTK result already comes from actual Linux execution.
+closed handles. The subsequent
+[run 43480059478](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478)
+passed the same gates plus actual managed installation into a path containing
+spaces and an installed compiler creating, checking, building and running a
+new CLI project. Its SDK's 563 file checksums and all 260 selected native build
+inputs were verified after download.

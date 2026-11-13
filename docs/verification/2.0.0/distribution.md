@@ -21,6 +21,24 @@ Exact decimal addition printed `0.3`; the new decimal remainder operation printe
 `2`. The executable ran with `PATH=/nonexistent`, without an Arya installation
 on its execution PATH. Build time was 19.47 seconds on this host.
 
+## Linux SDK qualification
+
+[Linux job 132073915697](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478/job/132073915697)
+passed on Ubuntu 24.04 x64 from source
+`25f1915af4886f3b61c35aa753cd1defe78c1f3a`. Its gates include the full native
+bootstrap/core suite, typed APIs, HTTP relocation, actual GTK actions under
+Xvfb, distribution packaging and the real installer. The installed command
+created, checked and built a CLI project through a prefix containing spaces,
+then the compiled program ran with the expected output.
+
+The downloaded [Linux SDK inspection](linux-sdk.json) records the exact compiler,
+archive, installer and checksum inventory identities. All 563 SDK files and all
+260 selected native build inputs were verified locally without executing the
+Linux binary on macOS. The installer bytes match the current checkout. This
+qualifies the Ubuntu 24.04 x64 runner environment; an ELF ABI note alone does not
+establish compatibility with older distributions. GUI programs require GTK 3
+and a graphical display. Final metadata assembly and publication remain separate.
+
 ## Editor packages
 
 Both packages were actually installed into isolated VS Code profiles. Each

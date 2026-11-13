@@ -9,10 +9,11 @@
     "12 final macOS application check/build/smoke/protocol/signature/archive suites",
     "Actual macOS versioned SDK installation and installed CLI create/check/build/run",
     "Bundled and portable VSIX actual VS Code host gates: ten checks each",
-    "Local macOS26 relocated HTTP regression using qualified compiler: release and sanitizer modes"
+    "Local macOS26 relocated HTTP regression using qualified compiler: release and sanitizer modes",
+    "Linux x64 full native bootstrap/core/API/HTTP/GTK/distribution and actual versioned installer with generated CLI check/build/run"
   ],
   "pending": [
-    "Complete Linux and Windows/Cygwin platform gates",
+    "Complete Windows/Cygwin platform and final installer gates",
     "Final artifact metadata/checksums and source archive",
     "Stable GitHub release and portfolio publication"
   ],

@@ -146,3 +146,20 @@ SDK artifact is `14064643844`, whose ZIP SHA-256 is
 `cb946e824b24c079fb4ce985875c904d571476aeb684302efd4b7adb876b24a4`.
 The newer `25f1915` Linux run adds a real versioned installer/create/build/run
 gate; that extra gate was pending at this entry.
+
+## Candidate `25f1915` Linux installation result
+
+[Desktop workflow 43480059478](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478)
+passed every Linux gate, including actual versioned SDK installation in a path
+containing spaces and installed-compiler project creation, checking, compilation
+and execution. SDK artifact `14067305675` has ZIP SHA-256
+`5a819b1870184d750c7c6a418cbb151f0a110f20f09174735ae999acecb8d77b`.
+The SDK tar archive SHA-256 is
+`2cfe1195fc1a94a043a4ddbf1292d4616227978f0743b6b3de410c46ff98853c`;
+its actual ELF x86-64 compiler SHA-256 is
+`06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694`.
+All 563 SDK checksums passed after download, stage-two/stage-three generated C
+converged, and all 260 selected native build inputs matched the later `9aa0575`
+checkout. Three differences were confined to packaging/test-controller files.
+This qualifies the measured Ubuntu 24.04 x64 target; it does not establish a
+minimum Linux kernel, glibc or GTK version for every distribution.

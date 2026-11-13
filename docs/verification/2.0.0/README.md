@@ -2,7 +2,8 @@
 
 Release qualification is in progress. The final native macOS SDK, both actual
 editor-host packages, installed CLI and twelve native application builds passed
-their recorded gates. Linux and Windows/Cygwin verification and publication remain
+their recorded gates. Linux also passed its complete runtime, GTK, distribution
+and real installer checks. Windows/Cygwin verification and publication remain
 pending. See [platform evidence](platform-qualification.md),
 [installer/editor identities](distribution.json),
 [application build evidence](application-release-ci.md) and

@@ -9,7 +9,8 @@
   "legacyStandardModulesWithNativeImplementations": 18,
   "publicNativeModules": 28,
   "qualifiedPlatforms": [
-    "darwin-arm64"
+    "darwin-arm64",
+    "linux-x64"
   ],
   "build": {
     "core": "POSIX shell, make, C11 compiler",
@@ -586,8 +587,7 @@
   "unqualifiedTargets": [
     "Windows",
     "cross-compilation",
-    "WebAssembly",
-    "Linux/x64 platform release qualification"
+    "WebAssembly"
   ],
   "provenance": "PROVENANCE.json",
   "notices": "THIRD-PARTY-NOTICES.txt",

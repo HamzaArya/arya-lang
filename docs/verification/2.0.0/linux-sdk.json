@@ -1,0 +1,79 @@
+{
+  "run": 43480059478,
+  "job": 132073915697,
+  "artifact": 14067305675,
+  "sourceCommit": "25f1915af4886f3b61c35aa753cd1defe78c1f3a",
+  "sdkPath": ".build/release-2.0.0/ci-25f1915-linux/extracted/arya-native-2.0.0-linux-x64",
+  "archiveSHA256": "2cfe1195fc1a94a043a4ddbf1292d4616227978f0743b6b3de410c46ff98853c",
+  "compilerSHA256": "06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694",
+  "inventorySHA256": "c43448408a69693292a6ddaeb689c0b0c31fd5a20f8a3120b2934878f66a0742",
+  "installerSHA256": "670c593ab923ffae12f26b892897185b9f7f386697cbb9a869dd501c0f01f277",
+  "zipSHA256": "5a819b1870184d750c7c6a418cbb151f0a110f20f09174735ae999acecb8d77b",
+  "file": "ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=89c9eee7446de6ed61079240283ed56212dde24c, for GNU/Linux 3.2.0, not stripped",
+  "verified": {
+    "fileCount": 563,
+    "checksumInventorySHA256": "c43448408a69693292a6ddaeb689c0b0c31fd5a20f8a3120b2934878f66a0742",
+    "executable": "arya",
+    "build": {
+      "assembledAtUtc": "2026-11-13T18:36:49Z",
+      "host": "Linux 7.0.0-1017-azure x86_64",
+      "version": "2.0.0",
+      "compilerSha256": "06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694",
+      "generatedCSha256": "5858e9ba1171f24565c6931d0f532e9245d442fd86b5f90cf592d72ffe192487",
+      "stageTwoCSha256": "5858e9ba1171f24565c6931d0f532e9245d442fd86b5f90cf592d72ffe192487",
+      "stageTwoThreeCIdentical": "true"
+    }
+  },
+  "sourceIdentity": {
+    "matchedBuildInputs": 260,
+    "sourceInventorySHA256": "7e1a528a303a08f624666148d1ee1c5124d13564b029b52a02b43058419ded44",
+    "nonBuildInputDifferences": [
+      {
+        "path": "native/bootstrap/release-apps.py",
+        "qualifiedSHA256": "c2fba0670a844e1b0d9248595119b861a6dc5466643c7a105a78b5eacb2384d2",
+        "checkoutSHA256": "fe15e0cbae1ee20c4d5d36d73c5deb27a848de708bc7d785f34c76cbfbe26626"
+      },
+      {
+        "path": "native/bootstrap/source-package.sh",
+        "qualifiedSHA256": "7694aab377588a3fabbef036b478db4c0ad363b4d6a15bac3d1101b2c30abdd3",
+        "checkoutSHA256": "a2d45c143aaf814760cbb74780599bfde5351a23901272d76df27511caffc902"
+      },
+      {
+        "path": "native/tests/release-apps-reference.py",
+        "qualifiedSHA256": "5a16b4ee7d8a69a7ac707a9e4bb2bfa9380d213fa2c3e3f059516fcc0c187609",
+        "checkoutSHA256": "bab2efd07b49558ed8ebe2fc9c273ba30863e7805100a7d28b1f6a9fb2422163"
+      }
+    ],
+    "note": "Tests, documentation and packaging metadata may differ; every selected compiler, runtime, library, vendor and native backend build input matches."
+  },
+  "status": "passed platform qualification; metadata assembly and publication pending",
+  "runURL": "https://github.com/HamzaArya/arya-lang/actions/runs/43480059478",
+  "jobURL": "https://github.com/HamzaArya/arya-lang/actions/runs/43480059478/job/132073915697",
+  "artifactZipBytes": 8698541,
+  "nativeExecution": {
+    "location": "GitHub Ubuntu 24.04 x64 runner",
+    "localMacExecutionClaimed": false,
+    "gates": [
+      "full self-hosted SDK bootstrap",
+      "full native core suite and regressions",
+      "17 typed API contracts and independent byte oracle",
+      "12 HTTP service relocation cases",
+      "real GTK controls/actions under Xvfb",
+      "SDK distribution and immutable archive packaging",
+      "real versioned install prefix containing spaces, generated CLI create/check/build/run"
+    ]
+  },
+  "localInspection": {
+    "checksumFiles": 563,
+    "nativeBuildInputs": 260,
+    "installerMatchesCheckout": true,
+    "compilerExecutedLocally": false,
+    "note": "ELF identity and complete payload hashes checked without attempting foreign execution on macOS."
+  },
+  "requirements": {
+    "qualifiedDistribution": "Ubuntu 24.04 x64",
+    "build": "C11/C++20 toolchain and Perl for a full source SDK build; C11 for applications",
+    "gui": "GTK 3 development files to build, GTK 3 runtime plus a graphical display to run",
+    "compatibilityBoundary": "ELF GNU/Linux ABI notes do not establish support for older distributions."
+  }
+}

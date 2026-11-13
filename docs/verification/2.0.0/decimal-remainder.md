@@ -1,7 +1,7 @@
 # Exact decimal remainder
 
-Status: final macOS SDK and migrated calculator suites passed; Linux and Windows
-platform qualification remains pending.
+Status: final macOS and Linux SDK regressions and migrated macOS calculator
+suites passed; Windows platform qualification remains pending.
 
 The Finance and Precision calculator work reports identified a missing public native integer remainder API. Their correct workaround computed `a - truncate(a / b) * b` from three decimal operations. Both GCD helpers now call `decimal.remainder(a, b)` directly.
 

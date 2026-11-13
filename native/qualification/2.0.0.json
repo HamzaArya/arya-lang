@@ -4,7 +4,8 @@
   "published": false,
   "nativeSourceCommit": "0dc38b789df2840aa2977769065479c578e70649",
   "qualifiedPlatforms": [
-    "darwin-arm64"
+    "darwin-arm64",
+    "linux-x64"
   ],
   "platforms": {
     "darwin-arm64": {
@@ -31,11 +32,38 @@
         "independent language and library references",
         "installed CLI project check/build/run",
         "bundled and portable VSIX actual editor hosts"
-      ]
+      ],
+      "additionalInstallerIndependentRun": 43479940689
     },
     "linux-x64": {
-      "status": "in-progress",
-      "note": "Full core/fresh-source gates passed; HTTP harness now retains the exact nonfatal ASan context-switch warning. Complete platform rerun pending."
+      "status": "passed",
+      "testedOS": "Ubuntu 24.04 x64",
+      "minimumOS": "No older libc/GTK distribution compatibility claimed",
+      "nativeFormat": "ELF x86-64",
+      "sourceCommit": "25f1915af4886f3b61c35aa753cd1defe78c1f3a",
+      "compilerSHA256": "06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694",
+      "generatedCSHA256": "5858e9ba1171f24565c6931d0f532e9245d442fd86b5f90cf592d72ffe192487",
+      "stageTwoThreeCIdentical": true,
+      "qualificationRun": 43480059478,
+      "qualificationJob": 132073915697,
+      "independentRun": 43474217260,
+      "independentJob": 132053674029,
+      "sdkArtifact": 14067305675,
+      "sdkFilesVerified": 563,
+      "originalSDKArchiveSHA256": "2cfe1195fc1a94a043a4ddbf1292d4616227978f0743b6b3de410c46ff98853c",
+      "installerSHA256": "670c593ab923ffae12f26b892897185b9f7f386697cbb9a869dd501c0f01f277",
+      "matchedNativeBuildInputs": 260,
+      "gates": [
+        "self-hosted full SDK bootstrap",
+        "native core and regressions",
+        "API contracts and twelve relocated HTTP scenarios",
+        "eight GTK widgets and toolkit actions under Xvfb",
+        "SDK distribution and package checksums",
+        "real versioned installation with spaces in paths",
+        "installed CLI create/check/build/run",
+        "independent fresh-source and reference gates"
+      ],
+      "note": "The exact known ASan makecontext/swapcontext capability warning is retained; every other HTTP stderr diagnostic still fails."
     },
     "windows-cygwin-x64": {
       "status": "in-progress",

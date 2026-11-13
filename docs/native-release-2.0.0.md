@@ -10,7 +10,7 @@ binary snapshots.
 
 | Reported problem | Implementation | Evidence |
 | --- | --- | --- |
-| Desktop module required web content | New `std gui` with AppKit, GTK 3 and Win32 controls, queued events, a native project template and persistent Task Desk example | AppKit and template gates passed in the qualified macOS SDK; [GUI report](native-gui-report.md). Linux/Windows qualification remains pending. |
+| Desktop module required web content | New `std gui` with AppKit, GTK 3 and Win32 controls, queued events, a native project template and persistent Task Desk example | AppKit and GTK widget/action/template gates passed with qualified native SDKs; [GUI report](native-gui-report.md). Windows qualification remains pending. |
 | Public filesystem only supported text | Six byte-file APIs and `security.hashBytes(Buffer)` preserve arbitrary binary content | macOS API/byte-oracle, limit, error, sanitizer and GC-stress gates passed; binary TextVault create/verify passed. |
 | Application saves used predictable temporary paths | Atomic text/byte replacement uses exclusive random siblings and checked writes; 20 old stores migrated | [API repair report](native-api-repairs.md): 20 functional suites and 60 storage-entry checks passed. The six desktop workers were also rebuilt in the final application CI. |
 | Valid inferred HTTP options rejected | Readonly input records for server options; four application `any` workarounds removed | Typed positive/negative checks and actual rebuilt server application suites passed. |
@@ -21,7 +21,7 @@ binary snapshots.
 | Collection iteration lost pending entries during mutation | Each Map/Set traversal retains its own compaction guard through exhaustion or abrupt completion | [Collection mutation regression](verification/2.0.0/collection-mutation.md): 26 checks per optimized/reference/sanitizer mode, with GC stress; repeated successfully in macOS qualification. |
 | Empty array operations invoked undefined C behavior | Guard zero-length pointer arithmetic and memory copies in concat, slice, unshift, splice, copyWithin and sort | Focused fresh/retained-storage sanitizer regression and the original failing CSV path passed in macOS qualification. |
 | Windows editor paths mixed native and POSIX forms | Cygwin mount-aware conversions and Windows file-URI transport | Unix URI/editor-path checks passed. Actual Windows editor transport and complete distribution qualification remain pending. |
-| No versioned installation and stable editor package | Checksum-verified versioned installers and bundled/portable VSIX modes derived from version 2.0.0 | [Actual macOS installer and both editor-host gates passed](verification/2.0.0/distribution.md); Windows/Linux release qualification remains separate. |
+| No versioned installation and stable editor package | Checksum-verified versioned installers and bundled/portable VSIX modes derived from version 2.0.0 | [Actual macOS/Linux installers and both macOS editor-host gates passed](verification/2.0.0/distribution.md); Windows qualification remains pending. |
 
 Atomic visibility is not an fsync durability guarantee. Stateful examples retain
 single-writer and size limits. Business features outside the earlier application
@@ -49,7 +49,7 @@ language defects and are not reported as newly implemented.
   from its restricted PATH. The harness now supplies those build tools while
   keeping Node/Python unavailable. A later Linux test exposed an invalid temporary
   directory template; adding the required `XXXXXX` suffix corrected that fixture.
-  The resulting Linux qualification rerun remains pending.
+  The resulting full Linux runtime, GTK, SDK and actual installer gates passed.
 - Linux and macOS CI exposed the empty-array undefined behavior recorded above.
   The runtime guards and focused regressions passed the macOS release gates.
 - Map/Set mutation could move pending entries behind a live loop cursor. Separate
@@ -113,9 +113,15 @@ from the earlier recorded manual GUI sessions.
 
 The actual macOS versioned installer, installed CLI build/run, bundled VSIX and
 portable VSIX gates also passed; their identities are recorded in
-[distribution qualification](verification/2.0.0/distribution.md). Linux and
-Windows/Cygwin qualification are still pending. This macOS evidence is not a
-claim of completed cross-platform qualification.
+[distribution qualification](verification/2.0.0/distribution.md).
+
+[Linux workflow 43480059478](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478)
+passed the complete native runtime, API, relocated HTTP, GTK and distribution
+suite on Ubuntu 24.04 x64. Its actual installer created a versioned prefix with
+spaces, and the installed compiler created, checked, built and ran a CLI project.
+All 563 downloaded SDK files and 260 native build inputs were verified. The ELF
+compiler SHA-256 is `06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694`.
+Windows/Cygwin qualification remains pending.
 
 The repository branch is `release/2.0.0-native`. Final distribution metadata,
 release assets and public download URLs will be recorded after the remaining

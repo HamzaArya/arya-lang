@@ -29,7 +29,7 @@
       "result": "controller invoked nonexistent bin/arya path; corrected to the SDK root executable"
     }
   ],
-  "linuxHarnessCorrection": "The final runtime exited successfully but the controller rejected the exact GCC ASan makecontext/swapcontext capability warning. The controller now logs that exact warning for sanitizer mode only and rejects all other stderr. Rerun pending.",
+  "linuxHarnessCorrection": "The controller logs only the exact GCC ASan makecontext/swapcontext capability warning in sanitizer mode and rejects all other stderr. All twelve scenarios passed on Linux in runs43478801468 and43480059478.",
   "filterReview": {
     "cases": 15,
     "result": "passed",

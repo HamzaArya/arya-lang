@@ -21,9 +21,9 @@ record, archive checksum and SDK `BUILD-INFO.txt` for the actual binary.
 
 | Target | Implementation and qualification status |
 | --- | --- |
-| macOS Apple silicon | Native compiler and direct AppKit controls implemented; local checks run on this target. Final release-artifact qualification is recorded separately. |
+| macOS Apple silicon | Qualified native compiler and direct AppKit controls; SDK minimum macOS 15.0, also exercised locally on macOS 26.5.2. The separate application bundles require macOS 26+. |
 | macOS Intel | Build on the target Mac; no Intel release qualification is claimed here. |
-| Linux x64 | Native compiler and GTK 3 controls implemented; release CI qualification is pending. |
+| Linux x64 | Qualified on Ubuntu 24.04, including actual GTK controls, SDK installation and generated CLI check/build/run. Other libc/GTK distribution versions require their own checks. |
 | Linux ARM64 | Requires a native build and target checks; no ARM64 release qualification is claimed here. |
 | Windows x64 with Cygwin | Native Windows PE executables and Win32 controls implemented with explicit Cygwin runtime dependencies; release CI qualification is pending. |
 | Windows MSVC or MinGW | No supported build or qualified SDK is supplied by these instructions. |
