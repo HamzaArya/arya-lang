@@ -1,0 +1,135 @@
+{
+  "status": "passed",
+  "sourceCommit": "c87190bd266b009e6fb7d2492cd06034fdb79755",
+  "workflowRun": 43488637857,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43488637857",
+  "scope": "Fresh-source native build, core/profile tests and managed installer with final binary checksum format, followed by all independent references. Shipping SDK origins remain the separately pinned native desktop jobs.",
+  "jobs": [
+    {
+      "platform": "macOS",
+      "job": 132103630616,
+      "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43488637857/job/132103630616",
+      "startedAt": "2026-11-13T19:04:07Z",
+      "completedAt": "2026-11-13T19:28:01Z",
+      "status": "passed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Linux native widget prerequisites",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Fresh source build, tests and installed SDK without Node or Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build local native compiler for optional arithmetic reference",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent pure-Python decimal reference (test only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seeded compiler robustness (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Exact binary64 formatting reference (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Type and native language-server references (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Current documentation links and library inventory (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Native authentication HTTP integration (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ],
+      "jobLogSHA256": "f1343acad67da61a971cb86399ada487dbd35a7a74937b39cc64b2d6331f7238"
+    },
+    {
+      "platform": "Linux",
+      "job": 132103631325,
+      "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43488637857/job/132103631325",
+      "startedAt": "2026-11-13T19:04:06Z",
+      "completedAt": "2026-11-13T19:35:02Z",
+      "status": "passed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Linux native widget prerequisites",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh source build, tests and installed SDK without Node or Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build local native compiler for optional arithmetic reference",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent pure-Python decimal reference (test only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seeded compiler robustness (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Exact binary64 formatting reference (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Type and native language-server references (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Current documentation links and library inventory (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Native authentication HTTP integration (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ],
+      "jobLogSHA256": "ccf934508bb1a187e2a9351c2b4083268a5bd104ce77f8e849925eb8899c1b3b"
+    }
+  ]
+}

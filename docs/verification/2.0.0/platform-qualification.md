@@ -208,3 +208,20 @@ Evidence artifact `14069546003` has verified ZIP SHA-256
 the compact identity and result record is [linux-installer-recheck.json](linux-installer-recheck.json).
 This requalifies the changed installer and checksum format. The compiler/runtime
 and GTK qualification remains the separately recorded original Linux job.
+
+## Final Unix fresh-source qualification
+
+[Independent workflow 43488637857](https://github.com/HamzaArya/arya-lang/actions/runs/43488637857)
+completed successfully on both macOS (job `132103630616`) and Linux (job
+`132103631325`) at exact source `c87190bd266b009e6fb7d2492cd06034fdb79755`.
+Each platform passed the fresh-source native bootstrap, core/profile tests and
+managed installer with Node/Python absent from executable search paths. This
+also exercises the final binary-mode source/SDK checksum format. All subsequent
+arithmetic, compiler robustness, binary64, types/LSP, documentation and native
+authentication HTTP reference gates passed.
+
+[final-unix-independent.json](final-unix-independent.json) records the exact job
+identities, results and hashes of the retained complete official logs. The
+shipping SDK origins remain the separately identified macOS `0dc38b7` and Linux
+`25f1915` desktop jobs; this later fresh-source proof does not change those
+binary provenance records.
