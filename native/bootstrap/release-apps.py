@@ -97,7 +97,8 @@ def checksums(path):
     return values
 
 
-def verify_sdk(sdk):
+def verify_sdk(sdk, executable='arya'):
+    assert executable in ('arya', 'arya.exe'), 'Unsupported SDK executable name'
     expected = checksums(sdk / 'SHA256SUMS')
     actual = {p.relative_to(sdk).as_posix() for p in sdk.rglob('*') if p.is_file() and p != sdk / 'SHA256SUMS'}
     assert not any(p.is_symlink() for p in sdk.rglob('*'))
@@ -107,10 +108,12 @@ def verify_sdk(sdk):
     build = dict(line.split(': ', 1) for line in (sdk / 'BUILD-INFO.txt').read_text().splitlines() if ': ' in line)
     for key in ('compilerSha256', 'generatedCSha256', 'stageTwoCSha256'):
         assert re.fullmatch(r'[0-9a-f]{64}', build[key]), 'Invalid SDK build identity: ' + key
-    assert build['compilerSha256'] == sha(sdk / 'arya')
+    assert executable in expected, 'SDK executable is missing from checksum inventory: ' + executable
+    assert build['compilerSha256'] == sha(sdk / executable)
     assert build['stageTwoThreeCIdentical'] == 'true'
     assert build['generatedCSha256'] == build['stageTwoCSha256']
-    return {'fileCount': len(actual), 'checksumInventorySHA256': sha(sdk / 'SHA256SUMS'), 'build': build}
+    return {'fileCount': len(actual), 'checksumInventorySHA256': sha(sdk / 'SHA256SUMS'),
+            'executable': executable, 'build': build}
 
 
 def compiler_input(name):

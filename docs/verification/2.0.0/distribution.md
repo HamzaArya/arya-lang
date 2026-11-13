@@ -69,7 +69,10 @@ identical inventories and hashes before and after the copy. Separate
 source, while the original compiler-build evidence remains unchanged. The new
 SDK checksum inventory covers every final file. A native installer smoke and
 archive verification are still required separately; assembly alone does not
-claim those results. Windows uses its native CI packaging and installer gates.
+claim those results. Windows uses `--platform windows-cygwin-x64` after its native
+CI packaging and installer gates pass. That profile additionally pins the exact
+native-tested installer; assembly rejects any installer change and preserves
+`arya.exe`, the Windows dependency record and platform README byte-for-byte.
 
 ## Problems found and resolved
 
