@@ -1,0 +1,43 @@
+{
+  "status": "qualified",
+  "generation": 2,
+  "version": "2.0.0",
+  "platform": "Ubuntu 24.04 x64",
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "workflowRun": 43495958933,
+  "job": 132128996654,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958933/job/132128996654",
+  "completedAt": "2026-11-13T20:14:29Z",
+  "artifact": {
+    "id": 14072932726,
+    "name": "native-sdk-ubuntu-24.04",
+    "sizeBytes": 8731850,
+    "sha256": "d2a112938b480da34f15bb2c6a505d9d80684b8e55abf62029b60124ef925071",
+    "downloadVerified": true
+  },
+  "archiveSHA256": "74c579ad248ad804e268a7a94e199f831a50622885e6a182f352e690b549f71b",
+  "compilerSHA256": "13e39ee60c94e8a8b985d575c399ab6fe4031a47e04d5dbc5416b1b1197d01ff",
+  "inventorySHA256": "8f2accbcd827f42fec1edfc4a9145274d881d2fad53377224e47f4115b5b9377",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "fileCount": 580,
+  "generatedCSHA256": "b2649a546f404d4d5b67dcecdff54ee23eab9b8739708638ce9abca22b59a0c3",
+  "stageTwoCSHA256": "b2649a546f404d4d5b67dcecdff54ee23eab9b8739708638ce9abca22b59a0c3",
+  "stageTwoThreeCIdentical": true,
+  "matchedNativeBuildInputs": 260,
+  "nonBuildInputDifferences": [],
+  "passedGates": [
+    "Fresh self-hosted native SDK bootstrap and generated-C convergence",
+    "Full native core regressions including security/diagnostics and binary hashes",
+    "Typed API, byte/atomic safety and HTTP relocation",
+    "Actual GTK3 public widgets and native actions under Xvfb",
+    "Relocated SDK and actual managed installer/create/check/build/run",
+    "SDK archive and checksum packaging"
+  ],
+  "evidenceArtifact": {
+    "id": 14071944882,
+    "sha256": "1d7744aa466d19a5e92cad277a31622a7a8105129b126d9e0b60fa05bff978fd"
+  },
+  "officialJobLogSHA256": "e653a94e82bc6df2a6b61d1f6545af4d7a5e6f1cf30c0ce95f75f2d700720042",
+  "compatibility": "Qualified on Ubuntu 24.04 x64 with C11 toolchain and GTK3. The ELF ABI note does not establish a minimum kernel/glibc/GTK version for other distributions.",
+  "historicalCandidate": "The earlier Linux25 candidate remains recorded in linux-sdk.json; this record identifies its replacement after the Cygwin compiler link fix."
+}

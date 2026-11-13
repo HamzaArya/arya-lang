@@ -1,0 +1,31 @@
+{
+  "generation": 2,
+  "status": "CI and local native checks passed; publication pending",
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "run": 43496335481,
+  "job": 132130301288,
+  "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "bundleArtifact": {
+    "id": 14073705620,
+    "bytes": 14259144,
+    "sha256": "91808f0a7be45fa3e82f44c7f1221a43e4d06983891ec513b1a768e47ff56384"
+  },
+  "evidenceArtifact": {
+    "id": 14072373203,
+    "bytes": 70129,
+    "sha256": "a97c9f379b84fa2e07333f1a0e67c6e2996b7b4980d8558d66c0bd0ba47fc2a5"
+  },
+  "applications": 12,
+  "archives": [
+    {
+      "filename": "arya-native-calculators-2.0.0-darwin-arm64.zip",
+      "bytes": 7485284,
+      "sha256": "e6df8bee4a913d13aa4eef7452f7c5784ee7d1065d4d20060045fcf339685b4b"
+    },
+    {
+      "filename": "arya-native-desktop-apps-2.0.0-darwin-arm64.zip",
+      "bytes": 6948635,
+      "sha256": "7f13352eff70ee63c29dec965db8ca5fbae3106fc793b6162bf97af43b7b5c8e"
+    }
+  ]
+}

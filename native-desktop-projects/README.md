@@ -6,9 +6,9 @@ The delivered apps use no web pages, HTTP server, WebKit, Electron, Node or Pyth
 
 ## Open the applications
 
-All six final applications passed fresh engine tests, bundle checks and local native host/worker protocol checks. The earlier native GUI workflows remain documented; final Study Desk launch and About version were inspected again. See [final application qualification](../docs/verification/2.0.0/application-release.md).
+All six final applications passed fresh engine tests, bundle checks and local native host/worker protocol checks. The earlier native GUI workflows remain documented; the current archive was rebuilt with the corrected compiler and verified again locally. See [final application qualification](../docs/verification/2.0.0/generation-2/application-release.md).
 
-Extract `.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` and double-click an app, or copy it to Applications. The full SDK is not needed to run it. The original [dist folder](dist) is preserved as historical output.
+Extract `.build/release-2.0.0/generation-2/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` and double-click an app, or copy it to Applications. The full SDK is not needed to run it. The original [dist folder](dist) is preserved as historical output.
 
 | Developer track | Application | Complete local workflows |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ open "arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app"
 open "arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app"
 ```
 
-The final archive SHA-256 is `71d74735771bac3c727736e2fb943a83446b0afc6cba0122ea4b1d80233ab6a7` (6,948,635 bytes). The earlier [original ZIP](Arya-Native-Desktop-macOS-arm64.zip) and its [checksum](Arya-Native-Desktop-macOS-arm64.zip.sha256) remain historical artifacts.
+The final archive SHA-256 is `7f13352eff70ee63c29dec965db8ca5fbae3106fc793b6162bf97af43b7b5c8e` (6,948,635 bytes). The earlier [original ZIP](Arya-Native-Desktop-macOS-arm64.zip) and its [checksum](Arya-Native-Desktop-macOS-arm64.zip.sha256) remain historical artifacts.
 
 ## Data and portability
 

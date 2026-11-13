@@ -1,0 +1,93 @@
+{
+  "status": "qualified CI SDK downloaded and locally verified; no final metadata assembly",
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "run": 43495958933,
+  "job": 132128996700,
+  "artifact": 14072747629,
+  "artifactSHA256": "3dfeac87902f93ef2b7796e62e54e53bb458f458435cbfddb87b7bb192912388",
+  "artifactBytes": 8162564,
+  "archiveSHA256": "54cfd82f7ed3f6476b75be994bd10457310b3aba8f49ba13637e586f46f58567",
+  "archiveBytes": 8332150,
+  "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "inventorySHA256": "6e1a02ded8ed665aa474eece92df6c7a15ff353e8465d24c1c660de01f663774",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "sdkPath": ".build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64",
+  "currentCheckout": "5289ccd8ff905893aaca03799df4c1ec01faa596",
+  "sdkVerification": {
+    "fileCount": 582,
+    "checksumInventorySHA256": "6e1a02ded8ed665aa474eece92df6c7a15ff353e8465d24c1c660de01f663774",
+    "executable": "arya",
+    "build": {
+      "assembledAtUtc": "2026-11-13T20:06:47Z",
+      "host": "Darwin 24.6.0 arm64",
+      "version": "2.0.0",
+      "compilerSha256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+      "generatedCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoThreeCIdentical": "true"
+    }
+  },
+  "sourceIdentity": {
+    "matchedBuildInputs": 260,
+    "sourceInventorySHA256": "4bea38e1ee9c16d292805e9ee81a682f8db121910024cd504adfd5bd70b3be2e",
+    "nonBuildInputDifferences": [],
+    "note": "Tests, documentation and packaging metadata may differ; every selected compiler, runtime, library, vendor and native backend build input matches."
+  },
+  "nativeInspection": [
+    {
+      "command": [
+        "file",
+        "-b",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya"
+      ],
+      "exitCode": 0,
+      "stdout": "Mach-O 64-bit executable arm64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "xcrun",
+        "vtool",
+        "-show-build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya"
+      ],
+      "exitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 15.0\n      sdk 15.5\n   ntools 1\n     tool LD\n  version 1167.5\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--strict",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya\nIdentifier=program\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20400 size=48608 flags=0x20002(adhoc,linker-signed) hashes=1516+0 location=embedded\nVersionPlatform=1\nVersionMin=983040\nVersionSDK=984320\nHash type=sha256 size=32\nCandidateCDHash sha256=a0763a5abc497138ddea9b65ff441adf5204bb9e\nCandidateCDHashFull sha256=a0763a5abc497138ddea9b65ff441adf5204bb9ec0c23302c86174f8faf7967a\nHash choices=sha256\nCMSDigest=a0763a5abc497138ddea9b65ff441adf5204bb9ec0c23302c86174f8faf7967a\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=4253964\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=a0763a5abc497138ddea9b65ff441adf5204bb9e\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/evidence/ci-ce80487-macos/extracted/arya-native-2.0.0-darwin-arm64/arya",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "Arya native 2.0.0 (self-hosted)\n",
+      "stderr": ""
+    }
+  ],
+  "minimumMacOS": "15.0",
+  "architecture": "arm64",
+  "note": "Original BUILD-INFO/SOURCE retained. Native signature verification proves byte consistency; the compiler is ad-hoc signed, not notarized Developer ID software."
+}

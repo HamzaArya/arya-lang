@@ -1,6 +1,21 @@
 # Calculator delivery report
 
-## Current 2.0.0 application release — 2026-11-13
+## Current 2.0.0 application release — generation two
+
+All six calculator engines were freshly checked, compiled and passed their complete suites in [run 43496335481](https://github.com/HamzaArya/arya-lang/actions/runs/43496335481), using source `ce80487668e082ffd263c5239d737de7074e4dc4` and qualified compiler `06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94`. The application sources and native hosts were unchanged. The compiler's Cygwin crypto-link repair required new compiler provenance, so every application was rebuilt without relaxing source checks.
+
+- Current archive: `.build/release-2.0.0/generation-2/final/arya-native-calculators-2.0.0-darwin-arm64.zip` (7,485,284 bytes).
+- SHA-256: `e6df8bee4a913d13aa4eef7452f7c5784ee7d1065d4d20060045fcf339685b4b`.
+- [Complete build evidence](../docs/verification/2.0.0/generation-2/applications/native-calculators-build.json), [archive evidence](../docs/verification/2.0.0/generation-2/applications/native-calculators-bundles.json) and [application qualification](../docs/verification/2.0.0/generation-2/application-release.md).
+
+All six exact downloaded bundles passed local file inventories, executable permissions, strict ad-hoc signatures, version 2.0.0 and actual native host/worker protocols on macOS 26.5.2. Protocol tests used isolated stores and no runtime PATH tools. The initial local archive verifier stopped because it omitted the intended root README and verification file from its expected entries; that harness assumption was fixed and the failed attempt retained. All application checks then passed. No application was abandoned.
+
+The exact new Pocket Calculator bundle was also opened through native app control. Its window rendered native controls and About displayed `Version 2.0.0 (2.0.0)`. It was closed without calculating, editing, saving or exporting. This is a bounded launch/About spot check, not a repeat of all earlier visual workflows.
+
+The apps still require macOS 26+ ARM64 and are ad-hoc signed, without Developer ID signing or notarization. Publication remains separate from these qualification results. Earlier candidate archives, reports and manual GUI sessions below retain their original identities.
+
+## Generation-one 2.0.0 application candidate — superseded
+
 
 All six engines were rebuilt from application commit `5d3286445587fec596b76f912f70cc1575679c75` using the qualified CI compiler `fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`. All full numerical/storage suites, packaged host/worker protocols, strict signatures and ZIP roundtrip checks passed in [run 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800). The SDK includes the final exact decimal remainder and source-independent HTTP repairs. The About dialog now reads the bundle version instead of a hardcoded value.
 

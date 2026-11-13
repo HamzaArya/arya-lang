@@ -1,0 +1,8 @@
+{
+  "status": "harness assertion before app execution",
+  "issue": "Expected root entries were only six applications, omitting intentional README.txt and verification.json",
+  "fix": "Verify root against six apps plus both documentation files and compare embedded verification metadata to the qualified package report. Reused extraction bytes are verified against archive bytes and executable modes before continuation.",
+  "applicationFailure": false,
+  "attemptScript": "verify-application-downloads.py",
+  "retryScript": "verify-application-downloads-v2.py"
+}

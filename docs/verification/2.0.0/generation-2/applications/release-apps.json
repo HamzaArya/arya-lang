@@ -1,0 +1,84 @@
+{
+  "status": "passed",
+  "publication": false,
+  "families": [
+    {
+      "family": "native-desktop-projects",
+      "buildReport": "native-desktop-projects/reports/20261113T200716.570504Z/results.json",
+      "archive": ".build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip",
+      "archiveSHA256": "7f13352eff70ee63c29dec965db8ca5fbae3106fc793b6162bf97af43b7b5c8e",
+      "archiveBytes": 6948635,
+      "passed": 6,
+      "compilerCommandSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94"
+    },
+    {
+      "family": "native-calculators",
+      "buildReport": "native-calculators/reports/20261113T200750.651072Z/results.json",
+      "archive": ".build/release-2.0.0/final/arya-native-calculators-2.0.0-darwin-arm64.zip",
+      "archiveSHA256": "e6df8bee4a913d13aa4eef7452f7c5784ee7d1065d4d20060045fcf339685b4b",
+      "archiveBytes": 7485284,
+      "passed": 6,
+      "compilerCommandSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94"
+    }
+  ],
+  "checkoutSHA": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "startedAtUTC": "2026-11-13T19:53:08.367895+00:00",
+  "qualification": {
+    "run": 43495958933,
+    "headSHA": "ce80487668e082ffd263c5239d737de7074e4dc4",
+    "job": 132128996700,
+    "jobName": "unix (macos-15)",
+    "jobConclusion": "success",
+    "runURL": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958933",
+    "artifact": {
+      "id": 14072747629,
+      "node_id": "MDg6QXJ0aWZhY3QxNDA3Mjc0NzYyOQ==",
+      "name": "native-sdk-macos-15",
+      "size_in_bytes": 8162564,
+      "url": "https://api.github.com/repos/HamzaArya/arya-lang/actions/artifacts/14072747629",
+      "archive_download_url": "https://api.github.com/repos/HamzaArya/arya-lang/actions/artifacts/14072747629/zip",
+      "expired": false,
+      "digest": "sha256:3dfeac87902f93ef2b7796e62e54e53bb458f458435cbfddb87b7bb192912388",
+      "created_at": "2026-11-13T20:07:02Z",
+      "updated_at": "2026-11-13T20:07:02Z",
+      "expires_at": "2027-02-11T19:50:29Z",
+      "workflow_run": {
+        "id": 43495958933,
+        "repository_id": 1450878905,
+        "head_repository_id": 1450878905,
+        "head_branch": "release/2.0.0-native",
+        "head_sha": "ce80487668e082ffd263c5239d737de7074e4dc4"
+      }
+    }
+  },
+  "sdk": {
+    "fileCount": 582,
+    "checksumInventorySHA256": "6e1a02ded8ed665aa474eece92df6c7a15ff353e8465d24c1c660de01f663774",
+    "executable": "arya",
+    "build": {
+      "assembledAtUtc": "2026-11-13T20:06:47Z",
+      "host": "Darwin 24.6.0 arm64",
+      "version": "2.0.0",
+      "compilerSha256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+      "generatedCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoThreeCIdentical": "true"
+    },
+    "archiveSHA256": "54cfd82f7ed3f6476b75be994bd10457310b3aba8f49ba13637e586f46f58567",
+    "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+    "architecture": "Mach-O 64-bit executable arm64",
+    "loadCommands": "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 15.0\n      sdk 15.5\n   ntools 1\n     tool LD\n  version 1167.5\n",
+    "version": "Arya native 2.0.0 (self-hosted)"
+  },
+  "sourceIdentity": {
+    "matchedBuildInputs": 260,
+    "sourceInventorySHA256": "4bea38e1ee9c16d292805e9ee81a682f8db121910024cd504adfd5bd70b3be2e",
+    "nonBuildInputDifferences": [],
+    "note": "Tests, documentation and packaging metadata may differ; every selected compiler, runtime, library, vendor and native backend build input matches."
+  },
+  "host": "ProductName:\t\tmacOS\nProductVersion:\t\t15.8.2\nBuildVersion:\t\t24H232\n",
+  "applications": 12,
+  "platform": "macOS 26+ ARM64 application bundles",
+  "signing": "ad-hoc; not Developer ID signed or notarized",
+  "note": "Automated engine, host/worker protocol and extracted-signature checks. This job does not claim manual GUI interaction or publish a release."
+}

@@ -1,0 +1,140 @@
+{
+  "version": "2.0.0",
+  "platform": "macOS 26 ARM64",
+  "created_utc": "2026-11-13T20:07:49.749085+00:00",
+  "signing": "ad-hoc; not Developer ID signed or notarized",
+  "build_report": "reports/20261113T200716.570504Z/results.json",
+  "build_report_sha256": "dcd5bfd3743659c0b0538e8f4b35d7e28731f9859a7f4f65c0f19210035c7ff6",
+  "compiler_version": "Arya native 2.0.0 (self-hosted)",
+  "compiler_command": "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+  "compiler_command_sha256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "projects": [
+    {
+      "project": "01-beginner-study-desk",
+      "app": "Study Desk.app",
+      "status": "passed",
+      "worker_sha256": "aa7e6552d9c1d0ec746a8fbfe92a73c412909796f1ef9ca4571a0325bf0d2d9e",
+      "host_sha256": "a79b795bc3bbbe7276727e16f017418a6c81f8a53d06adaf3663cba799181200",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "8caac3daea8dce3b6ed960cf7e47782fbf7ce4f935bf26be534b5fe85c6fe660",
+        "Contents/MacOS/NativeHost": "a79b795bc3bbbe7276727e16f017418a6c81f8a53d06adaf3663cba799181200",
+        "Contents/MacOS/arya-worker": "aa7e6552d9c1d0ec746a8fbfe92a73c412909796f1ef9ca4571a0325bf0d2d9e",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "aceb1071a3f699e91136bca8aa8da21a26f92624039b47eda73cdc011280022a",
+        "Contents/Resources/REPORT.md": "0334982bb86ba3101649ea614f029b281211386f43d9a37c74c22ab0c431ed0f",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "acd0c45a3543d90c49427b3d8054f661f83d6575a362a89f6178965ac1447853"
+      }
+    },
+    {
+      "project": "02-better-stockroom",
+      "app": "Stockroom.app",
+      "status": "passed",
+      "worker_sha256": "fd7d0984181e30364a42cf6de556cc74f3abfc336a30f66fd03e2d46a56f7bc0",
+      "host_sha256": "20a8597a77167eae6df3e90fec02f875bdcf5dadb48175e1bad612dc1d94c313",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "9f3190dddd8808f4c8b836488dcd38b085fec6b2caa44aeb1f881e7098efb634",
+        "Contents/MacOS/NativeHost": "20a8597a77167eae6df3e90fec02f875bdcf5dadb48175e1bad612dc1d94c313",
+        "Contents/MacOS/arya-worker": "fd7d0984181e30364a42cf6de556cc74f3abfc336a30f66fd03e2d46a56f7bc0",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "a4397c8ff8f6b4765e96a18c1acef75c2204099720c88b29a0171e18e7f4b5fc",
+        "Contents/Resources/REPORT.md": "af6050d81109e5ad6cec22dc137a68beb00e0bda2952a3cdb880e6702410576b",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "116073d8eedf6de566e75fae653e3777d23c9fa66d9c0689c194dc0858ed97bb",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "2d4854f8de848852277dc9b09cad1a62e3a97484a36230496f94b6da607eac23"
+      }
+    },
+    {
+      "project": "03-intermediate-support-desk",
+      "app": "Harbor Support Desk.app",
+      "status": "passed",
+      "worker_sha256": "1da473e6fdefe508587f5ff1e1bb777f93369ae1baed2e9b3b4942a6d7a011e9",
+      "host_sha256": "d57a74262be1f48689dfec91316c64fc56b910ad1d5a95bb55c5edf4e36d7a92",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "9ca196cf3008932ff9831bf0720916fe9c0a0e386a39e18866eb97650423a221",
+        "Contents/MacOS/NativeHost": "d57a74262be1f48689dfec91316c64fc56b910ad1d5a95bb55c5edf4e36d7a92",
+        "Contents/MacOS/arya-worker": "1da473e6fdefe508587f5ff1e1bb777f93369ae1baed2e9b3b4942a6d7a011e9",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "9392f521a78bad801a055654cb396da8ac2172df16da74b99642d9e8f45485d0",
+        "Contents/Resources/REPORT.md": "19dd71c6e5ef5cf9e47d4b514794a838fbe6159eb09b77c0201a5f3b6ae952b2",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7ea22870d034975d3678d13d4acbefa720a139d151a788090f7d78bf1cfb400c",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "ecf7312019ea16746064fc6ce7915cceba530af9deab768f6b0b46a4344e08c0"
+      }
+    },
+    {
+      "project": "04-advanced-project-studio",
+      "app": "Project Studio.app",
+      "status": "passed",
+      "worker_sha256": "e6cc36df463af2ebb2b599cf45ebe205ede0197539296aac8e5a396217f56bae",
+      "host_sha256": "0a3f349995125e6fd3ba159506f0a85cebae0e4b3b72d81e4c77bd9ca1a1d025",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "89828e1e17139a50b7ac0dcdc37910f3c927ea469d3c2162ffecdac58ed55225",
+        "Contents/MacOS/NativeHost": "0a3f349995125e6fd3ba159506f0a85cebae0e4b3b72d81e4c77bd9ca1a1d025",
+        "Contents/MacOS/arya-worker": "e6cc36df463af2ebb2b599cf45ebe205ede0197539296aac8e5a396217f56bae",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "582ceee6a1003a488d3652f87ad8520ebbccacddc23153f291f50c99897e83d5",
+        "Contents/Resources/REPORT.md": "712ee2e79dcd343684e6923bc8a1a7e92a9f002b062168e39a784a25bf77cd2b",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "a9ac7137e91e3a6f9052f3647a8a65de23c2bbe0f5b975d6b7960b353659bf40"
+      }
+    },
+    {
+      "project": "05-pro-incident-center",
+      "app": "Incident Center.app",
+      "status": "passed",
+      "worker_sha256": "52632ff2eead7aa3ade3047542f65967307ddb7712d9f010e9eefa00c3fef4c5",
+      "host_sha256": "5d1869a2b978817d024b58fa31924ac26aafb06ebb3ee836e2982e2832d48b45",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "c9a8a673879b4225aa519895b8c976895d79e8397eca64746efc72ff83f28d8e",
+        "Contents/MacOS/NativeHost": "5d1869a2b978817d024b58fa31924ac26aafb06ebb3ee836e2982e2832d48b45",
+        "Contents/MacOS/arya-worker": "52632ff2eead7aa3ade3047542f65967307ddb7712d9f010e9eefa00c3fef4c5",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "1513dcb03b9e3e721b4726fa1c33ad388805451d7afb33a7da996dcd5d498625",
+        "Contents/Resources/REPORT.md": "906b6884065d65684458b74946fc932ebca1c45bd6dbc367e7f1b68a31a91229",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "683681fb786dcc94465f0467828313af93e6d39b149eed8874e4965898a7deee"
+      }
+    },
+    {
+      "project": "06-world-class-ledger-studio",
+      "app": "Ledger Studio.app",
+      "status": "passed",
+      "worker_sha256": "b5cabc22c894bdb189062904fcfa3d7cb80439308698ed8204c00fa1ed23d9a1",
+      "host_sha256": "b7e0faa393f67713058ce3591b9466e8a5d2745a26fade632f309ca734b6ebaa",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "ac36530c51ffc58f72795cfb8132ef4a7a2e602b878833d613de3be3e5688754",
+        "Contents/MacOS/NativeHost": "b7e0faa393f67713058ce3591b9466e8a5d2745a26fade632f309ca734b6ebaa",
+        "Contents/MacOS/arya-worker": "b5cabc22c894bdb189062904fcfa3d7cb80439308698ed8204c00fa1ed23d9a1",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "45bfde779178b7b7d8719380e309f89e1b7a911df83916811bdcfc542e00a6ec",
+        "Contents/Resources/REPORT.md": "61b38e1b1468769611c8da0099944cf756e8cd92f458aedd0241fa823c682883",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "98f967b44ad2766613ad8417f9383b88612ae8fe29101fa54e60b7bbe4322478"
+      }
+    }
+  ],
+  "passed": 6,
+  "failed": 0,
+  "archive": ".build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip",
+  "archive_bytes": 6948635,
+  "archive_sha256": "7f13352eff70ee63c29dec965db8ca5fbae3106fc793b6162bf97af43b7b5c8e",
+  "archive_roundtrip_verified": true,
+  "historical_bundles_and_archives_preserved": true
+}

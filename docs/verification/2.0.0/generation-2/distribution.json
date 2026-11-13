@@ -1,0 +1,95 @@
+{
+  "generation": 2,
+  "status": "both actual editor hosts passed against new qualified compiler; publication pending",
+  "version": "2.0.0",
+  "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "sdkRun": 43495958933,
+  "sdkJob": 132128996700,
+  "sdkArtifact": 14072747629,
+  "qualifiedSDKArchiveSHA256": "54cfd82f7ed3f6476b75be994bd10457310b3aba8f49ba13637e586f46f58567",
+  "minimumMacOS": "15.0",
+  "artifacts": [
+    {
+      "mode": "bundled",
+      "filename": "arya-language-2.0.0-darwin-arm64.vsix",
+      "sha256": "abea580d285bc593f08fe19a171de78e8b81be2009557b1316f2f51c9bc94491",
+      "bytes": 6837887,
+      "editorSourceFilesMatched": 37,
+      "nativePayloadFilesMatched": 173,
+      "actualHost": {
+        "passed": true,
+        "provider": "native Arya LSP",
+        "selectedCompiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/editor-b-kogl6ppu/extensions/aryacode.arya-language-2.0.0/native/arya",
+        "checks": [
+          "default compiler selection",
+          "hover",
+          "UI completion",
+          "definition",
+          "references",
+          "rename",
+          "format",
+          "semantic tokens",
+          "symbols",
+          "live type diagnostics"
+        ],
+        "bundledNativeSDK": true,
+        "portableInstalledSDK": false,
+        "launchEnvironment": "direct editor executable",
+        "isolatedVSIXInstallation": true,
+        "compilerOverrideConfigured": false,
+        "compilerVersion": "Arya native 2.0.0 (self-hosted)",
+        "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+        "packageSHA256": "abea580d285bc593f08fe19a171de78e8b81be2009557b1316f2f51c9bc94491",
+        "evidence": "/Users/hamza/Projects/github-repo/arya-lang/.build/editor-b-kogl6ppu"
+      },
+      "qualifiedSDKPayloadFilesMatched": 169,
+      "nativeNoticesMatched": 3,
+      "platformMetadataMatched": true,
+      "nativeFilenameSetComparedToGenerationOne": {
+        "added": [],
+        "removed": [],
+        "totalFilesInEach": 173
+      }
+    },
+    {
+      "mode": "portable",
+      "filename": "arya-language-2.0.0-portable.vsix",
+      "sha256": "3f14e6cab04c0d50bd297906e0229bdc5dcf66ee2787bb78ef9d62548baef783",
+      "bytes": 668490,
+      "editorSourceFilesMatched": 37,
+      "nativePayloadFilesMatched": 0,
+      "actualHost": {
+        "passed": true,
+        "provider": "native Arya LSP",
+        "selectedCompiler": "arya",
+        "checks": [
+          "default compiler selection",
+          "hover",
+          "UI completion",
+          "definition",
+          "references",
+          "rename",
+          "format",
+          "semantic tokens",
+          "symbols",
+          "live type diagnostics"
+        ],
+        "bundledNativeSDK": false,
+        "portableInstalledSDK": true,
+        "launchEnvironment": "CLI with installed SDK on PATH",
+        "isolatedVSIXInstallation": true,
+        "compilerOverrideConfigured": false,
+        "compilerVersion": "Arya native 2.0.0 (self-hosted)",
+        "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+        "packageSHA256": "3f14e6cab04c0d50bd297906e0229bdc5dcf66ee2787bb78ef9d62548baef783",
+        "evidence": "/Users/hamza/Projects/github-repo/arya-lang/.build/editor-p-k7ps7t6q"
+      }
+    }
+  ],
+  "installedSDKPrefix": "/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/editor SDK prefix",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "homeUnsetDuringInstallation": true,
+  "portableReuse": "Exact generation-one portable archive; all37adapterfiles match current inputs. New actual host uses newly installed qualified compiler on PATH without override.",
+  "historicalEvidence": "../distribution.json retains generation-one identities and actual host results."
+}

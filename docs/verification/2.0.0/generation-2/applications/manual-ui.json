@@ -1,0 +1,22 @@
+{
+  "recordedAtUTC": "2026-11-13T20:18:25.539596+00:00",
+  "method": "Native app control through CUA; root agent observed exact generation-two extracted bundles",
+  "applications": [
+    {
+      "name": "Pocket Calculator",
+      "path": ".build/release-2.0.0/generation-2/evidence/ci-apps-ce80487/extracted/arya-native-calculators-2.0.0-darwin-arm64/Pocket Calculator.app"
+    },
+    {
+      "name": "Study Desk",
+      "path": ".build/release-2.0.0/generation-2/evidence/ci-apps-ce80487/extracted/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app"
+    }
+  ],
+  "observations": [
+    "Both main windows rendered native controls",
+    "Both About panels showed Version 2.0.0 (2.0.0)",
+    "About panels described the native AppKit interface and compiled Arya logic"
+  ],
+  "interactions": "Opened and viewed only; no calculation, edit, save or export performed",
+  "closure": "Both applications quit; final application inventory confirmed neither running",
+  "scope": "Two-app launch/About spot check; does not claim visual interaction testing of all twelve new bundles"
+}
