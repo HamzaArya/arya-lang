@@ -36,3 +36,7 @@ Production deployment, other operating systems, power-loss simulation and multi-
 ## Language API storage repair — 2026-11-13
 
 Migrated persistence to native `fs.writeTextAtomicSync`; loaders now inspect `fs.infoSync` directly and reject existing/dangling symlinks and nonregular stores. Fixed-name `.tmp` staging was removed. Write-failure smoke cases now deny creation in the parent directory, since an unused `.tmp` blocker no longer represents a write failure. Original source/tests were retained in `.build/language-api-repairs/migration-before/`. Verification passed: native check and release build; the full existing smoke suite with an injected `data.json.tmp` symlink sentinel; and separate-process rejection of an existing store symlink, dangling symlink, and directory store. Source, test, and executable hashes were checked after the run. See the suite-level `reports/language-api-storage-20261113.json`.
+
+## Superseding 2.0.0 relocation repair
+
+The source-folder dependency above describes the earlier SDK. In Arya 2.0.0, `web.serve` skips static-root resolution when both `html` and `assets` are `false`, as in this application; its explicit `root: process.cwd()` remains supported. The moved-executable/source-removal HTTP regression passed on macOS; see [release repair evidence](../../../docs/native-release-2.0.0.md). This documentation update records the language repair. The application's original test identities and platform coverage remain the evidence for its workflows.

@@ -36,3 +36,7 @@ Production deployment, other operating systems, power-loss simulation and multi-
 ## Language API storage repair — 2026-11-13
 
 Migrated persistence to native `fs.writeTextAtomicSync`; loaders now inspect `fs.infoSync` directly and reject existing/dangling symlinks and nonregular stores. Fixed-name `.tmp` staging was removed. Write-failure smoke cases now deny creation in the parent directory, since an unused `.tmp` blocker no longer represents a write failure. Original source/tests were retained in `.build/language-api-repairs/migration-before/`. Verification passed: native check and release build; the full existing smoke suite with an injected `data.json.tmp` symlink sentinel; and separate-process rejection of an existing store symlink, dangling symlink, and directory store. Source, test, and executable hashes were checked after the run. See the suite-level `reports/language-api-storage-20261113.json`.
+
+## Superseding 2.0.0 decimal diagnostic repair
+
+Rounding remains an explicit API argument, and typed calls reject its omission. Unannotated programs intentionally remain dynamic. The repaired runtime now reports `ARYA_DECIMAL_ROUNDING` for a missing mode instead of the misleading decimal-places error above; [API repair evidence](../../../docs/native-api-repairs.md) records typed and dynamic regressions. This application continues to supply `"half-even"`. This documentation update does not represent a new application build or test run.
