@@ -1,0 +1,32 @@
+name: Qualified Linux SDK installer recheck
+on:
+  workflow_dispatch:
+  push:
+    branches: ['release/**']
+    paths:
+      - '.github/workflows/native-linux-installer.yml'
+      - 'native/bootstrap/requalify-linux-installer.py'
+      - 'native/bootstrap/install-sdk.sh'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  installer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify controller and checksum boundaries
+        run: |
+          python3 native/tests/linux-installer-reference.py
+          python3 native/tests/release-apps-reference.py
+      - name: Verify qualified SDK and test the current installed CLI
+        run: python3 native/bootstrap/requalify-linux-installer.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-installer-requalification-evidence
+          path: .build/linux-installer-requalification/evidence/
+          if-no-files-found: warn
