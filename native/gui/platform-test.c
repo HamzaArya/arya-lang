@@ -7,13 +7,16 @@
 #include "gtk.c"
 #endif
 static void expect_event(AGWindow *window,const char *type,const char *id,int index){
-  int seen=0;for(int i=0;i<100;i++){AGuiEvent event={0};int result=arya_gui_poll(window,&event);assert(result>=0);if(result==1){if(!strcmp(event.type,type)&&!strcmp(event.id,id)){assert(event.state.index==index);seen=1;}arya_gui_dispose_state(&event.state);}if(seen)break;}assert(seen);
+  int seen=0;for(int i=0;i<100;i++){AGuiEvent event={0};int result=arya_gui_poll(window,&event);assert(result>=0);if(result==1){if(!strcmp(event.type,type)&&!strcmp(event.id,id)){assert(event.state.index==index);seen=1;}arya_gui_dispose_state(&event.state);}if(seen)break;}
+  if(!seen)fprintf(stderr,"Missing native event: %s for '%s'\n",type,id);
+  assert(seen);printf("Native event PASS: %s for '%s'\n",type,id);fflush(stdout);
 }
 int main(void){
   AGWindow *window=(AGWindow*)arya_gui_window("Arya native toolkit actions",480,420);assert(window);
   AGuiSpec spec={0};spec.kind=AG_BUTTON;spec.id="button";spec.text="Click";spec.x=20;spec.y=20;spec.width=140;spec.height=32;spec.enabled=1;spec.index=-1;spec.mask=AG_RECT|AG_TEXT|AG_ENABLED;assert(arya_gui_add(window,&spec));
   AGControl *button=ag_find(window,"button");
 #if defined(_WIN32) || defined(__CYGWIN__)
+  SetActiveWindow(window->window);
   SendMessageW(button->widget,BM_CLICK,0,0);
 #else
   gtk_button_clicked(GTK_BUTTON(button->widget));
@@ -42,7 +45,10 @@ int main(void){
   expect_event(window,"submit","input",-1);
   spec.kind=AG_TEXTAREA;spec.id="notes";spec.y=170;spec.height=120;assert(arya_gui_add(window,&spec));AGControl *notes=ag_find(window,"notes");
 #if defined(_WIN32) || defined(__CYGWIN__)
-  SetWindowTextW(notes->widget,L"line1\r\nline2");
+  /* WM_SETTEXT deliberately omits EN_CHANGE for multiline Win32 edits.
+     Replace the selected content through an edit operation instead. */
+  SendMessageW(notes->widget,EM_SETSEL,0,-1);
+  SendMessageW(notes->widget,EM_REPLACESEL,TRUE,(LPARAM)L"line1\r\nline2");
 #else
   gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(notes->widget)),"line1\nline2",-1);
 #endif

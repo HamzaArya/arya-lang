@@ -70,9 +70,10 @@ jobs:
       - name: Direct Win32 backend action probe
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
+          mkdir -p .build/release-evidence
           make native-gui CC=gcc
           gcc -std=c11 native/gui/platform-test.c -lcomctl32 -lgdi32 -luser32 -o .build/gui/platform-actions.exe
-          .build/gui/platform-actions.exe
+          .build/gui/platform-actions.exe 2>&1 | tee .build/release-evidence/windows-native-actions.log
       - name: Build native Windows PE toolchain with explicit Cygwin dependency
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |

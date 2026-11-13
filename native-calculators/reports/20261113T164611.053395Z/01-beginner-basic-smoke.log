@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/01-beginner-basic/.build/worker"]
+PASS: 87 native calculator calls, independent numerical oracle, rejection/no-mutation, history bounds, persistence, failed-write rollback and corruption

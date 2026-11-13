@@ -1,0 +1,103 @@
+{
+  "date_utc": "2026-11-13T16:48:23.042082+00:00",
+  "host_source_sha256": "2a2de3b2a621e91f3b6ab290f1c3e9d8f59917123597c7aae55085a4dd7489f3",
+  "projects": [
+    {
+      "project": "01-beginner-basic",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Pocket Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "c74c9aed720757320c1ee32337ff45e6873f92abb696c148664ce1e547291895",
+      "host_sha256": "badbc31f3576477fe1ee8b42acb52e4635d063ff1b0bc3ea58bf1da372562a6e",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "02-better-everyday",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Everyday Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "b6980bd4d18108874d3efa67df42b24ef36546bd8073a561e58ca00f9160c78e",
+      "host_sha256": "2d991d4178fcefc88c6e4068cb81ba1f1f05251f07cc87ba25c443bea2997239",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "03-intermediate-scientific",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Scientific Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "b7f9de1b4f4cc1b0e1be9bd92097e24aff4fb835cc5048d65026df41a8574bd8",
+      "host_sha256": "1eb1acf7cb8c3beb4b55ce0d1770ceb0a9d4a98537b12e310a2944f40f5d907a",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "04-advanced-programmer",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Programmer Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "0cfffd8c03dc1160d964961648682337710f7ca9548fe6783296a8b1e81a455b",
+      "host_sha256": "dc183e7db8865143df8abab58ba497ded698866fa75d566c6265b7712b039151",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "05-pro-finance",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Finance Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "920d1296d7e40dc178d838db31e4a6ff6d813ccbbc79c1c208ef8ea26c327376",
+      "host_sha256": "b186b7dc927147a82db285d7818b6168de44058b8b8d24f53573781746bf9e05",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "06-world-class-precision",
+      "app": "../.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64/Precision Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T164611.053395Z/results.json",
+      "package_evidence": "reports/20261113T164611.053395Z/results.json",
+      "worker_sha256": "89e4f123a54d22563af990391d048f0e6c5e36debc2adc6e4ef2d26c72b17651",
+      "host_sha256": "bed2dedee3774f7576853e332192dc552a09d1ae0094bf9d606bf682bebeffad",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    }
+  ],
+  "status": "passed"
+}

@@ -12,7 +12,7 @@ behavior only; they are not evidence of Windows execution.
 
 ## Candidate `e24caa4`
 
-- [Desktop workflow 43465804910](https://github.com/HamzaArya/arya-lang/actions/runs/43465804910): pending at this log entry.
+- [Desktop workflow 43465804910](https://github.com/HamzaArya/arya-lang/actions/runs/43465804910): Windows failed its early toolkit action step before compiler bootstrap. GitHub's generated multiline step script used CRLF, so `make` received `CC=gcc\r`. Cygwin shell steps now enable `-o igncr`, as documented by the [Cygwin installation action](https://github.com/cygwin/cygwin-install-action#line-endings). This was a workflow line-ending failure, not a Win32 widget execution result. Other platforms were pending at this log entry.
 - [Independent workflow 43465805025](https://github.com/HamzaArya/arya-lang/actions/runs/43465805025): pending at this log entry.
 - Windows now probes the real GCC sanitizer capability and stores its output. If Cygwin lacks ASan/UBSan, its focused tests explicitly use release/debug builds plus GC stress. That result does not claim Windows sanitizer coverage.
 - Windows gates include core behavior, empty arrays, collection mutation, process spawning, UInt32 operations, byte hashing, API contracts and byte/atomic-file behavior, editor paths, real Win32 controls, native Windows editor transport, SDK archive integrity, relocation and installation.

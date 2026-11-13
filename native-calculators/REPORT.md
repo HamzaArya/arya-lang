@@ -1,5 +1,21 @@
 # Calculator delivery report
 
+## Arya 2.0.0 rebuild and distribution
+
+All six engines were checked, rebuilt, and passed their complete smoke suites with the repaired Arya 2.0.0 compiler (`c5515eab20cb4a4a81b4a9d560f195108e6b916b05c72d491ccb7a0390ef71ee`). Programmer now calls the native UInt32 bitwise APIs; its 280 independent Python integer reference cases passed. Each bundle passed the actual AppKit host/worker protocol check and strict ad-hoc signature verification. No new engine or GUI-host failure occurred in this rebuild.
+
+The isolated versioned output preserves the 66 files in the historical `dist/` bundles and the original ZIP. Bundle application versions are now 2.0.0. The release ZIP was extracted again; every bundled file hash, executable permission, and application signature matched. This build did not repeat the earlier manual GUI sessions: their host-source evidence remains below, while the latest protocol and numerical evidence is linked here.
+
+- [Complete 6/6 build, tests and packaging](reports/20261113T164611.053395Z/results.json)
+- [Current-source, architecture and worker-dependency reconciliation](reports/release-2.0.0-delivery.json)
+- [Release ZIP verification](reports/release-2.0.0-bundles.json)
+- Artifact: `.build/release-2.0.0/arya-native-calculators-2.0.0-darwin-arm64.zip` (7,531,323 bytes)
+- SHA-256: `8f6854c4d7076dff9be2ccc75d7f49fdd6b3a1fd5e8b3e2fbddf5d6d1dc9149b`
+
+These remain native AppKit applications for macOS 26 on Apple Silicon. They are ad-hoc signed and are not Developer ID signed or notarized. The new language's GTK and Win32 backends do not automatically port these existing AppKit applications.
+
+The work records below describe the original delivery and its development history; the linked 2.0.0 evidence supersedes the original binary/source reconciliation for the new release.
+
 Request: six calculators, one per previously requested developer skill level, retaining the latest requirement for real native desktop GUI software. Work is confined to `native-calculators/`; existing projects and compiler/runtime sources are preserved.
 
 ## Work performed

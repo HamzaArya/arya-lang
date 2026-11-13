@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build and verify native macOS .app bundles. Python is build/test tooling only."""
-import argparse, datetime, hashlib, json, os, pathlib, plistlib, shutil, subprocess, sys, tempfile, time
+import argparse, datetime, hashlib, json, os, pathlib, plistlib, re, shutil, subprocess, sys, tempfile, time
 ROOT=pathlib.Path(__file__).resolve().parent
 REPO=ROOT.parent
 
@@ -43,12 +43,15 @@ def validate(config):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--filter',default='');p.add_argument('--compiler',default=str(REPO/'bin/arya'));p.add_argument('--package-only',action='store_true',help='Use existing .build/worker for iterative UI development; not full verification')
+    p.add_argument('--output',type=pathlib.Path,help='Bundle directory; defaults to dist/')
+    p.add_argument('--app-version',default='1.0',help='Numeric application version, for example 2.0.0')
     opt=p.parse_args(); projects=sorted(f for f in ROOT.glob('0*-*') if f.is_dir() and any(token in f.name for token in opt.filter.split(',')))
     if not projects:p.error('No matching projects')
+    if not re.fullmatch(r'[0-9]+(?:\.[0-9]+){0,2}',opt.app_version):p.error('--app-version must have one to three numeric components')
     stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ'); logs=ROOT/'reports'/stamp;logs.mkdir(parents=True)
-    build=ROOT/'.build';build.mkdir(exist_ok=True);dist=ROOT/'dist';dist.mkdir(exist_ok=True)
+    build=ROOT/'.build';build.mkdir(exist_ok=True);dist=opt.output.expanduser().resolve() if opt.output else ROOT/'dist';dist.mkdir(parents=True,exist_ok=True)
     host=build/'NativeHost';host_source=ROOT/'shared/NativeHost.m'
-    result={'date_utc':stamp,'mode':'package-only' if opt.package_only else 'check-build-test-package','host_source_sha256':sha(host_source),'compiler_version':subprocess.check_output([opt.compiler,'--version'],text=True).strip(),'projects':[]}
+    result={'date_utc':stamp,'mode':'package-only' if opt.package_only else 'check-build-test-package','app_version':opt.app_version,'output':str(dist),'host_source_sha256':sha(host_source),'compiler_version':subprocess.check_output([opt.compiler,'--version'],text=True).strip(),'compiler_sha256':sha(pathlib.Path(opt.compiler).resolve()),'projects':[]}
     result['host_build']=call(['clang','-fobjc-arc','-fmodules','-Wall','-Wextra',str(host_source),'-framework','Cocoa','-framework','UniformTypeIdentifiers','-o',str(host)],logs/'appkit-host.log')
     result['host_binary_sha256']=sha(host)
     icon_tool=build/'Icon'
@@ -73,7 +76,7 @@ def main():
                 row['steps'].append(call(['iconutil','-c','icns',str(iconset),'-o',str(resources/'Calculator.icns')],logs/(project.name+'-icon-package.log')))
                 for source in (REPO/'LICENSE',REPO/'NOTICE',REPO/'THIRD-PARTY-NOTICES.txt',pathlib.Path(str(worker)+'.NOTICE')):
                     if source.exists():shutil.copy2(source,resources/source.name)
-                info={'CFBundleName':config['name'],'CFBundleDisplayName':config['name'],'CFBundleIdentifier':'org.arya.native.'+config['id'],'CFBundleExecutable':'NativeHost','CFBundlePackageType':'APPL','CFBundleShortVersionString':'1.0','CFBundleVersion':'1','NSPrincipalClass':'NSApplication','NSHighResolutionCapable':True,'LSMinimumSystemVersion':'26.0','NSHumanReadableCopyright':'Arya native application collection. See bundled notices.'}
+                info={'CFBundleName':config['name'],'CFBundleDisplayName':config['name'],'CFBundleIdentifier':'org.arya.native.'+config['id'],'CFBundleExecutable':'NativeHost','CFBundlePackageType':'APPL','CFBundleShortVersionString':opt.app_version,'CFBundleVersion':opt.app_version,'NSPrincipalClass':'NSApplication','NSHighResolutionCapable':True,'LSMinimumSystemVersion':'26.0','NSHumanReadableCopyright':'Arya native application collection. See bundled notices.'}
                 info['CFBundleIconFile']='Calculator.icns'
                 (app/'Contents/Info.plist').write_bytes(plistlib.dumps(info))
                 row['steps'].append(call(['codesign','--force','--sign','-',str(mac/'arya-worker')],logs/(project.name+'-sign-worker.log')))
@@ -95,7 +98,7 @@ def main():
                 except BaseException:
                     if backup.exists():backup.rename(destination)
                     raise
-            row.update(status='passed',app=str(destination.relative_to(ROOT)),worker_sha256=sha(destination/'Contents/MacOS/arya-worker'),host_sha256=sha(destination/'Contents/MacOS/NativeHost'))
+            row.update(status='passed',app=os.path.relpath(destination,ROOT),worker_sha256=sha(destination/'Contents/MacOS/arya-worker'),host_sha256=sha(destination/'Contents/MacOS/NativeHost'))
             print('  PASS '+str(destination),flush=True)
         except Exception as error:
             row.update(status='failed',error=str(error));print('  FAIL '+str(error),flush=True)

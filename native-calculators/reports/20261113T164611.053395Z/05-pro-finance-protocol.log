@@ -1,0 +1,18 @@
+{
+  "views" : [
+    {
+      "view" : "history",
+      "response" : {
+        "result" : "0",
+        "message" : "Ready.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "memory" : "0",
+        "summary" : "0 saved calculations · Exact expressions; explicit final rounding"
+      }
+    }
+  ],
+  "ok" : true
+}

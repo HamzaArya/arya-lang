@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Reconcile delivered bundles with the latest complete build/test evidence."""
-import datetime, hashlib, json, pathlib, subprocess
+import argparse, datetime, hashlib, json, pathlib, subprocess
 root=pathlib.Path(__file__).resolve().parent
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output',type=pathlib.Path,default=root/'reports/DELIVERY-VERIFICATION.json',help='Evidence file; choose a versioned path to preserve older delivery records')
+options=parser.parse_args()
 sha=lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 runs=[]
 for path in sorted((root/'reports').glob('*/results.json')):
@@ -30,5 +33,5 @@ for project in sorted(root.glob('0*-*')):
     result['projects'].append({'project':project.name,'app':row['app'],'status':'passed','engine_build_test_evidence':str(engine_path.relative_to(root)),'package_evidence':str(path.relative_to(root)),'worker_sha256':sha(worker),'host_sha256':sha(host),'architecture':architecture,'worker_libraries':libraries})
 assert len(result['projects'])==6
 result['status']='passed'
-output=root/'reports/DELIVERY-VERIFICATION.json'; output.write_text(json.dumps(result,indent=2)+'\n')
+output=options.output.resolve(); output.parent.mkdir(parents=True,exist_ok=True); output.write_text(json.dumps(result,indent=2)+'\n')
 print(f'6/6 delivered apps match current sources and complete build/test evidence: {output}')
