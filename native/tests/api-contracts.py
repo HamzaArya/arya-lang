@@ -1,5 +1,6 @@
 """Independent byte oracle and positive/negative checker regression cases."""
 import json
+import errno
 import os
 from pathlib import Path
 import resource
@@ -13,6 +14,25 @@ compiler = Path(os.environ.get('ARYA_NATIVE_BIN', root / '.build/independent/ary
 sanitizers = os.environ.get('ARYA_TEST_SANITIZERS') != 'unavailable'
 if not sanitizers and sys.platform != 'cygwin':
     raise SystemExit('Sanitizer fallback requires the recorded Cygwin capability gate.')
+file_size_limit = True
+if sys.platform == 'cygwin':
+    # Cygwin currently rejects RLIMIT_FSIZE. Probe in a disposable process so
+    # the controller never changes its own limits or silently drops a gate.
+    probe_limit = subprocess.run([sys.executable, '-c',
+        'import resource\n'
+        'try: resource.setrlimit(resource.RLIMIT_FSIZE, (1024, 1024))\n'
+        'except OSError as error:\n print(error.errno)\n raise SystemExit(1)\n'
+        'except ValueError as error:\n print("ValueError: " + str(error))\n raise SystemExit(1)\n'],
+        capture_output=True, text=True, timeout=30)
+    # CPython translates setrlimit's EINVAL into this specific ValueError.
+    unsupported_limit = (str(errno.EINVAL), 'ValueError: current limit exceeds maximum limit')
+    if probe_limit.returncode == 1 and probe_limit.stdout.strip() in unsupported_limit:
+        file_size_limit = False
+        print('Cygwin RLIMIT_FSIZE probe: ' + probe_limit.stdout.strip())
+        print('RLIMIT_FSIZE EINVAL: write-size fault injection unavailable; '
+              'atomic writes, target rejection and preservation checks remain enabled.')
+    else:
+        assert probe_limit.returncode == 0, (probe_limit.stdout, probe_limit.stderr)
 prefix = 'const typed: boolean = true\n'
 decimal = 'use std "decimal" as decimal\n'
 web = 'use std "web" as web\nuse std "process" as process\n'
@@ -58,7 +78,7 @@ with tempfile.TemporaryDirectory(prefix='api-contracts-', dir=root / '.build') a
     probe.write_text(decimal + 'decimal.quantize("1.25", 2)\n')
     assert json.loads(run([compiler, 'check', probe, '--json']).stdout)['ok']
     for variant in ('optimized', 'reference'):
-        binary = temporary / variant
+        binary = temporary / (variant + ('.exe' if sys.platform == 'cygwin' else ''))
         options = ['--debug', *(['--sanitize'] if sanitizers else [])]
         if variant == 'reference':
             options += ['--no-data-opt']
@@ -89,11 +109,12 @@ with tempfile.TemporaryDirectory(prefix='api-contracts-', dir=root / '.build') a
         def restrict_writes():
             signal.signal(signal.SIGXFSZ, signal.SIG_IGN)
             resource.setrlimit(resource.RLIMIT_FSIZE, (1024, 1024))
-        failed_write = run([binary, data, 'atomic-write-failure'], preexec_fn=restrict_writes,
-                           env={**os.environ, 'ASAN_OPTIONS': 'detect_leaks=0', 'UBSAN_OPTIONS': 'halt_on_error=1'})
-        assert 'atomic failure preserved destination' in failed_write.stdout
-        assert (data / 'atomic-failed.bin').read_bytes() == b'preserve'
-        assert not list(data.glob('*.stage-*'))
+        if file_size_limit:
+            failed_write = run([binary, data, 'atomic-write-failure'], preexec_fn=restrict_writes,
+                               env={**os.environ, 'ASAN_OPTIONS': 'detect_leaks=0', 'UBSAN_OPTIONS': 'halt_on_error=1'})
+            assert 'atomic failure preserved destination' in failed_write.stdout
+            assert (data / 'atomic-failed.bin').read_bytes() == b'preserve'
+            assert not list(data.glob('*.stage-*'))
         print(f'{variant}: {result.stdout.strip()}')
 instrumentation = 'ASan/UBSan + GC stress' if sanitizers else 'debug + GC stress (Cygwin ASan/UBSan unavailable)'
 print(f'API contracts: {len(cases)} typed checks, dynamic compatibility, independent byte oracle; {instrumentation} passed')

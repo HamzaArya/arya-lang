@@ -68,3 +68,39 @@ regressions. Both then correctly rejected the new decimal-remainder test's
 nullable vector indexing at line 17. The test now validates vector shape and
 binds explicit string operands before invoking the typed API. This failure
 occurred before executing remainder vectors; it was not an arithmetic result.
+
+## Candidate `0dc38b7` and Windows isolation follow-up
+
+[Desktop workflow 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848)
+completed every macOS gate, including the repaired collection and empty-array
+cases, 869 remainder checks per mode, API contracts, HTTP relocation, AppKit
+controls and SDK distribution. Its SDK artifact `14061468049` contains a
+Mach-O ARM64 compiler targeting macOS 15.0. All 561 SDK checksums passed after
+download, and stage-two/stage-three generated C converged. The archive SHA-256
+is `04f8a197effdcde731bfb11447736c0cf779255f35a1d356c1066841dff2a6b5`.
+[Independent workflow 43470021846](https://github.com/HamzaArya/arya-lang/actions/runs/43470021846)
+also passed all macOS fresh-build, installed-SDK and reference gates. Both Linux
+jobs reached the same invalid string-storage temporary-directory fixture noted
+above; candidate `2477705` corrects that fixture and is being qualified separately.
+
+The completed Windows job from candidate `96e4b60` passed its full SDK bootstrap,
+confirming that subprocess spawning now reaches the final compiler and native
+dependencies. Its next core test failed while loading `core.exe`: the test set
+`PATH=/nonexistent`, which removed the declared Cygwin DLL search path. The
+corrected isolation harness uses an empty POSIX PATH on Cygwin: its
+[environment implementation](https://github.com/cygwin/cygwin/blob/master/winsup/cygwin/environ.cc)
+provides the original DLL directory separately to the Windows loader when PATH
+is absent or empty. The test uses an absolute C compiler path for compilation;
+Unix runtime isolation continues to use the nonexistent PATH. This avoids
+relocating the Cygwin DLL and still requires a passing Windows rerun.
+
+That Windows runner's GCC linker explicitly reported missing `-lasan` and
+`-lubsan`; release/debug builds with GC stress are therefore the Windows gate,
+while sanitizer coverage remains qualified on macOS/Linux. The API controller
+also probes Cygwin file-size limit support before attempting its write-failure
+injection: Cygwin's [resource implementation](https://github.com/cygwin/cygwin/blob/master/winsup/cygwin/resource.cc)
+does not implement setting `RLIMIT_FSIZE`. An actual `EINVAL` is recorded as
+unavailable fault injection, not a passing injection result. Byte fidelity,
+atomic replacement, target rejection and preservation tests remain enabled.
+Windows independent gates now all run and retain their individual logs before
+returning a failing status if any gate fails.

@@ -197,6 +197,11 @@ A remote VS Code window uses the remote extension host's platform. Run/Check
 require workspace trust; untrusted workspaces ignore project-local compiler
 settings. Restart the extension host after changing the compiler selection.
 
+For a portable package on macOS, launch `code .` from a terminal whose PATH
+contains the installed SDK. An editor opened from the Dock loads its login-shell
+environment; set the SDK path there or configure `arya.compilerPath` with the
+installed executable's full path.
+
 From a full repository checkout, package either form without npm:
 
 ```sh

@@ -9,6 +9,22 @@ export LC_ALL=C.UTF-8
 mkdir -p .build/release-evidence
 work=$(mktemp -d "$root/.build/windows-runtime.XXXXXX")
 trap 'rm -rf "$work"' EXIT HUP INT TERM
+. "$root/native/tests/runtime-path.sh"
+arya_test_prepare_runtime_path "$work"
+printf '%s\n' 'Isolated Windows tests use empty POSIX PATH; Cygwin supplies its native DLL loader directory.'
+cat > "$work/isolation.c" <<'C'
+#include <stdio.h>
+#include <stdlib.h>
+int main(void) {
+  const char *path = getenv("PATH");
+  if (!path || *path) return 1;
+  puts("Empty POSIX PATH: native DLL loading and absolute C toolchain passed.");
+  return 0;
+}
+C
+env -i PATH= "$(command -v gcc)" "$work/isolation.c" -o "$work/isolation.exe" > .build/release-evidence/windows-path-isolation.log 2>&1 || { cat .build/release-evidence/windows-path-isolation.log >&2; exit 1; }
+env -i PATH= "$work/isolation.exe" >> .build/release-evidence/windows-path-isolation.log 2>&1 || { cat .build/release-evidence/windows-path-isolation.log >&2; exit 1; }
+cat .build/release-evidence/windows-path-isolation.log
 printf '%s\n' 'int main(void) { return 0; }' > "$work/probe.c"
 if gcc -fsanitize=address,undefined "$work/probe.c" -o "$work/probe.exe" > .build/release-evidence/windows-sanitizer-capability.log 2>&1 && "$work/probe.exe" >> .build/release-evidence/windows-sanitizer-capability.log 2>&1; then
   export ARYA_TEST_SANITIZERS=required
@@ -18,11 +34,23 @@ else
   printf '%s\n' 'ASan/UBSan unavailable: Windows gates use release/debug + GC stress. Instrumentation is qualified separately on macOS/Linux.' >> .build/release-evidence/windows-sanitizer-capability.log
 fi
 cat .build/release-evidence/windows-sanitizer-capability.log
+failed=0
 for gate in run array-empty collection-mutation process-run python-platform bitwise32 decimal-remainder security-bytes editor-paths gui; do
-  sh "native/tests/$gate.sh" > ".build/release-evidence/windows-$gate.log" 2>&1 || { cat ".build/release-evidence/windows-$gate.log" >&2; exit 1; }
+  if sh "native/tests/$gate.sh" > ".build/release-evidence/windows-$gate.log" 2>&1; then
+    printf 'Windows gate PASS: %s\n' "$gate"
+  else
+    printf 'Windows gate FAIL: %s\n' "$gate" >&2
+    failed=1
+  fi
   cat ".build/release-evidence/windows-$gate.log"
 done
-python3 native/tests/api-contracts.py > .build/release-evidence/windows-api-contracts.log 2>&1 || { cat .build/release-evidence/windows-api-contracts.log >&2; exit 1; }
-cat .build/release-evidence/windows-api-contracts.log
-python3 native/tests/web-relocation.py > .build/release-evidence/windows-web-relocation.log 2>&1 || { cat .build/release-evidence/windows-web-relocation.log >&2; exit 1; }
-cat .build/release-evidence/windows-web-relocation.log
+for gate in api-contracts web-relocation; do
+  if python3 "native/tests/$gate.py" > ".build/release-evidence/windows-$gate.log" 2>&1; then
+    printf 'Windows gate PASS: %s\n' "$gate"
+  else
+    printf 'Windows gate FAIL: %s\n' "$gate" >&2
+    failed=1
+  fi
+  cat ".build/release-evidence/windows-$gate.log"
+done
+exit "$failed"

@@ -26,7 +26,7 @@ with tempfile.TemporaryDirectory(prefix="web-relocation-", dir=root / ".build") 
     (content / "index.html").write_text("<h1>Relocated native service</h1>")
     binaries = []
     for mode in ("release", "sanitized" if sanitized else "debug"):
-        binary = work / ("server-" + mode)
+        binary = work / ("server-" + mode + (".exe" if sys.platform == "cygwin" else ""))
         flags = ["--release"] if mode == "release" else ["--debug", *(["--sanitize"] if sanitized else [])]
         result = subprocess.run([str(compiler), "build", str(program), "-o", str(binary), *flags], capture_output=True, text=True)
         assert result.returncode == 0, result.stdout + result.stderr
@@ -36,7 +36,10 @@ with tempfile.TemporaryDirectory(prefix="web-relocation-", dir=root / ".build") 
         binaries.append(destination)
     source.rename(work / "preserved source")
     assert not source.exists()
-    environment = {"PATH": "/nonexistent", "ARYA_GC_STRESS": "1", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1"}
+    # Empty POSIX PATH keeps interpreter lookup disabled, while Cygwin supplies
+    # the original installation's DLL directory to the Windows loader.
+    runtime_path = "" if sys.platform == "cygwin" else "/nonexistent"
+    environment = {"PATH": runtime_path, "ARYA_GC_STRESS": "1", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1"}
     for binary in binaries:
         for scenario in ("api", "explicit", "external"):
             server = subprocess.Popen([str(binary), scenario, str(content)], cwd=installed,

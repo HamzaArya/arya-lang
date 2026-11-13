@@ -5,11 +5,13 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
 compiler=${ARYA_NATIVE_BIN:-$root/.build/independent/arya}
 tmp=$(mktemp -d "$root/.build/native-check.XXXXXX")
 trap 'rm -rf "$tmp"' EXIT HUP INT TERM
+. "$root/native/tests/runtime-path.sh"
+arya_test_prepare_runtime_path "$tmp"
 for name in core decimal list json; do
   "$compiler" build "$root/native/tests/fixtures/$name.arya" -o "$tmp/$name" --release > "$tmp/$name.build.log" 2>&1
-  env -i PATH=/nonexistent "$tmp/$name" > "$tmp/$name.actual"
+  env -i PATH="$arya_test_runtime_path" "$tmp/$name" > "$tmp/$name.actual"
   diff -u "$root/native/tests/fixtures/$name.expected" "$tmp/$name.actual"
-  env -i PATH=/nonexistent ARYA_GC_STRESS=1 "$tmp/$name" > "$tmp/$name.stress"
+  env -i PATH="$arya_test_runtime_path" ARYA_GC_STRESS=1 "$tmp/$name" > "$tmp/$name.stress"
   diff -u "$root/native/tests/fixtures/$name.expected" "$tmp/$name.stress"
   printf '%s\n' "$name: native output and GC stress passed"
 done
@@ -23,7 +25,7 @@ use arya "./helper.arya" as helper
 print(helper.current, helper.next(), helper.current)
 ARYA
 "$compiler" build "$tmp/modules/main.arya" -o "$tmp/modules/main" --release > "$tmp/modules.log" 2>&1
-env -i PATH=/nonexistent "$tmp/modules/main" > "$tmp/module.actual"
+env -i PATH="$arya_test_runtime_path" "$tmp/modules/main" > "$tmp/module.actual"
 printf '1 2 2\n' > "$tmp/module.expected"
 diff -u "$tmp/module.expected" "$tmp/module.actual"
 printf '%s\n' 'modules: live native exports passed'
@@ -55,7 +57,7 @@ fn say(value) => value + task
 print(say(2))
 ARYA
 "$compiler" build "$tmp/tdz.arya" -o "$tmp/tdz" --release > "$tmp/tdz.log" 2>&1
-env -i PATH=/nonexistent "$tmp/tdz" > "$tmp/tdz.actual"
+env -i PATH="$arya_test_runtime_path" "$tmp/tdz" > "$tmp/tdz.actual"
 printf 'ReferenceError\n3\n' > "$tmp/tdz.expected"
 diff -u "$tmp/tdz.expected" "$tmp/tdz.actual"
 printf '%s\n' 'canonical syntax and default-parameter TDZ passed'
@@ -69,9 +71,14 @@ for native_tool in cc as ld; do
   native_path=$(command -v "$native_tool")
   ln -s "$native_path" "$tmp/tools/$native_tool"
 done
+native_cc=$(command -v cc)
+compile_path="$tmp/tools:$arya_test_runtime_path"
+# Cygwin GCC finds its assembler/linker through configured absolute prefixes.
+# Empty POSIX PATH lets Cygwin provide DLL lookup without exposing executables.
+case $(uname -s) in CYGWIN*) compile_path=;; esac
 cp "$root/native/tests/fixtures/decimal.arya" "$tmp/sdk/main.arya"
-env -i PATH="$tmp/tools" "$tmp/sdk/arya" build "$tmp/sdk/main.arya" -o "$tmp/sdk/application" --release > "$tmp/sdk/build.log" 2>&1 || { cat "$tmp/sdk/build.log" >&2; exit 1; }
-env -i PATH=/nonexistent "$tmp/sdk/application" > "$tmp/sdk/actual"
+env -i PATH="$compile_path" "$tmp/sdk/arya" build "$tmp/sdk/main.arya" --cc "$native_cc" -o "$tmp/sdk/application" --release > "$tmp/sdk/build.log" 2>&1 || { cat "$tmp/sdk/build.log" >&2; exit 1; }
+env -i PATH="$arya_test_runtime_path" "$tmp/sdk/application" > "$tmp/sdk/actual"
 diff -u "$root/native/tests/fixtures/decimal.expected" "$tmp/sdk/actual"
 printf '%s\n' 'relocation: compiler and decimal program work without Node/Python'
 if command -v otool >/dev/null 2>&1; then otool -L "$tmp/sdk/arya" "$tmp/sdk/application" > "$tmp/dependencies"; else ldd "$tmp/sdk/arya" "$tmp/sdk/application" > "$tmp/dependencies"; fi
@@ -82,14 +89,14 @@ printf '%s\n' 'native dependencies: no embedded JavaScript or Python runtime'
 set -- --debug --sanitize
 if test "$arya_test_second_mode" = debug; then set -- --debug; fi
 "$compiler" build "$root/native/tests/fixtures/core.arya" -o "$tmp/sanitized" "$@" > "$tmp/sanitize.log" 2>&1 || { cat "$tmp/sanitize.log" >&2; exit 1; }
-env -i PATH=/nonexistent ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 ARYA_GC_STRESS=1 "$tmp/sanitized" > "$tmp/sanitized.actual"
+env -i PATH="$arya_test_runtime_path" ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 ARYA_GC_STRESS=1 "$tmp/sanitized" > "$tmp/sanitized.actual"
 diff -u "$root/native/tests/fixtures/core.expected" "$tmp/sanitized.actual"
 if test "$arya_test_second_mode" = sanitized; then
   printf '%s\n' 'ASan/UBSan with GC stress passed (leak detection not run)'
 else printf '%s\n' 'Core debug with GC stress passed; sanitizer instrumentation unavailable on this Cygwin toolchain.'; fi
 
 "$compiler" build "$root/native/examples/calculation-worker.arya" -o "$tmp/worker" --release > "$tmp/worker.log" 2>&1
-env -i PATH=/nonexistent "$tmp/worker" < "$root/native/tests/fixtures/bridge.input" > "$tmp/worker.actual"
+env -i PATH="$arya_test_runtime_path" "$tmp/worker" < "$root/native/tests/fixtures/bridge.input" > "$tmp/worker.actual"
 diff -u "$root/native/tests/fixtures/bridge.expected" "$tmp/worker.actual"
 printf '%s\n' 'native financial bridge: exact JSON-lines calculations passed'
 cat > "$tmp/failing-cc" <<'SH'
@@ -112,7 +119,7 @@ fn twice(input: number): number => input * 2
 print(value)
 ARYA
 "$compiler" build "$tmp/forward.arya" -o "$tmp/forward" > "$tmp/forward.log" 2>&1
-test "$(env -i PATH=/nonexistent "$tmp/forward")" = 6
+test "$(env -i PATH="$arya_test_runtime_path" "$tmp/forward")" = 6
 printf 'fn broken(value: boolean): number { if value { return 1 } }\n' > "$tmp/invalid.arya"
 if "$compiler" check "$tmp/invalid.arya" > "$tmp/returns.log" 2>&1; then exit 1; fi
 grep -q 'every continuing path' "$tmp/returns.log"
