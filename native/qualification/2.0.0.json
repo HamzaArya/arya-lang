@@ -97,5 +97,6 @@
     "macOS leak detection is not qualified.",
     "Cross-compilation and WebAssembly are not qualified."
   ],
-  "note": "Only completed platform gates are qualified. Release publication and final metadata assembly remain pending; historical alpha evidence does not qualify this release."
+  "note": "The platform identities below record preceding-generation passes. A Cygwin crypto link correction changed compiler source; fresh qualification of candidateSourceCommit and regenerated final artifacts is pending. Earlier binaries and evidence are preserved; they do not qualify the changed compiler. Publication remains pending.",
+  "candidateSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4"
 }

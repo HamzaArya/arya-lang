@@ -13,7 +13,8 @@
     "Linux x64 full native bootstrap/core/API/HTTP/GTK/distribution and actual versioned installer with generated CLI check/build/run"
   ],
   "pending": [
-    "Complete Windows/Cygwin platform and final installer gates",
+    "Corrected compiler qualification on macOS, Linux and Windows/Cygwin",
+    "Twelve application rebuilds and both editor-host checks against the new qualified macOS SDK",
     "Final artifact metadata/checksums and source archive",
     "Stable GitHub release and portfolio publication"
   ],
@@ -21,6 +22,10 @@
     "platforms": "platform-qualification.md",
     "applications": "application-release-ci.md",
     "distribution": "distribution.json",
-    "localHTTP": "http-relocation.json"
-  }
+    "localHTTP": "http-relocation.json",
+    "windowsCryptoFailure": "windows-crypto-link-failure.json",
+    "finalUnixPrecedingGeneration": "final-unix-independent.json"
+  },
+  "candidateSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "note": "Passed entries below retain the preceding generation identities. The Cygwin crypto link correction changed compiler source; new SDK, application and bundled-editor qualification is required before final assembly."
 }
