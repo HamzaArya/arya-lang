@@ -6,12 +6,12 @@ on:
         description: Native desktop qualification run containing the macOS SDK
         type: string
         required: true
-        default: '43470021848'
+        default: '43495958933'
       qualification_head_sha:
         description: Exact source commit of the qualification run
         type: string
         required: true
-        default: '0dc38b789df2840aa2977769065479c578e70649'
+        default: 'ce80487668e082ffd263c5239d737de7074e4dc4'
   push:
     branches: ['release/**']
     paths:
@@ -37,8 +37,8 @@ jobs:
     timeout-minutes: 90
     env:
       GH_TOKEN: ${{ github.token }}
-      QUALIFICATION_RUN_ID: ${{ inputs.qualification_run_id || '43470021848' }}
-      QUALIFICATION_HEAD_SHA: ${{ inputs.qualification_head_sha || '0dc38b789df2840aa2977769065479c578e70649' }}
+      QUALIFICATION_RUN_ID: ${{ inputs.qualification_run_id || '43495958933' }}
+      QUALIFICATION_HEAD_SHA: ${{ inputs.qualification_head_sha || 'ce80487668e082ffd263c5239d737de7074e4dc4' }}
     steps:
       - uses: actions/checkout@v4
       - name: Verify release-controller boundaries
