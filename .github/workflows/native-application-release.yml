@@ -1,0 +1,64 @@
+name: Native application release bundles
+on:
+  workflow_dispatch:
+    inputs:
+      qualification_run_id:
+        description: Native desktop qualification run containing the macOS SDK
+        type: string
+        required: true
+        default: '43470021848'
+      qualification_head_sha:
+        description: Exact source commit of the qualification run
+        type: string
+        required: true
+        default: '0dc38b789df2840aa2977769065479c578e70649'
+  push:
+    branches: ['release/**']
+    paths:
+      - '.github/workflows/native-application-release.yml'
+      - 'native/bootstrap/release-apps.py'
+      - 'native/tests/release-apps-reference.py'
+      - 'native-desktop-projects/build.py'
+      - 'native-desktop-projects/package-release.py'
+      - 'native-desktop-projects/shared/**'
+      - 'native-desktop-projects/0*/*.arya'
+      - 'native-desktop-projects/0*/smoke.py'
+      - 'native-calculators/build.py'
+      - 'native-calculators/package-release.py'
+      - 'native-calculators/shared/**'
+      - 'native-calculators/0*/*.arya'
+      - 'native-calculators/0*/smoke.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  applications:
+    runs-on: macos-15
+    timeout-minutes: 90
+    env:
+      GH_TOKEN: ${{ github.token }}
+      QUALIFICATION_RUN_ID: ${{ inputs.qualification_run_id || '43470021848' }}
+      QUALIFICATION_HEAD_SHA: ${{ inputs.qualification_head_sha || '0dc38b789df2840aa2977769065479c578e70649' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify release-controller boundaries
+        run: python3 native/tests/release-apps-reference.py
+      - name: Download qualified SDK and build twelve applications sequentially
+        run: >-
+          python3 native/bootstrap/release-apps.py
+          --qualification-run "$QUALIFICATION_RUN_ID"
+          --qualification-sha "$QUALIFICATION_HEAD_SHA"
+          --wait-seconds 3600
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-application-bundles-macos-arm64
+          path: |
+            .build/release-2.0.0/final/*.zip
+            .build/release-2.0.0/final/*.sha256
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-application-release-evidence
+          path: .build/native-app-release/evidence/
+          if-no-files-found: warn
