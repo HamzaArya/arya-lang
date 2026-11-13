@@ -95,7 +95,8 @@ fn releasedStorage(stopEarly) {
   for value in values { if stopEarly { break } }
   values.clear(); values.add(0)
   let before = runtime.collect()
-  for index in range(1024) { values.clear(); values.add(index) }
+  let index = 0
+  while index < 1024 { values.clear(); values.add(index); index += 1 }
   let after = runtime.collect()
   debug.assert(after <= before + 4096, "Closed collection loop retains tombstones")
   equal(values.values(), [1023])

@@ -1,6 +1,6 @@
 # Map and Set mutation repair
 
-Status: source repair implemented; final compiler regression run pending.
+Status: passed optimized release, optimizer-disabled reference, and AddressSanitizer/UndefinedBehaviorSanitizer execution on macOS ARM64; all executions enable garbage collection stress.
 
 ## Reproduced failure
 
@@ -31,4 +31,6 @@ This change does not expand `async.map` input support: its existing accepted inp
 - Constructors, spread, and empty collection traversal still work.
 - Completed and broken loops allow storage to be reclaimed while compiler temporaries remain in the same stack frame.
 
-The fixture passed the existing compiler's syntax/type check. Execution against the rebuilt compiler is required before qualification.
+The fixture passed 26 checks in each of the three modes against the rebuilt Arya 2.0.0 compiler (SHA-256 `c5515eab20cb4a4a81b4a9d560f195108e6b916b05c72d491ccb7a0390ef71ee`). The successful execution log is `.build/release-2.0.0/collection-mutation-retry.log`.
+
+The initial regression run passed the optimized mode but failed the reference mode's storage assertion because the test itself allocated a new 1,024-element range after its baseline snapshot. That range remained rooted legitimately with optimizations disabled. The churn loop now uses a numeric `while` loop, keeping the same 4,096-byte bound and removing that unrelated allocation. The initial failing log is preserved at `.build/release-2.0.0/collection-mutation.log`.
