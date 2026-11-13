@@ -404,7 +404,12 @@ static NSDictionary *RunWorker(NSString *executable, NSString *store, NSString *
     }];
 }
 - (void)revealData:(id)sender { (void)sender; [NSWorkspace.sharedWorkspace openURL:[NSURL fileURLWithPath:self.store.stringByDeletingLastPathComponent]]; }
-- (void)showAbout:(id)sender { (void)sender; [NSApp orderFrontStandardAboutPanelWithOptions:@{NSAboutPanelOptionApplicationName:self.config[@"name"],NSAboutPanelOptionApplicationVersion:@"1.0",NSAboutPanelOptionCredits:[[NSAttributedString alloc] initWithString:@"Native macOS AppKit interface. Application logic compiled from Arya. Local data, no web server."]}]; }
+- (void)showAbout:(id)sender {
+    (void)sender;
+    NSString *version=[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    if(![version isKindOfClass:NSString.class] || !version.length) version=@"Development";
+    [NSApp orderFrontStandardAboutPanelWithOptions:@{NSAboutPanelOptionApplicationName:self.config[@"name"],NSAboutPanelOptionApplicationVersion:version,NSAboutPanelOptionCredits:[[NSAttributedString alloc] initWithString:@"Native macOS AppKit interface. Application logic compiled from Arya. Local data, no web server."]}];
+}
 @end
 
 int main(int argc,const char **argv) {

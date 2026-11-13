@@ -77,7 +77,7 @@ async fn delayed() {
   return [old, text]
 }
 equal(await delayed(), ["start", "start-سلام😀"])
-const directory = fs.tempDirectory("arya-string-storage-")
+const directory = fs.tempDirectory("arya-string-storage-XXXXXX")
 try {
   let text = "data:سلام😀\0"
   const original = text

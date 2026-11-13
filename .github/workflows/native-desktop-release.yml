@@ -1,16 +1,23 @@
 name: Native desktop release qualification
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Platform to qualify
+        type: choice
+        default: all
+        options: [all, linux, macos, windows]
   push:
     branches: ['release/**']
 permissions:
   contents: read
 jobs:
   unix:
+    if: github.event_name != 'workflow_dispatch' || inputs.target != 'windows'
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-15]
+        os: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.target == 'linux' && '["ubuntu-24.04"]' || github.event_name == 'workflow_dispatch' && inputs.target == 'macos' && '["macos-15"]' || '["ubuntu-24.04","macos-15"]') }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
@@ -56,8 +63,9 @@ jobs:
           name: evidence-${{ matrix.os }}
           path: .build/release-evidence/
   windows-cygwin:
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'windows'
     runs-on: windows-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - run: git config --global core.autocrlf input
       - uses: actions/checkout@v4

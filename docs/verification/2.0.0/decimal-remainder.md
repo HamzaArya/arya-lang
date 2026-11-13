@@ -1,6 +1,6 @@
 # Exact decimal remainder
 
-Status: implemented; rebuilt compiler execution pending.
+Status: preliminary local regression passed; final SDK qualification pending.
 
 The Finance and Precision calculator work reports identified a missing public native integer remainder API. Their correct workaround computed `a - truncate(a / b) * b` from three decimal operations. Both GCD helpers now call `decimal.remainder(a, b)` directly.
 
@@ -13,3 +13,11 @@ The runtime dispatch, optimized standard-call recognition, checker contracts, pu
 `native/tests/decimal-remainder.sh` runs optimized release, optimizer-disabled reference, and sanitizer builds with garbage collection stress. It checks both APIs against every vector, parsed-operand immutability, canonical zero, fixed-scale input behavior, zero divisors, malformed/nonstring/oversized input, missing arguments, invalid opaque values and typed call rejection. An explicitly recorded Cygwin sanitizer-toolchain limitation selects debug plus GC stress there; it is not reported as sanitizer coverage.
 
 The first 2.0.0 calculator archive predates this narrow API migration and is preserved. The final calculator rebuild must produce new evidence and a separate immutable archive after the new compiler passes its gates.
+
+## Initial fixture correction
+
+The first Linux and macOS CI builds rejected the typed fixture before execution: vector indexing has type `string | undefined`, while `decimal.remainder` correctly requires strings. The fixture now asserts each vector has three fields and binds explicit string fallbacks before the API calls. An absent field still fails validation or the expected-result assertion. This was a test typing error, not an observed native remainder result failure; runtime qualification remained pending until the corrected fixture ran.
+
+## Preliminary native execution
+
+The corrected fixture passed **869 checks in each of optimized release, optimizer-disabled reference, and ASan/UBSan builds**, all with garbage collection stress. All typed-negative call checks passed too. The native compiler used was the completed local bootstrap `stage1`, SHA-256 `da60e17ea3169986c23a6362ccf627be8150014821bb0047a1d1917ffd90c942`. The full later bootstrap stages were stopped separately because of disk pressure, so this is explicitly preliminary API validation rather than final SDK self-hosting qualification. Log: `.build/release-2.0.0/decimal-remainder-stage1.log`.

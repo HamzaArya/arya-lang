@@ -47,3 +47,24 @@ input submission, multiline editing, window close events and retained closed
 window lifetime. The subsequent native compiler bootstrap and full public GUI,
 SDK and editor gates were still running or pending at this entry. This toolkit
 step alone does not qualify the complete Windows distribution.
+
+The macOS job completed all desktop workflow gates and produced its SDK. An
+inspection of that candidate's actual binary identified Mach-O ARM64, minimum
+macOS 15.0 and SDK 15.5; `--version` also ran successfully on the local macOS 26
+ARM64 host. This older artifact is retained only for inspection, not publication.
+
+The Linux job passed core tests through numeric, fixed-number and descriptor
+regressions, then failed `string-storage.arya:80`: its temporary-directory test
+passed a plain prefix to `fs.tempDirectory`. The API's template requires a final
+`XXXXXX`, which all production call sites already used. Linux rejected the
+invalid fixture with `EINVAL`; the fixture now supplies the portable template.
+No runtime change was needed for that failure.
+
+## Candidate `9831cf3`
+
+[Desktop workflow 43467923810](https://github.com/HamzaArya/arya-lang/actions/runs/43467923810)
+completed Linux and macOS bootstrap and the empty-array and collection mutation
+regressions. Both then correctly rejected the new decimal-remainder test's
+nullable vector indexing at line 17. The test now validates vector shape and
+binds explicit string operands before invoking the typed API. This failure
+occurred before executing remainder vectors; it was not an arithmetic result.
