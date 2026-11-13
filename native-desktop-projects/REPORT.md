@@ -2,13 +2,23 @@
 
 **Completed: 6 of 6 native macOS GUI applications**, one for each developer track. All six have packaged `.app` bundles, persistent workflows, native controls, documentation and tests. No application was abandoned.
 
-Open the [application folder](dist), or follow the [README](README.md). The [acceptance record](reports/acceptance.json) identifies every delivered file by hash and links exact verification evidence. The [native interaction report](reports/native-gui-qa.md) records the actual GUI operations and the defect found during them.
+## Current 2.0.0 application release — 2026-11-13
+
+All six applications were freshly checked, compiled and tested in [run 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800), from application commit `5d3286445587fec596b76f912f70cc1575679c75` with qualified SDK compiler `fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`. The compiler includes the final decimal and HTTP repairs; each application includes the filesystem API migration and a bundle-derived About version. All integration suites, packaged native protocols, signatures and ZIP roundtrip checks passed. The exact six downloaded apps also passed inventory, signatures and native protocols locally on macOS 26.5.2. Study Desk's native window and `Version 2.0.0 (2.0.0)` About dialog were inspected; it was then closed without saving records.
+
+- Final archive: `.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` (6,948,635 bytes).
+- SHA-256: `71d74735771bac3c727736e2fb943a83446b0afc6cba0122ea4b1d80233ab6a7`.
+- [Complete build evidence](../docs/verification/2.0.0/applications/native-desktop-projects-build.json), [archive evidence](../docs/verification/2.0.0/applications/native-desktop-projects-bundles.json) and [application qualification](../docs/verification/2.0.0/application-release.md).
+
+These are macOS 26+ ARM64 applications, ad-hoc signed with no Developer ID signature or notarization. Read the [installation and signing notes](../docs/installing.md#downloaded-macos-applications). Local disk pressure was resolved by using the qualified CI SDK and a sequential remote application build; no application was abandoned. The final manual spot check does not claim to repeat every earlier GUI workflow.
+
+Follow the [README](README.md) for the final archive. The original [application folder](dist), [acceptance record](reports/acceptance.json) and [native interaction report](reports/native-gui-qa.md) remain preserved historical evidence. The remainder of this report describes that original development and the superseded local package.
 
 ## What changed from the earlier delivery
 
 The earlier six GUIs used browser interfaces. This delivery builds six separate, broader desktop applications in `native-desktop-projects/`. Their windows, tables, menu bars, sheets, text fields, dropdowns, search controls and Save dialogs are real AppKit controls. There is no web page, embedded browser, HTTP server, WebKit, Electron, Node or Python application runtime.
 
-Arya's existing desktop API hosts a WKWebView and therefore could not supply the requested native controls. The shared [NativeHost.m](shared/NativeHost.m) bridge supplies macOS controls, while all six domain engines are written in Arya and compiled to native executables. Each bundle includes both binaries. The host sends command/JSON arguments directly to the engine and reads a JSON response; it never invokes a shell for application actions. This is not a claim that a native widget API has been added to Arya itself.
+Arya's existing desktop API hosts a WKWebView and therefore could not supply the requested native controls. The shared [NativeHost.m](shared/NativeHost.m) bridge supplies macOS controls, while all six domain engines are written in Arya and compiled to native executables. Each bundle includes both binaries. The host sends command/JSON arguments directly to the engine and reads a JSON response; it never invokes a shell for application actions. At the original delivery, no native widget API had been added to Arya itself. Arya 2.0.0 subsequently gained the direct [`std gui` API](../docs/native-gui.md); these existing applications retain their tested AppKit bridge.
 
 The levels are simulated developer tracks, not six human participants or certification of production readiness.
 
@@ -36,13 +46,13 @@ All applications also provide native search, selection details, editable forms, 
 7. Independently reviewed the host and builder. Corrected duplicate-name dropdown mapping, candidate-publication order and form/refresh interaction. Recorded exact AppKit probe output in [shared/REVIEW.md](shared/REVIEW.md).
 8. Used native computer controls to exercise every application's GUI. Found and fixed populated-table navigation, rebuilt the host/bundles, and reran affected navigation workflows.
 9. Audited final source and delivered binary hashes, confirmed the host has no WebKit/JavaScriptCore linkage, and verified the CSV export contents. Closed test apps and archived exclusively generated test data so normal first launches start empty.
-10. Wrote this report, individual work reports, README usage/build instructions and final acceptance records. Earlier source and browser projects were preserved; no compiler/runtime source changes were needed for this task.
+10. Wrote this report, individual work reports, README usage/build instructions and final acceptance records. Earlier source and browser projects were preserved; no compiler/runtime changes were needed for that original application task. The subsequent 2.0.0 language repairs are documented separately.
 
 ## Problems, stuck points and resolutions
 
 | Finding | What happened | Resolution / status |
 | --- | --- | --- |
-| Arya has no native AppKit widget API | Existing desktop support loads local HTTP content in WKWebView. | Added a shared Objective-C AppKit bridge in this collection. Arya owns application behavior. Native widgets are not falsely attributed to the existing Arya desktop module. |
+| Original delivery: Arya had no native AppKit widget API | Existing desktop support loads local HTTP content in WKWebView. | Added a shared Objective-C AppKit bridge in this collection. Arya owns application behavior. The later 2.0.0 `std gui` API is documented separately; this bridge remains in these applications. |
 | Populated table view-switching exception | Project Studio changed columns while AppKit retained an old row count, producing NSRangeException and an incomplete view. | Empty-table reload before reconstruction plus safe delegate bounds. Corrected native navigation passed with persisted data. |
 | Duplicate dropdown labels | AppKit `addItemWithTitle:` collapsed duplicate titles, breaking index-to-record mapping. | Distinct NSMenuItems retain their true IDs in representedObject. A probe verified all three values when two labels matched. |
 | Packaging replaced output too soon | An unverified candidate could replace the prior bundle before protocol/hash checks finished. | Validate inside staging; preserve the previous bundle until candidate publication succeeds. Reviewed by source; filesystem failures were not injected. |
@@ -75,8 +85,8 @@ All six workers now use native `fs.writeTextAtomicSync`; loaders inspect `infoSy
 
 [Worker migration verification](reports/language-api-storage-20261113.json) records six fresh checks/release builds/full smoke passes, injected `.tmp` symlink sentinel preservation, 18 store-entry rejection cases, and matching source/test/worker hashes. Reproduce with `python3 native/tests/application-storage.py --build --filter native-desktop-projects`. The earlier bundle acceptance record predates these changed workers: it must not be used as evidence that an older bundle contains this migration. Release packaging must copy and re-sign the current `.build/worker` executables; this worker verification itself does not repackage bundles.
 
-## Versioned 2.0.0 desktop package — 2026-11-13
+## Earlier local 2.0.0 desktop package — superseded, 2026-11-13
 
 Compiler-free repackaging is complete. [Release bundle evidence](reports/release-2.0.0-bundles.json) records six successful outer-app signatures, deep/strict signature verification, all bundled view protocol checks, and ZIP extraction/signature/hash verification. The packaged worker bytes exactly match all six workers in the storage migration evidence. The existing host input/source hashes match its prior successfully tested build; no compiler was launched. Worker signatures were preserved while signing each outer app, so no signing rewrite broke the tested worker identities.
 
-Artifact: `.build/release-2.0.0/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` (7,014,436 bytes). SHA-256: `d07108890f87c6859b6af8528826929a88f8a603541983e03deb989377c86dcc`. All six apps carry bundle version 2.0.0 and include their README, report, and notices. These macOS 26 ARM64 bundles are ad-hoc signed, not notarized. `native-desktop-projects/dist` and the historical `reports/acceptance.json` remain byte-for-byte preserved; the versioned archive is the updated release deliverable. The compiler-free packaging procedure is `package-release.py`, which refuses to overwrite an existing release output.
+Artifact: `.build/release-2.0.0/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` (7,014,436 bytes). SHA-256: `d07108890f87c6859b6af8528826929a88f8a603541983e03deb989377c86dcc`. All six apps carry bundle version 2.0.0 and include their README, report, and notices. These macOS 26 ARM64 bundles are ad-hoc signed, not notarized. `native-desktop-projects/dist` and the historical `reports/acceptance.json` remain byte-for-byte preserved; this versioned archive is retained as a superseded candidate. Use the final CI archive identified at the top of this report for the release. The compiler-free packaging procedure is `package-release.py`, which refuses to overwrite an existing release output.

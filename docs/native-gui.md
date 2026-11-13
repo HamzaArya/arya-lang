@@ -25,9 +25,9 @@ file; this example does not implement multi-process editing or autosave.
 
 | Backend | Build prerequisite | Qualification |
 | --- | --- | --- |
-| macOS AppKit | Xcode command-line tools, Cocoa system framework | Actual local compile and widget/action tests; see the report |
-| Linux GTK 3 | C11 compiler, `pkg-config`, GTK 3 development files (`libgtk-3-dev` on Debian/Ubuntu), graphical display | Source implemented; a Linux runner must pass the native GUI gate before a release claims qualification |
-| Windows Win32 | Windows compiler and SDK; the current full Arya runtime requires Cygwin POSIX facilities | Source implemented for `_WIN32` or `__CYGWIN__`; qualification requires a Windows runner. This is not evidence of a standalone MinGW runtime port |
+| macOS AppKit | Xcode command-line tools, Cocoa system framework | Full native SDK and direct GUI gate passed on macOS 15 ARM64 in [run 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848) |
+| Linux GTK 3 | C11 compiler, `pkg-config`, GTK 3 development files (`libgtk-3-dev` on Debian/Ubuntu), graphical display | Native GTK library compiled in the Linux SDK; final direct GUI execution gate pending |
+| Windows Win32 | Cygwin with `gcc-core`/`gcc-g++`; Windows system GUI libraries | Direct Win32 action probe and SDK bootstrap passed on Windows; full public GUI/distribution gates pending. Cygwin remains required |
 
 `make native-sdk` includes the native GUI archive and platform linker flags.
 GTK applications need the matching GTK runtime libraries on the destination.

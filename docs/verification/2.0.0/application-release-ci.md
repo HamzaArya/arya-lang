@@ -50,5 +50,4 @@ SDK qualification commit.
 `python3 native/tests/release-apps-reference.py` passed four isolated rejection
 test groups: SDK corruption/identity mismatch, native source drift, unsafe archive
 entries, and failed or mismatched qualification artifacts. These tests run no
-compiler, GUI or network request. Actual twelve-application CI execution remains
-pending until the workflow is committed and pushed.
+compiler, GUI or network request. The actual twelve-application build passed in [run 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800), job `132056918377`, from application commit `5d3286445587fec596b76f912f70cc1575679c75`. [Final application qualification](application-release.md) records the downloadable archive identities and the subsequent local macOS 26 checks.

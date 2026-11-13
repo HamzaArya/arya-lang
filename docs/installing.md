@@ -216,6 +216,22 @@ The default platform package is `.build/independent/share/editor/arya-language.v
 launcher. Standalone SDKs exclude the editor-host adapter; use the separate VSIX.
 Any compatible LSP client can instead start `arya lsp --stdio` directly.
 
+## Downloaded macOS applications
+
+The two 2.0.0 application collections contain twelve standalone AppKit apps for
+Apple Silicon macOS 26 or later. Extract the ZIP, then open an app or copy it to
+Applications. Running them does not require the Arya SDK, Node or Python. The
+SDK's macOS 15 minimum does not lower these application bundles' macOS 26 minimum.
+
+The apps are ad-hoc signed and their bundle signatures were verified. They have
+no Developer ID signature or Apple notarization, so macOS may block a downloaded
+app on first launch. Verify the archive against the official release checksum;
+see [Apple's guidance for safely opening apps](https://support.apple.com/en-us/102445)
+for the operating system's per-app review flow. The release does not install a
+system-wide Gatekeeper exception. Ad-hoc signature checks detect bundle changes
+but do not authenticate the publisher. [Application qualification](verification/2.0.0/application-release.md)
+records exact archive hashes and the tested scope.
+
 ## Move applications, upgrade, or remove
 
 Build on the intended target, then copy the executable, generated `.NOTICE`,

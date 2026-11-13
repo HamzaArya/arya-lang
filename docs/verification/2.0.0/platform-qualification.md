@@ -122,3 +122,18 @@ checksums, both generated-C identities, matching Cygwin/GCC versions and equal
 native build inputs in the new checkout. Tests, documentation and packaging
 metadata may change and are recorded separately. Every current Windows gate
 still runs before the ordinary release SDK artifact can be produced.
+
+## Candidate `2477705` independent result and `4ddf3a5` retry
+
+[Independent workflow 43474217260](https://github.com/HamzaArya/arya-lang/actions/runs/43474217260)
+passed every Linux and macOS fresh-build, full native core, installed SDK and
+reference gate. Linux desktop qualification separately reached API/HTTP tests;
+it stopped when an assertion rejected ASan's known `makecontext`/`swapcontext`
+warning even though the HTTP server exited zero. The next controller permits
+only the exact sanitizer warning in sanitized mode, prints it, and rejects any
+other stderr; it does not suppress runtime sanitizer errors.
+
+[Windows retry 43478802288](https://github.com/HamzaArya/arya-lang/actions/runs/43478802288)
+passed the early empty-PATH C compiler/linker/PE execution probe and the direct
+Win32 action harness before entering full bootstrap. This is measured evidence
+for the loader-isolation fix, not yet a complete Windows qualification result.

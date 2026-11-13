@@ -6,9 +6,9 @@ The delivered apps use no web pages, HTTP server, WebKit, Electron, Node or Pyth
 
 ## Open the applications
 
-All six applications passed engine tests, bundle checks and native GUI interaction checks.
+All six final applications passed fresh engine tests, bundle checks and local native host/worker protocol checks. The earlier native GUI workflows remain documented; final Study Desk launch and About version were inspected again. See [final application qualification](../docs/verification/2.0.0/application-release.md).
 
-Open the [dist folder](dist) in Finder and double-click an app. You can also copy an app to Applications. The full SDK is not needed to run it.
+Extract `.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip` and double-click an app, or copy it to Applications. The full SDK is not needed to run it. The original [dist folder](dist) is preserved as historical output.
 
 | Developer track | Application | Complete local workflows |
 | --- | --- | --- |
@@ -21,14 +21,14 @@ Open the [dist folder](dist) in Finder and double-click an app. You can also cop
 
 All apps include native search, record details, editing dialogs, CSV export with a Save dialog, keyboard editing shortcuts, Refresh, About, and Show data folder. Choose a view, create records with its buttons, then select a row to edit or perform a workflow action. Failed form submissions preserve entered values for correction. Account/project/service choices display names and carry the correct internal record ID.
 
-For example, from the repository root:
+For example, after extracting the final archive into the current folder:
 
 ```sh
-open "native-desktop-projects/dist/Study Desk.app"
-open "native-desktop-projects/dist/Ledger Studio.app"
+open "arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app"
+open "arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app"
 ```
 
-A [ZIP containing all six apps](Arya-Native-Desktop-macOS-arm64.zip) and its [SHA-256 checksum](Arya-Native-Desktop-macOS-arm64.zip.sha256) are also available.
+The final archive SHA-256 is `71d74735771bac3c727736e2fb943a83446b0afc6cba0122ea4b1d80233ab6a7` (6,948,635 bytes). The earlier [original ZIP](Arya-Native-Desktop-macOS-arm64.zip) and its [checksum](Arya-Native-Desktop-macOS-arm64.zip.sha256) remain historical artifacts.
 
 ## Data and portability
 
@@ -36,7 +36,7 @@ Data is stored outside the bundles, under `~/Library/Application Support/Arya Na
 
 CSV export includes the currently visible filtered rows. Formula-like cells receive a leading apostrophe so opening an export in a spreadsheet does not interpret those values as formulas. This export is a report, not a full-store backup/import format. Each README describes its limits.
 
-These bundles were built and tested on macOS 26.5.2 ARM64. They are locally ad-hoc signed and verified, not notarized public releases. Linux, Windows, other CPU architectures and other macOS versions have not been qualified. The build embeds the current Arya runtime's macOS minimum version; these are not portable cross-platform binaries.
+The final bundles were built on ARM64 macOS CI and verified again on macOS 26.5.2. Their application minimum is macOS 26.0, distinct from the SDK compiler's macOS 15 minimum. They are ad-hoc signed, with no Developer ID signature or Apple notarization. macOS may block downloaded apps on first launch; compare the official archive checksum and read the [installation and signing notes](../docs/installing.md#downloaded-macos-applications). Other CPU architectures and Windows/Linux versions of these AppKit applications are not supplied; Arya's direct `std gui` backends do not automatically port these bundles.
 
 ## Build and verify
 

@@ -1,0 +1,192 @@
+{
+  "status": "passed",
+  "host": "macOS26.5.2 ARM64",
+  "ciRun": 43475142800,
+  "ciJob": 132056918377,
+  "sourceCommit": "5d3286445587fec596b76f912f70cc1575679c75",
+  "projects": [
+    {
+      "family": "native-desktop-projects",
+      "application": "Study Desk.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "aa7e6552d9c1d0ec746a8fbfe92a73c412909796f1ef9ca4571a0325bf0d2d9e",
+      "hostSHA256": "a79b795bc3bbbe7276727e16f017418a6c81f8a53d06adaf3663cba799181200",
+      "bundleFileCount": 11,
+      "views": 2
+    },
+    {
+      "family": "native-desktop-projects",
+      "application": "Stockroom.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "fd7d0984181e30364a42cf6de556cc74f3abfc336a30f66fd03e2d46a56f7bc0",
+      "hostSHA256": "20a8597a77167eae6df3e90fec02f875bdcf5dadb48175e1bad612dc1d94c313",
+      "bundleFileCount": 11,
+      "views": 2
+    },
+    {
+      "family": "native-desktop-projects",
+      "application": "Harbor Support Desk.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "1da473e6fdefe508587f5ff1e1bb777f93369ae1baed2e9b3b4942a6d7a011e9",
+      "hostSHA256": "d57a74262be1f48689dfec91316c64fc56b910ad1d5a95bb55c5edf4e36d7a92",
+      "bundleFileCount": 11,
+      "views": 3
+    },
+    {
+      "family": "native-desktop-projects",
+      "application": "Project Studio.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "e6cc36df463af2ebb2b599cf45ebe205ede0197539296aac8e5a396217f56bae",
+      "hostSHA256": "0a3f349995125e6fd3ba159506f0a85cebae0e4b3b72d81e4c77bd9ca1a1d025",
+      "bundleFileCount": 11,
+      "views": 4
+    },
+    {
+      "family": "native-desktop-projects",
+      "application": "Incident Center.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "52632ff2eead7aa3ade3047542f65967307ddb7712d9f010e9eefa00c3fef4c5",
+      "hostSHA256": "5d1869a2b978817d024b58fa31924ac26aafb06ebb3ee836e2982e2832d48b45",
+      "bundleFileCount": 11,
+      "views": 3
+    },
+    {
+      "family": "native-desktop-projects",
+      "application": "Ledger Studio.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "b5cabc22c894bdb189062904fcfa3d7cb80439308698ed8204c00fa1ed23d9a1",
+      "hostSHA256": "b7e0faa393f67713058ce3591b9466e8a5d2745a26fade632f309ca734b6ebaa",
+      "bundleFileCount": 11,
+      "views": 3
+    },
+    {
+      "family": "native-calculators",
+      "application": "Pocket Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "404e78d4c5321162a860e7c16d37d4e486b812ce6cc91ec4ea0838912ca76e01",
+      "hostSHA256": "2eb19d0db1f910ec5b33f52927044bfc291862a49ff5069f359bcfcc7d80900e",
+      "bundleFileCount": 11,
+      "views": 1
+    },
+    {
+      "family": "native-calculators",
+      "application": "Everyday Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "5e1ad16186613ae38e6b50eb9ef07796a33c71db13852d4405daeecc78535e43",
+      "hostSHA256": "da8b9d5e282bf769ef8f1d2e8eeca5f1832d2df1dbf582d897139cdc9f7c78ad",
+      "bundleFileCount": 11,
+      "views": 1
+    },
+    {
+      "family": "native-calculators",
+      "application": "Scientific Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "0fefc82ff0da8928e0aa380494b011670ff8fe4d6db35a358a8dd5c9bbbe7374",
+      "hostSHA256": "9d67aab4689ca0de9671a8bf0914f0785c017b5cb5793a87033e5d1e53a699ac",
+      "bundleFileCount": 11,
+      "views": 1
+    },
+    {
+      "family": "native-calculators",
+      "application": "Programmer Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "98b8d754846c8fdf937a5079e7a05b87a30e4881aaeff852382a1244cc2ad05c",
+      "hostSHA256": "a3ecf7206c567a2cadd2e70ed72f24980d09242f6887386a37a12857dca71e3c",
+      "bundleFileCount": 11,
+      "views": 1
+    },
+    {
+      "family": "native-calculators",
+      "application": "Finance Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "09f827a0281bb5f841320d5d751a01a707fec120a99cd24eb2cf2edc01b4f827",
+      "hostSHA256": "039ccd4f017a23115affc9d68b9dd06dd338b5a1b35a8b9851f06a46084de767",
+      "bundleFileCount": 11,
+      "views": 1
+    },
+    {
+      "family": "native-calculators",
+      "application": "Precision Calculator.app",
+      "status": "passed",
+      "version": "2.0.0",
+      "minimumMacOS": "26.0",
+      "workerSHA256": "d9123daf094be38abe8644a554a8939ee926dcf3003f1a8c6de1b1f7e34699ec",
+      "hostSHA256": "85f764faba520bf6cd6d5d5724f16c6cd768f73b238f1648a1e25e7215a640d3",
+      "bundleFileCount": 11,
+      "views": 1
+    }
+  ],
+  "applications": 12,
+  "checks": [
+    "downloaded archive hashes match CI evidence",
+    "all bundle files match CI evidence",
+    "strict deep signatures",
+    "bundle version and minimum OS",
+    "actual native host/worker view protocol on macOS26",
+    "protocols use isolated stores and PATH=/nonexistent"
+  ],
+  "manualNativeGUI": {
+    "status": "passed",
+    "host": "macOS 26.5.2 ARM64",
+    "applications": [
+      {
+        "application": "Pocket Calculator.app",
+        "observed": [
+          "native calculator window and empty history",
+          "About: Version 2.0.0 (2.0.0)",
+          "closed after verification"
+        ]
+      },
+      {
+        "application": "Study Desk.app",
+        "observed": [
+          "native session table, notes view selector, search and empty store",
+          "About: Version 2.0.0 (2.0.0)",
+          "closed after verification"
+        ]
+      }
+    ],
+    "scope": "Inspected final downloaded CI bundles. No records or calculations saved. Full interactive workflows for all twelve were exercised in the earlier collection reports, not repeated in this final check.",
+    "toolingRecovery": [
+      "Initial Pocket selection timed out although the app launched. Selected the exact downloaded bundle path to avoid duplicate bundle identifiers in historical outputs.",
+      "Immediate post-Quit inventory was stale; the subsequent inventory confirmed both test apps exited."
+    ]
+  },
+  "downloadedArtifacts": [
+    {
+      "name": "native-application-bundles-macos-arm64",
+      "id": 14063296926,
+      "bytes": 14259112,
+      "sha256": "3283d1e580de55c73c86e44f7cbd4c2f7bbba277f653cd1f8cc4e8debb1bab9c"
+    },
+    {
+      "name": "native-application-release-evidence",
+      "id": 14063207159,
+      "bytes": 70669,
+      "sha256": "eafac5b18266385af862182589f6931b57fd82f0cd7075481468e5ab1410d8f9"
+    }
+  ],
+  "artifactTransferRecovery": "Python HTTPS transfer could not use the local CA trust store; system curl downloaded with normal TLS verification. Both ZIPs matched GitHub SHA-256 and byte count."
+}

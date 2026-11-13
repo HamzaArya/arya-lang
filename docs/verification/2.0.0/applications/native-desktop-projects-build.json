@@ -1,0 +1,604 @@
+{
+  "date_utc": "20261113T174613.498891Z",
+  "mode": "check-build-test-package",
+  "app_version": "2.0.0",
+  "output": "/Users/runner/work/arya-lang/arya-lang/.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64",
+  "host_source_sha256": "af8bd380ec27681f558d0d9e6845fff6f257ca2ccd6a8e0931070aecacd3df9f",
+  "compiler_version": "Arya native 2.0.0 (self-hosted)",
+  "compiler_command": "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+  "compiler_command_sha256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+  "projects": [
+    {
+      "path": "01-beginner-study-desk",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.057,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/01-beginner-study-desk/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.772,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/01-beginner-study-desk/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.321,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mku7kn4m/Study Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.013,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mku7kn4m/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mku7kn4m/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.013,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mku7kn4m/Study Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/01-beginner-study-desk-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "0334982bb86ba3101649ea614f029b281211386f43d9a37c74c22ab0c431ed0f",
+        "README.md": "aceb1071a3f699e91136bca8aa8da21a26f92624039b47eda73cdc011280022a",
+        "ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "main.arya": "dc5cbdd245d9016b735735e12ac53b0a881d87713e0ea270320f694838fc88f0",
+        "verification.json": "6bfb5c357e08967ceb1a55dfecd069b153418664523723f8ac6ef000dcdce065",
+        "smoke.py": "f51eb416d86e0c10f1757340e7b2135ecf7548cdc7c48e15d57ee80ed8bb6b8d"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Study Desk.app",
+      "tested_worker_sha256": "aa7e6552d9c1d0ec746a8fbfe92a73c412909796f1ef9ca4571a0325bf0d2d9e",
+      "worker_sha256": "aa7e6552d9c1d0ec746a8fbfe92a73c412909796f1ef9ca4571a0325bf0d2d9e",
+      "host_sha256": "a79b795bc3bbbe7276727e16f017418a6c81f8a53d06adaf3663cba799181200"
+    },
+    {
+      "path": "02-better-stockroom",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.039,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/02-better-stockroom/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.288,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/02-better-stockroom/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.25,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-n3hwsfni/Stockroom.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.009,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-n3hwsfni/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.016,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-n3hwsfni/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.011,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-n3hwsfni/Stockroom.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/02-better-stockroom-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "af6050d81109e5ad6cec22dc137a68beb00e0bda2952a3cdb880e6702410576b",
+        "README.md": "a4397c8ff8f6b4765e96a18c1acef75c2204099720c88b29a0171e18e7f4b5fc",
+        "ui.json": "116073d8eedf6de566e75fae653e3777d23c9fa66d9c0689c194dc0858ed97bb",
+        "main.arya": "f3dca992a6e4ca2e533379e4145e165c674be6794bf69534eb72e71bde7aa28c",
+        "verification.json": "691fe08039ec9c7d5b097e31184ae331b8e4bc7bcdf3b508f6c893dc62eefe5b",
+        "smoke.py": "e6b6197ec6ee44383eb7c49a719e367e7cd44957bb84be3bb4676c6e59fbb1e4"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Stockroom.app",
+      "tested_worker_sha256": "fd7d0984181e30364a42cf6de556cc74f3abfc336a30f66fd03e2d46a56f7bc0",
+      "worker_sha256": "fd7d0984181e30364a42cf6de556cc74f3abfc336a30f66fd03e2d46a56f7bc0",
+      "host_sha256": "20a8597a77167eae6df3e90fec02f875bdcf5dadb48175e1bad612dc1d94c313"
+    },
+    {
+      "path": "03-intermediate-support-desk",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.035,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/03-intermediate-support-desk/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.511,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/03-intermediate-support-desk/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.312,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-2smfnggm/Harbor Support Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.089,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-2smfnggm/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.017,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-2smfnggm/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.015,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-2smfnggm/Harbor Support Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/03-intermediate-support-desk-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "19dd71c6e5ef5cf9e47d4b514794a838fbe6159eb09b77c0201a5f3b6ae952b2",
+        "README.md": "9392f521a78bad801a055654cb396da8ac2172df16da74b99642d9e8f45485d0",
+        "ui.json": "7ea22870d034975d3678d13d4acbefa720a139d151a788090f7d78bf1cfb400c",
+        "main.arya": "e7f51372c49f33ec1654884ec02bde1b0925ccda1d9a492ac152c7be62ff42aa",
+        "verification.json": "2eb6ea4a59743e9233a7ff9af1acaddf2a7bf6b3b7dd7e88e81c97568afbbc49",
+        "smoke.py": "0536c4305f31c8b398c5ad08e80e8b53467b97e11067943cc79117b0111468ef"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Harbor Support Desk.app",
+      "tested_worker_sha256": "1da473e6fdefe508587f5ff1e1bb777f93369ae1baed2e9b3b4942a6d7a011e9",
+      "worker_sha256": "1da473e6fdefe508587f5ff1e1bb777f93369ae1baed2e9b3b4942a6d7a011e9",
+      "host_sha256": "d57a74262be1f48689dfec91316c64fc56b910ad1d5a95bb55c5edf4e36d7a92"
+    },
+    {
+      "path": "04-advanced-project-studio",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.081,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/04-advanced-project-studio/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 5.499,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/04-advanced-project-studio/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.379,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mf2n04yp/Project Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.015,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mf2n04yp/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.019,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mf2n04yp/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.019,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-mf2n04yp/Project Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/04-advanced-project-studio-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "712ee2e79dcd343684e6923bc8a1a7e92a9f002b062168e39a784a25bf77cd2b",
+        "README.md": "582ceee6a1003a488d3652f87ad8520ebbccacddc23153f291f50c99897e83d5",
+        "ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+        "main.arya": "ef9dda9de59060c0740add0b5e798dde17337944577b747461fac72bd6f59972",
+        "verification.json": "bcbad92543e4e139c15074192d0d489c0ec8b3f59721207c22833fe3892f4185",
+        "smoke.py": "18373bc286de003a5f2e62970769f73459a035b144733bd0debd971889e0e07e"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Project Studio.app",
+      "tested_worker_sha256": "e6cc36df463af2ebb2b599cf45ebe205ede0197539296aac8e5a396217f56bae",
+      "worker_sha256": "e6cc36df463af2ebb2b599cf45ebe205ede0197539296aac8e5a396217f56bae",
+      "host_sha256": "0a3f349995125e6fd3ba159506f0a85cebae0e4b3b72d81e4c77bd9ca1a1d025"
+    },
+    {
+      "path": "05-pro-incident-center",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.038,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/05-pro-incident-center/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.329,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/05-pro-incident-center/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.312,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-v9lybqvc/Incident Center.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.01,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-v9lybqvc/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.019,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-v9lybqvc/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.014,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-v9lybqvc/Incident Center.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/05-pro-incident-center-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "906b6884065d65684458b74946fc932ebca1c45bd6dbc367e7f1b68a31a91229",
+        "README.md": "1513dcb03b9e3e721b4726fa1c33ad388805451d7afb33a7da996dcd5d498625",
+        "ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+        "main.arya": "47b2c3eefc5225f9c05866d2eb5651d27c90df502cc168b39a237af5fc0b2847",
+        "verification.json": "ca1fd4d227062316433d38a8c07cf0c5a5193b95fae911ca5dc30eda6e5b3b0c",
+        "smoke.py": "2523deab5b24f808191e23cd52f63630e576a28c683cde769ea83f90b183a0d9"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Incident Center.app",
+      "tested_worker_sha256": "52632ff2eead7aa3ade3047542f65967307ddb7712d9f010e9eefa00c3fef4c5",
+      "worker_sha256": "52632ff2eead7aa3ade3047542f65967307ddb7712d9f010e9eefa00c3fef4c5",
+      "host_sha256": "5d1869a2b978817d024b58fa31924ac26aafb06ebb3ee836e2982e2832d48b45"
+    },
+    {
+      "path": "06-world-class-ledger-studio",
+      "steps": [
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.056,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-check.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/06-world-class-ledger-studio/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.961,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-build.log"
+        },
+        {
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "smoke.py",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/06-world-class-ledger-studio/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.366,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-ttfb_k87/Ledger Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.013,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-verify-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-ttfb_k87/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-ttfb_k87/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.018,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/arya-app-stage-ttfb_k87/Ledger Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T174613.498891Z/06-world-class-ledger-studio-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "61b38e1b1468769611c8da0099944cf756e8cd92f458aedd0241fa823c682883",
+        "README.md": "45bfde779178b7b7d8719380e309f89e1b7a911df83916811bdcfc542e00a6ec",
+        "ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+        "main.arya": "f4c0253b355d84b6d81ecf7d3ab5b34b753788eea724f8d0a8fd04a6db3d8e22",
+        "verification.json": "9169bff7bd9df9d01c69f47e00ab6debe4d4eb9944e5bf93de6f56eaa316d106",
+        "smoke.py": "dbf109439fbc83ce968e072af4fa27dc57b0722523b74f4ca31ebfb558222d8f"
+      },
+      "status": "passed",
+      "app": "../.build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64/Ledger Studio.app",
+      "tested_worker_sha256": "b5cabc22c894bdb189062904fcfa3d7cb80439308698ed8204c00fa1ed23d9a1",
+      "worker_sha256": "b5cabc22c894bdb189062904fcfa3d7cb80439308698ed8204c00fa1ed23d9a1",
+      "host_sha256": "b7e0faa393f67713058ce3591b9466e8a5d2745a26fade632f309ca734b6ebaa"
+    }
+  ],
+  "host_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fmodules",
+      "-Wall",
+      "-Wextra",
+      "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/shared/NativeHost.m",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "UniformTypeIdentifiers",
+      "-o",
+      "/Users/runner/work/arya-lang/arya-lang/native-desktop-projects/.build/NativeHost"
+    ],
+    "exit_code": 0,
+    "seconds": 9.055,
+    "log": "reports/20261113T174613.498891Z/appkit-host.log"
+  },
+  "host_binary_sha256": "3a1ce4fe02feb3a5116002d1536eae45075a85aea2256e67f2ffd8685a67837e",
+  "passed": 6,
+  "failed": 0
+}

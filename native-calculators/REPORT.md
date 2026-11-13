@@ -1,6 +1,18 @@
 # Calculator delivery report
 
-## Arya 2.0.0 rebuild and distribution
+## Current 2.0.0 application release — 2026-11-13
+
+All six engines were rebuilt from application commit `5d3286445587fec596b76f912f70cc1575679c75` using the qualified CI compiler `fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`. All full numerical/storage suites, packaged host/worker protocols, strict signatures and ZIP roundtrip checks passed in [run 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800). The SDK includes the final exact decimal remainder and source-independent HTTP repairs. The About dialog now reads the bundle version instead of a hardcoded value.
+
+- Final archive: `.build/release-2.0.0/final/arya-native-calculators-2.0.0-darwin-arm64.zip` (7,485,285 bytes).
+- SHA-256: `e2851b0f0cd7b925b412dbac12189d533d2fa67fca3bcdd694f01bd1fc567f0b`.
+- [Complete build evidence](../docs/verification/2.0.0/applications/native-calculators-build.json), [archive evidence](../docs/verification/2.0.0/applications/native-calculators-bundles.json) and [application qualification](../docs/verification/2.0.0/application-release.md).
+
+All six exact downloaded bundles also passed file-inventory, signature and actual native protocol checks locally on macOS 26.5.2, with isolated stores and no runtime PATH tools. Pocket Calculator opened as a native window and its About dialog displayed `Version 2.0.0 (2.0.0)`; it was closed without saving calculations. This final spot check does not repeat the earlier complete GUI sessions below. No application was abandoned, and no new application defect occurred in the final rebuild. Local disk pressure prevented a new local compiler bootstrap; the qualified CI SDK and sequential remote app build completed the work instead. The full account is in the linked qualification report.
+
+The apps require macOS 26+ ARM64. They are ad-hoc signed, not Developer ID signed or notarized; see [downloaded app guidance](../docs/installing.md#downloaded-macos-applications). Existing AppKit bundles do not run on Windows or Linux merely because Arya now has direct GTK/Win32 widget backends. All historical bundles, archives and reports below remain preserved and are superseded only as current release artifacts.
+
+## Earlier local 2.0.0 preparation — superseded
 
 All six engines were checked, rebuilt, and passed their complete smoke suites with the repaired Arya 2.0.0 compiler (`c5515eab20cb4a4a81b4a9d560f195108e6b916b05c72d491ccb7a0390ef71ee`). Programmer now calls the native UInt32 bitwise APIs; its 280 independent Python integer reference cases passed. Each bundle passed the actual AppKit host/worker protocol check and strict ad-hoc signature verification. No new engine or GUI-host failure occurred in this rebuild.
 
@@ -14,7 +26,7 @@ The isolated versioned output preserves the 66 files in the historical `dist/` b
 
 These remain native AppKit applications for macOS 26 on Apple Silicon. They are ad-hoc signed and are not Developer ID signed or notarized. The new language's GTK and Win32 backends do not automatically port these existing AppKit applications.
 
-The work records below describe the original delivery and its development history; the linked 2.0.0 evidence supersedes the original binary/source reconciliation for the new release.
+The section above records the earlier local candidate. The current release identities are at the top of this report; the work records below preserve original development history.
 
 Request: six calculators, one per previously requested developer skill level, retaining the latest requirement for real native desktop GUI software. Work is confined to `native-calculators/`; existing projects and compiler/runtime sources are preserved.
 
@@ -75,4 +87,4 @@ The initial all-six pipeline pass and later targeted rebuilds remain in timestam
 - [Pro report](05-pro-finance/REPORT.md)
 - [World-class report](06-world-class-precision/REPORT.md)
 
-Each project folder contains its complete source, native UI configuration, user guide, executable tests and development verification evidence. Build tools and the shared native host are in this collection. Apps are in `dist/`; the distributable archive is `Arya-Calculators-macOS-arm64.zip`.
+Each project folder contains its complete source, native UI configuration, user guide, executable tests and development verification evidence. Build tools and the shared native host are in this collection. The original apps are retained in `dist/` and `Arya-Calculators-macOS-arm64.zip`; use the final versioned archive identified at the top for 2.0.0.

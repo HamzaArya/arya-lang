@@ -1,0 +1,140 @@
+{
+  "version": "2.0.0",
+  "platform": "macOS 26 ARM64",
+  "created_utc": "2026-11-13T17:47:47.967461+00:00",
+  "signing": "ad-hoc; not Developer ID signed or notarized",
+  "build_report": "reports/20261113T174657.986552Z/results.json",
+  "build_report_sha256": "eb05c4d9ea13645822632e2232cd680e816f3c062e9ea0a31475b4e7de4fcfb1",
+  "compiler_version": "Arya native 2.0.0 (self-hosted)",
+  "compiler_command": "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya",
+  "compiler_command_sha256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+  "projects": [
+    {
+      "project": "01-beginner-basic",
+      "app": "Pocket Calculator.app",
+      "status": "passed",
+      "worker_sha256": "404e78d4c5321162a860e7c16d37d4e486b812ce6cc91ec4ea0838912ca76e01",
+      "host_sha256": "2eb19d0db1f910ec5b33f52927044bfc291862a49ff5069f359bcfcc7d80900e",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "18799630a61b9851cad7973fa536c31366206bcde0c57c8ad683686513b23234",
+        "Contents/MacOS/NativeHost": "2eb19d0db1f910ec5b33f52927044bfc291862a49ff5069f359bcfcc7d80900e",
+        "Contents/MacOS/arya-worker": "404e78d4c5321162a860e7c16d37d4e486b812ce6cc91ec4ea0838912ca76e01",
+        "Contents/Resources/Calculator.icns": "3cad7491ac22f4e33372b0f0a962722b647ce18c9445753980e5e78f61672ed9",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "6566f0148e619275ac81aa43f32ff17c3de454fd16c74525f4109bc8356732a9",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "712ef0c65abd03466ca1cd4b160e852031a20292311ff7c6dde111eb89cf47ab",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "57eceeeb5e74740ac6d78c87f7f730f9e8931c4d0c1f1b7b2d6319231f9cd879"
+      }
+    },
+    {
+      "project": "02-better-everyday",
+      "app": "Everyday Calculator.app",
+      "status": "passed",
+      "worker_sha256": "5e1ad16186613ae38e6b50eb9ef07796a33c71db13852d4405daeecc78535e43",
+      "host_sha256": "da8b9d5e282bf769ef8f1d2e8eeca5f1832d2df1dbf582d897139cdc9f7c78ad",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "601b6f5acf5038854d232d9d9019f9e014a6c3eb8d8c96075c37b5a67d8d21c1",
+        "Contents/MacOS/NativeHost": "da8b9d5e282bf769ef8f1d2e8eeca5f1832d2df1dbf582d897139cdc9f7c78ad",
+        "Contents/MacOS/arya-worker": "5e1ad16186613ae38e6b50eb9ef07796a33c71db13852d4405daeecc78535e43",
+        "Contents/Resources/Calculator.icns": "9ab4060a5eb2553b275516d6de77eb37e9d6f7ffcc912e1404205fa0261d2fac",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "ffd4e7c2661733d9080fefd65959dd943dc30a6efc545b40a56570bfa9374fc1",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "96f376940895ec75f4017f994c0f2f99616257e8646c8d7355351306a9ee0fcc",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "78db7aa57010f63cc27deba9ef21fc87d8c408dddaab1e4b2869d942e17840aa"
+      }
+    },
+    {
+      "project": "03-intermediate-scientific",
+      "app": "Scientific Calculator.app",
+      "status": "passed",
+      "worker_sha256": "0fefc82ff0da8928e0aa380494b011670ff8fe4d6db35a358a8dd5c9bbbe7374",
+      "host_sha256": "9d67aab4689ca0de9671a8bf0914f0785c017b5cb5793a87033e5d1e53a699ac",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "c57efb3ea73834456905d9b79b08b248a30d957e47d18f8a30c30003741ca69f",
+        "Contents/MacOS/NativeHost": "9d67aab4689ca0de9671a8bf0914f0785c017b5cb5793a87033e5d1e53a699ac",
+        "Contents/MacOS/arya-worker": "0fefc82ff0da8928e0aa380494b011670ff8fe4d6db35a358a8dd5c9bbbe7374",
+        "Contents/Resources/Calculator.icns": "3f5972838be1037da131f939308cdc1487f87fb7310e9532ee572a64202f0a4e",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "69f277834260f0a5615d60a180304b8364e72cdf42f558cb075937c7bb075627",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "42d31a64038179b8d3b4285c7628e6fbc0a114dcc7942faf8440a15fd5de5611",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "8edaf879e0b7dfeecb78df2d48117069c910160a5341a7f1912f8017826070bd"
+      }
+    },
+    {
+      "project": "04-advanced-programmer",
+      "app": "Programmer Calculator.app",
+      "status": "passed",
+      "worker_sha256": "98b8d754846c8fdf937a5079e7a05b87a30e4881aaeff852382a1244cc2ad05c",
+      "host_sha256": "a3ecf7206c567a2cadd2e70ed72f24980d09242f6887386a37a12857dca71e3c",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "edfcc8989b269f4b42d5f51119a8e9f00395ce58b3adc84d95ca56f944e0df7c",
+        "Contents/MacOS/NativeHost": "a3ecf7206c567a2cadd2e70ed72f24980d09242f6887386a37a12857dca71e3c",
+        "Contents/MacOS/arya-worker": "98b8d754846c8fdf937a5079e7a05b87a30e4881aaeff852382a1244cc2ad05c",
+        "Contents/Resources/Calculator.icns": "2081d087199dfb5153d44673075e7b1ba78a9d6e8e7a6aac11af30911bcd3d0e",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "f0575e640f4dd7b26d986e86667f77a50668a542cd7dd315e4dbe9464b11452b",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "1e9a239bb876847dc256c5a800cac537554280e3b13baf70535ee0ff26bfe4d2",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "99f3db256fe5db5a63e85162ae3879fd222b9f585ffd6941157dc0394881d581"
+      }
+    },
+    {
+      "project": "05-pro-finance",
+      "app": "Finance Calculator.app",
+      "status": "passed",
+      "worker_sha256": "09f827a0281bb5f841320d5d751a01a707fec120a99cd24eb2cf2edc01b4f827",
+      "host_sha256": "039ccd4f017a23115affc9d68b9dd06dd338b5a1b35a8b9851f06a46084de767",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "13995e200ab3e6f2cbd18ecc679ac1315867c3fb684f05b730a4f5127cd624f4",
+        "Contents/MacOS/NativeHost": "039ccd4f017a23115affc9d68b9dd06dd338b5a1b35a8b9851f06a46084de767",
+        "Contents/MacOS/arya-worker": "09f827a0281bb5f841320d5d751a01a707fec120a99cd24eb2cf2edc01b4f827",
+        "Contents/Resources/Calculator.icns": "a011232f4b7875a39c305a4ffbbb91c406fdafac9ca160ee28ae32c8d4a356d5",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "91094495b12a5097ed1b6946235dc7a9240842afe4dee3af4031f491cb7666d3",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "c3bdc3ee4a884f69b9bf53ccef37f7e97122ffeefc7464b4bb58c0be626d7816",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "6f51d385153a7b0fc2d4d607c6c9cf620411d374a2884f2845b51ad9b539ccb2"
+      }
+    },
+    {
+      "project": "06-world-class-precision",
+      "app": "Precision Calculator.app",
+      "status": "passed",
+      "worker_sha256": "d9123daf094be38abe8644a554a8939ee926dcf3003f1a8c6de1b1f7e34699ec",
+      "host_sha256": "85f764faba520bf6cd6d5d5724f16c6cd768f73b238f1648a1e25e7215a640d3",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "84239cd48ddbe57d7ade85a7962a2eb1abdd969c2bbf8a36a2d295d804e1b72e",
+        "Contents/MacOS/NativeHost": "85f764faba520bf6cd6d5d5724f16c6cd768f73b238f1648a1e25e7215a640d3",
+        "Contents/MacOS/arya-worker": "d9123daf094be38abe8644a554a8939ee926dcf3003f1a8c6de1b1f7e34699ec",
+        "Contents/Resources/Calculator.icns": "66aac7f0853308057209ec3915df91eb9a1066419ade4aa8fbade94a7ba74444",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/README.md": "d74ab92c2c8065e653381811eec35bfc040b2d555bf7d83ffc2b0304d4db4a84",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "8f5c28253a93cdaa89689e430ffb7800c04f2b517520465eb2e1ad16e35c58bd",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "9683145a5ad5ab1ab23317fed39691ce2211a60c8a802f3195a40d9084d47b47"
+      }
+    }
+  ],
+  "passed": 6,
+  "failed": 0,
+  "archive": ".build/release-2.0.0/final/arya-native-calculators-2.0.0-darwin-arm64.zip",
+  "archive_bytes": 7485285,
+  "archive_sha256": "e2851b0f0cd7b925b412dbac12189d533d2fa67fca3bcdd694f01bd1fc567f0b",
+  "archive_roundtrip_verified": true,
+  "historical_bundles_and_archives_preserved": true
+}

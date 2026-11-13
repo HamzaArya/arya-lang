@@ -1,0 +1,99 @@
+{
+  "status": "passed",
+  "publication": false,
+  "families": [
+    {
+      "family": "native-desktop-projects",
+      "buildReport": "native-desktop-projects/reports/20261113T174613.498891Z/results.json",
+      "archive": ".build/release-2.0.0/final/arya-native-desktop-apps-2.0.0-darwin-arm64.zip",
+      "archiveSHA256": "71d74735771bac3c727736e2fb943a83446b0afc6cba0122ea4b1d80233ab6a7",
+      "archiveBytes": 6948635,
+      "passed": 6,
+      "compilerCommandSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1"
+    },
+    {
+      "family": "native-calculators",
+      "buildReport": "native-calculators/reports/20261113T174657.986552Z/results.json",
+      "archive": ".build/release-2.0.0/final/arya-native-calculators-2.0.0-darwin-arm64.zip",
+      "archiveSHA256": "e2851b0f0cd7b925b412dbac12189d533d2fa67fca3bcdd694f01bd1fc567f0b",
+      "archiveBytes": 7485285,
+      "passed": 6,
+      "compilerCommandSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1"
+    }
+  ],
+  "checkoutSHA": "5d3286445587fec596b76f912f70cc1575679c75",
+  "startedAtUTC": "2026-11-13T17:46:05.440710+00:00",
+  "qualification": {
+    "run": 43470021848,
+    "headSHA": "0dc38b789df2840aa2977769065479c578e70649",
+    "job": 132039162194,
+    "jobName": "unix (macos-15)",
+    "jobConclusion": "success",
+    "runURL": "https://github.com/HamzaArya/arya-lang/actions/runs/43470021848",
+    "artifact": {
+      "id": 14061468049,
+      "node_id": "MDg6QXJ0aWZhY3QxNDA2MTQ2ODA0OQ==",
+      "name": "native-sdk-macos-15",
+      "size_in_bytes": 8110073,
+      "url": "https://api.github.com/repos/HamzaArya/arya-lang/actions/artifacts/14061468049",
+      "archive_download_url": "https://api.github.com/repos/HamzaArya/arya-lang/actions/artifacts/14061468049/zip",
+      "expired": false,
+      "digest": "sha256:15912de64cdc418a6035b91036985ff20cafbcdf6ad3dedbd8da515141b0b9ba",
+      "created_at": "2026-11-13T17:25:17Z",
+      "updated_at": "2026-11-13T17:25:17Z",
+      "expires_at": "2027-02-11T17:09:51Z",
+      "workflow_run": {
+        "id": 43470021848,
+        "repository_id": 1450878905,
+        "head_repository_id": 1450878905,
+        "head_branch": "release/2.0.0-native",
+        "head_sha": "0dc38b789df2840aa2977769065479c578e70649"
+      }
+    }
+  },
+  "sdk": {
+    "fileCount": 561,
+    "checksumInventorySHA256": "ea02ce36da1fb40b2f84432a42726e937176a14ec0374af89b4a3fa4468d665f",
+    "build": {
+      "assembledAtUtc": "2026-11-13T17:25:05Z",
+      "host": "Darwin 24.6.0 arm64",
+      "version": "2.0.0",
+      "compilerSha256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+      "generatedCSha256": "d91325d76368cc98b319cf397f7949d65b2151cb541fb0b29b46e3b2b7945ce1",
+      "stageTwoCSha256": "d91325d76368cc98b319cf397f7949d65b2151cb541fb0b29b46e3b2b7945ce1",
+      "stageTwoThreeCIdentical": "true"
+    },
+    "archiveSHA256": "04f8a197effdcde731bfb11447736c0cf779255f35a1d356c1066841dff2a6b5",
+    "compilerSHA256": "fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1",
+    "architecture": "Mach-O 64-bit executable arm64",
+    "loadCommands": "/Users/runner/work/arya-lang/arya-lang/.build/native-app-release/extracted/arya-native-2.0.0-darwin-arm64/arya:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 15.0\n      sdk 15.5\n   ntools 1\n     tool LD\n  version 1167.5\n",
+    "version": "Arya native 2.0.0 (self-hosted)"
+  },
+  "sourceIdentity": {
+    "matchedBuildInputs": 260,
+    "sourceInventorySHA256": "0ab6c2ba8b5d0b828347655968c6190e64adf649d130d5c3d1d598e9b49fd835",
+    "nonBuildInputDifferences": [
+      {
+        "path": "native/tests/fixtures/string-storage.arya",
+        "qualifiedSHA256": "b562ff4a5f87b2ca337eedc93078a3f122221be01428c81edde86b1ec23c8ff3",
+        "checkoutSHA256": "a4d42e870604ae3963b126e773e0a84c5388c1be565225ccf074067f80bf89a5"
+      },
+      {
+        "path": "native/bootstrap/release-apps.py",
+        "qualifiedSHA256": null,
+        "checkoutSHA256": "c2fba0670a844e1b0d9248595119b861a6dc5466643c7a105a78b5eacb2384d2"
+      },
+      {
+        "path": "native/tests/release-apps-reference.py",
+        "qualifiedSHA256": null,
+        "checkoutSHA256": "5a16b4ee7d8a69a7ac707a9e4bb2bfa9380d213fa2c3e3f059516fcc0c187609"
+      }
+    ],
+    "note": "Tests, documentation and packaging metadata may differ; every selected compiler, runtime, library, vendor and native backend build input matches."
+  },
+  "host": "ProductName:\t\tmacOS\nProductVersion:\t\t15.8.2\nBuildVersion:\t\t24H232\n",
+  "applications": 12,
+  "platform": "macOS 26+ ARM64 application bundles",
+  "signing": "ad-hoc; not Developer ID signed or notarized",
+  "note": "Automated engine, host/worker protocol and extracted-signature checks. This job does not claim manual GUI interaction or publish a release."
+}
