@@ -1,0 +1,230 @@
+{
+  "boundary": "Fresh process, module initialization, one empty report, stdio transfer and final cleanup/exit. Warm filesystem cache; two discarded warm launches. Node loads the existing generated report bundle; native loads the full worker.",
+  "raw": [
+    {
+      "sample": 0,
+      "name": "baseline-controlled",
+      "wallMs": 2.961749999999995
+    },
+    {
+      "sample": 0,
+      "name": "qualified",
+      "wallMs": 2.931416999999996
+    },
+    {
+      "sample": 0,
+      "name": "node",
+      "wallMs": 37.93954100000002
+    },
+    {
+      "sample": 1,
+      "name": "node",
+      "wallMs": 39.017875000000004
+    },
+    {
+      "sample": 1,
+      "name": "qualified",
+      "wallMs": 3.5089159999999993
+    },
+    {
+      "sample": 1,
+      "name": "baseline-controlled",
+      "wallMs": 3.6404579999999953
+    },
+    {
+      "sample": 2,
+      "name": "baseline-controlled",
+      "wallMs": 3.361165999999997
+    },
+    {
+      "sample": 2,
+      "name": "qualified",
+      "wallMs": 3.2589579999999785
+    },
+    {
+      "sample": 2,
+      "name": "node",
+      "wallMs": 39.13454200000001
+    },
+    {
+      "sample": 3,
+      "name": "node",
+      "wallMs": 38.06687500000004
+    },
+    {
+      "sample": 3,
+      "name": "qualified",
+      "wallMs": 3.6215830000000437
+    },
+    {
+      "sample": 3,
+      "name": "baseline-controlled",
+      "wallMs": 2.8492499999999836
+    },
+    {
+      "sample": 4,
+      "name": "baseline-controlled",
+      "wallMs": 2.678375000000017
+    },
+    {
+      "sample": 4,
+      "name": "qualified",
+      "wallMs": 2.952541999999994
+    },
+    {
+      "sample": 4,
+      "name": "node",
+      "wallMs": 38.83137499999998
+    },
+    {
+      "sample": 5,
+      "name": "node",
+      "wallMs": 38.62825000000004
+    },
+    {
+      "sample": 5,
+      "name": "qualified",
+      "wallMs": 3.3359170000000518
+    },
+    {
+      "sample": 5,
+      "name": "baseline-controlled",
+      "wallMs": 2.885791999999981
+    },
+    {
+      "sample": 6,
+      "name": "baseline-controlled",
+      "wallMs": 2.774166999999977
+    },
+    {
+      "sample": 6,
+      "name": "qualified",
+      "wallMs": 2.9747919999999795
+    },
+    {
+      "sample": 6,
+      "name": "node",
+      "wallMs": 38.88683299999997
+    },
+    {
+      "sample": 7,
+      "name": "node",
+      "wallMs": 40.30095800000004
+    },
+    {
+      "sample": 7,
+      "name": "qualified",
+      "wallMs": 3.800875000000019
+    },
+    {
+      "sample": 7,
+      "name": "baseline-controlled",
+      "wallMs": 3.2501250000000255
+    },
+    {
+      "sample": 8,
+      "name": "baseline-controlled",
+      "wallMs": 3.736458999999968
+    },
+    {
+      "sample": 8,
+      "name": "qualified",
+      "wallMs": 23.37933300000003
+    },
+    {
+      "sample": 8,
+      "name": "node",
+      "wallMs": 52.657542000000035
+    },
+    {
+      "sample": 9,
+      "name": "node",
+      "wallMs": 39.915167
+    },
+    {
+      "sample": 9,
+      "name": "qualified",
+      "wallMs": 3.514499999999998
+    },
+    {
+      "sample": 9,
+      "name": "baseline-controlled",
+      "wallMs": 2.892417000000023
+    },
+    {
+      "sample": 10,
+      "name": "baseline-controlled",
+      "wallMs": 3.0631670000000213
+    },
+    {
+      "sample": 10,
+      "name": "qualified",
+      "wallMs": 3.1580830000000333
+    },
+    {
+      "sample": 10,
+      "name": "node",
+      "wallMs": 37.58133299999997
+    },
+    {
+      "sample": 11,
+      "name": "node",
+      "wallMs": 40.72225000000003
+    },
+    {
+      "sample": 11,
+      "name": "qualified",
+      "wallMs": 3.56087500000001
+    },
+    {
+      "sample": 11,
+      "name": "baseline-controlled",
+      "wallMs": 2.932083000000034
+    },
+    {
+      "sample": 12,
+      "name": "baseline-controlled",
+      "wallMs": 2.6295000000000073
+    },
+    {
+      "sample": 12,
+      "name": "qualified",
+      "wallMs": 2.805541999999946
+    },
+    {
+      "sample": 12,
+      "name": "node",
+      "wallMs": 37.90899999999999
+    },
+    {
+      "sample": 13,
+      "name": "node",
+      "wallMs": 39.46733300000005
+    },
+    {
+      "sample": 13,
+      "name": "qualified",
+      "wallMs": 3.5006250000000136
+    },
+    {
+      "sample": 13,
+      "name": "baseline-controlled",
+      "wallMs": 3.0148340000000644
+    },
+    {
+      "sample": 14,
+      "name": "baseline-controlled",
+      "wallMs": 2.8082079999999223
+    },
+    {
+      "sample": 14,
+      "name": "qualified",
+      "wallMs": 3.086208000000056
+    },
+    {
+      "sample": 14,
+      "name": "node",
+      "wallMs": 38.011750000000006
+    }
+  ]
+}

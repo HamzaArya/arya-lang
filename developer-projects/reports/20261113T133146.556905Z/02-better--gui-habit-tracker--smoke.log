@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/gui-habit-tracker/.build/verified-app"]
+PASS: HTTP success/error paths, persistence across restart, graceful shutdown, corrupt-store protection

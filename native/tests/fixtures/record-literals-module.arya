@@ -1,0 +1,2 @@
+export let live = 1
+export fn advance(): number { live += 1; return live }

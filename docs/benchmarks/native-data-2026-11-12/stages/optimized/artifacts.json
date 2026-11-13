@@ -1,0 +1,26 @@
+{
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+  "compilerSha256": "dd595cccdd8c7c2c49ff12d2784b6f1f406c93a3b5e182ea48a46b7e85aab06b",
+  "version": "Arya native 2.0.0-alpha.2 (self-hosted)",
+  "flags": "-std=c11 -O2 -ffp-contract=off; counters separately enabled",
+  "artifacts": {
+    "worker": {
+      "sha256": "c18237c76f33177e19111101b9088ec96c1a60573f5e868ea7b0584d937c059c",
+      "cSha256": "1d9ba8a7a1b4831e7c7fa6aa4f273e84085caa18bec9cfecf32f605ab708eb5c",
+      "bytes": 1236680,
+      "buildMs": 5826.455542
+    },
+    "phases": {
+      "sha256": "8f82076f622cb737049e11ef37ed2e33d6f046db1532cb899f748e1c53c382ef",
+      "cSha256": "716443a39ca7d44fc02b9b0b021564b0ef6bf4d217602dc407024a8842c71f64",
+      "bytes": 540712,
+      "buildMs": 1952.7861249999996
+    },
+    "counters": {
+      "sha256": "d91cd9eab7dba1ce13cb1fc93a95ce729de24c13dbf3c95ea155a2b0b5723cdf",
+      "cSha256": "534441efdd35ec1487363fd7b9da73c0aa798a1ae744a22126b458a6bd9548cd",
+      "bytes": 1236568,
+      "buildMs": 4733.960958999999
+    }
+  }
+}

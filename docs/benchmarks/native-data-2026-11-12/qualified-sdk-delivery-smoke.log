@@ -1,0 +1,3 @@
+smoke: final relocated SDK cc-only build and interpreter-free GC stress passed
+stream: final relocated SDK cc-only build and interpreter-free GC stress passed
+Final SDK compiler, stdlib, static libraries and editor bundle match the qualified build

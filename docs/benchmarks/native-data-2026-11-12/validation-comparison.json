@@ -1,0 +1,336 @@
+{
+  "recordedAtUtc": "2026-11-12T20:14:41.898022+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "loadAverageStart": [
+    9.24169921875,
+    13.56884765625,
+    16.9482421875
+  ],
+  "environmentNote": "Root acceptance tests and a clean source build were active; this is operation process-CPU evidence under contention, not an idle-host wall-time claim.",
+  "sourceSha256": "da55cc173956a11b9ce7e71439a9a832f8f3fb076197bb0fb85e052418f95bb5",
+  "method": "Median operation CPU ms, excluding startup/setup/output. One discarded process per width/backend; alternating backend order, fresh process per sample, three schema warmups inside each process. No counters. Single development host.",
+  "binarySha256": {
+    "before": "a6687b00960f748d11e147da7338327204965b114a968bf4e3f827be383de5a2",
+    "after": "31084a8aad4a4acdeb348a1ce777cd9caab99f72379a5967324f9fbf947c3b14"
+  },
+  "generatedCSha256": {
+    "before": "4e83b706ada593d60c6f13020c3879860374d816b8d1e1ed231a785daf82fb21",
+    "after": "3cf28ba2915fa9f4db3194c1de74bba659628cdc79b25153bf9a0d30e5dd24e8"
+  },
+  "raw": [
+    {
+      "backend": "after",
+      "sample": 0,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.07,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 0,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.469,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 1,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.888999999999999,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 1,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.2779999999999996,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 2,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.885000000000001,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 2,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 5.752,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 3,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.67,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 3,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.5720000000000005,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 4,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.4130000000000003,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 4,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.853999999999999,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 5,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.563000000000001,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 5,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.509,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 6,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.614,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 6,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.0920000000000005,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 7,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 4.761,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 7,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.2310000000000003,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 8,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 2.239,
+      "checksum": 6350
+    },
+    {
+      "backend": "before",
+      "sample": 8,
+      "width": 128,
+      "iterations": 50,
+      "cpuMs": 5.141000000000001,
+      "checksum": 6350
+    },
+    {
+      "backend": "after",
+      "sample": 0,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 12.023,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 0,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 66.552,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 1,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 54.83200000000001,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 1,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 9.911,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 2,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 9.122000000000002,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 2,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 71.139,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 3,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 68.175,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 3,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 10.335999999999999,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 4,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 11.165999999999999,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 4,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 68.32199999999999,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 5,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 70.36500000000001,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 5,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 10.603000000000002,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 6,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 10.914,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 6,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 63.527,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 7,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 62.352000000000004,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 7,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 19.203,
+      "checksum": 25550
+    },
+    {
+      "backend": "after",
+      "sample": 8,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 9.694999999999999,
+      "checksum": 25550
+    },
+    {
+      "backend": "before",
+      "sample": 8,
+      "width": 512,
+      "iterations": 50,
+      "cpuMs": 68.20499999999998,
+      "checksum": 25550
+    }
+  ],
+  "summary": [
+    {
+      "width": 128,
+      "iterations": 50,
+      "medianCpuMs": {
+        "before": 4.761,
+        "after": 2.4130000000000003
+      },
+      "speedup": 1.9730625777041026
+    },
+    {
+      "width": 512,
+      "iterations": 50,
+      "medianCpuMs": {
+        "before": 68.175,
+        "after": 10.603000000000002
+      },
+      "speedup": 6.4297840233896055
+    }
+  ],
+  "loadAverageEnd": [
+    9.24169921875,
+    13.56884765625,
+    16.9482421875
+  ]
+}

@@ -1,0 +1,83 @@
+use std "decimal" as decimal
+use std "runtime" as runtime
+fn fail(message) { throw new Error(message) }
+let effort = 0
+export fn reset() { effort = 0 }
+fn spend() { effort += 1; if effort > 20000 { fail("Arithmetic work limit exceeded; simplify the expression.") } }
+fn absInt(value) { if value.startsWith("-") { return value.slice(1) }; return value }
+fn neg(value) { if value == "0" { return "0" }; if value.startsWith("-") { return value.slice(1) }; return "-" + value }
+fn gcd(a,b) {
+  a = absInt(a); b = absInt(b)
+  while b != "0" { spend(); let q = decimal.divide(a,b,0,"down"); let remainder = decimal.subtract(a,decimal.multiply(q,b)); a = b; b = remainder }
+  return a
+}
+fn quotient(a,b) { return decimal.divide(a,b,0,"down") }
+fn rational(n,d) {
+  spend(); if decimal.compare(d,"0") == 0 { fail("Division by zero is undefined.") }
+  n = decimal.from(n); d = decimal.from(d); if d.startsWith("-") { n = neg(n); d = neg(d) }
+  if n == "0" { return {n:"0",d:"1"} }
+  let common = gcd(n,d); n = quotient(n,common); d = quotient(d,common)
+  if absInt(n).length > 300 or d.length > 300 { fail("Reduced numerator or denominator exceeds 300 digits.") }
+  return {n:n,d:d}
+}
+export fn add(a,b) {
+  let common = gcd(a.d,b.d); let x = quotient(a.d,common); let y = quotient(b.d,common)
+  return rational(decimal.add(decimal.multiply(a.n,y),decimal.multiply(b.n,x)),decimal.multiply(x,b.d))
+}
+export fn subtract(a,b) { return add(a,{n:neg(b.n),d:b.d}) }
+fn multiply(a,b) {
+  let x = gcd(a.n,b.d); let y = gcd(b.n,a.d)
+  return rational(decimal.multiply(quotient(a.n,x),quotient(b.n,y)),decimal.multiply(quotient(a.d,y),quotient(b.d,x)))
+}
+fn divide(a,b) { if b.n == "0" { fail("Division by zero is undefined.") }; return multiply(a,rational(b.d,b.n)) }
+fn power(base,exponent) {
+  if exponent.d != "1" or decimal.compare(absInt(exponent.n),"100") > 0 { fail("Exponent must be an integer from -100 to 100.") }
+  let count = number(absInt(exponent.n)); if count == 0 and base.n == "0" { fail("0^0 is undefined in this calculator.") }
+  if exponent.n.startsWith("-") { base = divide({n:"1",d:"1"},base) }; let result = {n:"1",d:"1"}
+  while count > 0 { if count % 2 == 1 { result = multiply(result,base) }; count = Math.floor(count / 2); if count > 0 { base = multiply(base,base) } }; return result
+}
+fn literal(token) {
+  if token.length > 600 { fail("Numeric literal exceeds 600 characters.") }; let parts = token.split(".")
+  if parts.length > 2 or token == "." { fail("Invalid decimal literal.") }; let digits = parts.join("")
+  for c in digits { if not "0123456789".includes(c) { fail("Use decimal digits without exponent notation.") } }
+  let i = 0; while i < digits.length - 1 and digits[i] == "0" { i += 1 }; digits = digits.slice(i)
+  let d = "1"; if parts.length == 2 { d += "0".repeat(parts[1].length) }; return rational(digits,d)
+}
+let tokens = []; let cursor = 0; let depth = 0
+fn tokenize(source) {
+  let output = []; let i = 0
+  while i < source.length {
+    let c = source[i]
+    if " \t\r\n".includes(c) { i += 1; continue }
+    if "0123456789.".includes(c) { let start = i; while i < source.length and "0123456789.".includes(source[i]) { i += 1 }; output.push(source.slice(start,i)) }
+    else if "+-*/^()%".includes(c) { output.push(c); i += 1 }
+    else if source.slice(i,i+3) == "abs" { output.push("abs"); i += 3 }
+    else { fail("Unsupported token at character " + str(i+1) + ". Use decimal numbers, + - * / ^ %, parentheses or abs().") }
+    if output.length > 256 { fail("Expression exceeds 256 tokens.") }
+  }; return output
+}
+fn peek() { return tokens[cursor] ?? "" }
+fn take() { let token = peek(); cursor += 1; return token }
+fn sum() { let result = product(); while peek() == "+" or peek() == "-" { let op = take(); let right = product(); if op == "+" { result = add(result,right) } else { result = subtract(result,right) } }; return result }
+fn product() { let result = unary(); while peek() == "*" or peek() == "/" { let op = take(); let right = unary(); if op == "*" { result = multiply(result,right) } else { result = divide(result,right) } }; return result }
+fn unary() {
+  depth += 1; if depth > 32 { fail("Expression nesting exceeds 32 levels.") }; let result = undefined
+  if peek() == "+" { take(); result = unary() }
+  else if peek() == "-" { take(); let inner = unary(); result = {n:neg(inner.n),d:inner.d} }
+  else { result = powered() }; depth -= 1; return result
+}
+fn powered() { let result = primary(); if peek() == "^" { take(); result = power(result,unary()) }; return result }
+fn primary() {
+  let token = take(); let result = undefined
+  if token == "(" { result = sum(); if take() != ")" { fail("Missing closing parenthesis.") } }
+  else if token == "abs" { if take() != "(" { fail("abs needs parentheses.") }; result = sum(); if take() != ")" { fail("Missing closing parenthesis.") }; result = {n:absInt(result.n),d:result.d} }
+  else if token != "" and "0123456789.".includes(token[0]) { result = literal(token) }
+  else { fail("Expected a number or parenthesized expression.") }
+  while peek() == "%" { take(); result = divide(result,{n:"100",d:"1"}) }; return result
+}
+export fn evaluate(source) {
+  if runtime.kind(source) != "string" or source.trim().length == 0 or source.length > 2048 { fail("Expression must contain 1–2048 characters.") }
+  tokens = tokenize(source); cursor = 0; depth = 0; let result = sum(); if cursor != tokens.length { fail("Unexpected token; use an explicit operator between values.") }; return result
+}
+export fn exact(value) { if value.d == "1" { return value.n }; return "(" + value.n + "/" + value.d + ")" }
+export fn format(value,places,rounding) { return decimal.quantize(decimal.divide(value.n,value.d,places,rounding),places,rounding) }

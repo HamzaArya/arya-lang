@@ -1,0 +1,286 @@
+{
+  "date_utc": "20261113T145036.841848Z",
+  "mode": "check-build-test-package",
+  "host_source_sha256": "2a2de3b2a621e91f3b6ab290f1c3e9d8f59917123597c7aae55085a4dd7489f3",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "projects": [
+    {
+      "path": "05-pro-finance",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.152,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/05-pro-finance/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.36,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/05-pro-finance/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 2.927,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-smoke.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Calculator.iconset",
+            "4"
+          ],
+          "exit_code": 0,
+          "seconds": 0.804,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-icon.log"
+        },
+        {
+          "command": [
+            "iconutil",
+            "-c",
+            "icns",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Calculator.iconset",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Finance Calculator.app/Contents/Resources/Calculator.icns"
+          ],
+          "exit_code": 0,
+          "seconds": 0.076,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-icon-package.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Finance Calculator.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.04,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Finance Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.039,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Finance Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-dhiilevs/Finance Calculator.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T145036.841848Z/05-pro-finance-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "882c65542692a871c2a6579abbfd37dfe30363ec0a13461e63a0854bcd1ce682",
+        "README.md": "91094495b12a5097ed1b6946235dc7a9240842afe4dee3af4031f491cb7666d3",
+        "ui.json": "c3bdc3ee4a884f69b9bf53ccef37f7e97122ffeefc7464b4bb58c0be626d7816",
+        "rational.arya": "ef732448a6343ede64113cc0f459efe67b8ceeea1f6cc4b1adcb85cf3d50b9cd",
+        "main.arya": "9c0f4522c089a33169009f41afd8b098d088ec1449f51232ef49b704fac56edc",
+        "verification.json": "7b75d107f1b897341dd063274a8de77d9feb96a848936db6b1072c1e27301422",
+        "smoke.py": "ef66d473399a1ba1032d77d85d799bba19acb632fe951a97ad4b37d86b83adc7"
+      },
+      "status": "passed",
+      "app": "dist/Finance Calculator.app",
+      "worker_sha256": "d1c7e24a7fc91ed8b8b1121ccac3d382c61e7e4f84fea52505f0e7f84b381953",
+      "host_sha256": "12ea940be6dd5113c184414910ab2452fb2b1bede66b425f1739bf801d432138"
+    },
+    {
+      "path": "06-world-class-precision",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.08,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/06-world-class-precision/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 3.465,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/06-world-class-precision/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 2.508,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-smoke.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Calculator.iconset",
+            "5"
+          ],
+          "exit_code": 0,
+          "seconds": 0.131,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-icon.log"
+        },
+        {
+          "command": [
+            "iconutil",
+            "-c",
+            "icns",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Calculator.iconset",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Precision Calculator.app/Contents/Resources/Calculator.icns"
+          ],
+          "exit_code": 0,
+          "seconds": 0.04,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-icon-package.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Precision Calculator.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Precision Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Precision Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.011,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-cap_0l81/Precision Calculator.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T145036.841848Z/06-world-class-precision-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "146f895b1ee14a849d9efd6a2260a2a1e5470e912379341fc512393ef0ae6f81",
+        "README.md": "d74ab92c2c8065e653381811eec35bfc040b2d555bf7d83ffc2b0304d4db4a84",
+        "ui.json": "8f5c28253a93cdaa89689e430ffb7800c04f2b517520465eb2e1ad16e35c58bd",
+        "rational.arya": "ef732448a6343ede64113cc0f459efe67b8ceeea1f6cc4b1adcb85cf3d50b9cd",
+        "main.arya": "b3bca9f47bb1526096bc719c63f67d033b287c50c54fea838373927ad592236b",
+        "verification.json": "6508fd0609f1db8e04b3007a3d5e0c91ce0a10131dd7bfab6901673def24d5d6",
+        "smoke.py": "b55262397b1c83a70e72b85caf75db90fdc1ddb6e7630960a5a442cf7e154894"
+      },
+      "status": "passed",
+      "app": "dist/Precision Calculator.app",
+      "worker_sha256": "64884b4fc012ffb6aea20c672b342b96119ae56f3713811b74ce65f6b9748566",
+      "host_sha256": "640d6c12e5f58a6430e2ce9b09ba4cb6b69c7096c2206e2537b3984523ecc9a4"
+    }
+  ],
+  "host_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fmodules",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/NativeHost.m",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "UniformTypeIdentifiers",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/NativeHost"
+    ],
+    "exit_code": 0,
+    "seconds": 1.614,
+    "log": "reports/20261113T145036.841848Z/appkit-host.log"
+  },
+  "host_binary_sha256": "8feaa13cb695c99914247c45fb783d7ff8c7706f0cd66020bc00ccc38c86234d",
+  "icon_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/Icon.m",
+      "-framework",
+      "Cocoa",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon"
+    ],
+    "exit_code": 0,
+    "seconds": 0.984,
+    "log": "reports/20261113T145036.841848Z/icon-build.log"
+  },
+  "passed": 2,
+  "failed": 0
+}

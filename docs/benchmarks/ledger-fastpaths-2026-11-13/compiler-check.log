@@ -1,0 +1,2 @@
+.build/independent/arya check .build/independent/compiler.arya
+Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/independent/compiler.arya

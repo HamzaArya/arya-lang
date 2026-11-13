@@ -1,0 +1,18 @@
+# Operation CPU seconds, excluding setup, compilation and process startup.
+use std "validate" as validate
+use std "runtime" as runtime
+use std "debug" as debug
+const width = number(args[0] ?? "512")
+const iterations = number(args[1] ?? "100")
+let shape = {}; let input = {}
+for i in range(width) { shape["field" + str(i)] = validate.integer(); input["field" + str(i)] = i }
+let schema = validate.object(shape)
+for i in range(3) { debug.assert(validate.check(schema, input).ok) }
+const started = runtime.clock()
+let checksum = 0
+for i in range(iterations) {
+  let result = validate.check(schema, input)
+  debug.assert(result.ok)
+  checksum += result.value["field" + str(width - 1)]
+}
+print(JSON.stringify({width: width, iterations: iterations, cpuMs: (runtime.clock() - started) * 1000, checksum: checksum}))

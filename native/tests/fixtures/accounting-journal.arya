@@ -1,0 +1,136 @@
+use std "accounting" as accounting
+use std "debug" as debug
+use std "runtime" as runtime
+use std "decimal" as decimal
+let checks = 0
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), "Accounting journal result mismatch: " + JSON.stringify(actual)); checks += 1 }
+fn rejects(code, callback, transactionIndex, row) {
+  let caught = false
+  try { callback() } catch error {
+    equal(error.code, code)
+    if transactionIndex != undefined { equal(error.transactionIndex, transactionIndex) }
+    if row != undefined { equal(error.row, row) }
+    caught = true
+  }
+  debug.assert(caught, "Missing accounting rejection: " + code)
+}
+const policy = {currency: "AFN", scale: 2}
+fn posting(account, debit, credit) { return {account: account, debit: debit, credit: credit} }
+fn transaction(id, value) { return {id: id, entries: [posting("cash", value, "0"), posting("sales", "0", value)]} }
+const sale = transaction("sale-1", "100.25")
+equal(accounting.validateTransaction(sale, policy), {id: "sale-1", currency: "AFN", scale: 2, entryCount: 2, debit: "100.25", credit: "100.25", balanced: true})
+const expense = {id: "expense-1", entries: [posting("rent", "25.10", "0"), posting("cash", "0", "25.10")]}
+const prepared = accounting.prepareJournal([sale, expense], policy)
+sale.id = "changed"; sale.entries[0].debit = "0"; sale.entries.push(posting("bad", "999", "0"))
+policy.currency = "USD"; policy.scale = 0
+let report = prepared.calculate()
+equal([report.currency, report.scale, report.transactionCount, report.entryCount, report.debit, report.credit, report.balanced], ["AFN", 2, 2, 4, "125.35", "125.35", true])
+equal(report.transactions[0].id, "sale-1")
+equal(report.accounts.map(fn(row) => row.account), ["cash", "sales", "rent"])
+equal(report.accounts[0].balance, "75.15")
+equal(await prepared.calculateAsync(), report)
+let immutable = false
+try { report.transactions[0].id = "mutated" } catch error { immutable = error.name == "TypeError" }; equal(immutable, true)
+immutable = false; try { report.transactions.push({}) } catch error { immutable = error.name == "TypeError" }; equal(immutable, true)
+const selected = {currency: "AFN", scale: 2}
+equal(accounting.journalBatch([], selected).transactionCount, 0)
+rejects("ARYA_ACCOUNTING_SCALE", fn() { accounting.prepareJournal([], {currency: "AFN", scale: 7}) })
+rejects("ARYA_ACCOUNTING_LIMIT", fn() { accounting.prepareJournal(new Array(100001), selected) })
+rejects("ARYA_ACCOUNTING_DUPLICATE", fn() { accounting.prepareJournal([transaction("same", "1"), transaction("same", "2")], selected) }, 1)
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([transaction(" ", "1")], selected) }, 0)
+rejects("ARYA_ACCOUNTING_TRANSACTION", fn() { accounting.prepareJournal([{id: "one", entries: [posting("cash", "1", "0")]}], selected) }, 0)
+rejects("ARYA_ACCOUNTING_POSTING", fn() { accounting.prepareJournal([{id: "both", entries: [posting("cash", "1", "1"), posting("cash", "0", "0")]}], selected) }, 0, 0)
+rejects("ARYA_ACCOUNTING_POSTING", fn() { accounting.prepareJournal([transaction("zero", "0.00")], selected) }, 0, 0)
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([transaction("negative", "-1")], selected) }, 0, 0)
+rejects("ARYA_ACCOUNTING_SCALE", fn() { accounting.prepareJournal([transaction("fraction", "0.001")], selected) }, 0, 0)
+rejects("ARYA_ACCOUNTING_RANGE", fn() { accounting.prepareJournal([transaction("overflow", "92233720368547758.08")], selected) }, 0, 0)
+let getterRuns = 0
+const getter = {id: "getter"}
+Object.defineProperty(getter, "entries", {get: fn() { getterRuns += 1; return [] }, enumerable: true})
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([getter], selected) }, 0)
+equal(getterRuns, 0)
+# Two invalid transactions offset globally: strict journal validation must reject.
+const left = {id: "left", entries: [posting("cash", "5", "0"), posting("sales", "0", "4")]}
+const right = {id: "right", entries: [posting("cash", "4", "0"), posting("sales", "0", "5")]}
+equal(accounting.ledgerBatch([...left.entries, ...right.entries], selected).balanced, true)
+rejects("ARYA_ACCOUNTING_UNBALANCED", fn() { accounting.journalBatch([left, right], selected) }, 0)
+const maximum = "92233720368547758.07"
+equal(accounting.journalBatch([transaction("max1", maximum), transaction("max2", maximum)], selected).debit, "184467440737095516.14")
+const entries = [posting("cash", "100.25", "0"), posting("sales", "0", "100.25"), posting("rent", "25.10", "0"), posting("cash", "0", "25.10")]
+const trial = accounting.trialBalance(entries, selected)
+equal([trial.debit, trial.credit, trial.difference, trial.balanced], ["100.25", "100.25", "0.00", true])
+equal(trial.accounts, [{account: "cash", debit: "75.15", credit: "0.00"}, {account: "sales", debit: "0.00", credit: "100.25"}, {account: "rent", debit: "25.10", credit: "0.00"}])
+equal(accounting.trialBalance(left.entries, selected).difference, "1.00")
+const chart = [{account: "cash", type: "asset"}, {account: "sales", type: "revenue"}, {account: "rent", type: "expense"}, {account: "loan", type: "liability"}, {account: "capital", type: "equity"}]
+const statements = accounting.financialStatements(entries, chart, selected)
+equal(statements.incomeStatement, {revenue: "100.25", expenses: "25.10", netIncome: "75.15"})
+equal(statements.balanceSheet, {assets: "75.15", liabilities: "0.00", equity: "0.00", currentEarnings: "75.15", liabilitiesAndEquity: "75.15", difference: "0.00", balanced: true})
+equal(statements.accounts[3].normalBalance, "0.00")
+immutable = false; try { statements.balanceSheet.assets = "0" } catch error { immutable = error.name == "TypeError" }; equal(immutable, true)
+rejects("ARYA_ACCOUNTING_UNBALANCED", fn() { accounting.financialStatements(left.entries, chart, selected) })
+rejects("ARYA_ACCOUNTING_CLASSIFICATION", fn() { accounting.financialStatements(entries, [], selected) })
+rejects("ARYA_ACCOUNTING_CLASSIFICATION", fn() { accounting.financialStatements([], [{account: "cash", type: "typo"}], selected) })
+rejects("ARYA_ACCOUNTING_DUPLICATE", fn() { accounting.financialStatements([], [chart[0], chart[0]], selected) })
+const complete = [...entries, posting("cash", "200", "0"), posting("capital", "0", "200"), posting("cash", "30", "0"), posting("loan", "0", "30")]
+equal(accounting.financialStatements(complete, chart, selected).balanceSheet, {assets: "305.15", liabilities: "30.00", equity: "200.00", currentEarnings: "75.15", liabilitiesAndEquity: "305.15", difference: "0.00", balanced: true})
+# Deterministic conservation property with a separate integer-cent oracle.
+fn cents(value) { let digits = str(value).padStart(3, "0"); return digits.slice(0, -2) + "." + digits.slice(-2) }
+let count = 150; if args[0] == "--stress" { count = 25 }
+for index in range(1, count + 1) {
+  const revenue = index * 97 + 7; const cost = index * 13
+  const rows = [posting("cash", cents(revenue), "0"), posting("sales", "0", cents(revenue)), posting("rent", cents(cost), "0"), posting("cash", "0", cents(cost))]
+  const result = accounting.financialStatements(rows, chart, selected)
+  equal(result.incomeStatement.netIncome, cents(revenue - cost))
+  equal(result.balanceSheet.balanced, true)
+  equal(accounting.trialBalance(rows, selected).debit, cents(revenue))
+}
+runtime.collect()
+equal(prepared.calculate(), report)
+const aborter = new AbortController(); aborter.abort()
+let aborted = false
+try { await prepared.calculateAsync({signal: aborter.signal}) } catch error { aborted = error.code == "ARYA_ACCOUNTING_ABORTED" }
+equal(aborted, true)
+# Preserve validation order: every native row is checked before posting policy.
+const malformed = {id: "malformed", entries: [posting("cash", "0", "0"), posting("sales", "0", "01")]}
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.validateTransaction(malformed, selected) }, undefined, 1)
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([transaction("ok", "1"), malformed], selected) }, 1, 1)
+const offset = {id: "offset", entries: [posting("cash", "0", "0"), posting("sales", "0", "5")]}
+rejects("ARYA_ACCOUNTING_POSTING", fn() { accounting.prepareJournal([offset], selected) }, 0, 0)
+let difference = null
+try { accounting.prepareJournal([transaction("ok", "1"), left], selected) }
+catch error { difference = [error.code, error.transactionIndex, error.difference, error.message] }
+equal(difference, ["ARYA_ACCOUNTING_UNBALANCED", 1, "1.00", "Transaction debits and credits differ by 1.00."])
+# Duplicate IDs and journal row limits precede validation of that transaction.
+rejects("ARYA_ACCOUNTING_DUPLICATE", fn() { accounting.prepareJournal([transaction("same", "1"), {id: "same", entries: null}], selected) }, 1)
+const tooManyRows = new Array(1000000)
+rejects("ARYA_ACCOUNTING_LIMIT", fn() { accounting.prepareJournal([transaction("first", "1"), {id: "large", entries: tooManyRows}], selected) }, 1)
+let postingGetters = 0
+const accessorPosting = posting("cash", "1", "0")
+Object.defineProperty(accessorPosting, "credit", {get: fn() { postingGetters += 1; return "0" }, enumerable: true})
+rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([{id: "accessor", entries: [accessorPosting, posting("sales", "0", "1")]}], selected) }, 0, 0)
+equal(postingGetters, 0)
+# Cross-transaction account remapping preserves first-posting order and exact
+# aggregates wider than a signed 64-bit row, including special string keys.
+for scale in range(7) {
+  const money = {currency: "AFN", scale: scale}
+  let digits = "9223372036854775807"
+  if scale > 0 { digits = digits.slice(0, -scale) + "." + digits.slice(-scale) }
+  const rows = [
+    {id: "one", entries: [posting("__proto__", digits, "0"), posting("حساب", "0", digits)]},
+    {id: "two", entries: [posting("constructor", digits, "0"), posting("__proto__", "0", digits)]},
+    {id: "three", entries: [posting("حساب", digits, "0"), posting("constructor", "0", digits)]}
+  ]
+  const snapshot = accounting.prepareJournal(rows, money)
+  const combined = snapshot.calculate()
+  const flattened = []; for transaction in rows { for entry in transaction.entries { flattened.push(entry) } }
+  equal(combined.accounts, accounting.ledgerBatch(flattened, money).accounts)
+  equal(combined.accounts.map(fn(row) => row.account), ["__proto__", "حساب", "constructor"])
+  equal(combined.transactions.map(fn(row) => row.debit), [digits, digits, digits])
+  equal(combined.balanced, true)
+  rows[0].entries[0].account = "mutated"; rows[0].entries[0].debit = "0"
+  rows[1].entries = []; money.scale = 6 - scale
+  runtime.collect()
+  equal(await snapshot.calculateAsync(), combined)
+  equal(snapshot.calculate(), combined)
+}
+print("journal/report checks:", checks)

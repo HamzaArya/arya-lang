@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/service-job-queue/.build/verified-app"]
+PASS: enqueue, idempotency, conflicts, claim, expiry, stale lease, restart, failed write, fail/retry/complete, hidden lease, corrupt storage

@@ -1,0 +1,27 @@
+use std "accounting" as accounting
+use std "runtime" as runtime
+const transactions = []; const entries = []
+const count = number(args[0] ?? "1000")
+for i in range(count) {
+  const rows = [{account: "cash", debit: "123.45", credit: "0"}, {account: "sales", debit: "0", credit: "123.45"}]
+  transactions.push({id: "sale:" + str(i), entries: rows})
+  for row in rows { entries.push(row) }
+}
+const policy = {currency: "AFN", scale: 2}
+for warmup in range(2) { accounting.journalBatch(transactions, policy) }
+for sample in range(3) {
+  runtime.collect()
+  let started = runtime.clock()
+  for transaction in transactions { accounting.validateTransaction(transaction, policy) }
+  const validation = (runtime.clock() - started) * 1000
+  started = runtime.clock()
+  const flat = accounting.prepareLedger(entries, policy)
+  const flatPreparation = (runtime.clock() - started) * 1000
+  started = runtime.clock()
+  const journal = accounting.prepareJournal(transactions, policy)
+  const preparation = (runtime.clock() - started) * 1000
+  started = runtime.clock()
+  const result = journal.calculate()
+  const calculation = (runtime.clock() - started) * 1000
+  print(JSON.stringify({sample: sample, transactions: count, rows: len(entries), validationCpuMs: validation, flatPreparationCpuMs: flatPreparation, journalPreparationCpuMs: preparation, preparedCalculationCpuMs: calculation, debit: result.debit, credit: result.credit}))
+}

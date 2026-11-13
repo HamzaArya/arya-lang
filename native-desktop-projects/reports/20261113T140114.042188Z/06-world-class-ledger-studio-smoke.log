@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/06-world-class-ledger-studio/.build/worker"]
+PASS: 43 native ledger worker commands; account CRUD/status, exact balanced journals, large totals, idempotent replay/conflict, reversals, reconciliation, stale versions, corrupt store and failed-save rollback

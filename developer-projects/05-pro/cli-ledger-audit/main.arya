@@ -1,0 +1,37 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "process" as process
+fn text(value, label, limit = 120) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { throw new Error(label + " must be non-empty text (max " + str(limit) + ").") }
+  return value.trim()
+}
+fn record(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn rows(value, limit = 1000) { if not Array.isArray(value) or value.length > limit { throw new Error("Expected an array of at most " + str(limit) + " rows.") }; return value }
+fn readJSON(file) { let info = fs.infoSync(file); if info == null or info.size > 1048576 { throw new Error("Input file missing or exceeds 1 MiB.") }; return JSON.parse(fs.readTextSync(file)) }
+use std "decimal" as decimal
+fn amount(value) {
+  if runtime.kind(value) != "string" or not new RegExp("^-?[0-9]{1,18}(\\.[0-9]{1,2})?$").test(value) { throw new Error("Amount must be a decimal string with up to 18 integer and 2 fractional digits.") }
+  return decimal.quantize(value, 2, "half-even")
+}
+# Audit a journal without mutating its source.
+try {
+  if args.length != 1 { throw new Error("Usage: ledger-audit journal.json") }
+  let journal = record(readJSON(args[0])); let entries = rows(journal.entries)
+  let issues = []; let accounts = {}; let seen = new Set(); let totalDebit = "0.00"; let totalCredit = "0.00"
+  if entries.length == 0 { issues.push("Journal contains no entries.") }
+  for entry at index in entries {
+    record(entry); let id = text(entry.id, "Entry id"); if seen.has(id) { issues.push("Duplicate entry id: " + id) }; seen.add(id)
+    let lines = rows(entry.lines, 100); let debit = "0.00"; let credit = "0.00"
+    if lines.length < 2 { issues.push(id + ": at least two lines required.") }
+    for line in lines {
+      record(line); let account = text(line.account, "Account"); let d = amount(line.debit); let c = amount(line.credit)
+      if decimal.compare(d, "0") < 0 or decimal.compare(c, "0") < 0 or (decimal.compare(d, "0") > 0 and decimal.compare(c, "0") > 0) or (decimal.compare(d, "0") == 0 and decimal.compare(c, "0") == 0) { issues.push(id + ": each line needs exactly one positive side.") }
+      debit = decimal.add(debit, d); credit = decimal.add(credit, c)
+      accounts[account] = decimal.add(accounts[account] ?? "0.00", decimal.subtract(d,c))
+    }
+    if decimal.compare(debit, credit) != 0 { issues.push(id + ": entry is unbalanced by " + decimal.subtract(debit,credit)) }
+    totalDebit = decimal.add(totalDebit,debit); totalCredit = decimal.add(totalCredit,credit)
+  }
+  let report = {ok: issues.length == 0, entryCount: entries.length, debit: totalDebit, credit: totalCredit, accountBalances: accounts, issues: issues}
+  print(JSON.stringify(report, null, 2)); if issues.length > 0 { process.exit(1) }
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(2) }

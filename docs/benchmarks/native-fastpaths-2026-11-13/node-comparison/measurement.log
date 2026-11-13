@@ -1,0 +1,158 @@
+[
+  {
+    "kind": "sum",
+    "name": "baseline",
+    "medianCpuMs": 10.842999999999991,
+    "p95CpuMs": 12.24
+  },
+  {
+    "kind": "sum",
+    "name": "candidate",
+    "medianCpuMs": 10.907999999999987,
+    "p95CpuMs": 12.028999999999998
+  },
+  {
+    "kind": "sum",
+    "name": "node",
+    "medianCpuMs": 10.715,
+    "p95CpuMs": 12.522
+  },
+  {
+    "kind": "mix",
+    "name": "baseline",
+    "medianCpuMs": 31.664000000000026,
+    "p95CpuMs": 36.497
+  },
+  {
+    "kind": "mix",
+    "name": "candidate",
+    "medianCpuMs": 31.623999999999985,
+    "p95CpuMs": 39.50100000000003
+  },
+  {
+    "kind": "mix",
+    "name": "node",
+    "medianCpuMs": 13.557,
+    "p95CpuMs": 15.343
+  },
+  {
+    "kind": "fib",
+    "name": "baseline",
+    "medianCpuMs": 0.8070000000000022,
+    "p95CpuMs": 1.1660000000000004
+  },
+  {
+    "kind": "fib",
+    "name": "candidate",
+    "medianCpuMs": 0.8350000000000302,
+    "p95CpuMs": 1.0330000000000616
+  },
+  {
+    "kind": "fib",
+    "name": "node",
+    "medianCpuMs": 0.754,
+    "p95CpuMs": 1.399
+  },
+  {
+    "kind": "records",
+    "name": "baseline",
+    "medianCpuMs": 7.834000000000008,
+    "p95CpuMs": 11.970999999999954
+  },
+  {
+    "kind": "records",
+    "name": "candidate",
+    "medianCpuMs": 7.714999999999916,
+    "p95CpuMs": 13.19300000000001
+  },
+  {
+    "kind": "records",
+    "name": "node",
+    "medianCpuMs": 0.483,
+    "p95CpuMs": 3.998
+  },
+  {
+    "kind": "map",
+    "name": "baseline",
+    "medianCpuMs": 3.614000000000006,
+    "p95CpuMs": 6.408999999999998
+  },
+  {
+    "kind": "map",
+    "name": "candidate",
+    "medianCpuMs": 3.4279999999999866,
+    "p95CpuMs": 6.5270000000000605
+  },
+  {
+    "kind": "map",
+    "name": "node",
+    "medianCpuMs": 0.451,
+    "p95CpuMs": 1.003
+  },
+  {
+    "kind": "json",
+    "name": "baseline",
+    "medianCpuMs": 2.2499999999999742,
+    "p95CpuMs": 2.5080000000000657
+  },
+  {
+    "kind": "json",
+    "name": "candidate",
+    "medianCpuMs": 2.0540000000000003,
+    "p95CpuMs": 2.53099999999995
+  },
+  {
+    "kind": "json",
+    "name": "node",
+    "medianCpuMs": 0.475,
+    "p95CpuMs": 1.027
+  },
+  {
+    "kind": "strings",
+    "name": "baseline",
+    "medianCpuMs": 2.0559999999999468,
+    "p95CpuMs": 2.6450000000000085
+  },
+  {
+    "kind": "strings",
+    "name": "candidate",
+    "medianCpuMs": 1.9479999999999498,
+    "p95CpuMs": 3.4930000000000794
+  },
+  {
+    "kind": "strings",
+    "name": "node",
+    "medianCpuMs": 0.263,
+    "p95CpuMs": 0.642
+  },
+  {
+    "kind": "decimal",
+    "name": "baseline",
+    "medianCpuMs": 4.7919999999999074,
+    "p95CpuMs": 7.25000000000009
+  },
+  {
+    "kind": "decimal",
+    "name": "candidate",
+    "medianCpuMs": 4.812999999999956,
+    "p95CpuMs": 6.152999999999964
+  },
+  {
+    "kind": "decimal",
+    "name": "node",
+    "medianCpuMs": 0.11,
+    "p95CpuMs": 0.399
+  },
+  {
+    "kind": "parsed",
+    "name": "candidate",
+    "medianCpuMs": 1.3159999999999838,
+    "p95CpuMs": 1.7719999999999958
+  },
+  {
+    "kind": "parsed",
+    "name": "node",
+    "medianCpuMs": 0.075,
+    "p95CpuMs": 0.119
+  }
+]

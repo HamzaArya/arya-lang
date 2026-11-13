@@ -67,12 +67,15 @@ export fn assignable(from, to, invariant, depth) {
   if a != b { return b == "void" and (a == "undefined" or a == "void") }
   if a == "array" or a == "promise" { return assignable(from.value, to.value, invariant, depth + 1) and (not invariant or a == "promise" or assignable(to.value, from.value, true, depth + 1)) }
   if a == "record" {
+    # Trusted library inputs can promise not to replace their data fields.
+    # Nested mutable values retain their existing invariant checks.
+    let writable = invariant and not to.readonly
     for key in runtime.keys(to.fields) {
       let expected = to.fields[key]; let actual = from.fields[key]
       if actual == undefined { if not expected.optional { return false }; continue }
       if actual.optional and not expected.optional { return false }
       if not assignable(actual.type, expected.type, invariant, depth + 1) { return false }
-      if invariant and ((expected.optional and not actual.optional) or not assignable(expected.type, actual.type, true, depth + 1)) { return false }
+      if writable and ((expected.optional and not actual.optional) or not assignable(expected.type, actual.type, true, depth + 1)) { return false }
     }
     return true
   }
@@ -94,4 +97,25 @@ export fn record(fields, optional) {
   let result = {}
   for key in runtime.keys(fields) { result[key] = {type: fields[key], optional: optional == true} }
   return {kind: "record", fields: result}
+}
+# Record literal builders own the result's field map. Shared source descriptors
+# are copied, so optional overwrite inference cannot mutate a source contract.
+export fn recordField(result, name, value) {
+  if kind(result) != "record" { return "any" }
+  result.fields[name] = {type: value, optional: false}; return result
+}
+export fn recordSpread(result, source) {
+  if kind(result) != "record" or kind(source) != "record" { return "any" }
+  for name in runtime.keys(source.fields) {
+    let incoming = source.fields[name]; let previous = result.fields[name]
+    if incoming.optional and previous != undefined { result.fields[name] = {type: union([previous.type, incoming.type]), optional: previous.optional} }
+    else { result.fields[name] = {type: incoming.type, optional: incoming.optional} }
+  }
+  return result
+}
+export fn recordSpreadable(value) {
+  let k = kind(value)
+  if k == "record" or k == "any" or k == "never" { return true }
+  if k == "union" { for item in value.values { if not recordSpreadable(item) { return false } }; return true }
+  return false
 }

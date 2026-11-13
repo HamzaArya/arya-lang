@@ -25,3 +25,125 @@ Ledger entries are `{account, debit, credit}` with exact nonnegative string amou
 The native [JSON-lines financial worker](../native/examples/calculation-worker.arya) accepts `invoiceBatch` and `ledgerBatch` operations with these inputs. Its existing `invoiceTotals` protocol remains unchanged for callers summing precomputed subtotals/taxes. This worker reads requests from stdin and writes responses to stdout; it does not read or modify Ledger data. Existing Node accounting packages remain preserved under `compat/node` for pinned consumers; the native API has no Node addon loader or JavaScript fallback.
 
 Qualification includes all nine positive/negative tie rules, signed bounds, malformed inputs, accessor rejection, snapshot isolation, grouped wide ledger totals, cancellation/backpressure, 85 independent Decimal/integer batches (7600 rows), and a separate 100000-row execution/ownership check.
+
+## Validated journals
+
+`ledgerBatch` remains a diagnostic aggregation API: it permits incomplete or
+unbalanced rows and reports `balanced` and `difference`. A globally balanced
+aggregate does not prove that every constituent transaction is valid. Use the
+new journal API when accepting double-entry transactions:
+
+```arya
+use std "accounting" as accounting
+const transaction = {id: "sale-001", entries: [
+  {account: "cash", debit: "100.25", credit: "0"},
+  {account: "sales", debit: "0", credit: "100.25"}
+]}
+const options = {currency: "AFN", scale: 2}
+const validation = accounting.validateTransaction(transaction, options)
+const journal = accounting.prepareJournal([transaction], options)
+print((await journal.calculateAsync()).balanced) # true
+```
+
+`validateTransaction(transaction, options)` returns a frozen summary with `id`,
+`currency`, `scale`, `entryCount`, `debit`, `credit`, and `balanced: true`. Invalid
+transactions throw; this function does not return false or an unchecked result.
+The transaction must contain only `id` and `entries`. The ID is nonblank text
+of at most 128 UTF-16 units. Each transaction needs at least two posting rows;
+each row must have exactly one positive debit or credit, and every transaction
+must balance exactly. Zero-only rows, two-sided rows, negative amounts, nonzero
+digits beyond the selected scale and numeric rather than string amounts are rejected. Existing native
+ledger preparation validates account tags, signed 64-bit row bounds, exact
+decimal grammar and accessor/unknown-field rejection before reporting code
+reads the rows. No monetary value passes through binary64 arithmetic.
+
+`prepareJournal(transactions, options)` additionally rejects duplicate IDs within
+the supplied journal, more than 100000 transactions, and more than one million
+total posting rows. An empty journal is allowed, and its currency/scale policy
+is still validated. A pair of individually unbalanced transactions is rejected
+even when their differences cancel in the whole journal. Transaction identity
+is case-sensitive exact text; IDs and account names are not trimmed or otherwise
+normalized. Duplicate protection is scoped to this call: persistence,
+cross-request idempotency and database atomicity belong to the caller.
+
+Prepared journals snapshot their amounts and metadata. Later input mutation
+cannot affect calculations. They expose `currency`, `scale`, `length` (posting
+count), `transactionCount`, `calculate(execution?)`, and
+`calculateAsync(execution?)`. `journalBatch(transactions, options, execution?)`
+prepares and calculates in one call. Results contain the ordinary immutable
+ledger fields plus `transactionCount`, immutable `transactions` summaries, and
+`policy: "journal-v1"`. Account order follows first appearance; transaction
+summaries retain input order. Existing execution options, two-job backpressure,
+4096-row cooperative chunks and cancellation contracts apply to calculation.
+Preparation and per-transaction validation are synchronous.
+
+New journal failures use `ARYA_ACCOUNTING_TRANSACTION` for too few postings,
+`ARYA_ACCOUNTING_POSTING` for zero/two-sided postings,
+`ARYA_ACCOUNTING_UNBALANCED`, or `ARYA_ACCOUNTING_DUPLICATE`. Existing input,
+scale, range and limit codes remain applicable. A preparation error includes
+zero-based `transactionIndex`; row-specific errors include `row` within that
+transaction. An unbalanced transaction also supplies its exact `difference`.
+
+## Trial balances and basic financial statements
+
+`trialBalance(entries, options)` nets each account's debits and credits. It
+returns immutable `accounts: [{account, debit, credit}]`, net-side `debit` and
+`credit` totals, `difference`, `balanced`, `currency`, `scale`, `entryCount`, and
+`policy: "trial-balance-v1"`. Only one net side is positive per account. These
+totals differ from the gross posting totals in `ledgerBatch`. Unbalanced input
+is retained for diagnosis. Accounts retain first-appearance order, including
+zero-balance accounts.
+
+`financialStatements(entries, chart, options)` requires a balanced ledger and
+an explicit chart such as:
+
+```arya
+const chart = [
+  {account: "cash", type: "asset"},
+  {account: "sales", type: "revenue"},
+  {account: "rent", type: "expense"}
+]
+```
+
+Each chart entry contains exactly `account` and `type`. Supported types are
+`asset`, `liability`, `equity`, `revenue`, and `expense`. Chart size is at most
+100000 accounts. Duplicate chart names, accessors, unknown fields and missing
+classifications for used accounts are errors. Unused chart accounts appear
+with zero balances. Output follows chart order. Credit balances are positive
+for liabilities, equity and revenue; debit balances are positive for assets
+and expenses. Contra balances remain negative. The function returns:
+
+- `incomeStatement`: `revenue`, `expenses`, and `netIncome = revenue - expenses`.
+- `balanceSheet`: `assets`, `liabilities`, `equity`, `currentEarnings`,
+  `liabilitiesAndEquity`, `difference`, and `balanced`.
+- `accounts`: account name/type, gross `debit`/`credit`, debit-minus-credit
+  `balance`, and classification-adjusted `normalBalance`.
+- `currency`, `scale`, `entryCount`, and `policy: "statements-v1"`.
+
+The equation includes unclosed earnings:
+`assets = liabilities + equity + currentEarnings`. Amounts remain exact strings
+at the selected scale; no additional rounding or currency conversion occurs.
+All returned records and arrays are immutable. Classification errors use
+`ARYA_ACCOUNTING_CLASSIFICATION`; invalid chart rows include `chartIndex`.
+
+These are basic reports over the entries supplied by the caller. Period/date
+filtering, opening balances, closing entries, tax rules, consolidation,
+multi-currency translation and formal reporting standards are outside this API.
+The functions do not post to a database or implement persistent transactions.
+
+Run [journal-report.arya](../native/examples/journal-report.arya) for a complete
+example: a 100.25 sale and 25.10 expense produce 75.15 net income and cash, and
+a trial balance of 100.25 on each side.
+
+```sh
+bin/arya run native/examples/journal-report.arya
+sh native/tests/accounting-journal.sh
+```
+
+The focused suite checks transaction-level conservation, cancellation, immutable
+snapshots, duplicate and malformed inputs, exact wide amounts, net-side trial
+balances, chart classifications, liabilities/equity and earnings, and generated
+cases against an independent integer-cent oracle. It runs optimized and
+optimization-disabled release builds and an ASan/UBSan build with collector
+stress. Sanitizer leak detection is disabled on the local macOS host; execution
+uses an empty PATH and needs no Node or Python interpreter.

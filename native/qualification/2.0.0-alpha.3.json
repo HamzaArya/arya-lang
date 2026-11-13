@@ -1,0 +1,71 @@
+{
+  "version": "2.0.0-alpha.3",
+  "status": "locally-qualified-native-alpha-candidate",
+  "published": false,
+  "recordedAtUtc": "2026-11-13T09:21:15.994592+00:00",
+  "scope": "Native record composition, captured-variable flow corrections, consolidated current manual and portable SDK/source packaging. This is local alpha qualification, not production certification.",
+  "platform": {
+    "os": "darwin",
+    "architecture": "arm64",
+    "testedMacOS": "26.5.2",
+    "compilerMinimumMacOS": "26.0",
+    "kernel": "25.5.0",
+    "toolchain": "Apple clang version 21.0.0 (clang-2100.1.1.101)"
+  },
+  "compiler": {
+    "sha256": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5",
+    "bytes": 5937672,
+    "versionOutput": "Arya native 2.0.0-alpha.3 (self-hosted)",
+    "generatedCSha256": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee",
+    "stageTwoThreeCIdentical": true
+  },
+  "source": {
+    "manifest": "SOURCE-MANIFEST-2.0.0-alpha.3.json",
+    "sha256": "fb82f1bc308d03427c6a2d732c90e8e84973ec76ad9563dc5bf8babda373303e",
+    "inputsComparedWithFreshTree": 386,
+    "baseGitRevision": "28d27826ae74386dc81a652d24752409c6e2fb6a",
+    "documentationAndQualificationAssembledAfterCodeVerification": true
+  },
+  "freshSource": {
+    "compilerSha256": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5",
+    "generatedCSha256": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee",
+    "stageTwoThreeCIdentical": true,
+    "completedWithTestOnlyDistributionResumption": true,
+    "originalCombinedCommandExitCode": 2,
+    "completedIsolationAndInstallationChecks": true
+  },
+  "gates": {
+    "sharedMakeCheckUsedForQualification": false,
+    "freshBootstrapNativeTestsAndProfile": true,
+    "correctedFreshDistributionPackageAndRelocation": true,
+    "completeSdkChecksumInventoryAfterPackagingCorrection": true,
+    "recordRuntimeAssertionsPerMode": 100,
+    "recordModes": [
+      "release optimized",
+      "release reference",
+      "ASan/UBSan with GC stress"
+    ],
+    "recordRejectedCases": 41,
+    "suspendedGetterGcProbes": 2,
+    "typeReferenceCases": 105,
+    "languageServer": true,
+    "parserRobustnessCases": 267,
+    "documentationCommandChecks": 67,
+    "languageReferenceExamples": 12,
+    "publicLibraryModules": 26
+  },
+  "evidenceRoot": "docs/verification/2.0.0-alpha.3",
+  "evidenceSummarySha256": "cfa2ca056e5c4eb19ab6c7391433b85692d3d50fb9ac9a0454eaa1a66cc97897",
+  "archiveVerification": "Final archive hashes and transfer validation are recorded separately in delivery.json beside the immutable archives; qualification metadata does not self-hash the containing archive.",
+  "requiresNodeForNativeBuildOrExecution": false,
+  "requiresPythonForNativeBuildOrExecution": false,
+  "performance": "Prior alpha.2 measurements retain their recorded identities; no alpha.3 speed comparison was run.",
+  "limitations": [
+    "Initial parallel attempts exhausted disk space; logs retained.",
+    "A shared Clang subprocess aborted with mutex lock failed; exact cause is unestablished. The unchanged sanitizer probe and all native suites passed in the isolated fresh tree.",
+    "Concurrent shared accounting changes are excluded from this delivery and remain unqualified by this report. The shared make check exit zero is not used as snapshot qualification.",
+    "ASan/UBSan and GC stress were run; sanitizer leak detection was not run.",
+    "No hosted CI, other OS/CPU, live MySQL, optional Python bridge, real desktop UI or editor-host integration qualification in this update.",
+    "No alpha.3 performance benchmark or production-readiness claim."
+  ]
+}

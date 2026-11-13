@@ -138,7 +138,7 @@
           "default": "",
           "scope": "machine-overridable",
           "restricted": true,
-          "description": "Optional native Arya executable override. Empty uses the native SDK included with the extension."
+          "description": "Optional native Arya executable override. Empty uses a matching bundled SDK, otherwise arya (arya.exe on Windows) from PATH."
         },
         "arya.pythonPath": {
           "type": "string",

@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "nextId": 6,
+  "lastResult": "85.00",
+  "memory": "0",
+  "history": [
+    {
+      "id": "H1",
+      "expression": "0.1 + 0.2",
+      "result": "0.30",
+      "kind": "Expression",
+      "time": "2026-11-13T14:47:01.354Z",
+      "details": "Exact value: (3/10); decimal (2 places, half-even): 0.30"
+    },
+    {
+      "id": "H2",
+      "expression": "Loan 300000 at 6% APR over 360 months",
+      "result": "1798.65",
+      "kind": "loan",
+      "time": "2026-11-13T14:47:18.762Z",
+      "details": "Equal monthly payment estimate; rate APR/1200. Total from unrounded payment: 647514.57; interest: 347514.57. 100-place half-even working arithmetic; no fees or cent-adjusted final-payment schedule.",
+      "reusable": false
+    },
+    {
+      "id": "H3",
+      "expression": "Loan 18 at 1% APR over 1 months",
+      "result": "18.02",
+      "kind": "loan",
+      "time": "2026-11-13T14:51:18.603Z",
+      "details": "Equal monthly payments; rate APR/1200. Total from unrounded payment: 18.02; interest: 0.02. 200-place directed fixed-point bounds agree after selected rounding. No fees or cent-adjusted final-payment schedule.",
+      "reusable": false
+    },
+    {
+      "id": "H4",
+      "expression": "Compound 7200 at 1% APR for 2 months",
+      "result": "7212.01",
+      "kind": "compound",
+      "time": "2026-11-13T14:52:11.176Z",
+      "details": "Monthly compounding, no contributions or fees. Growth: 12.01. Exact rational fallback resolved a rounding boundary.",
+      "reusable": false
+    },
+    {
+      "id": "H5",
+      "expression": "100 * (1 - 15%)",
+      "result": "85.00",
+      "kind": "discount",
+      "time": "2026-11-13T14:52:24.607Z",
+      "details": "Discount saving: 15.00. Exact arithmetic; final rounding only.",
+      "reusable": false
+    }
+  ]
+}

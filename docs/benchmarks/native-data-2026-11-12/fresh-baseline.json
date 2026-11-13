@@ -1,0 +1,1614 @@
+{
+  "schema": 1,
+  "node": "v24.16.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M1",
+  "loadAverage": [
+    10.24951171875,
+    13.865234375,
+    12.689453125
+  ],
+  "samples": 7,
+  "warmup": 3,
+  "sessions": 1,
+  "phaseOrder": [
+    "readDecode",
+    "parse",
+    "envelopeValidation",
+    "calculation",
+    "serialization",
+    "writeEncode"
+  ],
+  "boundaries": "Direct persistent stdio workers. Round trip excludes host JSON encoding/decoding. Phase binaries are separate. Native read includes idle pipe wait; CPU read is meaningful, wall read is not isolated disk time. Validation is the existing envelope length guard; row decimal checks stay in calculation. Node readline decoding is outside its phase timer. Warm filesystem cache; startup is first request, not cold disk.",
+  "inputs": {
+    "1000": {
+      "sha256": "53b72433c5ad78c3b9f7b8393a60be09f8c117bc89b3d7223a83c81708a58827",
+      "bytes": 51663,
+      "expectedSha256": "f94ed4b020b53d5bac79cfcfc7b25d4788e9a95530c5e4b1d79e54c5ec38ded0"
+    },
+    "10000": {
+      "sha256": "5ecca6693dd35c89c4c5a98611f86a418d22543d879e3e48404a12b8cb5ecdba",
+      "bytes": 525288,
+      "expectedSha256": "26da4f02cd2228fe164e011ca10b741ea9d6ab3e3922f2034522b9ebda064f8b"
+    }
+  },
+  "summary": [
+    {
+      "rows": 1000,
+      "name": "baseline",
+      "samples": 7,
+      "roundTripMs": {
+        "median": 30.659875000000056,
+        "p95": 38.72075000000001
+      },
+      "hostEncodeMs": {
+        "median": 0.2675830000000019,
+        "p95": 0.31208300000002964
+      },
+      "hostDecodeMs": {
+        "median": 0.314707999999996,
+        "p95": 0.32870900000000347
+      },
+      "phases": [
+        {
+          "phase": "readDecode",
+          "cpuMs": {
+            "median": 2.5239999999999982,
+            "p95": 2.680999999999989
+          },
+          "wallMs": {
+            "median": 17.054999999701977,
+            "p95": 32.519999999552965
+          }
+        },
+        {
+          "phase": "parse",
+          "cpuMs": {
+            "median": 7.047999999999998,
+            "p95": 10.89699999999999
+          },
+          "wallMs": {
+            "median": 7.628999998793006,
+            "p95": 12.889000000432134
+          }
+        },
+        {
+          "phase": "envelopeValidation",
+          "cpuMs": {
+            "median": 0.006999999999979245,
+            "p95": 0.009000000000009
+          },
+          "wallMs": {
+            "median": 0.0020000003278255463,
+            "p95": 0.003999998793005943
+          }
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": {
+            "median": 10.365000000000013,
+            "p95": 15.495999999999983
+          },
+          "wallMs": {
+            "median": 11.39299999922514,
+            "p95": 17.66300000064075
+          }
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": {
+            "median": 1.3920000000000043,
+            "p95": 3.3270000000000106
+          },
+          "wallMs": {
+            "median": 1.4340000003576279,
+            "p95": 3.3509999997913837
+          }
+        },
+        {
+          "phase": "writeEncode",
+          "cpuMs": {
+            "median": 0.06899999999999962,
+            "p95": 0.11099999999999999
+          },
+          "wallMs": {
+            "median": 0.06799999997019768,
+            "p95": 0.10700000077486038
+          }
+        }
+      ]
+    },
+    {
+      "rows": 1000,
+      "name": "node",
+      "samples": 7,
+      "roundTripMs": {
+        "median": 9.035334000000034,
+        "p95": 11.381124999999997
+      },
+      "hostEncodeMs": {
+        "median": 0.2747919999999908,
+        "p95": 0.3620409999999765
+      },
+      "hostDecodeMs": {
+        "median": 0.32183400000002393,
+        "p95": 5.281625000000076
+      },
+      "phases": [
+        {
+          "phase": "readDecode",
+          "cpuMs": null,
+          "wallMs": null
+        },
+        {
+          "phase": "parse",
+          "cpuMs": {
+            "median": 0.219,
+            "p95": 1.595
+          },
+          "wallMs": {
+            "median": 0.21566600000005565,
+            "p95": 0.48708399999986796
+          }
+        },
+        {
+          "phase": "envelopeValidation",
+          "cpuMs": {
+            "median": 0.003,
+            "p95": 0.006
+          },
+          "wallMs": {
+            "median": 0.0025830000001860753,
+            "p95": 0.004750000000058208
+          }
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": {
+            "median": 6.872,
+            "p95": 14.145
+          },
+          "wallMs": {
+            "median": 5.354083000000173,
+            "p95": 6.75954200000001
+          }
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": {
+            "median": 0.111,
+            "p95": 2.112
+          },
+          "wallMs": {
+            "median": 0.0980419999998503,
+            "p95": 0.2129170000000613
+          }
+        },
+        {
+          "phase": "writeEncode",
+          "cpuMs": {
+            "median": 0.049,
+            "p95": 0.7
+          },
+          "wallMs": {
+            "median": 0.05025000000000546,
+            "p95": 0.12354100000015933
+          }
+        }
+      ]
+    },
+    {
+      "rows": 10000,
+      "name": "baseline",
+      "samples": 7,
+      "roundTripMs": {
+        "median": 436.8929160000007,
+        "p95": 467.0837499999998
+      },
+      "hostEncodeMs": {
+        "median": 1.2278329999999187,
+        "p95": 1.5562920000002123
+      },
+      "hostDecodeMs": {
+        "median": 1.2857089999997697,
+        "p95": 1.511540999999852
+      },
+      "phases": [
+        {
+          "phase": "readDecode",
+          "cpuMs": {
+            "median": 15.436999999999923,
+            "p95": 16.205999999999943
+          },
+          "wallMs": {
+            "median": 109.25200000032783,
+            "p95": 132.7570000011474
+          }
+        },
+        {
+          "phase": "parse",
+          "cpuMs": {
+            "median": 262.56499999999994,
+            "p95": 278.03900000000016
+          },
+          "wallMs": {
+            "median": 265.26500000059605,
+            "p95": 284.08599999919534
+          }
+        },
+        {
+          "phase": "envelopeValidation",
+          "cpuMs": {
+            "median": 0.006000000000172534,
+            "p95": 0.009999999999621423
+          },
+          "wallMs": {
+            "median": 0.0020000003278255463,
+            "p95": 0.0040000006556510925
+          }
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": {
+            "median": 135.53199999999998,
+            "p95": 156.88000000000014
+          },
+          "wallMs": {
+            "median": 136.25000000186265,
+            "p95": 165.68300000019372
+          }
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": {
+            "median": 14.170999999999934,
+            "p95": 16.638999999999626
+          },
+          "wallMs": {
+            "median": 14.184000000357628,
+            "p95": 16.95299999974668
+          }
+        },
+        {
+          "phase": "writeEncode",
+          "cpuMs": {
+            "median": 0.528000000000084,
+            "p95": 0.5519999999998859
+          },
+          "wallMs": {
+            "median": 0.7290000002831221,
+            "p95": 0.8789999987930059
+          }
+        }
+      ]
+    },
+    {
+      "rows": 10000,
+      "name": "node",
+      "samples": 7,
+      "roundTripMs": {
+        "median": 40.65458300000046,
+        "p95": 46.5728339999996
+      },
+      "hostEncodeMs": {
+        "median": 1.203417000000627,
+        "p95": 1.4057910000001357
+      },
+      "hostDecodeMs": {
+        "median": 1.396166999998968,
+        "p95": 1.750250000000051
+      },
+      "phases": [
+        {
+          "phase": "readDecode",
+          "cpuMs": null,
+          "wallMs": null
+        },
+        {
+          "phase": "parse",
+          "cpuMs": {
+            "median": 2.134,
+            "p95": 3.311
+          },
+          "wallMs": {
+            "median": 2.1467500000003383,
+            "p95": 3.540125000000444
+          }
+        },
+        {
+          "phase": "envelopeValidation",
+          "cpuMs": {
+            "median": 0.012,
+            "p95": 0.022
+          },
+          "wallMs": {
+            "median": 0.0037079999999605207,
+            "p95": 0.004500000000007276
+          }
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": {
+            "median": 39.269,
+            "p95": 77.353
+          },
+          "wallMs": {
+            "median": 34.87720900000022,
+            "p95": 54.054499999999734
+          }
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": {
+            "median": 1.28,
+            "p95": 2.01
+          },
+          "wallMs": {
+            "median": 1.2689159999999902,
+            "p95": 2.0656669999998485
+          }
+        },
+        {
+          "phase": "writeEncode",
+          "cpuMs": {
+            "median": 0.158,
+            "p95": 0.231
+          },
+          "wallMs": {
+            "median": 0.15633400000024267,
+            "p95": 0.23087499999996908
+          }
+        }
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 9.454709000000037,
+      "hostEncodeMs": 0.2747919999999908,
+      "hostDecodeMs": 0.323915999999997
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 23.62187499999999,
+      "hostEncodeMs": 0.27800000000002,
+      "hostDecodeMs": 0.32724999999999227
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 22.368333000000007,
+      "hostEncodeMs": 0.2675830000000019,
+      "hostDecodeMs": 0.314707999999996
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 11.345916999999986,
+      "hostEncodeMs": 0.2690830000000233,
+      "hostDecodeMs": 0.32183400000002393
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 9.035334000000034,
+      "hostEncodeMs": 0.27649999999999864,
+      "hostDecodeMs": 0.314707999999996
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 38.72075000000001,
+      "hostEncodeMs": 0.27183400000001257,
+      "hostDecodeMs": 0.3150829999999587
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 34.30570799999998,
+      "hostEncodeMs": 0.31208300000002964,
+      "hostDecodeMs": 0.15866599999998243
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 8.271667000000036,
+      "hostEncodeMs": 0.13229200000000674,
+      "hostDecodeMs": 0.31533300000000963
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 7.225666999999987,
+      "hostEncodeMs": 0.2767499999999927,
+      "hostDecodeMs": 0.14699999999999136
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 33.358834,
+      "hostEncodeMs": 0.11824999999998909,
+      "hostDecodeMs": 0.15404100000000653
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 23.605749999999944,
+      "hostEncodeMs": 0.12995800000004465,
+      "hostDecodeMs": 0.1563339999999016
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 8.210290999999984,
+      "hostEncodeMs": 0.1300420000000031,
+      "hostDecodeMs": 2.4972080000000005
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 11.381124999999997,
+      "hostEncodeMs": 0.3620409999999765,
+      "hostDecodeMs": 5.281625000000076
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 30.659875000000056,
+      "hostEncodeMs": 0.12429200000008223,
+      "hostDecodeMs": 0.32870900000000347
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 7.651540999999952,
+      "hostEncodeMs": 0.11962500000004184,
+      "hostDecodeMs": 0.32037500000001273,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.202,
+          0.001,
+          14.145,
+          2.112,
+          0.7
+        ],
+        "wallMs": [
+          null,
+          0.2000829999999496,
+          0.001334000000042579,
+          6.539457999999968,
+          0.2097919999998794,
+          0.12354100000015933
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 22.10891599999991,
+      "hostEncodeMs": 0.28062500000010004,
+      "hostDecodeMs": 1.0884169999999358,
+      "phases": {
+        "cpuMs": [
+          2.6670000000000025,
+          5.989999999999995,
+          0.007000000000007001,
+          9.733999999999993,
+          3.3270000000000106,
+          0.06899999999999962
+        ],
+        "wallMs": [
+          22.299000000581145,
+          5.996999999508262,
+          0.0020000003278255463,
+          9.759999999776483,
+          3.3509999997913837,
+          0.06400000117719173
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 56.31770899999992,
+      "hostEncodeMs": 0.29645899999991343,
+      "hostDecodeMs": 0.31712500000003274,
+      "phases": {
+        "cpuMs": [
+          2.5239999999999982,
+          7.047999999999998,
+          0.0060000000000060005,
+          9.247000000000005,
+          1.3920000000000043,
+          0.06099999999997774
+        ],
+        "wallMs": [
+          32.519999999552965,
+          12.889000000432134,
+          0.0020000003278255463,
+          11.39299999922514,
+          1.4340000003576279,
+          0.058000000193715096
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 6.174583999999868,
+      "hostEncodeMs": 0.19020799999998417,
+      "hostDecodeMs": 0.1459170000002814,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.219,
+          0.004,
+          7.329,
+          0.358,
+          0.042
+        ],
+        "wallMs": [
+          null,
+          0.21195800000009513,
+          0.0038749999998799467,
+          5.354083000000173,
+          0.09654199999999946,
+          0.04320799999982228
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 7.120750000000044,
+      "hostEncodeMs": 0.11687500000016371,
+      "hostDecodeMs": 0.19512500000018917,
+      "phases": {
+        "cpuMs": [
+          null,
+          1.595,
+          0.006,
+          8.524,
+          0.103,
+          0.045
+        ],
+        "wallMs": [
+          null,
+          0.48708399999986796,
+          0.00429100000019389,
+          6.119291999999859,
+          0.09570800000005875,
+          0.04504199999996672
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 33.105625000000146,
+      "hostEncodeMs": 0.12716600000021572,
+      "hostDecodeMs": 0.1578340000000935,
+      "phases": {
+        "cpuMs": [
+          1.6110000000000013,
+          10.89699999999999,
+          0.009000000000009,
+          15.495999999999983,
+          1.6550000000000176,
+          0.06899999999998574
+        ],
+        "wallMs": [
+          17.054999999701977,
+          11.860000001266599,
+          0.003999998793005943,
+          17.66300000064075,
+          1.6849999986588955,
+          0.06800000183284283
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 19.687999999999647,
+      "hostEncodeMs": 0.13058399999999892,
+      "hostDecodeMs": 0.14295799999990777,
+      "phases": {
+        "cpuMs": [
+          1.5139999999999876,
+          7.5230000000000015,
+          0.008000000000008,
+          9.042999999999996,
+          1.2069999999999859,
+          0.0650000000000095
+        ],
+        "wallMs": [
+          2.270999999716878,
+          7.628999998793006,
+          0.0030000004917383194,
+          9.087999999523163,
+          1.203999999910593,
+          0.06500000134110451
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 4.647417000000132,
+      "hostEncodeMs": 0.11870799999996962,
+      "hostDecodeMs": 0.1534999999998945,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.208,
+          0.003,
+          4.114,
+          0.103,
+          0.049
+        ],
+        "wallMs": [
+          null,
+          0.20320899999978792,
+          0.0025830000001860753,
+          3.954833000000008,
+          0.0980419999998503,
+          0.05025000000000546
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 5.924708999999893,
+      "hostEncodeMs": 0.125583000000006,
+      "hostDecodeMs": 0.31804200000033234,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.216,
+          0.002,
+          5.291,
+          0.227,
+          0.083
+        ],
+        "wallMs": [
+          null,
+          0.21566600000005565,
+          0.0018749999999272404,
+          5.089874999999893,
+          0.2129170000000613,
+          0.08454200000005585
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 19.879833000000417,
+      "hostEncodeMs": 0.1378749999998945,
+      "hostDecodeMs": 0.3235410000002048,
+      "phases": {
+        "cpuMs": [
+          1.582,
+          5.829999999999974,
+          0.0050000000000050004,
+          10.365000000000013,
+          1.4239999999999808,
+          0.0710000000000155
+        ],
+        "wallMs": [
+          14.179999999701977,
+          6.021999999880791,
+          0.0020000003278255463,
+          10.385999999940395,
+          1.4879999998956919,
+          0.06799999997019768
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 26.278959000000214,
+      "hostEncodeMs": 0.2826669999999467,
+      "hostDecodeMs": 0.3184999999998581,
+      "phases": {
+        "cpuMs": [
+          2.680999999999989,
+          9.126000000000023,
+          0.006999999999979245,
+          12.667000000000012,
+          1.240999999999992,
+          0.07499999999999174
+        ],
+        "wallMs": [
+          4.073999999091029,
+          9.171000000089407,
+          0.0020000003278255463,
+          12.847000000998378,
+          1.2379999998956919,
+          0.07399999909102917
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 7.850792000000183,
+      "hostEncodeMs": 0.2600830000001224,
+      "hostDecodeMs": 0.15629200000012133,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.468,
+          0.006,
+          6.872,
+          0.111,
+          0.057
+        ],
+        "wallMs": [
+          null,
+          0.4475830000001224,
+          0.004750000000058208,
+          6.75954200000001,
+          0.10329099999989921,
+          0.05629199999998491
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 4.509958000000097,
+      "hostEncodeMs": 0.12783300000000963,
+      "hostDecodeMs": 0.31029099999977916,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.22,
+          0.001,
+          4.381,
+          0.1,
+          0.039
+        ],
+        "wallMs": [
+          null,
+          0.21949999999992542,
+          0.0009170000000722212,
+          3.6788329999999405,
+          0.0967080000000351,
+          0.03916699999990669
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 23.95862500000021,
+      "hostEncodeMs": 0.26945800000021336,
+      "hostDecodeMs": 0.15691699999979392,
+      "phases": {
+        "cpuMs": [
+          2.675999999999984,
+          5.876999999999994,
+          0.0060000000000060005,
+          12.36900000000002,
+          1.3699999999999823,
+          0.11099999999999999
+        ],
+        "wallMs": [
+          17.868000000715256,
+          5.950000001117587,
+          0.001999998465180397,
+          13.586000001057982,
+          1.3799999989569187,
+          0.10700000077486038
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 46.5728339999996,
+      "hostEncodeMs": 1.1697910000002594,
+      "hostDecodeMs": 1.3005000000002838
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 457.03179099999943,
+      "hostEncodeMs": 1.2278329999999187,
+      "hostDecodeMs": 1.2857089999997697
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 449.3727080000008,
+      "hostEncodeMs": 1.5444170000000668,
+      "hostDecodeMs": 1.5044170000001031
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 40.65458300000046,
+      "hostEncodeMs": 1.203417000000627,
+      "hostDecodeMs": 1.5157500000004802
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 38.29762499999924,
+      "hostEncodeMs": 1.4057910000001357,
+      "hostDecodeMs": 1.278041000000485
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 414.0762079999995,
+      "hostEncodeMs": 1.5562920000002123,
+      "hostDecodeMs": 1.1817909999999756
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 397.2678340000002,
+      "hostEncodeMs": 1.1007920000001832,
+      "hostDecodeMs": 1.511540999999852
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 34.37504099999933,
+      "hostEncodeMs": 1.0844579999993584,
+      "hostDecodeMs": 1.4275410000000193
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 34.70758300000034,
+      "hostEncodeMs": 1.2455420000005688,
+      "hostDecodeMs": 1.750250000000051
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 467.0837499999998,
+      "hostEncodeMs": 1.2125420000002123,
+      "hostDecodeMs": 1.227375000000393
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 394.0149170000004,
+      "hostEncodeMs": 1.1039580000006026,
+      "hostDecodeMs": 1.3030419999995502
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 42.09708299999875,
+      "hostEncodeMs": 1.2124999999996362,
+      "hostDecodeMs": 1.396166999998968
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 41.36604099999931,
+      "hostEncodeMs": 1.1942500000004657,
+      "hostDecodeMs": 1.3931249999986903
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 436.8929160000007,
+      "hostEncodeMs": 1.2867500000011205,
+      "hostDecodeMs": 1.2209579999998823
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 49.94291700000031,
+      "hostEncodeMs": 1.2849999999998545,
+      "hostDecodeMs": 1.3869579999991402,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.215,
+          0.01,
+          70.402,
+          1.295,
+          0.231
+        ],
+        "wallMs": [
+          null,
+          2.229041999999936,
+          0.0037079999999605207,
+          44.689167,
+          1.3067500000001928,
+          0.23087499999996908
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 393.1267079999998,
+      "hostEncodeMs": 1.6566669999992882,
+      "hostDecodeMs": 1.4704170000004524,
+      "phases": {
+        "cpuMs": [
+          15.682999999999891,
+          208.5349999999999,
+          0.006000000000172534,
+          135.53199999999998,
+          14.170999999999934,
+          0.528000000000084
+        ],
+        "wallMs": [
+          127.246000001207,
+          225.72499999962747,
+          0.001999998465180397,
+          136.25000000186265,
+          14.184000000357628,
+          0.7289999984204769
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 417.7384579999998,
+      "hostEncodeMs": 1.3146670000005543,
+      "hostDecodeMs": 1.4196660000015981,
+      "phases": {
+        "cpuMs": [
+          15.511000000000053,
+          242.72099999999998,
+          0.005999999999950489,
+          139.05400000000023,
+          13.802000000000092,
+          0.49599999999960787
+        ],
+        "wallMs": [
+          20.867000002413988,
+          245.69399999827147,
+          0.0020000003278255463,
+          141.54399999976158,
+          13.850999999791384,
+          0.7290000002831221
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 40.30883299999914,
+      "hostEncodeMs": 1.4227499999997235,
+      "hostDecodeMs": 1.420749999999316,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.411,
+          0.012,
+          37.026,
+          1.335,
+          0.194
+        ],
+        "wallMs": [
+          null,
+          2.427624999999807,
+          0.004500000000007276,
+          34.87720900000022,
+          1.3245409999999538,
+          0.19437500000003638
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 38.505707999998776,
+      "hostEncodeMs": 1.297958999999537,
+      "hostDecodeMs": 1.472250000000713,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.134,
+          0.006,
+          36.072,
+          1.074,
+          0.166
+        ],
+        "wallMs": [
+          null,
+          2.1318750000000364,
+          0.0033750000002328306,
+          33.96787499999982,
+          1.0554590000001554,
+          0.16533299999991868
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 403.56041600000026,
+      "hostEncodeMs": 1.3743340000000899,
+      "hostDecodeMs": 1.514541000000463,
+      "phases": {
+        "cpuMs": [
+          15.066000000000024,
+          236.4510000000002,
+          0.005999999999950489,
+          133.50399999999985,
+          14.524000000000203,
+          0.5470000000000752
+        ],
+        "wallMs": [
+          109.25200000032783,
+          238.84599999897182,
+          0.0020000003278255463,
+          133.88800000026822,
+          14.628000000491738,
+          0.7549999989569187
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 447.6733329999988,
+      "hostEncodeMs": 1.2952080000013666,
+      "hostDecodeMs": 1.4930419999982405,
+      "phases": {
+        "cpuMs": [
+          15.121999999999858,
+          278.03900000000016,
+          0.009999999999621423,
+          134.33300000000025,
+          13.730999999999938,
+          0.5419999999998204
+        ],
+        "wallMs": [
+          20.55100000090897,
+          282.91400000080466,
+          0.0020000003278255463,
+          134.6399999987334,
+          13.781000001356006,
+          0.8209999985992908
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 61.44129099999918,
+      "hostEncodeMs": 1.361957999999504,
+      "hostDecodeMs": 1.4032090000000608,
+      "phases": {
+        "cpuMs": [
+          null,
+          3.311,
+          0.016,
+          40.958,
+          1.28,
+          0.158
+        ],
+        "wallMs": [
+          null,
+          3.540125000000444,
+          0.00437499999998181,
+          54.054499999999734,
+          1.2689159999999902,
+          0.15633400000024267
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 40.22883399999955,
+      "hostEncodeMs": 1.2545829999999114,
+      "hostDecodeMs": 1.4839589999992313,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.117,
+          0.022,
+          34.781,
+          1.145,
+          0.155
+        ],
+        "wallMs": [
+          null,
+          2.1467500000003383,
+          0.00420799999983501,
+          32.99449999999979,
+          1.1333340000001044,
+          0.1550000000002001
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 466.54762499999924,
+      "hostEncodeMs": 1.2912080000005517,
+      "hostDecodeMs": 1.5170409999991534,
+      "phases": {
+        "cpuMs": [
+          15.436999999999923,
+          266.254,
+          0.008000000000230045,
+          156.88000000000014,
+          14.728999999999992,
+          0.5519999999998859
+        ],
+        "wallMs": [
+          132.7570000011474,
+          268.9699999988079,
+          0.0040000006556510925,
+          165.68300000019372,
+          14.992000000551343,
+          0.8789999987930059
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 423.3729169999988,
+      "hostEncodeMs": 1.5120420000002923,
+      "hostDecodeMs": 1.2332919999989826,
+      "phases": {
+        "cpuMs": [
+          16.205999999999943,
+          262.56499999999994,
+          0.007999999999785956,
+          127.41700000000034,
+          12.35699999999973,
+          0.3850000000000797
+        ],
+        "wallMs": [
+          24.197999998927116,
+          265.26500000059605,
+          0.0020000003278255463,
+          128.00300000049174,
+          12.450999999418855,
+          0.5599999986588955
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 47.968417000000045,
+      "hostEncodeMs": 1.0920830000013666,
+      "hostDecodeMs": 1.3196250000000873,
+      "phases": {
+        "cpuMs": [
+          null,
+          1.836,
+          0.004,
+          77.353,
+          0.957,
+          0.15
+        ],
+        "wallMs": [
+          null,
+          1.819666999999754,
+          0.003208000000086031,
+          44.0917500000005,
+          0.9479590000000826,
+          0.1484999999993306
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 38.07120799999939,
+      "hostEncodeMs": 1.1949580000000424,
+      "hostDecodeMs": 1.6124159999999392,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.032,
+          0.012,
+          39.269,
+          2.01,
+          0.151
+        ],
+        "wallMs": [
+          null,
+          2.070875000000342,
+          0.0014160000000629225,
+          31.542999999999665,
+          2.0656669999998485,
+          0.1450830000003407
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 456.3485419999997,
+      "hostEncodeMs": 1.2287090000008902,
+      "hostDecodeMs": 1.2634170000001177,
+      "phases": {
+        "cpuMs": [
+          13.69700000000007,
+          269.9220000000002,
+          0.004999999999810711,
+          139.82800000000051,
+          16.638999999999626,
+          0.5129999999997636
+        ],
+        "wallMs": [
+          113.45499999821186,
+          284.08599999919534,
+          0.0020000021904706955,
+          140.60500000044703,
+          16.95299999974668,
+          0.6429999992251396
+        ]
+      }
+    }
+  ],
+  "firstRequest": [
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 25.388166,
+      "hostEncodeMs": 0.13266699999999787,
+      "hostDecodeMs": 0.16908300000000054
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 53.839,
+      "hostEncodeMs": 0.14279099999998834,
+      "hostDecodeMs": 2.191416000000004
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 1195.754583,
+      "hostEncodeMs": 0.12341700000001765,
+      "hostDecodeMs": 0.2928340000000844,
+      "phases": {
+        "cpuMs": [
+          1.3789999999999996,
+          5.720999999999999,
+          0.005000000000001531,
+          10.354999999999999,
+          1.2170000000000027,
+          0.07300000000000015
+        ],
+        "wallMs": [
+          1.3770000003278255,
+          6.054999999701977,
+          0.001999998465180397,
+          20.78800000064075,
+          1.2139999996870756,
+          0.07200000062584877
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 56.09095900000011,
+      "hostEncodeMs": 0.7048330000000078,
+      "hostDecodeMs": 0.20512500000018008,
+      "phases": {
+        "cpuMs": [
+          null,
+          0.345,
+          0.007,
+          27.286,
+          0.531,
+          0.694
+        ],
+        "wallMs": [
+          null,
+          0.277417000000014,
+          0.003958000000011452,
+          28.819375000000036,
+          0.5195420000000013,
+          0.7439999999999145
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "baseline",
+      "instrumentedPhases": false,
+      "roundTripMs": 338.4414999999999,
+      "hostEncodeMs": 1.333042000000205,
+      "hostDecodeMs": 1.50774999999976
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "node",
+      "instrumentedPhases": false,
+      "roundTripMs": 51.658416999999645,
+      "hostEncodeMs": 1.9761669999998048,
+      "hostDecodeMs": 1.46416599999975
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "baseline",
+      "instrumentedPhases": true,
+      "roundTripMs": 220.54304200000115,
+      "hostEncodeMs": 1.114832999999635,
+      "hostDecodeMs": 1.6919999999990978,
+      "phases": {
+        "cpuMs": [
+          13.813,
+          82.113,
+          0.005999999999992123,
+          108.20500000000001,
+          11.338999999999988,
+          0.5060000000000064
+        ],
+        "wallMs": [
+          13.865999998524785,
+          83.75,
+          0.0030000004917383194,
+          109.45900000073016,
+          11.376000000163913,
+          0.6759999990463257
+        ]
+      }
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "node",
+      "instrumentedPhases": true,
+      "roundTripMs": 50.33070900000166,
+      "hostEncodeMs": 1.1813330000004498,
+      "hostDecodeMs": 1.2613340000007156,
+      "phases": {
+        "cpuMs": [
+          null,
+          2.045,
+          0.006,
+          84.213,
+          1.144,
+          0.63
+        ],
+        "wallMs": [
+          null,
+          2.025499999999994,
+          0.00333299999999781,
+          44.12954199999999,
+          1.1874579999999924,
+          0.6460420000000227
+        ]
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "baseline",
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":102963,\"heapObjects\":43729,\"environments\":10,\"functions\":2224,\"genericCalls\":6525,\"directCalls\":1001,\"numericCalls\":0,\"heapTemporaries\":1005,\"gcCollections\":4,\"peakManagedBytes\":4315468,\"scalarCalls\":0,\"rootedCalls\":6524,\"rootPushes\":13281,\"environmentLookups\":1198}\n"
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "baseline",
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":1016463,\"heapObjects\":430729,\"environments\":10,\"functions\":20224,\"genericCalls\":65025,\"directCalls\":10001,\"numericCalls\":0,\"heapTemporaries\":10005,\"gcCollections\":8,\"peakManagedBytes\":36954174,\"scalarCalls\":0,\"rootedCalls\":65024,\"rootPushes\":130281,\"environmentLookups\":10198}\n"
+    }
+  ],
+  "resources": [
+    {
+      "name": "baseline",
+      "rows": 1000,
+      "measurement": "        0.02 real         0.01 user         0.00 sys\n            16334848  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1155  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   1  messages sent\n                   1  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  10  involuntary context switches\n           188658037  instructions retired\n            47136403  cycles elapsed\n            15467456  peak memory footprint\n"
+    },
+    {
+      "name": "node",
+      "rows": 1000,
+      "measurement": "        0.06 real         0.06 user         0.01 sys\n            59981824  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                3817  page reclaims\n                  76  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   1  messages sent\n                   1  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 162  involuntary context switches\n           454412318  instructions retired\n           175504491  cycles elapsed\n            23256384  peak memory footprint\n"
+    },
+    {
+      "name": "baseline",
+      "rows": 10000,
+      "measurement": "        0.24 real         0.17 user         0.06 sys\n            55738368  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                3562  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   2  messages sent\n                   9  messages received\n                   0  signals received\n                   4  voluntary context switches\n                 149  involuntary context switches\n          2012066530  instructions retired\n           548461949  cycles elapsed\n            54903872  peak memory footprint\n"
+    },
+    {
+      "name": "node",
+      "rows": 10000,
+      "measurement": "        0.10 real         0.14 user         0.01 sys\n            73334784  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                4627  page reclaims\n                  81  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   7  messages sent\n                   9  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 298  involuntary context switches\n          1029831835  instructions retired\n           356443055  cycles elapsed\n            33007872  peak memory footprint\n"
+    }
+  ]
+}

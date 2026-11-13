@@ -1,7 +1,7 @@
 /* Rooted property helpers shared by the native library implementations. */
 static AV aprop(AV object,const char *name) {
   int ascii=1;for(const unsigned char *s=(const unsigned char*)name;*s;s++)if(*s>=128){ascii=0;break;}
-  if(ascii&&(object.t==ARECORD||object.t==AFUNC)){
+  if(ascii&&(object.t==ARECORD||object.t==AFUNC)&&!object.p->keys){
     for(size_t i=0;i<object.p->len;i+=2)if(akey(object.p->data[i],name)){ARoot root;aroot(&root,&object,1);AV result=aread(object.p->data[i+1]);aunroot(&root);return result;}
     return av(AUNDEF);
   }
@@ -10,7 +10,7 @@ static AV aprop(AV object,const char *name) {
 }
 static AV aput(AV object,const char *name,AV value) {
   int ascii=1;for(const unsigned char *s=(const unsigned char*)name;*s;s++)if(*s>=128){ascii=0;break;}
-  if(ascii&&(object.t==ARECORD||object.t==AFUNC))for(size_t i=0;i<object.p->len;i+=2)if(akey(object.p->data[i],name))return aset(object,object.p->data[i],value);
+  if(ascii&&(object.t==ARECORD||object.t==AFUNC)&&!object.p->keys)for(size_t i=0;i<object.p->len;i+=2)if(akey(object.p->data[i],name))return aset(object,object.p->data[i],value);
   AV r[3]={object,value,av(AUNDEF)};ARoot root;aroot(&root,r,3);
   r[2]=astr(name);AV result=aset(object,r[2],value);aunroot(&root);return result;
 }

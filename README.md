@@ -1,32 +1,53 @@
 # Arya
 
-Arya is a native programming language with exact decimal calculations, HTTP applications, and a self-hosted compiler. Arya source compiles through C11 into ordinary executables. The compiler, language server, formatter, project creator, test runner, and standard libraries use the native toolchain.
+Arya is a native programming language with a self-hosted compiler, exact-decimal libraries and application tooling. Source compiles through C11 into executables. The compiler, formatter, checker, language server, test runner and project creator run without Node.js.
+
+The current source is **2.0.0**, undergoing stable release qualification. It adds direct native GUI widgets, binary filesystem operations, atomic file replacement and the reviewed compiler, runtime and editor improvements. Published platform support follows the [release qualification record](native/qualification/2.0.0.json).
+
+## Start a project
+
+From a complete source checkout or matching source snapshot:
 
 ```sh
-make native-editor
-./bin/arya create prices --template cli
-./bin/arya run prices/main.arya -- 19.95 3
-./bin/arya build prices/main.arya -o ./prices-app --release
-./prices-app 19.95 3
+make native-sdk
+./bin/arya --version
+./bin/arya create hello --template cli
+./bin/arya run hello/main.arya
+./bin/arya build hello/main.arya -o ./hello-app --release
+./hello-app
 ```
 
-The complete SDK includes compiled crypto, HTTP, URL and regex libraries, standard modules, and the native editor extension. A source build needs a POSIX shell, make and C11 compiler; the URL library needs C++20 and OpenSSL's build configuration needs Perl. Building and running Arya require no Node, npm or Python. Explicit Python interoperability needs its own interpreter. MySQL applications use an installed MySQL C client SDK. Desktop windows currently use macOS AppKit/WebKit.
+An installed SDK provides `arya` directly on PATH. Source builds need POSIX tools, a C11 compiler, C++20 for the full URL library and Perl for OpenSSL configuration. No Node, npm or Python is required for native builds. Compiled applications need their target's system libraries and any explicitly selected feature dependencies.
 
-Use `number` for ordinary binary64 calculations and decimal strings for money:
+**Installing on another computer:** use the [installation guide](docs/installing.md). It covers copying a full SDK, verifying checksums, setting PATH, building from source and deploying an application. Separate native builds target macOS, Linux and Windows with Cygwin. Each target must pass its own qualification gates before a release asset is offered; one operating system’s archive cannot run on another.
+
+## Compose records
 
 ```arya
-use std "accounting" as accounting
-let result = accounting.invoiceBatch(
-  [{price: "19.95", quantity: "2", discountBps: 1000, taxBps: 750}],
-  {currency: "AFN", scale: 2, rounding: "half-even"}
-)
-print(result.total) # 38.60
+const currency = "AFN"
+const defaults = {currency, scale: 2}
+const field = "rounding"
+const settings = {...defaults, [field]: "half-even"}
+print(JSON.stringify(settings))
 ```
 
-`arya create` provides `cli`, `web`, `api`, `ui` and `desktop` projects. Use `arya editor install --editor code` to install the bundled editor extension, or connect another LSP client to `arya lsp --stdio`. The extension uses the editor's existing host; all Arya analysis runs in the native executable.
+Fields evaluate left to right. Keys must be strings, spread accepts records only, and copies are shallow. Existing `let`, `const`, `fn`, `use`, pipelines and async syntax remain valid. Read the [language reference](docs/arya-language.md) for supported forms, typing, examples and differences from JavaScript.
 
-Read the [SDK guide](docs/native-sdk.md), [language profile](docs/native-profile.md), [standard library](docs/standard-library.md), [accounting API](docs/accounting-engine.md), and [qualification report](docs/native-independence-report.md). Platform qualification and resource limits are recorded in [native/manifest.json](native/manifest.json). This is an alpha language; platform ports and the broader ecosystem roadmap have separate acceptance criteria.
+Use binary64 `number` for ordinary arithmetic and explicit decimal strings/values for exact money. The SDK has [28 public standard modules](docs/standard-library.md), including [accounting](docs/accounting-engine.md), [money/finance/CSV](docs/native-finance-data.md), [authentication and native biometrics](docs/native-auth.md), and [security/debugging](docs/native-security-debugging.md). Templates cover CLI, web, API, UI and optional macOS WebKit desktop projects. The new `gui` module uses AppKit, GTK 3 or Win32 controls directly.
 
-The previous Node implementation, npm tooling and editor are preserved in [compat/node](compat/node/README.md). The native build does not use them. Existing Arya Ledger installations and data remain separate; the native [financial worker](native/examples/calculation-worker.arya) provides an opt-in JSON-lines integration.
+## Documentation and tools
 
-Arya is licensed under [Apache-2.0](LICENSE). Bundled dependencies retain their own terms in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).
+- [Documentation index](docs/README.md): current guides and versioned evidence.
+- [Getting started](docs/getting-started.md): create, check, format, test and build a project.
+- [CLI](docs/cli.md) and [SDK](docs/native-sdk.md): command and distribution contracts.
+- [Native profile](docs/native-profile.md): memory, libraries, foreign boundaries and limits.
+- [Syntax update and verification](docs/native-syntax.md): alpha.3 changes and checks.
+- [Contributing](CONTRIBUTING.md): source layout, bootstrap and acceptance gates.
+
+Run `arya lsp --stdio` from a compatible editor. The optional VS Code-compatible adapter is a separate editor-host component built by `make native-editor`; it is excluded from the standalone SDK.
+
+The [Ledger performance report](docs/native-ledger-fastpaths.md) retains the earlier compiler's measured improvements and tradeoffs. Its numbers identify specific binaries and workloads, not a universal speed claim for every later version.
+
+Original Node-profile guides, npm tooling and source remain under [compat/node](compat/node/README.md). Redundant active copies have been removed; historical qualification and benchmark evidence is preserved. Native builds do not use the compatibility implementation. Python interoperability, a native MySQL client and macOS desktop frameworks are explicit optional features.
+
+Arya is licensed under [Apache-2.0](LICENSE). Bundled dependencies retain their terms in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).

@@ -1,0 +1,3 @@
+native/bootstrap/verify-clean.sh
+Native clean workspace: /var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.ct8W4J
+Independent source build and tests passed without Node/Python: /var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.ct8W4J

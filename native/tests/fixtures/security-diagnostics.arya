@@ -1,0 +1,133 @@
+use std "validate" as validate
+use std "security" as security
+use std "debug" as debug
+use std "log" as log
+use std "runtime" as runtime
+
+fn stackLeaf() { debug.assert(false, "actionable failure") }
+fn stackCaller() { stackLeaf() }
+if args[0] == "--uncaught" { stackCaller() }
+
+let checks = 0
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), "Security/diagnostics regression"); checks += 1 }
+fn rejects(code, work) {
+  let caught = false
+  try { work() } catch error { equal(error.code, code); caught = true }
+  debug.assert(caught, "Expected failure: " + code)
+}
+
+# Schema validation must inspect data, never invoke an accessor.
+let accessorCalls = 0
+let input = {}
+runtime.fieldGetter(input, "amount", fn() { accessorCalls += 1; throw new Error("must never execute") })
+let schema = validate.object({amount: validate.string()})
+let checked = validate.check(schema, input)
+equal(checked.ok, false)
+equal(checked.issues[0].path, ["amount"])
+equal(checked.issues[0].code, "accessor")
+equal(accessorCalls, 0)
+rejects("ARYA_VALIDATION", fn() { validate.parse(schema, input) })
+let loose = validate.object({}, {strict: false})
+equal(validate.check(loose, input).ok, false)
+equal(accessorCalls, 0)
+let nested = validate.object({items: validate.array(schema)})
+let bad = validate.check(nested, {items: [input]})
+equal(bad.issues[0].path, ["items", 0, "amount"])
+equal(accessorCalls, 0)
+for depth in [NaN, Infinity, -Infinity, -1, 65, 1.5, "0", null, 1e100] {
+  rejects("ARYA_VALIDATION_SCHEMA", fn() { schema.read({}, [], [], depth) })
+}
+let issues = []
+validate.string().read("valid", [], issues, 64)
+equal(issues, [])
+let fields = {}; let data = {}
+for i in range(256) { fields["key" + str(i)] = validate.integer(); data["key" + str(i)] = i }
+equal(validate.parse(validate.object(fields), data), data)
+let unexpected = {}; for i in range(100) { unexpected[str(i)] = i }
+equal(validate.check(validate.object({}), unexpected).issues.length, 32)
+
+# A repeated alias is not a cycle. Redaction still applies to every occurrence.
+let output = []
+let logger = log.create({name: "review", level: "info", sink: fn(line) { output.push(JSON.parse(line)) }, redact: ["private_value"]})
+let shared = {answer: 42, password: "secret", privateValue: "private"}
+logger.info("aliases", {first: shared, second: shared, array: [shared, shared]})
+equal(output[0].first, output[0].second)
+equal(output[0].array[0], output[0].array[1])
+equal(output[0].second.password, "[Redacted]")
+equal(output[0].second.privateValue, "[Redacted]")
+let cycle = {}; cycle.next = cycle
+logger.info("cycle", {cycle: cycle})
+equal(output[1].cycle.next, "[Circular]")
+logger.info("accessor", input)
+equal(output[2].amount, "[Accessor]")
+equal(accessorCalls, 0)
+equal(logger.enabled("trace"), false)
+equal(logger.enabled("debug"), false)
+equal(logger.enabled("info"), true)
+equal(logger.enabled("fatal"), true)
+equal(logger.child({requestId: "request-1"}).enabled("info"), true)
+rejects("ARYA_LOG_CONFIG", fn() { logger.enabled("invalid") })
+let built = 0
+fn expensiveFields() { built += 1; return {answer: 42} }
+if logger.enabled("trace") { logger.trace("details", expensiveFields()) }
+equal(built, 0)
+equal(output.length, 3)
+let silent = log.create({level: "silent", sink: fn(line) { throw new Error("disabled sink") }})
+equal(silent.enabled("fatal"), false)
+silent.fatal("disabled", input)
+equal(accessorCalls, 0)
+
+# Inspection must respect record budgets and recursive rejected promises.
+equal(debug.inspect({first: 1, second: 2, third: 3}, {maxObjectKeys: 1}), "{ first: 1, ... 2 more items }")
+equal(debug.inspect({first: 1}, {maxObjectKeys: 0}), "{... 1 more items }")
+equal(debug.inspect(input), "{ amount: [Getter] }")
+equal(accessorCalls, 0)
+let reject = undefined
+let rejected = new Promise(fn(resolve, fail) { reject = fail })
+reject(rejected)
+try { await rejected } catch reason { equal(reason, rejected) }
+equal(debug.inspect(rejected), "Promise { <rejected> [Circular] }")
+let deep = {child: rejected}
+equal(debug.inspect(deep, {depth: 0}), "{ child: [Promise] }")
+fn sourceFailure() { debug.assert(false, "actionable failure") }
+try { sourceFailure() } catch error {
+  equal(error.code, "ARYA_ASSERTION")
+  equal(error.message, "actionable failure")
+}
+
+# Writer overflow remains a catchable error, not a null-pointer dereference.
+let hugeRow = []; for i in range(50) { hugeRow.push("x".repeat(10000)) }
+let huge = []; for i in range(50) { huge.push(hugeRow) }
+let overflow = false
+try { debug.trace("bounded", huge) } catch error { overflow = error.name == "RangeError" }
+equal(overflow, true)
+equal(debug.inspect("\uD800"), "'\\ud800'")
+equal(debug.inspect("\uDC00"), "'\\udc00'")
+
+# Established cryptographic primitive vectors and authentication failures.
+equal(security.hash("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+let key = security.generateKey()
+equal(key.length, 43)
+equal(security.randomToken(16).length, 22)
+let uuid = security.uuid()
+equal(uuid.length, 36)
+equal(uuid[14], "4")
+debug.assert("89ab".includes(uuid[19])); checks += 1
+let mac = security.hmac(key, "message\0tail")
+equal(security.verifyHmac(key, "message\0tail", mac), true)
+equal(security.verifyHmac(key, "message", mac), false)
+equal(security.verifyHmac(key, "message\0tail", mac + "0"), false)
+equal(security.timingSafeEqual("same\0tail", "same\0tail"), true)
+equal(security.timingSafeEqual("same\0tail", "same"), false)
+let ring = security.keyring({active: "current", keys: {current: key}})
+let context = {account: "account-1", purpose: "test"}
+let encrypted = ring.encrypt("private\0سلام", context)
+equal(ring.decrypt(encrypted, context), "private\0سلام")
+rejects("ARYA_SECURITY_DECRYPT", fn() { ring.decrypt(encrypted, {account: "account-2", purpose: "test"}) })
+rejects("ARYA_SECURITY_DECRYPT", fn() { ring.decrypt(encrypted, {account: "account-1", purpose: "changed"}) })
+let parts = encrypted.split("$")
+parts[5] = (parts[5][0] == "A" and "B" or "A") + parts[5].slice(1)
+rejects("ARYA_SECURITY_DECRYPT", fn() { ring.decrypt(parts.join("$"), context) })
+rejects("ARYA_SECURITY_DECRYPT", fn() { ring.decrypt(encrypted + "=", context) })
+rejects("ARYA_SECURITY_INPUT", fn() { security.randomToken(15) })
+print("security diagnostics:", checks, "checks passed")

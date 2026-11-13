@@ -1,0 +1,50 @@
+[
+  {
+    "rows": 1000,
+    "name": "baseline-controlled",
+    "median": 14.562207999999998,
+    "p95": 16.297999999999945,
+    "parseCpu": 4.342999999999986,
+    "calculationCpu": 6.7040000000000015
+  },
+  {
+    "rows": 1000,
+    "name": "qualified",
+    "median": 3.0758329999999887,
+    "p95": 3.463833000001614,
+    "parseCpu": 0.7929999999999986,
+    "calculationCpu": 1.4780000000000002
+  },
+  {
+    "rows": 1000,
+    "name": "node",
+    "median": 3.220459000000119,
+    "p95": 3.884749999999258,
+    "parseCpu": 0.165,
+    "calculationCpu": 2.998
+  },
+  {
+    "rows": 10000,
+    "name": "baseline-controlled",
+    "median": 390.333416999998,
+    "p95": 491.8520000000026,
+    "parseCpu": 249.0350000000001,
+    "calculationCpu": 115.18000000000006
+  },
+  {
+    "rows": 10000,
+    "name": "qualified",
+    "median": 34.535540999997465,
+    "p95": 41.566665999998804,
+    "parseCpu": 8.160999999999973,
+    "calculationCpu": 19.714999999999982
+  },
+  {
+    "rows": 10000,
+    "name": "node",
+    "median": 29.089500000000044,
+    "p95": 72.54358400000001,
+    "parseCpu": 1.539,
+    "calculationCpu": 27.107
+  }
+]

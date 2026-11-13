@@ -1,0 +1,68 @@
+concat: 5.469 ms CPU
+join: 2.725 ms CPU
+record: 10.523 ms CPU
+unique: 2.503 ms CPU
+promise: 2.449 ms CPU
+map-delete: 2.329 ms CPU
+map-read: 1.800 ms CPU
+json-parse: 5.129 ms CPU
+json-stringify: 2.341 ms CPU
+global-floor: 3.097 ms CPU
+cached-floor: 1.358 ms CPU
+random: 1.430 ms CPU
+sparse: 0.013 ms CPU
+{
+  "output": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-workloads/performance-audit.json",
+  "tooling": {
+    "quoted65536Check": {
+      "medianMs": 33.78158299892675,
+      "samplesMs": [
+        33.42687500116881,
+        33.31308399720001,
+        33.78158299892675,
+        34.350832997006364,
+        34.87950000271667
+      ]
+    },
+    "raw65536Check": {
+      "medianMs": 39.146792001702124,
+      "samplesMs": [
+        43.78766599984374,
+        38.57566700025927,
+        37.79870799917262,
+        39.146792001702124,
+        40.5285000015283
+      ]
+    },
+    "cachedRun": {
+      "medianMs": 31.4402500007418,
+      "samplesMs": [
+        30.197208001482068,
+        31.4402500007418,
+        30.597249999118503,
+        31.95554099875153,
+        31.727833000331884
+      ]
+    },
+    "directHello": {
+      "medianMs": 4.280082997865975,
+      "samplesMs": [
+        4.280082997865975,
+        4.707292002422037,
+        4.6272500003397,
+        3.7792910006828606,
+        3.9692909995210357
+      ]
+    },
+    "lsp400UnusedEdit": {
+      "medianMs": 19.120291999570327,
+      "samplesMs": [
+        19.120291999570327,
+        18.28279199980898,
+        18.40045800054213,
+        23.628540999197867,
+        20.347290999779943
+      ]
+    }
+  }
+}

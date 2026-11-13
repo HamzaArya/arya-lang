@@ -1,0 +1,7 @@
+{
+  "baselineCompilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+  "change": "Only as16-through-autf8 conversion section replaced in baseline-generated C; as16 body and non-ASCII conversion bodies unchanged. Added portable ASCII classifiers, direct final UTF16 decode buffer, and exact-sized ASCII encoding.",
+  "beforeRuntimeSectionSha256": "d86c873506b7ee79e45168679ca480fddf5e0aaf4ef17bedfc2c73ac20b6a4ff",
+  "afterRuntimeSectionSha256": "09224e4c34cd539eda69c199c4d4978887ae75df54644923b087aff75ed95144",
+  "flags": "-std=c11 -O2 -ffp-contract=off; libmpdec.a -lm -pthread"
+}

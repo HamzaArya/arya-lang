@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/cli-ledger-audit/.build/verified-app"]
+PASS: 8 ledger audit scenarios (exactness, imbalance, duplicates, invalid data, empty journal, usage)

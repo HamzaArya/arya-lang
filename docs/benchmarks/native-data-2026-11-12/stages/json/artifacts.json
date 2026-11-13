@@ -1,0 +1,25 @@
+{
+  "runtimeOnly": true,
+  "runtimeSha256": "f5a563b3ae7ae598acb5a98c301514036caadca84d6fef2514485221c8fb6db5",
+  "base": "baseline",
+  "artifacts": {
+    "worker": {
+      "sha256": "ae7134b11ab8cf838bd4f70af5e23005a9da71ff2f7c9e07c499b4249faedfb6",
+      "cSha256": "e5c2d67b76545ceb3e44f1ac242f5ae28a080cad77f2dbfaac5ab5badb74fec2",
+      "bytes": 1201048,
+      "buildMs": 6164.48825
+    },
+    "phases": {
+      "sha256": "06ee42deea76f70ec301b1c867a9bd17c4ea9d77da3912d6ec41030c54992d4b",
+      "cSha256": "bfd8c26ed651b2fa0348015c9050659c87509824ea1d6a10a761c4a1067a0763",
+      "bytes": 526264,
+      "buildMs": 2397.8862919999992
+    },
+    "counters": {
+      "sha256": "4b2f38f835bed7797a0511180a3b8eabbbab4fa3f193e021c38f17326275bf88",
+      "cSha256": "f26a968da438fac7cd6f63711f281a6f4b4b2fe5ed7fede18a1a1f32fb63f06c",
+      "bytes": 1200600,
+      "buildMs": 5094.276207999999
+    }
+  }
+}

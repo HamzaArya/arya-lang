@@ -1,0 +1,116 @@
+{
+  "recordedAtUtc": "2026-11-13T02:26:26Z",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "source": "native/tests/fixtures/numeric-calls.arya",
+  "sourceSha256": "35e621426b303d12fa78fd4a9806eb8a603be5c2415ecd49bc010dade442e9e6",
+  "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+  "staticLibmpdecSha256": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5",
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "method": "Instrumented separate processes, --counts mode, exactly 10000 each of toFixed(2), toString(16), and toString(). Before/after hold generated program and all other runtime code fixed. Reference disables data optimizations including literal interning and is provided for semantics, not an isolated allocation estimate. Counters include module/startup work; no warmup or GC stress. No timing inference.",
+  "artifacts": {
+    "before": {
+      "binarySha256": "7263d6b2f3391f684551a64b30a47183e92ffdfb99225bcc83531eb6acf0a6fe",
+      "generatedCSha256": "03dd7aee3282498c6895a5ee9c09ac2a40cc06bae1015819dfdcc73c34b9d18a",
+      "command": [
+        ".build/native-fastpaths-2026-11-13/numeric-fixture-before",
+        "--counts"
+      ],
+      "stdout": "143412\n",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 200352,
+        "heapObjects": 90136,
+        "environments": 1,
+        "functions": 30041,
+        "genericCalls": 30002,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 16,
+        "peakManagedBytes": 1105844,
+        "scalarCalls": 0,
+        "rootedCalls": 30001,
+        "rootPushes": 30046,
+        "environmentLookups": 13
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 25770219,
+        "strings": 30087,
+        "stringUnits": 144042,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 2.936
+      }
+    },
+    "after": {
+      "binarySha256": "16d7af0f1b8082e32a3d7ab16a2ab126572a5ed922f2a634bc2f2256f35e4a76",
+      "generatedCSha256": "18582d5127aaa1bb290b6fa8f35e39a619e9adcd7981c8edab4e63f3dfe86943",
+      "command": [
+        ".build/native-fastpaths-2026-11-13/numeric-fixture-after-isolated",
+        "--counts"
+      ],
+      "stdout": "143412\n",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 110352,
+        "heapObjects": 30136,
+        "environments": 1,
+        "functions": 41,
+        "genericCalls": 2,
+        "directCalls": 30000,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 6,
+        "peakManagedBytes": 1105114,
+        "scalarCalls": 0,
+        "rootedCalls": 1,
+        "rootPushes": 46,
+        "environmentLookups": 13
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 14730219,
+        "strings": 30087,
+        "stringUnits": 144042,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.206
+      }
+    },
+    "reference": {
+      "binarySha256": "25a76c25b9e9e414f3beadfaf8408bc9f1cc0739a1feb48ff275d8e96fdf9f17",
+      "generatedCSha256": "09b753d08c348af0b4671d19895c4addd508b6387cd5d0ef1f2a53b15b27d70e",
+      "command": [
+        ".build/native-fastpaths-2026-11-13/numeric-fixture-reference-after-isolated",
+        "--counts"
+      ],
+      "stdout": "143412\n",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 380202,
+        "heapObjects": 150086,
+        "environments": 1,
+        "functions": 30041,
+        "genericCalls": 30002,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 28,
+        "peakManagedBytes": 1091086,
+        "scalarCalls": 0,
+        "rootedCalls": 30001,
+        "rootPushes": 30046,
+        "environmentLookups": 13
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 38232493,
+        "strings": 90037,
+        "stringUnits": 553693,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 5.619
+      }
+    }
+  }
+}

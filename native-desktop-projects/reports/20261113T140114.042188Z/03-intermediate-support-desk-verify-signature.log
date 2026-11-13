@@ -1,0 +1,1 @@
+["codesign", "--verify", "--deep", "--strict", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-k74geup2/Harbor Support Desk.app"]

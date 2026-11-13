@@ -1,6 +1,5 @@
 """Optional host for bounded CSV -> exact grouping, with an integer oracle."""
 import hashlib,json,os,platform,subprocess,sys,time
-from decimal import Decimal,ROUND_HALF_EVEN
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 out=Path(sys.argv[1] if len(sys.argv)>1 else root/'.build/performance-2026-11-12').resolve()
@@ -14,6 +13,11 @@ build_ms=(time.perf_counter()-start)*1000
 sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
 sizes=[1000,10000,100000,1000000];inputs={};expected={}
 policy={'currency':'USD','scale':2,'rounding':'half-even'}
+def fixed_minor(thousandths):
+    cents,remainder=divmod(abs(thousandths),10)
+    if remainder>5 or remainder==5 and cents%2:cents+=1
+    sign='-' if thousandths<0 else ''
+    return sign+str(cents//100)+'.'+str(cents%100).zfill(2)
 for count in sizes:
     path=directory/f'{count}.csv';totals={}
     with path.open('w',newline='') as file:
@@ -23,7 +27,7 @@ for count in sizes:
             units=100005 if index%5 else -20035
             file.write(account+(','+'100.005' if units>0 else ',-20.035')+'\r\n')
             totals[account]=totals.get(account,0)+units
-    expected[count]={'rows':count,'accounts':[{'account':account,'total':{'amount':str((Decimal(units)/1000).quantize(Decimal('.01'),rounding=ROUND_HALF_EVEN)),**policy}} for account,units in totals.items()]}
+    expected[count]={'rows':count,'accounts':[{'account':account,'total':{'amount':fixed_minor(units),**policy}} for account,units in totals.items()]}
     inputs[count]={'sha256':sha(path),'bytes':path.stat().st_size}
 raw=[]
 for sample in range(-1,3):
@@ -35,7 +39,7 @@ for sample in range(-1,3):
         assert result.returncode==0,result.stderr.decode()
         actual=json.loads(result.stdout);assert actual==expected[count],count
         if sample>=0:raw.append({'sample':sample,'rows':count,'wallMs':elapsed,'outputSha256':hashlib.sha256(result.stdout).hexdigest(),'resources':result.stderr.decode()})
-report={'boundary':'Fresh native process reading an already generated CSV file, exact sum by account, boundary rounding, JSON output, cleanup. Warm filesystem cache; one warmup, three alternating-size samples. Inputs/expected totals use signed integer thousandths; Python Decimal only formats the boundary.',
+report={'boundary':'Fresh native process reading an already generated CSV file, exact sum by account, boundary rounding, JSON output, cleanup. Warm filesystem cache; one warmup, three alternating-size samples. Inputs, accumulation, half-even rounding and boundary formatting use an independent signed integer thousandths oracle.',
         'compilerSha256':sha(compiler),'sourceSha256':sha(root/'native/examples/stream-ledger.arya'),'binarySha256':sha(binary),'bytes':binary.stat().st_size,'buildMs':build_ms,'inputs':inputs,'raw':raw}
 (out/'streaming.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps([{'rows':n,'medianWallMs':sorted(x['wallMs'] for x in raw if x['rows']==n)[1]} for n in sizes],indent=2))

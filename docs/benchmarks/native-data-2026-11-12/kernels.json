@@ -1,0 +1,4657 @@
+{
+  "boundary": "Warmed kernel CPU, process transfer excluded; 3 warmups, 9 samples/session, 2 sessions; alternating n/n+1 and backend order. Decimal Node oracle uses exact fixed-scale BigInt. Parsed API is an opt-in candidate-only workload.",
+  "artifacts": {
+    "baseline": {
+      "compilerSha256": "fb45f92b713bca659224d35e382b19efc1c17dcf267ac0d4583350990272b91a",
+      "sourceSha256": "8b721df8ab895225f7246b30be90ea6f1e4955962a59539dd67f7471ebefe1b6",
+      "binarySha256": "0115f28fb76368df9f3983cd3e9f47ff4846bfbd4d6ec28c182d576a5b193056",
+      "bytes": 505592,
+      "buildBothMs": 3401.039708
+    },
+    "candidate": {
+      "compilerSha256": "dd595cccdd8c7c2c49ff12d2784b6f1f406c93a3b5e182ea48a46b7e85aab06b",
+      "sourceSha256": "d9013e00511b45a36f9fb0a1cf52b2f67dd73cec1b82e27344b4712a2e15753d",
+      "binarySha256": "1160140cbe086da27554e4f0469fd63ab9784e3dac37e49940cbad17e7f8f5d3",
+      "bytes": 523496,
+      "buildBothMs": 4115.089459000001
+    }
+  },
+  "raw": [
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.409
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.403999999999996
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.405
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.707
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.486
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.438999999999997
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.404999999999998
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.454999999999998
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.451
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.735
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.413999999999998
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.386000000000006
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.549000000000001
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.443000000000007
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.44
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.473
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.421000000000014
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.444000000000008
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.429999999999994
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.436
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.449
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.435
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.48199999999999
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.439000000000004
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.429999999999994
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.444000000000008
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.424
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.406000000000017
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.500999999999998
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.609
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 12.608
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.774999999999967
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.59200000000001
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.510000000000037
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.60400000000002
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.659
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 12.685
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.422000000000004
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.549999999999965
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.181999999999984
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.588999999999977
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.634
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 12.857
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.56800000000004
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.183000000000014
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.359999999999996
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.671000000000003
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.686
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 12.643
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.467999999999993
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.163999999999966
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.352999999999962
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.53699999999998
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.628
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.7940000000000169
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.7949999999999902
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.74
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.45
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5109999999999837
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5049999999999777
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8020000000000249
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.7960000000000189
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.718
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.446
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.49399999999999444
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5069999999999797
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8239999999999914
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8140000000000369
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.725
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.454
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5009999999999737
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5060000000000064
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8150000000000102
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8060000000000289
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.728
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.451
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5189999999999917
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5089999999999817
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8090000000000042
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8179999999999854
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.742
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 37.304
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.22800000000001
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.891
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 1.243
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.9270000000000165
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 37.336000000000034
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 33.803000000000026
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.925000000000069
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 2.35
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.277
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 5.981000000000014
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 36.87300000000005
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 33.46300000000002
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.862000000000034
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.47
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 2.564
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.1949999999999505
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 34.267000000000046
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 31.868999999999925
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.862000000000034
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.175
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.197
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 5.940999999999974
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 31.264999999999986
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 37.569000000000074
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.776000000000003
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.216
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 25.54300000000009
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.963000000000049
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.467
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.5
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 2.6399999999999757
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 24.44400000000013
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 25.22500000000005
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.7850000000000374
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.36
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.355
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 2.825999999999995
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 24.75200000000011
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 25.781000000000056
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.8690000000000104
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.366
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.443
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 2.6370000000000005
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 25.016999999999847
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 25.476000000000056
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.917999999999976
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.37
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.374
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 2.86300000000006
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 26.410999999999962
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 26.569000000000067
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.9879999999999907
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.383
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 4.105999999999943
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.0540000000000003
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.48
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.59
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.154999999999907
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 4.072000000000076
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 3.918000000000088
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.2490000000000565
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.574
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 1.035
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.044000000000046
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 3.9730000000000043
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 3.9960000000001106
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.1740000000000093
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.452
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.428
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.37900000000002
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 3.962000000000021
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 3.9890000000000203
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.1480000000000388
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.437
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.431
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.1600000000000508
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 4.218999999999973
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 3.9679999999999715
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.2639999999999327
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.474
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.94300000000003
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6680000000000028
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.25
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.244
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6169999999999796
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.287000000000152
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.951000000000038
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.7999999999999128
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.273
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.247
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6460000000000363
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.105999999999943
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 4.0039999999998965
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6220000000000123
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.247
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.317
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.778999999999975
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.160999999999859
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.923000000000121
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6359999999999708
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.239
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.225
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6500000000000403
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.088000000000092
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.985999999999823
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6359999999999708
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.25
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.505000000000093
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.774999999999974
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.098
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.088
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.471000000000003
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.801000000000167
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.816000000000043
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.5119999999999605
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.11
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.097
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.627000000000048
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.751000000000062
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.709999999999882
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.708999999999963
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.106
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.102
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.6439999999999815
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.765999999999938
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.489999999999995
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.569999999999963
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.141
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.101
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.517999999999911
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.708000000000046
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.56599999999996
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.6760000000000135
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.096
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.9460000000000024
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.064
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.064
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.2299999999999534
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.2379999999999614
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.062
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.064
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.9390000000000231
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.23899999999999
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.07
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.062
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.2729999999999686
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.1189999999999811
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.077
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.065
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.23899999999999
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.234999999999986
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.065
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.659
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.641000000000004
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.546
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.710999999999997
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.668000000000003
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.712
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 10.264
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 10.665000000000001
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.813999999999997
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.742000000000008
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.746000000000004
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.978
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 10.075
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.800000000000002
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.69600000000001
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.558999999999997
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.517000000000012
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.678
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 10.062
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.721999999999994
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.524000000000004
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.624999999999995
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.612999999999996
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000000,
+      "value": 49999995000000,
+      "cpuMs": 9.486
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.522
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.660000000000002
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000001,
+      "value": 50000005000000,
+      "cpuMs": 9.482000000000005
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.872
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.554
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.766000000000016
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.790000000000013
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.340000000000007
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 13.31
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 13.131
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 30.994999999999994
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 30.179999999999986
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.233999999999984
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 31.283999999999978
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 13.898
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 13.382
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.973000000000027
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.75899999999998
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.69200000000005
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 29.782000000000032
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 12.795
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 12.853
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.698
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 29.95599999999998
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.225
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 30.353999999999992
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000000,
+      "value": 995043.925585785,
+      "cpuMs": 13.202
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 13.168
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 30.65200000000001
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000001,
+      "value": 995098.9206297104,
+      "cpuMs": 30.907000000000018
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.99
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8599999999999719
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 1.0370000000000101
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.6219999999999559
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5590000000000317
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.499
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.89
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8820000000000494
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8650000000000047
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5359999999999809
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5530000000000257
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.474
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.809
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8360000000000034
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8199999999999874
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5030000000000312
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5250000000000532
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.631
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.817
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8589999999999987
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.8410000000000362
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5249999999999977
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.5410000000000137
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "fib",
+      "n": 24,
+      "value": 46368,
+      "cpuMs": 0.473
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.774
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 1.2080000000000424
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "fib",
+      "n": 25,
+      "value": 75025,
+      "cpuMs": 0.9230000000000071
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 2.96
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.714999999999915
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 39.854999999999976
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 38.461999999999996
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.9429999999999215
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.352
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.329
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.979000000000068
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 34.30900000000003
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 41.6430000000001
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.151999999999935
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.474
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.678
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.979999999999985
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 36.60399999999997
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 34.11799999999998
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.236999999999937
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.228
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.266
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.804000000000031
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 32.76400000000002
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 32.479000000000035
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 6.361999999999979
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "records",
+      "n": 20000,
+      "value": [
+        20000,
+        50000000
+      ],
+      "cpuMs": 0.255
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 0.128
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 5.871999999999988
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "records",
+      "n": 20001,
+      "value": [
+        20001,
+        50000000
+      ],
+      "cpuMs": 40.18300000000008
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.868
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 3.026000000000084
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 27.98899999999982
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 27.104999999999933
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 3.1359999999999166
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.428
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.4
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.7169999999999694
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 26.297000000000015
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 26.893000000000058
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 5.093000000000014
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.445
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.76
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 9.290999999999938
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 34.60400000000008
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 25.98699999999998
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 3.914000000000084
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.494
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.388
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 3.071000000000046
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 30.040999999999983
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 29.581999999999997
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 3.311000000000064
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "map",
+      "n": 3000,
+      "value": 4498500,
+      "cpuMs": 0.42
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 0.392
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 2.8369999999999784
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "map",
+      "n": 3001,
+      "value": 4501500,
+      "cpuMs": 29.343000000000117
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.487
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.118999999999982
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 5.098000000000047
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 4.162999999999917
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.234999999999987
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.478
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.471
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.16700000000003
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 4.313000000000011
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 3.9559999999998485
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.115000000000089
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.887
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.449
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.2459999999999702
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 4.045000000000076
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 4.242999999999997
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.203000000000066
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.433
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.429
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.1020000000000483
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 4.021000000000052
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 3.962999999999939
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 2.1679999999999477
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "json",
+      "n": 1000,
+      "value": 2000,
+      "cpuMs": 0.427
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 0.424
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 2.1560000000000468
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "json",
+      "n": 1001,
+      "value": 2002,
+      "cpuMs": 3.9450000000000873
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.224
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6180000000000083
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.967000000000054
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.105000000000025
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6100000000000003
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.234
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.23
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.7880000000000118
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.933999999999882
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.1599999999999415
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6239999999999588
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.237
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.229
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6969999999999485
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.9970000000000283
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.139000000000115
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.7960000000000198
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.248
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.233
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6410000000000036
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.9609999999998813
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 4.121000000000041
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 1.6169999999999796
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "strings",
+      "n": 1000,
+      "value": 6890,
+      "cpuMs": 0.238
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 0.258
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 1.6199999999999548
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1001,
+      "value": 6898,
+      "cpuMs": 3.9169999999999483
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.097
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.537999999999931
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.479000000000012
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.630999999999942
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.50600000000001
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.1
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.1
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.43300000000002
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.385999999999891
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.578000000000083
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.43300000000002
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.099
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.103
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.4480000000000075
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.380000000000162
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.579999999999918
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.512999999999989
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.108
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.124
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.534000000000038
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.433000000000021
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 5.557000000000034
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 4.486999999999908
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.075
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.065
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 4.4440000000000035
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 5.415999999999865
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.063
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.9359999999999369
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.186999999999938
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.063
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.063
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.2179999999999414
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.9270000000000111
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.064
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.06
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.2119999999999909
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.246999999999998
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.062
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.07
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.9270000000000111
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 1.1889999999999956
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5000,
+      "value": "617283945061728394506172839450025",
+      "cpuMs": 0.062
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "node",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 0.061
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5001,
+      "value": "617407401850740740185074074017915.005",
+      "cpuMs": 1.2220000000000564
+    }
+  ],
+  "summary": [
+    {
+      "kind": "sum",
+      "name": "baseline",
+      "medianCpuMs": 9.482000000000005,
+      "p95CpuMs": 9.813999999999997
+    },
+    {
+      "kind": "sum",
+      "name": "candidate",
+      "medianCpuMs": 9.486,
+      "p95CpuMs": 10.665000000000001
+    },
+    {
+      "kind": "sum",
+      "name": "node",
+      "medianCpuMs": 9.522,
+      "p95CpuMs": 10.264
+    },
+    {
+      "kind": "mix",
+      "name": "baseline",
+      "medianCpuMs": 29.69200000000005,
+      "p95CpuMs": 30.907000000000018
+    },
+    {
+      "kind": "mix",
+      "name": "candidate",
+      "medianCpuMs": 29.671000000000003,
+      "p95CpuMs": 31.283999999999978
+    },
+    {
+      "kind": "mix",
+      "name": "node",
+      "medianCpuMs": 12.795,
+      "p95CpuMs": 13.898
+    },
+    {
+      "kind": "fib",
+      "name": "baseline",
+      "medianCpuMs": 0.7940000000000169,
+      "p95CpuMs": 1.0370000000000101
+    },
+    {
+      "kind": "fib",
+      "name": "candidate",
+      "medianCpuMs": 0.7949999999999902,
+      "p95CpuMs": 1.2080000000000424
+    },
+    {
+      "kind": "fib",
+      "name": "node",
+      "medianCpuMs": 0.718,
+      "p95CpuMs": 0.99
+    },
+    {
+      "kind": "records",
+      "name": "baseline",
+      "medianCpuMs": 34.30900000000003,
+      "p95CpuMs": 41.6430000000001
+    },
+    {
+      "kind": "records",
+      "name": "candidate",
+      "medianCpuMs": 5.940999999999974,
+      "p95CpuMs": 6.9429999999999215
+    },
+    {
+      "kind": "records",
+      "name": "node",
+      "medianCpuMs": 0.329,
+      "p95CpuMs": 2.96
+    },
+    {
+      "kind": "map",
+      "name": "baseline",
+      "medianCpuMs": 26.297000000000015,
+      "p95CpuMs": 34.60400000000008
+    },
+    {
+      "kind": "map",
+      "name": "candidate",
+      "medianCpuMs": 2.917999999999976,
+      "p95CpuMs": 9.290999999999938
+    },
+    {
+      "kind": "map",
+      "name": "node",
+      "medianCpuMs": 0.4,
+      "p95CpuMs": 0.868
+    },
+    {
+      "kind": "json",
+      "name": "baseline",
+      "medianCpuMs": 3.9960000000001106,
+      "p95CpuMs": 5.098000000000047
+    },
+    {
+      "kind": "json",
+      "name": "candidate",
+      "medianCpuMs": 2.1600000000000508,
+      "p95CpuMs": 2.37900000000002
+    },
+    {
+      "kind": "json",
+      "name": "node",
+      "medianCpuMs": 0.452,
+      "p95CpuMs": 1.035
+    },
+    {
+      "kind": "strings",
+      "name": "baseline",
+      "medianCpuMs": 3.9970000000000283,
+      "p95CpuMs": 4.287000000000152
+    },
+    {
+      "kind": "strings",
+      "name": "candidate",
+      "medianCpuMs": 1.6359999999999708,
+      "p95CpuMs": 1.7999999999999128
+    },
+    {
+      "kind": "strings",
+      "name": "node",
+      "medianCpuMs": 0.239,
+      "p95CpuMs": 0.317
+    },
+    {
+      "kind": "decimal",
+      "name": "baseline",
+      "medianCpuMs": 5.56599999999996,
+      "p95CpuMs": 5.816000000000043
+    },
+    {
+      "kind": "decimal",
+      "name": "candidate",
+      "medianCpuMs": 4.512999999999989,
+      "p95CpuMs": 4.774999999999974
+    },
+    {
+      "kind": "decimal",
+      "name": "node",
+      "medianCpuMs": 0.1,
+      "p95CpuMs": 0.141
+    },
+    {
+      "kind": "parsed",
+      "name": "candidate",
+      "medianCpuMs": 1.2119999999999909,
+      "p95CpuMs": 1.2729999999999686
+    },
+    {
+      "kind": "parsed",
+      "name": "node",
+      "medianCpuMs": 0.063,
+      "p95CpuMs": 0.077
+    }
+  ],
+  "diagnostics": [
+    {
+      "name": "baseline",
+      "kind": "sum",
+      "n": 10000000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":286,\"heapObjects\":142,\"environments\":1,\"functions\":58,\"genericCalls\":8,\"directCalls\":2,\"numericCalls\":1,\"heapTemporaries\":2,\"gcCollections\":1,\"peakManagedBytes\":25360,\"scalarCalls\":1,\"rootedCalls\":7,\"rootPushes\":67,\"environmentLookups\":28}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "sum",
+      "n": 10000000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":374,\"heapObjects\":190,\"environments\":1,\"functions\":69,\"genericCalls\":8,\"directCalls\":2,\"numericCalls\":1,\"heapTemporaries\":0,\"gcCollections\":1,\"peakManagedBytes\":33440,\"scalarCalls\":1,\"rootedCalls\":7,\"rootPushes\":76,\"environmentLookups\":29}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":8437673,\"strings\":108,\"stringUnits\":748,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.015000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "mix",
+      "n": 2000000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":288,\"heapObjects\":143,\"environments\":1,\"functions\":58,\"genericCalls\":8,\"directCalls\":2,\"numericCalls\":1,\"heapTemporaries\":2,\"gcCollections\":1,\"peakManagedBytes\":25512,\"scalarCalls\":1,\"rootedCalls\":7,\"rootPushes\":67,\"environmentLookups\":28}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "mix",
+      "n": 2000000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":374,\"heapObjects\":190,\"environments\":1,\"functions\":69,\"genericCalls\":8,\"directCalls\":2,\"numericCalls\":1,\"heapTemporaries\":0,\"gcCollections\":1,\"peakManagedBytes\":33442,\"scalarCalls\":1,\"rootedCalls\":7,\"rootPushes\":76,\"environmentLookups\":29}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":8437682,\"strings\":108,\"stringUnits\":749,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.008000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "fib",
+      "n": 24,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":290,\"heapObjects\":144,\"environments\":1,\"functions\":58,\"genericCalls\":8,\"directCalls\":150050,\"numericCalls\":150049,\"heapTemporaries\":2,\"gcCollections\":1,\"peakManagedBytes\":25630,\"scalarCalls\":150049,\"rootedCalls\":7,\"rootPushes\":67,\"environmentLookups\":28}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "fib",
+      "n": 24,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":374,\"heapObjects\":190,\"environments\":1,\"functions\":69,\"genericCalls\":8,\"directCalls\":150050,\"numericCalls\":150049,\"heapTemporaries\":0,\"gcCollections\":1,\"peakManagedBytes\":33434,\"scalarCalls\":150049,\"rootedCalls\":7,\"rootPushes\":76,\"environmentLookups\":29}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":8437664,\"strings\":108,\"stringUnits\":745,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.009000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "records",
+      "n": 20000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":320308,\"heapObjects\":170151,\"environments\":1,\"functions\":20058,\"genericCalls\":20010,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":3,\"gcCollections\":6,\"peakManagedBytes\":24701112,\"scalarCalls\":0,\"rootedCalls\":20009,\"rootPushes\":40071,\"environmentLookups\":29}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "records",
+      "n": 20000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":20379,\"heapObjects\":20193,\"environments\":1,\"functions\":69,\"genericCalls\":10,\"directCalls\":20002,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":4,\"peakManagedBytes\":8020364,\"scalarCalls\":0,\"rootedCalls\":9,\"rootPushes\":20077,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":11798169,\"strings\":108,\"stringUnits\":754,\"jsonKeyHits\":0,\"fieldCacheHits\":29999,\"decimalFastPaths\":0,\"gcCpuMs\":1.085000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "map",
+      "n": 3000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":78305,\"heapObjects\":36152,\"environments\":1,\"functions\":6059,\"genericCalls\":12011,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":3,\"gcCollections\":5,\"peakManagedBytes\":2739312,\"scalarCalls\":0,\"rootedCalls\":12010,\"rootPushes\":12069,\"environmentLookups\":29}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "map",
+      "n": 3000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":36393,\"heapObjects\":12196,\"environments\":1,\"functions\":70,\"genericCalls\":6011,\"directCalls\":6002,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":2,\"peakManagedBytes\":1972228,\"scalarCalls\":0,\"rootedCalls\":6010,\"rootPushes\":6078,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":10759400,\"strings\":12109,\"stringUnits\":68312,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.331000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "json",
+      "n": 1000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":51312,\"heapObjects\":18155,\"environments\":1,\"functions\":58,\"genericCalls\":2009,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":3,\"gcCollections\":4,\"peakManagedBytes\":1153128,\"scalarCalls\":0,\"rootedCalls\":2008,\"rootPushes\":20067,\"environmentLookups\":29}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "json",
+      "n": 1000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":21379,\"heapObjects\":9193,\"environments\":1,\"functions\":69,\"genericCalls\":2009,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":2,\"peakManagedBytes\":1048700,\"scalarCalls\":0,\"rootedCalls\":2008,\"rootPushes\":13076,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":10046177,\"strings\":7108,\"stringUnits\":80748,\"jsonKeyHits\":0,\"fieldCacheHits\":1000,\"decimalFastPaths\":0,\"gcCpuMs\":0.285000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "strings",
+      "n": 1000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":48301,\"heapObjects\":23149,\"environments\":1,\"functions\":4058,\"genericCalls\":6009,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":3,\"gcCollections\":4,\"peakManagedBytes\":1154592,\"scalarCalls\":0,\"rootedCalls\":6008,\"rootPushes\":9067,\"environmentLookups\":29}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "strings",
+      "n": 1000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":18376,\"heapObjects\":8191,\"environments\":1,\"functions\":69,\"genericCalls\":2009,\"directCalls\":4002,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":2,\"peakManagedBytes\":1048618,\"scalarCalls\":0,\"rootedCalls\":2008,\"rootPushes\":5076,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":9755635,\"strings\":7108,\"stringUnits\":38094,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.225000}\n"
+    },
+    {
+      "name": "baseline",
+      "kind": "decimal",
+      "n": 5000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":45302,\"heapObjects\":15150,\"environments\":1,\"functions\":58,\"genericCalls\":5009,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":1339322,\"scalarCalls\":0,\"rootedCalls\":5008,\"rootPushes\":67,\"environmentLookups\":29}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "decimal",
+      "n": 5000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":25376,\"heapObjects\":5191,\"environments\":1,\"functions\":69,\"genericCalls\":5009,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":2,\"peakManagedBytes\":1048764,\"scalarCalls\":0,\"rootedCalls\":5008,\"rootPushes\":76,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":11086972,\"strings\":5108,\"stringUnits\":182073,\"jsonKeyHits\":0,\"fieldCacheHits\":1,\"decimalFastPaths\":0,\"gcCpuMs\":0.141000}\n"
+    },
+    {
+      "name": "candidate",
+      "kind": "parsed",
+      "n": 5000,
+      "stderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":5383,\"heapObjects\":5194,\"environments\":1,\"functions\":69,\"genericCalls\":5012,\"directCalls\":2,\"numericCalls\":0,\"heapTemporaries\":0,\"gcCollections\":1,\"peakManagedBytes\":874152,\"scalarCalls\":0,\"rootedCalls\":5011,\"rootPushes\":76,\"environmentLookups\":30}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":9278721,\"strings\":109,\"stringUnits\":816,\"jsonKeyHits\":0,\"fieldCacheHits\":5000,\"decimalFastPaths\":0,\"gcCpuMs\":0.196000}\n"
+    }
+  ]
+}

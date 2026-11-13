@@ -1,0 +1,6 @@
+{
+  "probeOutput": "getterCalls 1 accepted true\naliasSecond [Circular]\nrecordLimit { a: 1, b: 2 }\n",
+  "binarySha256": "2584eb50080b19e24517e6376d790b12697603ecf9b7a18ed7526d1e17581180",
+  "generatedCSha256": "4b4b42d94445a20014fd9ddf2f79d30a237a5066015a5a97ee4a4ddf8cbb37e8",
+  "limitations": "Local pre-change runtime behavior. Benchmarks use separate uninstrumented binaries."
+}

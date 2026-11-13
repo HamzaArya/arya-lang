@@ -1,22 +1,22 @@
 # Arya roadmap and implementation history
 
-> Archived milestone plan through 1.3.0-alpha.3. The original version-specific statements, checkboxes, and progress notes below preserve the planning record. Use the [current roadmap](../arya-roadmap.md) and [release readiness](../release-readiness.md) for active scope and qualification.
+> Archived milestone plan through 1.3.0-alpha.3. The original version-specific statements, checkboxes, and progress notes below preserve the planning record. Use the [current roadmap](../../compat/node/docs/arya-roadmap.md) and [release readiness](../../compat/node/docs/release-readiness.md) for active scope and qualification.
 
 **Status at archival:** Living implementation plan  
 **Created:** 8 November 2026  
 **Current source version:** Arya 1.3.0-alpha.3 (Node.js-only candidate); npm baseline 1.2.0-alpha.4
-**Implementation status:** [source maps](../source-maps.md); [core specification](../arya-specification.md); [current release notes](../releases/1.2.0-alpha.4.md)
+**Implementation status:** [source maps](../../compat/node/docs/source-maps.md); [core specification](../../compat/node/docs/arya-specification.md); [current release notes](../releases/1.2.0-alpha.4.md)
 **Related audit:** [Arya Language Logic Report](arya-language-logic-report.md)
 
 ## Current direction — 10 November 2026
 
-Arya focuses on readable Node.js applications combining JavaScript/npm and Python. The 1.3.0-alpha.2 source candidate retires native compilation and concentrates on five application templates, services/databases, UI/motion, Electron desktop apps, and editor quality. See [runtime and migration](../node-runtime.md) and [candidate notes](../releases/1.3.0-alpha.2.md).
+Arya focuses on readable Node.js applications combining JavaScript/npm and Python. The 1.3.0-alpha.2 source candidate retires native compilation and concentrates on five application templates, services/databases, UI/motion, Electron desktop apps, and editor quality. See [runtime and migration](../../compat/node/docs/node-runtime.md) and [candidate notes](../releases/1.3.0-alpha.2.md).
 
-The published npm baseline remains 1.2.0-alpha.4; its exact archives and native-inclusive evidence are historical facts. No new npm publication is implied by the source refocus. The roadmap's original milestone plans and logs below remain history; native/compiler milestones are no longer active product work. Current qualification is tracked in [release readiness](../release-readiness.md).
+The published npm baseline remains 1.2.0-alpha.4; its exact archives and native-inclusive evidence are historical facts. No new npm publication is implied by the source refocus. The roadmap's original milestone plans and logs below remain history; native/compiler milestones are no longer active product work. Current qualification is tracked in [release readiness](../../compat/node/docs/release-readiness.md).
 
-The current candidate also adds [readable application flow](../flow-syntax.md): pipelines, concise/default/rest functions, spreads, guards, indexed loops, finally cleanup, and collection helpers. Older forms remain accepted with the documented guard-keyword migration.
+The current candidate also adds [readable application flow](../../compat/node/docs/flow-syntax.md): pipelines, concise/default/rest functions, spreads, guards, indexed loops, finally cleanup, and collection helpers. Older forms remain accepted with the documented guard-keyword migration.
 
-The 1.3.0-alpha.3 UI candidate adds ten components, eight [reusable sections and four full-page templates](../ui-patterns.md), live galleries, and copyable examples. It retains the alpha.2 syntax contract.
+The 1.3.0-alpha.3 UI candidate adds ten components, eight [reusable sections and four full-page templates](../../compat/node/docs/ui-patterns.md), live galleries, and copyable examples. It retains the alpha.2 syntax contract.
 
 ## Original milestone plan
 
@@ -163,7 +163,7 @@ Before adding a dependency, record the selected source-map encoder and why it wa
 
 The current parser returns nested JavaScript strings before their final generated positions are known. Do not attempt to recover mappings by searching the final string: repeated identifiers and formatting changes make that unreliable.
 
-Implemented a source-preserving emission layer using explicit token-origin annotations in composed strings. The final emitter consumes the annotations and records generated line/UTF-16 columns after all runtime prefixes. This avoids searching generated identifiers or guessing offsets. See [the implemented design](../source-maps.md).
+Implemented a source-preserving emission layer using explicit token-origin annotations in composed strings. The final emitter consumes the annotations and records generated line/UTF-16 columns after all runtime prefixes. This avoids searching generated identifiers or guessing offsets. See [the implemented design](../../compat/node/docs/source-maps.md).
 
 - [x] Add generated-position tracking.
 - [x] Record statement and expression origins as fragments are created.
@@ -675,8 +675,8 @@ Add decisions here as they are made. Link the relevant issue or commit when avai
 | D-012 | 2026-11-09 | Record scope/declaration/reference facts during parsing; resolve the completed scope graph separately and share metadata with diagnostics/navigation | Preserve the mapped emitter, forward declarations, closures, and runtime TDZ without executing imports; all user-facing paths use one resolver | M3 |
 | D-013 | 2026-11-09 | Report all independent semantic diagnostics after a complete parse; retain one syntax diagnostic until parser recovery is implemented | Better editor/CLI feedback while keeping recovery out of M3; preserve the first-error API alias and bump the local preview to alpha.2 | M3 |
 
-| D-014 | 2026-11-10 | Adopt explicit input-first pipelines, concise/default/rest functions, iterable spreads, terminating guards, indexed iteration, and finally cleanup in 1.3.0-alpha.2 | Reduce wrappers and nesting while preserving method receivers, evaluation order, initializer environments, and explicit async behavior; the [flow contract](../flow-syntax.md) and conformance tests define the rules | Grammar, runtime, editor services, starter templates |
-| D-015 | 2026-11-10 | Reserve guard as a binding word; keep at contextual and old source spellings accepted | A terminating guard has clear statement syntax; older guard bindings require the [documented rename](../flow-syntax.md#validate-assumptions-with-early-exits), while property keys remain legal | Prerelease migration |
+| D-014 | 2026-11-10 | Adopt explicit input-first pipelines, concise/default/rest functions, iterable spreads, terminating guards, indexed iteration, and finally cleanup in 1.3.0-alpha.2 | Reduce wrappers and nesting while preserving method receivers, evaluation order, initializer environments, and explicit async behavior; the [flow contract](../../compat/node/docs/flow-syntax.md) and conformance tests define the rules | Grammar, runtime, editor services, starter templates |
+| D-015 | 2026-11-10 | Reserve guard as a binding word; keep at contextual and old source spellings accepted | A terminating guard has clear statement syntax; older guard bindings require the [documented rename](../../compat/node/docs/flow-syntax.md#validate-assumptions-with-early-exits), while property keys remain legal | Prerelease migration |
 | D-016 | 2026-11-10 | Add an input-first list library with exact-field selectors, nonmutating stable sorting, safe grouping, and explicit sync/async checks | Make routine application transformations short without silently treating promises as predicate results or modifying caller ordering | Standard library, member hints |
 
 ## Current workboard

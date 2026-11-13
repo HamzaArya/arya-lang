@@ -1,0 +1,6 @@
+{
+  "name": "Flowboard",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "ui"
+}

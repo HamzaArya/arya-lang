@@ -7,6 +7,7 @@ static AV aarray_method(AV object,AV key,int argc,AV *argv){
  AV r[8]={object,key,argc?argv[0]:av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,8);AV result=av(AUNDEF);size_t n=object.p->len;
  int mutate=akey(key,"push")||akey(key,"pop")||akey(key,"shift")||akey(key,"unshift")||akey(key,"splice")||akey(key,"reverse")||akey(key,"sort")||akey(key,"fill")||akey(key,"copyWithin");
  if(mutate&&object.p->scope<0){afail("TypeError","Cannot mutate a readonly list.");goto done;}
+ if(mutate&&object.p->sparse)alist_dense(object.p);
  if(akey(key,"push")||akey(key,"unshift")){if((size_t)argc>1000000-n){afail("RangeError","Native list limit exceeded.");goto done;}aresize(object.p,n+(size_t)argc);if(akey(key,"unshift"))memmove(object.p->data+argc,object.p->data,n*sizeof(AV));for(int i=0;i<argc;i++)object.p->data[akey(key,"unshift")?(size_t)i:n+(size_t)i]=argv[i];object.p->len=n+(size_t)argc;result=an((double)object.p->len);goto done;}
  if(akey(key,"pop")||akey(key,"shift")){if(n){result=aarray_item(object,akey(key,"shift")?0:n-1);if(akey(key,"shift"))memmove(object.p->data,object.p->data+1,(n-1)*sizeof(AV));object.p->len--;}goto done;}
  if(akey(key,"at")){double i=argc?ainteger(r[2]):0;if(i<0)i+=n;if(i>=0&&i<(double)n)result=aarray_item(object,(size_t)i);goto done;}

@@ -1,0 +1,51 @@
+native/tests/run.sh
+core: native output and GC stress passed
+decimal: native output and GC stress passed
+list: native output and GC stress passed
+json: native output and GC stress passed
+modules: live native exports passed
+publication: existing file and dangling symlink preserved
+diagnostics: invalid types, const writes and unknown imports rejected
+canonical syntax and default-parameter TDZ passed
+relocation: compiler and decimal program work without Node/Python
+native dependencies: no embedded JavaScript or Python runtime
+ASan/UBSan with GC stress passed (leak detection not run)
+native financial bridge: exact JSON-lines calculations passed
+compiler failure: partial output and staging cleaned
+typed functions: forward calls, return paths and arity verified
+sh native/tests/function-calls.sh
+calls: release optimized/reference semantics and GC stress passed
+calls: debug optimized/reference semantics and GC stress passed
+calls: ASan/UBSan optimized/reference with GC stress passed (leak detection not run)
+calls: depth traces and allocation bounds passed (32 vs 1767795 calloc calls)
+calls: general nonnumeric call allocation bounds passed (32 vs 1400051 calloc calls)
+sh native/tests/advanced-calls.sh
+advanced calls: release semantics passed in advanced/previous/reference modes
+advanced calls: debug semantics passed in advanced/previous/reference modes
+advanced calls: sanitized semantics passed in advanced/previous/reference modes
+advanced calls: scalar root/lookup bounds and captured-call reductions passed
+sh native/tests/data-optimization.sh
+data: release field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+data: debug field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+data: sanitized field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+sh native/tests/data-paths.sh
+data paths: optimized with GC stress passed
+data paths: reference with GC stress passed
+data paths: sanitized with GC stress passed
+sh native/tests/standard-calls.sh
+standard calls: ordering, roots, parsed values, aliases, shadowing, mutation, callbacks and errors passed
+standard calls: generic dispatch 1059 -> 45 with ASan/UBSan and GC stress
+sh native/tests/finance-data.sh
+finance values: parsed decimals, Money, batches, cancellation, reservation and indexed collections passed
+finance values: parsed decimals, Money, batches, cancellation, reservation and indexed collections passed
+CSV: split Unicode, quoted records, limits, backpressure and cancellation passed
+CSV: split Unicode, quoted records, limits, backpressure and cancellation passed
+sh native/tests/performance.sh
+performance: release ordering, aliases, sparse roots and GC stress passed
+performance: release text worker leaves timers runnable
+performance: release json-read worker leaves timers runnable
+performance: release json-write worker leaves timers runnable
+performance: sanitized ordering, aliases, sparse roots and GC stress passed
+performance: sanitized text worker leaves timers runnable
+performance: sanitized json-read worker leaves timers runnable
+performance: sanitized json-write worker leaves timers runnable

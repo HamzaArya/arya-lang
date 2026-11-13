@@ -1,5 +1,38 @@
 # Changelog
 
+## 2.0.0 — stable release qualification in progress
+
+- Add `std "gui"` for direct AppKit, GTK 3 and Win32 widgets and queued native events. Platform implementations are qualified separately. Windows builds use Cygwin’s POSIX runtime; a standalone MSVC/MinGW port is not claimed.
+- Add bounded binary filesystem reads/writes/appends, atomic text/byte replacement and SHA-256 over raw buffers. Upgrade the earlier applications to use the repaired APIs.
+- Correct readonly HTTP-server option contracts and missing decimal rounding diagnostics.
+- Add checksum-verified versioned installation and bundled/portable stable VSIX packaging.
+- Include the reviewed, previously unpublished compiler, runtime, syntax, authentication and documentation work listed below.
+
+
+## 2.0.0-alpha.3 — local candidate
+
+- Improved macOS biometrics with native async cancellation/deadlines, a single-operation prompt gate, noninteractive checks, structured OS errors and authenticated credential replacement that preserves Keychain access controls. Added isolated adapter tests for late callbacks and cancellation/write races.
+- Add `std "auth"`: native indexed bearer sessions, one-use challenges, password migration, RFC TOTP/PKCE, recovery codes, attempt limits and macOS LocalAuthentication/Keychain integration, with typed contracts, examples and sanitizer/vector tests. See [native authentication](docs/native-auth.md) for storage and platform boundaries.
+- Add record property shorthand, string computed keys and shallow record spread with source diagnostics, evaluation-order/GC checks, conservative structural typing and key-preserving LSP rename. Existing canonical syntax remains valid.
+- Consolidate current native documentation, remove duplicate retired-profile guides while preserving their originals, and document SDK/source/application installation on other computers.
+- This candidate includes the earlier unpublished engineering changes below. Existing alpha.2 archives and performance records remain immutable. See [syntax and documentation qualification](docs/native-syntax.md).
+
+### Included native engineering improvements
+
+- Fuse eligible `Number(value.toFixed(...))` calls without temporary managed strings while preserving exact rounding, selected callees, evaluation order and diagnostics. Add bounded ASCII conversion paths and independent numeric/Unicode guard tests. The unchanged Ledger comparison measures 19.4% less aging latency and 14.2% less allocation latency; report and production services remain effectively flat. See [measurements and limitations](docs/native-ledger-fastpaths.md).
+
+- Avoid temporary bound methods for immediate numeric calls, coallocate shared UTF-16 string buffers, and use bounded ARM64 JSON scanning with scalar differential and protected-page checks. Extend exact integer fixed formatting through 100 places, improve private global lookup, and guard optimized fresh data descriptors. See the [runtime optimization evidence](docs/native-fastpaths.md), including compilation costs and unchanged workloads.
+
+- Add transaction validation, immutable prepared journals, trial balances and classified financial statements using exact monetary strings; preserve aggregate ledger diagnostics.
+- Reject validation accessors without running them, check schema depth before integer conversion, and use indexed field lookup for strict schemas.
+- Fix false circular log values and oversized trace error propagation; bound record/promise inspection and add an allocation-free logging-level guard.
+- Pin the supported OpenSSL 3.5.9 LTS release, verify its upstream checksum, and key crypto build caches by source identity to prevent stale-library reuse.
+- Optimize common binary64 fixed formatting with exact integer rounding and retain the arbitrary-precision fallback; add independent reference and allocation evidence.
+- Bound unary parser recursion with source diagnostics and add seeded malformed-source checks.
+- Make standalone SDK contents independent of optional editor builds, require full SDK libraries for packaging, and update native onboarding and acceptance gates.
+
+These are working-tree changes, not a published release or a claim of stable production support. See the [audit, verification and remaining work](docs/native-professionalization.md).
+
 ## 2.0.0-alpha.2 — 2026-11-12
 
 - Complete the native compiler/runtime and standard-module migration, including native language services, formatter, test runner, project creator, editor SDK and all application templates. Core builds and programs require no Node/npm/Python.
@@ -35,7 +68,7 @@
 - Add deterministic IR inspection, structural/type/scope validation, debug/release modes, exclusive atomic output publication and native differential/relocation/toolchain-failure tests.
 - Retain alpha.11 artifacts and exact accounting behavior. Broader native language coverage, runtime/GC, cross-platform qualification and production backend selection remain open.
 
-See [native preview contracts](docs/native-preview.md) and [milestone evidence](docs/native-milestone.md).
+See [native preview contracts](compat/node/docs/native-preview.md) and [milestone evidence](compat/node/docs/native-milestone.md).
 
 ## Retained 1.3.0-alpha.11 candidate
 
@@ -45,7 +78,7 @@ See [native preview contracts](docs/native-preview.md) and [milestone evidence](
 - Audit the current architecture and feature gaps, preserve the master requirements, and document the staged typed IR/native compiler migration. A standalone native compiler, ISO currency registry and broader accounting ecosystem remain planned.
 - Generate the security policy's published-version paragraph from the same publication record as other current status pages.
 
-See [accounting contracts](docs/accounting-engine.md) and [milestone evidence](docs/accounting-milestone.md). This is an unpublished prototype, not a stable financial release.
+See [accounting contracts](docs/accounting-engine.md) and [milestone evidence](compat/node/docs/accounting-milestone.md). This is an unpublished prototype, not a stable financial release.
 
 ## Retained 1.3.0-alpha.10 candidate
 
@@ -56,15 +89,15 @@ See [accounting contracts](docs/accounting-engine.md) and [milestone evidence](d
 - Format core source with a pinned formatter and extract type representation and source effects into smaller modules; check formatting in CI.
 - Generate shared feature availability from one status file and reconcile outdated tooling decisions. Prepare an artifact-pinned learner exercise and observation template; real sessions remain pending.
 
-- Extend Arya Secure with login-time hash upgrades, bounded standard/strong scrypt profiles, keyrings and rotation, and authenticated account/purpose context. Preserve single-key v1 compatibility; document v2 envelopes in a [format specification](docs/arya-secure-format.md) with public interoperability vectors and a Python verifier.
-- Add `security` for salted scrypt passwords, cryptographic tokens, HMAC-SHA-256, and AES-256-GCM encryption, plus `testing` for Node-backed suites, async tests, hooks, strict assertions, and mocks. Include static signatures, editor hints, runnable examples, and security/error regressions; see the [security](docs/security-library.md) and [testing](docs/testing-library.md) guides.
+- Extend Arya Secure with login-time hash upgrades, bounded standard/strong scrypt profiles, keyrings and rotation, and authenticated account/purpose context. Preserve single-key v1 compatibility; document v2 envelopes in a [format specification](compat/node/docs/arya-secure-format.md) with public interoperability vectors and a Python verifier.
+- Add `security` for salted scrypt passwords, cryptographic tokens, HMAC-SHA-256, and AES-256-GCM encryption, plus `testing` for Node-backed suites, async tests, hooks, strict assertions, and mocks. Include static signatures, editor hints, runnable examples, and security/error regressions; see the [security](compat/node/docs/security-library.md) and [testing](compat/node/docs/testing-library.md) guides.
 - Discover closed workspace files in both editor adapters; share incremental analysis for diagnostics, imported definitions, references, signatures and static namespace rename.
 - Add standard-library signatures, list element propagation and a bounded `.d.ts` reader for checked imports. Explicit trusted boundaries remain available.
 - Separate AST parsing and JavaScript emission, bound AST structural depth, select only needed standard runtimes and bundle build entry points together.
 - Add seeded malformed-input/runtime conformance cases, incremental reuse tests, closed-file protocol tests and repeatable performance benchmarks.
 - Generate shared published-release status from one immutable record and reject stale status paragraphs during documentation checks.
 
-These changes require a new artifact version and fresh qualification; published alpha.9 bytes remain unchanged. See [implementation and limits](docs/editor-and-compiler-improvements.md).
+These changes require a new artifact version and fresh qualification; published alpha.9 bytes remain unchanged. See [implementation and limits](compat/node/docs/editor-and-compiler-improvements.md).
 
 ## 1.3.0-alpha.9 — published reliability preview
 
@@ -74,7 +107,7 @@ These changes require a new artifact version and fresh qualification; published 
 - Expand the CI matrix to the Node 22 minimum, current Node 22, Node 24 and Node 26 across Linux, Windows and macOS.
 - Preserve LF source/fixture checkouts across platforms; emit immediate TAP failure details and bound test execution so leaked handles cannot consume the whole CI job.
 - Update archive/editor packaging dependencies to fflate 0.8.3 and VSCE 4.1.0; scope a minimatch 11.0.7 override to VSCE to address known denial-of-service advisories.
-- Align primary installation guides with published alpha.7 and document the [stable release plan](docs/stable-release-plan.md).
+- Align primary installation guides with published alpha.7 and document the [stable release plan](compat/node/docs/stable-release-plan.md).
 
 These changes are not in the frozen 1.3.0-alpha.7 archives. The new release is 1.3.0-alpha.9 on npm’s `next` channel with published extension 1.3.4. See [candidate changes and qualification](docs/releases/1.3.0-alpha.9.md).
 
@@ -93,18 +126,18 @@ These changes are not in the frozen 1.3.0-alpha.7 archives. The new release is 1
 - Add conservative formatting/lint, parser recovery, snapshot navigation/signatures,
   incremental compilation, esbuild adapter and explicit Node test entry points.
 - Integrate an application-owned bank CSV preview in the separate Arya Ledger repository.
-- Published on npm's `next` tag and still experimental. See [contracts and limits](docs/business-applications.md)
-  and [phase evidence](docs/business-applications-plan.md).
+- Published on npm's `next` tag and still experimental. See [contracts and limits](compat/node/docs/business-applications.md)
+  and [phase evidence](compat/node/docs/business-applications-plan.md).
 
 
-Arya is experimental. Versioned release notes contain compatibility details; [release readiness](docs/release-readiness.md) records actual qualification.
+Arya is experimental. Versioned release notes contain compatibility details; [release readiness](compat/node/docs/release-readiness.md) records actual qualification.
 
 ## Unreleased documentation
 
 - Added a [CLI reference](docs/cli.md), a [release index](docs/releases/README.md), and file/JSON/path/math/environment contracts in the [standard-library reference](docs/standard-library.md).
 - Clarified published-baseline versus source-candidate requirements and pinned consumer setup examples to the recorded published version.
 - Corrected Python async/persistent-process claims, CLI argument handling, creator/archive version matching, and specification/API summaries.
-- Replaced the milestone workboard with a [current roadmap](docs/arya-roadmap.md); moved superseded plans, audits, and retired native instructions into the [historical archive](docs/history/README.md), preserving their evidence and updating links.
+- Replaced the milestone workboard with a [current roadmap](compat/node/docs/arya-roadmap.md); moved superseded plans, audits, and retired native instructions into the [historical archive](docs/history/README.md), preserving their evidence and updating links.
 
 ## 1.3.0-alpha.4 — canonical syntax candidate
 
@@ -113,7 +146,7 @@ Arya is experimental. Versioned release notes contain compatibility details; [re
 - Migrated starters, fixtures, active docs, snippets, grammars, completions, hover help, source highlighting, and the editor tour.
 - Added rejection/reclaimed-name coverage and updated diagnostic/source-position checks.
 
-See [candidate notes](docs/releases/1.3.0-alpha.4.md) and [syntax migration](docs/syntax-migration.md). This breaking prerelease candidate is not published to npm.
+See [candidate notes](docs/releases/1.3.0-alpha.4.md) and [syntax migration](compat/node/docs/syntax-migration.md). This breaking prerelease candidate is not published to npm.
 
 ## 1.3.0-alpha.3 — UI sections and templates candidate
 
@@ -122,7 +155,7 @@ See [candidate notes](docs/releases/1.3.0-alpha.4.md) and [syntax migration](doc
 - Added customizable landing, dashboard, settings, and sign-in templates with explicit server-action integration.
 - Expanded live previews, copyable examples, the implementation guide, completions, and snippets.
 
-See [candidate notes](docs/releases/1.3.0-alpha.3.md) and [sections/templates](docs/ui-patterns.md). This candidate is not published to npm.
+See [candidate notes](docs/releases/1.3.0-alpha.3.md) and [sections/templates](compat/node/docs/ui-patterns.md). This candidate is not published to npm.
 
 ## 1.3.0-alpha.2 — readable application flow candidate
 
@@ -130,7 +163,7 @@ See [candidate notes](docs/releases/1.3.0-alpha.3.md) and [sections/templates](d
 - Added ten collection helpers with field selectors, stable copied sorting, safe grouping, and explicit async/error behavior.
 - Updated starters, examples, highlighting, completion hints, snippets, and migration/specification docs.
 
-See [candidate notes](docs/releases/1.3.0-alpha.2.md) and [syntax guide](docs/flow-syntax.md). This candidate is not yet published to npm.
+See [candidate notes](docs/releases/1.3.0-alpha.2.md) and [syntax guide](compat/node/docs/flow-syntax.md). This candidate is not yet published to npm.
 
 ## 1.3.0-alpha.1 — Node.js-only source candidate
 
@@ -139,7 +172,7 @@ See [candidate notes](docs/releases/1.3.0-alpha.2.md) and [syntax guide](docs/fl
 - Added shared unknown-library diagnostics, explicit errors for retired native requests, and a build that removes stale generated bundles.
 - Preserved native work in Git history and retained published release evidence.
 
-See [candidate notes](docs/releases/1.3.0-alpha.1.md) and [migration](docs/node-runtime.md). This entry does not claim npm publication.
+See [candidate notes](docs/releases/1.3.0-alpha.1.md) and [migration](compat/node/docs/node-runtime.md). This entry does not claim npm publication.
 
 ## Repository updates after 1.2.0-alpha.4
 

@@ -1,0 +1,209 @@
+{
+  "id": "calc-finance",
+  "name": "Finance Calculator",
+  "subtitle": "Exact arithmetic and useful finance worksheets.",
+  "views": [
+    {
+      "id": "history",
+      "label": "Calculation history",
+      "columns": [
+        {
+          "key": "expression",
+          "label": "Calculation",
+          "width": 350
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "width": 240
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "width": 120
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "Loan payment",
+      "command": "loan",
+      "view": "history",
+      "selection": false,
+      "fields": [
+        {
+          "key": "principal",
+          "label": "Principal",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "rate",
+          "label": "Annual rate (%)",
+          "type": "text",
+          "required": true,
+          "default": "6"
+        },
+        {
+          "key": "months",
+          "label": "Monthly payments",
+          "type": "text",
+          "required": true,
+          "default": "360"
+        }
+      ]
+    },
+    {
+      "label": "Compound growth",
+      "command": "compound",
+      "view": "history",
+      "selection": false,
+      "fields": [
+        {
+          "key": "principal",
+          "label": "Initial principal",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "rate",
+          "label": "Annual rate (%)",
+          "type": "text",
+          "required": true,
+          "default": "6"
+        },
+        {
+          "key": "months",
+          "label": "Months (monthly compounding)",
+          "type": "text",
+          "required": true,
+          "default": "120"
+        }
+      ]
+    },
+    {
+      "label": "Discount price",
+      "command": "discount",
+      "view": "history",
+      "selection": false,
+      "fields": [
+        {
+          "key": "principal",
+          "label": "Original price",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "rate",
+          "label": "Discount (%)",
+          "type": "text",
+          "required": true,
+          "default": "10"
+        }
+      ]
+    }
+  ],
+  "calculator": {
+    "placeholder": "19.95 * 3 + 2.50",
+    "memory": true,
+    "keys": [
+      [
+        "7",
+        "8",
+        "9",
+        "/",
+        "(",
+        ")"
+      ],
+      [
+        "4",
+        "5",
+        "6",
+        "*",
+        "^",
+        "abs("
+      ],
+      [
+        "1",
+        "2",
+        "3",
+        "-",
+        "%"
+      ],
+      [
+        "0",
+        ".",
+        "+"
+      ]
+    ],
+    "options": [
+      {
+        "key": "precision",
+        "label": "Places",
+        "default": "2",
+        "choices": [
+          {
+            "value": "0",
+            "label": "0"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "16",
+            "label": "16"
+          },
+          {
+            "value": "20",
+            "label": "20"
+          },
+          {
+            "value": "30",
+            "label": "30"
+          },
+          {
+            "value": "50",
+            "label": "50"
+          }
+        ]
+      },
+      {
+        "key": "rounding",
+        "label": "Rounding",
+        "default": "half-even",
+        "choices": [
+          {
+            "value": "half-even",
+            "label": "Half even"
+          },
+          {
+            "value": "half-up",
+            "label": "Half up"
+          },
+          {
+            "value": "down",
+            "label": "Toward zero"
+          },
+          {
+            "value": "floor",
+            "label": "Floor"
+          },
+          {
+            "value": "ceil",
+            "label": "Ceiling"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "baseline": "Byte-identical initial emitted C, relinked with the candidate frozen static SDK. Artifact records retain exact cc arguments and hashes.",
+  "checks": [
+    {
+      "name": "baseline-controlled Ledger release",
+      "outcome": [
+        {
+          "zone": "Asia/Kabul",
+          "cases": 803,
+          "identical": true
+        },
+        {
+          "zone": "America/Los_Angeles",
+          "cases": 803,
+          "identical": true
+        }
+      ]
+    },
+    {
+      "name": "qualified Ledger sanitized GC stress",
+      "outcome": {
+        "flags": [
+          "--debug",
+          "--sanitize"
+        ],
+        "gcStress": true,
+        "leakDetection": false,
+        "binarySha256": "091a477e3145d1bdefcae31f28266e321ebe14474f4e21f3d7596f6cb45717df",
+        "cSha256": "3e8ee8e61d47777ed6a36f60652411a3da85c4432c0f7da62a752150448441fd",
+        "checks": [
+          {
+            "zone": "Asia/Kabul",
+            "cases": 803,
+            "identical": true
+          },
+          {
+            "zone": "America/Los_Angeles",
+            "cases": 803,
+            "identical": true
+          }
+        ]
+      }
+    }
+  ],
+  "commands": [
+    [
+      "node",
+      "native/benchmarks/ledger.mjs",
+      "measure",
+      "--labels",
+      "baseline-controlled,qualified,node",
+      "--samples",
+      "9",
+      "--sessions",
+      "2",
+      "--session-name",
+      "qualified-controlled-results"
+    ],
+    [
+      "node",
+      "native/benchmarks/ledger-pool.mjs"
+    ],
+    [
+      "node",
+      "native/benchmarks/ledger.mjs",
+      "startup",
+      "--labels",
+      "baseline-controlled,qualified,node",
+      "--session-name",
+      "startup-qualified-controlled"
+    ]
+  ],
+  "poolEnvironment": {
+    "ARYA_BENCH_BASELINE": "baseline-controlled",
+    "ARYA_BENCH_CANDIDATE": "qualified"
+  },
+  "controllerSha256": {
+    "native/benchmarks/ledger.mjs": "b7a68e4b53fd2d0e7ab29032edd992755729afc3f85121a23fbeacb444ef9bdb",
+    "native/benchmarks/ledger-pool.mjs": "3741d3ff71ee00d628733a0c0e381025eb11ed4015d0062b03aa6b4ed4009ed1",
+    "native/benchmarks/kernels.mjs": "d596f919d791a1edf9c312335044114cb837801ec27e2dc1471ef1e2c9165fe4",
+    "native/benchmarks/streaming.py": "11d859c7a5b695497fa09a00df07a473ec79d17e8791d34ade271dbc991cd4c3",
+    "native/benchmarks/build-cost.py": "1a5ef28135727565e1327a4bef3154570140e6a16d7eb6d567ac301d2aa28a5f"
+  }
+}

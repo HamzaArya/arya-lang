@@ -1,0 +1,5 @@
+{
+  "name": "service-idempotent-ledger",
+  "entry": "main.arya",
+  "target": "native"
+}

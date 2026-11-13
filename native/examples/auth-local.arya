@@ -1,0 +1,24 @@
+# macOS example. Default execution only checks capability; explicit store/unlock
+# commands use the real OS prompt. Run from a correctly signed application.
+use std "auth" as auth
+use std "env" as env
+const status = auth.biometricStatus()
+print(JSON.stringify(status))
+const credentials = auth.vault({service: "org.arya.example.session", policy: "biometrics", timeoutMs: 30000, cancelTitle: "Go back"})
+if args[0] == "store" {
+  # Obtain this opaque session from your password/MFA or OAuth server login.
+  await credentials.store("account-42", env.require("ARYA_DEMO_SESSION"), "Protect this session on this Mac")
+  print("Session stored")
+}
+if args[0] == "unlock" {
+  const token = await credentials.read("account-42", "Unlock your saved session")
+  if token == null { print("No saved session") }
+  else { print("Session unlocked; send it to your server over HTTPS") }
+  # Send the returned token as Authorization: Bearer <token>. The server still
+  # verifies its session expiry/revocation. A local Boolean is not server proof.
+}
+if args[0] == "remove" { await credentials.remove("account-42", "Remove your saved session"); print("Session removed") }
+if args[0] == "replace" {
+  const replaced = await credentials.replace("account-42", env.require("ARYA_DEMO_SESSION"), "Replace your saved session")
+  if replaced { print("Session replaced with its access controls preserved") } else { print("No saved session") }
+}

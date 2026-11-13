@@ -35,8 +35,9 @@ function compileC(input, binary, library) {
   writeFileSync(binary + '.cc.log', result.stdout + result.stderr);
 }
 const types = ['asset', 'liability', 'equity', 'revenue', 'cogs', 'expense', 'otherIncome', 'otherExpense'];
+const varied = args.includes('--varied');
 const payload = count => ({ types, rows: Array.from({ length: count }, (_, index) => ({ index,
-  type: types[index % types.length], balance: index % 5 ? '100.005' : '-20.035' })) });
+  type: types[index % types.length], balance: varied ? (((index * 7919) % 2000001 - 1000000) / 1000).toFixed(3) : index % 5 ? '100.005' : '-20.035' })) });
 
 const phaseArya = `use std "io" as io
 use std "json" as json
@@ -141,7 +142,7 @@ process.stdout.write(JSON.stringify({cpuMs:[null,diff(c2,c1),diff(c3,c2),diff(c4
     assert.equal(JSON.parse(result.stdout).result.length, types.length);
     if (i >= 0) raw.push({ sample: i, name, wallMs: performance.now() - start });
   }
-  save(join(out, 'startup.json'), { boundary: 'Fresh process, module initialization, one empty report, stdio transfer and final cleanup/exit. Warm filesystem cache; two discarded warm launches. Node loads the existing generated report bundle; native loads the full worker.', raw });
+  save(join(out, option('--session-name', 'startup') + '.json'), { boundary: 'Fresh process, module initialization, one empty report, stdio transfer and final cleanup/exit. Warm filesystem cache; two discarded warm launches. Node loads the existing generated report bundle; native loads the full worker.', raw });
   console.log('Startup samples retained');
 } else if (command === 'runtime') {
   // Runtime-only stage: retain the exact baseline frontend and emitted program.
@@ -260,6 +261,7 @@ process.stdout.write(JSON.stringify({cpuMs:[null,diff(c2,c1),diff(c3,c2),diff(c4
     resources.push({ name, rows: count, measurement: result.stderr });
   }
   save(join(out, sessionName + '.json'), { schema: 1, node: process.version, platform: platform(), arch: process.arch,
+    inputDistribution: varied ? 'Deterministic varied signed decimal balances, eight repeating types' : 'Two repeating decimal balances, eight repeating types',
     cpu: cpus()[0].model, loadAverage: loadavg(), samples, warmup, sessions, phaseOrder: ['readDecode','parse','envelopeValidation','calculation','serialization','writeEncode'],
     boundaries: 'Direct persistent stdio workers. Round trip excludes host JSON encoding/decoding. Phase binaries are separate. Native read includes idle pipe wait; CPU read is meaningful, wall read is not isolated disk time. Validation is the existing envelope length guard; row decimal checks stay in calculation. Node readline decoding is outside its phase timer. Warm filesystem cache; startup is first request, not cold disk.',
     inputs: Object.fromEntries(rows.map(count => [count, { sha256: hash(join(out, `input-${count}.jsonl`)), bytes: statSync(join(out, `input-${count}.jsonl`)).size,

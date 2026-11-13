@@ -1,0 +1,8 @@
+{
+  "seed": "0x41525941",
+  "cases": 47177,
+  "stressCases": 372,
+  "roundingModes": 4,
+  "work": "/Users/hamza/Projects/github-repo/arya-lang/artifacts/ledger-runtime-20261112-232609/integrated/fixed-reference-delivered",
+  "passed": true
+}

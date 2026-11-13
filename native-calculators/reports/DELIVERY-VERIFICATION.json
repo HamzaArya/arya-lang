@@ -1,0 +1,103 @@
+{
+  "date_utc": "2026-11-13T14:54:34.455552+00:00",
+  "host_source_sha256": "2a2de3b2a621e91f3b6ab290f1c3e9d8f59917123597c7aae55085a4dd7489f3",
+  "projects": [
+    {
+      "project": "01-beginner-basic",
+      "app": "dist/Pocket Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T144507.870261Z/results.json",
+      "package_evidence": "reports/20261113T144821.410621Z/results.json",
+      "worker_sha256": "055a4f7b3bc25a64f2b6a6d6751330216b13e72086cccdea81354061746784ef",
+      "host_sha256": "d3758b8a56c5dd8385e8dcd88e5163b6df0341d059d0c6e2546a15eb0b217d6e",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "02-better-everyday",
+      "app": "dist/Everyday Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T144507.870261Z/results.json",
+      "package_evidence": "reports/20261113T144821.410621Z/results.json",
+      "worker_sha256": "f540cc1482954f3e7eb5eafcbcb0a25366921de77b6f6b19d87f137c2a6de2cf",
+      "host_sha256": "1b2f7435bfbb065d0bcf93e4dd028df90c9cb876b2e2ab1eb9bc43be7e5fb643",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "03-intermediate-scientific",
+      "app": "dist/Scientific Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T143908.619076Z/results.json",
+      "package_evidence": "reports/20261113T144821.410621Z/results.json",
+      "worker_sha256": "ca62c3eabc3923864fa3b70ddacdd75609276d1b7eadeb760add0157eb8c741f",
+      "host_sha256": "1594a0ed99b9aa0da795ce0e3d57ac1f2ffe80de67734fdb9c808ef7999b3312",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "04-advanced-programmer",
+      "app": "dist/Programmer Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T143908.619076Z/results.json",
+      "package_evidence": "reports/20261113T144821.410621Z/results.json",
+      "worker_sha256": "fa9bf22110eb4433b9163c3b77a1e3d26bf96364efce909eaa197871858dc39f",
+      "host_sha256": "2a06342254c7573a10fc5bfbd123c756f466c7b8f52265f955f16b7c24814163",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "05-pro-finance",
+      "app": "dist/Finance Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T145036.841848Z/results.json",
+      "package_evidence": "reports/20261113T145036.841848Z/results.json",
+      "worker_sha256": "d1c7e24a7fc91ed8b8b1121ccac3d382c61e7e4f84fea52505f0e7f84b381953",
+      "host_sha256": "12ea940be6dd5113c184414910ab2452fb2b1bede66b425f1739bf801d432138",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    },
+    {
+      "project": "06-world-class-precision",
+      "app": "dist/Precision Calculator.app",
+      "status": "passed",
+      "engine_build_test_evidence": "reports/20261113T145036.841848Z/results.json",
+      "package_evidence": "reports/20261113T145036.841848Z/results.json",
+      "worker_sha256": "64884b4fc012ffb6aea20c672b342b96119ae56f3713811b74ce65f6b9748566",
+      "host_sha256": "640d6c12e5f58a6430e2ce9b09ba4cb6b69c7096c2206e2537b3984523ecc9a4",
+      "architecture": {
+        "NativeHost": "Mach-O 64-bit executable arm64",
+        "arya-worker": "Mach-O 64-bit executable arm64"
+      },
+      "worker_libraries": [
+        "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+      ]
+    }
+  ],
+  "status": "passed"
+}

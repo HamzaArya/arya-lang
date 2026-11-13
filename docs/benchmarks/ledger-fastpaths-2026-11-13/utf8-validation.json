@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-11-13T03:21:43Z",
+  "description": "Final endpoint-screen UTF8 runtime isolated into baseline emitted C. Includes guard-page boundaries, exhaustive non-ASCII rejection, GC ownership, UTF8 malformed bytes, NUL, surrogates, async lifetime and string limits.",
+  "runs": [
+    {
+      "kind": "guards",
+      "mode": "release",
+      "build_command": [
+        "cc",
+        "-std=c11",
+        "-ffp-contract=off",
+        "-O2",
+        "-DARYA_RUNTIME_COUNTERS=1",
+        "-DARYA_UTF8_FAST=1",
+        "-DARYA_UTF8_SOURCE=\"/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/fixture-after-final.c\"",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/tests/utf8-storage-guards.c",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/guards-final-release"
+      ],
+      "environment": {
+        "PATH": "/nonexistent",
+        "ARYA_GC_STRESS": "1",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "exit_code": 0,
+      "stdout": "UTF8 storage: 530860 guard, classifier, allocation, length-limit and reclamation checks passed.\n",
+      "stderr": "",
+      "binary_sha256": "7fff0119e9590a5f047102c1604c99915cbbcce686abed41a6f5ba7adfc4406b"
+    },
+    {
+      "kind": "guards",
+      "mode": "sanitized",
+      "build_command": [
+        "cc",
+        "-std=c11",
+        "-ffp-contract=off",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-DARYA_RUNTIME_COUNTERS=1",
+        "-DARYA_UTF8_FAST=1",
+        "-DARYA_UTF8_SOURCE=\"/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/fixture-after-final.c\"",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/tests/utf8-storage-guards.c",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/guards-final-sanitized"
+      ],
+      "environment": {
+        "PATH": "/nonexistent",
+        "ARYA_GC_STRESS": "1",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "exit_code": 0,
+      "stdout": "UTF8 storage: 530860 guard, classifier, allocation, length-limit and reclamation checks passed.\n",
+      "stderr": "",
+      "binary_sha256": "237926a719fca802ef43c6cc25bd8df8acd7d771620dcf84e74fd0c965976441"
+    },
+    {
+      "kind": "fixture",
+      "mode": "sanitized",
+      "build_command": [
+        "cc",
+        "-std=c11",
+        "-ffp-contract=off",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/fixture-after-final.c",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/fixture-final-sanitized"
+      ],
+      "environment": {
+        "PATH": "/nonexistent",
+        "ARYA_GC_STRESS": "1",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "exit_code": 0,
+      "stdout": "UTF8 storage checks: 520\n",
+      "stderr": "",
+      "binary_sha256": "e982f6251e9ef76753377a16bbeaa89e8b365253ec1d6d23bec5943b48478df6"
+    }
+  ],
+  "sources": {
+    "native/tests/utf8-storage-guards.c": "f476c53eb6a0ab73200cde70d656745a4790c28db07ceba78473009f104fc852",
+    "native/tests/fixtures/utf8-storage.arya": "e456c5a8376bcd88d1e4c733c95b9afc3d293cb5acd4d4024c209df18efd704e",
+    ".build/ledger-fastpaths-2026-11-13/utf8-storage/fixture-after-final.c": "1f9ba04f5af335ea286e9eb073f569f51f3c656ccbedb7743d175afae75dcfd4"
+  }
+}

@@ -6,7 +6,7 @@ const {spawn} = require('child_process');
 const {dirname, join} = require('path');
 const {tmpdir} = require('os');
 const {readFile} = require('fs/promises');
-const {existsSync} = require('fs');
+const {resolveCompiler} = require('./compiler-path.cjs');
 const selector = {language: 'arya', scheme: 'file'};
 const selectors = [selector, {language: 'arya', scheme: 'untitled'}];
 const position = value => new vscode.Position(value.line, value.character);
@@ -20,7 +20,7 @@ function setting(name, fallback) {
   if (vscode.workspace.isTrusted) return settings.get(name, fallback);
   return settings.inspect(name)?.globalValue ?? fallback;
 }
-function compilerExecutable() {const configured=setting('compilerPath','');if(configured)return configured;const bundled=join(__dirname,'native','arya');return existsSync(bundled)?bundled:'arya';}
+function compilerExecutable() { return resolveCompiler({configured: setting('compilerPath', '')}); }
 function workspaceEdit(value) {
   const edit = new vscode.WorkspaceEdit();
   for (const change of value.documentChanges ?? []) {

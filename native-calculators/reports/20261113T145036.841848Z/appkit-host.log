@@ -1,0 +1,1 @@
+["clang", "-fobjc-arc", "-fmodules", "-Wall", "-Wextra", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/NativeHost.m", "-framework", "Cocoa", "-framework", "UniformTypeIdentifiers", "-o", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/NativeHost"]

@@ -1,0 +1,119 @@
+{
+  "completed_utc": "2026-11-13T14:12:05.753872+00:00",
+  "count": 6,
+  "passed": 6,
+  "failed": 0,
+  "platform": "macOS 26.5.2 ARM64",
+  "native_gui_evidence": "reports/native-gui-qa.md",
+  "host_source_sha256": "6e9b3d7676f1e324dac99da17ef3b3f3f3a5c59e7ef319b7b7177908727d6e07",
+  "projects": [
+    {
+      "project": "01-beginner-study-desk",
+      "app": "dist/Study Desk.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "feacc760a30e15cf1ceb130816f0ffc64f5fa27f973378ad55fbaca317671209",
+        "Contents/MacOS/NativeHost": "81808fd7b11a92e2bcec95eeb1cbbb50d79a9b0d963b48c259d6892c6be2aad5",
+        "Contents/MacOS/arya-worker": "e50650149dafc6033865dfc42c45372d8211c7abf7b89421ef2bb4c1fb91e0a2",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "1c6c4da04f5fa6b5d5a370bc4d96c16ac365508d96670df0558a4ab8fbc1eea1"
+      }
+    },
+    {
+      "project": "02-better-stockroom",
+      "app": "dist/Stockroom.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "c7f6aecf31265a73ac0b3e594ed26568da65cba732bbb2847b54cd6fe3dabef0",
+        "Contents/MacOS/NativeHost": "f4b8255dd8dde12989b558540170327d6bdff9f5a88d90b530a5f90736914bb9",
+        "Contents/MacOS/arya-worker": "5baf674147f1e8a039af6d524a5e07d4c497781e3e37679e4cc7cd2cb33b9d97",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "116073d8eedf6de566e75fae653e3777d23c9fa66d9c0689c194dc0858ed97bb",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "5eadef2d2007b126b3a66af03b166006b334f2f1916f17d4dae6636619a281cb"
+      }
+    },
+    {
+      "project": "03-intermediate-support-desk",
+      "app": "dist/Harbor Support Desk.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "e050dcfe1da77573bed46bf48bcd9c2020c7c00ed04e23bcda9909e0415d1db8",
+        "Contents/MacOS/NativeHost": "4f3bc6fc13069ccc26eb7e68c895eb6e843d7844235160cfb6f5c245763d9ee2",
+        "Contents/MacOS/arya-worker": "a81f43b4e78c96871a5f8791c3da756424211de517d8009b58903eaf22070f71",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7ea22870d034975d3678d13d4acbefa720a139d151a788090f7d78bf1cfb400c",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "6db0ece953ccf8779d080d0bd0c7c5e004b304ec6d9adacac4d41d87f48a8a88"
+      }
+    },
+    {
+      "project": "04-advanced-project-studio",
+      "app": "dist/Project Studio.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "165f99e5d78baf207c5178d5e9f6ae463455d4f9edfec4b489f685279536936e",
+        "Contents/MacOS/NativeHost": "67acb38b54c292a6ba6a57e22ae66eeb0fce880db5eb2266ef2330ed73506abe",
+        "Contents/MacOS/arya-worker": "7b5692fbd4455419f360850d3149cee52e6cb6dccc57b6080a78f6e02ec9f26a",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "0212d54b859eca3c6c3306fbe63c6f61b306e0179e74d6a857be96c3da5e74d0"
+      }
+    },
+    {
+      "project": "05-pro-incident-center",
+      "app": "dist/Incident Center.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "37c2bc2fca50d16439624f691f8ec6a335fd9672b4f82ac84ed4268a205eb5a4",
+        "Contents/MacOS/NativeHost": "4597306e6d19b4906298ba8d08496ad36d88c2cd43a6e2df342882cc5a3515c7",
+        "Contents/MacOS/arya-worker": "e9c3b2bda7df57af853d9643f850676a93c277e1f81bca1af7caa478017ae160",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "fdcfef93a3ec90cbba250779456cb0bf05c445c39c473ac6e5d2c441aea01404"
+      }
+    },
+    {
+      "project": "06-world-class-ledger-studio",
+      "app": "dist/Ledger Studio.app",
+      "status": "passed",
+      "engine_evidence": "reports/20261113T140114.042188Z/results.json",
+      "final_host_and_package_evidence": "reports/20261113T140548.407270Z/results.json",
+      "bundle_files_sha256": {
+        "Contents/Info.plist": "302648efebcb661bfeb3550a39eac2f34c069808ad1ba6758d1c41cb0e788e0d",
+        "Contents/MacOS/NativeHost": "cd088641b7a507c0ca112dae7dee05c87af732985766288d30f76da56415ae3f",
+        "Contents/MacOS/arya-worker": "70d1e1a6bbec320880096bb7718164769b3f8b98717911aa8501efbd0ad348a5",
+        "Contents/Resources/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "Contents/Resources/NOTICE": "082453535cc35530bcc926ac8968b7de8561817678ae999c2980c32a525c1f30",
+        "Contents/Resources/THIRD-PARTY-NOTICES.txt": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/Resources/ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+        "Contents/Resources/worker.NOTICE": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+        "Contents/_CodeSignature/CodeResources": "421ce52a942f671e97b9b024d45b4cf86dbf02d02176941e010cd827845b8c89"
+      }
+    }
+  ]
+}

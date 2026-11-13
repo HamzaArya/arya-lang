@@ -1,0 +1,79 @@
+{
+  "recordedAtUtc": "2026-11-13T02:47:51.725210+00:00",
+  "status": "passed",
+  "version": "2.0.0-alpha.2",
+  "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+  "generatedCSha256": "b5df2f4721db92c4b62ea4c4ea268c54cfd2dd73f1e9d26cb9eb88a9fe32f4a9",
+  "stageTwoCSha256": "b5df2f4721db92c4b62ea4c4ea268c54cfd2dd73f1e9d26cb9eb88a9fe32f4a9",
+  "stageTwoThreeCIdentical": true,
+  "commands": [
+    {
+      "command": "make native-sdk",
+      "exitCode": 0,
+      "log": "build.log.gz"
+    },
+    {
+      "command": "make check",
+      "exitCode": 0,
+      "log": "check.log"
+    },
+    {
+      "command": "make native-clean-test",
+      "exitCode": 0,
+      "log": "clean-acceptance.log"
+    },
+    {
+      "command": "python3 native/tests/decimal-reference.py",
+      "exitCode": 0,
+      "log": "decimal-reference.log"
+    },
+    {
+      "command": "sh native/tests/distribution.sh",
+      "exitCode": 0,
+      "log": "final-distribution.log",
+      "context": "Repeated after final benchmark documentation was assembled; executable JS comparison snapshots are development-only and excluded from the SDK."
+    }
+  ],
+  "optionalChecks": [
+    "optional-checks-combined.json",
+    "number-reference-release.log",
+    "number-reference-sanitize.log",
+    "number-reference-wide-provenance.json"
+  ],
+  "qualifiedSourceInputs": "qualified-source-inputs.json",
+  "postQualificationEdit": {
+    "file": "Makefile",
+    "beforeSha256": "d478886449db2f71c650b1e82b5a803e272840faaee22bf5dc3edfd2f0193087",
+    "afterSha256": "83848a273538336e5e52cec69deae7d3632a9ba17f0ebc5cec02b75f3510316f",
+    "change": "Remove one duplicate fixed-format test invocation. All unique check commands unchanged; compiler/runtime/library/test source hashes unchanged; no build recipe changed.",
+    "verification": "check-plan-before.txt / check-plan-after.txt: counter difference is exactly one fixed-format test invocation; unique command sets equal."
+  },
+  "cleanSourceGate": {
+    "workspace": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J",
+    "compilerSha256": "9d323b0902ed25597629a9ba6daaf1a73db6b5a21bc810ac38169ccb4c94ac39",
+    "generatedCSha256": "475284f4f79b1e1e2c474a687aa98ad4f72e7a49071128a03edf3755ccb1c9d7",
+    "archivePath": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/source/artifacts/arya-native-2.0.0-alpha.2-darwin-arm64.tar.gz",
+    "archiveSha256": "352fd4b8b0176602bc63c7658bb66c2b526d68df416153951c8bfd6af5932e0c",
+    "archiveBytes": 7139973,
+    "notes": "Fresh source-only workspace; complete SDK + native/profile/distribution acceptance; excludes Node/npm/Python and alternate JS engines from build PATH; package integrity, relocation to path with spaces/apostrophe, compiler symlink, installed applications PATH=/nonexistent, linked-dependency inspection. Host interpreters were not physically uninstalled. Clean archive contains the report snapshot copied at gate start; final deliverable is assembled separately after reports finish.",
+    "allQualifiedSourceInputsMatch": true,
+    "stageTwoThreeCIdentical": true
+  },
+  "finalCandidateDirectory": "artifacts/native-fastpaths-2026-11-13",
+  "limitations": [
+    "Single macOS ARM64 qualification; no Windows/Linux execution gate here.",
+    "ASan detect_leaks=0; upstream static libraries are not sanitizer-instrumented.",
+    "Live Python/MySQL/desktop/editor integrations not repeated in this pass.",
+    "Benchmarks describe recorded workloads, not universal superiority or stable production readiness."
+  ],
+  "performanceRecords": [
+    "workloads.json",
+    "numeric-integrated.json",
+    "strings-integrated.json",
+    "format-integrated.json",
+    "toolchain.json",
+    "kernels.json",
+    "node-comparison/measurement-environment.json",
+    "clang-phase-profile/analysis.json"
+  ]
+}

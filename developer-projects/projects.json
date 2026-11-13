@@ -1,0 +1,110 @@
+[
+  {
+    "path": "01-beginner/cli-expenses",
+    "level": "Beginner",
+    "kind": "CLI",
+    "name": "Expense notebook"
+  },
+  {
+    "path": "01-beginner/gui-study-planner",
+    "level": "Beginner",
+    "kind": "GUI",
+    "name": "Study planner"
+  },
+  {
+    "path": "01-beginner/service-notes",
+    "level": "Beginner",
+    "kind": "Service",
+    "name": "Notes API"
+  },
+  {
+    "path": "02-better/cli-inventory",
+    "level": "Better",
+    "kind": "CLI",
+    "name": "Inventory manager"
+  },
+  {
+    "path": "02-better/gui-habit-tracker",
+    "level": "Better",
+    "kind": "GUI",
+    "name": "Habit tracker"
+  },
+  {
+    "path": "02-better/service-bookmarks",
+    "level": "Better",
+    "kind": "Service",
+    "name": "Bookmark API"
+  },
+  {
+    "path": "03-intermediate/cli-log-analyzer",
+    "level": "Intermediate",
+    "kind": "CLI",
+    "name": "Log analyzer"
+  },
+  {
+    "path": "03-intermediate/gui-support-desk",
+    "level": "Intermediate",
+    "kind": "GUI",
+    "name": "Support desk"
+  },
+  {
+    "path": "03-intermediate/service-reservations",
+    "level": "Intermediate",
+    "kind": "Service",
+    "name": "Reservation API"
+  },
+  {
+    "path": "04-advanced/cli-backup-manifest",
+    "level": "Advanced",
+    "kind": "CLI",
+    "name": "Backup manifest"
+  },
+  {
+    "path": "04-advanced/gui-project-board",
+    "level": "Advanced",
+    "kind": "GUI",
+    "name": "Project board"
+  },
+  {
+    "path": "04-advanced/service-job-queue",
+    "level": "Advanced",
+    "kind": "Service",
+    "name": "Job queue API"
+  },
+  {
+    "path": "05-pro/cli-ledger-audit",
+    "level": "Pro",
+    "kind": "CLI",
+    "name": "Ledger audit"
+  },
+  {
+    "path": "05-pro/gui-incident-console",
+    "level": "Pro",
+    "kind": "GUI",
+    "name": "Incident console"
+  },
+  {
+    "path": "05-pro/service-feature-flags",
+    "level": "Pro",
+    "kind": "Service",
+    "name": "Feature flag API"
+  },
+  {
+    "path": "06-world-class/cli-release-gate",
+    "level": "World class",
+    "kind": "CLI",
+    "name": "Release evidence gate"
+  },
+  {
+    "path": "06-world-class/gui-reconciliation",
+    "level": "World class",
+    "kind": "GUI",
+    "name": "Reconciliation workbench"
+  },
+  {
+    "path": "06-world-class/service-idempotent-ledger",
+    "level": "World class",
+    "kind": "Service",
+    "name": "Idempotent ledger API"
+  }
+]

@@ -1,0 +1,30 @@
+use std "debug" as debug
+fn equal(value, places, expected) {
+  debug.assert(value.toFixed(places) == expected, "Exact binary64 fixed formatting mismatch")
+}
+equal(1.005, 2, "1.00")
+equal(2.55, 1, "2.5")
+equal(2.5, 0, "3")
+equal(-2.5, 0, "-3")
+equal(-0, 2, "0.00")
+equal(-0.004, 2, "-0.00")
+equal(5e-324, 18, "0.000000000000000000")
+equal(-5e-324, 18, "-0.000000000000000000")
+equal(0.1, 18, "0.100000000000000006")
+equal(0.1, 19, "0.1000000000000000056")
+equal(0.1, 100, "0.1000000000000000055511151231257827021181583404541015625000000000000000000000000000000000000000000000")
+equal(1000000000000000128, 0, "1000000000000000128")
+equal(1e20, 18, "100000000000000000000.000000000000000000")
+equal(999999999999999900000, 18, "999999999999999868928.000000000000000000")
+equal(1e21, 2, "1e+21")
+equal(Infinity, 2, "Infinity")
+equal(-Infinity, 2, "-Infinity")
+equal(NaN, 2, "NaN")
+equal(1.5, NaN, "2")
+equal(1.25, 1.9, "1.3")
+for places in [-1, 101, Infinity, -Infinity] {
+  let rejected = false
+  try { (1).toFixed(places) } catch error { rejected = error.name == "RangeError" }
+  debug.assert(rejected, "Invalid formatting precision must fail")
+}
+print("number format: exact rounding, signed zero, subnormals, widths and fallback passed")

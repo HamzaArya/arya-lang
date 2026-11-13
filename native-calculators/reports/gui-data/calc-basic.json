@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "nextId": 4,
+  "history": [
+    {
+      "id": 1,
+      "expression": "7+8",
+      "result": "15",
+      "kind": "Basic arithmetic",
+      "time": "2026-11-13T14:28:27.711Z",
+      "details": "One operation using finite binary64 numbers."
+    },
+    {
+      "id": 2,
+      "expression": "9+2",
+      "result": "11",
+      "kind": "Basic arithmetic",
+      "time": "2026-11-13T14:46:06.661Z",
+      "details": "One operation using finite binary64 numbers."
+    },
+    {
+      "id": 3,
+      "expression": "11*2",
+      "result": "22",
+      "kind": "Basic arithmetic",
+      "time": "2026-11-13T14:46:11.974Z",
+      "details": "One operation using finite binary64 numbers."
+    }
+  ],
+  "lastResult": "22",
+  "memory": "0"
+}

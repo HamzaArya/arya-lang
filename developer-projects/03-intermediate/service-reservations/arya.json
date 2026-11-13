@@ -1,0 +1,6 @@
+{
+  "name": "Roomkeeper",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "api"
+}

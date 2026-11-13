@@ -1,0 +1,26 @@
+{
+  "startedAtUtc": "2026-11-13T02:47:46.898403+00:00",
+  "command": [
+    "/usr/local/bin/node",
+    "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/kernels.mjs",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/node-comparison",
+    "--measure-only"
+  ],
+  "loadStart": [
+    5.4599609375,
+    7.3828125,
+    8.36865234375
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "logicalCpus": 8,
+  "selectedEnvironment": {
+    "PATH": "/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/opt/homebrew/bin:/Users/hamza/.codex/tmp/arg0-macos/codex-arg0RoLurM:/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/sbin:/usr/local/mysql-9.7.0-macos15-arm64/bin:/Users/hamza/.vscode/extensions/openai.chatgpt-26.1106.51428-darwin-arm64/bin/macos-aarch64:/usr/local/mysql-9.7.0-macos15-arm64/bin",
+    "NODE_OPTIONS": null,
+    "NODE_PATH": null,
+    "ARYA_GC_STRESS": null,
+    "ARYA_RUNTIME_COUNTERS": null,
+    "ARYA_NATIVE_LIBDIR": null,
+    "ARYA_BENCH_COMPILER": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya"
+  },
+  "qualificationContext": "Root reported full checks and fresh source acceptance completed and heavy builds/tests stopped. Root is copying logs/editing docs only; this agent runs one timed controller before diagnostic compiler profiling. Host load is recorded; external host activity is not controlled."
+}

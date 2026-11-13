@@ -1,0 +1,525 @@
+{
+  "method": "Total phase durations come from Clang trace X events in microseconds. Header spans reconstruct matching Source async b/e timestamps (or X duration) in trace emission order. Header/phase spans nest and must not be summed. Compiler/linker driver wall times are separately measured by the diagnostic runner. Three diagnostic observations per variant; first baseline frontend observation is a visible outlier, retained. No extrapolation to uninstrumented release wall time.",
+  "raw": [
+    {
+      "label": "before",
+      "sample": 0,
+      "driverWallMs": 1491.065999998682,
+      "totalsMs": {
+        "ExecuteCompiler": 1273.623,
+        "Frontend": 301.503,
+        "Backend": 956.319,
+        "Optimizer": 545.465,
+        "CodeGenPasses": 401.163
+      },
+      "armNeonHeaderMs": 0,
+      "armNeonHeaderSpans": 0,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 54.783
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 54.17
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types.h",
+          "elapsedMs": 17.99
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types.h",
+          "elapsedMs": 17.704
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/_types.h",
+          "elapsedMs": 14.888
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_types.h",
+          "elapsedMs": 14.636
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 11.847
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 11.604
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 11.314
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 9.718
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "sample": 0,
+      "driverWallMs": 1210.7558749994496,
+      "totalsMs": {
+        "ExecuteCompiler": 1157.75,
+        "Frontend": 241.938,
+        "Backend": 913.048,
+        "Optimizer": 589.569,
+        "CodeGenPasses": 322.506
+      },
+      "armNeonHeaderMs": 86.519,
+      "armNeonHeaderSpans": 1,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/usr/lib/clang/21/include/arm_neon.h",
+          "elapsedMs": 86.519
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 7.132
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 7.066
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 6.101
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 4.876
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h",
+          "elapsedMs": 4.049
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 3.811
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 3.74
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h",
+          "elapsedMs": 2.584
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/select.h",
+          "elapsedMs": 2.201
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "sample": 1,
+      "driverWallMs": 1332.2847499985073,
+      "totalsMs": {
+        "ExecuteCompiler": 1268.975,
+        "Frontend": 234.577,
+        "Backend": 1031.373,
+        "Optimizer": 587.587,
+        "CodeGenPasses": 442.485
+      },
+      "armNeonHeaderMs": 75.872,
+      "armNeonHeaderSpans": 1,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/usr/lib/clang/21/include/arm_neon.h",
+          "elapsedMs": 75.872
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 7.552
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 6.545
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 6.478
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 5.486
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 4.831
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 4.745
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h",
+          "elapsedMs": 3.019
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h",
+          "elapsedMs": 2.956
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine/thread_status.h",
+          "elapsedMs": 2.847
+        }
+      ]
+    },
+    {
+      "label": "before",
+      "sample": 1,
+      "driverWallMs": 1159.1273329995602,
+      "totalsMs": {
+        "ExecuteCompiler": 1091.992,
+        "Frontend": 159.061,
+        "Backend": 930.058,
+        "Optimizer": 552.276,
+        "CodeGenPasses": 376.393
+      },
+      "armNeonHeaderMs": 0,
+      "armNeonHeaderSpans": 0,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 9.913
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 5.988
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 5.722
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 5.665
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 4.001
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 3.937
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine/thread_status.h",
+          "elapsedMs": 3.465
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/thread_status.h",
+          "elapsedMs": 3.436
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h",
+          "elapsedMs": 2.346
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h",
+          "elapsedMs": 2.256
+        }
+      ]
+    },
+    {
+      "label": "before",
+      "sample": 2,
+      "driverWallMs": 1342.3697500002163,
+      "totalsMs": {
+        "ExecuteCompiler": 1269.115,
+        "Frontend": 145.15,
+        "Backend": 1121.219,
+        "Optimizer": 572.394,
+        "CodeGenPasses": 547.351
+      },
+      "armNeonHeaderMs": 0,
+      "armNeonHeaderSpans": 0,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 9.463
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 6.353
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 5.284
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 5.205
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 5.092
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 5.019
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine/thread_status.h",
+          "elapsedMs": 2.782
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/thread_status.h",
+          "elapsedMs": 2.743
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h",
+          "elapsedMs": 2.479
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/architecture/byte_order.h",
+          "elapsedMs": 2.447
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "sample": 2,
+      "driverWallMs": 1295.8962909997354,
+      "totalsMs": {
+        "ExecuteCompiler": 1230.206,
+        "Frontend": 236.257,
+        "Backend": 991.005,
+        "Optimizer": 628.669,
+        "CodeGenPasses": 361.256
+      },
+      "armNeonHeaderMs": 77.875,
+      "armNeonHeaderSpans": 1,
+      "largestSourceSpans": [
+        {
+          "path": "/Library/Developer/CommandLineTools/usr/lib/clang/21/include/arm_neon.h",
+          "elapsedMs": 77.875
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h",
+          "elapsedMs": 7.497
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach-o/loader.h",
+          "elapsedMs": 5.883
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h",
+          "elapsedMs": 5.293
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h",
+          "elapsedMs": 5.235
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h",
+          "elapsedMs": 4.778
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdlib.h",
+          "elapsedMs": 4.717
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine/thread_status.h",
+          "elapsedMs": 2.633
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/thread_status.h",
+          "elapsedMs": 2.6
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h",
+          "elapsedMs": 2.403
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "phase": "driverWallMs",
+      "results": {
+        "before": {
+          "samplesMs": [
+            1491.065999998682,
+            1159.1273329995602,
+            1342.3697500002163
+          ],
+          "medianMs": 1342.3697500002163,
+          "minMs": 1159.1273329995602,
+          "maxMs": 1491.065999998682
+        },
+        "after": {
+          "samplesMs": [
+            1210.7558749994496,
+            1332.2847499985073,
+            1295.8962909997354
+          ],
+          "medianMs": 1295.8962909997354,
+          "minMs": 1210.7558749994496,
+          "maxMs": 1332.2847499985073
+        }
+      },
+      "differenceOfMediansMs": -46.47345900048094
+    },
+    {
+      "phase": "ExecuteCompiler",
+      "results": {
+        "before": {
+          "samplesMs": [
+            1273.623,
+            1091.992,
+            1269.115
+          ],
+          "medianMs": 1269.115,
+          "minMs": 1091.992,
+          "maxMs": 1273.623
+        },
+        "after": {
+          "samplesMs": [
+            1157.75,
+            1268.975,
+            1230.206
+          ],
+          "medianMs": 1230.206,
+          "minMs": 1157.75,
+          "maxMs": 1268.975
+        }
+      },
+      "differenceOfMediansMs": -38.909000000000106
+    },
+    {
+      "phase": "Frontend",
+      "results": {
+        "before": {
+          "samplesMs": [
+            301.503,
+            159.061,
+            145.15
+          ],
+          "medianMs": 159.061,
+          "minMs": 145.15,
+          "maxMs": 301.503
+        },
+        "after": {
+          "samplesMs": [
+            241.938,
+            234.577,
+            236.257
+          ],
+          "medianMs": 236.257,
+          "minMs": 234.577,
+          "maxMs": 241.938
+        }
+      },
+      "differenceOfMediansMs": 77.196
+    },
+    {
+      "phase": "Backend",
+      "results": {
+        "before": {
+          "samplesMs": [
+            956.319,
+            930.058,
+            1121.219
+          ],
+          "medianMs": 956.319,
+          "minMs": 930.058,
+          "maxMs": 1121.219
+        },
+        "after": {
+          "samplesMs": [
+            913.048,
+            1031.373,
+            991.005
+          ],
+          "medianMs": 991.005,
+          "minMs": 913.048,
+          "maxMs": 1031.373
+        }
+      },
+      "differenceOfMediansMs": 34.686000000000035
+    },
+    {
+      "phase": "Optimizer",
+      "results": {
+        "before": {
+          "samplesMs": [
+            545.465,
+            552.276,
+            572.394
+          ],
+          "medianMs": 552.276,
+          "minMs": 545.465,
+          "maxMs": 572.394
+        },
+        "after": {
+          "samplesMs": [
+            589.569,
+            587.587,
+            628.669
+          ],
+          "medianMs": 589.569,
+          "minMs": 587.587,
+          "maxMs": 628.669
+        }
+      },
+      "differenceOfMediansMs": 37.293000000000006
+    },
+    {
+      "phase": "CodeGenPasses",
+      "results": {
+        "before": {
+          "samplesMs": [
+            401.163,
+            376.393,
+            547.351
+          ],
+          "medianMs": 401.163,
+          "minMs": 376.393,
+          "maxMs": 547.351
+        },
+        "after": {
+          "samplesMs": [
+            322.506,
+            442.485,
+            361.256
+          ],
+          "medianMs": 361.256,
+          "minMs": 322.506,
+          "maxMs": 442.485
+        }
+      },
+      "differenceOfMediansMs": -39.90700000000004
+    },
+    {
+      "phase": "armNeonHeaderMs",
+      "results": {
+        "before": {
+          "samplesMs": [
+            0,
+            0,
+            0
+          ],
+          "medianMs": 0,
+          "minMs": 0,
+          "maxMs": 0
+        },
+        "after": {
+          "samplesMs": [
+            86.519,
+            75.872,
+            77.875
+          ],
+          "medianMs": 77.875,
+          "minMs": 75.872,
+          "maxMs": 86.519
+        }
+      },
+      "differenceOfMediansMs": 77.875
+    }
+  ]
+}

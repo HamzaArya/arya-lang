@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/04-advanced-programmer/.build/worker"]
+PASS: UInt32 literals/precedence/bit operations, 280 Python integer references including large multiplication, checked errors, conversions, history, persistence, corruption and failed writes

@@ -1,0 +1,21 @@
+command: ["/Users/hamza/Projects/github-repo/arya-lang/bin/arya", "build", "main.arya", "-o", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app", "--release", "--force"]
+/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app.arya-0Us5ki/program.c:6942:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6942 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app.arya-0Us5ki/program.c:6968:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6968 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app.arya-0Us5ki/program.c:6969:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6969 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app

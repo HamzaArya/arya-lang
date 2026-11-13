@@ -1,0 +1,68 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "validate" as validate
+use std "runtime" as runtime
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonempty text up to " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  let result = Number(value)
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be an integer.") }
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " is outside its allowed integer range.") }
+  return result
+}
+fn load(schema) {
+  let info = fs.infoSync(file)
+  if info == null { return {nextId: 1, rows: []} }
+  if info.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 1048576 { throw new Error("Data file exceeds 1 MiB.") }
+  return validate.parse(validate.object({nextId: validate.number({integer: true, min: 1}), rows: validate.array(schema, {max: 1000})}), JSON.parse(fs.readTextSync(file)))
+}
+fn save(next) {
+  if next.rows.length > 1000 { throw new Error("This local app supports at most 1000 records.") }
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 900000 { throw new Error("Store is full; remove old records first.") }
+  fs.writeTextAtomicSync(file, encoded)
+}
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn findIndex(rows, id) {
+  let index = rows.findIndex(fn(row) { return row.id == integer(id, "ID", 1) })
+  if index < 0 { throw new Error("Record not found.") }
+  return index
+}
+use std "web" as web
+fn endpoint(operation) {
+  return fn(request) {
+    try { return operation(request) }
+    catch failure { throw web.error(400, failure.message ?? str(failure), "APP_INPUT") }
+  }
+}
+const rowSchema = validate.object({id: validate.number(), title: validate.string(), url: validate.string(), tag: validate.string()})
+let data = load(rowSchema)
+fn fields(body) {
+  let address = new URL(text(body.url, "URL", 2000))
+  if not ["http:", "https:"].includes(address.protocol) or address.username != "" or address.password != "" { throw new Error("Use an HTTP(S) URL without embedded credentials.") }
+  return {title: text(body.title, "Title", 100), url: address.href, tag: text(body.tag, "Tag", 40)}
+}
+let server = web.serve(env.int("PORT", 4203), {
+  "GET /health": fn() { return {status: "ready", count: data.rows.length} },
+  "GET /bookmarks": fn(request) { let query = (request.query.q ?? "").toLowerCase(); let tag = request.query.tag ?? ""; return data.rows.filter(fn(row) { return (tag == "" or row.tag == tag) and (row.title + " " + row.url).toLowerCase().includes(query) }) },
+  "GET /bookmarks/:id": endpoint(fn(request) { return data.rows[findIndex(data.rows, request.params.id)] }),
+  "POST /bookmarks": endpoint(fn(request) {
+    let value = fields(request.body)
+    if data.rows.some(fn(row) { return row.url == value.url }) { throw new Error("That URL is already bookmarked.") }
+    let next = copy(data); let row = {id: next.nextId, title: value.title, url: value.url, tag: value.tag}
+    next.rows.push(row); next.nextId += 1; save(next); data = next; return web.response(201, row)
+  }),
+  "PUT /bookmarks/:id": endpoint(fn(request) {
+    let value = fields(request.body); let next = copy(data); let index = findIndex(next.rows, request.params.id)
+    if next.rows.some(fn(row) { return row.url == value.url and row.id != next.rows[index].id }) { throw new Error("That URL is already bookmarked.") }
+    next.rows[index] = {id: next.rows[index].id, title: value.title, url: value.url, tag: value.tag}; save(next); data = next; return data.rows[index]
+  }),
+  "DELETE /bookmarks/:id": endpoint(fn(request) { let next = copy(data); next.rows.splice(findIndex(next.rows, request.params.id), 1); save(next); data = next; return {deleted: true} })
+}, {root: process.cwd(), host: "127.0.0.1", html: false, assets: false, maxBodyBytes: 16384})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

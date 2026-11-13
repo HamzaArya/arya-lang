@@ -6,7 +6,15 @@ static void avissue(AV issues,AV path,const char *code,const char *message) {
   if(issues.p->len>=32)return;AV r[3]={issues,path,av(AUNDEF)};ARoot root;aroot(&root,r,3);r[2]=arecord();aput(r[2],"path",path);aput(r[2],"code",astr(code));aput(r[2],"message",astr(message));aappend_value(issues,r[2]);aunroot(&root);
 }
 static AV avpath(AV path,AV key){AV r[2]={path,key};ARoot root;aroot(&root,r,2);AV result=alist((int)path.p->len,path.p->data);r[0]=result;aappend_value(result,key);aunroot(&root);return result;}
-static AV avschema_call(AV env,int argc,AV *argv){if(argc<3||argv[1].t!=ALIST||argv[2].t!=ALIST)return avschema_error("Schema.read expects value, path and issues lists.");return avschema_read(env,argv[0],argv[1],argv[2],argc>3?(int)atonumber(argv[3]):0);}
+static AV avschema_call(AV env,int argc,AV *argv) {
+  if(argc<3||argv[1].t!=ALIST||argv[2].t!=ALIST)return avschema_error("Schema.read expects value, path and issues lists.");
+  int depth=0;
+  if(argc>3&&argv[3].t!=AUNDEF){
+    if(!ais_safe_integer(argv[3])||argv[3].n<0||argv[3].n>64)return avschema_error("Schema.read depth must be an integer from 0 to 64.");
+    depth=(int)argv[3].n;
+  }
+  return avschema_read(env,argv[0],argv[1],argv[2],depth);
+}
 static AV avschema_new(int kind,AV config,AV child,AV fallback,int has_default) {
   AV r[5]={config,child,fallback,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,5);r[3]=arecord();r[4]=alist(5,NULL);r[4].p->data[0]=an(kind);r[4].p->data[1]=config;r[4].p->data[2]=child;r[4].p->data[3]=fallback;r[4].p->data[4]=ab(has_default);r[3].p->parent=r[4];r[3].p->name="arya.validation.schema";
   r[4]=afunction(avschema_call,r[3],"schema.read");aput(r[3],"read",r[4]);r[3].p->scope=-2;AV result=r[3];aunroot(&root);return result;
@@ -48,8 +56,19 @@ static AV avschema_read(AV schema,AV value,AV path,AV issues,int depth) {
   else if(kind==7){if(value.t!=ALIST){avissue(issues,path,"type","Expected a list.");r[4]=av(AUNDEF);goto done;}if(value.p->len<minimum||value.p->len>maximum){avissue(issues,path,"length","List length is outside the allowed range.");r[4]=av(AUNDEF);goto done;}
     r[4]=alist((int)value.p->len,NULL);for(size_t i=0;i<value.p->len&&!afailed;i++){r[5]=avpath(path,an((double)i));r[6]=value.p->data[i].t==AUINIT?av(AUNDEF):value.p->data[i];r[7]=avschema_read(child,r[6],r[5],issues,depth+1);r[4].p->data[i]=r[7];}
   }else if(kind==8){if(value.t!=ARECORD){avissue(issues,path,"type","Expected an object.");r[4]=av(AUNDEF);goto done;}r[4]=arecord();AV strict=aprop(options,"strict");
-    if(strict.t==AUNDEF||atruth(strict))for(size_t i=0;i<value.p->len;i+=2){int known=0;for(size_t j=0;j<child.p->len;j+=2)if(aseq(value.p->data[i],child.p->data[j]))known=1;if(!known){r[5]=avpath(path,value.p->data[i]);avissue(issues,r[5],"unknown","Unexpected field.");}}
-    for(size_t i=0;i<child.p->len&&!afailed;i+=2){r[5]=avpath(path,child.p->data[i]);r[6]=aget(value,child.p->data[i]);r[7]=avschema_read(child.p->data[i+1],r[6],r[5],issues,depth+1);if(r[7].t!=AUNDEF)aset(r[4],child.p->data[i],r[7]);}
+    /* Validate descriptors before values: input inspection must not execute code.
+     * Use the record index rather than a quadratic scan of schema field names. */
+    for(size_t i=0;i<value.p->len&&issues.p->len<32;i+=2){
+      if(value.p->data[i+1].t==AGETTER){r[5]=avpath(path,value.p->data[i]);avissue(issues,r[5],"accessor","Expected a data field, not an accessor.");}
+      else if((strict.t==AUNDEF||atruth(strict))&&akey_find(child.p,value.p->data[i],2)==SIZE_MAX){r[5]=avpath(path,value.p->data[i]);avissue(issues,r[5],"unknown","Unexpected field.");}
+    }
+    for(size_t i=0;i<child.p->len&&!afailed&&issues.p->len<32;i+=2){
+      size_t slot=akey_find(value.p,child.p->data[i],2);
+      if(slot!=SIZE_MAX&&value.p->data[slot+1].t==AGETTER)continue;
+      r[5]=avpath(path,child.p->data[i]);r[6]=slot==SIZE_MAX?av(AUNDEF):aread(value.p->data[slot+1]);
+      if(afailed)break;
+      r[7]=avschema_read(child.p->data[i+1],r[6],r[5],issues,depth+1);if(r[7].t!=AUNDEF)aset(r[4],child.p->data[i],r[7]);
+    }
   }
 done:;AV result=r[4];aunroot(&root);return result;
 }

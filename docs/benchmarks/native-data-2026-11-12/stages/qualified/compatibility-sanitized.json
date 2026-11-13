@@ -1,0 +1,22 @@
+{
+  "flags": [
+    "--debug",
+    "--sanitize"
+  ],
+  "gcStress": true,
+  "leakDetection": false,
+  "binarySha256": "091a477e3145d1bdefcae31f28266e321ebe14474f4e21f3d7596f6cb45717df",
+  "cSha256": "3e8ee8e61d47777ed6a36f60652411a3da85c4432c0f7da62a752150448441fd",
+  "checks": [
+    {
+      "zone": "Asia/Kabul",
+      "cases": 803,
+      "identical": true
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "cases": 803,
+      "identical": true
+    }
+  ]
+}

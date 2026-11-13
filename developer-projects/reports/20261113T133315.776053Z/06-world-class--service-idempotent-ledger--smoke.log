@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app"]
+PASS: ledger exactness, idempotent retry/conflict, debit, overdraft, precision/zero/malformed rejection, persistence, corrupt-state rejection

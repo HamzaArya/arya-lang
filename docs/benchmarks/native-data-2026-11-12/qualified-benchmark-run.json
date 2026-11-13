@@ -1,0 +1,194 @@
+{
+  "compilerSha256": "02ee8b454cc3a36c190250e7765346eab90ef326e99136e8bf5ce33dc4e35daa",
+  "controllerSha256": {
+    "native/benchmarks/ledger.mjs": "b7a68e4b53fd2d0e7ab29032edd992755729afc3f85121a23fbeacb444ef9bdb",
+    "native/benchmarks/ledger-pool.mjs": "88b8f582c328e2870ba32911eac4348040c757134ff89cff584a49f879443719",
+    "native/benchmarks/kernels.mjs": "d596f919d791a1edf9c312335044114cb837801ec27e2dc1471ef1e2c9165fe4",
+    "native/benchmarks/streaming.py": "11d859c7a5b695497fa09a00df07a473ec79d17e8791d34ade271dbc991cd4c3",
+    "native/benchmarks/build-cost.py": "1a5ef28135727565e1327a4bef3154570140e6a16d7eb6d567ac301d2aa28a5f",
+    ".build/performance-2026-11-12/qualified-source/native/benchmarks/performance-audit.py": "7c2962e6a840ab3f1a8c2ceafa70eac6b3719f2dde276ae2fd871f96e15225ac"
+  },
+  "commands": [
+    {
+      "name": "direct",
+      "argv": [
+        "node",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger.mjs",
+        "measure",
+        "--out",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12",
+        "--labels",
+        "baseline,qualified,node",
+        "--samples",
+        "9",
+        "--sessions",
+        "2",
+        "--session-name",
+        "qualified-results"
+      ],
+      "environment": {},
+      "status": 0,
+      "wallSeconds": 25.929262834000838,
+      "loadAverageBefore": [
+        6.31103515625,
+        4.76025390625,
+        3.8681640625
+      ],
+      "loadAverageAfter": [
+        5.6171875,
+        4.728515625,
+        3.88232421875
+      ],
+      "log": "qualified-direct-measurement.log"
+    },
+    {
+      "name": "pool",
+      "argv": [
+        "node",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger-pool.mjs",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12",
+        "/Users/hamza/Projects/github-repo/accounting-database"
+      ],
+      "environment": {
+        "ARYA_BENCH_CANDIDATE": "qualified"
+      },
+      "status": 0,
+      "wallSeconds": 11.36497516700183,
+      "loadAverageBefore": [
+        5.6171875,
+        4.728515625,
+        3.88232421875
+      ],
+      "loadAverageAfter": [
+        5.28125,
+        4.6875,
+        3.87744140625
+      ],
+      "log": "qualified-pool-measurement.log"
+    },
+    {
+      "name": "startup",
+      "argv": [
+        "node",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger.mjs",
+        "startup",
+        "--out",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12",
+        "--labels",
+        "baseline,qualified,node",
+        "--session-name",
+        "startup-qualified"
+      ],
+      "environment": {},
+      "status": 0,
+      "wallSeconds": 0.9331190840021009,
+      "loadAverageBefore": [
+        5.28125,
+        4.6875,
+        3.87744140625
+      ],
+      "loadAverageAfter": [
+        5.28125,
+        4.6875,
+        3.87744140625
+      ],
+      "log": "qualified-startup-measurement.log"
+    },
+    {
+      "name": "kernels",
+      "argv": [
+        "node",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/kernels.mjs",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-workloads",
+        "--measure-only"
+      ],
+      "environment": {},
+      "status": 0,
+      "wallSeconds": 10.49366366599861,
+      "loadAverageBefore": [
+        5.28125,
+        4.6875,
+        3.87744140625
+      ],
+      "loadAverageAfter": [
+        16.36181640625,
+        7.03076171875,
+        4.71533203125
+      ],
+      "log": "qualified-kernels-measurement.log"
+    },
+    {
+      "name": "streaming",
+      "argv": [
+        "python3",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/streaming.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-workloads"
+      ],
+      "environment": {
+        "ARYA_NATIVE_BIN": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya"
+      },
+      "status": 0,
+      "wallSeconds": 12.012351124998531,
+      "loadAverageBefore": [
+        16.36181640625,
+        7.03076171875,
+        4.71533203125
+      ],
+      "loadAverageAfter": [
+        14.28125,
+        7.0283203125,
+        4.7548828125
+      ],
+      "log": "qualified-streaming-measurement.log"
+    },
+    {
+      "name": "build-cost",
+      "argv": [
+        "python3",
+        "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/build-cost.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-workloads"
+      ],
+      "environment": {},
+      "status": 0,
+      "wallSeconds": 39.3202585839972,
+      "loadAverageBefore": [
+        14.28125,
+        7.0283203125,
+        4.7548828125
+      ],
+      "loadAverageAfter": [
+        9.130859375,
+        6.626953125,
+        4.7119140625
+      ],
+      "log": "qualified-build-cost-measurement.log"
+    },
+    {
+      "name": "audit",
+      "argv": [
+        "python3",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/native/benchmarks/performance-audit.py",
+        "--compiler",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya",
+        "--samples",
+        "5",
+        "--output",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-workloads/performance-audit.json"
+      ],
+      "environment": {},
+      "status": 0,
+      "wallSeconds": 5.834088542000245,
+      "loadAverageBefore": [
+        9.130859375,
+        6.626953125,
+        4.7119140625
+      ],
+      "loadAverageAfter": [
+        8.7197265625,
+        6.5830078125,
+        4.70751953125
+      ],
+      "log": "qualified-audit-measurement.log"
+    }
+  ]
+}

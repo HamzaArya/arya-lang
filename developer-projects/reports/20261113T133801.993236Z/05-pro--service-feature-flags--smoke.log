@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/service-feature-flags/.build/verified-app"]
+PASS: feature flags create, deterministic evaluation including UTF-16 emoji regression, rollout edges, version conflict, invalid/malformed data, restart, corrupt-state rejection

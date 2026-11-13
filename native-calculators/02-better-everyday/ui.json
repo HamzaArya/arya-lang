@@ -1,0 +1,64 @@
+{
+  "id": "calc-everyday",
+  "name": "Everyday Calculator",
+  "subtitle": "Everyday expressions, percentages and a memory that stays with you.",
+  "views": [
+    {
+      "id": "history",
+      "label": "Calculation history",
+      "columns": [
+        {
+          "key": "expression",
+          "label": "Calculation",
+          "width": 350
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "width": 240
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "width": 120
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "calculator": {
+    "placeholder": "Example: 200 * (1 + 15%)",
+    "memory": true,
+    "keys": [
+      [
+        "7",
+        "8",
+        "9",
+        "/",
+        "sqrt("
+      ],
+      [
+        "4",
+        "5",
+        "6",
+        "*",
+        "square("
+      ],
+      [
+        "1",
+        "2",
+        "3",
+        "-",
+        "%"
+      ],
+      [
+        "0",
+        ".",
+        "(",
+        ")",
+        "+"
+      ]
+    ],
+    "options": []
+  }
+}

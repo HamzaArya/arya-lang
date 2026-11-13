@@ -38,7 +38,7 @@ static AV alist_standard(int id,int argc,AV *argv) {
     else if(id==303){if(atruth(r[4])){r[2]=r[3];break;}}
     else if(id==305){if(r[4].t!=ASTR){acoded_error("ARYA_LIST_KEY","groupBy keys must be strings.");break;}r[5]=aget(r[2],r[4]);if(r[5].t==AUNDEF){r[5]=alist(0,NULL);aset(r[2],r[4],r[5]);}aappend_value(r[5],r[3]);}
     else if(id==306){if((r[4].t!=ASTR&&(r[4].t!=ANUM||!isfinite(r[4].n)))||(sorted&&r[4].t!=rows[0].key.t)){acoded_error("ARYA_LIST_KEY","sortBy keys must all be strings or finite numbers.");break;}r[5].p->data[i]=r[4];r[6].p->data[i]=r[3];rows[sorted++]=(ALRow){r[3],r[4],i,argc>2&&akey(argv[2],"desc")};}
-    else if(id==308){int seen=0;for(size_t j=0;j<r[2].p->len;j++){AV previous=r[2].p->data[j];/* keys are retained separately below */if(alist_key_equal(previous,r[4])){seen=1;break;}}if(!seen){aappend_value(r[2],r[4]);if(r[5].t==AUNDEF)r[5]=alist(0,NULL);aappend_value(r[5],r[3]);}}
+    else if(id==308){if(akey_find(r[2].p,r[4],1)==SIZE_MAX){size_t slot=r[2].p->len;aappend_value(r[2],r[4]);akey_added(r[2].p,slot,1);if(r[5].t==AUNDEF)r[5]=alist(0,NULL);aappend_value(r[5],r[3]);}}
     else if(id==309){if(r[4].t!=ANUM||!isfinite(r[4].n)||!isfinite(r[2].n+r[4].n)){acoded_error("ARYA_LIST_NUMBER","sum requires finite numbers and finite total.");break;}r[2].n+=r[4].n;}
   }
   if(id==306&&!afailed){qsort(rows,sorted,sizeof(ALRow),alist_row_compare);for(size_t i=0;i<sorted;i++)aappend_value(r[2],rows[i].value);while(r[2].p->len<n)aappend_value(r[2],av(AUINIT));}

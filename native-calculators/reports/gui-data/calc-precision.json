@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "nextId": 5,
+  "lastResult": "(1/7)",
+  "memory": "0",
+  "history": [
+    {
+      "id": "H1",
+      "expression": "1/3 + 1/6",
+      "result": "(1/2)",
+      "kind": "Expression",
+      "time": "2026-11-13T14:52:57.228Z",
+      "details": "Exact value: (1/2); decimal (20 places, half-even): 0.50000000000000000000"
+    },
+    {
+      "id": "H2",
+      "expression": "(1/2)^2",
+      "result": "(1/4)",
+      "kind": "Expression",
+      "time": "2026-11-13T14:53:01.446Z",
+      "details": "Exact value: (1/4); decimal (20 places, half-even): 0.25000000000000000000"
+    },
+    {
+      "id": "H3",
+      "expression": "9007199254740993 + 1",
+      "result": "9007199254740994",
+      "kind": "Expression",
+      "time": "2026-11-13T14:53:07.306Z",
+      "details": "Exact value: 9007199254740994; decimal (20 places, half-even): 9007199254740994.00000000000000000000"
+    },
+    {
+      "id": "H4",
+      "expression": "1/7",
+      "result": "(1/7)",
+      "kind": "Expression",
+      "time": "2026-11-13T14:53:21.051Z",
+      "details": "Exact value: (1/7); decimal (50 places, half-even): 0.14285714285714285714285714285714285714285714285714"
+    }
+  ]
+}

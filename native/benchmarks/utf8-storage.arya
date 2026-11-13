@@ -1,0 +1,28 @@
+use std "runtime" as runtime
+const mode = args[0]
+const size = Number(args[1] ?? "4096")
+const count = Number(args[2] ?? "4000")
+const kind = args[3] ?? "ascii"
+let text = "x".repeat(size)
+if kind == "unicode" { text = "سلام😀".repeat(size / 6) }
+if kind == "late-unicode" { text = "x".repeat(size - 1) + "é" }
+if kind == "early-unicode" { text = "é" + "x".repeat(size - 1) }
+if kind == "middle-unicode" { text = "x".repeat(size / 2) + "é" + "x".repeat(size / 2 - 1) }
+const input = Buffer.from(text)
+const decode = input.toString
+const encode = Buffer.from
+fn work(n) {
+  let total = 0
+  let i = 0
+  if mode == "decode" {
+    while i < n { total += len(decode()); i += 1 }
+  } else {
+    while i < n { total += encode(text).length; i += 1 }
+  }
+  return total
+}
+work(20)
+runtime.collect()
+const start = runtime.clock()
+const total = work(count)
+print(total, (runtime.clock() - start) * 1000)

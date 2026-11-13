@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "recorded_utc": "2026-11-13T14:39:04.120414+00:00",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+  "source_sha256": {
+    "main.arya": "a16c9834bc2e362a468f1611ae58f095d78c6d09ae3f01fda467e8bb73ce4d36",
+    "ui.json": "42d31a64038179b8d3b4285c7628e6fbc0a114dcc7942faf8440a15fd5de5611",
+    "smoke.py": "04561103b1d137012b1aabe75a64cebcdc61ffe038160854761f84614f11f829"
+  },
+  "worker_sha256": "c178ece0250fad1fdf5467e1f9623cbd7c185d62c52008e67e0e49e2ae897ae5",
+  "steps": [
+    {
+      "command": [
+        "../../bin/arya",
+        "check",
+        "main.arya"
+      ],
+      "exit_code": 0,
+      "log": "evidence/check.log"
+    },
+    {
+      "command": [
+        "../../bin/arya",
+        "build",
+        "main.arya",
+        "-o",
+        ".build/worker",
+        "--release",
+        "--force"
+      ],
+      "exit_code": 0,
+      "log": "evidence/build.log"
+    },
+    {
+      "command": [
+        "python3",
+        "smoke.py",
+        ".build/worker"
+      ],
+      "exit_code": 0,
+      "log": "evidence/smoke.log"
+    }
+  ],
+  "native_gui_qa": "Performed separately by coordinating AppKit host task.",
+  "regressions": "Numerical-domain validation for every stored history result; scientific degree tangent poles before radian conversion."
+}

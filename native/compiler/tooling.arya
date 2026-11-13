@@ -51,7 +51,7 @@ export fn inspect(ast, lookup, infer, member, referencesOnly) {
       body(node.body); return
     }
     if node.kind == "literal" { return }
-    if node.kind == "object" { for field in node.fields { expression(field.value) }; return }
+    if node.kind == "object" { for field in node.fields { if field.computed != undefined { expression(field.computed) }; expression(field.value) }; return }
     if node.kind == "list" { for value in node.items { expression(value) }; return }
     if node.kind == "binary" { expression(node.left); expression(node.right); return }
     if node.kind == "member" { expression(node.object); expression(node.key); state.members.push(node); if member != undefined { let found = member(node); if found != null { state.references.push({binding: found, node: node, token: node.key.token, access: "member"}) } }; return }

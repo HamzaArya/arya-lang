@@ -18,3 +18,33 @@ services and application execution use the separate native toolchain.
 Python is needed only for explicit Python interoperability. The Python
 interpreter setting applies to application tasks, rather than the compiler or
 language server.
+
+## Platform packages and portable package
+
+A platform VSIX includes the native SDK for the operating system and architecture
+where it was packaged. The extension checks this identity before starting the
+bundled compiler. In a remote VS Code window the extension host's platform is
+used, which may differ from the computer displaying the window.
+
+A portable VSIX contains editor assets and transport only. It uses `arya` from
+PATH (`arya.exe` on Windows), or the full path in `arya.compilerPath`. Installing
+a portable extension does not install a compiler or qualify an operating system.
+Check the SDK's release notes for the exact supported target and dependencies.
+
+```sh
+# Package a complete, matching native SDK (default: .build/independent).
+sh native/bootstrap/editor-package.sh --sdk /path/to/sdk --output /path/to/arya-native.vsix
+# Package only the editor transport; no SDK or build tool is needed.
+sh native/bootstrap/editor-package.sh --mode portable --output /path/to/arya-portable.vsix
+```
+
+The package version comes from `native/VERSION`. Versions containing a prerelease
+suffix mark the VSIX as a preview; stable versions do not. Bundled packaging
+refuses a compiler whose `--version` differs from that source version.
+
+For a macOS or Linux SDK containing `install.sh`, run `sh ./install.sh .` from
+its extracted directory. This verifies its checksum manifest and installs under
+`~/.local`; add `~/.local/bin` to PATH. Upgrade installations retain earlier SDK
+versions and switch only the managed `arya` launcher. The installer refuses to
+overwrite an unrelated executable. Checksums establish file integrity, not the
+publisher's identity; obtain archives from the official release page.

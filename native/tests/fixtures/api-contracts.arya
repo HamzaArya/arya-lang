@@ -1,0 +1,107 @@
+use std "fs" as fs
+use std "decimal" as decimal
+use std "debug" as debug
+use std "runtime" as runtime
+use std "web" as web
+use std "process" as process
+
+fn equal(actual: any, expected: any): void { debug.assert(runtime.deepEqual(actual, expected), "API regression: " + str(actual) + " != " + str(expected)) }
+fn fails(work: any, code: string): void {
+  let caught = false
+  try { work() } catch error { caught = true; equal(error.code ?? error.name, code) }
+  debug.assert(caught, "Expected " + code)
+}
+async fn rejects(work: any, code: string): void {
+  let caught = false
+  try { await work() } catch error { caught = true; equal(error.code ?? error.name, code) }
+  debug.assert(caught, "Expected asynchronous " + code)
+}
+
+# Typed calls require all arguments; dynamic boundaries still receive precise
+# runtime errors. Exercise both small decimal and libmpdec fallback inputs.
+const dynamic: any = decimal
+for value in ["1.25", "123456789012345678901234567890.25"] {
+  fails(fn() { dynamic.quantize(value, 2) }, "ARYA_DECIMAL_ROUNDING")
+  fails(fn() { dynamic.divide(value, "2", 2) }, "ARYA_DECIMAL_ROUNDING")
+  fails(fn() { dynamic.quantize(value) }, "ARYA_DECIMAL_PLACES")
+  fails(fn() { dynamic.quantize(value, -1) }, "ARYA_DECIMAL_PLACES")
+  fails(fn() { dynamic.quantize(value, 2, "unsupported") }, "ARYA_DECIMAL_ROUNDING")
+  const parsed: any = dynamic.values.parse(value)
+  fails(fn() { dynamic.values.quantize(parsed, 2) }, "ARYA_DECIMAL_ROUNDING")
+  fails(fn() { dynamic.values.divide(parsed, dynamic.values.parse("2"), 2) }, "ARYA_DECIMAL_ROUNDING")
+  fails(fn() { dynamic.values.quantize(parsed) }, "ARYA_DECIMAL_PLACES")
+}
+equal(decimal.quantize("1.225", 2, "half-even"), "1.22")
+equal(decimal.divide("1", "8", 2, "half-up"), "0.13")
+
+const directory = args[0] ?? "."
+if args[1] == "atomic-write-failure" {
+  fails(fn() { fs.writeBytesAtomicSync(directory + "/atomic-failed.bin", Buffer.alloc(4096, 7)) }, "ARYA_IO")
+  equal(fs.readTextSync(directory + "/atomic-failed.bin"), "preserve")
+  print("atomic failure preserved destination")
+  process.exit(0)
+}
+fs.writeTextAtomicSync(directory + "/atomic.txt", "first")
+fs.writeTextAtomicSync(directory + "/atomic.txt", "Unicode: کابل\n")
+equal(fs.readTextSync(directory + "/atomic.txt"), "Unicode: کابل\n")
+fs.writeBytesAtomicSync(directory + "/atomic.bin", Buffer.from([0, 255, 195, 40]))
+equal(fs.readBytesSync(directory + "/atomic.bin").toString("hex"), "00ffc328")
+fails(fn() { fs.writeBytesAtomicSync(directory + "/atomic.bin", "bad") }, "TypeError")
+equal(fs.readBytesSync(directory + "/atomic.bin").toString("hex"), "00ffc328")
+for target in ["symlink", "dangling", "target-directory"] {
+  fails(fn() { fs.writeTextAtomicSync(directory + "/" + target, "bad") }, "ARYA_FS_TARGET")
+  fails(fn() { fs.writeBytesAtomicSync(directory + "/" + target, Buffer.from([0])) }, "ARYA_FS_TARGET")
+}
+fails(fn() { fs.writeTextAtomicSync(directory + "/missing-parent/file", "bad") }, "ENOENT")
+fails(fn() { fs.writeTextAtomicSync(directory + "/atomic.txt", "é".repeat(8388609)) }, "RangeError")
+equal(fs.readTextSync(directory + "/atomic.txt"), "Unicode: کابل\n")
+const bytes = Buffer.from([0, 1, 127, 128, 195, 40, 255, 10])
+const file = directory + "/roundtrip.bin"
+fs.writeBytesSync(file, bytes)
+equal(Buffer.isBuffer(fs.readBytesSync(file)), true)
+equal(fs.readBytesSync(file).toString("hex"), "00017f80c328ff0a")
+equal((await fs.readBytes(file)).toString("hex"), "00017f80c328ff0a")
+const view = bytes.subarray(2, 7)
+await fs.writeBytes(directory + "/view.bin", view)
+runtime.collect()
+equal((await fs.readBytes(directory + "/view.bin")).toString("hex"), "7f80c328ff")
+fs.appendBytesSync(file, Buffer.from([0, 254]))
+await fs.appendBytes(file, Buffer.from([253]))
+equal(fs.readBytesSync(file).toString("hex"), "00017f80c328ff0a00fefd")
+await fs.writeBytes(directory + "/empty.bin", Buffer.from([]))
+equal((await fs.readBytes(directory + "/empty.bin")).length, 0)
+await fs.appendBytes(directory + "/created.bin", bytes)
+equal(fs.readBytesSync(directory + "/created.bin").toString("hex"), "00017f80c328ff0a")
+for invalid in ["text", [1, 2], null, {length: 1}] {
+  fails(fn() { fs.writeBytesSync(file, invalid) }, "TypeError")
+  fails(fn() { fs.appendBytesSync(file, invalid) }, "TypeError")
+  await rejects(fn() { return fs.writeBytes(file, invalid) }, "TypeError")
+  await rejects(fn() { return fs.appendBytes(file, invalid) }, "TypeError")
+  equal(fs.readBytesSync(file).toString("hex"), "00017f80c328ff0a00fefd")
+}
+fails(fn() { fs.readBytesSync(file + "\0") }, "TypeError")
+const invalidPath: any = 42
+await rejects(fn() { return fs.readBytes(invalidPath) }, "TypeError")
+fails(fn() { fs.readBytesSync(directory + "/absent.bin") }, "ENOENT")
+await rejects(fn() { return fs.readBytes(directory + "/absent.bin") }, "ENOENT")
+fails(fn() { fs.writeBytesSync(directory + "/absent/file", bytes) }, "ENOENT")
+await rejects(fn() { return fs.writeBytes(directory + "/absent/file", bytes) }, "ENOENT")
+fails(fn() { fs.writeBytesSync(directory, bytes) }, "EISDIR")
+await rejects(fn() { return fs.appendBytes(directory, bytes) }, "EISDIR")
+equal(fs.readBytesSync(directory + "/limit.bin").length, 16777216)
+equal((await fs.readBytes(directory + "/limit.bin")).length, 16777216)
+fails(fn() { fs.readBytesSync(directory + "/oversize.bin") }, "RangeError")
+await rejects(fn() { return fs.readBytes(directory + "/oversize.bin") }, "RangeError")
+const concurrent = await Promise.all([fs.readBytes(file), fs.readBytes(directory + "/view.bin"), fs.readBytes(directory + "/empty.bin")])
+equal(concurrent.map(fn(value) { return value.toString("hex") }), ["00017f80c328ff0a00fefd", "7f80c328ff", ""])
+
+# Inferred required fields and calls inside literals are valid readonly
+# library inputs without an `any` assertion at the options boundary.
+const options = {host: "127.0.0.1", root: process.cwd(), html: false, assets: false, maxBodyBytes: 65536}
+let server = web.serve(0, {}, options)
+debug.assert(server.address().port > 0)
+const stop = {timeoutMs: 1000}
+await web.shutdown(server, stop)
+server = web.serve(0, {}, {host: "127.0.0.1", root: process.cwd(), html: false, assets: false})
+await web.shutdown(server)
+print("API contracts: decimal diagnostics, byte fidelity/bounds/errors, readonly server options passed")

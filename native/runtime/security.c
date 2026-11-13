@@ -68,6 +68,12 @@ static AV asec_keyring(AV options){const char *fields[]={"active","keys"};if(!ap
  done:;AV result=r[4];aunroot(&root);return afailed?av(AUNDEF):result;
 }
 static AV asecurity(int id,int argc,AV *argv){id-=1200;AV x=argc?argv[0]:av(AUNDEF),y=argc>1?argv[1]:av(AUNDEF),z=argc>2?argv[2]:av(AUNDEF);
+ if(id==14){
+   if(argc!=1||x.t!=ABYTES||x.p->scope<0||x.p->scope>16*1024*1024)return asec_error("ARYA_SECURITY_INPUT","hashBytes expects one Buffer of at most 16 MiB.");
+   unsigned char digest[EVP_MAX_MD_SIZE]={0};unsigned length=0;
+   if(EVP_Digest((const unsigned char*)x.p->chars,(size_t)x.p->scope,digest,&length,EVP_sha256(),NULL)!=1||length!=32)return asec_error("ARYA_SECURITY_CRYPTO","Native binary hashing failed.");
+   char hex[65];for(int i=0;i<32;i++)snprintf(hex+i*2,3,"%02x",digest[i]);OPENSSL_cleanse(digest,sizeof(digest));return astr(hex);
+ }
  if(id<=2){size_t count=id==1?16:32;if(id==0&&x.t!=AUNDEF){if(!ais_safe_integer(x)||x.n<16||x.n>1024)return asec_error("ARYA_SECURITY_INPUT","Token size must be from 16 to 1024 bytes.");count=(size_t)x.n;}unsigned char bytes[1024];if(RAND_bytes(bytes,(int)count)!=1)return asec_error("ARYA_SECURITY_CRYPTO","Cannot obtain secure randomness.");if(id==1){bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;char text[37];snprintf(text,sizeof(text),"%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",bytes[0],bytes[1],bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15]);return astr(text);}AV result=asec_b64(bytes,count);OPENSSL_cleanse(bytes,count);return result;}
  if(id==3||id==4||id==5||id==6){size_t n=0,m=0;unsigned char *a=NULL,*b=NULL,key[32]={0},digest[EVP_MAX_MD_SIZE]={0};AV result=av(AUNDEF);
    if(id==6){a=asec_text(x,0,1048576,0,&n);if(a)b=asec_text(y,0,1048576,0,&m);if(b)result=ab(n==m&&CRYPTO_memcmp(a,b,n)==0);}

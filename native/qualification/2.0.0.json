@@ -1,0 +1,6 @@
+{
+  "version": "2.0.0",
+  "status": "in-progress",
+  "qualifiedPlatforms": [],
+  "note": "Release qualification is being rerun for current sources. Prior alpha evidence is not proof of this release or new native GUI backends."
+}

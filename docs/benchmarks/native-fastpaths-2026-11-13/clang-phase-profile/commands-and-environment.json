@@ -1,0 +1,262 @@
+{
+  "startedAtUtc": "2026-11-13T02:49:30.035178+00:00",
+  "purpose": "Diagnostic Clang phase/header attribution after broad Node timing; separate from uninstrumented release timing. Three sequential alternating before/after pairs, no source edits. Traces contain nested wall-time spans, not additive CPU counters.",
+  "clangVersion": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "toolchainReportSha256": "b8178bed6012067368976034eaf2e80eee52dd76449d34aed18a1bf679be636b",
+  "loadStart": [
+    3.22802734375,
+    6.05078125,
+    7.73291015625
+  ],
+  "runs": [
+    {
+      "label": "before",
+      "sample": 0,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/before-0",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before-0.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1491.065999998682,
+      "returncode": 0,
+      "loadBefore": [
+        3.22802734375,
+        6.05078125,
+        7.73291015625
+      ],
+      "loadAfter": [
+        3.22802734375,
+        6.05078125,
+        7.73291015625
+      ],
+      "trace": "before-0.json",
+      "traceSha256": "0b22a258b489ce048f225cc93d2e048def4308c83d4d3882fd90ff8ab2a102d9",
+      "binarySha256": "030406e60febc87a56df7d71ba440270804972bf28ccd09c27d0a39ade3e0dd2",
+      "binaryBytes": 367368
+    },
+    {
+      "label": "after",
+      "sample": 0,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/after-0",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after-0.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1210.7558749994496,
+      "returncode": 0,
+      "loadBefore": [
+        3.22802734375,
+        6.05078125,
+        7.73291015625
+      ],
+      "loadAfter": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "trace": "after-0.json",
+      "traceSha256": "bbdfac6fa201a0d5a511622d8435a38a8d725ccf611f93d1974c4a27b4f281e2",
+      "binarySha256": "a92682c179a8ddfa24059810725cc33ff2788ab1aa65247d95f46414aa8a392d",
+      "binaryBytes": 383976
+    },
+    {
+      "label": "after",
+      "sample": 1,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/after-1",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after-1.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1332.2847499985073,
+      "returncode": 0,
+      "loadBefore": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "loadAfter": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "trace": "after-1.json",
+      "traceSha256": "923959d59efcc46b0cac29a3e3e8085f8ab44849c67b2804958761955cd55be0",
+      "binarySha256": "adff90f060a262742f3dd618bcf59baf4f2de0e731c7f3ec7772d6eeb08ddc60",
+      "binaryBytes": 383976
+    },
+    {
+      "label": "before",
+      "sample": 1,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/before-1",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before-1.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1159.1273329995602,
+      "returncode": 0,
+      "loadBefore": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "loadAfter": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "trace": "before-1.json",
+      "traceSha256": "8fec9758285a7e85e478206e9eb203fc8986b671fdadee29c74f99adc2a3b83d",
+      "binarySha256": "3165a368dec0b720e9721b655c375dc0ecda83b4f1c00e1877fb0efaed5db9af",
+      "binaryBytes": 367368
+    },
+    {
+      "label": "before",
+      "sample": 2,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/before-2",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before-2.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1342.3697500002163,
+      "returncode": 0,
+      "loadBefore": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "loadAfter": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "trace": "before-2.json",
+      "traceSha256": "a0e17793970ce2f32144026f459811c7274c3b7b832f590f84a9ec1316f07931",
+      "binarySha256": "70d3dd5cc8afc04241fe48587d602dacfd5ac42c759c2c74a353af7b51096ad4",
+      "binaryBytes": 367368
+    },
+    {
+      "label": "after",
+      "sample": 2,
+      "argv": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-O2",
+        "-ffp-contract=off",
+        "-I",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after.c",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/clang-phase-profile/after-2",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib/libmpdec.a",
+        "-lm",
+        "-pthread",
+        "-ftime-trace=/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after-2.json",
+        "-ftime-trace-granularity=500"
+      ],
+      "wallMs": 1295.8962909997354,
+      "returncode": 0,
+      "loadBefore": [
+        3.36962890625,
+        6.033203125,
+        7.716796875
+      ],
+      "loadAfter": [
+        3.33984375,
+        5.982421875,
+        7.68896484375
+      ],
+      "trace": "after-2.json",
+      "traceSha256": "009f222cb5c15954a3caeae530b0642b7b13f154236a279da54c7b3f36f9fb06",
+      "binarySha256": "0f31a649401a1936ef96d8550de2d7aabce7e15abbb670ab74988b9abfbcb7e7",
+      "binaryBytes": 383976
+    }
+  ],
+  "sources": {
+    "before": {
+      "original": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.c",
+      "archive": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/before.c",
+      "sha256": "540a7529646b253ae4791414d7ce63e0b5ef339dd171d26c3cee410910997d02",
+      "bytes": 562455,
+      "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib"
+    },
+    "after": {
+      "original": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.c",
+      "archive": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/clang-phase-profile/after.c",
+      "sha256": "198764ffa0a787512142484e8d14f2da9b53c9dccfba7de76d6fa741f5955c2b",
+      "bytes": 569410,
+      "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib"
+    }
+  },
+  "selectedEnvironment": {
+    "CC": null,
+    "ARYA_CC": null,
+    "CPATH": null,
+    "C_INCLUDE_PATH": null,
+    "LIBRARY_PATH": null,
+    "SDKROOT": null,
+    "MACOSX_DEPLOYMENT_TARGET": null
+  },
+  "finishedAtUtc": "2026-11-13T02:49:38.069303+00:00",
+  "loadEnd": [
+    3.33984375,
+    5.982421875,
+    7.68896484375
+  ]
+}

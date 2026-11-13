@@ -1,0 +1,290 @@
+{
+  "qualification": [
+    {
+      "label": "fixed-guards",
+      "exitCode": 0,
+      "seconds": 37.95883649999996
+    },
+    {
+      "label": "concurrent-number-tests",
+      "exitCode": 0,
+      "seconds": 6.923699124999985
+    },
+    {
+      "label": "tofixed",
+      "exitCode": 0,
+      "seconds": 9.10723091699947
+    },
+    {
+      "label": "core",
+      "exitCode": 0,
+      "seconds": 35.552958959000534
+    },
+    {
+      "label": "finance",
+      "exitCode": 0,
+      "seconds": 4.6394593749992055
+    },
+    {
+      "label": "json",
+      "exitCode": 0,
+      "seconds": 3.860963291999724
+    },
+    {
+      "label": "preserved-concurrent-unary-limit",
+      "exitCode": 0
+    },
+    {
+      "label": "prepare",
+      "exitCode": 0,
+      "seconds": 17.973282999999356
+    },
+    {
+      "label": "sanitize",
+      "exitCode": 0,
+      "seconds": 5.148652583000512
+    },
+    {
+      "label": "accounting",
+      "exitCode": 0,
+      "seconds": 7.958680250001635
+    },
+    {
+      "label": "ledger",
+      "exitCode": 0,
+      "seconds": 1.491960666000523
+    },
+    {
+      "label": "benchmark",
+      "exitCode": 0,
+      "seconds": 26.6609975829997
+    },
+    {
+      "label": "baseline-profile",
+      "exitCode": 0,
+      "seconds": 19.118625499999325
+    },
+    {
+      "label": "profile",
+      "exitCode": 0,
+      "seconds": 20.04283070799829
+    },
+    {
+      "label": "transfer",
+      "exitCode": 0,
+      "seconds": 7.991154584000469
+    }
+  ],
+  "nativeSuites": {
+    "compilerStage": "stage1; final bootstrap equality verified separately",
+    "results": [
+      {
+        "command": [
+          "sh",
+          "native/tests/run.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 117.8466565839999
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/number-format.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 122.5823531660003
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/data-optimization.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 88.73983425000006
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/data-paths.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 56.0908595840001
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/standard-calls.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 34.099026125000364
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/finance-data.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 90.1734354160003
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/function-calls.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 265.0805489579998
+      },
+      {
+        "command": [
+          "sh",
+          "native/tests/advanced-calls.sh"
+        ],
+        "exitCode": 0,
+        "seconds": 309.764559791
+      },
+      {
+        "command": [
+          "python3",
+          "native/tests/decimal-reference.py"
+        ],
+        "exitCode": 1,
+        "seconds": 244.661066958
+      }
+    ]
+  },
+  "finalCompilerTests": {
+    "compilerSha256": "beac6f576c9a16c788f139558bfb6c769a9c6b4f39195343f511d6ba28d53e7f",
+    "results": [
+      {
+        "fixture": "number-format",
+        "passed": true,
+        "stage1FinalGeneratedCEqual": true,
+        "generatedCSha256": "09ebe52c2c84487320355d7828687848714ab72839ff74f91e56910b0df67cab"
+      },
+      {
+        "fixture": "data-descriptor",
+        "passed": true,
+        "stage1FinalGeneratedCEqual": true,
+        "generatedCSha256": "9ee5a9ff2fd2b0f49e77da964c4b4ecc49ac5a3042b7581cc6257f5c51c84f0c"
+      },
+      {
+        "command": "python3 native/tests/accounting-reference.py FINAL_COMPILER",
+        "exitCode": 0,
+        "seconds": 34.99560495800006
+      }
+    ]
+  },
+  "accounting": {
+    "cases": 733,
+    "zones": [
+      {
+        "zone": "Asia/Kabul",
+        "backend": "baseline",
+        "cases": 733
+      },
+      {
+        "zone": "Asia/Kabul",
+        "backend": "candidate",
+        "cases": 733
+      },
+      {
+        "zone": "Asia/Kabul",
+        "backend": "sanitized",
+        "cases": 48
+      },
+      {
+        "zone": "America/Los_Angeles",
+        "backend": "baseline",
+        "cases": 733
+      },
+      {
+        "zone": "America/Los_Angeles",
+        "backend": "candidate",
+        "cases": 733
+      },
+      {
+        "zone": "America/Los_Angeles",
+        "backend": "sanitized",
+        "cases": 48
+      }
+    ]
+  },
+  "toFixed": {
+    "seed": "0x41525941",
+    "cases": 47177,
+    "stressCases": 372,
+    "roundingModes": 4,
+    "work": "/Users/hamza/Projects/github-repo/arya-lang/artifacts/ledger-runtime-20261112-232609/integrated/fixed-reference-delivered",
+    "passed": true
+  },
+  "decimal": {
+    "reference": "Python _pydecimal (independent pure-Python arithmetic)",
+    "cases": 5532,
+    "seed": "0x41525941",
+    "allMatched": true,
+    "batchModules": 4,
+    "batches": [
+      {
+        "firstModule": 0,
+        "modules": 4,
+        "entrySha256": "a54ef2a49ffb05710bc89fda717b6326a34f05201d8a74f36f79c0c45f75ccae",
+        "binarySha256": "efb79819a84fc69f96adfe635d4b4829985fa34f09ea1211963f34180144c575"
+      },
+      {
+        "firstModule": 4,
+        "modules": 4,
+        "entrySha256": "7bc351ffe8595b2ef4a4a1f63e1ccfff8e9c7b6c7c7d9038f5e74aca00d20980",
+        "binarySha256": "d3f23aea496402dd7845b93fd993735bad05a6016082fbe7f9d47ddb1865dd9e"
+      },
+      {
+        "firstModule": 8,
+        "modules": 4,
+        "entrySha256": "629968e7ac63792b7682b72008ce7bc16f165ca960537475cc749031aef2ae7a",
+        "binarySha256": "b535801465e3628e1907ad5f635c47a7a387407349b27330dc6f8c9ca417a35c"
+      },
+      {
+        "firstModule": 12,
+        "modules": 4,
+        "entrySha256": "3794e078971cdef2733a78b90a2a2964a8e3b59da383bb52ca9d74265fb7da5f",
+        "binarySha256": "05ffe77a52826dd92e136aeebd78c50fae32f52770824b9027f780a3f650fa1a"
+      },
+      {
+        "firstModule": 16,
+        "modules": 4,
+        "entrySha256": "d09790399ffb33710e03898a31e79567b25a522e5c11c903eb508198bfd643f3",
+        "binarySha256": "28727362b088d20e24bd24fe2075d094d502bb616d29d7c8c4e39c47e8d49ac1"
+      },
+      {
+        "firstModule": 20,
+        "modules": 4,
+        "entrySha256": "3f4662bd3927215b2599dc469b9ad14ade9b40fd32280ebb52106907b36c6ac2",
+        "binarySha256": "b90d02991c9d5d39d68b70263b76a63457bb4c52f2e15bf2c6f9372cf055a874"
+      }
+    ],
+    "sourceSha256": "de434c58a6cdd530b8ebb97841379c545df3fa16539ba61f9523f91f20e9c34b",
+    "outputSha256": "f3b26e56863b4ea443b01894883e92192e203646c0e50dd492ec5efbb76c27a5"
+  },
+  "json": {
+    "cases": 1444,
+    "asan": true,
+    "ubsan": true,
+    "gcStress": true,
+    "passed": true
+  },
+  "ledger": {
+    "tests": 4,
+    "casesPerTimeZone": 813,
+    "zones": [
+      "Asia/Kabul",
+      "America/Los_Angeles"
+    ],
+    "passed": true
+  },
+  "notes": [
+    "Native suite acceptance initially used the new stage1 compiler; the final release compiler passed the number/descriptor suite and application parity again.",
+    "Initial monolithic Decimal oracle compilation hit its 240-second timeout. The unchanged 5532-case matrix passed in six smaller release executables; the test now defaults to this bounded compilation.",
+    "A debug/sanitized monolithic attempt was stopped after memory pressure stalled compilation.",
+    "All final qualification commands passed. ASan leak detection was disabled."
+  ],
+  "localEvidenceDirectory": "/Users/hamza/Projects/github-repo/arya-lang/artifacts/ledger-runtime-20261112-232609"
+}

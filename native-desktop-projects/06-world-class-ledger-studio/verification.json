@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-11-13T13:57:47.166816+00:00",
+  "status": "passed",
+  "steps": [
+    {
+      "step": "check",
+      "exit_code": 0,
+      "seconds": 0.124,
+      "output": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/06-world-class-ledger-studio/main.arya\n"
+    },
+    {
+      "step": "build",
+      "exit_code": 0,
+      "seconds": 9.708,
+      "output": "See .build/build-final.log (native system ucontext deprecation warnings)."
+    },
+    {
+      "step": "smoke",
+      "exit_code": 0,
+      "seconds": 1.277,
+      "output": "PASS: 43 native ledger worker commands; account CRUD/status, exact balanced journals, large totals, idempotent replay/conflict, reversals, reconciliation, stale versions, corrupt store and failed-save rollback\n"
+    }
+  ],
+  "inputs_sha256": {
+    "main.arya": "e82f9626861398bc040f774ffe48fcd55bcea121be36c6e51f85ce249748fcbc",
+    "ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+    "smoke.py": "308b0a3362e9601d3b23acbea754a4f73850db8884662664a1ecb7394799d6ad"
+  },
+  "worker_sha256": "ba7d747952d841ca719e74e1cec0ac7123c6518939bc0f8c512ac89ee0cbcbf7"
+}

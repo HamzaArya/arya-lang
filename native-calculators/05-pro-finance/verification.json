@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-11-13T14:50:06.979867+00:00",
+  "status": "passed",
+  "supersedes": "Pre-review calculator verification; persistence and finance rounding bugs corrected.",
+  "steps": [
+    {
+      "name": "check",
+      "exit_code": 0,
+      "log": ".build/review-check.log",
+      "output": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/native-calculators/05-pro-finance/main.arya\n"
+    },
+    {
+      "name": "build",
+      "exit_code": 0,
+      "log": ".build/review-build.log",
+      "output": "Native release build passed; existing ucontext deprecation warnings."
+    },
+    {
+      "name": "smoke",
+      "exit_code": 0,
+      "log": ".build/review-smoke.log",
+      "output": "PASS: 254 real native worker calls; independent Fraction/Decimal oracles, precedence, ties, limits, memory, persistence, latest100 history, corrupt data, existing/dangling store symlinks, poisoned temporary symlinks and real write failure; finance worksheets checked at300-digit reference precision, maximum magnitude and exact rounding ties\n"
+    }
+  ],
+  "inputs_sha256": {
+    "main.arya": "9c0f4522c089a33169009f41afd8b098d088ec1449f51232ef49b704fac56edc",
+    "rational.arya": "ef732448a6343ede64113cc0f459efe67b8ceeea1f6cc4b1adcb85cf3d50b9cd",
+    "ui.json": "c3bdc3ee4a884f69b9bf53ccef37f7e97122ffeefc7464b4bb58c0be626d7816",
+    "smoke.py": "ef66d473399a1ba1032d77d85d799bba19acb632fe951a97ad4b37d86b83adc7"
+  },
+  "worker_sha256": "76533c0494810febf35c23cbf47b95e2b538adaa020156ffb20610a8c0a2cfb5"
+}

@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+    "sourceSha256": "8b721df8ab895225f7246b30be90ea6f1e4955962a59539dd67f7471ebefe1b6",
+    "binarySha256": "8c3a923618c324e926fff65930ce328b9019bd2380c057026e26aa57e393fde1",
+    "bytes": 541800,
+    "buildBothMs": 6990.499084
+  },
+  "candidate": {
+    "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+    "sourceSha256": "d9013e00511b45a36f9fb0a1cf52b2f67dd73cec1b82e27344b4712a2e15753d",
+    "binarySha256": "a494149a622f208b1a74c709715f847f722f1b75d4c7ba7e3e18885a780cb012",
+    "bytes": 542264,
+    "buildBothMs": 7850.8865829999995
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "sourceSha256": "452a8869c53851f36095b552c6ca80772acab60e31e90f7c4bf73222a8926ff4",
+  "source": "trace-overflow.arya",
+  "before": {
+    "compilerSha256": "b61bb15a9711f81d1302ad404c69a9065592a277d67bf6c50649b73769698272",
+    "binarySha256": "9325e38c35366a3621848862e0105091038e0b1f03a9f82a734f41b47b80e4bf",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": "",
+    "observation": "Retained baseline subprocess observation from accounting review; not rerun"
+  },
+  "after": {
+    "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+    "binarySha256": "c8efdc3c907a69afd42f2a6b200d0e84eb5950390d63ed3e51c2d405d97f9b07",
+    "returncode": 0,
+    "stdout": "trace limit was catchable\n",
+    "stderr": "",
+    "environment": {
+      "PATH": "/nonexistent"
+    }
+  }
+}

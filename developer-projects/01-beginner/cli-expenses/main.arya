@@ -1,0 +1,56 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "validate" as validate
+use std "runtime" as runtime
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonempty text up to " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  let result = Number(value)
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be an integer.") }
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " is outside its allowed integer range.") }
+  return result
+}
+fn load(schema) {
+  let info = fs.infoSync(file)
+  if info == null { return {nextId: 1, rows: []} }
+  if info.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 1048576 { throw new Error("Data file exceeds 1 MiB.") }
+  return validate.parse(validate.object({nextId: validate.number({integer: true, min: 1}), rows: validate.array(schema, {max: 1000})}), JSON.parse(fs.readTextSync(file)))
+}
+fn save(next) {
+  if next.rows.length > 1000 { throw new Error("This local app supports at most 1000 records.") }
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 900000 { throw new Error("Store is full; remove old records first.") }
+  fs.writeTextAtomicSync(file, encoded)
+}
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn findIndex(rows, id) {
+  let index = rows.findIndex(fn(row) { return row.id == integer(id, "ID", 1) })
+  if index < 0 { throw new Error("Record not found.") }
+  return index
+}
+use std "decimal" as decimal
+const rowSchema = validate.object({id: validate.number(), amount: validate.string(), category: validate.string(), note: validate.string()})
+try {
+  let data = load(rowSchema)
+  let command = args[0] ?? "help"
+  if command == "add" {
+    if args.length != 4 { throw new Error("Usage: add AMOUNT CATEGORY NOTE") }
+    if not new RegExp("^[0-9]{1,12}(\\.[0-9]{1,2})?$").test(args[1]) or Number(args[1]) <= 0 { throw new Error("Amount must be positive with at most two decimal places.") }
+    let row = {id: data.nextId, amount: decimal.quantize(args[1], 2, "half-even"), category: text(args[2], "Category", 40), note: text(args[3], "Note", 200)}
+    data.rows.push(row); data.nextId += 1; save(data); print(JSON.stringify(row))
+  } else if command == "list" { print(JSON.stringify(data.rows)) }
+  else if command == "summary" {
+    let total = "0"; let categories = {}
+    for row in data.rows { total = decimal.add(total, row.amount); categories[row.category] = decimal.add(categories[row.category] ?? "0", row.amount) }
+    print(JSON.stringify({total: decimal.quantize(total, 2, "half-even"), categories: categories, count: data.rows.length}))
+  } else if command == "delete" {
+    if args.length != 2 { throw new Error("Usage: delete ID") }
+    data.rows.splice(findIndex(data.rows, args[1]), 1); save(data); print("Deleted")
+  } else if command == "help" { print("Expense Ledger | add AMOUNT CATEGORY NOTE | list | summary | delete ID. Amounts use one currency chosen by you.") }
+  else { throw new Error("Unknown command; run help.") }
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(1) }

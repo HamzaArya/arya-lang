@@ -1,0 +1,5 @@
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.TLilSo/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/arya:
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.TLilSo/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/services:
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
+	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2100.43.0)

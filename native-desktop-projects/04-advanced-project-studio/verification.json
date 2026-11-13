@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "recorded_utc": "2026-11-13T13:56:06.934943+00:00",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+  "source_sha256": {
+    "main.arya": "b6826e30f841be42cc44c643732c95a7be513a23ae51fcdf2a1fe2b23055c432",
+    "ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+    "smoke.py": "18373bc286de003a5f2e62970769f73459a035b144733bd0debd971889e0e07e"
+  },
+  "worker_sha256": "0aecccfb57f3aca65f4f5ce4d695189f5d8bb4bbdbd50b2399c6ea90b72fc7e5",
+  "steps": [
+    {
+      "command": [
+        "../../bin/arya",
+        "check",
+        "main.arya"
+      ],
+      "exit_code": 0,
+      "log": "evidence/check.log"
+    },
+    {
+      "command": [
+        "../../bin/arya",
+        "build",
+        "main.arya",
+        "-o",
+        ".build/worker",
+        "--release",
+        "--force"
+      ],
+      "exit_code": 0,
+      "log": "evidence/build.log"
+    },
+    {
+      "command": [
+        "python3",
+        "smoke.py",
+        ".build/worker"
+      ],
+      "exit_code": 0,
+      "log": "evidence/smoke.log"
+    }
+  ],
+  "gui_verification": "Coordinated separately by parent native AppKit host task."
+}

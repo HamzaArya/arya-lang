@@ -1,0 +1,48 @@
+{
+  "recordedAtUtc": "2026-11-13T02:34:29.489465+00:00",
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+  "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+  "results": [
+    {
+      "name": "parser-fuzz",
+      "command": [
+        "python3",
+        "native/tests/parser-fuzz.py",
+        "--compiler",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "--output",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/native-fastpaths-2026-11-13/parser-fuzz-combined.json"
+      ],
+      "controllerSha256": "a615f1ff8470e2a17283e15432666a42ba62346be8d7278669f602782b301444",
+      "returncode": 0,
+      "wallSeconds": 2.8666852499991364,
+      "log": "docs/benchmarks/native-fastpaths-2026-11-13/parser-fuzz-combined.log"
+    },
+    {
+      "name": "types-reference",
+      "command": [
+        "python3",
+        "native/tests/types-reference.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya"
+      ],
+      "controllerSha256": "4e6ed7cf6786a5808635bab3aa92adf59473fc1397621bd5d9c2a8f10acaecc3",
+      "returncode": 0,
+      "wallSeconds": 1.3785802500005957,
+      "log": "docs/benchmarks/native-fastpaths-2026-11-13/types-reference-combined.log"
+    },
+    {
+      "name": "lsp-reference",
+      "command": [
+        "python3",
+        "native/tests/lsp-reference.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya"
+      ],
+      "controllerSha256": "4ae7dfef0627bdc5b473948b1d842d367715b2de50b6e0d5b861ea3fe78bcdef",
+      "returncode": 0,
+      "wallSeconds": 0.1345465000013064,
+      "log": "docs/benchmarks/native-fastpaths-2026-11-13/lsp-reference-combined.log"
+    }
+  ],
+  "compilerSha256After": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+  "hashesVerifiedUnchanged": true
+}

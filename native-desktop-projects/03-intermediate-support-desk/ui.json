@@ -1,0 +1,420 @@
+{
+  "id": "support-desk",
+  "name": "Harbor Support Desk",
+  "subtitle": "Own each request, resolve it clearly, and keep a useful history.",
+  "views": [
+    {
+      "id": "active",
+      "label": "Active tickets",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Ticket",
+          "width": 240
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "width": 150
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "width": 130
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "width": 100
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 130
+        },
+        {
+          "key": "updated",
+          "label": "Updated",
+          "width": 180
+        }
+      ]
+    },
+    {
+      "id": "tickets",
+      "label": "All tickets",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Ticket",
+          "width": 240
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "width": 150
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "width": 130
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "width": 100
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 130
+        },
+        {
+          "key": "updated",
+          "label": "Updated",
+          "width": 180
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "label": "Ticket history",
+      "columns": [
+        {
+          "key": "time",
+          "label": "Time (UTC)",
+          "width": 180
+        },
+        {
+          "key": "title",
+          "label": "Record",
+          "width": 220
+        },
+        {
+          "key": "action",
+          "label": "Action",
+          "width": 160
+        },
+        {
+          "key": "detail",
+          "label": "Details",
+          "width": 380
+        },
+        {
+          "key": "entityId",
+          "label": "Record ID",
+          "width": 220
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New ticket",
+      "command": "add",
+      "view": "active",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            },
+            {
+              "value": "Urgent",
+              "label": "Urgent"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit ticket",
+      "command": "edit",
+      "view": "active",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            },
+            {
+              "value": "Urgent",
+              "label": "Urgent"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Change status",
+      "command": "transition",
+      "view": "active",
+      "selection": true,
+      "fields": [
+        {
+          "key": "status",
+          "label": "Next status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Open",
+              "label": "Open"
+            },
+            {
+              "value": "Investigating",
+              "label": "Investigating"
+            },
+            {
+              "value": "Waiting",
+              "label": "Waiting"
+            },
+            {
+              "value": "Resolved",
+              "label": "Resolved"
+            }
+          ]
+        },
+        {
+          "key": "note",
+          "label": "Workflow note",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Delete ticket",
+      "command": "delete",
+      "view": "active",
+      "selection": true,
+      "destructive": true,
+      "fields": []
+    },
+    {
+      "label": "New ticket",
+      "command": "add",
+      "view": "tickets",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            },
+            {
+              "value": "Urgent",
+              "label": "Urgent"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit ticket",
+      "command": "edit",
+      "view": "tickets",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "customer",
+          "label": "Customer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            },
+            {
+              "value": "Urgent",
+              "label": "Urgent"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Change status",
+      "command": "transition",
+      "view": "tickets",
+      "selection": true,
+      "fields": [
+        {
+          "key": "status",
+          "label": "Next status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Open",
+              "label": "Open"
+            },
+            {
+              "value": "Investigating",
+              "label": "Investigating"
+            },
+            {
+              "value": "Waiting",
+              "label": "Waiting"
+            },
+            {
+              "value": "Resolved",
+              "label": "Resolved"
+            }
+          ]
+        },
+        {
+          "key": "note",
+          "label": "Workflow note",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Delete ticket",
+      "command": "delete",
+      "view": "tickets",
+      "selection": true,
+      "destructive": true,
+      "fields": []
+    }
+  ]
+}

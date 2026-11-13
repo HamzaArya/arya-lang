@@ -1,0 +1,594 @@
+{
+  "date_utc": "20261113T140114.042188Z",
+  "mode": "check-build-test-package",
+  "host_source_sha256": "8ab8ce0ba10aeaa861ff39fd32f004196f4f971bc448e11d59addce2a0ac7460",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "projects": [
+    {
+      "path": "01-beginner-study-desk",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.07,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/01-beginner-study-desk/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 3.918,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/01-beginner-study-desk/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.932,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-caar5a4_/Study Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.022,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-caar5a4_/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.04,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-caar5a4_/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-caar5a4_/Study Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/01-beginner-study-desk-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "main.arya": "93e31f3185b983eb8b0887f65e922b3d506ac489baaea2b875c5021b263d5762",
+        "verification.json": "6bfb5c357e08967ceb1a55dfecd069b153418664523723f8ac6ef000dcdce065",
+        "smoke.py": "c5e467e4a29fee724dbf39026ce07ca61abcc8be6eed67706e8ee388513e4735"
+      },
+      "status": "passed",
+      "app": "dist/Study Desk.app",
+      "worker_sha256": "e50650149dafc6033865dfc42c45372d8211c7abf7b89421ef2bb4c1fb91e0a2",
+      "host_sha256": "536f278367ef11911bfff67948080db464afa85735e23611da6fe7a598d61043"
+    },
+    {
+      "path": "02-better-stockroom",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.039,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/02-better-stockroom/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 3.81,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/02-better-stockroom/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.944,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-yn9ncm4c/Stockroom.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.022,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-yn9ncm4c/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-yn9ncm4c/Stockroom.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-yn9ncm4c/Stockroom.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/02-better-stockroom-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "116073d8eedf6de566e75fae653e3777d23c9fa66d9c0689c194dc0858ed97bb",
+        "main.arya": "91093e616484c2fd80c91c0b2f65b48059e20f987682ba45b5c3c2da78b92bd5",
+        "verification.json": "691fe08039ec9c7d5b097e31184ae331b8e4bc7bcdf3b508f6c893dc62eefe5b",
+        "smoke.py": "07938dde089739f4e07b087f7f06b24d0028b55693302cf72d2ae536b5181d14"
+      },
+      "status": "passed",
+      "app": "dist/Stockroom.app",
+      "worker_sha256": "5baf674147f1e8a039af6d524a5e07d4c497781e3e37679e4cc7cd2cb33b9d97",
+      "host_sha256": "4b74113479b0548c7fb24d6940cf558f62cdc92f213bf98cde42be9ad7d823cb"
+    },
+    {
+      "path": "03-intermediate-support-desk",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.074,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/03-intermediate-support-desk/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 3.647,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/03-intermediate-support-desk/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.875,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-k74geup2/Harbor Support Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.039,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-k74geup2/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.04,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-k74geup2/Harbor Support Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-k74geup2/Harbor Support Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/03-intermediate-support-desk-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "7ea22870d034975d3678d13d4acbefa720a139d151a788090f7d78bf1cfb400c",
+        "main.arya": "8f1cec2f044c9661deb505b35b208919b6c34366370542a3b6405d7511e2cf79",
+        "verification.json": "2eb6ea4a59743e9233a7ff9af1acaddf2a7bf6b3b7dd7e88e81c97568afbbc49",
+        "smoke.py": "0536c4305f31c8b398c5ad08e80e8b53467b97e11067943cc79117b0111468ef"
+      },
+      "status": "passed",
+      "app": "dist/Harbor Support Desk.app",
+      "worker_sha256": "a81f43b4e78c96871a5f8791c3da756424211de517d8009b58903eaf22070f71",
+      "host_sha256": "7916bd54e9ac5cabba7730b92e7c51471e45a02209d5e4578bf97dc6f760bd1a"
+    },
+    {
+      "path": "04-advanced-project-studio",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.073,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/04-advanced-project-studio/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.3,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/04-advanced-project-studio/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.988,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-0edt44kc/Project Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.041,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-0edt44kc/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.041,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-0edt44kc/Project Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-0edt44kc/Project Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/04-advanced-project-studio-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "951da95dd021f6a37342b1338cf0e4178762af23cb76192d9540ce9b6ef00cf1",
+        "main.arya": "b6826e30f841be42cc44c643732c95a7be513a23ae51fcdf2a1fe2b23055c432",
+        "verification.json": "bcbad92543e4e139c15074192d0d489c0ec8b3f59721207c22833fe3892f4185",
+        "smoke.py": "18373bc286de003a5f2e62970769f73459a035b144733bd0debd971889e0e07e"
+      },
+      "status": "passed",
+      "app": "dist/Project Studio.app",
+      "worker_sha256": "7b5692fbd4455419f360850d3149cee52e6cb6dccc57b6080a78f6e02ec9f26a",
+      "host_sha256": "09f83e6b4a9cc2190e24a57a5525d10f912e1875dc5414f939f268a0cbfaab43"
+    },
+    {
+      "path": "05-pro-incident-center",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.039,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/05-pro-incident-center/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.055,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/05-pro-incident-center/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.826,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/05-pro-incident-center-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+        "main.arya": "b143ca8c290c09691c18d97d33c4ffc0a907d9f73f18b1ae255722c5a301dac6",
+        "verification.json": "ca1fd4d227062316433d38a8c07cf0c5a5193b95fae911ca5dc30eda6e5b3b0c",
+        "smoke.py": "20fe04330a0ffd9b3b54225aef9414c8a57699b7516a1a327798a4ea56ba4a46"
+      },
+      "status": "passed",
+      "app": "dist/Incident Center.app",
+      "worker_sha256": "e9c3b2bda7df57af853d9643f850676a93c277e1f81bca1af7caa478017ae160",
+      "host_sha256": "a238041dc32f7cfdb3751b0fffe06aaa1fc90fe55852527dd4fa0ee008295891"
+    },
+    {
+      "path": "06-world-class-ledger-studio",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.073,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/06-world-class-ledger-studio/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.762,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/06-world-class-ledger-studio/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.996,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-smoke.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.019,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.022,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T140114.042188Z/06-world-class-ledger-studio-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "66e9b45b5a08638c2fec31029852184584df48fe764297c68fef3aaf92775f0b",
+        "main.arya": "e82f9626861398bc040f774ffe48fcd55bcea121be36c6e51f85ce249748fcbc",
+        "verification.json": "9169bff7bd9df9d01c69f47e00ab6debe4d4eb9944e5bf93de6f56eaa316d106",
+        "smoke.py": "308b0a3362e9601d3b23acbea754a4f73850db8884662664a1ecb7394799d6ad"
+      },
+      "status": "passed",
+      "app": "dist/Ledger Studio.app",
+      "worker_sha256": "70d1e1a6bbec320880096bb7718164769b3f8b98717911aa8501efbd0ad348a5",
+      "host_sha256": "d81e5c8c6519b649549dac3c5b13a774ebf4822c310c76202f2d3e1cafdb697e"
+    }
+  ],
+  "host_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fmodules",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/shared/NativeHost.m",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "UniformTypeIdentifiers",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/NativeHost"
+    ],
+    "exit_code": 0,
+    "seconds": 1.259,
+    "log": "reports/20261113T140114.042188Z/appkit-host.log"
+  },
+  "host_binary_sha256": "0391144c87fd5886eb4ccdf8b634309eaab70f22ad89f84e81bb22f66bd9754c",
+  "passed": 6,
+  "failed": 0
+}

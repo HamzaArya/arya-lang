@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "id": "sale-001",
+      "lines": [
+        {
+          "account": "cash",
+          "debit": "125.50",
+          "credit": "0.00"
+        },
+        {
+          "account": "sales",
+          "debit": "0.00",
+          "credit": "125.50"
+        }
+      ]
+    }
+  ]
+}

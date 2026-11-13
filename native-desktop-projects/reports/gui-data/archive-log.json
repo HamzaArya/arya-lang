@@ -1,0 +1,59 @@
+[
+  {
+    "app": "Study Desk",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/study-desk/data.json",
+    "archived": "reports/gui-data/study-desk.json",
+    "counts": {
+      "sessions": 1,
+      "notes": 0
+    }
+  },
+  {
+    "app": "Stockroom",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/stockroom/data.json",
+    "archived": "reports/gui-data/stockroom.json",
+    "counts": {
+      "products": 1,
+      "movements": 1
+    }
+  },
+  {
+    "app": "Harbor Support Desk",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/support-desk/data.json",
+    "archived": "reports/gui-data/support-desk.json",
+    "counts": {
+      "tickets": 1,
+      "history": 2
+    }
+  },
+  {
+    "app": "Project Studio",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/project-studio/data.json",
+    "archived": "reports/gui-data/project-studio.json",
+    "counts": {
+      "projects": 1,
+      "tasks": 1,
+      "history": 2
+    }
+  },
+  {
+    "app": "Incident Center",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/incident-center/data.json",
+    "archived": "reports/gui-data/incident-center.json",
+    "counts": {
+      "incidents": 1,
+      "services": 0,
+      "events": 1
+    }
+  },
+  {
+    "app": "Ledger Studio",
+    "source": "/Users/hamza/Library/Application Support/Arya Native/ledger-studio/data.json",
+    "archived": "reports/gui-data/ledger-studio.json",
+    "counts": {
+      "accounts": 2,
+      "journals": 1,
+      "reconciliations": 0
+    }
+  }
+]

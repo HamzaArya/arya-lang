@@ -1,0 +1,12 @@
+[
+  {
+    "zone": "Asia/Kabul",
+    "cases": 803,
+    "identical": true
+  },
+  {
+    "zone": "America/Los_Angeles",
+    "cases": 803,
+    "identical": true
+  }
+]

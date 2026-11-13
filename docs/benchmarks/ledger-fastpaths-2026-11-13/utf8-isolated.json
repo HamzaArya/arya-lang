@@ -1,0 +1,6491 @@
+{
+  "recordedAtUtc": "2026-11-13T03:18:12.755806+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "logicalCpus": 8,
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "command": [
+    "/usr/local/bin/python3",
+    "native/benchmarks/utf8-storage.py",
+    "--binary",
+    "before:.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+    "--binary",
+    "after:.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+    "--provenance",
+    ".build/ledger-fastpaths-2026-11-13/utf8-storage/final-provenance.json",
+    "--output",
+    ".build/ledger-fastpaths-2026-11-13/utf8-storage/final-isolated.json"
+  ],
+  "sourceSha256": "21bd383ea825162e4454c318c1e7805d315314a24db0a7d8cf71e8e1b08a2687",
+  "controllerSha256": "4fc4c37fb7d16365c08041f2d4ed08d5dd809710bef2c5b2ecf51c8c4f9976a1",
+  "method": "Release binaries; CPU clock inside conversion loop, after20 warmup conversions and collection. One discarded whole-process warmup per variant/case; alternating fresh-process samples. No counters or sanitizers. Build/startup/output excluded. Scalar byte/unit length checksums verified; content/ownership/guard-page tests are separate.",
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "artifacts": {
+    "before": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+      "binarySha256": "1e1c626f2240697f493a2b88512e8e2741777743d691cf587510b6f6bc681d65",
+      "generatedCSha256": "155e9a8193156d0f8fff66773d29f8acf6eb820f893726762e00b402c9a69a54"
+    },
+    "after": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+      "binarySha256": "ba7f2a06d24dc5b96f8327736a0823faf9036dfafeef04b5dc5ec3a70ea3db7d",
+      "generatedCSha256": "6ed5dd165479bbf46f6761f1fb6b5594768a9e47d9fc533c8c25e25f3da1fd66"
+    }
+  },
+  "warmups": [
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": -1,
+      "cpuMs": 13.805,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.79638671875,
+        6.06884765625,
+        5.666015625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": -1,
+      "cpuMs": 32.179,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 2.805,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 41.567,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": -1,
+      "cpuMs": 5.244999999999999,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": -1,
+      "cpuMs": 130.633,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 37.878,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 37.749,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 41.645999999999994,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 41.403999999999996,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 41.548,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 41.004,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 40.327,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 40.743,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": -1,
+      "cpuMs": 15.511000000000001,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": -1,
+      "cpuMs": 20.576,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 3.387,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.352,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": -1,
+      "cpuMs": 8.98,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": -1,
+      "cpuMs": 44.059,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 18.970999999999997,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 18.898000000000003,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.642999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.618,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 15.706999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.556,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.811000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": -1,
+      "cpuMs": 14.315999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 33.495999999999995,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 13.981,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 13.889,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 30.823,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 35.067,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 13.908,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 13.799,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 30.740999999999996,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 30.676000000000002,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 14.155000000000001,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 14.344000000000001,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 33.345,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 31.917,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 13.971999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 14.024000000000001,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 30.839000000000002,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 30.660999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 13.934000000000001,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 41.369,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 2.918,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 2.8870000000000005,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 42.336999999999996,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 42.788,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 2.825,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 2.793,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 41.875,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 41.319,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 3.0,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 2.9610000000000003,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 41.428,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.558,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 2.871,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 2.81,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 40.465,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 40.233,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 2.699,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 0,
+      "cpuMs": 133.00500000000002,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 0,
+      "cpuMs": 5.603000000000001,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 1,
+      "cpuMs": 5.283,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 1,
+      "cpuMs": 131.07399999999998,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 2,
+      "cpuMs": 130.554,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 2,
+      "cpuMs": 5.315,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 3,
+      "cpuMs": 5.413,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 3,
+      "cpuMs": 130.562,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 4,
+      "cpuMs": 130.089,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 4,
+      "cpuMs": 5.1869999999999985,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 5,
+      "cpuMs": 5.16,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 5,
+      "cpuMs": 129.965,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 6,
+      "cpuMs": 130.941,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 6,
+      "cpuMs": 5.271000000000001,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 7,
+      "cpuMs": 5.317,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 7,
+      "cpuMs": 136.565,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 8,
+      "cpuMs": 129.84500000000003,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 8,
+      "cpuMs": 5.199000000000001,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 38.05,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 37.798,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 37.806,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 37.83,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 37.934000000000005,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 37.743,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 37.761,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 37.507,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 37.510000000000005,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 37.6,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 37.31,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 37.150000000000006,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 36.987,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 37.271,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 37.32299999999999,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 38.086999999999996,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 42.367000000000004,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 37.418,
+      "checksum": 16368000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 43.846,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 43.609,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 41.025,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 40.794999999999995,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 40.716,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 41.281,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.455,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.440000000000005,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 40.72299999999999,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 40.970000000000006,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 40.526,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 40.579,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.815999999999995,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.743,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 40.661,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 40.823,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 40.724000000000004,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 41.159,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 40.99,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 41.596,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 40.983,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 40.222,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 40.881,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 41.338,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.876999999999995,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.845,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.892578125,
+        6.0673828125,
+        5.66796875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 40.97,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 41.32900000000001,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 41.098,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 40.940999999999995,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.889,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 41.308,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 41.537,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 40.9,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 40.69800000000001,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 41.038,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 40.574,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 42.37100000000001,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 42.041,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 40.701,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 41.189,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 40.352000000000004,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.978,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 40.83,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 40.817,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 41.255,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 40.811,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 40.995999999999995,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.984,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 40.769,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 41.18899999999999,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 40.773,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 40.705000000000005,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 40.993,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "decode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 20.0,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 15.185,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 15.218,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 20.513,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 20.621000000000002,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 15.419,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 15.670999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 20.561,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 20.481,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 15.688999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 15.475999999999999,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 20.793,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 20.676,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 15.663,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 15.441999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 20.642,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 20.694,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 15.477999999999998,
+      "checksum": 6400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "64",
+        "100000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.466,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 3.361,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 3.402,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.575,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.591,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 3.463,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 3.331,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.618,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.479,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 3.4099999999999993,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 3.3890000000000007,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.523,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.472,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 3.406,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 3.367,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 14.462,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 14.378,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 3.4470000000000005,
+      "checksum": 16384000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 0,
+      "cpuMs": 43.07,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 0,
+      "cpuMs": 9.173,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 1,
+      "cpuMs": 9.113,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 1,
+      "cpuMs": 43.212,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 2,
+      "cpuMs": 43.443999999999996,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 2,
+      "cpuMs": 8.931999999999999,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 3,
+      "cpuMs": 9.181999999999999,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 3,
+      "cpuMs": 44.260999999999996,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 4,
+      "cpuMs": 54.786,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 4,
+      "cpuMs": 9.012,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 5,
+      "cpuMs": 8.741999999999999,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 5,
+      "cpuMs": 43.007999999999996,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 6,
+      "cpuMs": 44.129000000000005,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 6,
+      "cpuMs": 10.104,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 7,
+      "cpuMs": 9.374,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 7,
+      "cpuMs": 45.099999999999994,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 8,
+      "cpuMs": 43.876,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "sample": 8,
+      "cpuMs": 9.01,
+      "checksum": 52428800,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "262144",
+        "200",
+        "ascii"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 18.936,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 18.986000000000004,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 18.896,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 18.676000000000002,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 18.987,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 18.903,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 18.884999999999998,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 18.834,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 19.064,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 19.249000000000002,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 19.622999999999998,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 19.753,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 19.319,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 19.157,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 19.657999999999998,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 18.974,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 19.098,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 18.88,
+      "checksum": 32736000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4092",
+        "4000",
+        "unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.681,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.525000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.582,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.721,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.568999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.644999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.712000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.622000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.554999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.621,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.955000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 15.318999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.626,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.533,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 15.073999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 14.818999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 15.296,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 15.182999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "early-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.722000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 15.413000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 15.447000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.629999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.616,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 15.296999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 15.091999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.216000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.234999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.913999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.870999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.116,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.263,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 15.671000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 15.591,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 14.993,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 14.854,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 15.521000000000003,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "middle-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.237,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 0,
+      "cpuMs": 14.511999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.254,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 1,
+      "cpuMs": 14.190000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.134999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 2,
+      "cpuMs": 14.229,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.173,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 3,
+      "cpuMs": 14.203,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.120000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 4,
+      "cpuMs": 14.175,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.122000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 5,
+      "cpuMs": 14.165999999999999,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.251,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 6,
+      "cpuMs": 14.119,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 14.077999999999998,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 7,
+      "cpuMs": 14.113000000000001,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 14.164,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/before-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "sample": 8,
+      "cpuMs": 14.086000000000002,
+      "checksum": 16388000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/utf8-storage/after-final",
+        "encode",
+        "4096",
+        "4000",
+        "late-unicode"
+      ],
+      "load": [
+        4.74072265625,
+        6.01611328125,
+        5.65185546875
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "medianCpuMs": 30.839000000000002,
+      "minCpuMs": 30.660999999999998,
+      "maxCpuMs": 35.067
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "medianCpuMs": 13.971999999999998,
+      "minCpuMs": 13.799,
+      "maxCpuMs": 14.344000000000001
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 41.369,
+      "minCpuMs": 40.233,
+      "maxCpuMs": 42.788
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 2.871,
+      "minCpuMs": 2.699,
+      "maxCpuMs": 3.0
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "medianCpuMs": 130.562,
+      "minCpuMs": 129.84500000000003,
+      "maxCpuMs": 136.565
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "medianCpuMs": 5.283,
+      "minCpuMs": 5.16,
+      "maxCpuMs": 5.603000000000001
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "medianCpuMs": 37.83,
+      "minCpuMs": 36.987,
+      "maxCpuMs": 42.367000000000004
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "medianCpuMs": 37.6,
+      "minCpuMs": 37.271,
+      "maxCpuMs": 37.806
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 40.724000000000004,
+      "minCpuMs": 40.440000000000005,
+      "maxCpuMs": 43.846
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 40.970000000000006,
+      "minCpuMs": 40.455,
+      "maxCpuMs": 43.609
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 40.889,
+      "minCpuMs": 40.222,
+      "maxCpuMs": 40.99
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 41.308,
+      "minCpuMs": 40.876999999999995,
+      "maxCpuMs": 41.596
+    },
+    {
+      "label": "before",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 40.817,
+      "minCpuMs": 40.574,
+      "maxCpuMs": 41.189
+    },
+    {
+      "label": "after",
+      "mode": "decode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 40.993,
+      "minCpuMs": 40.352000000000004,
+      "maxCpuMs": 42.37100000000001
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "medianCpuMs": 20.621000000000002,
+      "minCpuMs": 20.0,
+      "maxCpuMs": 20.793
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 64,
+      "iterations": 100000,
+      "medianCpuMs": 15.475999999999999,
+      "minCpuMs": 15.185,
+      "maxCpuMs": 15.688999999999998
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.479,
+      "minCpuMs": 14.378,
+      "maxCpuMs": 14.618
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 3.402,
+      "minCpuMs": 3.331,
+      "maxCpuMs": 3.463
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "medianCpuMs": 43.876,
+      "minCpuMs": 43.007999999999996,
+      "maxCpuMs": 54.786
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "ascii",
+      "units": 262144,
+      "iterations": 200,
+      "medianCpuMs": 9.113,
+      "minCpuMs": 8.741999999999999,
+      "maxCpuMs": 10.104
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "medianCpuMs": 18.987,
+      "minCpuMs": 18.676000000000002,
+      "maxCpuMs": 19.753
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "unicode",
+      "units": 4092,
+      "iterations": 4000,
+      "medianCpuMs": 18.986000000000004,
+      "minCpuMs": 18.88,
+      "maxCpuMs": 19.657999999999998
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.681,
+      "minCpuMs": 14.554999999999998,
+      "maxCpuMs": 15.318999999999999
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "early-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.644999999999998,
+      "minCpuMs": 14.525000000000002,
+      "maxCpuMs": 15.182999999999998
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.616,
+      "minCpuMs": 14.116,
+      "maxCpuMs": 14.993
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "middle-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 15.413000000000002,
+      "minCpuMs": 14.870999999999999,
+      "maxCpuMs": 15.671000000000001
+    },
+    {
+      "label": "before",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.165999999999999,
+      "minCpuMs": 14.113000000000001,
+      "maxCpuMs": 14.251
+    },
+    {
+      "label": "after",
+      "mode": "encode",
+      "kind": "late-unicode",
+      "units": 4096,
+      "iterations": 4000,
+      "medianCpuMs": 14.173,
+      "minCpuMs": 14.077999999999998,
+      "maxCpuMs": 14.511999999999999
+    }
+  ],
+  "provenance": {
+    "baselineCompilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+    "change": "Only as16-through-autf8 conversion section replaced in baseline-generated C; as16 body and non-ASCII conversion bodies unchanged. Added portable ASCII classifiers, direct final UTF16 decode buffer, and exact-sized ASCII encoding.",
+    "beforeRuntimeSectionSha256": "d86c873506b7ee79e45168679ca480fddf5e0aaf4ef17bedfc2c73ac20b6a4ff",
+    "afterRuntimeSectionSha256": "09224e4c34cd539eda69c199c4d4978887ae75df54644923b087aff75ed95144",
+    "flags": "-std=c11 -O2 -ffp-contract=off; libmpdec.a -lm -pthread"
+  },
+  "provenanceSha256": "b2810d45175b685d1133dfd683617214aa6465cb09d24dccf2e5136567708ab1"
+}

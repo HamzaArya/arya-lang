@@ -2,7 +2,7 @@ use std "json" as json
 use std "decimal" as decimal
 const value = json.parse("""{"2":2,"1":1,"text":"line\nbreak","nul":"\u0000","surrogate":"\ud800"}""")
 print(json.stringify(value))
-const cycle = {value: 1}
+const cycle: any = {value: 1}
 cycle.self = cycle
 try { json.stringify(cycle) } catch error { print(error.name) }
 try { json.parse("true false") } catch error { print(error.name) }
@@ -11,3 +11,13 @@ print(json.stringify({toJSON: fn() => 1}))
 try { decimal.roundingModes[0] = "wrong" } catch error { print(error.name) }
 try { decimal.add = fn(a,b) => "wrong" } catch error { print(error.name) }
 for letter at index in "🌉A" { print(index, len(letter)) }
+# The plain writer must retain the same container depth boundary.
+let nested: any = []
+for i in range(127) { nested = [nested] }
+print(len(json.stringify(nested) ?? ""))
+nested = [nested]
+try { json.stringify(nested) } catch error { print(error.name) }
+# Reusing an immutable parsed string must not change another value's snapshot.
+let repeated: any = json.parse('["shared","shared"]')
+repeated[0] += "!"
+print(repeated[0], repeated[1])

@@ -1,0 +1,3 @@
+ARYA_RUNTIME_COUNTERS {"callocCalls":120277,"heapObjects":64232,"environments":1004,"functions":2127,"genericCalls":26032,"directCalls":25008,"numericCalls":0,"heapTemporaries":2004,"gcCollections":6,"peakManagedBytes":7005448,"scalarCalls":0,"rootedCalls":26031,"rootPushes":54307,"environmentLookups":15084}
+ARYA_ALLOCATION_DETAIL {"requestedBytes":23479253,"strings":41014,"stringUnits":548360,"jsonKeyHits":7995,"fieldCacheHits":28990,"decimalFastPaths":4000,"gcCpuMs":4.671000}
+ARYA_NUMBER_DETAIL {"toFixedFastPaths":0,"toFixedFallbacks":0,"globalCacheHits":0,"dataDescriptorCalls":0}

@@ -1,0 +1,149 @@
+# Authentication flows over native crypto, indexed sessions and OS credentials.
+use std "_auth" as native
+use std "security" as security
+use std "runtime" as runtime
+
+fn failure(code, message) { let error = new Error(message); error.code = code; return error }
+fn options(value, names) {
+  if runtime.kind(value) != "record" or runtime.hasAccessor(value) { throw failure("ARYA_AUTH_INPUT", "Authentication options require data fields.") }
+  for key in runtime.keys(value) { if not names.includes(key) { throw failure("ARYA_AUTH_INPUT", "Unknown authentication option: " + key) } }
+  return value
+}
+fn integer(value, minimum, maximum) {
+  if not Number.isSafeInteger(value) or value < minimum or value > maximum { throw failure("ARYA_AUTH_INPUT", "Authentication integer is outside its allowed range.") }
+  return value
+}
+fn text(value, maximum) {
+  if runtime.kind(value) != "string" or value.length < 1 or value.length > maximum { throw failure("ARYA_AUTH_INPUT", "Expected bounded nonempty authentication text.") }
+  return value
+}
+
+# Password work uses the existing bounded native scrypt workers and formats.
+export async fn hashPassword(password, settings = {}) { return await security.hashPassword(password, settings) }
+export async fn verifyPassword(password, encoded) { return await security.verifyPassword(password, encoded) }
+export async fn verifyPasswordAndUpgrade(password, encoded, settings = {}) { return await security.verifyPasswordAndUpgrade(password, encoded, settings) }
+export fn passwordNeedsUpgrade(encoded, settings = {}) { return security.passwordNeedsUpgrade(encoded, settings) }
+export fn sessions(settings = {}) { return native.sessions(settings) }
+export fn generateTotpSecret(bytes = 20) { return native.generateTotpSecret(bytes) }
+export fn totpCode(secret, settings = {}) { return native.totpCode(secret, settings) }
+export fn verifyTotp(secret, code, settings = {}) { return native.verifyTotp(secret, code, settings) }
+export fn pkce(verifier) { return native.pkce(verifier) }
+
+export fn totpUri(secret, settings) {
+  settings = options(settings, ["issuer", "account", "algorithm", "digits", "period"])
+  const issuer = text(settings.issuer, 128); const account = text(settings.account, 256)
+  if issuer.includes(":") or account.includes(":") { throw failure("ARYA_AUTH_INPUT", "TOTP issuer and account must not contain a colon.") }
+  # Validate secret and profile in native code without exposing a current code.
+  const profile = {algorithm: settings.algorithm ?? "SHA1", digits: settings.digits ?? 6, period: settings.period ?? 30}
+  native.totpCode(secret, profile)
+  return "otpauth://totp/" + encodeURIComponent(issuer) + ":" + encodeURIComponent(account) + "?secret=" + secret + "&issuer=" + encodeURIComponent(issuer) + "&algorithm=" + profile.algorithm + "&digits=" + str(profile.digits) + "&period=" + str(profile.period)
+}
+
+# A separate opaque store binds each challenge namespace to one purpose. Taking
+# a challenge validates and consumes it synchronously, before any await point.
+export fn challenges(settings) {
+  settings = options(settings, ["purpose", "ttlSeconds", "maxChallenges"])
+  const purpose = text(settings.purpose, 64)
+  const store = native.sessions({ttlSeconds: integer(settings.ttlSeconds ?? 600, 1, 3600), maxSessions: integer(settings.maxChallenges ?? 4096, 1, 65536)})
+  return Object.freeze({
+    purpose,
+    issue: fn(subject) { return store.issue(subject, {methods: ["challenge"]}) },
+    consume: fn(token) { return store.consume(token) },
+    revoke: fn(token) { return store.revoke(token) },
+    revokeAll: fn(subject) { return store.revokeAll(subject) },
+    sweep: fn() { return store.sweep() },
+    stats: fn() { return store.stats() },
+    close: fn() { return store.close() }
+  })
+}
+
+export fn recoveryCodes(settings = {}) {
+  settings = options(settings, ["count"])
+  const count = integer(settings.count ?? 10, 1, 20)
+  let codes = []; let hashes = []
+  for _index in range(count) { const code = security.randomToken(16); codes.push(code); hashes.push(security.hash("arya$recovery$v1$" + code)) }
+  return Object.freeze({codes: Object.freeze(codes), hashes: Object.freeze(hashes)})
+}
+export fn consumeRecoveryCode(code, hashes) {
+  if not Array.isArray(hashes) or hashes.length > 20 or runtime.hasAccessor(hashes) { throw failure("ARYA_AUTH_INPUT", "Recovery hashes require a data list of at most twenty SHA-256 digests.") }
+  # Do the complete bounded scan, including after a match. Persist the returned
+  # hashes with an atomic compare-and-swap before accepting authentication.
+  let valid = runtime.kind(code) == "string" and code.length == 22
+  let checked = "invalid"; if valid { checked = code }
+  const candidate = security.hash("arya$recovery$v1$" + checked)
+  let matched = false; let remaining = []
+  for hash in hashes {
+    if runtime.kind(hash) != "string" or hash.length != 64 { throw failure("ARYA_AUTH_INPUT", "Recovery hash must be a SHA-256 digest.") }
+    for character in hash { if not "0123456789abcdef".includes(character) { throw failure("ARYA_AUTH_INPUT", "Recovery hash must be canonical lowercase SHA-256 hex.") } }
+    const equal = security.timingSafeEqual(candidate, hash)
+    if equal and valid { matched = true } else { remaining.push(hash) }
+  }
+  return Object.freeze({ok: matched, hashes: Object.freeze(remaining)})
+}
+
+export fn bearer(header) {
+  if runtime.kind(header) != "string" or header.length > 4096 { return null }
+  # Exactly one RFC 6750 token, no commas, extra fields or embedded whitespace.
+  const parts = header.split(" ")
+  if parts.length != 2 or parts[0].toLowerCase() != "bearer" or parts[1].length == 0 { return null }
+  for character in parts[1] { if not "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+/=".includes(character) { return null } }
+  const padding = parts[1].indexOf("=")
+  if padding == 0 { return null }
+  if padding > 0 { for character in parts[1].slice(padding) { if character != "=" { return null } } }
+  return parts[1]
+}
+export fn requireMethods(session, methods) {
+  if not Array.isArray(methods) or methods.length == 0 or methods.length > 8 or runtime.hasAccessor(methods) { throw failure("ARYA_AUTH_INPUT", "Required methods must be a nonempty data list.") }
+  if runtime.kind(session) != "record" or runtime.hasAccessor(session) or not Array.isArray(session.methods) or runtime.hasAccessor(session.methods) { throw failure("ARYA_AUTH_REQUIRED", "Authentication is required.") }
+  for method in methods { text(method, 32); if not session.methods.includes(method) { throw failure("ARYA_AUTH_REQUIRED", "Additional authentication is required.") } }
+  return session
+}
+
+# Bounded fixed-window attempts, charged before password or OTP verification.
+# Native monotonic time prevents wall-clock changes from resetting lockouts.
+export fn rateLimiter(settings = {}) {
+  settings = options(settings, ["maxAttempts", "windowSeconds", "maxEntries"])
+  const maximum = integer(settings.maxAttempts ?? 5, 1, 1000)
+  const window = integer(settings.windowSeconds ?? 300, 1, 86400)
+  const capacity = integer(settings.maxEntries ?? 4096, 1, 65536)
+  let entries = new Map(); let closed = false
+  fn open() { if closed { throw failure("ARYA_AUTH_CLOSED", "This authentication limiter is closed.") } }
+  fn key(value) { return security.hash(text(value, 512)) }
+  fn sweep() { open(); const now = native.monotonic(); let count = 0; for item in entries.entries() { if item[1].expires <= now { entries.delete(item[0]); count += 1 } }; return count }
+  fn attempt(value) {
+    open(); const digest = key(value); const now = native.monotonic(); let entry = entries.get(digest)
+    if entry == undefined or entry.expires <= now {
+      if entry == undefined and entries.size >= capacity { sweep(); if entries.size >= capacity { return Object.freeze({allowed: false, remaining: 0, retryAfter: window}) } }
+      entry = {used: 0, expires: now + window}; entries.set(digest, entry)
+    }
+    if entry.used >= maximum { return Object.freeze({allowed: false, remaining: 0, retryAfter: Math.ceil(entry.expires - now)}) }
+    entry.used += 1
+    return Object.freeze({allowed: true, remaining: maximum - entry.used, retryAfter: 0})
+  }
+  return Object.freeze({attempt, reset: fn(value) { open(); return entries.delete(key(value)) }, sweep, stats: fn() { sweep(); return Object.freeze({active: entries.size, maxEntries: capacity}) }, close: fn() { entries.clear(); closed = true }})
+}
+
+export fn biometricStatus(settings = {}) { return native.biometricStatus(settings) }
+export async fn authenticate(settings) { return await native.authenticate(settings) }
+export fn vault(settings) {
+  settings = options(settings, ["service", "policy", "timeoutMs", "interactive", "cancelTitle"])
+  const service = text(settings.service, 128); const policy = settings.policy ?? "biometrics"
+  if not ["biometrics", "device-owner"].includes(policy) { throw failure("ARYA_AUTH_INPUT", "Vault policy must be biometrics or device-owner.") }
+  const timeoutMs = integer(settings.timeoutMs ?? 30000, 1, 120000)
+  const interactive = settings.interactive ?? true
+  if runtime.kind(interactive) != "boolean" { throw failure("ARYA_AUTH_INPUT", "interactive must be a boolean.") }
+  const cancelTitle = settings.cancelTitle
+  if cancelTitle != undefined { text(cancelTitle, 64) }
+  fn local(reason, callOptions) {
+    callOptions = options(callOptions, ["timeoutMs", "signal", "interactive", "cancelTitle"])
+    let result = {reason: text(reason, 256), policy, timeoutMs, interactive, cancelTitle}
+    for key in runtime.keys(callOptions) { if callOptions[key] != undefined { result[key] = callOptions[key] } }
+    return result
+  }
+  return Object.freeze({
+    store: async fn(account, secret, reason, callOptions = {}) { return await native.vaultStore(service, account, secret, local(reason, callOptions)) },
+    read: async fn(account, reason, callOptions = {}) { return await native.vaultRead(service, account, undefined, local(reason, callOptions)) },
+    remove: async fn(account, reason, callOptions = {}) { return await native.vaultRemove(service, account, undefined, local(reason, callOptions)) },
+    replace: async fn(account, secret, reason, callOptions = {}) { return await native.vaultReplace(service, account, secret, local(reason, callOptions)) }
+  })
+}

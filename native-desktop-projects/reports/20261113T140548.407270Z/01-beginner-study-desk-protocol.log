@@ -1,0 +1,27 @@
+{
+  "views" : [
+    {
+      "view" : "sessions",
+      "response" : {
+        "message" : "Ready. Changes are saved on this computer.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 planned · 0 minutes remaining · 0 overdue · 0 completed"
+      }
+    },
+    {
+      "view" : "notes",
+      "response" : {
+        "message" : "Ready. Changes are saved on this computer.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 saved notes · Select a note to read, edit or delete it."
+      }
+    }
+  ],
+  "ok" : true
+}

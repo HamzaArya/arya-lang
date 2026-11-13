@@ -1,37 +1,37 @@
-# Release notes and publication records
+# Historical release notes and publication records
 
-The current published npm preview is **[1.3.0-alpha.9](1.3.0-alpha.9.md)** on `next`, with Marketplace extension **1.3.4**. The `latest` tag remains on **1.2.0-alpha.4**. See the [verified publication record](1.3.0-alpha.9-publication.json) and [release readiness](../release-readiness.md). Registry tags can move; pin an exact version for reproducible installs.
+This directory retains release notes and publication transactions for earlier Arya implementations. Registry tags and Marketplace versions mentioned in these records are observations from their publication dates, not a current registry lookup. For the native 2.0 toolchain, use the [installation guide](../installing.md), [SDK guide](../native-sdk.md) and [current documentation](../README.md).
 
-## Source candidates
+## Retained 1.3 records
 
-| Version | Changes |
+| Version | Recorded changes |
 | --- | --- |
-| [1.3.0-alpha.12](1.3.0-alpha.12.md) | Unpublished typed IR and LLVM scalar executable preview |
-| [1.3.0-alpha.11](1.3.0-alpha.11.md) | Unpublished exact accounting runtime, optional native batch kernel, architecture audit and staged native compiler plan |
-| [1.3.0-alpha.10](1.3.0-alpha.10.md) | Unpublished flow/npm typing, workspace/editor reliability, core maintenance and learner review candidate |
-| [1.3.0-alpha.9](1.3.0-alpha.9.md) | Reliability fixes, safer editor operations and consistent version/onboarding guidance; published on `next` |
-| [1.3.0-alpha.8](1.3.0-alpha.8.md) | Retained local reliability candidate; never published |
-| [1.3.0-alpha.7](1.3.0-alpha.7.md) | Checked rest parameter arrays and final business application artifact |
-| [1.3.0-alpha.6](1.3.0-alpha.6.md) | Relocatable business mapping builds; reviewed successor to alpha.5 |
-| [1.3.0-alpha.5](1.3.0-alpha.5.md) | Node business APIs, runtime isolation, optional types and developer tools |
-| [1.3.0-alpha.4](1.3.0-alpha.4.md) | Canonical syntax and removal of alternate spellings; [migration](../syntax-migration.md) |
-| [1.3.0-alpha.3](1.3.0-alpha.3.md) | UI components, sections, and full-page templates |
-| [1.3.0-alpha.2](1.3.0-alpha.2.md) | Pipelines, concise functions, guards, indexed loops, cleanup, and list helpers |
-| [1.3.0-alpha.1](1.3.0-alpha.1.md) | Node.js-only runtime and native migration |
+| [1.3.0-alpha.12](1.3.0-alpha.12.md) | Typed IR and LLVM scalar executable preview |
+| [1.3.0-alpha.11](1.3.0-alpha.11.md) | Exact accounting runtime, optional native batch kernel and staged compiler plan |
+| [1.3.0-alpha.10](1.3.0-alpha.10.md) | Flow/npm typing, workspace/editor reliability and learner review candidate |
+| [1.3.0-alpha.9](1.3.0-alpha.9.md) | Reliability and editor fixes; [publication transaction](1.3.0-alpha.9-publication.json) |
+| [1.3.0-alpha.8](1.3.0-alpha.8.md) | Retained local reliability candidate |
+| [1.3.0-alpha.7](1.3.0-alpha.7.md) | Rest parameter checking and business application artifact |
+| [1.3.0-alpha.6](1.3.0-alpha.6.md) | Relocatable business mapping builds |
+| [1.3.0-alpha.5](1.3.0-alpha.5.md) | Node business APIs, runtime isolation and developer tools |
+| [1.3.0-alpha.4](1.3.0-alpha.4.md) | Canonical spellings; [historical syntax migration](../../compat/node/docs/syntax-migration.md) |
+| [1.3.0-alpha.3](1.3.0-alpha.3.md) | UI components, sections and page templates |
+| [1.3.0-alpha.2](1.3.0-alpha.2.md) | Pipelines, concise functions, guards, indexed loops and cleanup |
+| [1.3.0-alpha.1](1.3.0-alpha.1.md) | Node-only profile and migration from the earlier native implementation |
 
-These notes record source candidates, not completed npm publications. Use [candidate setup](../node-runtime.md#try-the-candidate) to build the checkout or create a project with a matching archive.
+A source-candidate note is not proof of publication. The associated transaction JSON, where present, identifies what was published. These versions use the [retained compatibility implementation](../../compat/node/README.md); their setup instructions must not be used to install the current native SDK.
 
 ## Earlier previews
 
-| Version | Changes / recorded distribution |
+| Version | Recorded changes and distribution |
 | --- | --- |
-| [1.2.0-alpha.4](1.2.0-alpha.4.md) | UI/motion, editor setup, services/MySQL, async Python, safer expressions; [verified npm transaction](1.2.0-alpha.4-publication.json) |
-| [1.2.0-alpha.3](1.2.0-alpha.3.md) | Interactive project creator; [verified npm transaction](1.2.0-alpha.3-publication.json) |
-| [1.2.0-alpha.2](1.2.0-alpha.2.md) | HTML-first web applications; local preview |
-| [1.2.0-alpha.1](1.2.0-alpha.1.md) | Branded spellings, standard libraries, inline views; local preview |
-| [1.1.0-alpha.1](1.1.0-alpha.1.md) | Native compilation/self-hosting; [verified publication](../history/native-release-verification.md) |
-| [0.2.0-alpha.3](0.2.0-alpha.3.md) | Arya module graphs, interop, public distribution |
-| [0.2.0-alpha.2](0.2.0-alpha.2.md) | Lexical name and const-write checks; local preview |
-| [0.2.0-alpha.1](0.2.0-alpha.1.md) | Source maps; local preview |
+| [1.2.0-alpha.4](1.2.0-alpha.4.md) | UI, editor support, services, MySQL and async Python; [publication transaction](1.2.0-alpha.4-publication.json) |
+| [1.2.0-alpha.3](1.2.0-alpha.3.md) | Project creator; [publication transaction](1.2.0-alpha.3-publication.json) |
+| [1.2.0-alpha.2](1.2.0-alpha.2.md) | HTML-first web applications |
+| [1.2.0-alpha.1](1.2.0-alpha.1.md) | Earlier spellings, standard libraries and inline views |
+| [1.1.0-alpha.1](1.1.0-alpha.1.md) | Native compilation/self-hosting; [publication evidence](../history/native-release-verification.md) |
+| [0.2.0-alpha.3](0.2.0-alpha.3.md) | Arya module graphs, interoperability and distribution |
+| [0.2.0-alpha.2](0.2.0-alpha.2.md) | Lexical and const-write checks |
+| [0.2.0-alpha.1](0.2.0-alpha.1.md) | Source maps |
 
-Earlier notes describe their own implementation and qualification dates. Their native commands, preparation states, and old registry pointers do not describe the current source. See the [migration guide](../node-runtime.md) and [history index](../history/README.md) for retired features.
+Original guide content is preserved under `compat/node/docs`; links in retained Markdown notes may point there after documentation consolidation. Publication JSON, archive hashes and benchmark/qualification records are unchanged. See the [history index](../history/README.md) and [cleanup manifest](../maintenance/cleanup-2026-11-13.json).

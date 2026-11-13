@@ -1,0 +1,92 @@
+{
+  "id": "calc-scientific",
+  "name": "Scientific Calculator",
+  "subtitle": "Functions, powers and a clear real-number model.",
+  "views": [
+    {
+      "id": "history",
+      "label": "Calculation history",
+      "columns": [
+        {
+          "key": "expression",
+          "label": "Calculation",
+          "width": 350
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "width": 240
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "width": 120
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "calculator": {
+    "placeholder": "Example: sin(30) + sqrt(9) + 2^3",
+    "memory": true,
+    "keys": [
+      [
+        "7",
+        "8",
+        "9",
+        "/",
+        "sin(",
+        "cos("
+      ],
+      [
+        "4",
+        "5",
+        "6",
+        "*",
+        "tan(",
+        "sqrt("
+      ],
+      [
+        "1",
+        "2",
+        "3",
+        "-",
+        "ln(",
+        "log("
+      ],
+      [
+        "0",
+        ".",
+        "(",
+        ")",
+        "+",
+        "^"
+      ],
+      [
+        "pi",
+        "e",
+        "!",
+        "abs(",
+        "exp(",
+        "%"
+      ]
+    ],
+    "options": [
+      {
+        "key": "angle",
+        "label": "Angle",
+        "default": "deg",
+        "choices": [
+          {
+            "value": "deg",
+            "label": "Degrees"
+          },
+          {
+            "value": "rad",
+            "label": "Radians"
+          }
+        ]
+      }
+    ]
+  }
+}

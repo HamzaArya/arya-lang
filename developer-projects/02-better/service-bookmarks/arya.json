@@ -1,0 +1,6 @@
+{
+  "name": "service-bookmarks",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "api"
+}

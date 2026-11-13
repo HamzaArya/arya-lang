@@ -1,0 +1,227 @@
+{
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+  "compilerSha256": "8a034a4dee8dd637b657dcb7df19d8811854c73a0c52ff1a7fbeb2a42de3e8ec",
+  "work": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19",
+  "commands": [
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "create",
+        "prices",
+        "--template",
+        "cli"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19",
+      "exitCode": 0,
+      "stdout": "Created native Arya cli project: /Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices'\narya run main.arya\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/main.arya\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "test",
+        "main.test.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "ok 1 - decimal totals preserve cents\n1..1\n# suites 0\n# pass 1\n# fail 0\n# skipped 0\n# todo 0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.test.arya-FEdwc7/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.test.arya-FEdwc7/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.test.arya-FEdwc7/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "run",
+        "main.arya",
+        "--",
+        "19.95",
+        "3"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "Total: 59.85\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-ZnwtRI/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-ZnwtRI/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-ZnwtRI/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-NM9amx/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-NM9amx/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-NM9amx/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices",
+        "19.95",
+        "3"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "Total: 59.85\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "fmt",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "fmt",
+        "main.arya",
+        "--check"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "lint",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "check",
+        "main.arya",
+        "--json"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/main.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/main.arya\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "run",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-GenpU6/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-GenpU6/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/main.arya-GenpU6/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Compile error: Native output already exists; choose another path or explicitly use --force.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release",
+        "--force"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-OHOkK1/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-OHOkK1/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices.arya-OHOkK1/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "run",
+        "exact.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "27021597764222979.03\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/exact.arya-n6cRmQ/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/exact.arya-n6cRmQ/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/.arya/native/exact.arya-n6cRmQ/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/delivery verification/extracted SDK/arya-native-2.0.0-alpha.2-darwin-arm64/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices-debug",
+        "--debug",
+        "--sanitize"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices-debug\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices-debug.arya-xRPwop/program.c:6940:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6940 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices-debug.arya-xRPwop/program.c:6966:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices-debug.arya-xRPwop/program.c:6967:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6967 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n"
+    },
+    {
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices/prices-debug"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/installation-docs-6i66__19/prices",
+      "exitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "scope": "Original 18 quickstart/module/decimal/CLI commands against immutable 8a034a4d alpha.2 compiler. The newly added alpha.3 record-composition example, alpha.3 SDK/source packages and other OS/CPU installations are NOT covered by this record.",
+  "documentedVersionAtRun": "2.0.0-alpha.2",
+  "doesNotQualifyAlpha3RecordSyntax": true,
+  "sourceRecordSha256": "1807552686e24d08ee6377da938e98ed873b5745f2d74156e4ad80ce842d8cf2"
+}

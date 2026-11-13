@@ -41,7 +41,7 @@ $(NATIVE_BUILD)/runtime.c: $(NATIVE_BUILD)/runtime-source.arya
 $(NATIVE_BUILD)/stage1: $(NATIVE_BUILD)/seed $(NATIVE_MODULES) $(NATIVE_LIBRARIES) $(NATIVE_BUILD)/runtime-source.arya $(NATIVE_BUILD)/runtime.c $(NATIVE_BUILD)/lib/libmpdec.a $(NATIVE_BUILD)/rebase
 	$(NATIVE_BUILD)/seed build $(NATIVE_BUILD)/compiler.arya -o $(abspath $(NATIVE_BUILD)/stage1-seed) --cc $(abspath native/bootstrap/cc.sh)
 	$(NATIVE_BUILD)/rebase $(NATIVE_BUILD)/stage1-seed.c $(NATIVE_BUILD)/runtime.c $(NATIVE_BUILD)/stage1.c
-	$(CC) -std=c11 $(CFLAGS) -ffp-contract=off -I $(NATIVE_BUILD)/lib $(NATIVE_BUILD)/stage1.c $(NATIVE_BUILD)/lib/libmpdec.a -o $@ -lm
+	$(CC) -std=c11 $(CFLAGS) -ffp-contract=off -I $(NATIVE_BUILD)/lib $(NATIVE_BUILD)/stage1.c $(NATIVE_BUILD)/lib/libmpdec.a -o $@ -lm -pthread
 $(NATIVE_BUILD)/stage2: $(NATIVE_BUILD)/stage1 $(NATIVE_BUILD)/lib/libpcre2-16.a
 	$(NATIVE_BUILD)/stage1 build $(NATIVE_BUILD)/compiler.arya -o $(abspath $@) --force
 $(NATIVE_BUILD)/arya: $(NATIVE_BUILD)/stage2
@@ -54,16 +54,34 @@ native-check: native
 clean-native:
 	rm -rf .build/independent
 .PHONY: native-test
-native-test: native
+native-test: native native-crypto native-auth
 	native/tests/run.sh
 	sh native/tests/function-calls.sh
 	sh native/tests/advanced-calls.sh
+	sh native/tests/record-literals.sh
 	sh native/tests/data-optimization.sh
+	sh native/tests/fixed-format.sh
 	sh native/tests/data-paths.sh
+	sh native/tests/standard-calls.sh
 	sh native/tests/finance-data.sh
+	sh native/tests/accounting-journal.sh
+	sh native/tests/security-diagnostics.sh
+	sh native/tests/security-bytes.sh
+	sh native/tests/auth.sh
+	sh native/tests/number-format.sh
+	sh native/tests/numeric-calls.sh
+	sh native/tests/fixed-number.sh
+	sh native/tests/descriptor-boundaries.sh
+	sh native/tests/string-storage.sh
+	sh native/tests/utf8-storage.sh
+	sh native/tests/json-simd.sh
+	sh native/tests/performance.sh
 .PHONY: native-data-test
 native-data-test: native
+	sh native/tests/data-optimization.sh
+	sh native/tests/fixed-format.sh
 	sh native/tests/data-paths.sh
+	sh native/tests/standard-calls.sh
 	sh native/tests/finance-data.sh
 .PHONY: native-call-test
 native-call-test: native
@@ -72,14 +90,21 @@ native-call-test: native
 .PHONY: native-profile-test
 native-profile-test: native-sdk
 	sh native/tests/profile.sh
+.PHONY: native-distribution-test check
+native-distribution-test: native-sdk
+	sh native/tests/distribution.sh
+check: native-test native-profile-test native-distribution-test
 .PHONY: native-clean-test native-package
 native-clean-test:
 	native/bootstrap/verify-clean.sh
-native-package: native-test
+native-package: native-sdk native-test native-distribution-test
 	native/bootstrap/package.sh
+.PHONY: native-source-package
+native-source-package:
+	sh native/bootstrap/source-package.sh
 .PHONY: native-crypto native-http
 native-crypto: $(NATIVE_BUILD)/lib/libcrypto.a
-$(NATIVE_BUILD)/lib/libcrypto.a: native/vendor/openssl/openssl-3.6.4.tar.gz native/vendor/openssl/openssl-3.6.4.tar.gz.sha256 native/bootstrap/crypto-sdk.sh | $(NATIVE_BUILD)
+$(NATIVE_BUILD)/lib/libcrypto.a: native/vendor/openssl/openssl-3.5.9.tar.gz native/vendor/openssl/openssl-3.5.9.tar.gz.sha256 native/bootstrap/crypto-sdk.sh | $(NATIVE_BUILD)
 	native/bootstrap/crypto-sdk.sh
 native-http: $(NATIVE_BUILD)/lib/libllhttp.a
 $(NATIVE_BUILD)/lib/libllhttp.a: native/vendor/llhttp/src/llhttp.c native/vendor/llhttp/src/api.c native/vendor/llhttp/src/http.c native/vendor/llhttp/include/llhttp.h | $(NATIVE_BUILD)
@@ -100,12 +125,30 @@ $(NATIVE_BUILD)/lib/libada.a: native/vendor/ada/ada.cpp native/vendor/ada/ada.h 
 	$(CXX) -std=c++20 $(CFLAGS) -c native/vendor/ada/ada.cpp -o .build/ada/ada.o
 	ar rcs $@ .build/ada/ada.o
 	cp native/vendor/ada/ada_c.h $(NATIVE_BUILD)/lib/include/
+.PHONY: native-gui native-gui-test
+native-gui: $(NATIVE_BUILD)/lib/libarya-gui.a
+$(NATIVE_BUILD)/lib/libarya-gui.a: native/gui/build.sh native/gui/appkit.m native/gui/gtk.c native/gui/win32.c native/gui/common.h native/runtime/gui-platform.h | $(NATIVE_BUILD)
+	sh native/gui/build.sh
+native-gui-test: native native-gui
+	sh native/tests/gui.sh
 .PHONY: native-desktop
 native-desktop: $(NATIVE_BUILD)/lib/libarya-desktop.a
 $(NATIVE_BUILD)/lib/libarya-desktop.a: native/desktop/desktop.m | $(NATIVE_BUILD)
 	mkdir -p .build/desktop $(NATIVE_BUILD)/lib
 	$(CC) -fobjc-arc $(CFLAGS) -c $< -o .build/desktop/desktop.o
 	ar rcs $@ .build/desktop/desktop.o
+.PHONY: native-auth native-auth-test
+ifeq ($(shell uname -s),Darwin)
+native-auth: $(NATIVE_BUILD)/lib/libarya-auth.a
+$(NATIVE_BUILD)/lib/libarya-auth.a: native/desktop/auth.m native/runtime/auth-platform.h | $(NATIVE_BUILD)
+	mkdir -p .build/auth $(NATIVE_BUILD)/lib
+	$(CC) -fobjc-arc $(CFLAGS) -c $< -o .build/auth/auth.o
+	ar rcs $@ .build/auth/auth.o
+else
+native-auth:
+endif
+native-auth-test: native native-crypto native-auth
+	sh native/tests/auth.sh
 .PHONY: native-editor
 native-editor: native-sdk
 	sh native/bootstrap/editor-package.sh
@@ -113,4 +156,8 @@ native-editor: native-sdk
 ifeq ($(shell uname -s),Darwin)
 NATIVE_DESKTOP_SDK := native-desktop
 endif
-native-sdk: native native-crypto native-http native-url native-regex $(NATIVE_DESKTOP_SDK)
+native-sdk: native native-crypto native-http native-url native-regex native-auth native-gui $(NATIVE_DESKTOP_SDK)
+
+.PHONY: native-api-test
+native-api-test: native-sdk
+	python3 native/tests/api-contracts.py

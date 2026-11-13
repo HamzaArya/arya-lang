@@ -1,0 +1,15 @@
+{
+  "binarySha256": "c9020e453151ea29900bc4309d3a73c57b8cc06adda38a63dfec3211bc00d403",
+  "cSha256": "e919e27b13c395b3ebffc7777759120374feee8000b289a2617844fdd3eda0bc",
+  "scope": "calloc wrapper requests and string payloads; excludes realloc, raw malloc, mpdecimal, mark worklists and allocator metadata. Instrumented GC CPU only.",
+  "samples": [
+    {
+      "rows": 1000,
+      "stderr": "ARYA_ALLOCATION_DETAIL {\"requestedBytes\":276664417,\"strings\":36377,\"stringUnits\":282311,\"gcCpuMs\":1.646000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":102963,\"heapObjects\":43729,\"environments\":10,\"functions\":2224,\"genericCalls\":6525,\"directCalls\":1001,\"numericCalls\":0,\"heapTemporaries\":1005,\"gcCollections\":4,\"peakManagedBytes\":4315468,\"scalarCalls\":0,\"rootedCalls\":6524,\"rootPushes\":13281,\"environmentLookups\":1198}\n"
+    },
+    {
+      "rows": 10000,
+      "stderr": "ARYA_ALLOCATION_DETAIL {\"requestedBytes\":26416908891,\"strings\":360377,\"stringUnits\":2833975,\"gcCpuMs\":40.296000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":1016463,\"heapObjects\":430729,\"environments\":10,\"functions\":20224,\"genericCalls\":65025,\"directCalls\":10001,\"numericCalls\":0,\"heapTemporaries\":10005,\"gcCollections\":8,\"peakManagedBytes\":36954174,\"scalarCalls\":0,\"rootedCalls\":65024,\"rootPushes\":130281,\"environmentLookups\":10198}\n"
+    }
+  ]
+}

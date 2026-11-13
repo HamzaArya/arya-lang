@@ -1,0 +1,236 @@
+--- a/Makefile
++++ b/Makefile
+@@ -59,6 +59,7 @@
+ 	sh native/tests/function-calls.sh
+ 	sh native/tests/advanced-calls.sh
+ 	sh native/tests/data-optimization.sh
++	sh native/tests/fixed-format.sh
+ 	sh native/tests/data-paths.sh
+ 	sh native/tests/standard-calls.sh
+ 	sh native/tests/finance-data.sh
+@@ -72,6 +73,7 @@
+ .PHONY: native-data-test
+ native-data-test: native
+ 	sh native/tests/data-optimization.sh
++	sh native/tests/fixed-format.sh
+ 	sh native/tests/data-paths.sh
+ 	sh native/tests/standard-calls.sh
+ 	sh native/tests/finance-data.sh
+--- a/native/compiler/compiler.arya
++++ b/native/compiler/compiler.arya
+@@ -982,6 +982,28 @@
+   let raw = "av(AUNDEF)"; if node.raw != null { raw = literalString(e, node.raw) }
+   return temp(e, "ahtml_element(" + tag + "," + attributes + "," + children + "," + raw + ")")
+ }
++# Only a fresh, ordinary data descriptor with true flags can disappear. The
++# runtime checks the resolved callee; a replacement receives a real descriptor.
++# Constant flags have no effects, so evaluating value in source order is enough.
++fn defineDataDescriptor(node) {
++  if node.callee.kind != "member" or node.callee.key.kind != "literal" or node.callee.key.value != "defineProperty" { return null }
++  let object = node.callee.object
++  if object.kind != "name" or object.name != "Object" or not nativeGlobal(object) or len(node.arguments) != 3 { return null }
++  if node.arguments[0].kind == "spread" or node.arguments[1].kind == "spread" { return null }
++  let descriptor = node.arguments[2]
++  if descriptor.kind != "object" or len(descriptor.fields) != 4 { return null }
++  let names = ["value", "enumerable", "configurable", "writable"]
++  let seen = []; let value = null; let order = 0; let place = 1
++  for field in descriptor.fields {
++    let index = names.indexOf(field.key)
++    if index < 0 or seen.includes(field.key) { return null }
++    seen.push(field.key)
++    if index == 0 { value = field.value }
++    else if field.value.kind != "literal" or field.value.value != true { return null }
++    order += index * place; place *= 4
++  }
++  return {value: value, order: order}
++}
+ fn expr(e, node, env) {
+   location(e, node.token)
+   if node.kind == "view" { let children = temp(e, "alist(0,NULL)"); for child in node.children { let value = emitViewNode(e, child, env); temp(e, "aappend_value(" + children + "," + value + ")") }; let document = 0; if node.html { document = 1 }; return temp(e, "ahtml_children(" + children + "," + str(document) + ")") }
+@@ -1105,6 +1127,18 @@
+     return temp(e, dynamicCallName() + "(" + callee + "," + values.count + "," + values.data + ")")
+   }
+   if node.kind == "call" {
++    if dataOptimization {
++      let descriptor = defineDataDescriptor(node)
++      if descriptor != null {
++        # Resolve the callee before arguments, including a possible getter.
++        let callee = expr(e, node.callee, env)
++        let object = expr(e, node.arguments[0], env)
++        let key = expr(e, node.arguments[1], env)
++        let value = expr(e, descriptor.value, env)
++        location(e, node.token)
++        return temp(e, "adefine_data_call(" + callee + "," + object + "," + key + "," + value + "," + str(descriptor.order) + ")")
++      }
++    }
+     let standard = standardTarget(node.callee)
+     if standard != null {
+       # Evaluate the namespace/callee before every argument. The runtime guard
+--- a/native/runtime/core.c
++++ b/native/runtime/core.c
+@@ -58,7 +58,7 @@
+   size_t calloc_calls, heap_objects, environments, functions;
+   size_t generic_calls, direct_calls, numeric_calls, heap_temporaries;
+   size_t scalar_calls, rooted_calls, root_pushes, environment_lookups;
+-  size_t requested_bytes, strings, string_units, json_key_hits, field_cache_hits, decimal_fast_paths;
++  size_t requested_bytes, strings, string_units, json_key_hits, field_cache_hits, decimal_fast_paths, tofixed_fast_paths, tofixed_fallbacks, global_cache_hits, data_descriptor_calls;
+   double gc_cpu_ms;
+ } acounters;
+ #define ACOUNT(field) (++acounters.field)
+@@ -66,6 +66,7 @@
+   fprintf(stderr,"ARYA_RUNTIME_COUNTERS {\"callocCalls\":%zu,\"heapObjects\":%zu,\"environments\":%zu,\"functions\":%zu,\"genericCalls\":%zu,\"directCalls\":%zu,\"numericCalls\":%zu,\"heapTemporaries\":%zu,\"gcCollections\":%zu,\"peakManagedBytes\":%zu,\"scalarCalls\":%zu,\"rootedCalls\":%zu,\"rootPushes\":%zu,\"environmentLookups\":%zu}\n",
+     acounters.calloc_calls,acounters.heap_objects,acounters.environments,acounters.functions,acounters.generic_calls,acounters.direct_calls,acounters.numeric_calls,acounters.heap_temporaries,acollections,apeakh,acounters.scalar_calls,acounters.rooted_calls,acounters.root_pushes,acounters.environment_lookups);
+   fprintf(stderr,"ARYA_ALLOCATION_DETAIL {\"requestedBytes\":%zu,\"strings\":%zu,\"stringUnits\":%zu,\"jsonKeyHits\":%zu,\"fieldCacheHits\":%zu,\"decimalFastPaths\":%zu,\"gcCpuMs\":%.6f}\n",acounters.requested_bytes,acounters.strings,acounters.string_units,acounters.json_key_hits,acounters.field_cache_hits,acounters.decimal_fast_paths,acounters.gc_cpu_ms);
++  fprintf(stderr,"ARYA_NUMBER_DETAIL {\"toFixedFastPaths\":%zu,\"toFixedFallbacks\":%zu,\"globalCacheHits\":%zu,\"dataDescriptorCalls\":%zu}\n",acounters.tofixed_fast_paths,acounters.tofixed_fallbacks,acounters.global_cache_hits,acounters.data_descriptor_calls);
+ }
+ #define AADD(field,n) (acounters.field+=(n))
+ #else
+--- a/native/runtime/decimal.c
++++ b/native/runtime/decimal.c
+@@ -235,6 +235,62 @@
+   (void)value;(void)places;(void)out;return 0;
+ #endif
+ }
++/* Round the exact binary64 value times 10^places, never a rounded floating
++ * multiplication. toFixed chooses the larger magnitude on an exact half tie.
++ * A uint64 path covers common scales; a bounded stack integer handles all
++ * remaining finite values below 1e21 and places 0..100 (at most 403 bits).
++ * Neither path depends on libc's rounding mode, locale, or decimal precision. */
++static AV afixed_text(const uint16_t *reverse,size_t count,int places,int negative) {
++  uint16_t text[124];size_t at=0;
++  if(negative)text[at++]='-';
++  if(count<=(size_t)places){text[at++]='0';if(places)text[at++]='.';for(size_t i=count;i<(size_t)places;i++)text[at++]='0';}
++  for(size_t i=count;i;i--){text[at++]=reverse[i-1];if(i==(size_t)places+1&&places)text[at++]='.';}
++  return as16(text,at);
++}
++static AV anumber_fixed(double value,int places) {
++  uint64_t bits;memcpy(&bits,&value,sizeof(bits));
++  unsigned exponent=(unsigned)((bits>>52)&2047);
++  uint64_t significand=bits&0xfffffffffffffULL;
++  int shift=(exponent?(int)exponent-1075:-1074)+places;
++  if(exponent)significand|=1ULL<<52;
++  uint16_t reverse[122];size_t count=0;
++  static const uint64_t five[]={1,5,25,125,625,3125,15625,78125,390625,1953125,9765625,48828125,244140625,1220703125,6103515625ULL,30517578125ULL,152587890625ULL,762939453125ULL,3814697265625ULL};
++  if(places<=18&&significand<=UINT64_MAX/five[places]){
++    uint64_t scaled=significand*five[places],rounded;
++    if(shift>=0){if(shift>=64||scaled>(UINT64_MAX>>shift))goto wide;rounded=scaled<<shift;}
++    else {unsigned right=(unsigned)-shift;rounded=right<64?scaled>>right:0;if(right<=64)rounded+=(scaled>>(right-1))&1;}
++    do{reverse[count++]=(uint16_t)('0'+rounded%10);rounded/=10;}while(rounded);
++    ACOUNT(tofixed_fast_paths);return afixed_text(reverse,count,places,value<0);
++  }
++wide:;
++  AV small;if(anumber_fixed_small(value,places,&small)){ACOUNT(tofixed_fast_paths);return small;}
++  /* 16 limbs leave room above the maximum 403-bit rounded coefficient.
++   * Subnormals can require a right shift of 1074: bits beyond the coefficient
++   * are zero, so they round to zero without shifting by an invalid C width. */
++  uint32_t limbs[16]={0};size_t used=significand>>32?2:1;
++  limbs[0]=(uint32_t)significand;limbs[1]=(uint32_t)(significand>>32);
++  for(int i=0;i<places;i++){uint64_t carry=0;for(size_t j=0;j<used;j++){uint64_t product=(uint64_t)limbs[j]*5+carry;limbs[j]=(uint32_t)product;carry=product>>32;}if(carry)limbs[used++]=(uint32_t)carry;}
++  if(shift>=0){
++    unsigned words=(unsigned)shift/32,part=(unsigned)shift%32;
++    if(words){for(size_t i=used;i;i--)limbs[i-1+words]=limbs[i-1];memset(limbs,0,words*sizeof(uint32_t));used+=words;}
++    if(part){uint32_t carry=0;for(size_t i=0;i<used;i++){uint64_t next=((uint64_t)limbs[i]<<part)|carry;limbs[i]=(uint32_t)next;carry=(uint32_t)(next>>32);}if(carry)limbs[used++]=carry;}
++  }else{
++    unsigned right=(unsigned)-shift,words=right/32,part=right%32,half=(right-1)/32;
++    int up=half<used&&((limbs[half]>>((right-1)%32))&1);
++    size_t remaining=words<used?used-words:0;
++    for(size_t i=0;i<remaining;i++){uint32_t next=limbs[i+words]>>part;if(part&&i+words+1<used)next|=limbs[i+words+1]<<(32-part);limbs[i]=next;}
++    used=remaining;if(!used){used=1;limbs[0]=0;}
++    if(up){size_t i=0;while(i<used&&++limbs[i]==0)i++;if(i==used)limbs[used++]=1;}
++  }
++  while(used>1&&!limbs[used-1])used--;
++  /* Divide by 1e9, emitting each remainder backwards with zero padding. */
++  do{uint64_t remainder=0;for(size_t i=used;i;i--){uint64_t next=(remainder<<32)|limbs[i-1];limbs[i-1]=(uint32_t)(next/1000000000);remainder=next%1000000000;}
++    while(used>1&&!limbs[used-1])used--;
++    int more=used>1||limbs[0]!=0;
++    for(int i=0;i<9;i++){reverse[count++]=(uint16_t)('0'+remainder%10);remainder/=10;if(!more&&!remainder)break;}
++  }while(used>1||limbs[0]);
++  ACOUNT(tofixed_fallbacks);return afixed_text(reverse,count,places,value<0);
++}
+ /* Immediate calls keep receiver/key/arguments in the generated caller's roots.
+  * Detached methods retain their bound environment and share this implementation. */
+ static AV anumber_invoke(double value,AV key,int argc,AV *argv) {
+@@ -242,11 +298,7 @@
+   double places=argc?atonumber(argv[0]):0;if(isnan(places))places=0;places=trunc(places);
+   if(!isfinite(places)||places<0||places>100)return afail("RangeError","toFixed places must be from 0 to 100.");
+   if(!isfinite(value)||fabs(value)>=1e21)return atostring(an(value));
+-  AV fast;if(anumber_fixed_small(value,(int)places,&fast))return fast;
+-  char exact[1600];snprintf(exact,sizeof(exact),"%.1074f",value);
+-  mpd_context_t ctx;adcontext(&ctx);uint32_t status=0;mpd_t *number=mpd_qnew();if(!number)return afail("Error","Cannot allocate decimal formatting context.");
+-  mpd_qset_string(number,exact,&ctx,&status);mpd_qrescale(number,number,-(mpd_ssize_t)places,&ctx,&status);
+-  AV result=status&MPD_Errors?afail("RangeError","Cannot format number."):adtext(number,&ctx,1,value<0);mpd_del(number);return result;
++  return anumber_fixed(value,(int)places);
+ }
+ static AV anumber_method(AV env,int argc,AV *argv) {
+   return anumber_invoke(env.p->data[0].n,env.p->data[1],argc,argv);
+--- a/native/runtime/globals.c
++++ b/native/runtime/globals.c
+@@ -14,6 +14,23 @@
+  if(id>=1&&id<=3){r[2]=aobject_keys(r[0]);if(afailed)goto done;if(id==1){out=r[2];goto done;}r[3]=alist(0,NULL);for(size_t i=0;i<r[2].p->len&&!afailed;i++){r[4]=r[2].p->data[i];r[5]=aget(r[0],r[4]);if(id==3){AV pair[2]={r[4],r[5]};r[5]=alist(2,pair);}aappend_value(r[3],r[5]);}out=r[3];goto done;}
+  afail("TypeError","Unknown native Object function.");
+  done:aunroot(&root);return afailed?av(AUNDEF):out;
++}
++/* Lowered fresh data descriptors are unobservable to the builtin. Guard the
++ * actual selected function, since aliases, getters and user replacements must
++ * still receive a normal mutable descriptor in its original field order. */
++static AV adefine_data_call(AV callee,AV object,AV key,AV value,unsigned order) {
++  /* Reading a stored reference/getter is observable in the native value
++   * model. Materialize that descriptor and use the ordinary reader below. */
++  if(value.t!=AUINIT&&value.t!=AREF&&value.t!=AGETTER&&callee.t==AFUNC&&callee.p->code==aobject_function&&callee.p->parent.t==ANUM&&callee.p->parent.n==12){
++    ACOUNT(direct_calls);ACOUNT(data_descriptor_calls);if(!acall_enter())return av(AUNDEF);
++    (void)(key.t!=ASTR?afail("TypeError","Object.defineProperty requires a record, name and descriptor."):aset(object,key,value));
++    adepth--;return afailed?av(AUNDEF):object;
++  }
++  AV r[5]={callee,object,key,value,av(AUNDEF)};ARoot root;aroot(&root,r,5);r[4]=arecord();
++  const char *names[]={"value","enumerable","configurable","writable"};
++  for(int i=0;i<4&&!afailed;i++,order>>=2)aput(r[4],names[order&3],(order&3)?ab(1):r[3]);
++  AV result=av(AUNDEF);if(!afailed){AV args[3]={r[1],r[2],r[4]};result=acall_rooted(r[0],3,args);}
++  aunroot(&root);return result;
+ }
+ static AV anumber_global_call(AV env,int argc,AV *argv){int id=(int)env.n;AV x=argc?argv[0]:av(AUNDEF);if(id==0)return an(argc?atonumber(x):0);if(id==1)return ab(x.t==ANUM&&isfinite(x.n));if(id==2)return ab(x.t==ANUM&&isnan(x.n));if(id==3)return ab(x.t==ANUM&&isfinite(x.n)&&trunc(x.n)==x.n);if(id==4)return ab(ais_safe_integer(x));if(id==7)return ab(isnan(atonumber(x)));if(id==8)return ab(isfinite(atonumber(x)));
+  AV text=atostring(x);if(afailed)return av(AUNDEF);ARoot root;aroot(&root,&text,1);size_t start=0,n=(size_t)text.p->scope;while(start<n&&aspace(text.p->chars[start]))start++;char *bytes=(char*)amemory(n-start+1);size_t length=0;for(size_t i=start;i<n;i++)bytes[length++]=text.p->chars[i]<128?(char)text.p->chars[i]:'?';bytes[length]=0;double result=NAN;
+@@ -85,7 +102,11 @@
+ static AV aconsole_call(AV env,int argc,AV *argv){FILE *file=env.n?stderr:stdout;AV value=av(AUNDEF);ARoot root;aroot(&root,&value,1);for(int i=0;i<argc&&!afailed;i++){value=argv[i].t==ASTR?argv[i]:ainspect(argv[i],4,10000,0);if(afailed)break;size_t n;char *bytes=autf8bytes(value,&n);if(i)fputc(' ',file);fwrite(bytes,1,n,file);free(bytes);}fputc('\n',file);fflush(file);aunroot(&root);return av(AUNDEF);}
+ static AV aperformance_call(AV env,int argc,AV *argv){(void)env;(void)argc;(void)argv;return an(amonotonic()*1000);}
+ static void aglobal_field(AV object,const char *name,ACode fn,int id){AV value=afunction(fn,an(id),name);aput(object,name,value);}
+-static AV aglobal(const char *name){if(aextra_roots[2].t!=ARECORD)aextra_roots[2]=arecord();AV r[2]={astr(name),av(AUNDEF)};ARoot root;aroot(&root,r,2);r[1]=aget(aextra_roots[2],r[0]);if(r[1].t!=AUNDEF)goto done;
++static AV aglobal(const char *name){if(aextra_roots[2].t!=ARECORD)aextra_roots[2]=arecord();
++ /* The private cache is rooted for the process lifetime. ASCII hits need no
++  * temporary string, and the returned object retains its mutable identity. */
++ AV cached=aprop(aextra_roots[2],name);if(cached.t!=AUNDEF){ACOUNT(global_cache_hits);return cached;}
++ AV r[2]={astr(name),av(AUNDEF)};ARoot root;aroot(&root,r,2);
+  if(!strcmp(name,"Object")){r[1]=afunction(aobject_function,an(0),name);const char *names[]={"keys","values","entries","is","hasOwn","freeze","isFrozen","fromEntries","assign","create","getOwnPropertyDescriptor","defineProperty"};for(int i=0;i<12;i++)aglobal_field(r[1],names[i],aobject_function,i+1);}
+  else if(!strcmp(name,"Number")){r[1]=afunction(anumber_global_call,an(0),name);const char *names[]={"isFinite","isNaN","isInteger","isSafeInteger","parseInt","parseFloat"};for(int i=0;i<6;i++)aglobal_field(r[1],names[i],anumber_global_call,i+1);aput(r[1],"MAX_SAFE_INTEGER",an(9007199254740991.0));aput(r[1],"MIN_SAFE_INTEGER",an(-9007199254740991.0));aput(r[1],"MAX_VALUE",an(DBL_MAX));aput(r[1],"MIN_VALUE",an(0x1p-1074));aput(r[1],"EPSILON",an(DBL_EPSILON));aput(r[1],"NaN",an(NAN));aput(r[1],"POSITIVE_INFINITY",an(INFINITY));aput(r[1],"NEGATIVE_INFINITY",an(-INFINITY));}
+  else if(!strcmp(name,"Array")){r[1]=afunction(aarray_global_call,an(0),name);aglobal_field(r[1],"isArray",aarray_global_call,1);aglobal_field(r[1],"of",aarray_global_call,2);aglobal_field(r[1],"from",aarray_global_call,3);}
+--- a/native/tests/decimal-reference.py
++++ b/native/tests/decimal-reference.py
+@@ -110,12 +110,25 @@
+         imports.append(f'use arya "./{name}" as part{len(imports)}')
+     entry.write_text('\n'.join(imports)+'\n')
+     binary=directory/'program'
+-    build=subprocess.run([str(compiler),'build',str(entry),'-o',str(binary),'--release'],capture_output=True,text=True,timeout=240)
+-    assert build.returncode==0, build.stderr or build.stdout
+-    actual=subprocess.check_output([str(binary)],env={'PATH':'/nonexistent'},text=True,timeout=30).splitlines()
++    # Keep the independent matrix unchanged, but bound the C optimizer's working
++    # set. A single generated program can otherwise exceed small hosts' memory.
++    batch_modules=int(os.environ.get('ARYA_DECIMAL_REFERENCE_BATCH_MODULES','4'))
++    if batch_modules<1:raise ValueError('Batch module count must be positive')
++    actual=[]; batches=[]
++    for start in range(0,len(imports),batch_modules):
++        batch=directory/f'batch-{start}.arya'
++        batch.write_text('\n'.join(imports[start:start+batch_modules])+'\n')
++        binary=directory/f'program-{start}'
++        build=subprocess.run([str(compiler),'build',str(batch),'-o',str(binary),'--release'],capture_output=True,text=True,timeout=240)
++        assert build.returncode==0, build.stderr or build.stdout
++        output=subprocess.check_output([str(binary)],env={'PATH':'/nonexistent'},text=True,timeout=30)
++        actual.extend(output.splitlines())
++        batches.append({'firstModule':start,'modules':min(batch_modules,len(imports)-start),
++                        'entrySha256':hashlib.sha256(batch.read_bytes()).hexdigest(),
++                        'binarySha256':hashlib.sha256(binary.read_bytes()).hexdigest()})
+     assert actual == expected, next(((i,a,b) for i,(a,b) in enumerate(zip(actual,expected)) if a!=b),('length',len(actual),len(expected)))
+     record={'reference':'Python _pydecimal (independent pure-Python arithmetic)', 'cases':len(expected),
+-            'seed':'0x41525941', 'allMatched':True,
++            'seed':'0x41525941', 'allMatched':True, 'batchModules':batch_modules, 'batches':batches,
+             'sourceSha256':hashlib.sha256(('\n'.join(source_text)+entry.read_text()).encode()).hexdigest(),
+             'outputSha256':hashlib.sha256(('\n'.join(actual)+'\n').encode()).hexdigest()}
+     (root/'.build/native-decimal-reference.json').write_text(json.dumps(record,indent=2)+'\n')

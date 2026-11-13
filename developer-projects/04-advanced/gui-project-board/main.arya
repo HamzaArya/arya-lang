@@ -1,0 +1,71 @@
+use std "fs" as fs
+use std "env" as env
+use std "web" as web
+use std "validate" as validate
+use std "process" as process
+use std "security" as security
+const dataFile = env.get("DATA_FILE", "data.json")
+let rows: any = []
+fn save(next) {
+  fs.writeTextAtomicSync(dataFile, JSON.stringify(next, null, 2) + "\n")
+  rows = next
+}
+fn find(id) { for row in rows { if row.id == id { return row } }; throw web.error(404, "Record not found", "NOT_FOUND") }
+fn text(value, label) { if value.trim() == "" { throw web.error(400, label + " cannot be blank", "INVALID_INPUT") }; return value.trim() }
+
+use std "ui" as ui
+
+const inputSchema = validate.object({title: validate.string({min: 1, max: 160}), owner: validate.string({min: 1, max: 80}), detail: validate.string({max: 2000})})
+const rowSchema = validate.object({id: validate.string(), title: validate.string(), owner: validate.string(), detail: validate.string(), status: validate.enum(["Backlog", "Doing", "Done"]), version: validate.integer({min: 1})})
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null { rows = validate.parse(validate.array(rowSchema, {max: 200}), JSON.parse(fs.readTextSync(dataFile))) }
+fn page() {
+ let cards = []
+ for status in ["Backlog", "Doing", "Done"] {
+   let items = [ui.heading(status, {level: 2}), ui.badge(str(rows.filter(fn(row) => row.status == status).length) + " tasks")]
+   for row in rows {
+     if row.status == status { items.push(ui.card([
+       ui.heading(row.title, {level: 3}), ui.text("Assignee: " + row.owner), ui.text(row.detail), ui.text("Revision " + str(row.version), {class: "arya-muted"}),
+       ui.row(["Backlog", "Doing", "Done"].filter(fn(s) => s != status).map(fn(s) { return ui.button("Move to " + s, {variant: "secondary", action: ui.request("/api/items/" + row.id, {method: "PATCH", body: {status: s, version: row.version}, result: "result", error: "problem", pending: "busy"}), disabled: ui.bind("busy", false)}) })),
+       ui.button("Delete task", {variant: "danger", action: ui.request("/api/items/" + row.id + "/delete", {method: "POST", body: {version: row.version}, result: "result", error: "problem", pending: "busy"}), disabled: ui.bind("busy", false)})
+     ])) }
+   }
+   if items.length == 2 { items.push(ui.text("No tasks here yet.", {class: "arya-muted"})) }; cards.push(ui.section(items))
+ }
+ return ui.page({title: "Flowboard", theme: "light", css: "main.arya-page{max-width:82rem} h1{max-width:none} .arya-card{overflow-wrap:anywhere} .board{align-items:start} .arya-card .arya-card{padding:1rem} .arya-card h3{font-size:1.2rem}", state: {title: "", owner: "", detail: "", busy: false, result: null, problem: ""}, body: ui.stack([
+   ui.text("ARYA / ADVANCED", {class: "arya-eyebrow"}), ui.heading("Flowboard"), ui.text("Plan the next release, assign work, and keep focus: at most three tasks Doing.", {class: "arya-muted"}),
+   ui.row([ui.stat("Total tasks", rows.length), ui.stat("Completed", rows.filter(fn(row) => row.status == "Done").length), ui.link("Refresh board", "/")]),
+   ui.text(ui.bind("result.message", "Changes are saved immediately. Refresh the board after each change."), {role: "status", "aria-live": "polite"}), ui.text(ui.bind("problem"), {role: "alert"}),
+   ui.card([ui.heading("New task", {level: 2}), ui.form([
+     ui.label("Title", "title"), ui.input({id: "title", bind: "title", required: true, maxlength: 160}),
+     ui.label("Assignee", "owner"), ui.input({id: "owner", bind: "owner", required: true, maxlength: 80}),
+     ui.label("Details", "detail"), ui.textarea({id: "detail", bind: "detail", maxlength: 2000}),
+     ui.button("Create task", {type: "submit", disabled: ui.bind("busy", false)})
+   ], {action: ui.request("/api/items", {method: "POST", body: {title: ui.bind("title"), owner: ui.bind("owner"), detail: ui.bind("detail")}, result: "result", error: "problem", pending: "busy"})})]),
+   ui.grid(cards, {class: "board"})
+ ])})
+}
+let routes = {
+ "GET /health": fn() { return {status: "ready", count: rows.length} },
+ "GET /": fn() { return web.response(200, page(), {"cache-control": "no-store"}) },
+ "GET /api/items": fn() { return rows },
+ "POST /api/items": web.route(fn(request) {
+   if rows.length >= 200 { throw web.error(409, "Board limit of 200 reached", "LIMIT") }
+   const row = {id: security.uuid(), title: text(request.body.title, "Title"), owner: text(request.body.owner, "Assignee"), detail: request.body.detail, status: "Backlog", version: 1}; save(rows.concat([row])); return web.response(201, {item: row, message: "task created. Refresh the board to see it."})
+ }, {body: inputSchema}),
+ "PATCH /api/items/:id": web.route(fn(request) {
+   const old = find(request.params.id); if old.version != request.body.version { throw web.error(409, "Board changed. Refresh before editing.", "VERSION_CONFLICT") }
+   if request.body.status == "Doing" and old.status != "Doing" and rows.filter(fn(row) => row.status == "Doing").length >= 3 { throw web.error(409, "Doing is full (limit 3). Finish a task first.", "WIP_LIMIT") }
+   let next = rows.map(fn(row) { if row.id == old.id { return {id: row.id, title: row.title, owner: row.owner, detail: row.detail, status: request.body.status, version: row.version + 1} }; return row }); save(next); return {message: "task moved. Refresh the board to see it."}
+ }, {body: validate.object({status: validate.enum(["Backlog", "Doing", "Done"]), version: validate.integer({min: 1})})}),
+ "POST /api/items/:id/delete": web.route(fn(request) {
+   const old = find(request.params.id); if old.version != request.body.version { throw web.error(409, "Board changed. Refresh before deleting.", "VERSION_CONFLICT") }; save(rows.filter(fn(row) => row.id != old.id)); return {message: "task deleted. Refresh the board."}
+ }, {body: validate.object({version: validate.integer({min: 1})})})
+}
+
+const appRoot = process.cwd()
+const serverOptions: any = {host: "127.0.0.1", root: appRoot, html: false, assets: false, maxBodyBytes: 65536}
+let server = web.serve(env.int("PORT", 4412), routes, serverOptions)
+print("Flowboard: http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

@@ -1,0 +1,7 @@
+use std "debug" as debug
+let inner = new Array(50).fill("x".repeat(10000))
+let outer = new Array(50).fill(inner)
+let caught = false
+try { debug.trace("wide", outer) } catch error { caught = error.name == "RangeError" }
+debug.assert(caught)
+print("trace limit was catchable")

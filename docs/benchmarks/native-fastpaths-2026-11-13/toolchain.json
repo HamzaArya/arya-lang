@@ -1,0 +1,2420 @@
+{
+  "recordedAtUtc": "2026-11-13T02:32:41.756961+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "logicalCpus": 8,
+  "python": "3.13.15",
+  "controllerSha256": "b245c8e302ba8d44033b014b2756738d1dd9630cb50b40dd91a91e103ef32d55",
+  "evidenceDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi",
+  "method": "Fresh process wall time. One discarded warmup per operation/SDK; nine check/startup samples and three forced build samples, alternating SDK order. Warm filesystem caches. Check includes startup, loading, lexing, parsing and validation, not isolated parsing. Build includes frontend, C generation, C11 -O2 compilation and static linking, using existing SDK libraries. Direct hello includes process launch, runtime initialization, printing and exit. No Node executable is used. Single-host measurements; no claimed production throughput.",
+  "toolchain": {
+    "argv": [
+      "cc",
+      "--version"
+    ],
+    "wallMs": 266.415792,
+    "returncode": 0,
+    "stdout": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ],
+    "loadAverageAfter": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ]
+  },
+  "selectedEnvironment": {
+    "PATH": "/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/opt/homebrew/bin:/Users/hamza/.codex/tmp/arg0-macos/codex-arg0RoLurM:/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/sbin:/usr/local/mysql-9.7.0-macos15-arm64/bin:/Users/hamza/.vscode/extensions/openai.chatgpt-26.1106.51428-darwin-arm64/bin/macos-aarch64:/usr/local/mysql-9.7.0-macos15-arm64/bin",
+    "ARYA_CC": null,
+    "CC": null,
+    "ARYA_NATIVE_LIBDIR": null,
+    "SDKROOT": null,
+    "MACOSX_DEPLOYMENT_TARGET": null,
+    "CPATH": null,
+    "C_INCLUDE_PATH": null,
+    "LIBRARY_PATH": null
+  },
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "sourceSha256": {
+    "hello": "e3bf55b0f9ba503507ab1092711fbb0af1e8916d8a1dabf49836f77f07d1c7f2",
+    "quoted65536": "7324000207f79d74f1aee6ad86d795751cef9f8acacb6ea673e54dda76b747c0",
+    "raw65536": "9a7be54be158fba8558a40b63894b8b38a46eb091e0ff4400b9eea8ee121b1b0"
+  },
+  "compilers": {
+    "before": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+      "sha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+      "bytes": 5749112,
+      "version": {
+        "argv": [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+          "--version"
+        ],
+        "wallMs": 6.704833,
+        "returncode": 0,
+        "stdout": "Arya native 2.0.0-alpha.2 (self-hosted)\n",
+        "stderr": "",
+        "loadAverageBefore": [
+          7.04150390625,
+          9.9814453125,
+          9.322265625
+        ],
+        "loadAverageAfter": [
+          7.04150390625,
+          9.9814453125,
+          9.322265625
+        ]
+      },
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib",
+      "libmpdecSha256": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5"
+    },
+    "after": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+      "sha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "bytes": 5783400,
+      "version": {
+        "argv": [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+          "--version"
+        ],
+        "wallMs": 6.703,
+        "returncode": 0,
+        "stdout": "Arya native 2.0.0-alpha.2 (self-hosted)\n",
+        "stderr": "",
+        "loadAverageBefore": [
+          7.04150390625,
+          9.9814453125,
+          9.322265625
+        ],
+        "loadAverageAfter": [
+          7.04150390625,
+          9.9814453125,
+          9.322265625
+        ]
+      },
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib",
+      "libmpdecSha256": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5"
+    }
+  },
+  "warmups": [
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.029625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 7.978458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 38.812333,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 39.446584,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 41.394625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 36.834375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1822.719083,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-2moxRe/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-2moxRe/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-2moxRe/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "91e0b3bb508f4c1e01cd77e37534f5ac023025f7f620e79ba833fbf414b5431d",
+      "generatedCSha256": "540a7529646b253ae4791414d7ce63e0b5ef339dd171d26c3cee410910997d02",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1727.924542,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-R4HfE2/program.c:6912:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6912 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-R4HfE2/program.c:6938:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6938 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-R4HfE2/program.c:6939:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.2783203125,
+        9.9814453125,
+        9.326171875
+      ],
+      "executableBytes": 383976,
+      "executableSha256": "60aae86ece672261bef37a4b2bcdc9b6634411387f4cebd92664c3d89b876cce",
+      "generatedCSha256": "198764ffa0a787512142484e8d14f2da9b53c9dccfba7de76d6fa741f5955c2b",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.980625,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.923042,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": -1
+    }
+  ],
+  "raw": [
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.262625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.05275,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 7.449625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 13.864792,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 7.3515,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.469959,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 6.391209,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 6.352417,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.915708,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.990917,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 6.178334,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.899291,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.725959,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 6.176083,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.764,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.952458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 5.792084,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "--json"
+      ],
+      "wallMs": 6.437291,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 36.78,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.019709,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 39.126417,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 43.209833,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 41.289125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 43.013125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 39.122583,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.033458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 34.874166,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 35.691666,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.145042,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 34.262583,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 34.201292,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 36.35775,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 35.907875,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 32.493042,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 32.924125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 35.628791,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.153375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.281708,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 41.23,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.233917,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 36.952917,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.852709,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.824541,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.94775,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.3355,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 41.927917,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.365042,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.714125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.756875,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.614666,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 41.396125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 36.999667,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 37.042583,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 40.004583,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "loadAverageAfter": [
+        7.04150390625,
+        9.9814453125,
+        9.322265625
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1290.739416,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-ATmWuJ/program.c:6912:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6912 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-ATmWuJ/program.c:6938:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6938 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-ATmWuJ/program.c:6939:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.2783203125,
+        9.9814453125,
+        9.326171875
+      ],
+      "loadAverageAfter": [
+        7.2783203125,
+        9.9814453125,
+        9.326171875
+      ],
+      "executableBytes": 383976,
+      "executableSha256": "60aae86ece672261bef37a4b2bcdc9b6634411387f4cebd92664c3d89b876cce",
+      "generatedCSha256": "198764ffa0a787512142484e8d14f2da9b53c9dccfba7de76d6fa741f5955c2b",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1049.765417,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-oy2fMG/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-oy2fMG/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-oy2fMG/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.2783203125,
+        9.9814453125,
+        9.326171875
+      ],
+      "loadAverageAfter": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "91e0b3bb508f4c1e01cd77e37534f5ac023025f7f620e79ba833fbf414b5431d",
+      "generatedCSha256": "540a7529646b253ae4791414d7ce63e0b5ef339dd171d26c3cee410910997d02",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1000.972458,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-0CyREt/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-0CyREt/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-0CyREt/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "loadAverageAfter": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "91e0b3bb508f4c1e01cd77e37534f5ac023025f7f620e79ba833fbf414b5431d",
+      "generatedCSha256": "540a7529646b253ae4791414d7ce63e0b5ef339dd171d26c3cee410910997d02",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1398.939167,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-nQFtCq/program.c:6912:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6912 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-nQFtCq/program.c:6938:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6938 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-nQFtCq/program.c:6939:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "loadAverageAfter": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "executableBytes": 383976,
+      "executableSha256": "60aae86ece672261bef37a4b2bcdc9b6634411387f4cebd92664c3d89b876cce",
+      "generatedCSha256": "198764ffa0a787512142484e8d14f2da9b53c9dccfba7de76d6fa741f5955c2b",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1239.873917,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-W8LV2n/program.c:6912:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6912 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-W8LV2n/program.c:6938:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6938 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1.arya-W8LV2n/program.c:6939:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.095703125,
+        9.8984375,
+        9.30078125
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "executableBytes": 383976,
+      "executableSha256": "60aae86ece672261bef37a4b2bcdc9b6634411387f4cebd92664c3d89b876cce",
+      "generatedCSha256": "198764ffa0a787512142484e8d14f2da9b53c9dccfba7de76d6fa741f5955c2b",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1103.838708,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-vYUBqV/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-vYUBqV/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0.arya-vYUBqV/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "91e0b3bb508f4c1e01cd77e37534f5ac023025f7f620e79ba833fbf414b5431d",
+      "generatedCSha256": "540a7529646b253ae4791414d7ce63e0b5ef339dd171d26c3cee410910997d02",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.713833,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.906833,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.9235,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.885625,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.661041,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 4.297292,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.905,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.717709,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.58675,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.7895,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.790541,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.48375,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.639959,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.962125,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 4.103875,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.607042,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-1"
+      ],
+      "wallMs": 3.610584,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/toolchain-51jj50pi/hello-0"
+      ],
+      "wallMs": 3.649417,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "loadAverageAfter": [
+        7.16796875,
+        9.86669921875,
+        9.29296875
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 8
+    }
+  ],
+  "summary": [
+    {
+      "operation": "check-hello",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 6.391209,
+          "minMs": 5.764,
+          "maxMs": 11.469959
+        },
+        "after": {
+          "medianMs": 5.952458,
+          "minMs": 5.725959,
+          "maxMs": 13.864792
+        }
+      }
+    },
+    {
+      "operation": "check-quoted65536",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 37.019709,
+          "minMs": 35.628791,
+          "maxMs": 43.013125
+        },
+        "after": {
+          "medianMs": 34.874166,
+          "minMs": 32.493042,
+          "maxMs": 43.209833
+        }
+      }
+    },
+    {
+      "operation": "check-raw65536",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 40.824541,
+          "minMs": 40.004583,
+          "maxMs": 41.927917
+        },
+        "after": {
+          "medianMs": 37.233917,
+          "minMs": 36.952917,
+          "maxMs": 40.3355
+        }
+      }
+    },
+    {
+      "operation": "forced-build-hello",
+      "samplesPerSdk": 3,
+      "results": {
+        "before": {
+          "medianMs": 1049.765417,
+          "minMs": 1000.972458,
+          "maxMs": 1103.838708
+        },
+        "after": {
+          "medianMs": 1290.739416,
+          "minMs": 1239.873917,
+          "maxMs": 1398.939167
+        }
+      }
+    },
+    {
+      "operation": "direct-startup-hello",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 3.906833,
+          "minMs": 3.649417,
+          "maxMs": 4.297292
+        },
+        "after": {
+          "medianMs": 3.639959,
+          "minMs": 3.48375,
+          "maxMs": 3.885625
+        }
+      }
+    }
+  ],
+  "sdk": {
+    "argv": [
+      "xcrun",
+      "--show-sdk-path"
+    ],
+    "wallMs": 10.360708,
+    "returncode": 0,
+    "stdout": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ],
+    "loadAverageAfter": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ]
+  },
+  "sdkVersion": {
+    "argv": [
+      "xcrun",
+      "--show-sdk-version"
+    ],
+    "wallMs": 8.891459,
+    "returncode": 0,
+    "stdout": "26.5\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ],
+    "loadAverageAfter": [
+      7.04150390625,
+      9.9814453125,
+      9.322265625
+    ]
+  },
+  "finishedAtUtc": "2026-11-13T02:32:59.537877+00:00"
+}

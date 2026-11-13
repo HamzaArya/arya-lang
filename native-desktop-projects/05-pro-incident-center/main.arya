@@ -1,0 +1,104 @@
+use std "fs" as fs
+use std "env" as env
+use std "runtime" as runtime
+fn fail(message) { throw new Error(message) }
+fn record(value) { if not runtime.isRecord(value) { fail("Expected a JSON object.") }; return value }
+fn text(value,label,limit=160) { if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { fail(label + " must be non-empty text, at most " + str(limit) + " characters.") }; return value.trim() }
+fn optionalText(value,label,limit=2000) { if value == undefined { return "" }; if runtime.kind(value) != "string" or value.length > limit { fail(label + " must be text, at most " + str(limit) + " characters.") }; return value.trim() }
+fn rows(value,maximum) { if not Array.isArray(value) or value.length > maximum { fail("Invalid stored collection or capacity exceeded.") }; return value }
+fn integer(value) { return Number.isSafeInteger(value) and value >= 1 }
+fn version(item,body) { if not integer(item.version) or str(body.version) != str(item.version) { fail("This record changed. Refresh, select it again and retry.") } }
+fn choose(value,values,label) { if not values.includes(value) { fail("Invalid " + label + ".") }; return value }
+fn find(items,id,label) { let found = items.find(fn(item) { return item.id == id }); if found == undefined { fail(label + " not found. Refresh the view.") }; return found }
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn fresh(next,prefix) { let id = prefix + str(next.serial); next.serial += 1; return id }
+const dataFile = env.get("DATA_FILE","data.json")
+fn readStore(fallback) {
+  let info = fs.infoSync(dataFile)
+  if info == null { return fallback }
+  if info.type != "file" { fail("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 4194304 { fail("Data store is invalid or exceeds 4 MiB.") }
+  return record(JSON.parse(fs.readTextSync(dataFile)))
+}
+fn persist(next) {
+  let encoded = JSON.stringify(next,null,2); if Buffer.byteLength(encoded,"utf8") > 4194304 { fail("Data store would exceed 4 MiB. Export/archive data before continuing.") }
+  try { fs.writeTextAtomicSync(dataFile, encoded) }
+  catch problem { fail("Could not save changes. Existing data is unchanged; check the data folder.") }
+}
+fn validateIds(items,prefix,serial) {
+  let seen = new Set()
+  for item in items {
+    record(item); let id = text(item.id,"Stored identifier",40)
+    if not id.startsWith(prefix) or not new RegExp("^[1-9][0-9]*$").test(id.slice(prefix.length)) or number(id.slice(prefix.length)) >= serial or seen.has(id) or not integer(item.version) { fail("Invalid or duplicate stored identifier/version.") }; seen.add(id)
+  }
+}
+let state = {schema:1,serial:1,incidents:[],services:[],events:[]}
+fn validateState(value) {
+  record(value); if value.schema != 1 or not integer(value.serial) { fail("Unsupported or corrupt incident store.") }
+  rows(value.incidents,1000); rows(value.services,500); rows(value.events,10000)
+  validateIds(value.incidents,"I",value.serial); validateIds(value.services,"S",value.serial); validateIds(value.events,"E",value.serial)
+  for service in value.services { text(service.name,"Service name",100); text(service.owner,"Service owner",100); optionalText(service.description,"Service description"); choose(service.status,["operational","degraded","outage"],"service status") }
+  for incident in value.incidents {
+    text(incident.title,"Incident title"); text(incident.owner,"Incident owner",100); choose(incident.priority,["P1","P2","P3"],"priority"); choose(incident.status,["open","investigating","resolved"],"incident status"); optionalText(incident.description,"Description"); text(incident.created,"Creation time",40)
+    if incident.serviceId != "" { find(value.services,incident.serviceId,"Stored service") }
+  }
+  for event in value.events { text(event.subject,"Event subject",160); text(event.entityId,"Event entity",40); text(event.action,"Event action",40); text(event.note,"Event note",2000); text(event.time,"Event time",40) }
+}
+fn event(next,item,action,note) {
+  if next.events.length >= 10000 { fail("Activity timeline has reached 10,000 events. Export/archive before adding changes.") }
+  next.events.push({id:fresh(next,"E"),version:1,entityId:item.id,subject:item.title ?? item.name,action:action,note:note,time:new Date().toISOString()})
+}
+fn incidentFields(body,next) {
+  let serviceId = optionalText(body.serviceId,"Service id",40); if serviceId != "" { find(next.services,serviceId,"Service") }
+  return {title:text(body.title,"Incident title"),owner:text(body.owner,"Owner",100),priority:choose(body.priority,["P1","P2","P3"],"priority"),serviceId:serviceId,description:optionalText(body.description,"Description")}
+}
+fn serviceFields(body) { return {name:text(body.name,"Service name",100),owner:text(body.owner,"Owner",100),status:choose(body.status,["operational","degraded","outage"],"service status"),description:optionalText(body.description,"Description")} }
+fn act(command,body) {
+  if command == "list" { return "Current data loaded." }
+  let next = copy(state); let message = "Saved."
+  if command == "incident-add" {
+    if next.incidents.length >= 1000 { fail("Maximum 1,000 incidents reached.") }
+    let item = Object.assign(incidentFields(body,next),{id:fresh(next,"I"),version:1,status:"open",created:new Date().toISOString()}); next.incidents.push(item); event(next,item,"Created","Incident opened by owner " + item.owner); message = "Created incident " + item.id + "."
+  } else if command == "incident-edit" {
+    let item = find(next.incidents,body.id,"Incident"); version(item,body); let fields = incidentFields(body,next); Object.assign(item,fields); item.version += 1; event(next,item,"Edited","Title, ownership, priority, service or description updated."); message = "Updated " + item.id + "."
+  } else if command == "incident-transition" {
+    let item = find(next.incidents,body.id,"Incident"); version(item,body); let status = text(body.status,"Next status",30); let note = text(body.note,"Investigation/resolution note",2000)
+    if not ((item.status == "open" and status == "investigating") or (item.status == "investigating" and status == "resolved")) { fail("Use open → investigating → resolved. Resolved incidents have a separate Reopen action.") }
+    item.status = status; item.version += 1; event(next,item,"Status: " + status,note); message = item.id + " is now " + status + "."
+  } else if command == "incident-note" {
+    let item = find(next.incidents,body.id,"Incident"); version(item,body); let note = text(body.note,"Note",2000); item.version += 1; event(next,item,"Note",note); message = "Added note to " + item.id + "."
+  } else if command == "incident-reopen" {
+    let item = find(next.incidents,body.id,"Incident"); version(item,body); if item.status != "resolved" { fail("Only a resolved incident can reopen.") }; let note = text(body.note,"Reopen reason",2000); item.status = "open"; item.version += 1; event(next,item,"Reopened",note); message = "Reopened " + item.id + "."
+  } else if command == "incident-delete" {
+    let item = find(next.incidents,body.id,"Incident"); version(item,body); if item.status != "resolved" { fail("Resolve an incident before deleting it.") }; event(next,item,"Deleted","Resolved incident removed; timeline retained."); next.incidents = next.incidents.filter(fn(row) { return row.id != body.id }); message = "Deleted incident; timeline retained."
+  } else if command == "service-add" {
+    if next.services.length >= 500 { fail("Maximum 500 services reached.") }; let fields = serviceFields(body)
+    if next.services.some(fn(item) { return item.name.toLowerCase() == fields.name.toLowerCase() }) { fail("A service already has that name.") }
+    let item = Object.assign(fields,{id:fresh(next,"S"),version:1}); next.services.push(item); event(next,item,"Service created","Service added to catalogue."); message = "Created service " + item.id + "."
+  } else if command == "service-edit" {
+    let item = find(next.services,body.id,"Service"); version(item,body); let fields = serviceFields(body)
+    if next.services.some(fn(row) { return row.id != item.id and row.name.toLowerCase() == fields.name.toLowerCase() }) { fail("A service already has that name.") }
+    Object.assign(item,fields); item.version += 1; event(next,item,"Service updated","Service status: " + item.status); message = "Updated service " + item.id + "."
+  } else if command == "service-delete" {
+    let item = find(next.services,body.id,"Service"); version(item,body); if next.incidents.some(fn(row) { return row.serviceId == item.id }) { fail("A linked incident still uses this service. Reassign or delete that incident first.") }; event(next,item,"Service deleted","Service removed from catalogue."); next.services = next.services.filter(fn(row) { return row.id != body.id }); message = "Deleted service."
+  } else { fail("Unknown command.") }
+  validateState(next); persist(next); state = next; return message
+}
+fn snapshot(view,message) {
+  let output = []; let active = state.incidents.filter(fn(item) { return item.status != "resolved" }); let urgent = active.filter(fn(item) { return item.priority == "P1" }).length
+  if view == "incidents" {
+    let activityById = {}
+    for entry in state.events {
+      if activityById[entry.entityId] == undefined { activityById[entry.entityId] = [] }
+      activityById[entry.entityId].push(entry.time + " · " + entry.action + ": " + entry.note)
+    }
+    output = state.incidents.map(fn(item) { let service = state.services.find(fn(row) { return row.id == item.serviceId }); return Object.assign({},item,{service:service?.name ?? "Unassigned",activity:(activityById[item.id] ?? []).join("\n")}) })
+  } else if view == "services" { output = state.services.map(fn(item) { return Object.assign({},item,{activeIncidents:active.filter(fn(row) { return row.serviceId == item.id }).length}) }) }
+  else if view == "timeline" { output = state.events.slice().reverse() }
+  else { fail("Unknown view.") }
+  return {ok:true,message:message,rows:output,summary:str(active.length) + " active incidents · " + str(urgent) + " urgent P1 · " + str(state.services.length) + " services · " + str(state.events.length) + " activity entries"}
+}
+try {
+  let body = record(JSON.parse(args[1] ?? "{}")); let view = body.view ?? "incidents"; choose(view,["incidents","services","timeline"],"view")
+  state = readStore(state); validateState(state); let message = act(args[0] ?? "list",body); print(JSON.stringify(snapshot(view,message)))
+} catch problem { print(JSON.stringify({ok:false,message:problem.message ?? str(problem)})) }

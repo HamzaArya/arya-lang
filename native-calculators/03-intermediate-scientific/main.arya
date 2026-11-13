@@ -1,0 +1,130 @@
+use std "fs" as fs
+use std "env" as env
+use std "validate" as validate
+use std "runtime" as runtime
+use std "security" as security
+use std "math" as math
+const dataFile: string = env.get("DATA_FILE", "data.json")
+const maxBytes = 524288
+let state: any = {format: 1, lastResult: "0", memory: "0", history: []}
+let tokens: any = []; let cursor = 0
+fn fail(message): never { throw new Error(message) }
+fn kind(value) { return runtime.kind(value) }
+fn text(value, label, max) { if kind(value) != "string" or value.trim() == "" or value.length > max { fail(label + " must be nonblank text of at most " + str(max) + " characters.") }; return value.trim() }
+fn peek() { return tokens[cursor] }
+fn take() { const token = tokens[cursor]; cursor += 1; return token }
+fn accept(value) { if peek().text == value { cursor += 1; return true }; return false }
+fn need(value) { if not accept(value) { fail("Expected '" + value + "' at token " + str(cursor + 1) + ".") } }
+fn nesting(depth) { if depth > 32 { fail("Expression nesting exceeds 32 levels.") } }
+fn persist() {
+  const output = (JSON.stringify(state, null, 2) ?? "") + "\n"
+  if Buffer.byteLength(output, "utf8") > maxBytes { fail("Calculator storage exceeds 512 KiB.") }
+  const stage = fs.tempDirectory(dataFile + ".stage-XXXXXX"); const file = stage + "/data.json"
+  try { fs.writeTextSync(file, output); fs.rename(file, dataFile) }
+  finally { if fs.existsSync(file) { fs.remove(file) }; fs.removeDirectory(stage) }
+}
+fn record(expression, result, label, details) {
+  state.history.push({id: security.uuid(), expression: expression, result: result, kind: label, time: new Date().toISOString(), details: details})
+  if state.history.length > 100 { state.history = state.history.slice(-100) }
+  state.lastResult = result
+}
+const historySchema = validate.object({id: validate.string(), expression: validate.string({max: 512}), result: validate.string({max: 500}), kind: validate.string({max: 100}), time: validate.string({max: 50}), details: validate.string({max: 2048})})
+
+let angle = "deg"
+fn finite(value): number { if not Number.isFinite(value) { fail("The result is not finite or is outside the real-number domain.") }; if value == 0 { return 0 }; return value }
+fn scalar(value): number {
+  const raw = text(value, "Number", 500)
+  if not new RegExp("^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$").test(raw) { fail("Expected a decimal number.") }
+  return finite(Number(raw))
+}
+fn tokenize(source) {
+  tokens = []; cursor = 0; let i = 0
+  while i < source.length {
+    const c = source[i]
+    if " \t\r\n".includes(c) { i += 1; continue }
+    if "0123456789.".includes(c) {
+      const start = i; let digits = 0
+      while i < source.length and "0123456789".includes(source[i]) { i += 1; digits += 1 }
+      if source[i] == "." { i += 1; while i < source.length and "0123456789".includes(source[i]) { i += 1; digits += 1 } }
+      if digits == 0 { fail("A decimal point must contain digits.") }
+      if source[i] == "e" or source[i] == "E" {
+        i += 1; if source[i] == "+" or source[i] == "-" { i += 1 }; let exponentDigits = 0
+        while i < source.length and "0123456789".includes(source[i]) { i += 1; exponentDigits += 1 }
+        if exponentDigits == 0 { fail("Scientific notation requires exponent digits.") }
+      }
+      const raw = source.slice(start, i); tokens.push({text: raw, type: "number", value: scalar(raw)})
+    } else if "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(c) {
+      const start = i; while i < source.length and "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(source[i]) { i += 1 }
+      tokens.push({text: source.slice(start, i).toLowerCase(), type: "name"})
+    } else if "+-*/%^!(),".includes(c) { tokens.push({text: c, type: "operator"}); i += 1 }
+    else { fail("Unsupported character '" + c + "'.") }
+    if tokens.length > 256 { fail("Expression exceeds 256 tokens.") }
+  }
+  tokens.push({text: "<end>", type: "end"})
+}
+fn factorial(value): number { if not Number.isInteger(value) or value < 0 or value > 170 { fail("Factorial requires an integer from 0 to 170.") }; let result = 1; for n in range(2, value + 1) { result *= n }; return finite(result) }
+fn applyFunction(name, value): number {
+  let radians = value; if angle == "deg" { radians = value / 180 * math.PI }
+  if name == "sin" { return finite(math.sin(radians)) }
+  if name == "cos" { return finite(math.cos(radians)) }
+  if name == "tan" { if angle == "deg" and math.abs(value % 180) == 90 { fail("Tangent is undefined at this degree angle.") }; if math.abs(math.cos(radians)) < 1e-15 { fail("Tangent is undefined at this angle.") }; return finite(math.tan(radians)) }
+  if name == "asin" or name == "acos" or name == "atan" {
+    let answer = 0
+    if name == "asin" { answer = math.asin(value) } else if name == "acos" { answer = math.acos(value) } else { answer = math.atan(value) }
+    if angle == "deg" { answer = answer * 180 / math.PI }; return finite(answer)
+  }
+  if name == "sqrt" { if value < 0 { fail("Square root requires a nonnegative value.") }; return finite(math.sqrt(value)) }
+  if name == "ln" or name == "log" { if value <= 0 { fail("Logarithms require a positive value.") }; if name == "ln" { return finite(math.log(value)) }; return finite(math.log10(value)) }
+  if name == "abs" { return math.abs(value) }
+  if name == "exp" { return finite(math.exp(value)) }
+  if name == "floor" { return math.floor(value) }
+  if name == "ceil" { return math.ceil(value) }
+  if name == "fact" { return factorial(value) }
+  return fail("Unknown function '" + name + "'.")
+}
+fn primary(depth): number {
+  nesting(depth); const token = take()
+  if token.type == "number" { return token.value }
+  if token.text == "(" { const value = sum(depth + 1); need(")"); return value }
+  if token.type == "name" {
+    if token.text == "pi" { return math.PI }; if token.text == "e" { return math.E }
+    need("("); const value = sum(depth + 1); need(")"); return applyFunction(token.text, value)
+  }
+  return fail("Expected a number, constant, function or parenthesized expression.")
+}
+fn postfix(depth): number { let value = primary(depth); while accept("!") { value = factorial(value) }; return value }
+fn power(depth): number { let value = postfix(depth); if accept("^") { value = finite(math.pow(value, unary(depth + 1))) }; return value }
+fn unary(depth): number { nesting(depth); if accept("+") { return unary(depth + 1) }; if accept("-") { return -unary(depth + 1) }; return power(depth) }
+fn product(depth): number {
+  let value = unary(depth)
+  while ["*", "/", "%"].includes(peek().text) {
+    const op = take().text; const right = unary(depth)
+    if op == "*" { value = finite(value * right) } else { if right == 0 { fail("Division or remainder by zero is undefined.") }; if op == "/" { value = finite(value / right) } else { value = finite(value % right) } }
+  }; return value
+}
+fn sum(depth): number { let value = product(depth); while peek().text == "+" or peek().text == "-" { const op = take().text; const right = product(depth); if op == "+" { value = finite(value + right) } else { value = finite(value - right) } }; return value }
+fn calculate(expression) { tokenize(expression); const result = finite(sum(0)); if peek().type != "end" { fail("Unexpected token '" + peek().text + "'. Implicit multiplication is not supported.") }; return str(result) }
+const stateSchema = validate.object({format: validate.integer({min: 1, max: 1}), lastResult: validate.string({max: 500}), memory: validate.string({max: 500}), history: validate.array(historySchema, {max: 100})})
+try {
+  const info = fs.infoSync(dataFile)
+  if info != null { if info.type != "file" or info.size > maxBytes { fail("Storage must be a regular JSON file of at most 512 KiB.") }; state = validate.parse(stateSchema, JSON.parse(fs.readTextSync(dataFile))) }
+  scalar(state.lastResult); scalar(state.memory)
+  for row in state.history { scalar(row.result) }
+  const command = args[0] ?? "list"; const body: any = JSON.parse(args[1] ?? "{}")
+  if kind(body) != "record" { fail("Command input must be a JSON object.") }
+  if body.view != undefined and body.view != "history" { fail("Unknown view.") }
+  let message = "Ready"
+  if command == "calculate" {
+    angle = body.angle ?? "deg"; if not ["deg", "rad"].includes(angle) { fail("Choose degrees or radians.") }
+    const expression = text(body.expression, "Expression", 512); const result = calculate(expression)
+    record(expression, result, "Scientific", "Angle mode: " + angle + "; binary64 real arithmetic"); message = "Calculated in " + angle + " mode."
+  } else if command == "clear-history" { state.history = []; message = "History cleared." }
+  else if ["memory-store", "memory-add", "memory-subtract"].includes(command) {
+    const value = scalar(body.value); let memory = scalar(state.memory)
+    if command == "memory-store" { memory = value } else if command == "memory-add" { memory = finite(memory + value) } else { memory = finite(memory - value) }; state.memory = str(memory); message = "Memory updated."
+  } else if command == "memory-clear" { state.memory = "0"; message = "Memory cleared." }
+  else if command == "memory-recall" { state.lastResult = state.memory; message = "Memory recalled." }
+  else if command != "list" { fail("Unknown calculator command.") }
+  if command != "list" { persist() }
+  print(JSON.stringify({ok: true, message: message, result: state.lastResult, memory: state.memory, rows: state.history.slice().reverse(), summary: str(state.history.length) + " calculations · real binary64 arithmetic"}))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

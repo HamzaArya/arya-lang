@@ -1,0 +1,544 @@
+{
+  "id": "project-studio",
+  "name": "Project Studio",
+  "subtitle": "Plan projects, protect focus, and see what is actually finished.",
+  "views": [
+    {
+      "id": "projects",
+      "label": "Projects",
+      "columns": [
+        {
+          "key": "name",
+          "label": "Project",
+          "width": 240
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "width": 140
+        },
+        {
+          "key": "progress",
+          "label": "Progress",
+          "width": 90
+        },
+        {
+          "key": "tasks",
+          "label": "Tasks",
+          "width": 70
+        },
+        {
+          "key": "done",
+          "label": "Done",
+          "width": 70
+        },
+        {
+          "key": "active",
+          "label": "Active",
+          "width": 70
+        },
+        {
+          "key": "wipLimit",
+          "label": "WIP limit",
+          "width": 90
+        },
+        {
+          "key": "id",
+          "label": "Project ID",
+          "width": 240
+        }
+      ]
+    },
+    {
+      "id": "tasks",
+      "label": "All tasks",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Task",
+          "width": 240
+        },
+        {
+          "key": "project",
+          "label": "Project",
+          "width": 180
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "width": 130
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 100
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date",
+          "width": 110
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "width": 90
+        }
+      ]
+    },
+    {
+      "id": "overdue",
+      "label": "Overdue tasks",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Task",
+          "width": 240
+        },
+        {
+          "key": "project",
+          "label": "Project",
+          "width": 180
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "width": 130
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 100
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date",
+          "width": 110
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "width": 90
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "label": "Activity history",
+      "columns": [
+        {
+          "key": "time",
+          "label": "Time (UTC)",
+          "width": 180
+        },
+        {
+          "key": "title",
+          "label": "Record",
+          "width": 220
+        },
+        {
+          "key": "action",
+          "label": "Action",
+          "width": 160
+        },
+        {
+          "key": "detail",
+          "label": "Details",
+          "width": 380
+        },
+        {
+          "key": "entityId",
+          "label": "Record ID",
+          "width": 220
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New project",
+      "command": "project-add",
+      "view": "projects",
+      "selection": false,
+      "fields": [
+        {
+          "key": "name",
+          "label": "Project name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Project owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "wipLimit",
+          "label": "Active work limit (1\u201320)",
+          "type": "text",
+          "default": "3",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit project",
+      "command": "project-edit",
+      "view": "projects",
+      "selection": true,
+      "fields": [
+        {
+          "key": "name",
+          "label": "Project name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Project owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "wipLimit",
+          "label": "Active work limit (1\u201320)",
+          "type": "text",
+          "default": "3",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Delete project",
+      "command": "project-delete",
+      "view": "projects",
+      "selection": true,
+      "destructive": true,
+      "fields": []
+    },
+    {
+      "label": "New task",
+      "command": "task-add",
+      "view": "tasks",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Task title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "projectId",
+          "label": "Project",
+          "type": "choice",
+          "optionsView": "projects",
+          "valueKey": "id",
+          "labelKey": "name",
+          "required": true
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date (YYYY-MM-DD; optional)",
+          "type": "text"
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit task",
+      "command": "task-edit",
+      "view": "tasks",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Task title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "projectId",
+          "label": "Project",
+          "type": "choice",
+          "optionsView": "projects",
+          "valueKey": "id",
+          "labelKey": "name",
+          "required": true
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date (YYYY-MM-DD; optional)",
+          "type": "text"
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Change status",
+      "command": "task-transition",
+      "view": "tasks",
+      "selection": true,
+      "fields": [
+        {
+          "key": "status",
+          "label": "Next status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Planned",
+              "label": "Planned"
+            },
+            {
+              "value": "Doing",
+              "label": "Doing"
+            },
+            {
+              "value": "Blocked",
+              "label": "Blocked"
+            },
+            {
+              "value": "Done",
+              "label": "Done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Delete task",
+      "command": "task-delete",
+      "view": "tasks",
+      "selection": true,
+      "destructive": true,
+      "fields": []
+    },
+    {
+      "label": "New task",
+      "command": "task-add",
+      "view": "overdue",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Task title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "projectId",
+          "label": "Project",
+          "type": "choice",
+          "optionsView": "projects",
+          "valueKey": "id",
+          "labelKey": "name",
+          "required": true
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date (YYYY-MM-DD; optional)",
+          "type": "text"
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit task",
+      "command": "task-edit",
+      "view": "overdue",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Task title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "projectId",
+          "label": "Project",
+          "type": "choice",
+          "optionsView": "projects",
+          "valueKey": "id",
+          "labelKey": "name",
+          "required": true
+        },
+        {
+          "key": "assignee",
+          "label": "Assignee",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "dueDate",
+          "label": "Due date (YYYY-MM-DD; optional)",
+          "type": "text"
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Low",
+              "label": "Low"
+            },
+            {
+              "value": "Normal",
+              "label": "Normal"
+            },
+            {
+              "value": "High",
+              "label": "High"
+            }
+          ],
+          "default": "Normal"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Change status",
+      "command": "task-transition",
+      "view": "overdue",
+      "selection": true,
+      "fields": [
+        {
+          "key": "status",
+          "label": "Next status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "Planned",
+              "label": "Planned"
+            },
+            {
+              "value": "Doing",
+              "label": "Doing"
+            },
+            {
+              "value": "Blocked",
+              "label": "Blocked"
+            },
+            {
+              "value": "Done",
+              "label": "Done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Delete task",
+      "command": "task-delete",
+      "view": "overdue",
+      "selection": true,
+      "destructive": true,
+      "fields": []
+    }
+  ]
+}

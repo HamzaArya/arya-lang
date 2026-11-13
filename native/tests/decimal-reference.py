@@ -90,6 +90,15 @@ with d.localcontext() as context:
                 output=format(quantized,f'.{places}f') if operation=='quantize' else canonical(quantized)
                 if operation=='quantize' and left==0 and output.startswith('-'):output=output[1:]
                 add_case(operation,[a]+([b] if operation=='divide' else [])+[places,mode],output)
+    # Already-quantized text may be reused by the native small-coefficient
+    # path, but input negative zero must still normalize for every mode.
+    for mode in list(modes)+['half-ceil','half-floor']:
+        for text in ['0','-0','0.00','-0.00','1.00','-1.00',
+                     '0.000000000000000001','-0.000000000000000001',
+                     '9223372036854775807','-9223372036854775808']:
+            places=len(text.split('.')[1]) if '.' in text else 0
+            output=text[1:] if text.startswith('-') and d.Decimal(text)==0 else text
+            add_case('quantize',[text,places,mode],output)
 with tempfile.TemporaryDirectory(prefix='arya-native-reference-',dir=root/'.build') as temp:
     directory=Path(temp)
     # Each source unit keeps the compiler's existing 50000-token bound.
@@ -101,12 +110,25 @@ with tempfile.TemporaryDirectory(prefix='arya-native-reference-',dir=root/'.buil
         imports.append(f'use arya "./{name}" as part{len(imports)}')
     entry.write_text('\n'.join(imports)+'\n')
     binary=directory/'program'
-    build=subprocess.run([str(compiler),'build',str(entry),'-o',str(binary),'--release'],capture_output=True,text=True,timeout=240)
-    assert build.returncode==0, build.stderr or build.stdout
-    actual=subprocess.check_output([str(binary)],env={'PATH':'/nonexistent'},text=True,timeout=30).splitlines()
+    # Keep the independent matrix unchanged, but bound the C optimizer's working
+    # set. A single generated program can otherwise exceed small hosts' memory.
+    batch_modules=int(os.environ.get('ARYA_DECIMAL_REFERENCE_BATCH_MODULES','4'))
+    if batch_modules<1:raise ValueError('Batch module count must be positive')
+    actual=[]; batches=[]
+    for start in range(0,len(imports),batch_modules):
+        batch=directory/f'batch-{start}.arya'
+        batch.write_text('\n'.join(imports[start:start+batch_modules])+'\n')
+        binary=directory/f'program-{start}'
+        build=subprocess.run([str(compiler),'build',str(batch),'-o',str(binary),'--release'],capture_output=True,text=True,timeout=240)
+        assert build.returncode==0, build.stderr or build.stdout
+        output=subprocess.check_output([str(binary)],env={'PATH':'/nonexistent'},text=True,timeout=30)
+        actual.extend(output.splitlines())
+        batches.append({'firstModule':start,'modules':min(batch_modules,len(imports)-start),
+                        'entrySha256':hashlib.sha256(batch.read_bytes()).hexdigest(),
+                        'binarySha256':hashlib.sha256(binary.read_bytes()).hexdigest()})
     assert actual == expected, next(((i,a,b) for i,(a,b) in enumerate(zip(actual,expected)) if a!=b),('length',len(actual),len(expected)))
     record={'reference':'Python _pydecimal (independent pure-Python arithmetic)', 'cases':len(expected),
-            'seed':'0x41525941', 'allMatched':True,
+            'seed':'0x41525941', 'allMatched':True, 'batchModules':batch_modules, 'batches':batches,
             'sourceSha256':hashlib.sha256(('\n'.join(source_text)+entry.read_text()).encode()).hexdigest(),
             'outputSha256':hashlib.sha256(('\n'.join(actual)+'\n').encode()).hexdigest()}
     (root/'.build/native-decimal-reference.json').write_text(json.dumps(record,indent=2)+'\n')

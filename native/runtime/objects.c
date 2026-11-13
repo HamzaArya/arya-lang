@@ -6,7 +6,7 @@ static int adeep_value(AV a,AV b,AEquality *state,int depth){if(++state->nodes>1
  for(size_t i=0;i<state->count;i++)if(state->pairs[i].a==a.p&&state->pairs[i].b==b.p)return 1;
  if(state->count==state->capacity){size_t n=state->capacity?state->capacity*2:32;AEqualPair *p=(AEqualPair*)realloc(state->pairs,n*sizeof(*p));if(!p){afail("Error","Cannot allocate structural comparison.");return 0;}state->pairs=p;state->capacity=n;}state->pairs[state->count++]=(AEqualPair){a.p,b.p};
  if(a.t==ALIST){for(size_t i=0;i<a.p->len;i++)if(!adeep_value(a.p->data[i],b.p->data[i],state,depth+1))return 0;return 1;}
- for(size_t i=0;i<a.p->len;i+=2){int found=0;for(size_t j=0;j<b.p->len;j+=2)if(aseq(a.p->data[i],b.p->data[j])){found=1;if(!adeep_value(a.p->data[i+1],b.p->data[j+1],state,depth+1))return 0;break;}if(!found)return 0;}return 1;
+ for(size_t i=0;i<a.p->len;i+=2){size_t slot=akey_find(b.p,a.p->data[i],2);if(slot==SIZE_MAX||!adeep_value(a.p->data[i+1],b.p->data[slot+1],state,depth+1))return 0;}return 1;
 }
 static AV aruntime_defer_body(AV env,int argc,AV *argv){(void)argc;(void)argv;acurrent_task->state=0;atask_yield();return acall(env,0,NULL);}
 static void aruntime_finish(void){AV hooks=aextra_roots[1];if(hooks.t==ALIST)for(size_t i=0;i<hooks.p->len&&!afailed;i++)acall(hooks.p->data[i],0,NULL);}

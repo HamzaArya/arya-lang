@@ -1,0 +1,10 @@
+{
+  "seed": 731923,
+  "mutations": 256,
+  "totalCases": 266,
+  "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+  "controllerSha256": "a615f1ff8470e2a17283e15432666a42ba62346be8d7278669f602782b301444",
+  "environment": "compiler subprocess PATH=/nonexistent; Python controller only",
+  "failures": [],
+  "reproductions": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-parser-fuzz-xock4l1n"
+}

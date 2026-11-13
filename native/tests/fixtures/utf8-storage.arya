@@ -1,0 +1,47 @@
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+let checks = 0
+fn equal(actual: any, expected: any) {
+  debug.assert(runtime.deepEqual(actual, expected), "UTF conversion mismatch")
+  checks += 1
+}
+for count in [0, 1, 2, 3, 4, 7, 8, 9, 15, 16, 17, 31, 32, 33, 63, 64, 65, 127, 128, 129, 4095, 4096, 4097] {
+  const source = ("a\0z".repeat(count)).slice(0, count)
+  const encoded = Buffer.from(source)
+  const prefix = Buffer.from([0, 255, 1])
+  const joined = Buffer.concat([prefix, encoded, prefix])
+  equal(encoded.length, count)
+  equal(encoded.toString(), source)
+  equal(joined.subarray(3, 3 + count).toString(), source)
+  equal(Buffer.from(encoded.toString()).equals(encoded), true)
+  for suffix in ["é", "سلام", "😀", "\ud800", "\udfff"] {
+    const value = source + suffix
+    let expected = value
+    if suffix == "\ud800" or suffix == "\udfff" { expected = source + "\ufffd" }
+    equal(Buffer.from(value).toString(), expected)
+    let clean = suffix
+    if suffix == "\ud800" or suffix == "\udfff" { clean = "\ufffd" }
+    equal(Buffer.from(suffix + source).toString(), clean + source)
+    equal(Buffer.from(source.slice(0, count / 2) + suffix + source.slice(count / 2)).toString(), source.slice(0, count / 2) + clean + source.slice(count / 2))
+  }
+  runtime.collect()
+}
+for pair in [
+  [[], ""], [[0, 127], "\0\u007f"], [[194, 128], "\u0080"],
+  [[224, 160, 128], "\u0800"], [[240, 144, 128, 128], "\ud800\udc00"],
+  [[244, 143, 191, 191], "\udbff\udfff"], [[239, 187, 191], "\ufeff"],
+  [[128], "\ufffd"], [[255], "\ufffd"], [[192, 175], "\ufffd\ufffd"],
+  [[224, 128, 128], "\ufffd\ufffd\ufffd"], [[237, 160, 128], "\ufffd\ufffd\ufffd"],
+  [[244, 144, 128, 128], "\ufffd\ufffd\ufffd\ufffd"],
+  [[240, 159], "\ufffd\ufffd"], [[226, 130, 65], "\ufffd\ufffdA"],
+  [[194, 65], "\ufffdA"], [[65, 0, 255, 66], "A\0\ufffdB"]
+] { equal(Buffer.from(pair[0]).toString(), pair[1]) }
+equal(Buffer.from("\ud800\udc00").toString("hex"), "f0908080")
+equal(Buffer.from("\ud800X\udc00").toString("hex"), "efbfbd58efbfbd")
+const retained = []
+for i in range(64) { retained.push(Buffer.from("x".repeat(i) + "\0" + str(i)).toString()) }
+await tasks.sleep(0)
+runtime.collect()
+for i in range(64) { equal(retained[i], "x".repeat(i) + "\0" + str(i)) }
+print("UTF8 storage checks:", checks)

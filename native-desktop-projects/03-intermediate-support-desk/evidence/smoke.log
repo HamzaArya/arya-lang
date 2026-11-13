@@ -1,0 +1,1 @@
+PASS: ticket CRUD, customer/owner/priority edits, valid/invalid lifecycle, stale revisions, active/all/history views, separate-process persistence, failed-write preservation, corrupt/duplicate storage

@@ -1,0 +1,2183 @@
+{
+  "recordedAtUtc": "2026-11-13T02:25:24Z",
+  "boundary": "CPU ms inside warmed workload; build/startup/output excluded. Fresh processes, alternating binary order. Allocation counters from separate processes.",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "flags": "--release (-O2 -ffp-contract=off); counters add --runtime-counters",
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "sourceSha256": "95dc0858a2b5b9f7927d581ac23301711c6b9481ce215e4ce5543d623744444e",
+  "controllerSha256": "a0485169cd7332b0d68127b3690b886592ca0298838fddb76163c39175f916dd",
+  "loadStart": [
+    6.2685546875,
+    8.31103515625,
+    8.45947265625
+  ],
+  "artifacts": {
+    "before": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+      "binarySha256": "69201ddc65f21a6a9138ef37ae0bce7e26eb590aabdf05adcdb2877a5aae9933",
+      "generatedCSha256": "d430e6f3e5237cd3be78d3850f28d4d740164abb90702b15e0541118c63173f6",
+      "binaryBytes": 524680
+    },
+    "isolated": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+      "binarySha256": "518410d5a9db3a6d6d97406f082b5d58a787a18e60aaf7e1a298cf850ca9b408",
+      "generatedCSha256": "2842cc284b1f4febb17c28145e9f8fefb406d0ca91124fe0e181623007ca9d49",
+      "binaryBytes": 508304
+    }
+  },
+  "raw": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 23.105,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 19.314999999999998,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 19.339000000000002,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 20.955,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 21.463000000000005,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 19.53,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 20.315,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 20.954,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 20.906000000000002,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 19.209999999999997,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 19.432,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 20.980999999999998,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 20.538999999999998,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 19.112,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 19.042999999999996,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 20.621000000000002,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 20.922000000000004,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 19.105,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 27.554000000000002,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 26.229,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 25.825999999999997,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 26.799,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 26.999000000000002,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 24.676,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 24.612,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 26.761,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 26.832,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 27.987000000000002,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 26.545,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 26.383,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 26.19,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 23.974000000000004,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 24.181,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 27.652000000000005,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 26.924,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 25.009,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 0,
+      "cpuMs": 16.240000000000002,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 0,
+      "cpuMs": 14.607000000000001,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 1,
+      "cpuMs": 14.722000000000003,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 1,
+      "cpuMs": 16.51,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 2,
+      "cpuMs": 18.438999999999997,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 2,
+      "cpuMs": 15.088000000000001,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 3,
+      "cpuMs": 15.259000000000002,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 3,
+      "cpuMs": 16.493000000000002,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 4,
+      "cpuMs": 16.776,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 4,
+      "cpuMs": 16.343999999999998,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 5,
+      "cpuMs": 15.643,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 5,
+      "cpuMs": 20.852000000000004,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 6,
+      "cpuMs": 17.811,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 6,
+      "cpuMs": 15.307999999999998,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 7,
+      "cpuMs": 15.501999999999999,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 7,
+      "cpuMs": 17.68,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 8,
+      "cpuMs": 16.726000000000003,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 8,
+      "cpuMs": 14.453999999999999,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 8.517,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 8.331,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 9.216,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 9.186,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 8.444999999999999,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 8.657,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 8.398000000000001,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 8.371,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 8.570999999999998,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 9.596,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 8.514000000000001,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 8.385,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 8.373999999999999,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 8.538,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 8.492999999999999,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 8.393,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 8.375,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 8.674000000000001,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-benchmark",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "medianCpuMs": 20.954,
+      "minCpuMs": 20.538999999999998,
+      "maxCpuMs": 23.105
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "medianCpuMs": 19.314999999999998,
+      "minCpuMs": 19.042999999999996,
+      "maxCpuMs": 20.315
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "medianCpuMs": 26.832,
+      "minCpuMs": 26.19,
+      "maxCpuMs": 27.652000000000005
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "medianCpuMs": 25.009,
+      "minCpuMs": 23.974000000000004,
+      "maxCpuMs": 27.987000000000002
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "medianCpuMs": 16.776,
+      "minCpuMs": 16.240000000000002,
+      "maxCpuMs": 20.852000000000004
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "medianCpuMs": 15.259000000000002,
+      "minCpuMs": 14.453999999999999,
+      "maxCpuMs": 16.343999999999998
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "medianCpuMs": 8.393,
+      "minCpuMs": 8.371,
+      "maxCpuMs": 9.186
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "medianCpuMs": 8.538,
+      "minCpuMs": 8.331,
+      "maxCpuMs": 9.596
+    }
+  ],
+  "counters": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-counter",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 404239,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 202007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 21,
+        "peakManagedBytes": 1087304,
+        "scalarCalls": 0,
+        "rootedCalls": 202006,
+        "rootPushes": 42,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 30190312,
+        "strings": 101051,
+        "stringUnits": 492355,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.904
+      }
+    },
+    {
+      "label": "isolated",
+      "mode": "short",
+      "iterations": 100000,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-counter",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "loadAfter": [
+        6.2685546875,
+        8.31103515625,
+        8.45947265625
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 303188,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 202007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 20,
+        "peakManagedBytes": 1086626,
+        "scalarCalls": 0,
+        "rootedCalls": 202006,
+        "rootPushes": 42,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 29381897,
+        "strings": 101051,
+        "stringUnits": 492354,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.031
+      }
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-counter",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 303239,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 101007,
+        "directCalls": 101002,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 24,
+        "peakManagedBytes": 1087274,
+        "scalarCalls": 0,
+        "rootedCalls": 101006,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 32869283,
+        "strings": 101051,
+        "stringUnits": 2424588,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 4.026
+      }
+    },
+    {
+      "label": "isolated",
+      "mode": "slice",
+      "iterations": 100000,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-counter",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 202188,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 101007,
+        "directCalls": 101002,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 23,
+        "peakManagedBytes": 1086678,
+        "scalarCalls": 0,
+        "rootedCalls": 101006,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 32060791,
+        "strings": 101051,
+        "stringUnits": 2424576,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 2.919
+      }
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-counter",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 363261,
+        "heapObjects": 132104,
+        "environments": 1,
+        "functions": 40,
+        "genericCalls": 44007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 29,
+        "peakManagedBytes": 1096238,
+        "scalarCalls": 0,
+        "rootedCalls": 44006,
+        "rootPushes": 121047,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 34191019,
+        "strings": 110055,
+        "stringUnits": 396596,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 43997,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 5.251
+      }
+    },
+    {
+      "label": "isolated",
+      "mode": "json",
+      "iterations": 10000,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-counter",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 253206,
+        "heapObjects": 132104,
+        "environments": 1,
+        "functions": 40,
+        "genericCalls": 44007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 28,
+        "peakManagedBytes": 1095602,
+        "scalarCalls": 0,
+        "rootedCalls": 44006,
+        "rootPushes": 121047,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 33310663,
+        "strings": 110055,
+        "stringUnits": 396608,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 43997,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 4.554
+      }
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-counter",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 101273,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 9,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 15,
+        "peakManagedBytes": 1628416,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 25132324,
+        "strings": 101051,
+        "stringUnits": 5000551074,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.634
+      }
+    },
+    {
+      "label": "isolated",
+      "mode": "append",
+      "iterations": 100000,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-counter",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "loadAfter": [
+        6.56689453125,
+        8.3388671875,
+        8.46826171875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 101205,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 9,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 15,
+        "peakManagedBytes": 1627536,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 25131787,
+        "strings": 101051,
+        "stringUnits": 5000551075,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.537
+      }
+    }
+  ],
+  "provenance": {
+    "description": "Exactly three string-storage blocks replaced in otherwise baseline-generated C; numeric/JSON code unchanged",
+    "beforeSourceSha256": "b1acd05e490df3f6dfc4da871e3f70e180275af93077cb3e8c2999987d153d10",
+    "replacements": [
+      {
+        "old": "typedef struct { uint16_t *chars; size_t capacity, used, references; } AStringBuffer;",
+        "new": "typedef struct { size_t capacity, used, references; uint16_t chars[]; } AStringBuffer;"
+      },
+      {
+        "old": "static void astring_release(AH *h) {\n  AStringBuffer *buffer=h->external;\n  if(buffer&&!--buffer->references) { aallocated-=sizeof(*buffer)+(buffer->capacity+1)*sizeof(uint16_t);free(buffer->chars);free(buffer); }\n}",
+        "new": "static void astring_release(AH *h) {\n  AStringBuffer *buffer=h->external;\n  if(buffer&&!--buffer->references) { aallocated-=sizeof(*buffer)+(buffer->capacity+1)*sizeof(uint16_t);free(buffer); }\n}"
+      },
+      {
+        "old": "static AStringBuffer *astring_buffer(size_t capacity) {\n  AStringBuffer *buffer=amemory(sizeof(*buffer));buffer->capacity=capacity;buffer->references=1;\n  buffer->chars=amemory((capacity+1)*sizeof(uint16_t));\n  aallocated+=sizeof(*buffer)+(capacity+1)*sizeof(uint16_t);if(aallocated>apeakh)apeakh=aallocated;return buffer;\n}",
+        "new": "static AStringBuffer *astring_buffer(size_t capacity) {\n  size_t bytes=sizeof(AStringBuffer)+(capacity+1)*sizeof(uint16_t);\n  AStringBuffer *buffer=amemory(bytes);buffer->capacity=capacity;buffer->references=1;\n  aallocated+=bytes;if(aallocated>apeakh)apeakh=aallocated;return buffer;\n}"
+      }
+    ],
+    "baselineCompiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+    "baselineCompilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+    "baselineCoreSha256": "b1acd05e490df3f6dfc4da871e3f70e180275af93077cb3e8c2999987d153d10",
+    "candidateCompileFlags": [
+      "cc",
+      "-std=c11",
+      "-ffp-contract=off",
+      "-O2",
+      "-I",
+      "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib",
+      "SOURCE",
+      "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/lib/libmpdec.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "OUTPUT"
+    ]
+  },
+  "provenanceSha256": "c82b753da9a68ca33e784c3f9bf2a70c6b85667aabddfbca74be5d6f0bd97479",
+  "counterArtifacts": {
+    "before": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/before-counter",
+      "binarySha256": "2aa71f8c84908aef7893a470dc0f8d694adb59406f392cc37c429b04d4f837fc",
+      "generatedCSha256": "84dcf2e34269fc26cce1f259f313e35651287eca1d6784fdcc2bf8de4f22c816",
+      "binaryBytes": 524696
+    },
+    "isolated": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/string-storage/isolated-counter",
+      "binarySha256": "2a3ee3a575b5cf6d6b1b6a94947ea190dbea0ac0a364cfed3d75fea912b1ca8b",
+      "generatedCSha256": "7be4c39b688be30de9fc79383dca8ea18a0274829d64ad6b2e0644e98f88c051",
+      "binaryBytes": 524672
+    }
+  },
+  "hashesVerifiedUnchanged": true,
+  "loadEnd": [
+    6.56689453125,
+    8.3388671875,
+    8.46826171875
+  ]
+}

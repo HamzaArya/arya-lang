@@ -1,0 +1,60 @@
+use std "runtime" as runtime
+use std "list" as list
+use std "fs" as fs
+const mode = args[0]
+const n = number(args[1])
+if mode == "concat" {
+  let text = ""; let i = 0; const start = runtime.clock()
+  while i < n { text += "x"; i += 1 }
+  print(len(text), (runtime.clock() - start) * 1000)
+} else if mode == "join" {
+  let chunks = []; let i = 0; const start = runtime.clock()
+  while i < n { chunks.push("x"); i += 1 }
+  const text = chunks.join("")
+  print(len(text), (runtime.clock() - start) * 1000)
+} else if mode == "record" {
+  let data = {}; let i = 0; const start = runtime.clock()
+  while i < n { data["key" + str(i)] = i; i += 1 }
+  print(data["key" + str(n - 1)], (runtime.clock() - start) * 1000)
+} else if mode == "unique" {
+  const input = range(n); runtime.collect(); const start = runtime.clock()
+  const result = list.unique(input)
+  print(len(result), (runtime.clock() - start) * 1000)
+} else if mode == "set-unique" {
+  const input = range(n); runtime.collect(); const start = runtime.clock()
+  const result = new Set(input)
+  print(result.size, (runtime.clock() - start) * 1000)
+} else if mode == "promise" {
+  const input = range(n); runtime.collect(); const start = runtime.clock()
+  const result = await Promise.all(input)
+  print(len(result), (runtime.clock() - start) * 1000)
+} else if mode == "map-delete" or mode == "map-read" {
+  const data = new Map(); let i = 0
+  while i < n { data.set(i, i); i += 1 }
+  runtime.collect(); i = 0; let total = 0; const start = runtime.clock()
+  while i < n { if mode == "map-delete" { if data.delete(i) { total += 1 } } else { total += data.get(i) }; i += 1 }
+  print(total, (runtime.clock() - start) * 1000)
+} else if mode == "json-parse" {
+  const text = fs.readTextSync(args[2]); runtime.collect(); const start = runtime.clock()
+  const result = JSON.parse(text)
+  print(result["key" + str(n - 1)], (runtime.clock() - start) * 1000)
+} else if mode == "json-stringify" {
+  const text = fs.readTextSync(args[2]); const value = JSON.parse(text); runtime.collect(); const start = runtime.clock()
+  const result = JSON.stringify(value)
+  print(len(result), (runtime.clock() - start) * 1000)
+} else if mode == "global-floor" or mode == "cached-floor" or mode == "random" {
+  const math = Math; let i = 0; let total = 0; const start = runtime.clock()
+  while i < n {
+    if mode == "global-floor" { total += Math.floor(i / 2) }
+    else if mode == "cached-floor" { total += math.floor(i / 2) }
+    else { total += math.random() }
+    i += 1
+  }
+  print(total, (runtime.clock() - start) * 1000)
+} else if mode == "sparse" {
+  const before = runtime.collect(); const start = runtime.clock()
+  const value = []; value[n] = 1
+  const bytes = runtime.collect() - before
+  if value[n] != 1 or len(value) != n + 1 { throw "Sparse output mismatch" }
+  print(bytes, (runtime.clock() - start) * 1000)
+}

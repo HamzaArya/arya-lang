@@ -1,0 +1,38 @@
+{
+  "views" : [
+    {
+      "view" : "accounts",
+      "response" : {
+        "message" : "Current ledger loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 accounts · 0 journals · total debits = credits 0.00 · 0 reconciliations"
+      }
+    },
+    {
+      "view" : "journals",
+      "response" : {
+        "message" : "Current ledger loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 accounts · 0 journals · total debits = credits 0.00 · 0 reconciliations"
+      }
+    },
+    {
+      "view" : "reconciliations",
+      "response" : {
+        "message" : "Current ledger loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 accounts · 0 journals · total debits = credits 0.00 · 0 reconciliations"
+      }
+    }
+  ],
+  "ok" : true
+}

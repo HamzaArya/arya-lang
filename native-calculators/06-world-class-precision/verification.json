@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-11-13T14:50:06.983237+00:00",
+  "status": "passed",
+  "supersedes": "Pre-review calculator verification; persistence and finance rounding bugs corrected.",
+  "steps": [
+    {
+      "name": "check",
+      "exit_code": 0,
+      "log": ".build/review-check.log",
+      "output": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/native-calculators/06-world-class-precision/main.arya\n"
+    },
+    {
+      "name": "build",
+      "exit_code": 0,
+      "log": ".build/review-build.log",
+      "output": "Native release build passed; existing ucontext deprecation warnings."
+    },
+    {
+      "name": "smoke",
+      "exit_code": 0,
+      "log": ".build/review-smoke.log",
+      "output": "PASS: 233 real native worker calls; independent Fraction/Decimal oracles, precedence, ties, limits, memory, persistence, latest100 history, corrupt data, existing/dangling store symlinks, poisoned temporary symlinks and real write failure\n"
+    }
+  ],
+  "inputs_sha256": {
+    "main.arya": "b3bca9f47bb1526096bc719c63f67d033b287c50c54fea838373927ad592236b",
+    "rational.arya": "ef732448a6343ede64113cc0f459efe67b8ceeea1f6cc4b1adcb85cf3d50b9cd",
+    "ui.json": "8f5c28253a93cdaa89689e430ffb7800c04f2b517520465eb2e1ad16e35c58bd",
+    "smoke.py": "b55262397b1c83a70e72b85caf75db90fdc1ddb6e7630960a5a442cf7e154894"
+  },
+  "worker_sha256": "fe1397dcc36bfc30923f557d4e33df7e914ce66ac227d128c81f6774d2b1753a"
+}

@@ -1,0 +1,125 @@
+{
+  "currency": "AFN",
+  "scale": 2,
+  "backend": "native",
+  "accounts": [
+    {
+      "account": "cash",
+      "debit": "100.25",
+      "credit": "25.10",
+      "balance": "75.15"
+    },
+    {
+      "account": "sales",
+      "debit": "0.00",
+      "credit": "100.25",
+      "balance": "-100.25"
+    },
+    {
+      "account": "rent",
+      "debit": "25.10",
+      "credit": "0.00",
+      "balance": "25.10"
+    }
+  ],
+  "entryCount": 4,
+  "debit": "125.35",
+  "credit": "125.35",
+  "difference": "0.00",
+  "balanced": true,
+  "transactionCount": 2,
+  "transactions": [
+    {
+      "id": "sale-001",
+      "currency": "AFN",
+      "scale": 2,
+      "entryCount": 2,
+      "debit": "100.25",
+      "credit": "100.25",
+      "balanced": true
+    },
+    {
+      "id": "rent-001",
+      "currency": "AFN",
+      "scale": 2,
+      "entryCount": 2,
+      "debit": "25.10",
+      "credit": "25.10",
+      "balanced": true
+    }
+  ],
+  "policy": "journal-v1"
+}
+{
+  "currency": "AFN",
+  "scale": 2,
+  "entryCount": 4,
+  "accounts": [
+    {
+      "account": "cash",
+      "debit": "75.15",
+      "credit": "0.00"
+    },
+    {
+      "account": "sales",
+      "debit": "0.00",
+      "credit": "100.25"
+    },
+    {
+      "account": "rent",
+      "debit": "25.10",
+      "credit": "0.00"
+    }
+  ],
+  "debit": "100.25",
+  "credit": "100.25",
+  "difference": "0.00",
+  "balanced": true,
+  "policy": "trial-balance-v1"
+}
+{
+  "currency": "AFN",
+  "scale": 2,
+  "entryCount": 4,
+  "accounts": [
+    {
+      "account": "cash",
+      "type": "asset",
+      "debit": "100.25",
+      "credit": "25.10",
+      "balance": "75.15",
+      "normalBalance": "75.15"
+    },
+    {
+      "account": "sales",
+      "type": "revenue",
+      "debit": "0.00",
+      "credit": "100.25",
+      "balance": "-100.25",
+      "normalBalance": "100.25"
+    },
+    {
+      "account": "rent",
+      "type": "expense",
+      "debit": "25.10",
+      "credit": "0.00",
+      "balance": "25.10",
+      "normalBalance": "25.10"
+    }
+  ],
+  "policy": "statements-v1",
+  "incomeStatement": {
+    "revenue": "100.25",
+    "expenses": "25.10",
+    "netIncome": "75.15"
+  },
+  "balanceSheet": {
+    "assets": "75.15",
+    "liabilities": "0.00",
+    "equity": "0.00",
+    "currentEarnings": "75.15",
+    "liabilitiesAndEquity": "75.15",
+    "difference": "0.00",
+    "balanced": true
+  }
+}

@@ -1,0 +1,88 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "runtime" as runtime
+use std "validate" as validate
+use std "security" as security
+use std "datetime" as datetime
+const dataFile: string = env.get("DATA_FILE", "data.json")
+const maxBytes = 4194304
+let state: any = {format: 1, tickets: [], history: []}
+fn clean(value, label, maximum = 160) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonblank text of at most " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn optionalText(value, label, maximum = 4000) {
+  if runtime.kind(value) != "string" or value.length > maximum { throw new Error(label + " must be text of at most " + str(maximum) + " characters.") }; return value.trim()
+}
+fn choose(value, choices, label) { if not choices.includes(value) { throw new Error("Choose a valid " + label + ".") }; return value }
+fn find(collection, id) { if runtime.kind(id) != "string" { throw new Error("Select a record first.") }; for row in collection { if row.id == id { return row } }; throw new Error("The selected record no longer exists. Refresh the view.") }
+fn version(row, supplied) { if not Number.isSafeInteger(supplied) or supplied != row.version { throw new Error("This record changed. Refresh before editing or deleting.") } }
+fn history(title, entityId, action, detail) {
+  state.history.push({id: security.uuid(), time: new Date().toISOString(), entityId: entityId, title: title, action: action, detail: detail})
+  if state.history.length > 1000 { state.history = state.history.slice(-1000) }
+}
+fn persist() {
+  const output = JSON.stringify(state, null, 2) ?? ""
+  if Buffer.byteLength(output, "utf8") + 1 > maxBytes { throw new Error("Storage limit of 4 MiB reached. Remove old records before adding more.") }
+  fs.writeTextAtomicSync(dataFile, output + "\n")
+}
+const historySchema = validate.object({id: validate.string(), time: validate.string(), entityId: validate.string(), title: validate.string(), action: validate.string(), detail: validate.string()})
+
+const statuses = ["Open", "Investigating", "Waiting", "Resolved"]
+const priorities = ["Low", "Normal", "High", "Urgent"]
+const ticketSchema = validate.object({id: validate.string(), version: validate.integer({min: 1}), title: validate.string({min: 1, max: 160}), customer: validate.string({min: 1, max: 120}), owner: validate.string({min: 1, max: 100}), priority: validate.enum(priorities), status: validate.enum(statuses), description: validate.string({max: 4000}), created: validate.string(), updated: validate.string()})
+const stateSchema = validate.object({format: validate.integer({min: 1, max: 1}), tickets: validate.array(ticketSchema, {max: 300}), history: validate.array(historySchema, {max: 1000})})
+fn integrity() {
+  let seen = new Set()
+  for row in state.tickets { if seen.has(row.id) { throw new Error("Stored tickets have duplicate IDs.") }; seen.add(row.id); clean(row.title, "Title"); clean(row.customer, "Customer", 120); clean(row.owner, "Owner", 100) }
+}
+fn fields(body) { return {title: clean(body.title, "Title"), customer: clean(body.customer, "Customer", 120), owner: clean(body.owner, "Owner", 100), priority: choose(body.priority, priorities, "priority"), description: optionalText(body.description ?? "", "Description")} }
+fn execute(command, body) {
+  if command == "add" {
+    if state.tickets.length >= 300 { throw new Error("Ticket limit of 300 reached.") }
+    const input = fields(body); const now = new Date().toISOString()
+    const row = {id: security.uuid(), version: 1, title: input.title, customer: input.customer, owner: input.owner, priority: input.priority, description: input.description, status: "Open", created: now, updated: now}
+    state.tickets.push(row); history(row.title, row.id, "Created", row.customer + " · Owner: " + row.owner + " · " + row.priority); return "Ticket created."
+  }
+  if not ["edit", "transition", "delete"].includes(command) { throw new Error("Unknown command.") }
+  const row = find(state.tickets, body.id); version(row, body.version)
+  if command == "delete" { state.tickets = state.tickets.filter(fn(item) => item.id != row.id); history(row.title, row.id, "Deleted", "Ticket deleted; its history is retained."); return "Ticket deleted." }
+  if command == "edit" {
+    const input = fields(body); row.title = input.title; row.customer = input.customer; row.owner = input.owner; row.priority = input.priority; row.description = input.description
+    history(row.title, row.id, "Edited", row.customer + " · Owner: " + row.owner + " · " + row.priority)
+  } else {
+    const next = choose(body.status, statuses, "status")
+    const allowed = {Open: ["Investigating"], Investigating: ["Waiting", "Resolved"], Waiting: ["Investigating", "Resolved"], Resolved: ["Open"]}
+    if not allowed[row.status].includes(next) { throw new Error("Cannot move " + row.status + " to " + next + ". Follow the ticket workflow.") }
+    const note = optionalText(body.note ?? "", "Transition note", 1000)
+    history(row.title, row.id, "Status changed", row.status + " → " + next + ". " + note); row.status = next
+  }
+  row.version += 1; row.updated = new Date().toISOString(); return "Ticket updated."
+}
+fn snapshot(view) {
+  const active = state.tickets.filter(fn(row) => row.status != "Resolved")
+  const urgent = active.filter(fn(row) => row.priority == "Urgent")
+  let rows = state.tickets
+  if view == "active" { rows = active }
+  if view == "history" { rows = state.history.slice().reverse() }
+  return {rows: rows, summary: str(state.tickets.length) + " tickets · " + str(active.length) + " active · " + str(urgent.length) + " urgent · " + str(state.history.length) + " recent history events"}
+}
+
+try {
+  const metadata = fs.infoSync(dataFile)
+  if metadata != null {
+    if metadata.type != "file" or metadata.size > maxBytes { throw new Error("Storage must be a regular JSON file of at most 4 MiB.") }
+    state = validate.parse(stateSchema, JSON.parse(fs.readTextSync(dataFile)))
+  }
+  integrity()
+  const command = args[0] ?? "list"
+  const body: any = JSON.parse(args[1] ?? "{}")
+  if body == null or runtime.kind(body) != "record" or Array.isArray(body) { throw new Error("Command input must be a JSON object.") }
+  const view = body.view ?? "active"
+  if not ["active", "tickets", "history"].includes(view) { throw new Error("Unknown application view.") }
+  let message = "Ready"
+  if command != "list" { message = execute(command, body); integrity(); persist() }
+  const result = snapshot(view)
+  print(JSON.stringify({ok: true, message: message, rows: result.rows, summary: result.summary}))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

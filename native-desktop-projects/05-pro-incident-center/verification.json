@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-11-13T13:57:36.047570+00:00",
+  "status": "passed",
+  "steps": [
+    {
+      "step": "check",
+      "exit_code": 0,
+      "seconds": 0.235,
+      "output": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/05-pro-incident-center/main.arya\n"
+    },
+    {
+      "step": "build",
+      "exit_code": 0,
+      "seconds": 12.189,
+      "output": "See .build/build-final.log (native system ucontext deprecation warnings)."
+    },
+    {
+      "step": "smoke",
+      "exit_code": 0,
+      "seconds": 1.345,
+      "output": "PASS: 31 native incident worker commands; CRUD, service dependencies, lifecycle, notes, reopen, timeline, stale versions, corrupt store and failed-save rollback\n"
+    }
+  ],
+  "inputs_sha256": {
+    "main.arya": "b143ca8c290c09691c18d97d33c4ffc0a907d9f73f18b1ae255722c5a301dac6",
+    "ui.json": "7a023541dafa185a808a32c05aa48acdf5049db7abc4397e5509b88a56a0426b",
+    "smoke.py": "20fe04330a0ffd9b3b54225aef9414c8a57699b7516a1a327798a4ea56ba4a46"
+  },
+  "worker_sha256": "2125133e378e5812dee436685431688bebc017dc83d3391cac73ccba0920c8b8"
+}

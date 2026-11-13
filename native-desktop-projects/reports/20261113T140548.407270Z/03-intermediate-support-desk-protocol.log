@@ -1,0 +1,38 @@
+{
+  "views" : [
+    {
+      "view" : "active",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 tickets · 0 active · 0 urgent · 0 recent history events"
+      }
+    },
+    {
+      "view" : "tickets",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 tickets · 0 active · 0 urgent · 0 recent history events"
+      }
+    },
+    {
+      "view" : "history",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 tickets · 0 active · 0 urgent · 0 recent history events"
+      }
+    }
+  ],
+  "ok" : true
+}

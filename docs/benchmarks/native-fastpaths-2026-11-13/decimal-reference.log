@@ -1,0 +1,47 @@
+{
+  "reference": "Python _pydecimal (independent pure-Python arithmetic)",
+  "cases": 5532,
+  "seed": "0x41525941",
+  "allMatched": true,
+  "batchModules": 4,
+  "batches": [
+    {
+      "firstModule": 0,
+      "modules": 4,
+      "entrySha256": "a54ef2a49ffb05710bc89fda717b6326a34f05201d8a74f36f79c0c45f75ccae",
+      "binarySha256": "e8e8263f60e747ec937197f7b1eee6496b42d5507d2cb1fc4af97ce928ccf991"
+    },
+    {
+      "firstModule": 4,
+      "modules": 4,
+      "entrySha256": "7bc351ffe8595b2ef4a4a1f63e1ccfff8e9c7b6c7c7d9038f5e74aca00d20980",
+      "binarySha256": "5d7ba2b46978d89e0d07ad26ff1bbceffc14480e30a65c0e7a6d6365d451e974"
+    },
+    {
+      "firstModule": 8,
+      "modules": 4,
+      "entrySha256": "629968e7ac63792b7682b72008ce7bc16f165ca960537475cc749031aef2ae7a",
+      "binarySha256": "89ca3c6f05c4c46e43c0703a30390b28b14e2389a04bc0b32b1ab90ae7d17b6b"
+    },
+    {
+      "firstModule": 12,
+      "modules": 4,
+      "entrySha256": "3794e078971cdef2733a78b90a2a2964a8e3b59da383bb52ca9d74265fb7da5f",
+      "binarySha256": "fa7838a74aa33837facb0e671efd76d08fbd8c9a7a7899a077b5fe11fe603124"
+    },
+    {
+      "firstModule": 16,
+      "modules": 4,
+      "entrySha256": "d09790399ffb33710e03898a31e79567b25a522e5c11c903eb508198bfd643f3",
+      "binarySha256": "01bea2cd1eb904be23bc7e597c0bf3a82495ec7d4e29b313ad72ef1fa22a79e4"
+    },
+    {
+      "firstModule": 20,
+      "modules": 4,
+      "entrySha256": "3f4662bd3927215b2599dc469b9ad14ade9b40fd32280ebb52106907b36c6ac2",
+      "binarySha256": "b578647559cef10a45c6922e6b71ec50cb64288fbc4de37b37ec621fae9111a8"
+    }
+  ],
+  "sourceSha256": "de434c58a6cdd530b8ebb97841379c545df3fa16539ba61f9523f91f20e9c34b",
+  "outputSha256": "f3b26e56863b4ea443b01894883e92192e203646c0e50dd492ec5efbb76c27a5"
+}

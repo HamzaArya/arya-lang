@@ -1,0 +1,34 @@
+# Successful session verification CPU time, including digest, expiry check and
+# immutable result snapshot. Both paths use the same native-issued sessions.
+use std "auth" as auth
+use std "security" as security
+use std "runtime" as runtime
+use std "debug" as debug
+const mode = args[0] ?? "native"
+const count = number(args[1] ?? "4096")
+const iterations = number(args[2] ?? "20000")
+debug.assert(["native", "reference"].includes(mode))
+debug.assert(Number.isSafeInteger(count) and count >= 1 and count <= 65536)
+debug.assert(Number.isSafeInteger(iterations) and iterations >= 1 and iterations <= 1000000)
+const store = auth.sessions({maxSessions: count, ttlSeconds: 3600})
+let tokens = []; let reference = new Map()
+for i in range(count) {
+  const issued = store.issue("account:" + str(i), {methods: ["password"]})
+  tokens.push(issued.token)
+  reference.set(security.hash(issued.token), {session: issued.session, deadline: runtime.elapsed() + 3600000})
+}
+fn referenceVerify(token) {
+  if token.length != 43 { return null }
+  const item = reference.get(security.hash(token))
+  if item == undefined or runtime.elapsed() >= item.deadline { return null }
+  const session = item.session
+  return Object.freeze({subject: session.subject, issuedAt: session.issuedAt, expiresAt: session.expiresAt, methods: Object.freeze(session.methods.slice())})
+}
+let verify = store.verify; if mode == "reference" { verify = referenceVerify }
+for i in range(100) { debug.assert(runtime.deepEqual(verify(tokens[i % count]), referenceVerify(tokens[i % count]))) }
+let checksum = 0
+const started = runtime.clock()
+for i in range(iterations) { const session = verify(tokens[i % count]); checksum += session.subject.length + session.methods.length }
+const cpuMs = (runtime.clock() - started) * 1000
+print(JSON.stringify({mode, count, iterations, cpuMs, checksum}))
+store.close()

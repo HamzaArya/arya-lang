@@ -1,0 +1,251 @@
+{
+  "analyzedAtUtc": "2026-11-13T03:42:47.881802+00:00",
+  "source": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat.json",
+  "sourceSha256": "e8b98d565000e4f4abb1532ab6befddb4dca8f48f3370bd91863c4760cbf42b7",
+  "parityAssertions": 3708,
+  "method": "Nearest-rank statistics from 100 timed samples per backend per session, three sessions. Positive candidate change means slower. Descriptive analysis only; no formal significance test. Filtered run changes workload history and is compared internally rather than against earlier timings.",
+  "preparation": {
+    "createdAtUtc": "2026-11-13T03:34:36.372174+00:00",
+    "sourceAdapter": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger-targets.mjs",
+    "sourceAdapterSha256": "f97d7b35dd738c60999a96314b822c71a10f6871790a8f9365530e2abf599578",
+    "focusedAdapter": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat-adapter.mjs",
+    "focusedAdapterSha256": "f8c5762de120dbcbccf4bc2c972f897bd762c706b396146e5ae05af821c0b26d",
+    "change": "Only the target-selection array differs. Original frozen application controller timing, payload generation, backend rotation and parity assertions remain unchanged. Filtering changes preceding workload/GC history; compare baseline/candidate within this repeat, not against previous sessions.",
+    "plannedOptions": {
+      "samples": 100,
+      "sessions": 3,
+      "warmups": 3
+    },
+    "retainedAdapterSnapshot": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/evidence/ledger-fastpaths-2026-11-13/focused-repeat-adapter.mjs",
+      "sha256": "f8c5762de120dbcbccf4bc2c972f897bd762c706b396146e5ae05af821c0b26d",
+      "byteIdenticalToRunAdapter": true
+    }
+  },
+  "results": [
+    {
+      "name": "invoice-exact-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "backendStats": {
+        "baselineNative": {
+          "samples": 300,
+          "minMs": 0.7340409999997064,
+          "p25Ms": 0.8812080000000151,
+          "medianMs": 1.0743330000000242,
+          "p75Ms": 2.15112500000032,
+          "p95Ms": 3.1323340000017197,
+          "maxMs": 3.7663329999995767
+        },
+        "native": {
+          "samples": 300,
+          "minMs": 0.630500000000211,
+          "p25Ms": 0.7870000000002619,
+          "medianMs": 0.9667500000000473,
+          "p75Ms": 1.8541670000013255,
+          "p95Ms": 2.8703340000001845,
+          "maxMs": 7.091042000000016
+        },
+        "node": {
+          "samples": 300,
+          "minMs": 1.5702909999999974,
+          "p25Ms": 1.6483750000002146,
+          "medianMs": 1.7497920000000704,
+          "p75Ms": 4.550959000000148,
+          "p95Ms": 5.644791999999143,
+          "maxMs": 6.654916999999841
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 1.0320839999999407,
+          "candidateMedianMs": 0.9194589999999607,
+          "candidateChangePercent": -10.912386976252563
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.990709000001516,
+          "candidateMedianMs": 0.856166999999914,
+          "candidateChangePercent": -13.580375266742916
+        },
+        {
+          "session": 2,
+          "baselineMedianMs": 2.5973330000015267,
+          "candidateMedianMs": 2.246041000002151,
+          "candidateChangePercent": -13.525104405140542
+        }
+      ],
+      "candidateChangePercent": -10.013934227094811,
+      "candidateDeltaMs": -0.10758299999997689,
+      "combinedIqrOverlaps": true
+    },
+    {
+      "name": "payroll-exact-30-rules",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "backendStats": {
+        "baselineNative": {
+          "samples": 300,
+          "minMs": 0.17929199999980483,
+          "p25Ms": 0.2610419999982696,
+          "medianMs": 0.4554580000003625,
+          "p75Ms": 0.6690829999934067,
+          "p95Ms": 1.153374999994412,
+          "maxMs": 20.731292000000394
+        },
+        "native": {
+          "samples": 300,
+          "minMs": 0.18637500000022555,
+          "p25Ms": 0.2536660000005213,
+          "medianMs": 0.4195419999996375,
+          "p75Ms": 0.6738750000004075,
+          "p95Ms": 1.1728749999965657,
+          "maxMs": 5.6227079999989655
+        },
+        "node": {
+          "samples": 300,
+          "minMs": 0.22895799999969313,
+          "p25Ms": 0.3045829999973648,
+          "medianMs": 0.4998330000016722,
+          "p75Ms": 0.7780409999977564,
+          "p95Ms": 1.5014589999991586,
+          "maxMs": 8.07287500000075
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.24154099999941536,
+          "candidateMedianMs": 0.23758400000042457,
+          "candidateChangePercent": -1.6382311901500635
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.5617500000007567,
+          "candidateMedianMs": 0.5459169999994629,
+          "candidateChangePercent": -2.818513573880288
+        },
+        {
+          "session": 2,
+          "baselineMedianMs": 0.6019999999989523,
+          "candidateMedianMs": 0.6020420000058948,
+          "candidateChangePercent": 0.006976745339315471
+        }
+      ],
+      "candidateChangePercent": -7.885688691536085,
+      "candidateDeltaMs": -0.035916000000725035,
+      "combinedIqrOverlaps": true
+    },
+    {
+      "name": "production-schedule-12",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "backendStats": {
+        "baselineNative": {
+          "samples": 300,
+          "minMs": 0.05999999999949068,
+          "p25Ms": 0.13008300000001327,
+          "medianMs": 0.26779099999839673,
+          "p75Ms": 0.3830000000016298,
+          "p95Ms": 0.6267079999997804,
+          "maxMs": 14.139041000000361
+        },
+        "native": {
+          "samples": 300,
+          "minMs": 0.0605409999989206,
+          "p25Ms": 0.13454099999944447,
+          "medianMs": 0.27133299999968585,
+          "p75Ms": 0.3946250000008149,
+          "p95Ms": 0.7239159999953699,
+          "maxMs": 4.486584000000221
+        },
+        "node": {
+          "samples": 300,
+          "minMs": 0.0970000000015716,
+          "p25Ms": 0.15725000000020373,
+          "medianMs": 0.2864579999986745,
+          "p75Ms": 0.3568749999976717,
+          "p95Ms": 0.6745420000006561,
+          "maxMs": 1.501083999999537
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.12295799999992596,
+          "candidateMedianMs": 0.12849999999889405,
+          "candidateChangePercent": 4.507230110258331
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.30900000000110595,
+          "candidateMedianMs": 0.3059580000008282,
+          "candidateChangePercent": -0.984466019503849
+        },
+        {
+          "session": 2,
+          "baselineMedianMs": 0.33429199999955017,
+          "candidateMedianMs": 0.36379099999612663,
+          "candidateChangePercent": 8.824321251066781
+        }
+      ],
+      "candidateChangePercent": 1.3226732792776197,
+      "candidateDeltaMs": 0.003542000001289125,
+      "combinedIqrOverlaps": true
+    },
+    {
+      "name": "bank-normalize-one-row",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "backendStats": {
+        "baselineNative": {
+          "samples": 300,
+          "minMs": 0.07933400000001711,
+          "p25Ms": 0.20883400000457186,
+          "medianMs": 0.3164580000011483,
+          "p75Ms": 0.4492919999975129,
+          "p95Ms": 0.6993749999965075,
+          "maxMs": 1.8352500000000873
+        },
+        "native": {
+          "samples": 300,
+          "minMs": 0.07520900000054098,
+          "p25Ms": 0.20383399999991525,
+          "medianMs": 0.32487500000570435,
+          "p75Ms": 0.4731670000037411,
+          "p95Ms": 0.675916000000143,
+          "maxMs": 1.756374999997206
+        },
+        "node": {
+          "samples": 300,
+          "minMs": 0.04437499999949068,
+          "p25Ms": 0.08325000000331784,
+          "medianMs": 0.13483300000007148,
+          "p75Ms": 0.17295899999589892,
+          "p95Ms": 0.2776660000017728,
+          "maxMs": 0.8441659999989497
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.19370900000103575,
+          "candidateMedianMs": 0.20191700000032142,
+          "candidateChangePercent": 4.237283760301169
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.34745899999688845,
+          "candidateMedianMs": 0.3794159999997646,
+          "candidateChangePercent": 9.197344147989362
+        },
+        {
+          "session": 2,
+          "baselineMedianMs": 0.32733400000142865,
+          "candidateMedianMs": 0.34904200000164565,
+          "candidateChangePercent": 6.631758387494813
+        }
+      ],
+      "candidateChangePercent": 2.6597526384308567,
+      "candidateDeltaMs": 0.00841700000455603,
+      "combinedIqrOverlaps": true
+    }
+  ]
+}

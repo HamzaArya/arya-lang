@@ -1,0 +1,44 @@
+[
+  {
+    "rows": 1000,
+    "name": "baseline",
+    "medianMs": 13.546124999999847,
+    "p95Ms": 30.996624999999767,
+    "medianTimerDelayMs": 1.8987499999993815
+  },
+  {
+    "rows": 1000,
+    "name": "qualified",
+    "medianMs": 4.001542000000029,
+    "p95Ms": 8.13195799999994,
+    "medianTimerDelayMs": 1.1485419999999635
+  },
+  {
+    "rows": 1000,
+    "name": "node",
+    "medianMs": 4.710249999999974,
+    "p95Ms": 24.05358299999989,
+    "medianTimerDelayMs": 1.004165999999998
+  },
+  {
+    "rows": 10000,
+    "name": "baseline",
+    "medianMs": 354.32366700000057,
+    "p95Ms": 405.4212500000003,
+    "medianTimerDelayMs": 0.3277090000001408
+  },
+  {
+    "rows": 10000,
+    "name": "qualified",
+    "medianMs": 38.33866699999999,
+    "p95Ms": 46.741875000000164,
+    "medianTimerDelayMs": 0.1277500000001055
+  },
+  {
+    "rows": 10000,
+    "name": "node",
+    "medianMs": 39.9444169999997,
+    "p95Ms": 55.18479099999968,
+    "medianTimerDelayMs": 0.9312909999998737
+  }
+]

@@ -1,0 +1,125 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "env" as env
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200, optional = false) {
+  if runtime.kind(value) != "string" or value.length > maximum or (not optional and value.trim().length == 0) { throw new Error(label + " must be text with at most " + str(maximum) + " characters; required fields cannot be blank.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be a whole number.") }
+  let result = Number(value)
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " must be a whole number from " + str(minimum) + " to " + str(maximum) + ".") }
+  return result
+}
+fn storedInteger(value, label, minimum = 0, maximum = 1000000) { if runtime.kind(value) != "number" { throw new Error(label + " must be stored as a number.") }; return integer(value, label, minimum, maximum) }
+fn object(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn array(value, label, maximum) { if not Array.isArray(value) or value.length > maximum { throw new Error(label + " must be a list with at most " + str(maximum) + " items.") }; return value }
+fn day(value, label, optional = false) {
+  text(value, label, 10, optional)
+  if optional and value == "" { return "" }
+  if not new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$").test(value) { throw new Error(label + " must use YYYY-MM-DD.") }
+  let parsed = new Date(value + "T00:00:00Z")
+  if not Number.isFinite(parsed.getTime()) or parsed.toISOString().slice(0, 10) != value { throw new Error(label + " must be a real calendar date.") }
+  return value
+}
+fn today() { return new Date().toISOString().slice(0, 10) }
+fn load(initial) {
+  let info = fs.infoSync(file)
+  if info == null { return initial }
+  if info.type != "file" or info.size > 2097152 { throw new Error("The data store must be a regular JSON file no larger than 2 MiB.") }
+  return object(JSON.parse(fs.readTextSync(file)))
+}
+fn save(state) {
+  let encoded = JSON.stringify(state, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 2097152 { throw new Error("The data store is full (2 MiB limit). Export and archive old records first.") }
+  try { fs.writeTextAtomicSync(file, encoded) }
+  catch failure { throw new Error("Could not save the change. Your existing data was preserved. Check the data folder and available disk space.") }
+}
+fn selected(items, body) {
+  let id = integer(body.id, "Record ID", 1)
+  let index = items.findIndex(fn(item) { return item.id == id })
+  if index < 0 { throw new Error("This record no longer exists. Refresh and select another record.") }
+  if integer(body.version, "Record version", 1) != items[index].version { throw new Error("This record changed since it was displayed. Refresh before editing.") }
+  return index
+}
+use std "decimal" as decimal
+fn price(value) {
+  if runtime.kind(value) != "string" or not new RegExp("^(0|[1-9][0-9]{0,11})(\\.[0-9]{1,2})?$").test(value) { throw new Error("Unit price must be a nonnegative decimal with at most 12 whole digits and two decimal places.") }
+  return decimal.quantize(value, 2, "half-even")
+}
+fn fields(body) {
+  let sku = text(body.sku, "SKU", 40).toUpperCase()
+  if not new RegExp("^[A-Z0-9][A-Z0-9._-]*$").test(sku) { throw new Error("SKU must use letters, digits, dots, underscores or hyphens.") }
+  return {sku: sku, name: text(body.name, "Product name", 160), location: text(body.location ?? "", "Location", 100, true), unitPrice: price(body.unitPrice), reorder: integer(body.reorder, "Low stock threshold", 0), description: text(body.description ?? "", "Description", 4000, true)}
+}
+fn validateStore(state) {
+  if state.schema != 1 { throw new Error("Unrecognized Stockroom data format.") }
+  storedInteger(state.nextProductId, "Next product ID", 1); storedInteger(state.nextMovementId, "Next movement ID", 1)
+  array(state.products, "Stored products", 1000); array(state.movements, "Stored movements", 10000)
+  let ids = new Set(); let skus = new Set(); let balances = {}; let lastMovement = 0
+  for item in state.products {
+    object(item); storedInteger(item.id, "Stored product ID", 1); storedInteger(item.version, "Stored version", 1); fields(item); storedInteger(item.quantity, "Stored stock", 0)
+    if ids.has(item.id) or skus.has(item.sku) or item.id >= state.nextProductId or item.sku != item.sku.toUpperCase() or price(item.unitPrice) != item.unitPrice { throw new Error("Duplicate or inconsistent stored product.") }
+    ids.add(item.id); skus.add(item.sku)
+  }
+  for movement in state.movements {
+    object(movement); storedInteger(movement.id, "Stored movement ID", 1); storedInteger(movement.productId, "Stored movement product", 1)
+    storedInteger(movement.units, "Stored units", 1); storedInteger(movement.balance, "Stored movement balance", 0); day(movement.date, "Stored movement date")
+    text(movement.sku, "Stored movement SKU", 40); text(movement.name, "Stored movement name", 160); text(movement.reason, "Stored reason", 500)
+    if movement.id <= lastMovement or movement.id >= state.nextMovementId or movement.productId >= state.nextProductId or not ["Receive", "Issue"].includes(movement.kind) { throw new Error("Invalid stored stock movement.") }
+    lastMovement = movement.id; let sign = 1; if movement.kind == "Issue" { sign = -1 }
+    let balance = (balances[str(movement.productId)] ?? 0) + sign * movement.units
+    if balance < 0 or balance != movement.balance { throw new Error("Stock movement history has an inconsistent balance.") }
+    balances[str(movement.productId)] = balance
+  }
+  for item in state.products { if item.quantity != (balances[str(item.id)] ?? 0) { throw new Error("Stored stock does not agree with movement history.") } }
+  for id in Object.keys(balances) { if not ids.has(Number(id)) and balances[id] != 0 { throw new Error("A deleted product still has stock in movement history.") } }
+}
+fn snapshot(state, view, message) {
+  if view == "movements" { return {ok: true, message: message, rows: state.movements.slice().reverse(), summary: str(state.movements.length) + " stock movements · History is read-only and survives product deletion."} }
+  if view != "products" { throw new Error("Choose Products or Stock movements.") }
+  let total = "0.00"; let units = 0; let low = 0
+  let output = state.products.map(fn(item) {
+    let value = decimal.quantize(decimal.multiply(item.unitPrice, str(item.quantity)), 2, "half-even")
+    total = decimal.add(total, value); units += item.quantity
+    let status = "In stock"; if item.quantity <= item.reorder { status = "Low stock"; low += 1 }
+    return Object.assign({}, item, {value: value, stockStatus: status})
+  })
+  return {ok: true, message: message, rows: output, summary: str(output.length) + " products · " + str(units) + " units · " + str(low) + " low stock · Inventory value " + decimal.quantize(total, 2, "half-even") + " (one currency)"}
+}
+try {
+  if args.length != 2 { throw new Error("Expected a command and JSON request.") }
+  let command = args[0]; let body = object(JSON.parse(args[1])); let view = body.view ?? "products"
+  let state = load({schema: 1, nextProductId: 1, nextMovementId: 1, products: [], movements: []}); validateStore(state)
+  let message = "Ready. Select a product to edit it or record stock."; let changed = false
+  if command == "list" {}
+  else if command == "product-add" or command == "product-edit" {
+    let index = -1; if command == "product-edit" { index = selected(state.products, body) }
+    let values = fields(body)
+    for item at position in state.products { if item.sku == values.sku and position != index { throw new Error("That SKU is already in use. Choose a unique SKU.") } }
+    if command == "product-add" {
+      if state.products.length >= 1000 { throw new Error("The product limit is 1000.") }
+      state.products.push(Object.assign({id: state.nextProductId, version: 1, quantity: 0}, values)); state.nextProductId += 1; message = "Product created with zero stock. Use Receive stock to add units."
+    } else {
+      state.products[index] = Object.assign({}, state.products[index], values, {version: state.products[index].version + 1}); message = "Product details updated."
+    }; changed = true
+  } else if command == "product-delete" {
+    let index = selected(state.products, body)
+    if state.products[index].quantity != 0 { throw new Error("Issue the remaining stock before deleting this product. Movement history will be kept.") }
+    state.products.splice(index, 1); changed = true; message = "Product deleted. Its movement history was preserved."
+  } else if command == "receive" or command == "issue" {
+    let index = selected(state.products, body); let units = integer(body.units, "Units", 1); let reason = text(body.reason, "Movement reason", 500)
+    let date = body.date ?? ""; if date == "" { date = today() }; day(date, "Movement date")
+    if state.movements.length >= 10000 { throw new Error("Movement history is full (10000 records). Export and archive this store before recording more stock.") }
+    let signed = units; let kind = "Receive"; if command == "issue" { signed = -units; kind = "Issue" }
+    let product = state.products[index]; let balance = product.quantity + signed
+    if balance < 0 { throw new Error("Not enough stock: only " + str(product.quantity) + " units are available.") }
+    if balance > 1000000 { throw new Error("A product cannot hold more than 1000000 units.") }
+    state.movements.push({id: state.nextMovementId, productId: product.id, sku: product.sku, name: product.name, kind: kind, units: units, balance: balance, date: date, reason: reason})
+    state.nextMovementId += 1; product.quantity = balance; product.version += 1; changed = true; message = kind + " recorded. " + str(balance) + " units now in stock."
+  } else { throw new Error("Unknown Stockroom command.") }
+  let response = snapshot(state, view, message)
+  if changed { save(state) }
+  print(JSON.stringify(response))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

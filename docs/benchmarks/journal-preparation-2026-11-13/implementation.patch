@@ -1,0 +1,928 @@
+--- a/native/runtime/accounting.c
++++ b/native/runtime/accounting.c
+@@ -163,6 +163,63 @@
+   }
+   free(ids);r[1].p->scope=-2;AV result=afailed?av(AUNDEF):r[2];aunroot(&root);return result;
+ }
++/* Journal policy is applied only after the complete transaction has passed
++ * native row validation. Totals need no per-account report or decimal parsing. */
++static AV aac_posting_summary(AV prepared) {
++  AACBatch *source=aac_batch(prepared,0);if(!source)return av(AUNDEF);
++  if(source->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
++  AACWide debit=0,credit=0;
++  for(size_t i=0;i<source->count;i++){
++    AACLedger *entry=(AACLedger*)source->storage+i;
++    if((entry->debit>0)==(entry->credit>0))return aac_fail("ARYA_ACCOUNTING_POSTING","Each posting must have exactly one positive debit or credit.",i);
++    debit+=entry->debit;credit+=entry->credit;
++  }
++  AV r[2]={prepared,av(AUNDEF)};ARoot root;aroot(&root,r,2);
++  r[1]=arecord();aput(r[1],"currency",aac_field(prepared.p->parent,"currency"));aput(r[1],"scale",an(source->scale));
++  aput(r[1],"entryCount",an((double)source->count));aput(r[1],"debit",aac_format(debit,source->scale));aput(r[1],"credit",aac_format(credit,source->scale));
++  aput(r[1],"difference",aac_format(debit-credit,source->scale));aput(r[1],"balanced",ab(debit==credit));
++  r[1].p->scope=-2;AV result=r[1];aunroot(&root);return result;
++}
++/* Copy validated fixed-point rows, remapping account IDs in first-posting order.
++ * The result owns its storage and names; it retains neither caller rows nor the
++ * component handles. The one-million-row bound makes every sum fit AACWide. */
++static AV aac_combine_ledger(AV parts,AV policy) {
++  AACBatch *selected=aac_batch(policy,0);if(!selected)return av(AUNDEF);
++  if(selected->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
++  if(parts.t!=ALIST||parts.p->len>100000)return aac_fail("ARYA_ACCOUNTING_LIMIT","Use at most 100000 prepared ledger batches.",SIZE_MAX);
++  AV currency=aac_field(policy.p->parent,"currency");size_t count=0;
++  for(size_t i=0;i<parts.p->len;i++){
++    AACBatch *part=aac_batch(parts.p->data[i],0);if(!part)return av(AUNDEF);
++    if(part->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
++    AV tag=aac_field(parts.p->data[i].p->parent,"currency");
++    if(part->scale!=selected->scale||memcmp(tag.p->chars,currency.p->chars,3*sizeof(uint16_t)))return aac_fail("ARYA_ACCOUNTING_INPUT","Prepared ledger policies must match.",SIZE_MAX);
++    if(part->count>1000000-count)return aac_fail("ARYA_ACCOUNTING_LIMIT","Journal exceeds one million posting rows.",SIZE_MAX);
++    count+=part->count;
++  }
++  AV r[5]={parts,policy,av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,5);
++  r[2]=arecord();aput(r[2],"currency",currency);aput(r[2],"scale",an(selected->scale));aput(r[2],"length",an((double)count));
++  r[3]=alist(0,NULL);aput(r[2],"names",r[3]);r[2].p->scope=-2;
++  r[4]=aac_new(2,count*sizeof(AACLedger),r[2]);
++  AACBatch *combined=(AACBatch*)r[4].p->external;combined->count=count;combined->scale=selected->scale;combined->price_scale=selected->scale;
++  size_t capacity=8;while(capacity<(count<100000?count:100000)*2)capacity*=2;
++  uint32_t *ids=(uint32_t*)amemory(capacity*sizeof(uint32_t));size_t offset=0;
++  for(size_t p=0;p<parts.p->len&&!afailed;p++){
++    AV handle=parts.p->data[p],names=aac_field(handle.p->parent,"names");AACBatch *part=(AACBatch*)handle.p->external;
++    uint32_t *mapping=(uint32_t*)amemory(part->accounts*sizeof(uint32_t));
++    for(size_t i=0;i<part->count;i++){
++      AACLedger entry=((AACLedger*)part->storage)[i];
++      if(!mapping[entry.account]){
++        AV name=names.p->data[entry.account];size_t slot=(size_t)aac_hash(name)&(capacity-1);
++        while(ids[slot]){AV existing=r[3].p->data[ids[slot]-1];if(existing.p->scope==name.p->scope&&!memcmp(existing.p->chars,name.p->chars,(size_t)name.p->scope*sizeof(uint16_t)))break;slot=(slot+1)&(capacity-1);}
++        if(!ids[slot]){if(combined->accounts>=100000){aac_fail("ARYA_ACCOUNTING_LIMIT","Too many account groups.",offset+i);break;}ids[slot]=(uint32_t)++combined->accounts;aappend_value(r[3],name);}
++        mapping[entry.account]=ids[slot];
++      }
++      entry.account=mapping[entry.account]-1;((AACLedger*)combined->storage)[offset+i]=entry;
++    }
++    free(mapping);offset+=part->count;
++  }
++  free(ids);r[3].p->scope=-2;AV result=afailed?av(AUNDEF):r[4];aunroot(&root);return result;
++}
+ static AV aac_begin(AV prepared) {
+   AACBatch *source=aac_batch(prepared,0);if(!source)return av(AUNDEF);
+   AV result=aac_new(source->kind+2,source->kind==2?source->accounts*2*sizeof(AACWide):0,prepared);
+@@ -215,5 +272,7 @@
+   if(id==1803)return aac_begin(first);
+   if(id==1804)return aac_step(first,second);
+   if(id==1805)return aac_finish(first);
++  if(id==1806)return aac_posting_summary(first);
++  if(id==1807)return aac_combine_ledger(first,second);
+   return aac_fail("ARYA_ACCOUNTING_INPUT","Unknown accounting operation.",SIZE_MAX);
+ }
+--- a/native/runtime/core.c
++++ b/native/runtime/core.c
+@@ -619,7 +619,7 @@
+   if(env.n==69)return afile_tree_info(argc,argv);
+   if(env.n==1900)return acsv_decoder(argc,argv);
+ #ifdef ARYA_ACCOUNTING
+-  if(env.n>=1800&&env.n<=1805)return aaccounting_operation((int)env.n,argc,argv);
++  if(env.n>=1800&&env.n<=1807)return aaccounting_operation((int)env.n,argc,argv);
+ #endif
+ #ifdef ARYA_DESKTOP
+   if(env.n==1700)return adesktop_operation(argc,argv);
+@@ -705,7 +705,7 @@
+   AV roots[3]={arecord(),av(AUNDEF),av(AUNDEF)}; ARoot r; aroot(&r,roots,3);
+   if(!strcmp(name,"list")) {const char *names[]={"map","flatMap","filter","find","reduce","groupBy","sortBy","take","unique","sum","reserve"};for(int i=0;i<11;i++)astdfield(roots[0],names[i],300+i);}
+ #ifdef ARYA_ACCOUNTING
+-  else if(!strcmp(name,"_accounting")){const char *names[]={"prepareInvoices","prepareLedger","metadata","begin","step","finish"};for(int i=0;i<6;i++)astdfield(roots[0],names[i],1800+i);}
++  else if(!strcmp(name,"_accounting")){const char *names[]={"prepareInvoices","prepareLedger","metadata","begin","step","finish","postingSummary","combineLedger"};for(int i=0;i<8;i++)astdfield(roots[0],names[i],1800+i);}
+ #endif
+ #ifdef ARYA_DESKTOP
+   else if(!strcmp(name,"desktop")){astdfield(roots[0],"open",1700);}
+--- a/native/libraries/accounting.arya
++++ b/native/libraries/accounting.arya
+@@ -65,25 +65,19 @@
+ fn tag(value, label) {
+   if runtime.kind(value) != "string" or len(value) > 128 or value.trim() == "" { throw failure("ARYA_ACCOUNTING_INPUT", label + " must be nonblank text of at most 128 UTF-16 units.") }
+ }
+-fn transactionSummary(transaction, options) {
++fn transactionSummary(transaction, options, batches = undefined) {
+   dataFields(transaction, ["id", "entries"], "Transaction")
+   tag(transaction.id, "Transaction id")
+   if runtime.kind(transaction.entries) != "list" or len(transaction.entries) < 2 { throw failure("ARYA_ACCOUNTING_TRANSACTION", "A transaction needs at least two posting rows.") }
+   # Native preparation first enforces canonical decimals, scale, signed bounds,
+   # unknown-field rejection and the prohibition on accessor-driven inputs.
+-  let result = ledgerBatch(transaction.entries, options)
+-  for entry at index in transaction.entries {
+-    let debit = decimal.compare(entry.debit, "0") > 0
+-    let credit = decimal.compare(entry.credit, "0") > 0
+-    if debit == credit {
+-      let error = failure("ARYA_ACCOUNTING_POSTING", "Each posting must have exactly one positive debit or credit.")
+-      error.row = index; throw error
+-    }
+-  }
++  const prepared = native.prepareLedger(transaction.entries, options)
++  const result = native.postingSummary(prepared)
+   if not result.balanced {
+     let error = failure("ARYA_ACCOUNTING_UNBALANCED", "Transaction debits and credits differ by " + result.difference + ".")
+     error.difference = result.difference; throw error
+   }
++  if batches != undefined { batches.push(prepared) }
+   return runtime.freeze({id: transaction.id, currency: result.currency, scale: result.scale,
+     entryCount: result.entryCount, debit: result.debit, credit: result.credit, balanced: true})
+ }
+@@ -94,28 +88,36 @@
+     difference: result.difference, balanced: result.balanced, transactionCount: len(transactions),
+     transactions: transactions, policy: "journal-v1"})
+ }
++fn journalSnapshot(prepared, summaries) {
++  # Closures retain only the prepared batch and summaries, allowing caller
++  # inputs and intermediate transaction handles to be collected after prepare.
++  return runtime.freeze({currency: prepared.currency, scale: prepared.scale, length: prepared.length,
++    transactionCount: len(summaries),
++    calculate: fn(options) { return journalResult(prepared.calculate(options), summaries) },
++    calculateAsync: async fn(options) { return journalResult(await prepared.calculateAsync(options), summaries) }})
++}
+ export fn prepareJournal(transactions, options) {
+   if runtime.kind(transactions) != "list" or len(transactions) > 100000 { throw failure("ARYA_ACCOUNTING_LIMIT", "Use at most 100000 transactions and one million posting rows.") }
+   # Validate policy even for an empty journal, before examining transactions.
+-  const selected = native.metadata(native.prepareLedger([], options))
++  const empty = native.prepareLedger([], options)
++  const selected = native.metadata(empty)
+   const policy = {currency: selected.currency, scale: selected.scale}
+-  const ids = new Set(); const summaries = []; const entries = []
++  const ids = new Set(); const summaries = []; const batches = []
++  let entryCount = 0
+   for transaction at index in transactions {
+     try {
+       dataFields(transaction, ["id", "entries"], "Transaction")
+       tag(transaction.id, "Transaction id")
+       if ids.has(transaction.id) { throw failure("ARYA_ACCOUNTING_DUPLICATE", "Duplicate transaction id: " + transaction.id) }
+-      if runtime.kind(transaction.entries) == "list" and len(transaction.entries) > 1000000 - len(entries) { throw failure("ARYA_ACCOUNTING_LIMIT", "Journal exceeds one million posting rows.") }
+-      summaries.push(transactionSummary(transaction, policy)); ids.add(transaction.id)
+-      for entry in transaction.entries { entries.push(entry) }
++      if runtime.kind(transaction.entries) == "list" and len(transaction.entries) > 1000000 - entryCount { throw failure("ARYA_ACCOUNTING_LIMIT", "Journal exceeds one million posting rows.") }
++      summaries.push(transactionSummary(transaction, policy, batches)); ids.add(transaction.id)
++      entryCount += len(transaction.entries)
+     } catch error { error.transactionIndex = index; throw error }
+   }
+-  const prepared = prepareLedger(entries, policy)
++  # Combine immutable native snapshots without reading or parsing caller rows again.
++  const prepared = batch(native.combineLedger(batches, empty))
+   runtime.freeze(summaries)
+-  return runtime.freeze({currency: prepared.currency, scale: prepared.scale, length: prepared.length,
+-    transactionCount: len(summaries),
+-    calculate: fn(options) { return journalResult(prepared.calculate(options), summaries) },
+-    calculateAsync: async fn(options) { return journalResult(await prepared.calculateAsync(options), summaries) }})
++  return journalSnapshot(prepared, summaries)
+ }
+ export fn journalBatch(transactions, options, selected) { return prepareJournal(transactions, options).calculate(selected) }
+ fn amount(value, scale) { return decimal.quantize(value, scale, "down") }
+--- a/native/tests/accounting-journal.sh
++++ b/native/tests/accounting-journal.sh
+@@ -14,7 +14,22 @@
+   else
+     env -i PATH=/nonexistent "$tmp/$mode"
+   fi
++  "$compiler" build "$root/native/tests/fixtures/accounting-journal-lifetime.arya" -o "$tmp/lifetime-$mode" "$@" > "$tmp/lifetime.build.log" 2>&1 || { cat "$tmp/lifetime.build.log" >&2; exit 1; }
++  if test "$mode" = sanitized; then
++    env -i PATH=/nonexistent ARYA_GC_STRESS=1 ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 "$tmp/lifetime-$mode" --stress
++  else
++    env -i PATH=/nonexistent "$tmp/lifetime-$mode"
++  fi
+ done
++sdk=$(CDPATH= cd -- "$(dirname -- "$compiler")" && pwd)
++lib=${ARYA_NATIVE_LIBDIR:-$sdk/lib}
++"${CC:-cc}" -std=c11 -O0 -g -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer \
++  "-DARYA_ACCOUNTING_JOURNAL_SOURCE=\"$tmp/release.c\"" -I "$lib" \
++  "$root/native/tests/accounting-journal-probe.c" "$lib/libmpdec.a" -lm -pthread -o "$tmp/snapshots" \
++  > "$tmp/snapshots.build.log" 2>&1 || { cat "$tmp/snapshots.build.log" >&2; exit 1; }
++# Explicit collections exercise ownership. GC stress on the 100000-name limit
++# probe would turn construction into a quadratic collector benchmark.
++env -i PATH=/nonexistent ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 "$tmp/snapshots"
+ "$compiler" check "$root/native/tests/fixtures/accounting-journal-types.arya" --json > "$tmp/types.check.json" || { cat "$tmp/types.check.json" >&2; exit 1; }
+ "$compiler" build "$root/native/tests/fixtures/accounting-journal-types.arya" -o "$tmp/typed" --release > "$tmp/types.build.log" 2>&1 || { cat "$tmp/types.build.log" >&2; exit 1; }
+ env -i PATH=/nonexistent "$tmp/typed"
+--- a/native/tests/fixtures/accounting-journal.arya
++++ b/native/tests/fixtures/accounting-journal.arya
+@@ -90,4 +90,47 @@
+ let aborted = false
+ try { await prepared.calculateAsync({signal: aborter.signal}) } catch error { aborted = error.code == "ARYA_ACCOUNTING_ABORTED" }
+ equal(aborted, true)
++# Preserve validation order: every native row is checked before posting policy.
++const malformed = {id: "malformed", entries: [posting("cash", "0", "0"), posting("sales", "0", "01")]}
++rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.validateTransaction(malformed, selected) }, undefined, 1)
++rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([transaction("ok", "1"), malformed], selected) }, 1, 1)
++const offset = {id: "offset", entries: [posting("cash", "0", "0"), posting("sales", "0", "5")]}
++rejects("ARYA_ACCOUNTING_POSTING", fn() { accounting.prepareJournal([offset], selected) }, 0, 0)
++let difference = null
++try { accounting.prepareJournal([transaction("ok", "1"), left], selected) }
++catch error { difference = [error.code, error.transactionIndex, error.difference, error.message] }
++equal(difference, ["ARYA_ACCOUNTING_UNBALANCED", 1, "1.00", "Transaction debits and credits differ by 1.00."])
++# Duplicate IDs and journal row limits precede validation of that transaction.
++rejects("ARYA_ACCOUNTING_DUPLICATE", fn() { accounting.prepareJournal([transaction("same", "1"), {id: "same", entries: null}], selected) }, 1)
++const tooManyRows = new Array(1000000)
++rejects("ARYA_ACCOUNTING_LIMIT", fn() { accounting.prepareJournal([transaction("first", "1"), {id: "large", entries: tooManyRows}], selected) }, 1)
++let postingGetters = 0
++const accessorPosting = posting("cash", "1", "0")
++Object.defineProperty(accessorPosting, "credit", {get: fn() { postingGetters += 1; return "0" }, enumerable: true})
++rejects("ARYA_ACCOUNTING_INPUT", fn() { accounting.prepareJournal([{id: "accessor", entries: [accessorPosting, posting("sales", "0", "1")]}], selected) }, 0, 0)
++equal(postingGetters, 0)
++# Cross-transaction account remapping preserves first-posting order and exact
++# aggregates wider than a signed 64-bit row, including special string keys.
++for scale in range(7) {
++  const money = {currency: "AFN", scale: scale}
++  let digits = "9223372036854775807"
++  if scale > 0 { digits = digits.slice(0, -scale) + "." + digits.slice(-scale) }
++  const rows = [
++    {id: "one", entries: [posting("__proto__", digits, "0"), posting("حساب", "0", digits)]},
++    {id: "two", entries: [posting("constructor", digits, "0"), posting("__proto__", "0", digits)]},
++    {id: "three", entries: [posting("حساب", digits, "0"), posting("constructor", "0", digits)]}
++  ]
++  const snapshot = accounting.prepareJournal(rows, money)
++  const combined = snapshot.calculate()
++  const flattened = []; for transaction in rows { for entry in transaction.entries { flattened.push(entry) } }
++  equal(combined.accounts, accounting.ledgerBatch(flattened, money).accounts)
++  equal(combined.accounts.map(fn(row) => row.account), ["__proto__", "حساب", "constructor"])
++  equal(combined.transactions.map(fn(row) => row.debit), [digits, digits, digits])
++  equal(combined.balanced, true)
++  rows[0].entries[0].account = "mutated"; rows[0].entries[0].debit = "0"
++  rows[1].entries = []; money.scale = 6 - scale
++  runtime.collect()
++  equal(await snapshot.calculateAsync(), combined)
++  equal(snapshot.calculate(), combined)
++}
+ print("journal/report checks:", checks)
+--- /dev/null
++++ b/native/tests/accounting-journal-probe.c
+@@ -0,0 +1,57 @@
++/* Include emitted C to check native snapshot ownership and global boundaries
++ * without constructing 100000 source-level records or invoking program main. */
++#define main arya_accounting_journal_fixture_main
++#include ARYA_ACCOUNTING_JOURNAL_SOURCE
++#undef main
++#include <assert.h>
++
++static AV prepared(size_t accounts,const char *prefix) {
++  AV r[3]={av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,3);
++  r[0]=arecord();aput(r[0],"currency",astr("AFN"));aput(r[0],"scale",an(2));aput(r[0],"length",an((double)accounts));
++  r[1]=alist(0,NULL);aput(r[0],"names",r[1]);
++  for(size_t i=0;i<accounts;i++){
++    char text[64];snprintf(text,sizeof(text),"%s:%zu",prefix,i);r[2]=astr(text);aappend_value(r[1],r[2]);
++  }
++  r[0].p->scope=r[1].p->scope=-2;r[2]=aac_new(2,accounts*sizeof(AACLedger),r[0]);
++  AACBatch *batch=(AACBatch*)r[2].p->external;batch->count=batch->accounts=accounts;batch->scale=batch->price_scale=2;
++  for(size_t i=0;i<accounts;i++){AACLedger *row=(AACLedger*)batch->storage+i;row->account=(uint32_t)i;row->debit=1;}
++  AV result=r[2];aunroot(&root);return result;
++}
++static void rejected(const char *code,size_t row) {
++  assert(afailed&&akey(aac_field(aerror,"code"),code));
++  AV actual=aac_field(aerror,"row");
++  assert(row==SIZE_MAX?actual.t==AUNDEF:actual.t==ANUM&&actual.n==(double)row);
++  afailed=0;aerror=av(AUNDEF);
++}
++int main(void) {
++  AV r[6];for(size_t i=0;i<6;i++)r[i]=av(AUNDEF);ARoot root;aroot(&root,r,6);
++  r[0]=prepared(2,"account");r[1]=alist(1,r);r[2]=prepared(0,"empty");
++  r[3]=aac_combine_ledger(r[1],r[2]);assert(!afailed);
++  AACBatch *source=(AACBatch*)r[0].p->external,*copy=(AACBatch*)r[3].p->external;
++  assert(copy->storage!=source->storage&&copy->count==2&&copy->accounts==2);
++  ((AACLedger*)source->storage)[0].debit=99;
++  r[0]=r[1]=av(AUNDEF);agc();
++  r[4]=aac_begin(r[3]);aac_step(r[4],an(1000000));r[5]=aac_finish(r[4]);
++  assert(!afailed&&akey(aac_field(r[5],"debit"),"0.02"));
++  assert(akey(aac_field(aac_field(r[5],"accounts").p->data[0],"account"),"account:0"));
++  r[0]=r[1]=r[3]=r[4]=r[5]=av(AUNDEF);agc();
++
++  /* Exactly 100000 accounts succeeds. A new account in a later component
++   * fails at its global posting offset; no partial batch is returned. */
++  r[0]=prepared(100000,"unique");r[1]=alist(1,r);
++  r[3]=aac_combine_ledger(r[1],r[2]);assert(!afailed&&((AACBatch*)r[3].p->external)->accounts==100000);
++  r[4]=prepared(1,"extra");aappend_value(r[1],r[4]);
++  r[5]=aac_combine_ledger(r[1],r[2]);assert(r[5].t==AUNDEF);rejected("ARYA_ACCOUNTING_LIMIT",100000);
++  /* Count checks must precede storage reads, even for internal handle users. */
++  source=(AACBatch*)r[0].p->external;size_t saved=source->count;source->count=1000000;
++  r[5]=aac_combine_ledger(r[1],r[2]);assert(r[5].t==AUNDEF);rejected("ARYA_ACCOUNTING_LIMIT",SIZE_MAX);source->count=saved;
++  ((AACBatch*)r[4].p->external)->scale=3;
++  r[5]=aac_combine_ledger(r[1],r[2]);assert(r[5].t==AUNDEF);rejected("ARYA_ACCOUNTING_INPUT",SIZE_MAX);
++  r[5]=aac_posting_summary(r[2]);assert(!afailed&&akey(aac_field(r[5],"debit"),"0.00"));
++  r[5]=aac_combine_ledger(av(AUNDEF),r[2]);assert(r[5].t==AUNDEF);rejected("ARYA_ACCOUNTING_LIMIT",SIZE_MAX);
++  r[5]=aac_posting_summary(an(1));assert(r[5].t==AUNDEF);rejected("ARYA_ACCOUNTING_INPUT",SIZE_MAX);
++  for(size_t i=0;i<6;i++)r[i]=av(AUNDEF);
++  agc();assert(aallocated==0&&!aheap);aunroot(&root);
++  puts("journal snapshots: independent storage, retained names, global account/row limits and full reclamation passed");
++  return 0;
++}
+--- /dev/null
++++ b/native/tests/accounting-journal-reference.py
+@@ -0,0 +1,177 @@
++#!/usr/bin/env python3
++"""Optional independent journal oracle. Amounts use Python integers, never float.
++
++No generated/translated implementation or production application is imported.
++Core journal acceptance remains POSIX/native in accounting-journal.sh.
++"""
++import argparse
++import copy
++import hashlib
++import json
++import os
++from pathlib import Path
++import random
++import subprocess
++import tempfile
++
++
++def amount(units, scale):
++    sign = "-" if units < 0 else ""
++    digits = str(abs(units)).zfill(scale + 1)
++    return sign + (digits[:-scale] + "." + digits[-scale:] if scale else digits)
++
++
++def units(text, scale):
++    whole, _, fraction = text.partition(".")
++    assert not any(digit != "0" for digit in fraction[scale:])
++    return int(whole) * 10 ** scale + int((fraction[:scale] + "0" * scale)[:scale] or "0")
++
++
++def oracle(case):
++    scale = case["options"]["scale"]
++    balances, summaries = {}, []
++    debit = credit = count = 0
++    for transaction in case["transactions"]:
++        d = c = 0
++        for entry in transaction["entries"]:
++            pair = balances.setdefault(entry["account"], [0, 0])
++            left, right = units(entry["debit"], scale), units(entry["credit"], scale)
++            assert (left > 0) != (right > 0)
++            pair[0] += left
++            pair[1] += right
++            d += left
++            c += right
++            count += 1
++        assert d == c
++        summaries.append(dict(id=transaction["id"], currency="AFN", scale=scale,
++                              entryCount=len(transaction["entries"]), debit=amount(d, scale),
++                              credit=amount(c, scale), balanced=True))
++        debit += d
++        credit += c
++    return dict(currency="AFN", scale=scale, backend="native", entryCount=count,
++                accounts=[dict(account=name, debit=amount(d, scale), credit=amount(c, scale),
++                               balance=amount(d - c, scale)) for name, (d, c) in balances.items()],
++                debit=amount(debit, scale), credit=amount(credit, scale),
++                difference=amount(debit - credit, scale), balanced=True,
++                transactionCount=len(summaries), transactions=summaries, policy="journal-v1")
++
++
++def cases():
++    rng = random.Random(0x4A4F5552)
++    keys = ["cash", "sales", "__proto__", "constructor", "حساب", "a\0b", "2", "10", "é", "😀"]
++    result = []
++    for scale in range(7):
++        result.append(dict(transactions=[], options=dict(currency="AFN", scale=scale)))
++        for _ in range(24):
++            transactions = []
++            for index in range(rng.randrange(1, 16)):
++                rows = []
++                for _ in range(rng.randrange(1, 9)):
++                    value = rng.choice([1, 2**63 - 1, rng.randrange(1, 2**63)])
++                    # Extra fractional zeroes are legal, without rounding.
++                    text = amount(value, scale) + ("00" if scale and rng.randrange(2) else "")
++                    rows.extend([dict(account=rng.choice(keys), debit=text, credit="0"),
++                                 dict(account=rng.choice(keys), debit="0", credit=text)])
++                rng.shuffle(rows)
++                transactions.append(dict(id=f"transaction:{index}", entries=rows))
++            result.append(dict(transactions=transactions, options=dict(currency="AFN", scale=scale)))
++    return result
++
++
++def invalid_cases():
++    policy = dict(currency="AFN", scale=2)
++    sale = dict(id="sale", entries=[dict(account="cash", debit="1", credit="0"),
++                                    dict(account="sales", debit="0", credit="1")])
++    result = []
++    for field, value, code in (("debit", "-1", "INPUT"), ("debit", "01", "INPUT"),
++                               ("debit", "0.001", "SCALE"), ("debit", "92233720368547758.08", "RANGE"),
++                               ("credit", "1", "POSTING"), ("debit", "0", "POSTING"),
++                               ("account", " ", "INPUT"), ("extra", True, "INPUT")):
++        for index in range(3):
++            bad = copy.deepcopy(sale)
++            bad["id"] = "bad"
++            bad["entries"][0][field] = value
++            good = [dict(id=f"good:{i}", entries=copy.deepcopy(sale["entries"])) for i in range(index)]
++            result.append((dict(transactions=[*good, bad], options=policy), "ARYA_ACCOUNTING_" + code))
++    for transaction, code in ((None, "INPUT"), (dict(id=" ", entries=[]), "INPUT"),
++                              (dict(id=1, entries=[]), "INPUT"), (dict(id="empty", entries=[]), "TRANSACTION"),
++                              (dict(id="null", entries=None), "TRANSACTION"), (dict(id="extra", entries=[], extra=1), "INPUT")):
++        result.append((dict(transactions=[transaction], options=policy), "ARYA_ACCOUNTING_" + code))
++    for options, code in ((dict(currency="afn", scale=2), "CURRENCY"), (dict(currency="AFN", scale=7), "SCALE"),
++                          (dict(currency="AFN", scale=2, rounding="down"), "INPUT"), (None, "INPUT")):
++        result.append((dict(transactions=[], options=options), "ARYA_ACCOUNTING_" + code))
++    duplicate = dict(id="sale", entries=None)
++    result.append((dict(transactions=[sale, duplicate], options=policy), "ARYA_ACCOUNTING_DUPLICATE"))
++    # A later malformed native row takes precedence over an earlier zero posting.
++    malformed = dict(id="ordered", entries=[dict(account="cash", debit="0", credit="0"),
++                                            dict(account="sales", debit="0", credit="01")])
++    result.append((dict(transactions=[malformed], options=policy), "ARYA_ACCOUNTING_INPUT"))
++    unbalanced = copy.deepcopy(sale)
++    unbalanced["entries"][1]["credit"] = "2"
++    result.append((dict(transactions=[unbalanced], options=policy), "ARYA_ACCOUNTING_UNBALANCED"))
++    return result
++
++
++def main():
++    root = Path(__file__).resolve().parents[2]
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--compiler", type=Path, default=root / ".build/independent/arya")
++    parser.add_argument("--baseline-compiler", type=Path, help="Also compare complete invalid-input errors with this frozen compiler/stdlib")
++    parser.add_argument("--mode", choices=["release", "reference", "sanitized"], default="sanitized")
++    parser.add_argument("--output", type=Path)
++    args = parser.parse_args()
++    if args.output and args.output.exists():
++        parser.error("choose a new output path to preserve evidence")
++    compiler = args.compiler.resolve()
++    data = cases()
++    invalid = invalid_cases()
++    expected = [oracle(case) for case in data]
++    source = Path(__file__).with_name("fixtures") / "accounting-journal-driver.arya"
++    flags = {"release": ["--release"], "reference": ["--release", "--no-call-opt", "--no-data-opt"],
++             "sanitized": ["--debug", "--sanitize"]}[args.mode]
++    compilers = {"candidate": compiler}
++    if args.baseline_compiler:
++        compilers = {"baseline": args.baseline_compiler.resolve(), **compilers}
++    established = None
++    artifacts = {}
++    with tempfile.TemporaryDirectory(prefix="journal-oracle-", dir=root / ".build") as work:
++        for label, selected in compilers.items():
++            build_environment = dict(os.environ)
++            build_environment["ARYA_NATIVE_LIBDIR"] = str(selected.parent / "lib")
++            binary = Path(work) / label
++            built = subprocess.run([str(selected), "build", str(source), "-o", str(binary), *flags],
++                                   env=build_environment, capture_output=True, text=True, timeout=180)
++            assert built.returncode == 0, built.stderr + built.stdout
++            run = subprocess.run([str(binary)], input="".join(json.dumps(case) + "\n" for case in [*data, *(c for c, _ in invalid)]),
++                                 capture_output=True, text=True, timeout=180,
++                                 env={"PATH": "/nonexistent", "ASAN_OPTIONS": "detect_leaks=0",
++                                      "UBSAN_OPTIONS": "halt_on_error=1"})
++            assert run.returncode == 0, run.stderr
++            actual = [json.loads(line) for line in run.stdout.splitlines()]
++            assert len(actual) == len(expected) + len(invalid), (len(actual), len(expected), len(invalid))
++            for index, (row, wanted) in enumerate(zip(actual, expected)):
++                assert row == {"ok": True, "result": wanted}, (label, index, row, wanted)
++            errors = actual[len(expected):]
++            for index, (row, (_, code)) in enumerate(zip(errors, invalid)):
++                assert row["ok"] is False and row["error"]["code"] == code, (label, index, row, code)
++            if established is not None:
++                assert errors == established, (label, errors, established)
++            established = errors
++            artifacts[label] = dict(compilerSha256=hashlib.sha256(selected.read_bytes()).hexdigest(),
++                                   binarySha256=hashlib.sha256(binary.read_bytes()).hexdigest(), stderr=run.stderr)
++    report = dict(passed=True, mode=args.mode, cases=len(data), invalidCases=len(invalid),
++                  invalidErrorParity=bool(args.baseline_compiler),
++                  postingRows=sum(len(t["entries"]) for c in data for t in c["transactions"]),
++                  seed="0x4A4F5552", scales=list(range(7)),
++                  oracle="Independent Python integer minor units; full ordered report equality; error codes plus optional established error parity",
++                  sourceSha256=hashlib.sha256(source.read_bytes()).hexdigest(), artifacts=artifacts,
++                  casesSha256=hashlib.sha256(json.dumps([*data, *(c for c, _ in invalid)], sort_keys=True).encode()).hexdigest())
++    if args.output:
++        with args.output.open("x") as output:
++            json.dump(report, output, indent=2)
++            output.write("\n")
++    print(json.dumps(report))
++
++
++if __name__ == "__main__":
++    main()
+--- /dev/null
++++ b/native/tests/fixtures/accounting-journal-driver.arya
+@@ -0,0 +1,9 @@
++use std "io" as io
++use std "json" as json
++use std "accounting" as accounting
++while true {
++  const line = io.readLine(); if line == null { break }
++  const request: any = json.parse(line)
++  try { print(json.stringify({ok: true, result: accounting.journalBatch(request.transactions, request.options)})) }
++  catch error { print(json.stringify({ok: false, error: {code: error.code, message: error.message, row: error.row, transactionIndex: error.transactionIndex, difference: error.difference}})) }
++}
+--- /dev/null
++++ b/native/benchmarks/journal.arya
+@@ -0,0 +1,29 @@
++# Optional development benchmark. All amount results remain decimal strings.
++use std "accounting" as accounting
++use std "io" as io
++use std "json" as json
++use std "runtime" as runtime
++print("ready")
++while true {
++  const line = io.readLine(); if line == null { break }
++  const start = runtime.clock(); const request: any = json.parse(line)
++  const parsed = runtime.clock()
++  let prepared: any = null; const entries = []
++  if request.mode == "calculate" { prepared = accounting.prepareJournal(request.transactions, request.options) }
++  if request.mode == "flat-prepare" { for transaction in request.transactions { for entry in transaction.entries { entries.push(entry) } } }
++  const setup = runtime.clock(); let result: any = null
++  for iteration in range(request.iterations) {
++    if request.mode == "prepare" { result = accounting.prepareJournal(request.transactions, request.options) }
++    else if request.mode == "calculate" { result = prepared.calculate() }
++    else if request.mode == "journal" { result = accounting.journalBatch(request.transactions, request.options) }
++    else if request.mode == "flat-prepare" { result = accounting.prepareLedger(entries, request.options) }
++    else if request.mode == "validate" { result = []; for transaction in request.transactions { result.push(accounting.validateTransaction(transaction, request.options)) } }
++    else { throw new Error("Unknown journal benchmark mode.") }
++  }
++  const finished = runtime.clock()
++  # For preparation measurements, result calculation/serialization is outside
++  # the operation interval. The controller still verifies the complete report.
++  if request.mode == "prepare" or request.mode == "flat-prepare" { result = result.calculate() }
++  print(json.stringify({result: result, parseCpuMs: (parsed - start) * 1000,
++    setupCpuMs: (setup - parsed) * 1000, operationCpuMs: (finished - setup) * 1000}))
++}
+--- /dev/null
++++ b/native/benchmarks/journal.py
+@@ -0,0 +1,291 @@
++#!/usr/bin/env python3
++"""Optional native before/after journal evidence, with separate build/measure steps.
++
++Python is a development controller/oracle, never a runtime dependency. This does
++not compare languages or qualify a release. Existing evidence is never replaced.
++"""
++import argparse
++from contextlib import contextmanager
++from datetime import datetime, timezone
++import fcntl
++import hashlib
++import json
++import os
++from pathlib import Path
++import platform
++import runpy
++import select
++import shutil
++import statistics
++import subprocess
++import tempfile
++import time
++
++MODES = ("validate", "flat-prepare", "prepare", "calculate", "journal")
++
++
++def sha(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def save(path, value):
++    with path.open("x") as output:
++        json.dump(value, output, indent=2)
++        output.write("\n")
++
++
++def sdk_files(compiler):
++    # The compiler reads standard libraries from adjacent files. A compiler hash
++    # alone cannot identify the program being measured in a dirty checkout.
++    files = [compiler]
++    for name in ("stdlib", "lib"):
++        files.extend(p for p in (compiler.parent / name).rglob("*") if p.is_file())
++    return {str(p): sha(p) for p in sorted(files)}
++
++
++def verify(identities):
++    for name, expected in identities.items():
++        path = Path(name)
++        if not path.is_file() or sha(path) != expected:
++            raise RuntimeError(f"Benchmark input changed: {name}")
++
++
++@contextmanager
++def timing_lock():
++    # Shared across output directories and SDKs; crashes release the OS lock.
++    with (Path(tempfile.gettempdir()) / "arya-performance.lock").open("a+") as lock:
++        try:
++            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
++        except BlockingIOError as error:
++            raise RuntimeError("Another cooperating Arya benchmark holds the timing lock") from error
++        yield
++
++
++def idle_host():
++    processes = subprocess.run(["ps", "-axo", "pid=,comm=,args="], capture_output=True, text=True, check=True)
++    busy = []
++    for line in processes.stdout.splitlines():
++        fields = line.strip().split(None, 2)
++        if len(fields) != 3 or int(fields[0]) == os.getpid():
++            continue
++        name = Path(fields[1]).name
++        if name in {"make", "clang", "clang++", "cc", "gcc", "g++"} or (
++                name in {"arya", "stage1", "stage2"} and " build " in fields[2]) or (
++                "native/benchmarks/" in fields[2] and name in {"node", "python", "python3", "Python"}):
++            busy.append(line.strip())
++    if busy:
++        raise RuntimeError("Competing build/benchmark processes; defer timing:\n" + "\n".join(busy))
++
++
++def build(args):
++    out = args.out.resolve()
++    out.mkdir(parents=True)  # Refuse an existing evidence directory.
++    source = Path(__file__).with_suffix(".arya")
++    oracle = Path(__file__).parents[1] / "tests/accounting-journal-reference.py"
++    shutil.copyfile(source, out / "workload.arya")
++    shutil.copyfile(oracle, out / "oracle.py")
++    workloads = []
++    for name, count, pairs in (("small", 10, 1), ("many", 1000, 1), ("wide", 20, 50)):
++        transactions = []
++        for i in range(count):
++            entries = []
++            for j in range(pairs):
++                units = (i + 1) * 97 + j + 1
++                amount = f"{units // 100}.{units % 100:02}"
++                entries.extend([dict(account=f"account:{(i + j) % 37}", debit=amount, credit="0"),
++                                dict(account=f"account:{(i + j + 1) % 37}", debit="0", credit=amount)])
++            transactions.append(dict(id=f"transaction:{i}", entries=entries))
++        workloads.append(dict(name=name, transactions=transactions, options=dict(currency="AFN", scale=2)))
++    save(out / "workloads.json", workloads)
++    cc = os.environ.get("ARYA_CC") or os.environ.get("CC") or "cc"
++    cc_version = subprocess.run([cc, "--version"], capture_output=True, text=True, check=True)
++    toolchain = dict(cc=cc, ccVersion=cc_version.stdout + cc_version.stderr,
++                     flags="--release: C11 -O2 -ffp-contract=off; counters add --runtime-counters",
++                     platform=platform.platform(), architecture=platform.machine(),
++                     controllerPython=platform.python_version())
++    identities = {str(p): sha(p) for p in (Path(__file__).resolve(), out / "workload.arya", out / "oracle.py", out / "workloads.json")}
++    artifacts = {}
++    for label, compiler in (("before", args.before_compiler.resolve()), ("after", args.after_compiler.resolve())):
++        identities.update(sdk_files(compiler))
++        environment = dict(os.environ)
++        environment.pop("ARYA_GC_STRESS", None)
++        environment["ARYA_NATIVE_LIBDIR"] = str(compiler.parent / "lib")
++        artifacts[label] = {"compiler": str(compiler), "builds": []}
++        for variant in ("timing", "counters"):
++            binary = out / f"{label}-{variant}"
++            argv = [str(compiler), "build", str(out / "workload.arya"), "-o", str(binary), "--release"]
++            if variant == "counters":
++                argv.append("--runtime-counters")
++            started = time.perf_counter_ns()
++            result = subprocess.run(argv, env=environment, capture_output=True, text=True, timeout=180)
++            record = dict(argv=argv, applicationBuildWallMs=(time.perf_counter_ns() - started) / 1e6,
++                          returncode=result.returncode, stdout=result.stdout, stderr=result.stderr)
++            save(out / f"{label}-{variant}-build.json", record)
++            if result.returncode:
++                raise RuntimeError(result.stderr + result.stdout)
++            artifacts[label][variant] = str(binary)
++            artifacts[label]["builds"].append(record)
++            for path in (binary, binary.with_suffix(".c")):
++                identities[str(path)] = sha(path)
++    verify(identities)
++    save(out / "artifacts.json", dict(identities=identities, artifacts=artifacts, toolchain=toolchain))
++    print(f"Built and hashed inputs in {out}; timing has not run.")
++
++
++class Peer:
++    def __init__(self, binary, stderr):
++        self.stderr = stderr.open("x")
++        started = time.perf_counter_ns()
++        self.child = subprocess.Popen([binary], env={"PATH": "/nonexistent"}, stdin=subprocess.PIPE,
++                                      stdout=subprocess.PIPE, stderr=self.stderr, text=True)
++        try:
++            if self.line().strip() != "ready":
++                raise RuntimeError("Unexpected worker readiness response")
++        except Exception:
++            self.child.kill()
++            self.child.wait()
++            self.child.stdin.close()
++            self.child.stdout.close()
++            self.stderr.close()
++            raise
++        self.cold_ready_ms = (time.perf_counter_ns() - started) / 1e6
++
++    def line(self):
++        if not select.select([self.child.stdout], [], [], 120)[0]:
++            raise RuntimeError("Worker response timed out")
++        line = self.child.stdout.readline()
++        if not line:
++            raise RuntimeError("Worker exited before responding")
++        return line
++
++    def request(self, request):
++        started = time.perf_counter_ns()
++        text = json.dumps(request, ensure_ascii=True, separators=(",", ":")) + "\n"
++        encoded = time.perf_counter_ns()
++        self.child.stdin.write(text)
++        self.child.stdin.flush()
++        line = self.line()
++        received = time.perf_counter_ns()
++        result = json.loads(line)
++        result.update(hostEncodeMs=(encoded - started) / 1e6, pipeAndWorkerWallMs=(received - encoded) / 1e6,
++                      hostDecodeMs=(time.perf_counter_ns() - received) / 1e6)
++        return result
++
++    def close(self):
++        self.child.stdin.close()
++        try:
++            status = self.child.wait(timeout=30)
++        except subprocess.TimeoutExpired:
++            self.child.kill()
++            self.child.wait()
++            raise
++        finally:
++            self.stderr.close()
++            self.child.stdout.close()
++        if status:
++            raise RuntimeError(f"Worker exited with status {status}")
++
++
++def measure(args):
++    out = args.out.resolve()
++    if (out / "results.json").exists() or (out / "started.json").exists():
++        raise RuntimeError("Timing already started here; build a new evidence directory")
++    artifacts = json.loads((out / "artifacts.json").read_text())
++    verify(artifacts["identities"])
++    oracle = runpy.run_path(str(out / "oracle.py"))["oracle"]
++    workloads = json.loads((out / "workloads.json").read_text())
++    expected = {w["name"]: oracle(w) for w in workloads}
++    with timing_lock():
++        idle_host()  # No override: existing uncoordinated builds invalidate timing.
++        report = dict(recordedAtUtc=datetime.now(timezone.utc).isoformat(), platform=platform.platform(),
++                      architecture=platform.machine(), cpus=os.cpu_count(), loadAverageStart=os.getloadavg(),
++                      environmentNote=args.environment_note, artifacts=artifacts, warmups=[], raw=[], starts=[], diagnostics=[],
++                      boundaries={"build": "Application frontend + C11 compilation + linking wall time; excludes compiler bootstrap",
++                                  "coldReady": "Process launch through native runtime/module initialization and ready line; excludes calculations",
++                                  "operation": "Warmed native operation CPU, natural GC; excludes input parse/setup, output/report calculation for prepare modes, pipes and JSON output",
++                                  "roundTrip": "Persistent-worker pipe/worker wall time; includes request write, input JSON, setup, operation and output JSON/read; host encode/decode separate",
++                                  "memory": "Separate counters executable: peak managed bytes and allocation counts; includes parsing/setup/reporting, not RSS",
++                                  "limits": "Native before/after only; no Node/PHP, full-service, concurrent throughput or platform release claim"})
++        save(out / "started.json", report)
++        for session in range(args.sessions):
++            idle_host()
++            peers = {}
++            try:
++                for label, artifact in artifacts["artifacts"].items():
++                    peers[label] = Peer(artifact["timing"], out / f"{label}-{session}.stderr")
++                    report["starts"].append(dict(session=session, label=label, coldReadyMs=peers[label].cold_ready_ms))
++                for workload in workloads:
++                    for mode in MODES:
++                        wanted = expected[workload["name"]]
++                        if mode == "validate":
++                            wanted = wanted["transactions"]
++                        elif mode == "flat-prepare":
++                            wanted = {k: v for k, v in wanted.items() if k not in ("transactions", "transactionCount", "policy")}
++                        for sample in range(-args.warmups, args.samples):
++                            idle_host()
++                            labels = list(peers)
++                            if (sample + session) % 2:
++                                labels.reverse()
++                            for label in labels:
++                                request = {k: v for k, v in workload.items() if k != "name"}
++                                request.update(mode=mode, iterations=1)
++                                row = peers[label].request(request)
++                                actual = row.pop("result")
++                                if actual != wanted:
++                                    raise RuntimeError(f"Independent integer oracle mismatch: {label}, {workload['name']}, {mode}")
++                                row.update(session=session, sample=sample, label=label, workload=workload["name"], mode=mode,
++                                           resultSha256=hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest())
++                                report["warmups" if sample < 0 else "raw"].append(row)
++                                # Retain completed samples if a later check fails.
++                                with (out / "samples.jsonl").open("a") as partial:
++                                    partial.write(json.dumps(row) + "\n")
++            finally:
++                for peer in peers.values():
++                    peer.close()
++        idle_host()
++        # Allocation diagnostics are separate from timing and verified too.
++        for label, artifact in artifacts["artifacts"].items():
++            peer = Peer(artifact["counters"], out / f"{label}-counters.stderr")
++            try:
++                w = workloads[1]
++                row = peer.request(dict(transactions=w["transactions"], options=w["options"], mode="journal", iterations=1))
++                if row["result"] != expected[w["name"]]:
++                    raise RuntimeError("Counter build oracle mismatch")
++            finally:
++                peer.close()
++            report["diagnostics"].append(dict(label=label, workload=w["name"], stderr=(out / f"{label}-counters.stderr").read_text()))
++        verify(artifacts["identities"])
++        report["summary"] = []
++        for workload in workloads:
++            for mode in MODES:
++                for label in artifacts["artifacts"]:
++                    rows = [r for r in report["raw"] if r["workload"] == workload["name"] and r["mode"] == mode and r["label"] == label]
++                    fields = ("operationCpuMs", "parseCpuMs", "setupCpuMs", "pipeAndWorkerWallMs", "hostEncodeMs", "hostDecodeMs")
++                    report["summary"].append(dict(workload=workload["name"], mode=mode, label=label, samples=len(rows),
++                                                  median={k: statistics.median(r[k] for r in rows) for k in fields},
++                                                  minOperationCpuMs=min(r["operationCpuMs"] for r in rows),
++                                                  maxOperationCpuMs=max(r["operationCpuMs"] for r in rows)))
++        report.update(passed=True, finishedAtUtc=datetime.now(timezone.utc).isoformat(), loadAverageEnd=os.getloadavg())
++        save(out / "results.json", report)
++        print(json.dumps(report["summary"], indent=2))
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    commands = parser.add_subparsers(dest="action", required=True)
++    builder = commands.add_parser("build")
++    builder.add_argument("--before-compiler", type=Path, required=True)
++    builder.add_argument("--after-compiler", type=Path, required=True)
++    builder.add_argument("--out", type=Path, required=True)
++    measurer = commands.add_parser("measure")
++    measurer.add_argument("--out", type=Path, required=True)
++    measurer.add_argument("--samples", type=int, choices=range(3, 32), default=9)
++    measurer.add_argument("--sessions", type=int, choices=range(2, 5), default=2)
++    measurer.add_argument("--warmups", type=int, choices=range(1, 6), default=3)
++    measurer.add_argument("--environment-note", default="Shared development host; no competing build/benchmark processes detected")
++    args = parser.parse_args()
++    (build if args.action == "build" else measure)(args)
++
++
++if __name__ == "__main__":
++    main()
+--- /dev/null
++++ b/native/tests/journal-benchmark-guards.py
+@@ -0,0 +1,73 @@
++#!/usr/bin/env python3
++"""Optional controller guardrails: preserve evidence, reject drift and contention."""
++import fcntl
++import json
++from pathlib import Path
++import runpy
++import subprocess
++import sys
++import tempfile
++import unittest
++
++controller = Path(__file__).parents[1] / "benchmarks/journal.py"
++guard = runpy.run_path(str(controller))
++
++
++class Guardrails(unittest.TestCase):
++    def command(self, *args):
++        return subprocess.run([sys.executable, str(controller), *map(str, args)],
++                              capture_output=True, text=True, timeout=15)
++
++    def test_existing_output_is_preserved(self):
++        with tempfile.TemporaryDirectory() as work:
++            out = Path(work)
++            marker = out / "historical.json"
++            marker.write_text("retain this evidence\n")
++            result = self.command("build", "--before-compiler", "/missing-before", "--after-compiler", "/missing-after", "--out", out)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("FileExistsError", result.stderr)
++            self.assertEqual(marker.read_text(), "retain this evidence\n")
++            self.assertEqual(list(out.iterdir()), [marker])
++
++    def test_changed_stdlib_is_rejected_before_measurement(self):
++        with tempfile.TemporaryDirectory() as work:
++            out = Path(work)
++            compiler = out / "arya"
++            compiler.write_text("same compiler binary")
++            (out / "stdlib").mkdir()
++            library = out / "stdlib/accounting.arya"
++            library.write_text("original library")
++            identities = guard["sdk_files"](compiler)
++            self.assertIn(str(library), identities)
++            (out / "artifacts.json").write_text(json.dumps(dict(identities=identities)))
++            library.write_text("changed semantics")
++            result = self.command("measure", "--out", out)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("Benchmark input changed:", result.stderr)
++            self.assertFalse((out / "started.json").exists())
++            self.assertFalse((out / "results.json").exists())
++
++    def test_cross_directory_timing_lock(self):
++        with tempfile.TemporaryDirectory() as work:
++            out = Path(work)
++            (out / "artifacts.json").write_text('{"identities": {}}')
++            (out / "workloads.json").write_text("[]")
++            (out / "oracle.py").write_text("def oracle(case): return {}\n")
++            with guard["timing_lock"]():
++                result = self.command("measure", "--out", out)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("holds the timing lock", result.stderr)
++            self.assertFalse((out / "started.json").exists())
++
++    def test_started_run_is_never_reused(self):
++        with tempfile.TemporaryDirectory() as work:
++            out = Path(work)
++            (out / "started.json").write_text("incomplete historical run\n")
++            result = self.command("measure", "--out", out)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("Timing already started here", result.stderr)
++            self.assertEqual((out / "started.json").read_text(), "incomplete historical run\n")
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ b/native/tests/fixtures/accounting-journal-lifetime.arya
+@@ -0,0 +1,23 @@
++use std "accounting" as accounting
++use std "runtime" as runtime
++use std "debug" as debug
++fn journal(count) {
++  const entries = []
++  for i in range(count) {
++    entries.push({account: "cash", debit: "1", credit: "0"})
++    entries.push({account: "sales", debit: "0", credit: "1"})
++  }
++  return accounting.prepareJournal([{id: "one", entries: entries}], {currency: "AFN", scale: 2})
++}
++let count = 1001; if args[0] == "--stress" { count = 65 }
++let held = journal(1)
++const small = runtime.collect()
++held = journal(count)
++const large = runtime.collect()
++# A retained prepared journal needs 24 native bytes per row plus constant
++# metadata for this single transaction and two accounts. Allow ample overhead,
++# while rejecting retained caller row records or a second native posting copy.
++debug.assert(large - small < count * 64 + 16384, "Journal calculation closures retained preparation inputs: " + str(large - small))
++debug.assert(held.calculate().entryCount == count * 2)
++debug.assert((await held.calculateAsync()).balanced)
++print("journal retained managed-byte growth:", large - small, "for", count * 2, "rows")

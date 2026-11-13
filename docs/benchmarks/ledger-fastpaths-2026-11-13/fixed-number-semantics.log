@@ -1,0 +1,7 @@
+fixed number depth: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+fixed number checks: 207
+fixed number C guards: 19728 bitwise cases, 4 rounding modes, comma locale passed, replacement callees passed
+fixed number depth: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+fixed number checks: 207
+fixed number C guards: 19728 bitwise cases, 4 rounding modes, comma locale passed, replacement callees passed
+fixed number: reference/ASan/UBSan/GC, source locations, depth, and 30000 avoided temporary allocations passed

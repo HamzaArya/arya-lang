@@ -1,0 +1,112 @@
+{
+  "boundary": "Fresh native process reading an already generated CSV file, exact sum by account, boundary rounding, JSON output, cleanup. Warm filesystem cache; one warmup, three alternating-size samples. Inputs, accumulation, half-even rounding and boundary formatting use an independent signed integer thousandths oracle.",
+  "compilerSha256": "02ee8b454cc3a36c190250e7765346eab90ef326e99136e8bf5ce33dc4e35daa",
+  "sourceSha256": "8d00f09068b3efe5404180968e4e62074dddc33721b1d94ce575a5c1dbd93ac7",
+  "binarySha256": "2d1a58bef4cc67880785676c3336e6a86b14c9fee57fb9a1cbc83735aeebf917",
+  "bytes": 627224,
+  "buildMs": 4888.114332999976,
+  "inputs": {
+    "1000": {
+      "sha256": "9108de7abca91f6869a556b7f1de68abf6940ace4fd7dc67835f7713c9c449fb",
+      "bytes": 19926
+    },
+    "10000": {
+      "sha256": "30d6aa0112289258002a61901dc82bb203432c8225693bf2ce05ece2cef629e0",
+      "bytes": 199116
+    },
+    "100000": {
+      "sha256": "ef89b755e41a3d621eef3c44e1176dbd6cd3e03b3b896d1ff7d77377ba5ca2c9",
+      "bytes": 1991016
+    },
+    "1000000": {
+      "sha256": "cf882a7eda2ce1f4e74d68068dadc31ae80d2adb61d21ff8ea827cd3c85de947",
+      "bytes": 19910016
+    }
+  },
+  "raw": [
+    {
+      "sample": 0,
+      "rows": 1000000,
+      "wallMs": 1543.9301250007702,
+      "outputSha256": "ba4270845eac0d2ad77663d8da7cf6c49ffdb4ae24d39d213654066663489573",
+      "resources": "        1.53 real         1.20 user         0.03 sys\n            22134784  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1545  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                3616  involuntary context switches\n         15727209447  instructions retired\n          3618159820  cycles elapsed\n            21660608  peak memory footprint\n"
+    },
+    {
+      "sample": 0,
+      "rows": 100000,
+      "wallMs": 122.12725000063074,
+      "outputSha256": "42f817217ea70143f9702d1f3e4066d5f83435736190f41160d588e32eda98e7",
+      "resources": "        0.11 real         0.11 user         0.00 sys\n            21037056  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1443  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  23  involuntary context switches\n          1607635892  instructions retired\n           349980972  cycles elapsed\n            20186048  peak memory footprint\n"
+    },
+    {
+      "sample": 0,
+      "rows": 10000,
+      "wallMs": 19.86979199864436,
+      "outputSha256": "d78d40c8555b63b0e9018fa4f8536a9352bc487859fe64bbdf378cde499f3771",
+      "resources": "        0.01 real         0.01 user         0.00 sys\n            20725760  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1424  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                   4  involuntary context switches\n           198226849  instructions retired\n            48179176  cycles elapsed\n            19874752  peak memory footprint\n"
+    },
+    {
+      "sample": 0,
+      "rows": 1000,
+      "wallMs": 9.066665999853285,
+      "outputSha256": "1397d21c6f9c7701299c82d50562c0162bbdc91d57a8a1410dcf6e6bdb08ecac",
+      "resources": "        0.00 real         0.00 user         0.00 sys\n            14893056  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1068  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                   4  involuntary context switches\n            46931442  instructions retired\n            15041680  cycles elapsed\n            14042048  peak memory footprint\n"
+    },
+    {
+      "sample": 1,
+      "rows": 1000,
+      "wallMs": 8.282582999527222,
+      "outputSha256": "1397d21c6f9c7701299c82d50562c0162bbdc91d57a8a1410dcf6e6bdb08ecac",
+      "resources": "        0.00 real         0.00 user         0.00 sys\n            14893056  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1068  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                   7  involuntary context switches\n            47017226  instructions retired\n            14597884  cycles elapsed\n            14042048  peak memory footprint\n"
+    },
+    {
+      "sample": 1,
+      "rows": 10000,
+      "wallMs": 19.796083000983344,
+      "outputSha256": "d78d40c8555b63b0e9018fa4f8536a9352bc487859fe64bbdf378cde499f3771",
+      "resources": "        0.01 real         0.01 user         0.00 sys\n            20758528  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1426  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                   7  involuntary context switches\n           199204873  instructions retired\n            48195939  cycles elapsed\n            19907520  peak memory footprint\n"
+    },
+    {
+      "sample": 1,
+      "rows": 100000,
+      "wallMs": 125.21025000023656,
+      "outputSha256": "42f817217ea70143f9702d1f3e4066d5f83435736190f41160d588e32eda98e7",
+      "resources": "        0.12 real         0.11 user         0.00 sys\n            22167552  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1512  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 138  involuntary context switches\n          1611921984  instructions retired\n           361888977  cycles elapsed\n            21316544  peak memory footprint\n"
+    },
+    {
+      "sample": 1,
+      "rows": 1000000,
+      "wallMs": 1170.3815829969244,
+      "outputSha256": "ba4270845eac0d2ad77663d8da7cf6c49ffdb4ae24d39d213654066663489573",
+      "resources": "        1.16 real         1.13 user         0.02 sys\n            21987328  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1530  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 818  involuntary context switches\n         15695582602  instructions retired\n          3432164375  cycles elapsed\n            21513152  peak memory footprint\n"
+    },
+    {
+      "sample": 2,
+      "rows": 1000000,
+      "wallMs": 1210.6553750018065,
+      "outputSha256": "ba4270845eac0d2ad77663d8da7cf6c49ffdb4ae24d39d213654066663489573",
+      "resources": "        1.20 real         1.16 user         0.02 sys\n            22298624  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1520  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                1771  involuntary context switches\n         15706577675  instructions retired\n          3488083947  cycles elapsed\n            21447616  peak memory footprint\n"
+    },
+    {
+      "sample": 2,
+      "rows": 100000,
+      "wallMs": 126.2245840007381,
+      "outputSha256": "42f817217ea70143f9702d1f3e4066d5f83435736190f41160d588e32eda98e7",
+      "resources": "        0.12 real         0.11 user         0.00 sys\n            21069824  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1445  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 119  involuntary context switches\n          1608586102  instructions retired\n           365410405  cycles elapsed\n            20218816  peak memory footprint\n"
+    },
+    {
+      "sample": 2,
+      "rows": 10000,
+      "wallMs": 20.703874997707317,
+      "outputSha256": "d78d40c8555b63b0e9018fa4f8536a9352bc487859fe64bbdf378cde499f3771",
+      "resources": "        0.01 real         0.01 user         0.00 sys\n            20791296  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1428  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  23  involuntary context switches\n           198586095  instructions retired\n            50085547  cycles elapsed\n            19940288  peak memory footprint\n"
+    },
+    {
+      "sample": 2,
+      "rows": 1000,
+      "wallMs": 9.425625001313165,
+      "outputSha256": "1397d21c6f9c7701299c82d50562c0162bbdc91d57a8a1410dcf6e6bdb08ecac",
+      "resources": "        0.00 real         0.00 user         0.00 sys\n            14909440  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                1069  page reclaims\n                   3  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  29  involuntary context switches\n            47157739  instructions retired\n            16427516  cycles elapsed\n            14058432  peak memory footprint\n"
+    }
+  ]
+}

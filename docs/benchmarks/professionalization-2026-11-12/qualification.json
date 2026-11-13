@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "scope": "Local macOS ARM64 qualification of the current working-tree native implementation; not stable-production or cross-platform certification.",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "cpu": "Apple M1",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+  "compiler": {
+    "sha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+    "bytes": 5749112,
+    "generatedCSha256": "779af15c1e3dac5f2ed641f058ca7c45fde117bbaf1330b963a513380a72ece1",
+    "stageTwoThreeCIdentical": true
+  },
+  "freshSource": {
+    "workspace": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.8b2fDB",
+    "inputsMatchedCurrentCheckout": 355,
+    "compilerSha256": "5ec32e70d2aae9efdb2c3e721c11f450b7fe0dcc8d737c5c1fd5ac874d9532c9",
+    "archiveSha256": "90e838774b766a58af4640b1ac9cabe9b784121c72e54f5cedbb95e9018b2bda",
+    "archiveBytes": 6623428,
+    "fullVerificationLogSha256": "0358abab87d938bfe0956b9a7cf826f0778a5c298bcf7a719510fd591e331a5b",
+    "buildEnvironment": "env -i; PATH contains POSIX tool symlinks but excludes Node/npm/Python/Bun/Deno/QuickJS/JavaScriptCore commands",
+    "executionEnvironment": "env -i PATH=/nonexistent",
+    "relocation": "SDK path with spaces/apostrophe and compiler symlink; installed decimal and service programs passed; checksums and no-AppleDouble archive passed"
+  },
+  "commandsPassed": [
+    "make native",
+    "make check",
+    "make native-clean-test",
+    "python3 native/tests/parser-fuzz.py --compiler .build/independent/arya",
+    "python3 native/tests/number-format-reference.py",
+    "python3 native/tests/number-format-reference.py --sanitize",
+    "python3 native/tests/decimal-reference.py",
+    "python3 native/tests/accounting-reference.py .build/independent/arya",
+    "python3 native/tests/types-reference.py .build/independent/arya",
+    "python3 native/tests/lsp-reference.py .build/independent/arya"
+  ],
+  "referenceCounts": {
+    "parser": 266,
+    "binary64FormattingRelease": 3354,
+    "binary64FormattingSanitized": 3354,
+    "decimal": 5532,
+    "accountingBatches": 85,
+    "accountingRows": 7600,
+    "types": 105,
+    "glob": 4368
+  },
+  "firstAttempt": "All build/test gates passed, but the in-flight wrapper stopped with a syntax error after a late script edit. Packaging/relocation then passed from that workspace. The final frozen wrapper was rerun from a new source-only workspace and passed end to end.",
+  "limits": [
+    "Interpreters are excluded from the build PATH, not uninstalled from the host OS.",
+    "ASan/UBSan and GC stress instrument generated programs/runtime wrappers; upstream static libraries were not rebuilt with sanitizers.",
+    "Leak detection disabled on this macOS host.",
+    "Linux/Windows/additional CPUs and live optional Python/MySQL/desktop/editor host integration were not requalified in this pass.",
+    "Caught errors do not expose .stack; uncaught native source traces are tested.",
+    "No external release publication, cryptographic audit, or release-signature verification is claimed."
+  ]
+}

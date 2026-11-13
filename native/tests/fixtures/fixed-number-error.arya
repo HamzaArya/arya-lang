@@ -1,0 +1,6 @@
+fn fail(): any {
+  return Number(
+    (1.25).toFixed(101)
+  )
+}
+fail()

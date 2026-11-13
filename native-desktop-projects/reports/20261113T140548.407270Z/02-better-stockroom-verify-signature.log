@@ -1,0 +1,1 @@
+["codesign", "--verify", "--deep", "--strict", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-we7qu_k5/Stockroom.app"]

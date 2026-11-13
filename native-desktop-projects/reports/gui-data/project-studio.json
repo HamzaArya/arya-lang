@@ -1,0 +1,44 @@
+{
+  "format": 1,
+  "projects": [
+    {
+      "id": "4d1f4a9d-4c72-4114-aeb0-56c45314dbad",
+      "version": 1,
+      "name": "Native launch QA",
+      "owner": "Local team",
+      "description": "",
+      "wipLimit": 3
+    }
+  ],
+  "tasks": [
+    {
+      "id": "b51c155d-faf2-493c-934b-18ec106bf68e",
+      "version": 1,
+      "title": "Verify native project choices",
+      "projectId": "4d1f4a9d-4c72-4114-aeb0-56c45314dbad",
+      "assignee": "Local tester",
+      "dueDate": "",
+      "priority": "Normal",
+      "description": "",
+      "status": "Planned"
+    }
+  ],
+  "history": [
+    {
+      "id": "1eb5c40e-4b78-475b-b2df-9677ac30e313",
+      "time": "2026-11-13T14:04:25.728Z",
+      "entityId": "4d1f4a9d-4c72-4114-aeb0-56c45314dbad",
+      "title": "Native launch QA",
+      "action": "Project created",
+      "detail": "Owner: Local team"
+    },
+    {
+      "id": "92d0d984-c6b6-45ed-b8d8-802a5e01eed3",
+      "time": "2026-11-13T14:07:06.957Z",
+      "entityId": "b51c155d-faf2-493c-934b-18ec106bf68e",
+      "title": "Verify native project choices",
+      "action": "Task created",
+      "detail": "Assignee: Local tester"
+    }
+  ]
+}

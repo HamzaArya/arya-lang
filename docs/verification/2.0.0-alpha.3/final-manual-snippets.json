@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "compilerSha256": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5",
+  "scope": "Current manual snippets are byte-identical to the exact delivery compiler examples.json execution inputs.",
+  "documents": [
+    {
+      "document": "docs/arya-language.md",
+      "currentSha256": "07c88fc582ce949e6de38769a6e3236fd31afa53f03d89b2f689105cfa1a2bff",
+      "testedDocumentSha256": "07c88fc582ce949e6de38769a6e3236fd31afa53f03d89b2f689105cfa1a2bff",
+      "aryaExamplesUnchanged": true,
+      "examples": 12
+    },
+    {
+      "document": "docs/getting-started.md",
+      "currentSha256": "70b24f7dc55c780a0d30dcda821aa232605496c908834cfea8bf856e503f89ee",
+      "testedDocumentSha256": "70b24f7dc55c780a0d30dcda821aa232605496c908834cfea8bf856e503f89ee",
+      "aryaExamplesUnchanged": true,
+      "examples": 4
+    }
+  ]
+}

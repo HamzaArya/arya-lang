@@ -1,0 +1,9 @@
+use std "io" as io
+use std "json" as json
+use std "accounting" as accounting
+while true {
+  const line = io.readLine(); if line == null { break }
+  const request: any = json.parse(line)
+  try { print(json.stringify({ok: true, result: accounting.journalBatch(request.transactions, request.options)})) }
+  catch error { print(json.stringify({ok: false, error: {code: error.code, message: error.message, row: error.row, transactionIndex: error.transactionIndex, difference: error.difference}})) }
+}

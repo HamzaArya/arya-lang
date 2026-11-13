@@ -1,0 +1,1 @@
+["codesign", "--verify", "--deep", "--strict", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app"]

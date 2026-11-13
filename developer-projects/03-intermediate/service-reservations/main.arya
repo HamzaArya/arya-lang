@@ -1,0 +1,40 @@
+use std "fs" as fs
+use std "env" as env
+use std "web" as web
+use std "validate" as validate
+use std "process" as process
+use std "security" as security
+const dataFile = env.get("DATA_FILE", "data.json")
+let rows: any = []
+fn save(next) {
+  fs.writeTextAtomicSync(dataFile, JSON.stringify(next, null, 2) + "\n")
+  rows = next
+}
+fn find(id) { for row in rows { if row.id == id { return row } }; throw web.error(404, "Record not found", "NOT_FOUND") }
+fn text(value, label) { if value.trim() == "" { throw web.error(400, label + " cannot be blank", "INVALID_INPUT") }; return value.trim() }
+
+use std "datetime" as datetime
+const inputSchema = validate.object({room: validate.string({min: 1, max: 80}), owner: validate.string({min: 1, max: 100}), start: validate.string({min: 20, max: 30}), end: validate.string({min: 20, max: 30})})
+const rowSchema = validate.object({id: validate.string(), room: validate.string(), owner: validate.string(), start: validate.string(), end: validate.string()})
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null { rows = validate.parse(validate.array(rowSchema, {max: 1000}), JSON.parse(fs.readTextSync(dataFile))) }
+let routes = {
+ "GET /health": fn() { return {status: "ready", reservations: rows.length} },
+ "GET /reservations": fn(request) { return rows.filter(fn(row) { return request.query.room == undefined or row.room == request.query.room }) },
+ "POST /reservations": web.route(fn(request) {
+   let body = request.body; let room = text(body.room, "Room"); let owner = text(body.owner, "Owner"); let start: any = null; let finish: any = null
+   try { start = datetime.instant(body.start); finish = datetime.instant(body.end) } catch failure { throw web.error(400, "Use ISO UTC timestamps", "INVALID_DATE") }
+   if start >= finish { throw web.error(400, "End must follow start", "INVALID_RANGE") }
+   for row in rows { if row.room == room and start < row.end and finish > row.start { throw web.error(409, "Room is already reserved in this interval", "CONFLICT") } }
+   if rows.length >= 1000 { throw web.error(409, "Reservation limit reached", "LIMIT") }
+   const row = {id: security.uuid(), room: room, owner: owner, start: start, end: finish}; save(rows.concat([row])); return web.response(201, row)
+ }, {body: inputSchema}),
+ "DELETE /reservations/:id": fn(request) { const old = find(request.params.id); save(rows.filter(fn(row) => row.id != old.id)); return {deleted: old.id} }
+}
+
+const appRoot = process.cwd()
+const serverOptions: any = {host: "127.0.0.1", root: appRoot, html: false, assets: false, maxBodyBytes: 65536}
+let server = web.serve(env.int("PORT", 4313), routes, serverOptions)
+print("Roomkeeper: http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

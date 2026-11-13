@@ -1,0 +1,48 @@
+# A single-account native API with password + TOTP login, bearer sessions,
+# rotation, logout and attempt limits. Set AUTH_PASSWORD_HASH and
+# AUTH_TOTP_SECRET from provisioning; put HTTPS in front of remote deployments.
+use std "auth" as auth
+use std "web" as web
+use std "env" as env
+use std "validate" as validate
+use std "security" as security
+use std "process" as process
+
+const account = env.get("AUTH_ACCOUNT", "admin")
+const passwordHash = env.require("AUTH_PASSWORD_HASH")
+const totpSecret = env.require("AUTH_TOTP_SECRET")
+auth.totpCode(totpSecret, {time: 0})
+const sessions = auth.sessions({ttlSeconds: 900, maxSessions: 1024})
+const attempts = auth.rateLimiter({maxAttempts: 5, windowSeconds: 300, maxEntries: 1})
+let lastCounter = -1
+const noStore = {"cache-control": "no-store"}
+const loginSchema = validate.object({account: validate.string({min: 1, max: 64}), password: validate.string({min: 1, max: 256}), code: validate.string({min: 6, max: 6})})
+fn tokenFor(request) {
+  const token = auth.bearer(request.headers.authorization)
+  if token == null { throw web.error(401, "Authentication required", "AUTH_REQUIRED") }
+  if sessions.verify(token) == null { throw web.error(401, "Authentication required", "AUTH_REQUIRED") }
+  return token
+}
+const server = web.serve(env.int("PORT", 3000), {
+  "POST /login": web.route(async fn(request) {
+    const attempt = attempts.attempt(account)
+    if not attempt.allowed { return web.response(429, {error: "Try again later"}, {"retry-after": str(attempt.retryAfter), "cache-control": "no-store"}) }
+    const input = request.body
+    const passwordOk = await auth.verifyPassword(input.password, passwordHash)
+    if not passwordOk or not security.timingSafeEqual(input.account, account) { return web.response(401, {error: "Invalid credentials"}, noStore) }
+    const otp = auth.verifyTotp(totpSecret, input.code, {lastCounter})
+    if not otp.ok { return web.response(401, {error: "Invalid credentials"}, noStore) }
+    # No await between accepting the counter, recording it and issuing a session.
+    const issued = sessions.issue(account, {methods: ["password", "totp"]})
+    lastCounter = otp.counter
+    return web.response(200, issued, noStore)
+  }, {body: loginSchema}),
+  "GET /me": fn(request) { return web.response(200, auth.requireMethods(sessions.verify(tokenFor(request)), ["password", "totp"]), noStore) },
+  "POST /rotate": fn(request) { return web.response(200, sessions.rotate(tokenFor(request)), noStore) },
+  "POST /logout": fn(request) { sessions.revoke(tokenFor(request)); return web.response(200, {ok: true}, noStore) }
+}, {host: "127.0.0.1", html: false, assets: false, maxBodyBytes: 4096, maxConnections: 32})
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server); sessions.close(); attempts.close() }, {once: true}) }
+print("Native auth API:", server.address().port)
+# Process-local sessions, counters and limits reset on restart. For multiple
+# instances, persist counter acceptance and recovery consumption atomically in
+# a shared store, and use a shared session backend. Never accept client methods.

@@ -1,138 +1,154 @@
-# Install and upgrade Arya
+# Install Arya on another computer
 
-Arya is licensed under [Apache-2.0](../LICENSE). Its npm package is `arya-language`; the commands are `arya` and `arya-lsp`. The current published preview is **1.3.0-alpha.9**, published on 11 November 2026 with the `next` tag. The `latest` tag remains on the older 1.2 release. It includes UI/desktop starters and bundled editor support. It remains an experimental alpha; see the [release notes](releases/1.3.0-alpha.9.md) for scope and compatibility.
+Arya provides a native SDK and source builds. The SDK contains the compiler and tools for developing programs; a compiled application can run without installing Arya. Choose the workflow that matches what you want to move.
 
-## Requirements and tested support
+| Your goal | Transfer | Requirements on the destination |
+| --- | --- | --- |
+| Write, check and build Arya programs | A matching SDK archive, its checksum and your project sources | Compatible OS/CPU; a C11 toolchain to build programs |
+| Run an already compiled application | Its executable, notices, assets/configuration and selected external dependencies | Compatible OS/CPU and system libraries; no Arya compiler or Node |
+| Build the latest compiler or try another target | The matching complete source snapshot, including `native/vendor` | POSIX tools, C11, C++20 and Perl; platform qualification still applies |
 
-The npm compiler and default JavaScript target require Node.js 22.15 or newer. The current published preview, 1.3.0-alpha.9, uses Node.js only and requires no C compiler; see [runtime and migration](node-runtime.md). Python is needed only for `use python` programs and Python integration tests; the CLI uses `ARYA_PYTHON`, otherwise `python` on Windows or `python3` elsewhere. The interpreter must contain the imported Python dependencies. `use js` dependencies must be installed in the source project's normal Node dependency tree.
+Development snapshots can share a version string. Select an archive by its accompanying delivery/qualification record and checksum, then inspect `BUILD-INFO.txt`; the version string alone does not identify which syntax or optimizations it contains. Older archives are immutable and do not acquire later changes. A Git clone contains committed work only; use the matching source snapshot for unpublished changes.
 
-Local macOS arm64 results and the exact-candidate CI links are recorded in [release readiness](release-readiness.md). Check those results for the package and runtime you use. The expanded stabilization matrix includes additional Node versions; configured jobs count as qualification only after they pass.
+## Platform status
 
-## Install in one project
+| Destination | Current status | Installation route |
+| --- | --- | --- |
+| macOS, Apple Silicon (`arm64`) | Locally qualified native target | Matching `darwin-arm64` SDK, or source build |
+| macOS, Intel (`x86_64`) | Not qualified by the current records | Experimental source build on that Mac; an ARM64 archive is unsuitable |
+| Linux, x64 or ARM64 | Source/CI paths exist; no current local platform qualification is claimed | Experimental native source build and full checks on the target machine |
+| Windows with WSL | WSL itself is available; Arya under WSL remains an unqualified Linux target | Set up WSL, then follow the Linux source workflow inside it |
+| Native Windows / MSVC | No qualified native SDK or supported MSVC build | Use an appropriate Linux environment for experimentation |
 
-Install the current preview directly from npm:
+The tested target is recorded in the package's `manifest.json` and qualification evidence. A successful script or an archive filename does not establish support for every OS version. Cross-compilation, universal binaries and WebAssembly are not supplied by these installation steps. Rebuild and test on the OS/CPU you intend to use.
 
-```sh
-npm init -y
-npm install --save-exact arya-language@1.3.0-alpha.9
-npx --no-install arya --version
-```
+## Install a packaged SDK on an Apple Silicon Mac
 
-The CLI identifies `Arya 1.3.0-alpha.9`. To create a new application interactively, use `npm create arya-language@1.3.0-alpha.9`, then run `npm install` and `npm run dev` inside the created folder. Registry installation uses matching compiler and creator versions; no repository checkout or archive transfer is required. `@latest` follows the registry tag, which may move after this publication record.
+This delivery was tested on macOS **26.5.2**. Its compiler binary declares a minimum macOS version of **26.0**; it cannot be installed as a working binary on earlier macOS releases. The minimum load version is not a claim that every 26.x release has been tested. On an older Mac, use a package qualified for that OS or build and test the source locally as an experimental target.
 
-The [release notes](releases/1.3.0-alpha.9.md) describe compatibility; the [publication record](releases/1.3.0-alpha.9-publication.json) verifies registry hashes and a fresh public install. Local/offline archive installation remains available as described below.
-
-`arya-language@latest` selects whichever public preview the registry tag currently names; it can change when a new release is selected. Pin the intended archive or published version for reproducible projects. Read the matching release notes before upgrading.
-
-Use the version in the filename, package metadata, and the CLI output together. This installs a local compiler without a repository checkout or a global install. `npx --no-install` uses the compiler already installed in this project.
-
-Create `main.arya`:
-
-```arya
-print("Hello from Arya")
-```
-
-Then run:
+Copy the chosen `arya-native-2.0.0-alpha.3-darwin-arm64.tar.gz` and its `.sha256` file to the other Mac. Keep its delivery record if supplied. Install Apple's Command Line Tools if you need to build programs:
 
 ```sh
-npx --no-install arya check main.arya
-npx --no-install arya run main.arya
-npx --no-install arya build main.arya
-node --enable-source-maps .arya/build/main.arya.mjs
+xcode-select --install
+cc --version
 ```
 
-Check prints `Check OK` and never executes imports. Run and standalone execution print `Hello from Arya`. Build prints its generated entry path and writes source maps alongside the generated modules. Keep those maps with the output when diagnosing failures. The maps contain a copy of the original source text.
+Follow Apple's installation dialog, then run the version check. [Apple's Command Line Tools instructions](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools).
 
-For arguments, use `npx --no-install arya run main.arya -- "literal argument"`. Read them through the Arya `args` list. Everything after `--` belongs to the program. The candidate CLI still recognizes compatibility/retired compiler flags between the file and `--`; see the [command reference](cli.md#run-and-pass-arguments).
-
-## Create a project interactively
-
-With the compiler installed:
+From the directory containing both archive files, verify and extract into a new snapshot directory. Choose a different unused name on each upgrade; `mkdir` deliberately fails if that snapshot already exists.
 
 ```sh
-npx --no-install arya create
+shasum -a 256 -c arya-native-2.0.0-alpha.3-darwin-arm64.tar.gz.sha256
+mkdir -p "$HOME/.local/opt/arya"
+arya_install="$HOME/.local/opt/arya/snapshot-1"
+mkdir "$arya_install"
+tar -xzf arya-native-2.0.0-alpha.3-darwin-arm64.tar.gz -C "$arya_install"
+arya_sdk="$arya_install/arya-native-2.0.0-alpha.3-darwin-arm64"
+cd "$arya_sdk"
+shasum -a 256 -c SHA256SUMS
+./arya --version
+export PATH="$arya_sdk:$PATH"
 ```
 
-The current release offers web, API, CLI, UI, and Electron desktop applications. The native template was retired in 1.3. The generated `package.json` pins Arya and supplies `npm run dev`, `check`, `start`, and `build` scripts. Web apps use one `index.html` containing `div#root`; browser code renders the interface there. Flow syntax and UI sections/templates are included in alpha.7; unpublished changes require [candidate setup](node-runtime.md#try-the-candidate).
+The archive checksum checks the transferred archive; `SHA256SUMS` checks the extracted files. Obtain the expected checksum through the same trusted source as the release or delivery record. Keep the entire SDK directory, including `lib/`, `stdlib/`, notices and metadata.
 
-The pinned registry entry is `npm create arya-language@1.3.0-alpha.9`. npm install arya-language remains a normal compiler installation and does not ask project-creation questions automatically.
-
-For an offline project or an unpublished future candidate, supply a matching compiler archive:
+To make this PATH choice persistent, add the following line to `~/.zshrc` on a typical macOS zsh setup, using the snapshot directory you actually installed. Bash users can put the equivalent line in their shell startup file.
 
 ```sh
-npx --no-install arya create my-app --template web --compiler /path/to/arya-language-1.3.0-alpha.9.tgz
-cd my-app
-npm install
-npm run dev
+export PATH="$HOME/.local/opt/arya/snapshot-1/arya-native-2.0.0-alpha.3-darwin-arm64:$PATH"
 ```
 
-The archive is copied into vendor/ and referenced relatively, so the generated project can be moved to another machine before installing dependencies. See the [project creator guide](project-creator.md).
+Open a new terminal and run `command -v arya` and `arya --version`. You can also use the executable's absolute path without changing PATH. Continue with [your first project](getting-started.md).
 
-## Work across several files
+## Build the current source
 
-Place dependencies below the entry file's directory:
+Use a complete source checkout or source snapshot matching the intended changes. For the alpha.3 candidate, use `arya-native-2.0.0-alpha.3-source.tar.gz` from the matching `artifacts/native-syntax-2026-11-13/verified/` delivery; verify its supplied checksum before extracting it. This source archive is separate from the binary SDK and is the appropriate starting point for another target. Core compilation needs a POSIX shell, `make`, a C11 compiler and standard Unix utilities. Accounting requires the compiler's `__int128` support. The full SDK additionally builds Ada URL with C++20 and configures the vendored OpenSSL sources with Perl. Packaging and verification use `shasum`, `tar` and standard filesystem tools. Node, npm and Python are not native build requirements.
 
-```text
-project/
-  main.arya
-  lib/greeting.arya
-```
-
-```arya
-# lib/greeting.arya
-export fn greeting(name) {
-  return "Hello, " + name
-}
-```
-
-```arya
-# main.arya
-use arya "./lib/greeting.arya" as messages
-print(messages.greeting("Arya"))
-```
-
-Run `npx --no-install arya run main.arya` from `project`. Imports use relative paths and an explicit `.arya` extension. The entry directory is the project boundary; dependencies cannot escape it through `..` or symlinks. JavaScript and Python dependencies remain their own ecosystems and do not become Arya registry packages.
-
-## Optional global installation
+For the matching source archive, start from the directory holding the archive and its checksum:
 
 ```sh
-npm install --global "/absolute/path/to/arya-language-<version>.tgz"
-arya --version
+shasum -a 256 -c arya-native-2.0.0-alpha.3-source.tar.gz.sha256
+mkdir arya-source-work
+tar -xzf arya-native-2.0.0-alpha.3-source.tar.gz -C arya-source-work
+cd arya-source-work/arya-native-2.0.0-alpha.3-source
 ```
 
-The npm global executable directory must be on PATH. On Windows, PowerShell execution policy can affect npm's `.ps1` command shim; the `.cmd` shim or a direct Node invocation can be used under the machine's existing policy. A local project installation is preferable when different projects use different compiler versions.
-
-To bypass shell shims in a local installation:
+Choose an unused work directory. From this extracted source root, or the root of your matching checkout:
 
 ```sh
-node node_modules/arya-language/dist/cli.cjs --version
-node node_modules/arya-language/dist/cli.cjs run main.arya
+cc --version
+c++ --version
+perl --version
+make native-sdk
+./bin/arya --version
+export PATH="$PWD/.build/independent:$PATH"
 ```
 
-## Other editors and AryaCode
+The PATH entry is absolute after expansion, so it continues to work after changing into a project directory. `bin/arya` is a source-checkout launcher; `.build/independent` is the built SDK layout. `make native` builds only the compiler/core dependencies; use `make native-sdk` for the complete supported library set.
 
-Use the [editor guide](arya-editors.md) for the local VSIX and LSP configuration. The portable server command is `arya-lsp --stdio`, or `node node_modules/arya-language/dist/lsp.cjs --stdio`. A server waiting for protocol messages will not display a terminal prompt.
+Before distributing a newly built target, run:
 
-AryaCode installs its own pinned compiler archive. Installing a different compiler into a project does not change AryaCode's embedded package. Update the IDE pin and rebuild through its documented integration workflow. Keep Arya language versions separate from AryaCode product versions.
+```sh
+make check
+make native-clean-test
+ARYA_PACKAGE_DIRECTORY="$PWD/artifacts/my-verified-build" make native-package
+```
 
-## Upgrade and roll back
+Packaging refuses to replace an existing archive. The clean gate builds from copied source with Node/JavaScript engines and Python excluded from its tool search path, then checks the relocated SDK. It does not uninstall interpreters from your computer. Full checks require a C compiler with AddressSanitizer and UndefinedBehaviorSanitizer support. On an unqualified target, failures must be investigated before calling that target supported.
 
-1. Save or commit your source and dependency lockfile.
-2. Read the target version's release notes and migration examples.
-3. Install the exact registry version with `npm install --save-exact arya-language@<new-version>`, or the reviewed archive with `npm install --save-exact "/absolute/path/to/arya-language-<new-version>.tgz"`. Unpublished candidates require an archive.
-4. Check `npx --no-install arya --version`, run Check on the entry file, and run the project's tests/examples.
-5. Rebuild generated output. Do not mix a new generated module with an older map.
+### Linux development setup
 
-To roll back, reinstall the previous retained archive and rebuild from source. Keep its lockfile if exact npm dependencies matter. Generated `.arya` directories are disposable build artifacts; retain original `.arya`, `.mjs`, and `.py` source and the project's dependency manifests.
+On Ubuntu, the following supplies the usual build prerequisites for an experimental source build:
 
-## Uninstall
+```sh
+sudo apt update
+sudo apt install build-essential perl
+cc --version
+c++ --version
+perl --version
+command -v shasum
+```
 
-For a project-local installation, run `npm uninstall arya-language` in that project. For a global installation, run `npm uninstall --global arya-language`. Remove an installed editor extension through that editor's normal extension manager. Those operations do not intentionally delete your source files.
+Ubuntu's `build-essential` package supplies GCC, G++, libc development headers and make. Use a C++20-capable compiler; installing the prerequisites alone does not qualify Arya on Linux. [Ubuntu package details](https://packages.ubuntu.com/noble/build-essential), [Perl package](https://packages.ubuntu.com/noble/perl), [Ubuntu GCC setup](https://ubuntu.com/developers/docs/howto/gcc-setup/).
 
-## Offline and isolated installations
+Then run the source workflow above inside the Linux environment. Keep `CC` and `CXX` consistent with the desired toolchain. For other distributions, obtain equivalent compiler, development-header, make, Perl and checksum packages through that distribution's instructions. The macOS archive cannot run as a Linux executable.
 
-A supplied Arya tarball contains bundled compiler/CLI/LSP runtime code; installing it from a local path does not require access to the source repository. Use `npm install --offline --ignore-scripts --no-audit --no-fund "/absolute/path/to/arya-language-<version>.tgz"` in a fresh project with a package manifest. This does not supply third-party JavaScript packages, Python, or Python packages; transfer/install those separately through the chosen ecosystem's supported offline process.
+### Windows through WSL
 
-Verify an archive against a checksum received with the same reviewed release. On macOS/Linux, use `shasum -a 256 <archive>` or `sha256sum <archive>` as available; on PowerShell use `Get-FileHash <archive> -Algorithm SHA256`. A matching checksum verifies bytes against that record; it does not settle ownership, licensing, or authenticity of an untrusted download source.
+For a Windows development experiment, follow Microsoft's WSL setup. On a compatible Windows installation, run this in an administrator PowerShell window, complete the requested restart/setup, and open the installed Linux distribution:
 
-For a source checkout, `npm ci` may need registry access or a populated npm cache for development dependencies. That differs from installing the already bundled archive. The [release process](releasing.md) and [readiness audit](release-readiness.md) cover clean-install acceptance and candidate provenance.
+```powershell
+wsl --install
+```
+
+Microsoft documents the current Windows prerequisites and distribution options in [Install WSL](https://learn.microsoft.com/en-us/windows/wsl/install). Inside Ubuntu/WSL, use the Linux source workflow above. Build and run the Linux executable inside WSL; this does not produce a native Windows `.exe`. Arya's current POSIX runtime and toolchain have not been qualified here for WSL or native Windows.
+
+## Move a compiled application
+
+Build a release application on its intended target, then copy the executable, its generated `.NOTICE`, assets and required configuration. You normally do not need its generated `.c` file, the Arya compiler or the SDK to execute it. Retain the dependency/license notices when distributing it.
+
+```sh
+arya build main.arya -o ./my-app --release
+./my-app
+```
+
+The OS/CPU, system-library ABI and enabled features must be compatible on the destination. Launch from the working directory the application expects. Web projects can need their `public/` assets. Explicit Python integration needs its interpreter and Python modules; MySQL integration needs the selected client library; desktop programs need macOS AppKit/WebKit. The native HTTP server does not supply a TLS deployment layer. [SDK layout and deployment details](native-sdk.md).
+
+Inspect dependencies of your own built application with `otool -L ./my-app` on macOS or `ldd ./my-app` on Linux. Do not assume a binary built on a newer OS will run on every older release.
+
+## Editors, upgrades and removal
+
+Use `arya lsp --stdio` with an LSP client. The VS Code-compatible adapter is a separate optional package; its editor host uses JavaScript, while Arya analysis remains native. Installation and configuration are described in the [SDK guide](native-sdk.md#editors).
+
+Install upgrades beside the old SDK, switch PATH or your editor's compiler path, check/test projects and rebuild their binaries. Use `--force` only when intentionally replacing an existing build output. Keep each compiler with its own `lib/` and `stdlib/`; mixing SDK versions can produce incorrect builds. Remove the selected SDK directory and its PATH/editor entry to uninstall it. Projects and compiled applications are separate files.
+
+| Symptom | Check or fix |
+| --- | --- |
+| `arya: command not found` | Check `command -v arya`, PATH and the shell startup file; try the executable's absolute path. |
+| `bad CPU type` / `Exec format error` | Verify OS/CPU with `uname -s` and `uname -m`; obtain or build the matching target. |
+| `cc` missing / developer-tools error | Install the platform C toolchain and confirm `cc --version`. |
+| Missing `libmpdec.a`, headers or a native SDK library | Restore the complete matching SDK; from source, run `make native-sdk`. |
+| Newly documented syntax is rejected | Check the actual executable path and build identity. An older snapshot can have the same alpha version string. |
+| Output already exists | Choose a new output path or intentionally use `--force`. |
+| Unsupported desktop/MySQL/Python feature | Check its explicit platform/runtime requirements in the SDK and library guides. |
+| Checksum mismatch | Stop using that copy; obtain the matching archive/checksum again and verify it before extraction. |

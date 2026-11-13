@@ -1,0 +1,8 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/.build/verified-app"]
+Traceback (most recent call last):
+  File "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/smoke.py", line 42, in <module>
+    html=s.request("GET","/",raw=True);assert "<!doctype html>" in html and "Refresh board" in html and "Create ticket" in html
+  File "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/smoke.py", line 31, in request
+    payload=response.read().decode(); assert response.status==expected,(method,path,response.status,payload)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('GET', '/', 500, '{"error":"Internal server error","code":"ARYA_UI"}')

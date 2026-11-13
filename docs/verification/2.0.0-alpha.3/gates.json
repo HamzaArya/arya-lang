@@ -1,0 +1,279 @@
+{
+  "recordedAtUtc": "2026-11-13T09:21:15.994592+00:00",
+  "passed": true,
+  "scope": "Isolated fresh-source native bootstrap, full runtime/profile/distribution suites, relocated SDK and optional references. Fresh verification completed in two parts after a test-only documentation assertion correction; the original combined make native-clean-test invocation did not exit zero. Shared-tree make check is excluded from qualification because accounting sources/compiler changed concurrently.",
+  "gates": {
+    "delivery-types": {
+      "command": [
+        "python3",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/native/tests/types-reference.py",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya"
+      ],
+      "startedAtUtc": "2026-11-13T08:46:39.705137+00:00",
+      "elapsedSeconds": 0.672,
+      "exitCode": 0,
+      "passed": true,
+      "log": "delivery-types.log.gz"
+    },
+    "delivery-lsp": {
+      "command": [
+        "python3",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/native/tests/lsp-reference.py",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya"
+      ],
+      "startedAtUtc": "2026-11-13T08:46:40.409728+00:00",
+      "elapsedSeconds": 0.063,
+      "exitCode": 0,
+      "passed": true,
+      "log": "delivery-lsp.log.gz"
+    },
+    "delivery-parser-fuzz": {
+      "command": [
+        "python3",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/native/tests/parser-fuzz.py",
+        "--compiler",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "--output",
+        "docs/verification/2.0.0-alpha.3/parser-fuzz.json"
+      ],
+      "startedAtUtc": "2026-11-13T08:50:43.825783+00:00",
+      "elapsedSeconds": 1.502,
+      "exitCode": 0,
+      "passed": true,
+      "log": "delivery-parser-fuzz.log.gz"
+    },
+    "delivery-self-check": {
+      "command": [
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/compiler.arya"
+      ],
+      "startedAtUtc": "2026-11-13T08:46:42.133140+00:00",
+      "elapsedSeconds": 1.007,
+      "exitCode": 0,
+      "passed": true,
+      "log": "delivery-self-check.log.gz"
+    },
+    "fresh-source-resumed": {
+      "command": [
+        "sh",
+        ".build/syntax-docs-2026-11-13/resume-fresh-distribution.sh"
+      ],
+      "startedAtUtc": "2026-11-13T08:25:14.335193+00:00",
+      "elapsedSeconds": 47.611,
+      "exitCode": 0,
+      "passed": true,
+      "log": "fresh-source-resumed.log.gz"
+    },
+    "delivery-packaging-inventory": {
+      "command": [
+        "env",
+        "-i",
+        "PATH=/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/tools",
+        "/bin/sh",
+        "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/native/tests/distribution.sh"
+      ],
+      "startedAtUtc": "2026-11-13T08:59:59.650294+00:00",
+      "elapsedSeconds": 28.563,
+      "exitCode": 0,
+      "passed": true,
+      "log": "delivery-packaging-inventory.log.gz"
+    }
+  },
+  "earlierAttempts": {
+    "make-check-disk-full": {
+      "command": [
+        "make",
+        "check"
+      ],
+      "startedAtUtc": "2026-11-13T07:56:02.104573+00:00",
+      "elapsedSeconds": 292.607,
+      "exitCode": 2,
+      "passed": false,
+      "originalCommandLogName": "make-check.log",
+      "retainedLog": "initial-disk-full-make-check.log.gz"
+    },
+    "fresh-source-disk-full": {
+      "command": [
+        "make",
+        "native-clean-test"
+      ],
+      "startedAtUtc": "2026-11-13T07:53:54.482874+00:00",
+      "elapsedSeconds": 320.816,
+      "exitCode": 2,
+      "passed": false,
+      "originalCommandLogName": "fresh-source.log",
+      "retainedLog": "initial-disk-full-fresh-verification.log.gz"
+    },
+    "make-check-toolchain-crash": {
+      "command": [
+        "make",
+        "check"
+      ],
+      "startedAtUtc": "2026-11-13T08:04:20.118026+00:00",
+      "elapsedSeconds": 295.093,
+      "exitCode": 2,
+      "passed": false,
+      "originalCommandLogName": "make-check.log",
+      "retainedLog": "initial-clang-abort.log.gz"
+    },
+    "fresh-source-before-distribution-fix": {
+      "command": [
+        "make",
+        "native-clean-test"
+      ],
+      "startedAtUtc": "2026-11-13T08:04:20.118026+00:00",
+      "elapsedSeconds": 986.03,
+      "exitCode": 2,
+      "passed": false,
+      "originalCommandLogName": "fresh-source.log",
+      "retainedLog": "fresh-native-verification.log.gz"
+    }
+  },
+  "freshSource": {
+    "workspace": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0",
+    "buildInputsCompared": 386,
+    "inputMismatches": [],
+    "nodePythonJavaScriptEnginesExcludedFromPath": true,
+    "nativeBootstrapRuntimeAndProfilePassedBeforeDistribution": true,
+    "originalGateExitCode": 2,
+    "originalFailure": "Distribution test expected an obsolete human README heading; replaced with checks for the current version qualification file and report link.",
+    "testOnlyCorrection": {
+      "atUtc": "2026-11-13T08:23:58.346003+00:00",
+      "file": "native/tests/distribution.sh",
+      "beforeSha256": "574f1bd5e668163cbce5a63ef7c9a4e53f64c8ce80a9dd4f010224e68af77990",
+      "afterSha256": "a7183abe3719de1e7f68c722deae93ccdd9b9de357fad0e6b16603ed53db138e",
+      "reason": "Replace obsolete human heading assertion with current qualification file and report-link checks. Compiler, runtime, libraries and build scripts unchanged."
+    },
+    "packagingOnlyCorrection": {
+      "atUtc": "2026-11-13T08:59:59.517806+00:00",
+      "reason": "Hash nested checksum files too; only the root inventory excludes itself. Add independent complete SDK file-inventory comparison. Compiler/runtime/library sources and binaries unchanged.",
+      "files": [
+        {
+          "path": "native/bootstrap/stage-sdk.sh",
+          "beforeSha256": "da0d6de035d631ad4351a39e95cc1127f2135a51b76cf419cdac7c6b2bc373c9",
+          "afterSha256": "c1d2c6440e6bc02a8c5015fed94058ddac202fb1895ba7f3fe99fea17c438b6c"
+        },
+        {
+          "path": "native/bootstrap/source-package.sh",
+          "beforeSha256": "6ece302204b286f6288b334eadb5c4fa11eb8a9dc965a9882b28134929f7705b",
+          "afterSha256": "7694aab377588a3fabbef036b478db4c0ad363b4d6a15bac3d1101b2c30abdd3"
+        },
+        {
+          "path": "native/tests/distribution.sh",
+          "beforeSha256": "a7183abe3719de1e7f68c722deae93ccdd9b9de357fad0e6b16603ed53db138e",
+          "afterSha256": "90f73a1b73168b0d55f675c87916fce7f699e6c2cbf2237582d5fb350aae6d43"
+        }
+      ]
+    },
+    "remainingChecksPassed": true,
+    "resumeMethod": "Run corrected native-distribution-test, then the unchanged verify-clean.sh tail starting at the stage-two/stage-three C comparison. No compiler, runtime, library or build-script edits.",
+    "resumptionScript": "resume-fresh-distribution.sh",
+    "runtimeLog": "fresh-native-verification.log.gz",
+    "distributionLog": "fresh-distribution-resumed.log.gz"
+  },
+  "identities": {
+    "delivery": {
+      "arya": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5",
+      "arya.c": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee",
+      "stage2.c": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee"
+    }
+  },
+  "earlierSharedComparison": {
+    "comparedInputs": 386,
+    "mismatches": [],
+    "identities": {
+      "arya": {
+        "checkout": "31ba623ad6d37e6a8f1f5c6e71956960c0f073c9ed434385c6d0ed339e341e98",
+        "fresh": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5"
+      },
+      "arya.c": {
+        "checkout": "dddb460893874507932324b6aca6e1e7a43d8809c55dbae64272d701a315ff9f",
+        "fresh": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee"
+      },
+      "stage2.c": {
+        "checkout": "dddb460893874507932324b6aca6e1e7a43d8809c55dbae64272d701a315ff9f",
+        "fresh": "c543f3f40e2072bdcb5c9947ad7e4030680e90c560f9116d2bd76c3051b0a0ee"
+      }
+    },
+    "scope": "Build input/source/binary comparison only; runtime gates still in progress.",
+    "generatedCEqualAfterSourceRootNormalization": true,
+    "normalizedGeneratedCSha256": [
+      "ea433171907db6969ee5636858682ea0a234659086efb60c299642071bd56015",
+      "ea433171907db6969ee5636858682ea0a234659086efb60c299642071bd56015"
+    ],
+    "note": "Raw compiler/C hashes differ because native source-frame locations embed absolute source roots; only that root text was normalized for the comparison."
+  },
+  "reproducibilityNote": "Before concurrent edits, the shared and fresh builds differed only in embedded source-root paths after normalization; the delivery uses the exact fresh compiler hash, not the changing shared build.",
+  "concurrentWorkingTreeChanges": {
+    "observedAtUtc": "2026-11-13T09:21:15.994973+00:00",
+    "files": [
+      {
+        "path": "Makefile",
+        "qualifiedSha256": "7ae3bbeb38be586adb762b5df0542795f6b8dafcdd84f4b69cfceaa35c7cefc2",
+        "observedSharedSha256": "e149d672acbe822abcaeced23b0073211cb7a6f4fa0f68d3211244558f1d11d4"
+      },
+      {
+        "path": "native/compiler/compiler.arya",
+        "qualifiedSha256": "446bbb5cd0f573138cb17795002a17df3e49feb0cc40fb27d2755e9d80c238c9",
+        "observedSharedSha256": "111005c428467ea7cfb27a4633393474dbe94f2239b5daa306bbff1b317b6488"
+      },
+      {
+        "path": "native/compiler/standard-types.arya",
+        "qualifiedSha256": "3e7adf084bd1ba26d08863c18b1215bb288b5ae77fc1a2c3fce2f95f9587ccc6",
+        "observedSharedSha256": "c507c26a3623bec696d459040361d82a6a0bcf11644321eb7af685ba3ff77a1f"
+      },
+      {
+        "path": "native/libraries/accounting.arya",
+        "qualifiedSha256": "31cf4506f8df17bb21169f9b8f2ee72146a701e741fd4f2ee3796689e1c20c30",
+        "observedSharedSha256": "3e5fb94118861609937fa40e7954467ea2c7ac83a3f0381c2f42fa4bf77e01f8"
+      },
+      {
+        "path": "native/manifest.json",
+        "qualifiedSha256": "02a35295436afe51648c8150ff6d07d4320c552c5054537d80fcbabc46747ece",
+        "observedSharedSha256": "ec2b1547a41659745b661086f36e9720e3a47c7a77209b38b339c0aa9e565d12"
+      },
+      {
+        "path": "native/runtime/accounting.c",
+        "qualifiedSha256": "2a18c6ab7fa18fd5b6d7d37dc8d7b52ec05fbe4417f437cb4d4cb95d5d6a400c",
+        "observedSharedSha256": "98223b6140d0b320b23e7d6cc303c77e0e9615d59aa16d5642ce2a34128174f7"
+      },
+      {
+        "path": "native/runtime/core.c",
+        "qualifiedSha256": "065ebf4a41fa544e8121a0257eee4082acea9ebb3899e4bf3bb33203007cac69",
+        "observedSharedSha256": "4b90da4b0c2dc1fde13c80695986cee84ac31e3ac0590e649ccae6bb82e94718"
+      },
+      {
+        "path": "native/tests/accounting-journal.sh",
+        "qualifiedSha256": "9531a8494dcedf563c18602a802e010c8475ddbcee55151a6dec74883ea06e2c",
+        "observedSharedSha256": "2ae417c6506be58a6ccd9d27c17ea41e1edeca3b6d8f13ddf1850d9807f010f9"
+      },
+      {
+        "path": "native/tests/fixtures/accounting-journal.arya",
+        "qualifiedSha256": "15e84bbf7dafa408e0a2e563b20fbd43e56dae88ea2551c5ac36c6479e160b98",
+        "observedSharedSha256": "896a6c75f4596277054ff0de337b7557018afd5868b6c482c3d63cc3c0bd5684"
+      }
+    ],
+    "sharedMakeCheck": {
+      "command": [
+        "make",
+        "check"
+      ],
+      "startedAtUtc": "2026-11-13T08:26:01.994087+00:00",
+      "elapsedSeconds": 582.545,
+      "exitCode": 0,
+      "passed": true,
+      "log": "make-check.log"
+    },
+    "qualifiedBySharedMakeCheck": false,
+    "action": "Preserve shared edits; assemble archives from the unchanged isolated fresh source/compiler. Current documentation and qualification metadata are copied afterward."
+  },
+  "limitations": [
+    "Initial parallel attempts exhausted disk space; logs retained.",
+    "A shared Clang subprocess aborted with mutex lock failed; exact cause is unestablished. The unchanged sanitizer probe and all native suites passed in the isolated fresh tree.",
+    "Concurrent shared accounting changes are excluded from this delivery and remain unqualified by this report. The shared make check exit zero is not used as snapshot qualification.",
+    "ASan/UBSan and GC stress were run; sanitizer leak detection was not run.",
+    "No hosted CI, other OS/CPU, live MySQL, optional Python bridge, real desktop UI or editor-host integration qualification in this update.",
+    "No alpha.3 performance benchmark or production-readiness claim."
+  ]
+}

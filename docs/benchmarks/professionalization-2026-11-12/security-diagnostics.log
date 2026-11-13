@@ -1,0 +1,5 @@
+security diagnostics: 67 checks passed
+security diagnostics: 67 checks passed
+security and diagnostics: release, ASan/UBSan and GC stress passed without Node/Python
+source stacks: uncaught assertions report function names and Arya line/column in both build modes
+disabled trace: 100 and 10000 guards used 148 calloc-wrapper calls each

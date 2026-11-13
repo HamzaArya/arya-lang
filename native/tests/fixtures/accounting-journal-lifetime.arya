@@ -1,0 +1,23 @@
+use std "accounting" as accounting
+use std "runtime" as runtime
+use std "debug" as debug
+fn journal(count) {
+  const entries = []
+  for i in range(count) {
+    entries.push({account: "cash", debit: "1", credit: "0"})
+    entries.push({account: "sales", debit: "0", credit: "1"})
+  }
+  return accounting.prepareJournal([{id: "one", entries: entries}], {currency: "AFN", scale: 2})
+}
+let count = 1001; if args[0] == "--stress" { count = 65 }
+let held = journal(1)
+const small = runtime.collect()
+held = journal(count)
+const large = runtime.collect()
+# A retained prepared journal needs 24 native bytes per row plus constant
+# metadata for this single transaction and two accounts. Allow ample overhead,
+# while rejecting retained caller row records or a second native posting copy.
+debug.assert(large - small < count * 64 + 16384, "Journal calculation closures retained preparation inputs: " + str(large - small))
+debug.assert(held.calculate().entryCount == count * 2)
+debug.assert((await held.calculateAsync()).balanced)
+print("journal retained managed-byte growth:", large - small, "for", count * 2, "rows")

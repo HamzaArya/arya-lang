@@ -1,0 +1,27 @@
+use std "runtime" as runtime
+const mode = args[0]
+const count = number(args[1] ?? "100000")
+const input = "abسلام😀\0".repeat(16)
+const encoded = '{"name":"Arya","text":"سلام 😀","items":["a","b","c"],"count":42}'
+fn work(mode, count) {
+  let total = 0
+  let i = 0
+  if mode == "short" {
+    while i < count { total += len(str(i)); i += 1 }
+  } else if mode == "slice" {
+    while i < count { const at = i % 32; total += len(input.slice(at, at + 24)); i += 1 }
+  } else if mode == "json" {
+    while i < count { const row = JSON.parse(encoded); total += len(row.name) + len(row.text) + len(row.items[1]) + row.count; i += 1 }
+  } else if mode == "append" {
+    let text = ""
+    while i < count { text += "x"; i += 1 }
+    total = len(text)
+  } else { throw "Unknown string-storage benchmark mode" }
+  return total
+}
+work(mode, 1000)
+runtime.collect()
+const started = runtime.clock()
+const result = work(mode, count)
+const elapsed = (runtime.clock() - started) * 1000
+print(result, elapsed)

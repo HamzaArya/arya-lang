@@ -1,0 +1,32 @@
+[
+  {
+    "project": "developer-projects/05-pro/cli-ledger-audit",
+    "exit": 0,
+    "seconds": 18.28
+  },
+  {
+    "project": "developer-projects/05-pro/gui-incident-console",
+    "exit": 0,
+    "seconds": 79.76
+  },
+  {
+    "project": "developer-projects/05-pro/service-feature-flags",
+    "exit": 0,
+    "seconds": 35.25
+  },
+  {
+    "project": "developer-projects/06-world-class/cli-release-gate",
+    "exit": 0,
+    "seconds": 9.44
+  },
+  {
+    "project": "developer-projects/06-world-class/gui-reconciliation",
+    "exit": 0,
+    "seconds": 92.99
+  },
+  {
+    "project": "developer-projects/06-world-class/service-idempotent-ledger",
+    "exit": 0,
+    "seconds": 34.32
+  }
+]

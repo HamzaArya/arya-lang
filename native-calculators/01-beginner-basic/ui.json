@@ -1,0 +1,60 @@
+{
+  "id": "calc-basic",
+  "name": "Pocket Calculator",
+  "subtitle": "Clear, simple arithmetic — one operation at a time.",
+  "views": [
+    {
+      "id": "history",
+      "label": "Calculation history",
+      "columns": [
+        {
+          "key": "expression",
+          "label": "Calculation",
+          "width": 350
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "width": 240
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "width": 120
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "calculator": {
+    "placeholder": "Example: -12.5 * 4",
+    "memory": false,
+    "keys": [
+      [
+        "7",
+        "8",
+        "9",
+        "/"
+      ],
+      [
+        "4",
+        "5",
+        "6",
+        "*"
+      ],
+      [
+        "1",
+        "2",
+        "3",
+        "-"
+      ],
+      [
+        "0",
+        ".",
+        "00",
+        "+"
+      ]
+    ],
+    "options": []
+  }
+}

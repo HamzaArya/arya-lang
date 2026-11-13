@@ -1,0 +1,19 @@
+# Build with the full native SDK. No Node/Python is required.
+use std "security" as security
+use std "validate" as validate
+use std "log" as log
+use std "debug" as debug
+
+let logger = log.create({name: "secure-example", level: "info"})
+const schema = validate.object({account: validate.string({min: 1, max: 64}), note: validate.string({max: 4096})})
+const request = validate.parse(schema, {account: "demo", note: "Private account note"})
+# Provision and persist keys separately in real applications. This demo key is ephemeral.
+const ring = security.keyring({active: "demo-key", keys: {"demo-key": security.generateKey()}})
+const context = {account: request.account, purpose: "account-note"}
+const encrypted = ring.encrypt(request.note, context)
+debug.assert(ring.decrypt(encrypted, context) == request.note, "Authenticated round trip failed")
+if logger.enabled("trace") {
+  logger.trace("envelope created", {account: request.account, bytes: encrypted.length})
+}
+logger.info("note validated and encrypted", {account: request.account, token: security.randomToken()})
+# token is recursively redacted from structured output.

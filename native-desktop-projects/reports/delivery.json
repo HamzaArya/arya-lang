@@ -1,0 +1,10 @@
+{
+  "recorded_utc": "2026-11-13T14:15:09.041606+00:00",
+  "archive": "Arya-Native-Desktop-macOS-arm64.zip",
+  "bytes": 6934017,
+  "sha256": "2951e68d3bb83112d99de356343c6080f7d24edaa1822acbe89bd602f63a3049",
+  "app_count": 6,
+  "acceptance": "acceptance.json",
+  "native_gui_evidence": "native-gui-qa.md",
+  "test_data": "Archived under reports/gui-data; default application stores start empty."
+}

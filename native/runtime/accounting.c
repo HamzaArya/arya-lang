@@ -163,6 +163,63 @@ static AV aac_prepare(AV rows,AV options,int invoice) {
   }
   free(ids);r[1].p->scope=-2;AV result=afailed?av(AUNDEF):r[2];aunroot(&root);return result;
 }
+/* Journal policy is applied only after the complete transaction has passed
+ * native row validation. Totals need no per-account report or decimal parsing. */
+static AV aac_posting_summary(AV prepared) {
+  AACBatch *source=aac_batch(prepared,0);if(!source)return av(AUNDEF);
+  if(source->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
+  AACWide debit=0,credit=0;
+  for(size_t i=0;i<source->count;i++){
+    AACLedger *entry=(AACLedger*)source->storage+i;
+    if((entry->debit>0)==(entry->credit>0))return aac_fail("ARYA_ACCOUNTING_POSTING","Each posting must have exactly one positive debit or credit.",i);
+    debit+=entry->debit;credit+=entry->credit;
+  }
+  AV r[2]={prepared,av(AUNDEF)};ARoot root;aroot(&root,r,2);
+  r[1]=arecord();aput(r[1],"currency",aac_field(prepared.p->parent,"currency"));aput(r[1],"scale",an(source->scale));
+  aput(r[1],"entryCount",an((double)source->count));aput(r[1],"debit",aac_format(debit,source->scale));aput(r[1],"credit",aac_format(credit,source->scale));
+  aput(r[1],"difference",aac_format(debit-credit,source->scale));aput(r[1],"balanced",ab(debit==credit));
+  r[1].p->scope=-2;AV result=r[1];aunroot(&root);return result;
+}
+/* Copy validated fixed-point rows, remapping account IDs in first-posting order.
+ * The result owns its storage and names; it retains neither caller rows nor the
+ * component handles. The one-million-row bound makes every sum fit AACWide. */
+static AV aac_combine_ledger(AV parts,AV policy) {
+  AACBatch *selected=aac_batch(policy,0);if(!selected)return av(AUNDEF);
+  if(selected->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
+  if(parts.t!=ALIST||parts.p->len>100000)return aac_fail("ARYA_ACCOUNTING_LIMIT","Use at most 100000 prepared ledger batches.",SIZE_MAX);
+  AV currency=aac_field(policy.p->parent,"currency");size_t count=0;
+  for(size_t i=0;i<parts.p->len;i++){
+    AACBatch *part=aac_batch(parts.p->data[i],0);if(!part)return av(AUNDEF);
+    if(part->kind!=2)return aac_fail("ARYA_ACCOUNTING_INPUT","Expected a prepared ledger batch.",SIZE_MAX);
+    AV tag=aac_field(parts.p->data[i].p->parent,"currency");
+    if(part->scale!=selected->scale||memcmp(tag.p->chars,currency.p->chars,3*sizeof(uint16_t)))return aac_fail("ARYA_ACCOUNTING_INPUT","Prepared ledger policies must match.",SIZE_MAX);
+    if(part->count>1000000-count)return aac_fail("ARYA_ACCOUNTING_LIMIT","Journal exceeds one million posting rows.",SIZE_MAX);
+    count+=part->count;
+  }
+  AV r[5]={parts,policy,av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,5);
+  r[2]=arecord();aput(r[2],"currency",currency);aput(r[2],"scale",an(selected->scale));aput(r[2],"length",an((double)count));
+  r[3]=alist(0,NULL);aput(r[2],"names",r[3]);r[2].p->scope=-2;
+  r[4]=aac_new(2,count*sizeof(AACLedger),r[2]);
+  AACBatch *combined=(AACBatch*)r[4].p->external;combined->count=count;combined->scale=selected->scale;combined->price_scale=selected->scale;
+  size_t capacity=8;while(capacity<(count<100000?count:100000)*2)capacity*=2;
+  uint32_t *ids=(uint32_t*)amemory(capacity*sizeof(uint32_t));size_t offset=0;
+  for(size_t p=0;p<parts.p->len&&!afailed;p++){
+    AV handle=parts.p->data[p],names=aac_field(handle.p->parent,"names");AACBatch *part=(AACBatch*)handle.p->external;
+    uint32_t *mapping=(uint32_t*)amemory(part->accounts*sizeof(uint32_t));
+    for(size_t i=0;i<part->count;i++){
+      AACLedger entry=((AACLedger*)part->storage)[i];
+      if(!mapping[entry.account]){
+        AV name=names.p->data[entry.account];size_t slot=(size_t)aac_hash(name)&(capacity-1);
+        while(ids[slot]){AV existing=r[3].p->data[ids[slot]-1];if(existing.p->scope==name.p->scope&&!memcmp(existing.p->chars,name.p->chars,(size_t)name.p->scope*sizeof(uint16_t)))break;slot=(slot+1)&(capacity-1);}
+        if(!ids[slot]){if(combined->accounts>=100000){aac_fail("ARYA_ACCOUNTING_LIMIT","Too many account groups.",offset+i);break;}ids[slot]=(uint32_t)++combined->accounts;aappend_value(r[3],name);}
+        mapping[entry.account]=ids[slot];
+      }
+      entry.account=mapping[entry.account]-1;((AACLedger*)combined->storage)[offset+i]=entry;
+    }
+    free(mapping);offset+=part->count;
+  }
+  free(ids);r[3].p->scope=-2;AV result=afailed?av(AUNDEF):r[4];aunroot(&root);return result;
+}
 static AV aac_begin(AV prepared) {
   AACBatch *source=aac_batch(prepared,0);if(!source)return av(AUNDEF);
   AV result=aac_new(source->kind+2,source->kind==2?source->accounts*2*sizeof(AACWide):0,prepared);
@@ -215,5 +272,7 @@ static AV aaccounting_operation(int id,int argc,AV *argv) {
   if(id==1803)return aac_begin(first);
   if(id==1804)return aac_step(first,second);
   if(id==1805)return aac_finish(first);
+  if(id==1806)return aac_posting_summary(first);
+  if(id==1807)return aac_combine_ledger(first,second);
   return aac_fail("ARYA_ACCOUNTING_INPUT","Unknown accounting operation.",SIZE_MAX);
 }

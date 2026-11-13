@@ -1,0 +1,69 @@
+{
+  "preparedAtUtc": "2026-11-13T02:41:22.466236+00:00",
+  "state": "build-only; timed samples held pending root qualification",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "logicalCpus": 8,
+  "loadStart": [
+    9.0439453125,
+    9.74267578125,
+    9.4365234375
+  ],
+  "node": {
+    "path": "/usr/local/bin/node",
+    "sha256": "de225762a2e4ca48405039e77f1f4db7bcdd35628d2312ed442789bfba2b87d0",
+    "bytes": 243486096,
+    "version": "v24.16.0"
+  },
+  "baseline": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+    "sha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+    "bytes": 5749112,
+    "version": "Arya native 2.0.0-alpha.2 (self-hosted)"
+  },
+  "candidate": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+    "sha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+    "bytes": 5783400,
+    "version": "Arya native 2.0.0-alpha.2 (self-hosted)"
+  },
+  "controller": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/kernels.mjs",
+    "sha256": "d596f919d791a1edf9c312335044114cb837801ec27e2dc1471ef1e2c9165fe4",
+    "bytes": 6184
+  },
+  "sourceTemplate": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/kernels.arya",
+    "sha256": "8b721df8ab895225f7246b30be90ea6f1e4955962a59539dd67f7471ebefe1b6",
+    "bytes": 1995
+  },
+  "selectedEnvironment": {
+    "PATH": "/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/opt/homebrew/bin:/Users/hamza/.codex/tmp/arg0-macos/codex-arg0RoLurM:/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/sbin:/usr/local/mysql-9.7.0-macos15-arm64/bin:/Users/hamza/.vscode/extensions/openai.chatgpt-26.1106.51428-darwin-arm64/bin/macos-aarch64:/usr/local/mysql-9.7.0-macos15-arm64/bin",
+    "CC": null,
+    "ARYA_CC": null,
+    "ARYA_NATIVE_LIBDIR": null,
+    "ARYA_GC_STRESS": null,
+    "CFLAGS": null,
+    "CPPFLAGS": null,
+    "LDFLAGS": null,
+    "CPATH": null,
+    "LIBRARY_PATH": null,
+    "SDKROOT": null,
+    "MACOSX_DEPLOYMENT_TARGET": null
+  },
+  "clearedEnvironment": [
+    "ARYA_NATIVE_LIBDIR",
+    "ARYA_GC_STRESS",
+    "ARYA_RUNTIME_COUNTERS"
+  ],
+  "buildCommand": [
+    "/usr/local/bin/node",
+    "native/benchmarks/kernels.mjs",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/node-comparison",
+    "--build-only"
+  ],
+  "candidateEnvironment": {
+    "ARYA_BENCH_COMPILER": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya"
+  },
+  "ccVersion": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n"
+}

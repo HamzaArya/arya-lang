@@ -1,0 +1,4 @@
+native/bootstrap/verify-clean.sh
+Native clean workspace: /var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T//arya-native-clean.zBjnzf
+native/bootstrap/verify-clean.sh: line 48: syntax error near unexpected token `('
+make: *** [native-clean-test] Error 2

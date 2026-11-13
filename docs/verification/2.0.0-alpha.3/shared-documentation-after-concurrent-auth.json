@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "scope": "Offline local targets, Markdown heading anchors and manifest/catalog equality; external URLs and runtime examples are not executed.",
+  "results": {
+    "repository": {
+      "guides": 39,
+      "localLinks": 364,
+      "modules": 27
+    }
+  },
+  "issues": [
+    "repository: module missing from catalog: auth"
+  ]
+}

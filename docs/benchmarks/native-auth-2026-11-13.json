@@ -1,0 +1,352 @@
+{
+  "recordedAtUtc": "2026-11-13T09:29:46Z",
+  "scope": "Successful digest lookup + monotonic expiry + immutable session snapshot. Setup, startup, build and output excluded. Native vs Arya Map in one binary; fresh alternating processes. No password or biometric speed claim.",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "flags": "--release (-O2 -ffp-contract=off)",
+  "compilerSha256": "88713d0a5055613dd8f54eec79b9bcff060a9c31cbe5540eaa4f56166af43c4d",
+  "binarySha256": "c7ad4f36ebc97b4cfcb8f8b0aee6dfd007d0aa3347779911a53a8d8c1758639c",
+  "generatedCSha256": "9e9dd2299b030ec33b8c758578013b26eeaf17e50e578a6f6449a94cfdbdf4c0",
+  "sources": {
+    "native/benchmarks/auth.arya": "6036b23ddebe76459e24cd8d5656a80b41aff5c5ec4e80893422acbdc6a7250f",
+    "native/benchmarks/auth.py": "6af5064de2655b47f63baea47343baad1c6b55c828c43eaccfef00d563a58ff7",
+    "native/libraries/auth.arya": "8c51237c12ce66d1d1e08043c8310a193b9007a07714720593d717e7895782fb",
+    "native/runtime/auth.c": "de91838ca5c41029c6815f21ffb872baf5421ac1a5b435da6f2916f08014cb6a",
+    "native/runtime/security.c": "a20422427acbb491754378e13a35a96ac9032b79d013b8f6f2f1cf66a5406019",
+    "native/runtime/auth-platform.h": "a316efb7352cdcfbd49fbb153645cd15ad1609c189867b83409f9266deb82670",
+    "native/desktop/auth.m": "9a63e9a722698f4e78b7d04e6599773da0923b9d98de54c4463f4ed47a8ca14a"
+  },
+  "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/auth-benchmark-n4uapdzm/auth",
+  "binaryBytes": 5154216,
+  "loadStart": [
+    5.34912109375,
+    5.705078125,
+    5.48681640625
+  ],
+  "raw": [
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 25.996999999999996,
+      "checksum": 213750,
+      "sample": 0
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 53.646,
+      "checksum": 213750,
+      "sample": 0
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 53.728,
+      "checksum": 213750,
+      "sample": 1
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 25.841,
+      "checksum": 213750,
+      "sample": 1
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 27.249000000000002,
+      "checksum": 213750,
+      "sample": 2
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 57.874,
+      "checksum": 213750,
+      "sample": 2
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 56.284,
+      "checksum": 213750,
+      "sample": 3
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 28.788,
+      "checksum": 213750,
+      "sample": 3
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 31.16,
+      "checksum": 213750,
+      "sample": 4
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 71.325,
+      "checksum": 213750,
+      "sample": 4
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 64.35300000000001,
+      "checksum": 213750,
+      "sample": 5
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 25.035999999999994,
+      "checksum": 213750,
+      "sample": 5
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 24.436,
+      "checksum": 213750,
+      "sample": 6
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 51.858999999999995,
+      "checksum": 213750,
+      "sample": 6
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 51.807,
+      "checksum": 213750,
+      "sample": 7
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 26.307,
+      "checksum": 213750,
+      "sample": 7
+    },
+    {
+      "mode": "native",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 24.892999999999997,
+      "checksum": 213750,
+      "sample": 8
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "iterations": 20000,
+      "cpuMs": 52.47399999999999,
+      "checksum": 213750,
+      "sample": 8
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 53.049,
+      "checksum": 254450,
+      "sample": 0
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 67.601,
+      "checksum": 254450,
+      "sample": 0
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 68.964,
+      "checksum": 254450,
+      "sample": 1
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 44.443,
+      "checksum": 254450,
+      "sample": 1
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 46.97299999999999,
+      "checksum": 254450,
+      "sample": 2
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 69.303,
+      "checksum": 254450,
+      "sample": 2
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 67.42099999999999,
+      "checksum": 254450,
+      "sample": 3
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 44.291999999999994,
+      "checksum": 254450,
+      "sample": 3
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 49.824,
+      "checksum": 254450,
+      "sample": 4
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 68.99999999999999,
+      "checksum": 254450,
+      "sample": 4
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 69.648,
+      "checksum": 254450,
+      "sample": 5
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 45.625,
+      "checksum": 254450,
+      "sample": 5
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 43.721999999999994,
+      "checksum": 254450,
+      "sample": 6
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 65.83200000000001,
+      "checksum": 254450,
+      "sample": 6
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 65.193,
+      "checksum": 254450,
+      "sample": 7
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 42.878,
+      "checksum": 254450,
+      "sample": 7
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 43.505,
+      "checksum": 254450,
+      "sample": 8
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "iterations": 20000,
+      "cpuMs": 67.853,
+      "checksum": 254450,
+      "sample": 8
+    }
+  ],
+  "summary": [
+    {
+      "mode": "native",
+      "count": 32,
+      "medianCpuMs": 25.996999999999996,
+      "minCpuMs": 24.436,
+      "maxCpuMs": 31.16
+    },
+    {
+      "mode": "reference",
+      "count": 32,
+      "medianCpuMs": 53.728,
+      "minCpuMs": 51.807,
+      "maxCpuMs": 71.325
+    },
+    {
+      "mode": "native",
+      "count": 4096,
+      "medianCpuMs": 44.443,
+      "minCpuMs": 42.878,
+      "maxCpuMs": 53.049
+    },
+    {
+      "mode": "reference",
+      "count": 4096,
+      "medianCpuMs": 67.853,
+      "minCpuMs": 65.193,
+      "maxCpuMs": 69.648
+    }
+  ],
+  "loadEnd": [
+    5.32080078125,
+    5.693359375,
+    5.48388671875
+  ]
+}

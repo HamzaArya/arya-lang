@@ -1,0 +1,186 @@
+--- a/native/runtime/core.c
++++ b/native/runtime/core.c
+@@ -137,8 +137,31 @@
+   ACOUNT(strings);AADD(string_units,n);AH *h=aalloc(ASTR,0);AStringBuffer *buffer=astring_buffer(n);
+   buffer->used=n;h->scope=(int)n;h->external=buffer;h->chars=buffer->chars;if(n)memcpy(h->chars,s,n*sizeof(uint16_t));return ap(h);
+ }
++/* memcpy permits unaligned input without aliasing violations. The repeated
++ * masks test each byte/unit independently on either byte order; tail loads
++ * never reach beyond the supplied span. */
++static int aascii_bytes(const char *s,size_t n) {
++  if(n && (unsigned char)s[n-1]>=128)return 0;
++  while(n>=8){uint64_t word;memcpy(&word,s,sizeof(word));if(word&UINT64_C(0x8080808080808080))return 0;s+=8;n-=8;}
++  while(n--){if((unsigned char)*s++>=128)return 0;}return 1;
++}
++static int aascii_units(const uint16_t *s,size_t n) {
++  if(n && s[n-1]>=128)return 0;
++  while(n>=4){uint64_t word;memcpy(&word,s,sizeof(word));if(word&UINT64_C(0xff80ff80ff80ff80))return 0;s+=4;n-=4;}
++  while(n--){if(*s++>=128)return 0;}return 1;
++}
+ static AV astrn(const char *s,size_t n) {
+   if(n>67108864)return afail("RangeError","UTF-8 input exceeds 64 MiB.");
++  if(aascii_bytes(s,n)){
++    if(n>16777216)return afail("RangeError","Strings exceed the 16 Mi UTF-16 unit limit.");
++    /* The raw source may belong to an otherwise unrooted byte buffer. Finish
++     * reading it before aalloc can collect, as the general decoder does. The
++     * pending buffer cannot be reclaimed until attached to its new header. */
++    AStringBuffer *buffer=astring_buffer(n);
++    for(size_t i=0;i<n;i++)buffer->chars[i]=(unsigned char)s[i];
++    ACOUNT(strings);AADD(string_units,n);AH *h=aalloc(ASTR,0);
++    buffer->used=n;h->scope=(int)n;h->external=buffer;h->chars=buffer->chars;return ap(h);
++  }
+   size_t used=0; uint16_t *u=(uint16_t*)amemory((n+1)*sizeof(uint16_t));
+   for(size_t i=0;i<n;) { unsigned c=(unsigned char)s[i++], cp=c; int extra=0;
+     if(c>=0xc2 && c<=0xdf) { cp=c&31; extra=1; } else if(c>=0xe0 && c<=0xef) { cp=c&15; extra=2; } else if(c>=0xf0 && c<=0xf4) { cp=c&7; extra=3; } else if(c>=128) cp=0xfffd;
+@@ -151,6 +174,10 @@
+ }
+ static AV astr(const char *s) { return astrn(s,strlen(s)); }
+ static char *autf8bytes(AV s,size_t *written) {
++  if(aascii_units(s.p->chars,(size_t)s.p->scope)){
++    size_t n=(size_t)s.p->scope;char *out=(char*)amemory(n+1);
++    for(size_t i=0;i<n;i++)out[i]=(char)s.p->chars[i];out[n]=0;if(written)*written=n;return out;
++  }
+   size_t n=(size_t)s.p->scope, at=0; char *out=(char*)amemory(n*3+1);
+   for(size_t i=0;i<n;i++) { unsigned c=s.p->chars[i]; if(c>=0xd800 && c<=0xdbff && i+1<n && s.p->chars[i+1]>=0xdc00 && s.p->chars[i+1]<=0xdfff) c=0x10000+((c-0xd800)<<10)+(s.p->chars[++i]-0xdc00); else if(c>=0xd800 && c<=0xdfff) c=0xfffd;
+     if(c<128) out[at++]=(char)c; else if(c<2048) { out[at++]=(char)(0xc0|(c>>6)); out[at++]=(char)(0x80|(c&63)); } else if(c<65536) { out[at++]=(char)(0xe0|(c>>12)); out[at++]=(char)(0x80|((c>>6)&63)); out[at++]=(char)(0x80|(c&63)); } else { out[at++]=(char)(0xf0|(c>>18)); out[at++]=(char)(0x80|((c>>12)&63)); out[at++]=(char)(0x80|((c>>6)&63)); out[at++]=(char)(0x80|(c&63)); }
+--- a/native/runtime/decimal.c
++++ b/native/runtime/decimal.c
+@@ -247,23 +247,34 @@
+   for(size_t i=count;i;i--){text[at++]=reverse[i-1];if(i==(size_t)places+1&&places)text[at++]='.';}
+   return as16(text,at);
+ }
+-static AV anumber_fixed(double value,int places) {
++/* Exact common coefficient shared by ordinary formatting and the guarded
++ * Number(toFixed(...)) lowering. Failure retains the existing wide path. */
++static int afixed_coefficient64(double value,int places,uint64_t *rounded) {
++  if(places<0||places>18)return 0;
+   uint64_t bits;memcpy(&bits,&value,sizeof(bits));
+   unsigned exponent=(unsigned)((bits>>52)&2047);
+   uint64_t significand=bits&0xfffffffffffffULL;
+   int shift=(exponent?(int)exponent-1075:-1074)+places;
+   if(exponent)significand|=1ULL<<52;
+-  uint16_t reverse[122];size_t count=0;
+   static const uint64_t five[]={1,5,25,125,625,3125,15625,78125,390625,1953125,9765625,48828125,244140625,1220703125,6103515625ULL,30517578125ULL,152587890625ULL,762939453125ULL,3814697265625ULL};
+-  if(places<=18&&significand<=UINT64_MAX/five[places]){
+-    uint64_t scaled=significand*five[places],rounded;
+-    if(shift>=0){if(shift>=64||scaled>(UINT64_MAX>>shift))goto wide;rounded=scaled<<shift;}
+-    else {unsigned right=(unsigned)-shift;rounded=right<64?scaled>>right:0;if(right<=64)rounded+=(scaled>>(right-1))&1;}
++  if(significand>UINT64_MAX/five[places])return 0;
++  uint64_t scaled=significand*five[places];
++  if(shift>=0){if(shift>=64||scaled>(UINT64_MAX>>shift))return 0;*rounded=scaled<<shift;}
++  else {unsigned right=(unsigned)-shift;*rounded=right<64?scaled>>right:0;if(right<=64)*rounded+=(scaled>>(right-1))&1;}
++  return 1;
++}
++static AV anumber_fixed(double value,int places) {
++  uint16_t reverse[122];size_t count=0;uint64_t rounded;
++  if(afixed_coefficient64(value,places,&rounded)){
+     do{reverse[count++]=(uint16_t)('0'+rounded%10);rounded/=10;}while(rounded);
+     ACOUNT(tofixed_fast_paths);return afixed_text(reverse,count,places,value<0);
+   }
+-wide:;
+   AV small;if(anumber_fixed_small(value,places,&small)){ACOUNT(tofixed_fast_paths);return small;}
++  uint64_t bits;memcpy(&bits,&value,sizeof(bits));
++  unsigned exponent=(unsigned)((bits>>52)&2047);
++  uint64_t significand=bits&0xfffffffffffffULL;
++  int shift=(exponent?(int)exponent-1075:-1074)+places;
++  if(exponent)significand|=1ULL<<52;
+   /* 16 limbs leave room above the maximum 403-bit rounded coefficient.
+    * Subnormals can require a right shift of 1074: bits beyond the coefficient
+    * are zero, so they round to zero without shifting by an invalid C width. */
+@@ -303,3 +314,52 @@
+ static AV anumber_method(AV env,int argc,AV *argv) {
+   return anumber_invoke(env.p->data[0].n,env.p->data[1],argc,argv);
+ }
++/* These two helpers preserve separate inner/outer source locations and depth
++ * checks. All AV inputs are already rooted in the generated caller's slots.
++ * Only a known builtin Number can consume the virtual string. The fallback
++ * keeps the originally selected method and performs ordinary conversion. */
++static AV anumber_global_call(AV env,int argc,AV *argv);
++#include <fenv.h>
++#include <locale.h>
++static AV afixed_number_prepare(AV number,AV method,AV object,AV key,int direct,int argc,AV *argv,int *folded) {
++  *folded=0;
++  if(number.t==AFUNC&&number.p->code==anumber_global_call&&number.p->parent.t==ANUM&&number.p->parent.n==0&&direct&&object.t==ANUM&&akey(key,"toFixed")&&isfinite(object.n)&&fabs(object.n)<1e21&&(!argc||argv[0].t==ANUM||argv[0].t==AUNDEF)){
++    double places=argc&&argv[0].t==ANUM?argv[0].n:0;
++    if(isnan(places))places=0;places=trunc(places);
++    uint64_t coefficient;
++    if(isfinite(places)&&places>=0&&places<=18&&afixed_coefficient64(object.n,(int)places,&coefficient)){
++      ACOUNT(direct_calls);if(!acall_enter())return av(AUNDEF);
++#if FLT_EVAL_METHOD == 0 && !defined(__FAST_MATH__)
++      /* Every 10^p through p=18 is exactly representable in binary64. With
++       * a coefficient <=2^53 both operands are exact, so one nearest-rounded
++       * division has the same result as parsing the exact decimal rational.
++       * Keep strtod for directed rounding, non-dot locales, and wide values.
++       * Negate before division to preserve a rounded negative zero. */
++      if(coefficient<=9007199254740992ULL&&fegetround()==FE_TONEAREST){
++        const char *point=localeconv()->decimal_point;
++        if(point[0]=='.'&&point[1]==0){
++          static const double tens[]={1.,10.,100.,1000.,10000.,100000.,1000000.,10000000.,100000000.,1000000000.,10000000000.,100000000000.,1000000000000.,10000000000000.,100000000000000.,1000000000000000.,10000000000000000.,100000000000000000.,1000000000000000000.};
++          double signed_coefficient=(double)coefficient;
++          if(object.n<0)signed_coefficient=-signed_coefficient;
++          AV result=an(signed_coefficient/tens[(int)places]);adepth--;*folded=1;return result;
++        }
++      }
++#endif
++      char reverse[24],text[64];size_t count=0,at=0;int scale=(int)places;
++      do{reverse[count++]=(char)('0'+coefficient%10);coefficient/=10;}while(coefficient);
++      if(object.n<0)text[at++]='-';
++      if(count<=(size_t)scale){text[at++]='0';if(scale)text[at++]='.';for(size_t i=count;i<(size_t)scale;i++)text[at++]='0';}
++      for(size_t i=count;i;i--){text[at++]=reverse[i-1];if(i==(size_t)scale+1&&scale)text[at++]='.';}
++      text[at]=0;
++      /* Parse the same exact ASCII decimal as Number would. A coefficient
++       * outside the exact conversion guard must never be rounded to double. */
++      AV result=an(strtod(text,NULL));adepth--;*folded=1;return result;
++    }
++  }
++  return aimmediate_call(method,object,key,direct,argc,argv);
++}
++static AV afixed_number_finish(AV number,AV value,int folded) {
++  if(!folded)return acall_rooted(number,1,&value);
++  ACOUNT(direct_calls);if(!acall_enter())return av(AUNDEF);
++  adepth--;return value;
++}
+--- a/native/compiler/compiler.arya
++++ b/native/compiler/compiler.arya
+@@ -1004,6 +1004,16 @@
+   }
+   return {value: value, order: order}
+ }
++# Preserve both call boundaries while eliding a fixed-format string which only
++# the selected builtin Number would read. Dynamic receivers retain their call.
++fn fixedNumberArgument(node) {
++  if node.callee.kind != "name" or node.callee.name != "Number" or not nativeGlobal(node.callee) or len(node.arguments) != 1 { return null }
++  let inner = node.arguments[0]
++  if inner.kind != "call" or inner.callee.kind != "member" { return null }
++  let key = inner.callee.key
++  if key.kind != "literal" or key.value != "toFixed" or (key.type != "string" and key.token.kind != "string") { return null }
++  return inner
++}
+ fn expr(e, node, env) {
+   location(e, node.token)
+   if node.kind == "view" { let children = temp(e, "alist(0,NULL)"); for child in node.children { let value = emitViewNode(e, child, env); temp(e, "aappend_value(" + children + "," + value + ")") }; let document = 0; if node.html { document = 1 }; return temp(e, "ahtml_children(" + children + "," + str(document) + ")") }
+@@ -1128,6 +1138,24 @@
+   }
+   if node.kind == "call" {
+     if dataOptimization {
++      let fixed = fixedNumberArgument(node)
++      if fixed != null {
++        # The outer callee is selected before any receiver/key/argument work.
++        let number = expr(e, node.callee, env)
++        checkMemberExport(fixed.callee.object, fixed.callee.key, fixed.token)
++        let object = expr(e, fixed.callee.object, env)
++        let key = expr(e, fixed.callee.key, env)
++        let direct = "im" + str(e.caches); e.caches += 1
++        let folded = "nf" + str(e.caches); e.caches += 1
++        emit(e, "int " + direct + "," + folded + ";")
++        location(e, fixed.callee.token)
++        let method = temp(e, "aimmediate_get(" + object + "," + key + ",&" + direct + ")")
++        let args = emitArguments(e, fixed.arguments, env, null)
++        location(e, fixed.token)
++        let value = temp(e, "afixed_number_prepare(" + number + "," + method + "," + object + "," + key + "," + direct + "," + args.count + "," + args.data + ",&" + folded + ")")
++        location(e, node.token)
++        return temp(e, "afixed_number_finish(" + number + "," + value + "," + folded + ")")
++      }
+       let descriptor = defineDataDescriptor(node)
+       if descriptor != null {
+         # Resolve the callee before arguments, including a possible getter.

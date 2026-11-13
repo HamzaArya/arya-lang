@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-13",
+  "compiler": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "projects": [
+    {
+      "project": "cli-expenses",
+      "development_release_build": "passed",
+      "development_acceptance": "passed",
+      "final_source_check": "passed",
+      "final_source_sha256": "4a69ed0827c4337b3aaf398cbf7998aa6e29f39736632193151a0ee1e1f1e98c",
+      "final_source_rebuild_and_acceptance": "See root reports/ integration evidence; includes UTF-8 byte-limit and web root review fixes.",
+      "abandoned": false
+    },
+    {
+      "project": "gui-study-planner",
+      "development_release_build": "passed",
+      "development_acceptance": "passed",
+      "final_source_check": "passed",
+      "final_source_sha256": "5c9e674fa8ed256217b429320205524ff87af7033d0560afc18c01e9e1d22a49",
+      "final_source_rebuild_and_acceptance": "See root reports/ integration evidence; includes UTF-8 byte-limit and web root review fixes.",
+      "abandoned": false
+    },
+    {
+      "project": "service-notes",
+      "development_release_build": "passed",
+      "development_acceptance": "passed",
+      "final_source_check": "passed",
+      "final_source_sha256": "e3e5e8205e44e69065c1f69c2aa43880324db7d577807f14607b1456f90effb6",
+      "final_source_rebuild_and_acceptance": "See root reports/ integration evidence; includes UTF-8 byte-limit and web root review fixes.",
+      "abandoned": false
+    }
+  ]
+}

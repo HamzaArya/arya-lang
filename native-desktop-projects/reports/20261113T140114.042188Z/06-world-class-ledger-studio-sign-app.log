@@ -1,0 +1,2 @@
+["codesign", "--force", "--deep", "--sign", "-", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app"]
+/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-lyotg479/Ledger Studio.app: replacing existing signature

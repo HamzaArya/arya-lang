@@ -1,156 +1,222 @@
-# Arya practical language reference
+# Arya language reference
 
-The current source is **1.3.0-alpha.9**, a published experimental reliability preview focused on Node.js applications. The published npm preview is **1.3.0-alpha.9** on `next`; `latest` remains on the older 1.2 release. See [runtime and migration](node-runtime.md). See the [documentation index](README.md) for all guides. Start with the [web application guide](arya-web.md) for `const`, `fn`, `if`/`else`, `for`, `return`, `print`, and HTML-first web projects with separate page, CSS, and browser JavaScript files. The [beginner tutorial and nine runnable lessons](arya-tutorial.md) teach the same canonical syntax. The [specification and version amendments](arya-specification.md) define precise rules and migration requirements.
+This is the native **2.0.0-alpha.3** language. Record shorthand, computed keys and record spread were added in alpha.3; older SDKs require the explicit-field alternatives below. Start with [installation](installing.md) and [getting started](getting-started.md). The [native profile](native-profile.md) defines runtime limits and host-library compatibility.
 
-For VS Code-compatible editors, Sublime, JetBrains, Vim/Neovim, Emacs, and other clients, use the [editor setup guide](arya-editors.md). The portable kit includes a local VSIX, an installable compiler, a standard LSP server, and syntax adapters; compatibility and verification vary by editor.
-
-Arya is an experimental programming language developed in its own repository and integrated into AryaCode through a versioned package. The default target compiles `.arya` files to JavaScript ES modules and runs them on Node.js. It supports scripts, Node web applications, JavaScript/npm libraries, Python function calls, and the new web view syntax. Arya uses its own grammar; opening a file and checking its syntax do not execute imports or user code.
-
-The longer-term direction is one readable language for scripts, applications, and access to multiple ecosystems. The current source uses a single Node.js runtime. The earlier native compiler is retired; see the [migration guide](node-runtime.md). Direct arbitrary C, C++, Rust, Go, Java, or .NET imports remain unsupported. Libraries exposed through a compatible Node addon or Python package can be used through the JavaScript profile, subject to the bridge limits below.
-
-Arya 1.2.0-alpha.4 includes nullish defaults (`??`), optional access/index/calls (`?.`), and leading-dot multiline chains on Node.js. The CLI/editor add source excerpts, help, spelling Quick Fixes, and JSON check reporting. See the [syntax and debugging guide](syntax-and-debugging.md).
-
-For web interfaces and desktop GUI applications, the JavaScript target includes `use std "ui"`: styled components, responsive layouts, browser state, forms, JSON API actions, and animation presets. The same UI can run in an optional Electron window. See the [UI guide](ui-apps.md) for npm starters and the component/animation API.
-
-The source candidate also adds [reusable UI sections and full-page templates](ui-patterns.md) for landing pages, dashboards, settings, and sign-in interfaces.
-
-## Readable application flow
-
-Starting in 1.3.0-alpha.2, the source candidate adds `|>` and `|> await`, expression-bodied functions with defaults/rest parameters, list/call spread, terminating guards, indexed iteration, and finally cleanup. The `list` library supplies input-first collection operations. See the [syntax guide](flow-syntax.md) for exact evaluation, scope, async, and error behavior. Block functions remain accepted; rename earlier bindings called `guard`. For the removal of alternate spellings in alpha.4, see [syntax migration](syntax-migration.md).
-
-## Canonical syntax and web applications
-
-Use `let` for mutable bindings, `const` for fixed bindings, `fn`/`return` for functions, `if`/`else if`/`else` for conditions, `for` for iteration, and `print` for output. Starting in 1.3.0-alpha.4, these are the only spellings for those constructs. Earlier aliases are removed; [syntax migration](syntax-migration.md) lists every replacement.
-
-Web projects require `index.html` by default; `arya init my-app --web` creates the entry, an Arya server, and separate public CSS/JavaScript assets. `web.serve(3000)` starts that file-based application. The optional `{html: false}` setting permits an API-only or inline-view application.
-
-On the JavaScript target, `view { ... }` creates HTML with class shorthand such as `body bg-dark`, escaped text/attribute expressions, and literal `style`/`script` contents. Raw triple-double-quoted strings support multiline CSS, JavaScript, and ordinary text. `use std` provides the [standard libraries](standard-library.md), including candidate-only list helpers. The [async Python guide](python-async.md) explains nonblocking calls, binding imports, batching, cancellation, and virtual environments. The [service guide](services.md) documents schemas, structured logs, operational HTTP helpers, and a multi-file example. The MySQL library includes verified pooled connections, prepared queries, transactions, health checks, and graceful closure; see the [database guide](mysql.md). Embedded browser scripts do not capture server-side Arya/Python variables. See the [web guide](arya-web.md) for complete APIs and a runnable example:
-
-```sh
-npm run build
-npm run arya -- run fixtures/web/studio.arya
-```
-
-The remainder of this reference describes the Node.js runtime using canonical syntax. Programs use the documented Node host globals and library contracts below.
-
-## Start in AryaCode
-
-Open `fixtures/arya` as a workspace, open `hello.arya`, trust the workspace, and click **Run Current File** or press **Ctrl+F5**. **Build / Check Current File** compiles without executing the program. Use **Stop Current File** for a running web server. The Run status button, editor toolbar, and Explorer context menu recognize Arya files.
-
-The editor includes syntax highlighting, comments and bracket pairing, snippets, keyword/builtin completion, builtin hover help, top-level symbols in Outline, live syntax/name/const-write diagnostics, and same-file lexical go-to-definition. Try the `fn`, `for`, `usejs`, and `usepy` snippets. Documented standard-library member hints, MySQL handle completions, semantic colors, and spelling Quick Fixes are available. Arbitrary dependency introspection, static type analysis, formatting, and source-level debugging remain future work.
-
-From this repository:
-
-```sh
-npm run arya -- run fixtures/arya/hello.arya
-npm run arya -- run fixtures/arya/bridge.arya
-npm run arya -- run fixtures/arya/web.arya
-npm run arya -- check fixtures/arya/hello.arya
-npm run arya -- build fixtures/arya/hello.arya
-```
-
-Run `npm ci` and `npm run build` before using the repository CLI, which is also available as `node dist/cli.cjs`. `run` accepts program arguments after the file, optionally separated by `--`; access them through `args`.
-
-CLI graph artifacts go into `.arya/build` beside the entry source, mirroring dependency paths. Editor graph artifacts go into fingerprinted `.arya/run` directories. Node package lookup follows the generated tree and the entry project's parent `node_modules` chain; packages installed only in an original nested dependency folder are not automatically resolved. Local JavaScript/Python import paths are resolved relative to the original source. Generated files embed those local paths; rebuild after moving a project. A syntax, name, or dependency-graph failure never launches a previous build. Outputs are staged as a complete owned graph before publication. Generated directories are ignored by Git.
-
-## Readable basics
+## A complete example
 
 ```arya
-fn greet(name) {
-  return "Hello, " + name
-}
+use std "list" as list
 
-let languages = ["Arya", "JavaScript", "Python"]
-for language in languages {
-  print(greet(language))
-}
+const currency = "AFN"
+const defaults = {currency, scale: 2}
+const field = "rounding"
+const settings = {...defaults, [field]: "half-even"}
+const people = [{name: "Samira", score: 95}, {name: "Hamza", score: 85}]
 
+fn greeting(name: string = "World"): string => "Hello, " + name
+for person at index in people |> list.sortBy("score", "desc") {
+  print(index + 1, greeting(person.name))
+}
+print(JSON.stringify(settings))
+```
+
+`arya check file.arya` checks a program without executing its imports. `arya run file.arya` builds and runs it. `arya build file.arya -o app --release` produces a native executable. See the [CLI reference](cli.md) for caching, output protection, diagnostics and build options.
+
+## Source, bindings and values
+
+Source is UTF-8. Identifiers use ASCII letters, digits and underscores, cannot begin with a digit, and cannot use the reserved `__arya` prefix. Comments start with `#` or `//`. Statements can be separated by newlines or semicolons. Blocks use braces.
+
+```arya
+let count = 1
+count += 2
+const profile = {name: "Arya"}
+profile.name = "Ledger"
+print(count, profile.name)
+```
+
+`let` permits rebinding; `const` prevents rebinding but does not freeze referenced records or lists. Bindings are lexical, closures capture live bindings, and reading a binding before initialization raises an error. There is no `var` declaration or assignment expression.
+
+Values include binary64 numbers, booleans, strings, lists, records, functions, `null` and `undefined`. Native host helpers supply other bounded values such as Map, Set, Buffer and Promise. Integer-looking numbers are still binary64; use the [decimal, money and accounting libraries](standard-library.md) when exact arithmetic is required. `0.1 + 0.2` is not an exact decimal calculation.
+
+Single- and double-quoted strings support the documented escapes; triple-quoted strings are raw multiline text. Strings use UTF-16 indexing, while iteration yields Unicode code points. Backtick interpolation, block comments and arbitrary-precision integer literals are not provided. Use concatenation or library formatting explicitly.
+
+## Records and composition
+
+A record has string keys and mutable stored fields. Explicit fields remain valid:
+
+```arya
+const name = "Ledger"
+const defaults = {host: "127.0.0.1", port: 8080}
+const key = "currency"
+const settings = {...defaults, name, [key]: "AFN", port: 9000}
+print(settings.name, settings.port, settings[key])
+```
+
+| Form | Meaning | Earlier explicit equivalent |
+| --- | --- | --- |
+| `{name}` | Read the binding named `name` into the field named `name` | `{name: name}` |
+| `{[key]: value}` | Evaluate a string key, validate it, then evaluate its value | Create a record, then assign `record[key] = value` |
+| `{...base, port: 9000}` | Shallow-copy the record's fields, then set `port` | Construct explicit fields or use the existing record operations |
+
+Fields evaluate from left to right. Later fields overwrite earlier values; overwriting does not move an existing key. Numeric-index-looking keys follow the existing `Object.keys` ordering, followed by other keys in insertion order. `__proto__`, `constructor`, empty strings, Unicode and embedded NUL are ordinary record keys; records have no JavaScript prototype chain.
+
+Computed keys must evaluate to strings. There is no implicit numeric/object key conversion: write `{[str(7)]: "seven"}`. The checker rejects a statically known non-string key; a dynamic invalid key raises `TypeError` before its value expression runs. Shorthand requires a valid existing binding; reserved words and quoted keys still need an explicit `key: value` field.
+
+Spread accepts **records only**. Lists, strings, functions, numbers, `null` and `undefined` are rejected. It snapshots the source's stored keys, then reads each current value once. A getter may change a later value; keys added during a getter are not included. A getter failure stops the literal. A returned Promise is copied as a value, not implicitly awaited. The copy has ordinary mutable value fields; it does not retain getter descriptors, freezing or live module-export behavior.
+
+The copy is shallow: nested records and lists remain shared. Copying does not validate untrusted input. Use `std "validate"` first. See the runnable [record composition example](../native/examples/record-composition.arya).
+
+```arya
+const shared = {amount: 1}
+const original = {shared}
+const copy = {...original}
+copy.shared.amount = 2
+print(original.shared.amount) # 2
+```
+
+Known record spreads and literal computed keys retain structural inference, including optional-field overwrite unions. A dynamic computed key or an `any`/union spread conservatively makes the whole literal `any`, including later fields. This is a loss of checking, not proof that the resulting record matches an annotation. Prefer known record contracts and validation where precise types matter. Getters/calls can invalidate narrowing of captured mutable variables; recheck such values after effects.
+
+## Lists and iteration
+
+```arya
+const first = [1, 2]
+const values = [...first, 3]
+for value at index in values {
+  print(index, value)
+}
 let total = 0
-for value in range(1, 6) {
-  total += value
-}
+for value in values { total += value }
+print(total)
+```
 
-if total == 15 and len(languages) == 3 {
-  print("Everything is connected.")
-} else {
-  print("Keep building.")
+List and call spread are distinct from record spread: supported iterable inputs are lists and strings. Native lists support sparse holes and bounded array-style operations, with the limits in the [profile](native-profile.md). Indexed iteration uses `for value at index in values`. `range(...)` creates a bounded list of at most 100000 elements; use a `while` loop or streamed input for larger work.
+
+## Functions, defaults and rest arguments
+
+```arya
+fn multiply(left: number, right: number = 2): number {
+  return left * right
+}
+fn greeting(name = "World") => "Hello, " + name
+fn total(...values: number[]): number {
+  let result = 0
+  for value in values { result += value }
+  return result
+}
+print(multiply(4), greeting(), total(...[1, 2, 3]))
+```
+
+Use `fn` for declarations and function expressions. `=>` selects a concise expression body, including a record expression. Defaults run when needed and can refer to earlier initialized parameters; later parameter reads retain temporal-dead-zone behavior. A rest parameter must be last. Explicit non-void return contracts require a value on every continuing path. Functions are lexical closures; there are no classes, `this`, generators or method declaration shorthand.
+
+## Control flow and operators
+
+```arya
+fn describe(amount: number): string {
+  guard amount >= 0 else { return "invalid" }
+  if amount == 0 { return "empty" }
+  else { return "positive" }
+}
+let remaining = 3
+while remaining > 0 {
+  remaining -= 1
+  if remaining == 1 { continue }
+  print(describe(remaining))
 }
 ```
 
-Statements use newlines or semicolons. Blocks use braces. `#` and `//` start line comments. Lists, call arguments, object literals, and parenthesized expressions can span lines; after a binary operator, its next operand can start on the following line. Strings use single or double quotes, with `\n`, `\r`, `\t`, escaped quotes, and `\\` escapes. Names use ASCII letters, digits, and underscores, starting with a letter or underscore.
+Use `if`/`else`, `while`, `for`, `break`, `continue` and `return`. A `guard condition else { ... }` fallback must exit its current path with an allowed control-flow operation; it cannot silently continue after a failed condition.
 
-| Feature | Syntax |
+| Operators, tighter groups first | Behavior |
 | --- | --- |
-| Mutable binding / constant binding | `let score = 0` / `const title = "Arya"` |
-| Objects and lists | `{name: "Arya", ready: true}` / `[1, 2, 3]` |
-| Property / list item | `person.name` / `values[0]` |
-| Updates | `score += 1` / `values[0] = 42` |
-| Conditions | `if ready { ... } else if waiting { ... } else { ... }` |
-| Loops | `for item in items { ... }` / `while running { ... }` |
-| Loop control | `break` / `continue` |
-| Functions / callbacks | `fn add(a, b) { return a + b }` / `fn(value) { return value * 2 }` |
-| Async work | `async fn load() { return await fetch(url) }` |
-| Exceptions | `try { ... } catch error { print(error.message) }` / `throw new Error("message")` |
-| Constructors | `new library.Client(options)` |
-| Module exports | `export fn add(a, b) { return a + b }` / `export const version = "1"` |
+| Calls, member/index access, `?.` | Optional access short-circuits on nullish values |
+| Unary `not`, `!`, `+`, `-`, `await` | Unary operators bind before binary operators in Arya |
+| `**` | Right-associative exponentiation |
+| `*`, `/`, `%`; then `+`, `-` | Binary64 arithmetic; `+` also performs supported string concatenation |
+| `<`, `<=`, `>`, `>=`; then `==`, `!=` | Comparisons; equality is strict, without JavaScript-style coercive `==` |
+| `and`; then `or`; then `??` | Short-circuit operand selection; `??` selects a fallback only for null/undefined |
+| `|>` | Input-first pipeline; use parentheses when grouping would be unclear |
 
-Values and interoperability follow JavaScript semantics: numbers are IEEE-754 doubles, strings use UTF-16, lists are arrays, and objects and functions retain their identities. Conditions use JavaScript truthiness. `==` and `!=` compile to strict equality and inequality; `and`, `or`, and `not` become short-circuit JavaScript operators. `and`/`or` return operand values. `const` prevents reassignment of the binding; it does not freeze an object. Arithmetic supports `+ - * / % **`; mixing strings with `+` follows JavaScript concatenation. Exponentiation is right-associative, and Arya unary operators bind before exponentiation (`-2 ** 2` is `(-2) ** 2`).
+Use parentheses around signed exponent bases to make intent explicit. `and`/`or` return selected operands; `not`/`!` return booleans. Arya does not provide ternary expressions, `++`/`--`, bitwise expression operators, destructuring declarations or switch statements.
 
-Builtins: `print(...values)`, `len(stringOrList)`, `str(value)`, `number(value)`, `range(end)`, `range(start, end, step)`, and `args`. See the [builtin and host-global contract](arya-specification.md#7-arya-built-ins-and-guaranteed-host-globals) for exact conditions and the complete guaranteed Node global list, including `JSON`, `Promise`, `Math`, `Date`, `fetch`, and `process`. Source size, token count, and nesting caps are [implementation limits](arya-specification.md#12-implementation-limits-and-conformance); the CLI counts UTF-8 bytes while the compiler API counts UTF-16 units.
-
-Functions are visible throughout their enclosing module or block. A `let`/`const` binding exists throughout its scope but cannot be used until its declaration runs. A closure can refer to a later declaration and use it after initialization. See [scope timing](arya-specification.md#4-bindings-and-scope-timing) for shadowing, loop capture, and import alias timing. `check` rejects unknown lexical names and direct/compound writes to const, import aliases, and Arya built-ins. It reports independent semantic errors together and may suggest a unique close spelling. Properties and object keys are excluded from lexical lookup, so mutable objects bound with const still work. Missing dependencies and runtime initialization order are not validated. Annotated modules also receive the bounded [optional type checks](business-applications.md#optional-type-annotations); unannotated modules remain dynamic, and external API declarations remain trusted boundaries.
-
-## JavaScript libraries and frameworks
+## Pipelines and asynchronous work
 
 ```arya
-use js "node:path" as path
-use js "express" as express
+use std "list" as list
+use std "async" as tasks
 
-let app = express()
-app.get("/", fn(request, response) {
-  response.json({message: "Hello from Arya", file: path.basename("/app/main.arya")})
-})
-app.listen(3000)
+const values = [3, 1, 2]
+const selected = values |> list.filter(fn(value) => value > 1)
+print(selected)
+async fn ready(value: number): number {
+  await tasks.sleep(1)
+  return value
+}
+print(await ready(3))
+print(4 |> await ready())
 ```
 
-Install a package with npm in the source file's project before using it. Arya does not install libraries automatically. For the optional Express example, create a new project folder, run `npm init -y` followed by `npm install express` there, copy `fixtures/arya/express.arya` into it, and open that folder in AryaCode. The [tutorial](arya-tutorial.md#lesson-5-use-an-existing-javascript-library) walks through these steps. `web.arya` supplies a dependency-free HTTP app with a page and a JSON endpoint at `http://localhost:3000`.
+`value |> function(extra)` inserts `value` as the first argument. A plain pipeline does not await; `|> await` explicitly awaits its result. `await` is allowed at top level and inside `async fn`, not ordinary functions or parameter defaults. An async function's return annotation describes the value returned by its body; calling `ready` above produces `Promise<number>`. Scheduling is cooperative: CPU-heavy Arya code must yield for other Arya tasks to progress. Filesystem and selected native jobs use workers; this is not a Node event-loop implementation.
 
-`use js` selects `namespace.default ?? namespace`: a non-nullish default becomes the alias, while an absent, null, or undefined default selects the namespace. An intentional null/undefined default remains accessible as `alias.default`. This also supports CommonJS libraries exposed through Node's ESM loader. Calls keep real JavaScript values, promises, constructors, callbacks, and method receivers. npm modules, `node:` builtins, and relative `.mjs`/`.cjs` helpers are supported. For a library with a non-nullish default and separate named exports, use a small `.mjs` wrapper to expose the named API you need. JavaScript dependencies execute before the Arya module body; the alias initializes at its `use` statement.
+## Modules and exports
 
-Arya exports become ordinary ES module exports. Compile a shared `.arya` file with `build`, then import its generated `.mjs` module from JavaScript or with `use js`. First-class multi-file compilation is available with `use arya "./math.arya" as math`; one Check/Build/Run resolves the entry's contained dependency graph, rejects cycles/missing direct exports, and emits a map per module. Imports must be relative with an explicit `.arya` suffix. See the [module contract](arya-specification.md#11-arya-modules-and-build-graphs) and [completed learning project](learning-path.md). Browser frameworks can consume generated JavaScript through their normal bundler, but this release supplies no JSX syntax, browser build pipeline, or framework-specific integration. Python imports require Node and cannot run in a browser.
-
-## Python bridge
+In `prices.arya`:
 
 ```arya
-use python "math" as math
-use python "./statistics_helper.py" as statistics
-
-print(math.sqrt(81))
-let report = statistics.summarize([10, 20, 30])
-print(report.mean)
-print(statistics.round_mean.with([[1, 2, 4]], {digits: 2}))
+export const currency = "AFN"
+export fn label(amount: string): string => amount + " " + currency
 ```
 
-An ordinary Python helper needs no Arya SDK:
+In `main.arya` beside it:
 
-```python
-import statistics
-
-def summarize(values):
-    return {"count": len(values), "mean": statistics.mean(values)}
-
-def round_mean(values, *, digits=2):
-    return round(statistics.mean(values), digits)
+```arya
+use arya "./prices.arya" as prices
+use std "decimal" as decimal
+print(prices.label(decimal.multiply("19.95", "3")))
 ```
 
-The bridge imports installed module names or source-relative `.py` files and calls public functions. Nested public functions such as `package.submodule.function(...)` work when the package exposes that submodule. Use `function.with([positionalArgs], {keyword: value})` for keyword arguments. Install dependencies into the selected Python environment normally.
+Native imports use `use arya` for source modules and `use std` for bundled modules. Top-level declarations can be exported; namespace exports are live and readonly to importers. Explicit Python imports and `std "python"` use a separately installed interpreter. `use js`, npm imports and JavaScript module output belong to the retired compatibility implementation, not this SDK. See the [library catalog](standard-library.md).
 
-In AryaCode, `arya.tools.python` wins, followed by the workspace `.venv`/`venv`, then the bundled or discovered interpreter. The CLI uses `ARYA_PYTHON` when set, otherwise `python3` (`python` on Windows).
+## Type contracts and errors
 
-Each call starts a fresh Python process, sends one JSON request, and returns one JSON response. Strings, finite numbers, booleans, null, lists, and JSON-compatible objects cross the bridge. Python exceptions become catchable Arya/JavaScript errors. Python stdout is forwarded to stderr so library logging does not corrupt results. Calls are synchronous, limited to 30 seconds and 8 MiB output, and do not retain Python state. Stable `error.code` values and action hints identify interpreter/module/file/member, input/return, timeout, output, and protocol failures; UTF-8 is enforced for pipes. See the [interop guide](interop.md) and its runnable npm/batch examples. Python objects, constants, callbacks, generators, GUI event loops, and direct NumPy/Pandas objects are not transported. A helper can convert a data-frame result to JSON-friendly rows. For repeated or expensive work, batch it into one Python helper call.
+Annotations are optional and do not add runtime validation. Supported contracts include primitives, lists, record fields, optional fields, unions, function signatures and promises; there are no user-defined generic declarations or class/interface declarations.
 
-## Verification and next steps
+```arya
+fn title(person: {name: string, label?: string}): string {
+  return person.label ?? person.name
+}
+fn increment(value: number): number => value + 1
+const action: fn(number): number = increment
+const values: number[] = [1, 2]
+print(title({name: "Samira"}), action(values[0] ?? 0))
+```
 
-`npm run check` covers core conformance, execution, Node ESM/CommonJS interoperability, Python transport, syntax diagnostics, source maps, and portable editor/LSP services. AryaCode's separate repository owns workspace trust, IDE containment, and desktop acceptance; its `ARYACODE_TEST_WORKBENCH=/path/to/AryaCode npm run test:arya` exercises those editor workflows in a disposable desktop profile.
+`unknown` requires validation before typed member access or use. `any` explicitly bypasses checks. Mutable nested aliases keep invariant contracts; fresh-record syntax does not make shared nested data safe to widen. Static analysis cannot replace validation at external boundaries.
 
-Source maps and lexical checks remain available in the 1.2 preview. CLI and AryaCode runs map runtime stacks to original Arya locations; standalone generated modules require `node --enable-source-maps generated.mjs`. Arya module graphs and actionable Python bridge codes are implemented. Interactive debugging remains future work as tracked in [the roadmap](arya-roadmap.md). Local package distribution is implemented. Optional static types are implemented with the limits in the [business API guide](business-applications.md). Arbitrary ecosystem compatibility and stable/platform qualification remain separate work. Programs inherit Node.js performance characteristics; benchmark representative application workloads.
+Record/function member reads may invoke getters. Alpha.3 discards prior null/undefined narrowing for mutable bindings captured by closures after those reads, including optional chains and compound expressions. Recheck the binding after the read, or copy its narrowed value into a `const` beforehand. Ordinary uncaptured locals retain their narrowing unless directly assigned. This deliberately rejects some previously accepted code whose refinement could become stale; it is conservative even for a structural record that happens to contain only data fields. Loop summaries conservatively treat optional chains and unknown iteration as effects; exception/finally paths discard facts for potentially changed bindings. A loop that can exit through `break` does not establish that its condition became false.
+
+```arya
+try {
+  throw new Error("The operation failed")
+} catch error {
+  print(error.message)
+} finally {
+  print("cleanup")
+}
+```
+
+Errors include source locations and native source frames. Use `std "debug"` for assertions/inspection/tracing and `std "log"` for structured logs. [Security and debugging](native-security-debugging.md) documents practical controls. Expression nesting is bounded to 100; source and runtime resource limits remain enforced.
+
+## Familiarities and differences from JavaScript
+
+| Area | Arya native behavior |
+| --- | --- |
+| Familiar forms | `let`, `const`, braces, lists, property access, `async`/`await`, optional access and many host-style helpers |
+| Function/module syntax | `fn`, `use std`, `use arya`, `export fn`; no JavaScript `function`, `import` or npm resolution |
+| Equality and logic | `==` is strict; `and`/`or`/`not` are canonical logical forms |
+| Record syntax | Alpha.3 adds shorthand/computed/spread forms; keys must be strings and spread sources must be records |
+| Object model | No prototype chain, classes or complete JavaScript property-descriptor semantics |
+| Numbers/text | Binary64 arithmetic and UTF-16 indexing are familiar; exact decimals use explicit libraries |
+| Execution | Ahead-of-time C11/native executable with Arya's runtime; no Node or JavaScript execution engine |
+| Missing constructs | Destructuring, user generics, generators, template interpolation, ternaries and general JavaScript syntax are not accepted |
+
+The earlier aliases `keep`, `task`, `give`, `when`, `otherwise`, `each` and implicit `say` were already retired before alpha.3; use `const`, `fn`, `return`, `if`, `else`, `for` and `print`. Properties such as `ui.when` remain legal. This update adds syntax without renaming existing canonical forms. See [changes and verification](native-syntax.md) for qualification and remaining work.

@@ -16,7 +16,7 @@ if(!measureOnly)for(const name of ['baseline','candidate']){
   let code=readFileSync(join(root,'native/benchmarks/kernels.arya'),'utf8');
   if(name==='candidate')code=code.replace('# PARSED_KERNEL',`fn parsed(n) { const value = decimal.values.parse("123456789012345678901234567890.005"); let result = decimal.values.parse("0"); for i in range(n) { result = decimal.values.add(result, value) }; return decimal.values.format(result) }`).replace('if kind == "strings"','if kind == "parsed" { return parsed(n) }; if kind == "strings"');
   const source=join(dir,name+'.arya');writeFileSync(source,code);
-  const compiler=join(out,name==='baseline'?'baseline-sdk':'sdk-final','arya');const start=performance.now();
+  const compiler=name==='candidate'&&process.env.ARYA_BENCH_COMPILER?resolve(process.env.ARYA_BENCH_COMPILER):join(out,name==='baseline'?'baseline-sdk':'sdk-final','arya');const start=performance.now();
   run(compiler,['build',source,'-o',join(dir,name),'--release','--force']);
   run(compiler,['build',source,'-o',join(dir,name+'-counters'),'--release','--runtime-counters','--force']);
   artifacts[name]={compilerSha256:hash(compiler),sourceSha256:hash(source),binarySha256:hash(join(dir,name)),bytes:statSync(join(dir,name)).size,buildBothMs:performance.now()-start};

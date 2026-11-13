@@ -1,0 +1,131 @@
+{
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya",
+  "compilerSha256": "02ee8b454cc3a36c190250e7765346eab90ef326e99136e8bf5ce33dc4e35daa",
+  "tests": [
+    {
+      "name": "native-tests",
+      "command": [
+        "make",
+        "native-test"
+      ],
+      "status": 0,
+      "wallSeconds": 131.40883866700096,
+      "log": "qualified-native-tests.log",
+      "logSha256": "3ebe61d5e518ac9c71bb755a8fb5f1f010544c00bc7167e7ac9962a2f16708b6"
+    },
+    {
+      "name": "profile",
+      "command": [
+        "sh",
+        "native/tests/profile.sh"
+      ],
+      "status": 0,
+      "wallSeconds": 88.35218516700115,
+      "log": "qualified-profile.log",
+      "logSha256": "1c252bd829a0445a38ab1eb9bcd97b58ffc47e9c24b0c29a81dc1e8bf46f1df9"
+    },
+    {
+      "name": "editor-package",
+      "command": [
+        "sh",
+        "native/bootstrap/editor-package.sh"
+      ],
+      "status": 0,
+      "wallSeconds": 0.9957046669987903,
+      "log": "qualified-editor-package.log",
+      "logSha256": "a72db5aeb59b436a7942795eec9caea10e96d2efd17b43724af87e5f96364e9f"
+    },
+    {
+      "name": "types",
+      "command": [
+        "python3",
+        "native/tests/types-reference.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya"
+      ],
+      "status": 0,
+      "wallSeconds": 0.7917352090007626,
+      "log": "qualified-types.log",
+      "logSha256": "2253bab7bc8bc9651ee9cef6387bae1ed6e5d096eb8fbe8f28f8012b280039a1"
+    },
+    {
+      "name": "cache",
+      "command": [
+        "python3",
+        "native/tests/performance-reference.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya"
+      ],
+      "status": 0,
+      "wallSeconds": 6.584016666001844,
+      "log": "qualified-cache.log",
+      "logSha256": "5e8a64bc0c189f9af3fab1b2fce7e00e8d93141d10cdf0c1dc240372db778114"
+    },
+    {
+      "name": "project",
+      "command": [
+        "python3",
+        "native/tests/project-reference.py",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya"
+      ],
+      "status": 0,
+      "wallSeconds": 19.58325608299856,
+      "log": "qualified-project.log",
+      "logSha256": "a04947595406149c89afc675c21a2e29d6cd632ac6debbfd4ef831f378e89625"
+    },
+    {
+      "name": "decimal",
+      "command": [
+        "python3",
+        "native/tests/decimal-reference.py"
+      ],
+      "status": 0,
+      "wallSeconds": 69.80433400000038,
+      "log": "qualified-decimal.log",
+      "logSha256": "8239b89fd343901bd739936dd59af3bca3533db51c97d332b7dd2c54529fc50c"
+    },
+    {
+      "name": "json",
+      "command": [
+        "node",
+        "native/tests/json-reference.mjs"
+      ],
+      "status": 0,
+      "wallSeconds": 2.290489457998774,
+      "log": "qualified-json.log",
+      "logSha256": "2e7e3f0cd6600e57b74bc8b66c858a02e0968d5192ec542a6c41de22da3edfbd"
+    },
+    {
+      "name": "csv",
+      "command": [
+        "python3",
+        "native/tests/csv-reference.py"
+      ],
+      "status": 0,
+      "wallSeconds": 6.1784746250013995,
+      "log": "qualified-csv.log",
+      "logSha256": "b4ce03159633ec9acf89698b399da8a4804eef0c11be883ba1202aed73f2d303"
+    },
+    {
+      "name": "line-input",
+      "command": [
+        "python3",
+        "native/tests/io-reference.py"
+      ],
+      "status": 0,
+      "wallSeconds": 2.330487584000366,
+      "log": "qualified-line-input.log",
+      "logSha256": "554b569e89149f9ab211930d3b4e9b8f46b37af0a4e20bb5ba1ec7aadf3dd14c"
+    },
+    {
+      "name": "ledger-finance",
+      "command": [
+        "node",
+        "native/tests/ledger-finance.mjs",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12"
+      ],
+      "status": 0,
+      "wallSeconds": 6.517813208000007,
+      "log": "qualified-ledger-finance.log",
+      "logSha256": "ce6f3119c904ec15cb826acf21ae276564a866d2af63bd5daddc49c10a29d653"
+    }
+  ]
+}

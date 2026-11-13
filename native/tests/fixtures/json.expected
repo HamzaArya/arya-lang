@@ -7,3 +7,6 @@ TypeError
 TypeError
 0 2
 1 1
+256
+RangeError
+shared! shared

@@ -1,0 +1,23 @@
+{
+  "format": 1,
+  "lastResult": "1",
+  "lastDetails": "Hex: 0x00000001 · Binary: 00000000000000000000000000000001",
+  "history": [
+    {
+      "id": "ed96e2ab-4337-42cc-b150-56b322928a83",
+      "expression": "(0xFF AND 0b10101010) << 8",
+      "result": "43520",
+      "kind": "UInt32 / wrap",
+      "time": "2026-11-13T14:33:05.492Z",
+      "details": "Hex: 0x0000AA00 · Binary: 00000000000000001010101000000000"
+    },
+    {
+      "id": "785f77f6-1307-4ec3-91aa-22edefde5ca3",
+      "expression": "0xFFFFFFFF * 0xFFFFFFFF",
+      "result": "1",
+      "kind": "UInt32 / wrap",
+      "time": "2026-11-13T14:33:10.352Z",
+      "details": "Hex: 0x00000001 · Binary: 00000000000000000000000000000001"
+    }
+  ]
+}

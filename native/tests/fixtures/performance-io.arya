@@ -1,0 +1,16 @@
+use std "fs" as fs
+use std "debug" as debug
+use std "json" as json
+let completed = false
+let observedPendingRead = false
+let timer = new Promise(fn(resolve) {
+  setTimeout(fn() { observedPendingRead = not completed; resolve() }, 10)
+})
+print("native filesystem ready")
+if args[1] == "json-read" { debug.assert((await json.read(args[0])).value == "worker") }
+else if args[1] == "json-write" { await json.write(args[0], {value: "worker"}) }
+else { debug.assert(await fs.readText(args[0]) == "worker") }
+completed = true
+await timer
+debug.assert(observedPendingRead, "A filesystem read blocked the timer queue.")
+print("native filesystem scheduling passed")

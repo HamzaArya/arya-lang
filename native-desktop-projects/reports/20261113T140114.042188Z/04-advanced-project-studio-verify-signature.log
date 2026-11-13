@@ -1,0 +1,1 @@
+["codesign", "--verify", "--deep", "--strict", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-0edt44kc/Project Studio.app"]

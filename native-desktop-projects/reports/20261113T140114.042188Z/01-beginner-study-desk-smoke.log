@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/01-beginner-study-desk/.build/worker"]
+PASS: 26 Study Desk worker scenarios: full session/note lifecycle, dates, versions, persistence, failed-write rollback and corrupt-store preservation

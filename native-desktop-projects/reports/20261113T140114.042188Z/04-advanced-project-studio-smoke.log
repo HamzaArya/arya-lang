@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/04-advanced-project-studio/.build/worker"]
+PASS: project/task CRUD, project assignment, dates/overdue, progress, per-project active WIP including blocked work, protected project deletion, stale versions, history, persistence, write rollback, corrupt references

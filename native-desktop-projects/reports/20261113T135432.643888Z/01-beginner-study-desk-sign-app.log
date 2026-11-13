@@ -1,0 +1,2 @@
+["codesign", "--force", "--deep", "--sign", "-", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-g3230ncd/Study Desk.app"]
+/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-g3230ncd/Study Desk.app: replacing existing signature

@@ -1,126 +1,94 @@
-# Start with one useful Arya program
+# Your first Arya project
 
-Arya is a good fit to evaluate for readable Node.js applications that combine npm
-libraries and Python data processing. Start small before choosing it for an entire
-application. This is an experimental preview, not a promise of production stability.
+Complete [installation](installing.md) and put the intended SDK on PATH. `command -v arya` shows which compiler these commands will use. A C11 toolchain is needed for `run`, `build` and `test`; the compiled program then runs directly.
 
-## First success without Python or a custom editor
-
-Install Node.js 22.15 or newer. From a directory where you keep projects:
+## Create, check, test and run
 
 ```sh
-npm create arya-language@1.3.0-alpha.9 hello-arya -- --template cli
-cd hello-arya
-npm install
-npm run dev -- Hamza
-npm run check
-npm run build
+arya create prices --template cli
+cd prices
+arya check main.arya
+arya test main.test.arya
+arya run main.arya -- 19.95 3
+arya build main.arya -o ./prices --release
+./prices 19.95 3
 ```
 
-The CLI starter prints `Hello, Hamza!`. Open `main.arya` in any editor and change
-the greeting. Run it again. The project pins the published alpha.9 compiler.
-For future unpublished changes, use the [candidate/archive workflow](node-runtime.md#try-the-candidate).
+Both execution commands print `Total: 59.85`. The generated project contains `main.arya`, `main.test.arya`, `arya.json`, a Makefile and a README. Application arguments follow `--` when using `arya run`; a compiled executable receives them directly.
 
-Add `print(missingName)` at the end and run `npm run check`. Read the source
-location and unknown-name diagnostic, remove that line, then Check again. This
-shows how to recover from a mistake before introducing services or dependencies.
-
-For editor assistance follow [editor setup](editor-setup.md). AryaCode is optional.
-The published extension 1.3.4 contains compiler 1.3.0-alpha.9. Run
-`npx --no-install arya editor status` to see both identities. Extension version
-numbers are separate from compiler versions.
-
-## Add one Arya module to JavaScript
-
-Keep your existing JavaScript application. Add this `report.arya` beside its
-package.json:
+The starter uses exact decimal strings for amounts. Ordinary `number` values are binary64, so choose the data model deliberately:
 
 ```arya
-export fn total(values: number[]): number {
-  let result: number = 0
-  for value in values { result += value }
-  return result
+use std "decimal" as decimal
+
+fn total(price: string, quantity: string): string {
+  return decimal.quantize(decimal.multiply(price, quantity), 2, "half-even")
+}
+
+print(total("9007199254740993.01", "3"))
+```
+
+This prints `27021597764222979.03`. For currency-tagged amounts, journals and financial reports, use the [standard library](standard-library.md) and [accounting API](accounting-engine.md).
+
+## Split a project into modules
+
+Create `lib/prices.arya` beneath the project directory:
+
+```arya
+use std "decimal" as decimal
+
+export fn total(price: string, quantity: string): string {
+  return decimal.quantize(decimal.multiply(price, quantity), 2, "half-even")
 }
 ```
 
-Build only that module:
+Then `main.arya` can import it explicitly:
 
-```sh
-npx --no-install arya check report.arya
-npx --no-install arya build report.arya
+```arya
+use arya "./lib/prices.arya" as prices
+print(prices.total("19.95", "3"))
 ```
 
-Create `run-report.mjs`:
+Run `arya check main.arya`, then `arya run main.arya`. Imports stay within the entry file's project directory and reject module cycles. `export fn`, `export const` and other supported exports expose the module's public bindings. Native imports use `std`, `arya` or the explicit Python bridge; npm imports belong to the historical Node implementation.
 
-```js
-import {total} from './.arya/build/report.arya.mjs';
-console.log(total([10, 20, 30]));
+## Compose records
+
+The alpha.3 SDK supports shorthand fields, string computed keys and record spread:
+
+```arya
+const currency = "AFN"
+const defaults = {currency, scale: 0}
+const roundingKey: string = "rounding"
+const options = {...defaults, [roundingKey]: "half-even", scale: 2}
+print(JSON.stringify(options))
 ```
 
-Run `node --enable-source-maps run-report.mjs`; it prints `60`. The typed build
-also emits `report.arya.d.mts`. Checking is optional and bounded; declarations
-are not runtime input validation. Use [business API guidance](business-applications.md#optional-type-annotations)
-for trusted JavaScript/Python boundaries. For bundling existing projects, use the
-[esbuild adapter](business-applications.md#build-tests-and-tooling).
+`{currency}` means `{currency: currency}`. The spread copies the record's own stored fields into a new record, and later fields replace earlier values; `options` has scale `2` while `defaults` retains scale `0`. This is a shallow copy, and computed keys must be strings. Read the [language reference](arya-language.md) for the complete contracts and diagnostics. Older alpha.2 SDK archives do not contain this syntax.
 
-This lets you evaluate Arya without rewriting an application or replacing npm.
-Rebuild after source changes. Generated output under `.arya/build` is owned by
-the compiler; keep your handwritten files elsewhere.
+## Everyday workflow
 
-## Try the npm and Python reporting showcase
+| Task | Command |
+| --- | --- |
+| Check without running imports | `arya check main.arya` |
+| Machine-readable diagnostics | `arya check main.arya --json` |
+| Format source | `arya fmt main.arya` |
+| Verify formatting | `arya fmt main.arya --check` |
+| Additional diagnostics | `arya lint main.arya` |
+| Debug/sanitizer build | `arya build main.arya -o ./prices-debug --debug --sanitize` |
+| Replace your existing release output | `arya build main.arya -o ./prices --release --force` |
 
-The [reporting service](../fixtures/examples/python-web/README.md) combines input
-validation, Python CSV/statistics, JavaScript SHA-256, HTTP responses, bounded
-concurrency, cancellation and shutdown. Its consumer setup works without a
-repository checkout. Start with standard-library Python before adding packages.
+`arya run` reuses its compiler-owned output when source, dependencies and build inputs are unchanged. An explicit output path is protected against accidental replacement; `--force` makes replacement intentional. The [CLI reference](cli.md) documents options and native tooling.
 
-Use asynchronous/batched Python calls for servers. Calls still start fresh Python
-processes and transport JSON data, not live Python objects or callbacks. Measure
-your workload; batching reduces repeated startup, but this is not a claim that
-Arya accelerates Python computation. See [Python lifecycle and limits](python-async.md).
+## Choose another application template
 
-## Make your everyday workflow explicit
+| Template | Create command | Result |
+| --- | --- | --- |
+| Command line | `arya create my-cli --template cli` | An exact-decimal CLI and native tests |
+| HTTP API | `arya create my-api --template api` | Validated native HTTP endpoints |
+| Website | `arya create my-web --template web` | Native HTTP backend with browser assets |
+| UI | `arya create my-ui --template ui` | Declarative browser UI with native routes |
+| macOS desktop | `arya create my-desktop --template desktop` | AppKit/WebKit window with native routes |
 
-- Check: `npx --no-install arya check main.arya`.
-- Format: `npx --no-install arya fmt main.arya`; CI check: add `--check`.
-- Lint: `npx --no-install arya lint main.arya`.
-- Test: `npx --no-install arya test example.test.arya`, using Node's test/assert APIs.
-- Build: `npx --no-install arya build main.arya`; retain the printed entry and maps.
+Network starters handle shutdown signals. Browser content can include HTML, CSS and JavaScript; the Arya compiler and native server do not execute through Node. Desktop has additional macOS requirements, and the native HTTP server is not a complete TLS deployment solution.
 
-The existing [tooling guide](business-applications.md) documents these commands.
-The alpha.8 editor fixes cover open documents and bounded unfinished expressions,
-not automatic discovery of every file. Exported-symbol rename is refused in the
-editor until project coverage can be guaranteed.
-
-## Deploy a simple Node API deliberately
-
-For a CLI/API/web project, build on the intended Node version, then run the
-printed JavaScript entry directly, for example:
-
-```sh
-npm ci
-npm run check
-npm run build
-node --enable-source-maps .arya/build/main.arya.mjs
-```
-
-The generated starter's `npm start` runs the compiler and needs development
-dependencies. A direct Node entry avoids that launcher requirement. Keep the
-project layout, generated output/maps, HTML/public assets, and local Python files
-together; install imported npm runtime packages as production dependencies.
-Provide Node and the selected Python environment on the target. Do not copy only
-one generated module from a multi-file application. UI/Electron starters have
-additional launch/asset/runtime requirements and are separate qualification work.
-
-Test health checks, invalid inputs, cancellation, shutdown and configuration on
-the actual deployment target. Never put secrets in browser state or committed
-examples. Arya executes with Node's host access and is not an untrusted-code sandbox.
-
-## Help decide what to improve next
-
-Report the compiler and extension versions separately, OS/Node/Python versions,
-commands, the smallest failing source and expected/actual output. The
-[contributing guide](../CONTRIBUTING.md) explains regression reports; send security
-issues privately through [SECURITY.md](../SECURITY.md). Newcomer observations are
-valuable: record time to first successful run, blockers and help required rather
-than assuming that a tutorial passing automated tests means it is easy to use.
+Read [the language reference](arya-language.md) for syntax and types, [the native profile](native-profile.md) for compatibility and resource limits, and [the SDK guide](native-sdk.md) for editors and deployment. The runnable [journal report](../native/examples/journal-report.arya) and [security/debugging guide](native-security-debugging.md) show larger examples.

@@ -1,0 +1,71 @@
+{
+  "compilerSha256": "02ee8b454cc3a36c190250e7765346eab90ef326e99136e8bf5ce33dc4e35daa",
+  "environment": {
+    "PATH": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-tools"
+  },
+  "executionEnvironment": {
+    "PATH": "/nonexistent",
+    "ARYA_GC_STRESS": "1"
+  },
+  "tests": [
+    {
+      "name": "smoke",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-qualified/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-smoke.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-smoke",
+        "--release"
+      ],
+      "sha256": "7b9f38ec636f9a88fcd22691cc8533bb1bf830c0f032c5b45da2c39d05d26a37",
+      "output": {
+        "money": {
+          "amount": "100.10",
+          "currency": "USD",
+          "scale": 2,
+          "rounding": "half-even"
+        },
+        "rows": [
+          [
+            "account",
+            "amount"
+          ],
+          [
+            "Cash",
+            "100.005"
+          ]
+        ],
+        "exact": "9007199254740993.01"
+      },
+      "dependencies": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-smoke:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)\n"
+    },
+    {
+      "name": "stream",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-qualified/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-qualified/stream-ledger.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-stream",
+        "--release"
+      ],
+      "sha256": "fadb2a375e4a42ebeb9cda1c879c8b5faaa9a688ea2b648d2fdeb8c72c880fa9",
+      "output": {
+        "rows": 2,
+        "accounts": [
+          {
+            "account": "=print(99)",
+            "total": {
+              "amount": "100.01",
+              "currency": "USD",
+              "scale": 2,
+              "rounding": "half-even"
+            }
+          }
+        ]
+      },
+      "dependencies": "/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/sdk-stream:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)\n"
+    }
+  ]
+}

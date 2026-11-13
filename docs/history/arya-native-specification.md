@@ -1,9 +1,9 @@
 # Arya native profile contract
 
-> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../../compat/node/docs/node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
 
 
-**Historical implementation:** 1.2.0-alpha.4, retaining the 1.1.0-alpha.1 baseline and the 1.2 amendments below. Experimental and separate from the [Node profile](../arya-specification.md). The native compiler and runtime implement this profile; future alpha changes require conformance tests and migration notes.
+**Historical implementation:** 1.2.0-alpha.4, retaining the 1.1.0-alpha.1 baseline and the 1.2 amendments below. Experimental and separate from the [Node profile](../../compat/node/docs/arya-specification.md). The native compiler and runtime implement this profile; future alpha changes require conformance tests and migration notes.
 
 ## Syntax and compilation
 
@@ -93,4 +93,4 @@ The new `view` web grammar and the JavaScript profile's web/MySQL helpers are ou
 
 ## Safe expressions in 1.2.0-alpha.4
 
-The TypeScript-hosted and self-hosted native compilers support nullish coalescing (`??`), optional property/index/call chains (`?.`), and leading-dot multiline chains as specified in the [syntax contract](../syntax-and-debugging.md). Nullish checks distinguish null/undefined from zero, false, and empty strings. Skipped indexes/arguments do not execute; grouping ends the continuous optional chain. Native numeric specialization falls back to dynamic emission for these new operations. The shared safe-access fixture is verified under garbage-collection stress and through bootstrap stages. The JavaScript-only debug library does not expand the native library set.
+The TypeScript-hosted and self-hosted native compilers support nullish coalescing (`??`), optional property/index/call chains (`?.`), and leading-dot multiline chains as specified in the [syntax contract](../../compat/node/docs/syntax-and-debugging.md). Nullish checks distinguish null/undefined from zero, false, and empty strings. Skipped indexes/arguments do not execute; grouping ends the continuous optional chain. Native numeric specialization falls back to dynamic emission for these new operations. The shared safe-access fixture is verified under garbage-collection stress and through bootstrap stages. The JavaScript-only debug library does not expand the native library set.

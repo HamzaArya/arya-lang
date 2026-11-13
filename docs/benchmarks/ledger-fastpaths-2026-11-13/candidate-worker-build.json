@@ -1,0 +1,33 @@
+{
+  "startedAtUtc": "2026-11-13T03:24:56.371831+00:00",
+  "finishedAtUtc": "2026-11-13T03:25:04.104737+00:00",
+  "command": [
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+    "build",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/backend/src/arya/native-worker.arya",
+    "--output",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker",
+    "--release"
+  ],
+  "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+  "compilerSha256": "8a034a4dee8dd637b657dcb7df19d8811854c73a0c52ff1a7fbeb2a42de3e8ec",
+  "compilerVersion": "Arya native 2.0.0-alpha.2 (self-hosted)",
+  "sourceManifestSha256": "e35f659eea5158a5c4b21150a4e43e6c4d458dcc9010bd58657fc962d1df1a17",
+  "sdkStaticLibraries": {
+    "libcrypto.a": "45243fe734b3ca73668cd46c0825860461d7b64eff2825d7adae76d40feffb53",
+    "libllhttp.a": "25f5bc5785f3d45bd1bc5eeaebec366f530d30343064abd6797d7daaffc326b6",
+    "libarya-desktop.a": "de46177c9146bff822424ef278b5e42de9cf48af6b82819ab49e73d754230c1c",
+    "libpcre2-16.a": "a9803f6494f76dc4e40fc61d56c04685d6d8944027b89f4df0a31f63fc874dcd",
+    "libmpdec.a": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5",
+    "libada.a": "3a4fa6cad1c31fcf2465a6c9c0f68d4ebd90677d7b7ef55a79d1ac384c883bf7"
+  },
+  "binarySha256": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8",
+  "generatedCSha256": "ffffa46d153635774f4de78b024fa2734f1085a2a015d6e8d928d559bc5b57a2",
+  "noticeSha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "environment": {
+    "PATH": "/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/opt/homebrew/bin:/Users/hamza/.codex/tmp/arg0-macos/codex-arg0RoLurM:/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/sbin:/usr/local/mysql-9.7.0-macos15-arm64/bin:/Users/hamza/.vscode/extensions/openai.chatgpt-26.1106.51428-darwin-arm64/bin/macos-aarch64:/usr/local/mysql-9.7.0-macos15-arm64/bin",
+    "TZ": null
+  },
+  "allFrozenInputsUnchanged": true
+}

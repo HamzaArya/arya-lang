@@ -1,0 +1,44 @@
+[
+  {
+    "rows": 1000,
+    "name": "baseline-controlled",
+    "medianMs": 12.167875000000095,
+    "p95Ms": 15.282457999999991,
+    "medianTimerDelayMs": 0.8607499999998254
+  },
+  {
+    "rows": 1000,
+    "name": "qualified",
+    "medianMs": 3.700749999999971,
+    "p95Ms": 4.761207999999954,
+    "medianTimerDelayMs": 0.5542909999999779
+  },
+  {
+    "rows": 1000,
+    "name": "node",
+    "medianMs": 4.392667000000074,
+    "p95Ms": 7.84362499999952,
+    "medianTimerDelayMs": 0.9981250000000159
+  },
+  {
+    "rows": 10000,
+    "name": "baseline-controlled",
+    "medianMs": 343.8395840000003,
+    "p95Ms": 493.0410410000004,
+    "medianTimerDelayMs": 0.18316699999991215
+  },
+  {
+    "rows": 10000,
+    "name": "qualified",
+    "medianMs": 38.08416700000089,
+    "p95Ms": 56.959957999999915,
+    "medianTimerDelayMs": 0.20045800000116287
+  },
+  {
+    "rows": 10000,
+    "name": "node",
+    "medianMs": 38.843832999999904,
+    "p95Ms": 48.57570899999973,
+    "medianTimerDelayMs": 0.5007919999998194
+  }
+]

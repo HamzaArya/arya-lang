@@ -23,19 +23,19 @@ export fn check(ast, hooks) {
   }
   fn filter(value, excluded, retain) { let values = [value]; if types.kind(value) == "union" { values = value.values }; let result = []; for item in values { if (types.kind(item) == excluded) == retain { result.push(item) } }; return types.union(result) }
   fn nullish(node) { if node.kind == "literal" and node.value == null { return "null" }; if node.kind == "name" and node.name == "undefined" and hooks.global(node) { return "undefined" }; return null }
-  fn narrow(node, truth) {
-    if node.kind == "unary" and ["not", "!"].includes(node.operator) { narrow(node.value, not truth); return }
+  fn narrow(node, truth, skipCaptured) {
+    if node.kind == "unary" and ["not", "!"].includes(node.operator) { narrow(node.value, not truth, skipCaptured); return }
     if node.kind == "binary" and ["and", "or"].includes(node.operator) {
       let sequential = node.operator == "and"; let before = state.slice()
-      if truth == sequential { if not node.right.hasEffects { narrow(node.left, truth) }; narrow(node.right, truth) }
-      else { narrow(node.left, truth); let first = state; state = before; narrow(node.left, not truth); narrow(node.right, truth); state = join(first, state) }
+      if truth == sequential { narrow(node.left, truth, skipCaptured or node.right.hasEffects); narrow(node.right, truth, skipCaptured) }
+      else { narrow(node.left, truth, skipCaptured); let first = state; state = before; narrow(node.left, not truth, skipCaptured or node.right.hasEffects); narrow(node.right, truth, skipCaptured); state = join(first, state) }
       return
     }
     if node.kind == "binary" and ["==", "!="].includes(node.operator) {
       let name = node.left; let absent = nullish(node.right)
       if absent == null { absent = nullish(node.left); name = node.right }
-      if absent != null and name.kind == "name" and not hooks.global(name) { let binding = hooks.lookup(name); write(binding, filter(read(binding), absent, truth == (node.operator == "=="))) }
-    } else if truth and node.kind == "name" and not hooks.global(node) { let binding = hooks.lookup(node); write(binding, types.present(read(binding))) }
+      if absent != null and name.kind == "name" and not hooks.global(name) { let binding = hooks.lookup(name); if not (skipCaptured and binding.mutableCaptured) { write(binding, filter(read(binding), absent, truth == (node.operator == "=="))) } }
+    } else if truth and node.kind == "name" and not hooks.global(node) { let binding = hooks.lookup(node); if not (skipCaptured and binding.mutableCaptured) { write(binding, types.present(read(binding))) } }
   }
   fn invalidate() { effectSerial += 1; let values = state.slice(); for item in values { if item.binding.mutableCaptured { write(item.binding, declared(item.binding)) } } }
   fn writes(body, result) {
@@ -55,6 +55,69 @@ export fn check(ast, hooks) {
     return "number"
   }
   fn member(base, key, token) { if types.kind(base) == "unknown" { hooks.fail(token, "Unknown external value: validate it before reading members.", "ARYA_TYPE_UNKNOWN") }; try { return hooks.member(base, key, token) } catch failure { error(token, failure.message ?? str(failure)) } }
+  fn getterReceiver(value) {
+    let kind = types.kind(value)
+    if ["record", "any", "function"].includes(kind) { return true }
+    if kind == "union" { for option in value.values { if getterReceiver(option) { return true } } }
+    return false
+  }
+  fn readMember(base, key, token) {
+    let value = member(base, key, token)
+    # Native records and functions can hold getters. Apply their possible
+    # writes here, before the next operand, argument or optional-chain step.
+    if getterReceiver(base) { invalidate() }
+    return value
+  }
+  # Loop backedges can reach reads checked before a getter/call in the body.
+  # Summarize possible execution effects without visiting function bodies or
+  # assuming flow-sensitive types that a previous iteration could invalidate.
+  fn receiverEffects(node, iteration) {
+    if node.kind == "list" or node.kind == "literal" { return false }
+    if node.kind == "name" {
+      let value = "any"
+      if hooks.global(node) { value = hooks.infer(node) } else { value = declared(hooks.lookup(node)) }
+      if iteration { return not ["array", "string"].includes(types.kind(value)) }
+      return getterReceiver(value)
+    }
+    return true
+  }
+  fn viewEffects(children) {
+    for child in children {
+      if child.kind == "text" and expressionEffects(child.value) { return true }
+      if child.attributes != undefined { for field in child.attributes { if expressionEffects(field.value) { return true } } }
+      if child.children != undefined and viewEffects(child.children) { return true }
+    }
+    return false
+  }
+  fn expressionEffects(node) {
+    if node == null or node == undefined or ["name", "literal", "function"].includes(node.kind) { return false }
+    if ["call", "new", "pipe"].includes(node.kind) { return true }
+    if node.kind == "member" { return receiverEffects(node.object, false) or expressionEffects(node.object) or expressionEffects(node.key) }
+    if node.kind == "binary" { return expressionEffects(node.left) or expressionEffects(node.right) }
+    if node.kind == "unary" { return node.operator == "await" or expressionEffects(node.value) }
+    if node.kind == "object" { for field in node.fields { if field.spread or expressionEffects(field.computed) or expressionEffects(field.value) { return true } }; return false }
+    if node.kind == "list" { for item in node.items { if expressionEffects(item) { return true } }; return false }
+    if node.kind == "chain" { return true }
+    if node.kind == "view" { return viewEffects(node.children) }
+    return expressionEffects(node.value)
+  }
+  fn blockEffects(block) {
+    if block == null or block == undefined { return false }
+    for item in block.statements {
+      if item.kind == "function" { continue }
+      if expressionEffects(item.value) or expressionEffects(item.condition) or expressionEffects(item.iterable) { return true }
+      if item.kind == "assignment" {
+        if item.target.kind == "member" and item.operator == "=" { if expressionEffects(item.target.object) or expressionEffects(item.target.key) { return true } }
+        else if expressionEffects(item.target) { return true }
+      }
+      if item.kind == "for" and receiverEffects(item.iterable, true) { return true }
+      let never = item.kind == "while" and item.condition.kind == "literal" and item.condition.value == false
+      if not never and blockEffects(item.body) { return true }
+      if blockEffects(item.otherwise) or blockEffects(item.handler) or blockEffects(item.finalizer) { return true }
+      if not hooks.outcomes({statements: [item]}).includes("normal") { break }
+    }
+    return false
+  }
   fn invoke(signature, callArguments, values, token) {
     let kind = types.kind(signature)
     if kind == "any" { invalidate(); return "any" }
@@ -125,7 +188,7 @@ export fn check(ast, hooks) {
   fn functionCheck(node) {
     let signature = hooks.signature(node)
     if checked.includes(node) { return signature }; checked.push(node)
-    let saved = state; let savedReturns = returns; let previous = current
+    let saved = state; let savedReturns = returns; let previous = current; let savedEffects = effectSerial
     state = state.slice(); invalidate(); returns = []; current = node
     let index = 0
     for parameter in node.params {
@@ -136,7 +199,7 @@ export fn check(ast, hooks) {
     if node.rest != null { write(node.rest, node.rest.annotation ?? types.array("any")) }
     let continuing = body(node.body)
     if node.returnType == null { let values = returned(node.body); if hooks.outcomes(node.body).includes("normal") { values.push("undefined") }; let value = types.union(values); if node.async { value = types.promise(types.awaited(value)) }; signature.result = value }
-    state = saved; returns = savedReturns; current = previous
+    state = saved; returns = savedReturns; current = previous; effectSerial = savedEffects
     node.checkedType = signature; return signature
   }
   fn view(children) { for child in children { if child.kind == "text" { expression(child.value) }; if child.attributes != undefined { for field in child.attributes { expression(field.value) } }; if child.children != undefined { view(child.children) } } }
@@ -149,9 +212,28 @@ export fn check(ast, hooks) {
     else if node.kind == "function" { value = functionCheck(node) }
     else if node.kind == "view" { view(node.children); value = "string" }
     else if node.kind == "list" { let items = []; for item in node.items { let type = expression(item); if item.kind == "spread" and types.kind(type) == "array" { type = type.value }; items.push(type) }; value = types.array(types.union(items)) }
-    else if node.kind == "object" { let fields = {}; for field in node.fields { fields[field.key] = expression(field.value) }; value = types.record(fields) }
+    else if node.kind == "object" {
+      value = types.record({})
+      for field in node.fields {
+        if field.spread {
+          let source = expression(field.value)
+          if not types.recordSpreadable(source) { error(field.token, "Record spread requires a record, received " + types.text(source) + ".") }
+          value = types.recordSpread(value, source)
+          # Copying fields may invoke getters which mutate captured bindings.
+          invalidate()
+        } else {
+          let key = field.key
+          if field.computed != undefined {
+            let keyType = expression(field.computed)
+            if not types.assignable(keyType, "string") { error(field.token, "Computed record keys must be strings, received " + types.text(keyType) + ".") }
+            if field.computed.kind == "literal" and field.computed.token.kind == "string" { key = field.computed.value } else { value = "any" }
+          }
+          value = types.recordField(value, key, expression(field.value))
+        }
+      }
+    }
     else if node.kind == "spread" { value = expression(node.value); if not ["array", "string", "any"].includes(types.kind(value)) { error(node.token, "Spread requires an array or string, received " + types.text(value) + ".") } }
-    else if node.kind == "member" { let base = expression(node.object); expression(node.key); value = member(base, node.key, node.token) }
+    else if node.kind == "member" { let base = expression(node.object); expression(node.key); value = readMember(base, node.key, node.token) }
     else if node.kind == "binary" {
       let left = expression(node.left)
       if ["and", "or", "??"].includes(node.operator) {
@@ -178,7 +260,9 @@ export fn check(ast, hooks) {
       value = expression(node.base); let optional = false
       for step in node.steps {
         if step.optional { value = types.present(value); optional = true }
-        if step.kind == "member" { expression(step.key); value = member(value, step.key, step.token) }
+        # A skipped optional path cannot restore captured refinements: the
+        # taken path may have invoked a getter. Ordinary locals are unchanged.
+        if step.kind == "member" { expression(step.key); value = readMember(value, step.key, step.token) }
         else { let values = []; for argument in step.arguments { values.push(expression(argument)) }; value = invoke(value, step.arguments, values, step.token) }
       }
       if optional { value = types.union([value, "undefined"]) }
@@ -199,7 +283,7 @@ export fn check(ast, hooks) {
       } else if item.kind == "assignment" {
         let target = item.target; let binding = null; let expected = "any"; let before = "any"
         if target.kind == "name" { binding = hooks.lookup(target); before = read(binding); expected = declared(binding) }
-        else { let base = expression(target.object); expression(target.key); before = member(base, target.key, target.token); expected = before; if types.kind(base) == "array" { if target.key.kind == "literal" and target.key.value == "length" { expected = "number" } else { expected = base.value } } }
+        else { let base = expression(target.object); expression(target.key); if item.operator == "=" { before = member(base, target.key, target.token) } else { before = readMember(base, target.key, target.token) }; expected = before; if types.kind(base) == "array" { if target.key.kind == "literal" and target.key.value == "length" { expected = "number" } else { expected = base.value } } }
         let actual = expression(item.value); if item.operator != "=" { actual = binary(item.operator[0], before, actual, item.token) }
         compatible(actual, expected, item.value)
         if binding != null { write(binding, assigned(expected, actual)) }
@@ -209,21 +293,31 @@ export fn check(ast, hooks) {
         if yes and no { state = join(yesState, noState) } else if yes { state = yesState } else { state = noState }
         continuing = yes or no
       } else if item.kind == "while" or item.kind == "for" {
-        let changed = []; writes(item.body, changed); let before = state.slice()
+        let changed = []; writes(item.body, changed); let before = state.slice(); let beforeEffects = effectSerial
         let never = item.kind == "while" and item.condition.kind == "literal" and item.condition.value == false
-        if not never { invalidateWrites(changed) }
+        let mutates = expressionEffects(item.condition) or expressionEffects(item.iterable) or blockEffects(item.body)
+        if item.kind == "for" and receiverEffects(item.iterable, true) { mutates = true }
+        if not never { invalidateWrites(changed); if mutates { invalidate() } }
         if item.kind == "while" { expression(item.condition); narrow(item.condition, true) }
         else { let source = expression(item.iterable); let element = "any"; if types.kind(source) == "array" { element = source.value }; if types.kind(source) == "string" { element = "string" }; item.binding.inferredType = element; write(item.binding, element); if item.indexBinding != null { item.indexBinding.inferredType = "number"; write(item.indexBinding, "number") } }
         body(item.body); state = before
-        if not never { invalidateWrites(changed); if item.kind == "while" { narrow(item.condition, false) } }
+        if not never { invalidateWrites(changed); if mutates { invalidate() }; if item.kind == "while" and not hooks.outcomes(item.body).includes("break") { narrow(item.condition, false) } }
+        else { effectSerial = beforeEffects }
       } else if item.kind == "try" {
-        let before = state.slice(); let changed = []; writes(item.body, changed)
+        let before = state.slice(); let changed = []; writes(item.body, changed); let beforeEffects = effectSerial
         let yes = body(item.body); let normal = state
-        state = before; invalidateWrites(changed); let no = false
+        let mutated = effectSerial != beforeEffects
+        state = before; invalidateWrites(changed); if mutated { invalidate() }; let no = false
         if item.handler != null { if item.binding != null { write(item.binding, "any") }; no = body(item.handler) }
         if yes and no { state = join(normal, state) } else if yes { state = normal }
         continuing = yes or no
-        if item.finalizer != null { let finalContinues = body(item.finalizer); continuing = continuing and finalContinues }
+        if item.finalizer != null {
+          # Finally also runs after throws/returns/breaks whose intermediate
+          # states are not the normal-path state retained above.
+          writes(item.handler, changed); invalidateWrites(changed)
+          if effectSerial != beforeEffects { invalidate() }
+          let finalContinues = body(item.finalizer); continuing = continuing and finalContinues
+        }
       } else if item.kind == "return" {
         let value = expression(item.value)
         if current != null and current.async and types.kind(value) == "promise" { value = value.value }

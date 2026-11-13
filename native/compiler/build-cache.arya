@@ -1,27 +1,42 @@
-# Cache only compiler-owned run outputs, using exact generated C and build inputs.
+# Cache compiler-owned outputs using exact source/dependency contents and build inputs.
 use std "fs" as fs
 use std "path" as path
 use std "process" as process
 use std "runtime" as runtime
-fn tree(directory, result, depth) {
-  if depth > 24 or len(result) > 8192 { throw "Native SDK cache fingerprint exceeds its file limit." }
-  let info = fs.infoSync(directory); result.push({file: directory, info: info})
-  if info == null or info.type != "directory" { return }
-  let names = fs.listSync(directory).sort()
-  for name in names { tree(path.join(directory, name), result, depth + 1) }
-}
-export fn configuration(compiler, library, mode, sanitize, mysql) {
+export fn configuration(compiler, library, mode, sanitize, mysql, flags) {
   let executable = compiler; let search = process.env("PATH") ?? ""
   if not compiler.includes("/") { for directory in search.split(":") { let candidate = path.resolve(directory, compiler); if fs.isFile(candidate) { executable = path.realPath(candidate); break } } }
-  let files = []; tree(library, files, 0)
-  if mysql { tree(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "include"), files, 0); tree(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "lib"), files, 0) }
-  return {compiler: executable, compilerInfo: fs.infoSync(executable), library: library, mode: mode, sanitize: sanitize, platform: runtime.platform(), path: search, files: files, cpath: process.env("CPATH"), cIncludePath: process.env("C_INCLUDE_PATH"), libraryPath: process.env("LIBRARY_PATH"), sdkRoot: process.env("SDKROOT"), deploymentTarget: process.env("MACOSX_DEPLOYMENT_TARGET"), ccTarget: process.env("CCC_OVERRIDE_OPTIONS")}
+  let files = [fs._treeInfoSync(library)]
+  if mysql { files.push(fs._treeInfoSync(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "include"))); files.push(fs._treeInfoSync(path.join(process.env("ARYA_MYSQL_PREFIX") or "/usr/local/mysql", "lib"))) }
+  return {builder: process.executable(), builderInfo: fs.infoSync(process.executable()), mysql: mysql, flags: flags, compiler: executable, compilerInfo: fs.infoSync(executable), library: library, mode: mode, sanitize: sanitize, platform: runtime.platform(), path: search, files: files, cpath: process.env("CPATH"), cIncludePath: process.env("C_INCLUDE_PATH"), libraryPath: process.env("LIBRARY_PATH"), sdkRoot: process.env("SDKROOT"), deploymentTarget: process.env("MACOSX_DEPLOYMENT_TARGET"), ccTarget: process.env("CCC_OVERRIDE_OPTIONS")}
 }
-export fn reusable(output, source, code, configuration) {
+export fn reusable(output, source, compiler, library, mode, sanitize, flags) {
   try {
     let saved = runtime.jsonParse(fs.readTextSync(output + ".BUILD"))
-    if saved.nativeBuild != 1 or saved.source != source or not runtime.deepEqual(saved.configuration, configuration) or not runtime.deepEqual(saved.binary, fs.infoSync(output)) { return false }
-    return fs.isFile(output) and fs.readTextSync(output + ".c") == code
+    if saved.nativeBuild != 2 or saved.source != source or runtime.kind(saved.inputs) != "list" or runtime.kind(saved.edges) != "list" { return false }
+    let current = configuration(compiler, library, mode, sanitize, saved.configuration.mysql, flags)
+    if not runtime.deepEqual(saved.configuration, current) or not runtime.deepEqual(saved.binary, fs.infoSync(output)) or not runtime.deepEqual(saved.cfile, fs.infoSync(output + ".c")) { return false }
+    if not fs.isFile(output) { return false }
+    let entry = false
+    for input in saved.inputs { if input.file == source { entry = true }; if not fs.isFile(input.file) or fs.readTextSync(input.file) != input.source { return false } }
+    for edge in saved.edges { if path.realPath(edge.request) != edge.resolved { return false } }
+    return entry
   } catch _missing { return false }
 }
-export fn save(output, source, binary, configuration) { return runtime.jsonStringify({nativeBuild: 1, source: source, binary: fs.infoSync(binary), configuration: configuration}) + "\n" }
+export fn save(output, source, configuration, units) {
+  let inputs = []; let edges = []; let size = 0
+  for unit in units {
+    size += len(unit.source)
+    # Larger programs still build normally; avoid exceeding the JSON cache budget.
+    if size > 1048576 { return "{}\n" }
+    inputs.push({file: unit.filename, source: unit.source})
+    for item in unit.ast.statements {
+      if item.kind == "import" and item.unit != undefined {
+        let requested = path.resolve(path.dirname(unit.filename), item.specifier)
+        if item.bridge == "std" { requested = path.join(path.dirname(process.executable()), "stdlib", item.specifier + ".arya") }
+        edges.push({request: requested, resolved: item.unit.filename})
+      }
+    }
+  }
+  return runtime.jsonStringify({nativeBuild: 2, source: source, binary: fs.infoSync(output), cfile: fs.infoSync(output + ".c"), configuration: configuration, inputs: inputs, edges: edges}) + "\n"
+}

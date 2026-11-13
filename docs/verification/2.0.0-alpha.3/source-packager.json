@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "testedAtUtc": "2026-11-13T07:45:23.542659+00:00",
+  "scope": "Source packager preflight only; not a build or qualification of the final candidate compiler/source archive.",
+  "passed": false,
+  "version": "2.0.0-alpha.3",
+  "command": "env -i PATH=<retained clean tools> ARYA_PACKAGE_DIRECTORY=<owned preflight/packages> /bin/sh native/bootstrap/source-package.sh",
+  "environment": {
+    "platform": "darwin",
+    "machine": "arm64",
+    "cleanTools": "/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.TLilSo/tools",
+    "nodePythonAndJavaScriptEnginesAbsentFromPath": true,
+    "independentValidator": "Python 3.13.15"
+  },
+  "packagerSha256": "6ece302204b286f6288b334eadb5c4fa11eb8a9dc965a9882b28134929f7705b",
+  "documentationAssemblySha256": "910366446fd4e801623de6a09b05f5eb3e426b37793e4895e441b771e7ca1692",
+  "documentationCatalogSha256": "55c697476878827d26e0df77a74302874582ea0c234d4683694627dcf4216252",
+  "archive": {
+    "name": "arya-native-2.0.0-alpha.3-source.tar.gz",
+    "sha256": "533b4321436e6a03c74ebf02de80bd76c53bab74d38da1c6a150cb67097b85ce",
+    "checksumFileSha256": "7fc9303331f1d3c113ecad10301b41c2fee1339665246703a5f7d524c28ab985",
+    "bytes": 60017125,
+    "members": 826,
+    "fileChecksums": 749,
+    "sha256sumsSha256": "476f6701f024c22f1f9304988bc03a926ea7ac9d21c065874169b9aa412b6c68"
+  },
+  "checks": {
+    "archiveChecksumPassed": true,
+    "allFileChecksumsPassed": true,
+    "checksumInventoryCoversAllFiles": false,
+    "noCachesAppleDoubleOrSymlinks": true,
+    "buildInputsMatchOriginals": 426,
+    "vendoredInputsMatchOriginals": 172,
+    "checkoutInputsChangedDuringPackaging": [],
+    "retiredRuntimeAndEditorAdapterAbsent": true,
+    "documentation": {
+      "guides": 37,
+      "localLinks": 229,
+      "libraryModules": 26,
+      "issues": []
+    },
+    "overwriteRefused": true,
+    "overwritePreservedArchiveAndChecksumHashes": true
+  },
+  "evidenceDirectory": ".build/syntax-docs-2026-11-13/source-package-preflight",
+  "elapsedSeconds": 23.795,
+  "limitations": [
+    "No source bootstrap/application tests were executed by this preflight.",
+    "Compiler sources may change after this packaging-only proof.",
+    "Final release artifacts need their own integrity and build verification."
+  ],
+  "cleanup": "Owned preflight package/extraction directories removed after verification; archive hashes, inventories, input hashes and logs retained.",
+  "originalPreflightReportedPassed": true,
+  "correction": {
+    "reason": "The original validator excluded all files named SHA256SUMS, mirroring the packager omission. The stronger final archive audit found the nested evidence inventory missing from the root checksum list.",
+    "uncoveredFile": "docs/benchmarks/native-data-2026-11-12/SHA256SUMS",
+    "listedFileDigestsDidVerify": true,
+    "fixedIn": "stage-sdk.sh and source-package.sh now exclude only ./SHA256SUMS; final corrected archive inventory results are in delivery.json.",
+    "originalEvidence": "source-packager-original-preflight.json"
+  }
+}

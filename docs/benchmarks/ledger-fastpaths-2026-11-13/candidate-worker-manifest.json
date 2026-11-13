@@ -1,0 +1,22 @@
+{
+  "compiler": "Arya native 2.0.0-alpha.2 (self-hosted)",
+  "platform": "darwin",
+  "arch": "arm64",
+  "binarySha256": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8",
+  "sources": {
+    "bank-import.arya": "81c97a1d43c9b9323024dab202ff6149c6cd79efb1334b1f92d6c18693ea8d55",
+    "budget-variance.arya": "50d8de1c2d305a9d4aeb9be5c9a99393df6abb7d809514c3664eb4503aeab750",
+    "bank-matching.arya": "59d2c5ea32b10bd80fca1dcd273177ff3a93dee9df7f775dd7d536821ca82fd3",
+    "import-mappings.arya": "cfcca869f91df9d9f24376bae63a3abc1cfef72d10b81f3347d73887eb516b0f",
+    "report-preparation.arya": "54a2152b5dba6b8bc0afa935a1b62eb240fb4c473c442a106b8ece0bf843cd62",
+    "calculation-previews.arya": "1a601878501d663b47d66de8eba7363180ac352c5403da44c43da41910798b88",
+    "aging-settlement.arya": "d09b906c2152b63b105e4327bd02a2060de10479e315d8b31dfd237c7fff795e",
+    "schedule-rules.arya": "53808b9a1db2e79dbea4d0ce5d1739e61fa1773ca9caa9a053d5475e732a1ff8",
+    "money-policy.arya": "f1f137229a67aa08e866576d2d910f9892abed42350b79fd4ba7e6bbfdb75784",
+    "native-worker.arya": "353a972f101ba3302d6d347f2cebada1f1fb24e7290af8944e514338b3107787"
+  },
+  "productionTasks": [
+    "report-groups",
+    "schedule-production"
+  ]
+}

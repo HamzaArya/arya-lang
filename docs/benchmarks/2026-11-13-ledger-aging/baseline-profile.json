@@ -1,0 +1,995 @@
+{
+  "compilerSha256": "c9f8dfbef5bf7f040b23466b03938f0e3a695729bfd741008bfffebde6902612",
+  "sourceSha256": "a3fc317095c2f435b7f9c58b7ee19e6eef92f43cee73145f00b7ad9cbbf91826",
+  "phaseBinarySha256": "6f89e793c693338026e1b08dbf8d5efe73d61df5c3fa173a46fd7ca7dad6e0b1",
+  "instrumentedBinarySha256": "da75ba427405195f6b6a7f0cf25c693d59b1ee11b8161534e4038f22f8ae80d7",
+  "method": "Uninstrumented phase CPU, 3 discarded warmups and 9 retained samples in one persistent process per microkernel. Separate per-helper instrumented builds; inclusive helper totals overlap and incur clock overhead. amemory/aresize timings cover runtime allocator calls; libmpdec allocator hooks are measured separately from runtime allocation. Requested runtime bytes count amemory allocations, not every realloc. Managed bytes are live+uncollected, not RSS. macOS maxRSS is bytes, Linux KiB. Phase instrumentation itself perturbs CPU; use phase binary for timing.",
+  "summary": [
+    {
+      "task": "aging-settle",
+      "parseCpuMs": 1.23899999999999,
+      "calculateCpuMs": 35.407000000000025,
+      "stringifyCpuMs": 1.1049999999999671
+    },
+    {
+      "task": "allocation-index",
+      "parseCpuMs": 5.878999999999968,
+      "calculateCpuMs": 62.311999999999976,
+      "stringifyCpuMs": 1.0799999999999699
+    },
+    {
+      "task": "rounding",
+      "parseCpuMs": 0.33400000000000096,
+      "calculateCpuMs": 44.63099999999998,
+      "stringifyCpuMs": 0.007000000000034756
+    },
+    {
+      "task": "rounding-detached",
+      "parseCpuMs": 0.32999999999999696,
+      "calculateCpuMs": 44.15599999999997,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "properties",
+      "parseCpuMs": 4.468,
+      "calculateCpuMs": 0.4090000000000066,
+      "stringifyCpuMs": 0.002000000000002
+    },
+    {
+      "task": "updates",
+      "parseCpuMs": 5.063000000000012,
+      "calculateCpuMs": 1.5389999999999988,
+      "stringifyCpuMs": 1.1120000000000019
+    },
+    {
+      "task": "descriptors",
+      "parseCpuMs": 6.929999999999992,
+      "calculateCpuMs": 6.5660000000000025,
+      "stringifyCpuMs": 1.1469999999999954
+    },
+    {
+      "task": "sorting",
+      "parseCpuMs": 4.049000000000024,
+      "calculateCpuMs": 1.6690000000000038,
+      "stringifyCpuMs": 2.2549999999999932
+    },
+    {
+      "task": "allocation",
+      "parseCpuMs": 0.37399999999999933,
+      "calculateCpuMs": 2.3800000000000003,
+      "stringifyCpuMs": 1.9510000000000014
+    }
+  ],
+  "raw": [
+    {
+      "task": "aging-settle",
+      "sample": 0,
+      "parseCpuMs": 1.9030000000000158,
+      "calculateCpuMs": 38.88700000000001,
+      "stringifyCpuMs": 1.0830000000000006
+    },
+    {
+      "task": "aging-settle",
+      "sample": 1,
+      "parseCpuMs": 1.1720000000000064,
+      "calculateCpuMs": 35.011999999999986,
+      "stringifyCpuMs": 1.0830000000000006
+    },
+    {
+      "task": "aging-settle",
+      "sample": 2,
+      "parseCpuMs": 1.225999999999977,
+      "calculateCpuMs": 36.404999999999994,
+      "stringifyCpuMs": 1.1599999999999944
+    },
+    {
+      "task": "aging-settle",
+      "sample": 3,
+      "parseCpuMs": 1.8980000000000108,
+      "calculateCpuMs": 35.11799999999998,
+      "stringifyCpuMs": 1.1740000000000084
+    },
+    {
+      "task": "aging-settle",
+      "sample": 4,
+      "parseCpuMs": 1.1809999999999876,
+      "calculateCpuMs": 34.87100000000004,
+      "stringifyCpuMs": 1.1369999999999991
+    },
+    {
+      "task": "aging-settle",
+      "sample": 5,
+      "parseCpuMs": 1.23899999999999,
+      "calculateCpuMs": 35.407000000000025,
+      "stringifyCpuMs": 1.0879999999999779
+    },
+    {
+      "task": "aging-settle",
+      "sample": 6,
+      "parseCpuMs": 1.9379999999999953,
+      "calculateCpuMs": 35.09899999999999,
+      "stringifyCpuMs": 1.0749999999999926
+    },
+    {
+      "task": "aging-settle",
+      "sample": 7,
+      "parseCpuMs": 1.1339999999999684,
+      "calculateCpuMs": 35.59300000000004,
+      "stringifyCpuMs": 1.1049999999999671
+    },
+    {
+      "task": "aging-settle",
+      "sample": 8,
+      "parseCpuMs": 1.399000000000039,
+      "calculateCpuMs": 41.35100000000003,
+      "stringifyCpuMs": 1.3819999999999943
+    },
+    {
+      "task": "allocation-index",
+      "sample": 0,
+      "parseCpuMs": 5.775000000000002,
+      "calculateCpuMs": 64.67,
+      "stringifyCpuMs": 1.0799999999999699
+    },
+    {
+      "task": "allocation-index",
+      "sample": 1,
+      "parseCpuMs": 7.006000000000013,
+      "calculateCpuMs": 60.050999999999966,
+      "stringifyCpuMs": 1.0310000000000041
+    },
+    {
+      "task": "allocation-index",
+      "sample": 2,
+      "parseCpuMs": 5.886000000000003,
+      "calculateCpuMs": 57.93700000000002,
+      "stringifyCpuMs": 1.0270000000000001
+    },
+    {
+      "task": "allocation-index",
+      "sample": 3,
+      "parseCpuMs": 4.169000000000034,
+      "calculateCpuMs": 62.311999999999976,
+      "stringifyCpuMs": 1.1029999999999651
+    },
+    {
+      "task": "allocation-index",
+      "sample": 4,
+      "parseCpuMs": 4.0519999999999445,
+      "calculateCpuMs": 62.40000000000001,
+      "stringifyCpuMs": 1.0769999999999946
+    },
+    {
+      "task": "allocation-index",
+      "sample": 5,
+      "parseCpuMs": 5.434999999999968,
+      "calculateCpuMs": 60.342000000000006,
+      "stringifyCpuMs": 1.1569999999999636
+    },
+    {
+      "task": "allocation-index",
+      "sample": 6,
+      "parseCpuMs": 5.878999999999968,
+      "calculateCpuMs": 61.53400000000009,
+      "stringifyCpuMs": 1.0949999999999571
+    },
+    {
+      "task": "allocation-index",
+      "sample": 7,
+      "parseCpuMs": 6.454000000000071,
+      "calculateCpuMs": 63.28899999999993,
+      "stringifyCpuMs": 1.076000000000077
+    },
+    {
+      "task": "allocation-index",
+      "sample": 8,
+      "parseCpuMs": 6.060999999999983,
+      "calculateCpuMs": 63.13799999999992,
+      "stringifyCpuMs": 1.1120000000000019
+    },
+    {
+      "task": "rounding",
+      "sample": 0,
+      "parseCpuMs": 0.6609999999999949,
+      "calculateCpuMs": 46.54900000000001,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "rounding",
+      "sample": 1,
+      "parseCpuMs": 0.3300000000000247,
+      "calculateCpuMs": 43.335999999999984,
+      "stringifyCpuMs": 0.009000000000009
+    },
+    {
+      "task": "rounding",
+      "sample": 2,
+      "parseCpuMs": 0.33299999999999996,
+      "calculateCpuMs": 44.15200000000002,
+      "stringifyCpuMs": 0.006999999999979245
+    },
+    {
+      "task": "rounding",
+      "sample": 3,
+      "parseCpuMs": 0.33199999999999896,
+      "calculateCpuMs": 44.10599999999998,
+      "stringifyCpuMs": 0.007000000000034756
+    },
+    {
+      "task": "rounding",
+      "sample": 4,
+      "parseCpuMs": 0.33400000000000096,
+      "calculateCpuMs": 45.217000000000006,
+      "stringifyCpuMs": 0.007000000000034756
+    },
+    {
+      "task": "rounding",
+      "sample": 5,
+      "parseCpuMs": 0.33600000000000296,
+      "calculateCpuMs": 44.63099999999998,
+      "stringifyCpuMs": 0.008000000000008
+    },
+    {
+      "task": "rounding",
+      "sample": 6,
+      "parseCpuMs": 0.34199999999995345,
+      "calculateCpuMs": 45.31200000000002,
+      "stringifyCpuMs": 0.006999999999979245
+    },
+    {
+      "task": "rounding",
+      "sample": 7,
+      "parseCpuMs": 0.32399999999999096,
+      "calculateCpuMs": 45.00900000000002,
+      "stringifyCpuMs": 0.010999999999983245
+    },
+    {
+      "task": "rounding",
+      "sample": 8,
+      "parseCpuMs": 0.3429999999999822,
+      "calculateCpuMs": 44.220000000000034,
+      "stringifyCpuMs": 0.006999999999979245
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 0,
+      "parseCpuMs": 0.32099999999998796,
+      "calculateCpuMs": 45.483,
+      "stringifyCpuMs": 0.008000000000008
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 1,
+      "parseCpuMs": 0.3369999999999762,
+      "calculateCpuMs": 44.41100000000001,
+      "stringifyCpuMs": 0.0050000000000050004
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 2,
+      "parseCpuMs": 0.3250000000000197,
+      "calculateCpuMs": 44.15599999999997,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 3,
+      "parseCpuMs": 0.35000000000001696,
+      "calculateCpuMs": 44.52,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 4,
+      "parseCpuMs": 0.34200000000000896,
+      "calculateCpuMs": 43.366000000000014,
+      "stringifyCpuMs": 0.005999999999950489
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 5,
+      "parseCpuMs": 0.31999999999998696,
+      "calculateCpuMs": 45.99799999999998,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 6,
+      "parseCpuMs": 0.32999999999999696,
+      "calculateCpuMs": 43.590999999999994,
+      "stringifyCpuMs": 0.007000000000034756
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 7,
+      "parseCpuMs": 0.3410000000000357,
+      "calculateCpuMs": 43.26899999999995,
+      "stringifyCpuMs": 0.005000000000032756
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 8,
+      "parseCpuMs": 0.3189999999999582,
+      "calculateCpuMs": 43.81900000000005,
+      "stringifyCpuMs": 0.005999999999950489
+    },
+    {
+      "task": "properties",
+      "sample": 0,
+      "parseCpuMs": 3.5600000000000005,
+      "calculateCpuMs": 0.41200000000000264,
+      "stringifyCpuMs": 0.001000000000001
+    },
+    {
+      "task": "properties",
+      "sample": 1,
+      "parseCpuMs": 4.890999999999999,
+      "calculateCpuMs": 0.4190000000000027,
+      "stringifyCpuMs": 0.0029999999999960614
+    },
+    {
+      "task": "properties",
+      "sample": 2,
+      "parseCpuMs": 4.468,
+      "calculateCpuMs": 0.41400000000000464,
+      "stringifyCpuMs": 0.0019999999999950613
+    },
+    {
+      "task": "properties",
+      "sample": 3,
+      "parseCpuMs": 4.496999999999994,
+      "calculateCpuMs": 0.4950000000000093,
+      "stringifyCpuMs": 0.002000000000002
+    },
+    {
+      "task": "properties",
+      "sample": 4,
+      "parseCpuMs": 3.3269999999999964,
+      "calculateCpuMs": 0.4069999999999907,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "properties",
+      "sample": 5,
+      "parseCpuMs": 4.6380000000000035,
+      "calculateCpuMs": 0.3989999999999966,
+      "stringifyCpuMs": 0.002000000000002
+    },
+    {
+      "task": "properties",
+      "sample": 6,
+      "parseCpuMs": 4.536999999999999,
+      "calculateCpuMs": 0.38299999999999446,
+      "stringifyCpuMs": 0.004000000000004
+    },
+    {
+      "task": "properties",
+      "sample": 7,
+      "parseCpuMs": 4.304999999999989,
+      "calculateCpuMs": 0.4090000000000066,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "properties",
+      "sample": 8,
+      "parseCpuMs": 3.2940000000000054,
+      "calculateCpuMs": 0.4030000000000006,
+      "stringifyCpuMs": 0.002000000000002
+    },
+    {
+      "task": "updates",
+      "sample": 0,
+      "parseCpuMs": 4.723999999999999,
+      "calculateCpuMs": 1.582,
+      "stringifyCpuMs": 1.1120000000000019
+    },
+    {
+      "task": "updates",
+      "sample": 1,
+      "parseCpuMs": 6.284999999999999,
+      "calculateCpuMs": 1.5389999999999988,
+      "stringifyCpuMs": 1.3299999999999979
+    },
+    {
+      "task": "updates",
+      "sample": 2,
+      "parseCpuMs": 5.694000000000004,
+      "calculateCpuMs": 1.4399999999999968,
+      "stringifyCpuMs": 1.1079999999999979
+    },
+    {
+      "task": "updates",
+      "sample": 3,
+      "parseCpuMs": 4.503000000000007,
+      "calculateCpuMs": 1.2240000000000029,
+      "stringifyCpuMs": 1.0449999999999904
+    },
+    {
+      "task": "updates",
+      "sample": 4,
+      "parseCpuMs": 5.154999999999993,
+      "calculateCpuMs": 1.811000000000007,
+      "stringifyCpuMs": 1.6690000000000038
+    },
+    {
+      "task": "updates",
+      "sample": 5,
+      "parseCpuMs": 5.063000000000012,
+      "calculateCpuMs": 1.0989999999999889,
+      "stringifyCpuMs": 1.0460000000000191
+    },
+    {
+      "task": "updates",
+      "sample": 6,
+      "parseCpuMs": 4.56899999999999,
+      "calculateCpuMs": 1.1860000000000204,
+      "stringifyCpuMs": 1.0270000000000001
+    },
+    {
+      "task": "updates",
+      "sample": 7,
+      "parseCpuMs": 4.4399999999999995,
+      "calculateCpuMs": 1.8360000000000043,
+      "stringifyCpuMs": 1.566999999999985
+    },
+    {
+      "task": "updates",
+      "sample": 8,
+      "parseCpuMs": 6.670000000000009,
+      "calculateCpuMs": 2.346999999999988,
+      "stringifyCpuMs": 1.5999999999999903
+    },
+    {
+      "task": "descriptors",
+      "sample": 0,
+      "parseCpuMs": 6.724999999999995,
+      "calculateCpuMs": 5.359000000000003,
+      "stringifyCpuMs": 1.0539999999999994
+    },
+    {
+      "task": "descriptors",
+      "sample": 1,
+      "parseCpuMs": 6.153000000000006,
+      "calculateCpuMs": 6.5660000000000025,
+      "stringifyCpuMs": 1.1469999999999954
+    },
+    {
+      "task": "descriptors",
+      "sample": 2,
+      "parseCpuMs": 7.108000000000003,
+      "calculateCpuMs": 5.702999999999986,
+      "stringifyCpuMs": 1.1290000000000189
+    },
+    {
+      "task": "descriptors",
+      "sample": 3,
+      "parseCpuMs": 6.929999999999992,
+      "calculateCpuMs": 7.1269999999999945,
+      "stringifyCpuMs": 1.1879999999999946
+    },
+    {
+      "task": "descriptors",
+      "sample": 4,
+      "parseCpuMs": 8.579000000000004,
+      "calculateCpuMs": 6.428000000000017,
+      "stringifyCpuMs": 1.453999999999983
+    },
+    {
+      "task": "descriptors",
+      "sample": 5,
+      "parseCpuMs": 8.208999999999994,
+      "calculateCpuMs": 11.914000000000009,
+      "stringifyCpuMs": 1.1029999999999929
+    },
+    {
+      "task": "descriptors",
+      "sample": 6,
+      "parseCpuMs": 6.357000000000001,
+      "calculateCpuMs": 7.609000000000004,
+      "stringifyCpuMs": 1.6760000000000108
+    },
+    {
+      "task": "descriptors",
+      "sample": 7,
+      "parseCpuMs": 9.211000000000025,
+      "calculateCpuMs": 11.081999999999981,
+      "stringifyCpuMs": 1.7540000000000056
+    },
+    {
+      "task": "descriptors",
+      "sample": 8,
+      "parseCpuMs": 6.274000000000002,
+      "calculateCpuMs": 5.533999999999983,
+      "stringifyCpuMs": 1.1270000000000446
+    },
+    {
+      "task": "sorting",
+      "sample": 0,
+      "parseCpuMs": 4.088000000000001,
+      "calculateCpuMs": 1.6690000000000038,
+      "stringifyCpuMs": 2.2350000000000008
+    },
+    {
+      "task": "sorting",
+      "sample": 1,
+      "parseCpuMs": 3.8359999999999923,
+      "calculateCpuMs": 1.483999999999999,
+      "stringifyCpuMs": 2.2670000000000052
+    },
+    {
+      "task": "sorting",
+      "sample": 2,
+      "parseCpuMs": 3.9909999999999943,
+      "calculateCpuMs": 1.6560000000000046,
+      "stringifyCpuMs": 2.2549999999999932
+    },
+    {
+      "task": "sorting",
+      "sample": 3,
+      "parseCpuMs": 3.8760000000000043,
+      "calculateCpuMs": 1.9629999999999925,
+      "stringifyCpuMs": 2.3380000000000067
+    },
+    {
+      "task": "sorting",
+      "sample": 4,
+      "parseCpuMs": 4.558000000000007,
+      "calculateCpuMs": 1.566999999999985,
+      "stringifyCpuMs": 2.2310000000000105
+    },
+    {
+      "task": "sorting",
+      "sample": 5,
+      "parseCpuMs": 3.8529999999999953,
+      "calculateCpuMs": 1.9399999999999973,
+      "stringifyCpuMs": 2.472000000000002
+    },
+    {
+      "task": "sorting",
+      "sample": 6,
+      "parseCpuMs": 4.382999999999998,
+      "calculateCpuMs": 1.92500000000001,
+      "stringifyCpuMs": 2.3189999999999875
+    },
+    {
+      "task": "sorting",
+      "sample": 7,
+      "parseCpuMs": 4.061000000000009,
+      "calculateCpuMs": 1.7419999999999936,
+      "stringifyCpuMs": 2.1790000000000145
+    },
+    {
+      "task": "sorting",
+      "sample": 8,
+      "parseCpuMs": 4.049000000000024,
+      "calculateCpuMs": 1.6149999999999776,
+      "stringifyCpuMs": 2.246999999999999
+    },
+    {
+      "task": "allocation",
+      "sample": 0,
+      "parseCpuMs": 0.397999999999999,
+      "calculateCpuMs": 2.1839999999999984,
+      "stringifyCpuMs": 2.069999999999999
+    },
+    {
+      "task": "allocation",
+      "sample": 1,
+      "parseCpuMs": 0.42299999999999977,
+      "calculateCpuMs": 2.169000000000004,
+      "stringifyCpuMs": 1.9510000000000014
+    },
+    {
+      "task": "allocation",
+      "sample": 2,
+      "parseCpuMs": 0.36800000000000027,
+      "calculateCpuMs": 2.6149999999999993,
+      "stringifyCpuMs": 1.9909999999999997
+    },
+    {
+      "task": "allocation",
+      "sample": 3,
+      "parseCpuMs": 0.3929999999999975,
+      "calculateCpuMs": 2.5560000000000027,
+      "stringifyCpuMs": 2.0789999999999975
+    },
+    {
+      "task": "allocation",
+      "sample": 4,
+      "parseCpuMs": 0.36900000000000127,
+      "calculateCpuMs": 2.3800000000000003,
+      "stringifyCpuMs": 1.9510000000000014
+    },
+    {
+      "task": "allocation",
+      "sample": 5,
+      "parseCpuMs": 0.37399999999999933,
+      "calculateCpuMs": 1.8550000000000093,
+      "stringifyCpuMs": 1.930000000000001
+    },
+    {
+      "task": "allocation",
+      "sample": 6,
+      "parseCpuMs": 0.37299999999999833,
+      "calculateCpuMs": 2.225000000000005,
+      "stringifyCpuMs": 1.9559999999999995
+    },
+    {
+      "task": "allocation",
+      "sample": 7,
+      "parseCpuMs": 0.3630000000000022,
+      "calculateCpuMs": 2.473000000000003,
+      "stringifyCpuMs": 1.9009999999999998
+    },
+    {
+      "task": "allocation",
+      "sample": 8,
+      "parseCpuMs": 0.39100000000000246,
+      "calculateCpuMs": 2.5280000000000022,
+      "stringifyCpuMs": 1.90499999999999
+    }
+  ],
+  "diagnostics": [
+    {
+      "task": "aging-settle",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 23.769,
+          "gcCpuMs": 0.09,
+          "allocatorCpuMs": 5.651,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 4322,
+          "requestedBytes": 807574,
+          "managedBytes": 1600918
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 202.38,
+          "gcCpuMs": 2.069,
+          "allocatorCpuMs": 45.325,
+          "decimalAllocatorCpuMs": 15.416,
+          "decimalRequestedBytes": 3527032,
+          "objects": 44822,
+          "requestedBytes": 12577439,
+          "managedBytes": 3692204
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.1189999999999998,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0020000000000024443,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 813248,
+          "managedBytes": 813246
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":6.076000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.192000,\"objects\":229,\"requestedBytes\":9271898,\"managedBytes\":457480,\"maxRssPlatformUnits\":11304960}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":29.845000,\"gcCpuMs\":0.090000,\"allocatorCpuMs\":5.843000,\"objects\":4551,\"requestedBytes\":10079472,\"managedBytes\":2058398,\"maxRssPlatformUnits\":13090816}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":232.225000,\"gcCpuMs\":2.159000,\"allocatorCpuMs\":51.168000,\"objects\":49373,\"requestedBytes\":22656911,\"managedBytes\":5750602,\"maxRssPlatformUnits\":18579456}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":15.416000,\"requestedBytes\":3527032}\nARYA_PHASE {\"cpuMs\":233.344000,\"gcCpuMs\":2.159000,\"allocatorCpuMs\":51.170000,\"objects\":49375,\"requestedBytes\":23470159,\"managedBytes\":6563848,\"maxRssPlatformUnits\":19496960}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":15.416000,\"requestedBytes\":3527032}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":7285,\"inclusiveCpuMs\":66.360000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":69979,\"inclusiveCpuMs\":17.371000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":40112,\"inclusiveCpuMs\":47.311000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":2015,\"inclusiveCpuMs\":1.520000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":7,\"inclusiveCpuMs\":8.861000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":156140,\"inclusiveCpuMs\":40.663000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":42004,\"inclusiveCpuMs\":10.519000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":21033,\"inclusiveCpuMs\":60.737000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":21855,\"callocCalls\":0,\"reallocCalls\":12012,\"freeCalls\":21855,\"requestedBytes\":3527032,\"allocatorCpuMs\":15.416000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":156140,\"heapObjects\":49378,\"environments\":2,\"functions\":7428,\"genericCalls\":30780,\"directCalls\":12749,\"numericCalls\":0,\"heapTemporaries\":2005,\"gcCollections\":5,\"peakManagedBytes\":7522602,\"scalarCalls\":0,\"rootedCalls\":28333,\"rootPushes\":63597,\"environmentLookups\":2045}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":25865873,\"strings\":30844,\"stringUnits\":1275202,\"jsonKeyHits\":11990,\"fieldCacheHits\":41548,\"decimalFastPaths\":0,\"gcCpuMs\":2.771000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":156140,\"heapObjects\":49378,\"environments\":2,\"functions\":7428,\"genericCalls\":30780,\"directCalls\":12749,\"numericCalls\":0,\"heapTemporaries\":2005,\"gcCollections\":5,\"peakManagedBytes\":7522600,\"scalarCalls\":0,\"rootedCalls\":28333,\"rootPushes\":63597,\"environmentLookups\":2045}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":25865868,\"strings\":30844,\"stringUnits\":1275201,\"jsonKeyHits\":11990,\"fieldCacheHits\":41548,\"decimalFastPaths\":0,\"gcCpuMs\":2.708000}\n"
+    },
+    {
+      "task": "allocation-index",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 91.475,
+          "gcCpuMs": 0.249,
+          "allocatorCpuMs": 24.477999999999998,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3814526,
+          "managedBytes": 6128126
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 404.727,
+          "gcCpuMs": 6.953,
+          "allocatorCpuMs": 89.081,
+          "decimalAllocatorCpuMs": 22.931,
+          "decimalRequestedBytes": 5413216,
+          "objects": 87005,
+          "requestedBytes": 18214921,
+          "managedBytes": 1393044
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.1539999999999964,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.01999999999999602,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 373822,
+          "managedBytes": 373820
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":8.361000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.207000,\"objects\":229,\"requestedBytes\":11211270,\"managedBytes\":1427166,\"maxRssPlatformUnits\":13729792}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":99.836000,\"gcCpuMs\":0.249000,\"allocatorCpuMs\":24.685000,\"objects\":20322,\"requestedBytes\":15025796,\"managedBytes\":7555292,\"maxRssPlatformUnits\":20004864}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":504.563000,\"gcCpuMs\":7.202000,\"allocatorCpuMs\":113.766000,\"objects\":107327,\"requestedBytes\":33240717,\"managedBytes\":8948336,\"maxRssPlatformUnits\":29392896}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":22.931000,\"requestedBytes\":5413216}\nARYA_PHASE {\"cpuMs\":505.717000,\"gcCpuMs\":7.202000,\"allocatorCpuMs\":113.786000,\"objects\":107329,\"requestedBytes\":33614539,\"managedBytes\":9322156,\"maxRssPlatformUnits\":29392896}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":22.931000,\"requestedBytes\":5413216}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":9565,\"inclusiveCpuMs\":101.388000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":178459,\"inclusiveCpuMs\":48.180000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":90097,\"inclusiveCpuMs\":112.069000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":19565,\"inclusiveCpuMs\":27.603000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":320565,\"inclusiveCpuMs\":88.795000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":99097,\"inclusiveCpuMs\":25.026000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":48260,\"inclusiveCpuMs\":148.055000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":28695,\"callocCalls\":0,\"reallocCalls\":19130,\"freeCalls\":28695,\"requestedBytes\":5413216,\"allocatorCpuMs\":22.931000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":320565,\"heapObjects\":107332,\"environments\":2,\"functions\":9664,\"genericCalls\":57834,\"directCalls\":29134,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":16969244,\"scalarCalls\":0,\"rootedCalls\":57833,\"rootPushes\":166633,\"environmentLookups\":43}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":34639293,\"strings\":68081,\"stringUnits\":1538658,\"jsonKeyHits\":39996,\"fieldCacheHits\":72462,\"decimalFastPaths\":0,\"gcCpuMs\":8.036000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":320565,\"heapObjects\":107332,\"environments\":2,\"functions\":9664,\"genericCalls\":57834,\"directCalls\":29134,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":16969244,\"scalarCalls\":0,\"rootedCalls\":57833,\"rootPushes\":166633,\"environmentLookups\":43}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":34639343,\"strings\":68081,\"stringUnits\":1538668,\"jsonKeyHits\":39996,\"fieldCacheHits\":72462,\"decimalFastPaths\":0,\"gcCpuMs\":11.224000}\n"
+    },
+    {
+      "task": "rounding",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.704000000000001,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.6029999999999998,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1306,
+          "managedBytes": 394906
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 169.81799999999998,
+          "gcCpuMs": 1.307,
+          "allocatorCpuMs": 34.659,
+          "decimalAllocatorCpuMs": 24.523,
+          "decimalRequestedBytes": 5651000,
+          "objects": 40022,
+          "requestedBytes": 8105645,
+          "managedBytes": 784234
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.019000000000005457,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.003999999999997783,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 428,
+          "managedBytes": 426
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":4.244000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.216000,\"objects\":229,\"requestedBytes\":8728126,\"managedBytes\":185594,\"maxRssPlatformUnits\":10616832}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.948000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.819000,\"objects\":236,\"requestedBytes\":8729432,\"managedBytes\":580500,\"maxRssPlatformUnits\":11141120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":179.766000,\"gcCpuMs\":1.307000,\"allocatorCpuMs\":37.478000,\"objects\":40258,\"requestedBytes\":16835077,\"managedBytes\":1364734,\"maxRssPlatformUnits\":13107200}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":24.523000,\"requestedBytes\":5651000}\nARYA_PHASE {\"cpuMs\":179.785000,\"gcCpuMs\":1.307000,\"allocatorCpuMs\":37.482000,\"objects\":40260,\"requestedBytes\":16835505,\"managedBytes\":1365160,\"maxRssPlatformUnits\":13107200}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":24.523000,\"requestedBytes\":5651000}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":10000,\"inclusiveCpuMs\":107.270000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":10091,\"inclusiveCpuMs\":2.697000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":82,\"inclusiveCpuMs\":0.122000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":120666,\"inclusiveCpuMs\":34.862000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":10082,\"inclusiveCpuMs\":2.624000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":32.651000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":30000,\"callocCalls\":0,\"reallocCalls\":20000,\"freeCalls\":30000,\"requestedBytes\":5651000,\"allocatorCpuMs\":24.523000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":120666,\"heapObjects\":40263,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":2220534,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16836814,\"strings\":20158,\"stringUnits\":180303,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":1.455000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":120666,\"heapObjects\":40263,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":2220534,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16836884,\"strings\":20158,\"stringUnits\":180317,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":1.481000}\n"
+    },
+    {
+      "task": "rounding-detached",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.2330000000000005,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.3850000000000002,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1324,
+          "managedBytes": 394924
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 161.677,
+          "gcCpuMs": 1.433,
+          "allocatorCpuMs": 32.231,
+          "decimalAllocatorCpuMs": 23.264,
+          "decimalRequestedBytes": 5651000,
+          "objects": 40022,
+          "requestedBytes": 8105645,
+          "managedBytes": 784234
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.02199999999999136,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 428,
+          "managedBytes": 426
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":4.083000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.179000,\"objects\":229,\"requestedBytes\":8728162,\"managedBytes\":185612,\"maxRssPlatformUnits\":10616832}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.316000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.564000,\"objects\":236,\"requestedBytes\":8729486,\"managedBytes\":580536,\"maxRssPlatformUnits\":11141120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":170.993000,\"gcCpuMs\":1.433000,\"allocatorCpuMs\":34.795000,\"objects\":40258,\"requestedBytes\":16835131,\"managedBytes\":1364770,\"maxRssPlatformUnits\":13107200}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":23.264000,\"requestedBytes\":5651000}\nARYA_PHASE {\"cpuMs\":171.015000,\"gcCpuMs\":1.433000,\"allocatorCpuMs\":34.795000,\"objects\":40260,\"requestedBytes\":16835559,\"managedBytes\":1365196,\"maxRssPlatformUnits\":13107200}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":23.264000,\"requestedBytes\":5651000}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":10000,\"inclusiveCpuMs\":103.107000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":10091,\"inclusiveCpuMs\":2.516000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":82,\"inclusiveCpuMs\":0.108000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":120666,\"inclusiveCpuMs\":32.396000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":10082,\"inclusiveCpuMs\":2.402000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":28.795000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":30000,\"callocCalls\":0,\"reallocCalls\":20000,\"freeCalls\":30000,\"requestedBytes\":5651000,\"allocatorCpuMs\":23.264000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":120666,\"heapObjects\":40263,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":2220570,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16836868,\"strings\":20158,\"stringUnits\":180321,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":1.602000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":120666,\"heapObjects\":40263,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":6,\"peakManagedBytes\":2220570,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16836873,\"strings\":20158,\"stringUnits\":180322,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":1.506000}\n"
+    },
+    {
+      "task": "properties",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 73.691,
+          "gcCpuMs": 0.174,
+          "allocatorCpuMs": 17.976,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 12861,
+          "requestedBytes": 2401354,
+          "managedBytes": 4804042
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 0.8140000000000072,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0020000000000024443,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 0,
+          "requestedBytes": 1008,
+          "managedBytes": 0
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.01099999999999568,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0019999999999988916,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 402,
+          "managedBytes": 400
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":7.930000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.197000,\"objects\":229,\"requestedBytes\":10909966,\"managedBytes\":1276514,\"maxRssPlatformUnits\":13352960}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":81.621000,\"gcCpuMs\":0.174000,\"allocatorCpuMs\":18.173000,\"objects\":13090,\"requestedBytes\":13311320,\"managedBytes\":6080556,\"maxRssPlatformUnits\":18432000}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":82.435000,\"gcCpuMs\":0.174000,\"allocatorCpuMs\":18.175000,\"objects\":13090,\"requestedBytes\":13312328,\"managedBytes\":6080556,\"maxRssPlatformUnits\":18448384}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":82.446000,\"gcCpuMs\":0.174000,\"allocatorCpuMs\":18.177000,\"objects\":13092,\"requestedBytes\":13312730,\"managedBytes\":6080956,\"maxRssPlatformUnits\":18448384}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":36080,\"inclusiveCpuMs\":9.160000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":36067,\"inclusiveCpuMs\":45.941000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":27164,\"inclusiveCpuMs\":7.709000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":39067,\"inclusiveCpuMs\":10.474000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":27164,\"heapObjects\":13095,\"environments\":2,\"functions\":79,\"genericCalls\":3008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6081924,\"scalarCalls\":0,\"rootedCalls\":3007,\"rootPushes\":39086,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13313979,\"strings\":6998,\"stringUnits\":670772,\"jsonKeyHits\":35988,\"fieldCacheHits\":11999,\"decimalFastPaths\":0,\"gcCpuMs\":0.696000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":27164,\"heapObjects\":13095,\"environments\":2,\"functions\":79,\"genericCalls\":3008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6081948,\"scalarCalls\":0,\"rootedCalls\":3007,\"rootPushes\":39086,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13314039,\"strings\":6998,\"stringUnits\":670784,\"jsonKeyHits\":35988,\"fieldCacheHits\":11999,\"decimalFastPaths\":0,\"gcCpuMs\":0.687000}\n"
+    },
+    {
+      "task": "updates",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 96.935,
+          "gcCpuMs": 0.288,
+          "allocatorCpuMs": 25.445,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3814508,
+          "managedBytes": 6128108
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 19.533,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.5859999999999985,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 1,
+          "requestedBytes": 524480,
+          "managedBytes": 1048784
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.11399999999999,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.007999999999999119,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 374232,
+          "managedBytes": 374216
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":10.289000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.297000,\"objects\":229,\"requestedBytes\":11211234,\"managedBytes\":1427148,\"maxRssPlatformUnits\":13746176}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":107.224000,\"gcCpuMs\":0.288000,\"allocatorCpuMs\":25.742000,\"objects\":20322,\"requestedBytes\":15025742,\"managedBytes\":7555256,\"maxRssPlatformUnits\":20021248}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":126.757000,\"gcCpuMs\":0.288000,\"allocatorCpuMs\":28.328000,\"objects\":20323,\"requestedBytes\":15550222,\"managedBytes\":8604040,\"maxRssPlatformUnits\":21168128}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":127.871000,\"gcCpuMs\":0.288000,\"allocatorCpuMs\":28.336000,\"objects\":20326,\"requestedBytes\":15924454,\"managedBytes\":8978256,\"maxRssPlatformUnits\":21528576}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":50079,\"inclusiveCpuMs\":14.985000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":50067,\"inclusiveCpuMs\":69.089000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":40875,\"inclusiveCpuMs\":12.368000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":59067,\"inclusiveCpuMs\":15.995000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":40875,\"heapObjects\":20329,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9388850,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":50087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16949768,\"strings\":10231,\"stringUnits\":1210786,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":1.256000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":40875,\"heapObjects\":20329,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9388828,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":50087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16949713,\"strings\":10231,\"stringUnits\":1210775,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":1.339000}\n"
+    },
+    {
+      "task": "descriptors",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 113.152,
+          "gcCpuMs": 0.339,
+          "allocatorCpuMs": 30.063000000000002,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3814516,
+          "managedBytes": 6128116
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 151.378,
+          "gcCpuMs": 4.013999999999999,
+          "allocatorCpuMs": 31.073999999999998,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20027,
+          "requestedBytes": 4329472,
+          "managedBytes": 5460128
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.2240000000000464,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.006000000000000227,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 374232,
+          "managedBytes": 374216
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":9.341000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.226000,\"objects\":229,\"requestedBytes\":11211250,\"managedBytes\":1427156,\"maxRssPlatformUnits\":13729792}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":122.493000,\"gcCpuMs\":0.339000,\"allocatorCpuMs\":30.289000,\"objects\":20322,\"requestedBytes\":15025766,\"managedBytes\":7555272,\"maxRssPlatformUnits\":19791872}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":273.871000,\"gcCpuMs\":4.353000,\"allocatorCpuMs\":61.363000,\"objects\":40349,\"requestedBytes\":19355238,\"managedBytes\":13015400,\"maxRssPlatformUnits\":21020672}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":275.095000,\"gcCpuMs\":4.353000,\"allocatorCpuMs\":61.369000,\"objects\":40352,\"requestedBytes\":19729470,\"managedBytes\":13389616,\"maxRssPlatformUnits\":21020672}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":110092,\"inclusiveCpuMs\":35.748000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":90080,\"inclusiveCpuMs\":136.019000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":10000,\"inclusiveCpuMs\":23.312000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":90937,\"inclusiveCpuMs\":31.735000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":99080,\"inclusiveCpuMs\":29.647000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":39.493000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":90937,\"heapObjects\":40355,\"environments\":2,\"functions\":92,\"genericCalls\":10008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":4,\"peakManagedBytes\":13800192,\"scalarCalls\":0,\"rootedCalls\":10007,\"rootPushes\":80099,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":20754739,\"strings\":20243,\"stringUnits\":1270885,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":5.867000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":90937,\"heapObjects\":40355,\"environments\":2,\"functions\":92,\"genericCalls\":10008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":4,\"peakManagedBytes\":13800210,\"scalarCalls\":0,\"rootedCalls\":10007,\"rootPushes\":80099,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":20754784,\"strings\":20243,\"stringUnits\":1270894,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":2.627000}\n"
+    },
+    {
+      "task": "sorting",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 82.39099999999999,
+          "gcCpuMs": 0.207,
+          "allocatorCpuMs": 20.069,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 12861,
+          "requestedBytes": 2401348,
+          "managedBytes": 4804036
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 13.924000000000007,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 4.532,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3006,
+          "requestedBytes": 997968,
+          "managedBytes": 861456
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 2.536999999999992,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.038000000000000256,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 1229341,
+          "managedBytes": 1229318
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":8.519000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.221000,\"objects\":229,\"requestedBytes\":10909954,\"managedBytes\":1276508,\"maxRssPlatformUnits\":13320192}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":90.910000,\"gcCpuMs\":0.207000,\"allocatorCpuMs\":20.290000,\"objects\":13090,\"requestedBytes\":13311302,\"managedBytes\":6080544,\"maxRssPlatformUnits\":18399232}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":104.834000,\"gcCpuMs\":0.207000,\"allocatorCpuMs\":24.822000,\"objects\":16096,\"requestedBytes\":14309270,\"managedBytes\":6942000,\"maxRssPlatformUnits\":19529728}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":107.371000,\"gcCpuMs\":0.207000,\"allocatorCpuMs\":24.860000,\"objects\":16099,\"requestedBytes\":15538611,\"managedBytes\":8171318,\"maxRssPlatformUnits\":19660800}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":39080,\"inclusiveCpuMs\":11.005000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":36068,\"inclusiveCpuMs\":51.172000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":1,\"inclusiveCpuMs\":13.829000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":39178,\"inclusiveCpuMs\":12.315000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":42068,\"inclusiveCpuMs\":12.570000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":3000,\"inclusiveCpuMs\":10.086000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":39178,\"heapObjects\":16102,\"environments\":2,\"functions\":81,\"genericCalls\":6009,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9628994,\"scalarCalls\":0,\"rootedCalls\":3008,\"rootPushes\":51088,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":19181630,\"strings\":9999,\"stringUnits\":2031482,\"jsonKeyHits\":35988,\"fieldCacheHits\":6001,\"decimalFastPaths\":0,\"gcCpuMs\":1.028000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":39178,\"heapObjects\":16102,\"environments\":2,\"functions\":81,\"genericCalls\":6009,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9628990,\"scalarCalls\":0,\"rootedCalls\":3008,\"rootPushes\":51088,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":19181620,\"strings\":9999,\"stringUnits\":2031480,\"jsonKeyHits\":35988,\"fieldCacheHits\":6001,\"decimalFastPaths\":0,\"gcCpuMs\":0.974000}\n"
+    },
+    {
+      "task": "allocation",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.681,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.7,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1310,
+          "managedBytes": 394910
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 60.366,
+          "gcCpuMs": 0.293,
+          "allocatorCpuMs": 13.823,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 10001,
+          "requestedBytes": 1601168,
+          "managedBytes": 3913376
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.9629999999999939,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.012000000000000455,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 778381,
+          "managedBytes": 778358
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":4.290000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.219000,\"objects\":229,\"requestedBytes\":8728134,\"managedBytes\":185598,\"maxRssPlatformUnits\":10600448}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.971000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.919000,\"objects\":236,\"requestedBytes\":8729444,\"managedBytes\":580508,\"maxRssPlatformUnits\":11124736}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":70.337000,\"gcCpuMs\":0.293000,\"allocatorCpuMs\":16.742000,\"objects\":10237,\"requestedBytes\":10330612,\"managedBytes\":4493884,\"maxRssPlatformUnits\":15237120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":72.300000,\"gcCpuMs\":0.293000,\"allocatorCpuMs\":16.754000,\"objects\":10240,\"requestedBytes\":11108993,\"managedBytes\":5272242,\"maxRssPlatformUnits\":16416768}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_method\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":30076,\"inclusiveCpuMs\":7.862000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":30067,\"inclusiveCpuMs\":39.304000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":10608,\"inclusiveCpuMs\":3.453000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":50067,\"inclusiveCpuMs\":13.323000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":10608,\"heapObjects\":10243,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6170954,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":20087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13354602,\"strings\":145,\"stringUnits\":907884,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.891000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":10608,\"heapObjects\":10243,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6170982,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":20087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13354672,\"strings\":145,\"stringUnits\":907898,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.702000}\n"
+    }
+  ],
+  "nodeProfiles": []
+}

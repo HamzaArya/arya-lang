@@ -1,0 +1,3336 @@
+{
+  "identities": {
+    "baseline": {
+      "compilerSha256": "c9f8dfbef5bf7f040b23466b03938f0e3a695729bfd741008bfffebde6902612",
+      "binarySha256": "39837f3dbf02df8e27449568cfb2f087e8197a7dece32a86f6c802f9532d55a4",
+      "generatedCSha256": "fe1bcb8fc7d616ebbb3d0603426c5cf21d88cc811b4cd44aab3a56d324166fac"
+    },
+    "candidate": {
+      "compilerSha256": "c805519b484ac86fde7a77043568f1f009d033bafae6ba89cdd8da97b162ab90",
+      "binarySha256": "cb4f8f33871646c886c8acaae7410742718bb6c3299669e3f2f8f1981169ffad",
+      "generatedCSha256": "be3df3b067513dca65d688aa60ba74a24f4585bcd3dfb5c96adff2c5a3f6d67f"
+    }
+  },
+  "sourceSha256": "21a404e653bbfd6b0bb9f6100021d051d0e3b4212eb3f8f91f195bbdbec09a32",
+  "controllerSha256": "1a6c65e7259c9d0d2df6251e80ec60ad8eb4832958a6b2b58d1f66de7c375e9f",
+  "method": "Transfer diagnostic, with CPU clock probes in native peers. No JSON parse/serialization of payloads and no calculations. ASCII frame echoed at identical input/output byte sizes. Two fresh persistent-worker sessions, five discarded warmups, twenty samples/session/backend, alternating order. Native CPU isolates input framing/UTF-8 decode and output UTF-8 encode/write. Metadata serialization is outside those CPU intervals; wall time ends on echo receipt. This is a control, not the production protocol or a subtractable estimate for unequal Ledger input/output sizes.",
+  "summary": [
+    {
+      "bytes": 1024,
+      "backend": "node",
+      "samples": 40,
+      "medianMs": 0.035667000000103144,
+      "p95Ms": 0.13000000000010914
+    },
+    {
+      "bytes": 1024,
+      "backend": "baseline",
+      "samples": 40,
+      "medianMs": 0.028333999999631487,
+      "p95Ms": 0.08883400000013353,
+      "medianReadCpuMs": 0.010999999999999725,
+      "medianWriteCpuMs": 0.003000000000000398
+    },
+    {
+      "bytes": 1024,
+      "backend": "candidate",
+      "samples": 40,
+      "medianMs": 0.030874999999468855,
+      "p95Ms": 0.08449999999993452,
+      "medianReadCpuMs": 0.011000000000000593,
+      "medianWriteCpuMs": 0.0039999999999996635
+    },
+    {
+      "bytes": 262144,
+      "backend": "node",
+      "samples": 40,
+      "medianMs": 0.9144580000001952,
+      "p95Ms": 2.74212499999976
+    },
+    {
+      "bytes": 262144,
+      "backend": "baseline",
+      "samples": 40,
+      "medianMs": 2.451125000000502,
+      "p95Ms": 3.728499999999258,
+      "medianReadCpuMs": 1.5639999999999994,
+      "medianWriteCpuMs": 0.3579999999999972
+    },
+    {
+      "bytes": 262144,
+      "backend": "candidate",
+      "samples": 40,
+      "medianMs": 2.6494999999995343,
+      "p95Ms": 6.049959000000854,
+      "medianReadCpuMs": 1.6299999999999994,
+      "medianWriteCpuMs": 0.36199999999999777
+    },
+    {
+      "bytes": 900000,
+      "backend": "node",
+      "samples": 40,
+      "medianMs": 2.3014579999999114,
+      "p95Ms": 4.034208999999464
+    },
+    {
+      "bytes": 900000,
+      "backend": "baseline",
+      "samples": 40,
+      "medianMs": 7.22845899999993,
+      "p95Ms": 8.478125000000546,
+      "medianReadCpuMs": 5.124000000000017,
+      "medianWriteCpuMs": 1.0979999999999879
+    },
+    {
+      "bytes": 900000,
+      "backend": "candidate",
+      "samples": 40,
+      "medianMs": 7.353165999999874,
+      "p95Ms": 9.573707999999897,
+      "medianReadCpuMs": 5.120999999999986,
+      "medianWriteCpuMs": 1.1270000000000169
+    }
+  ],
+  "raw": [
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.09475000000020373
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.03499999999985448,
+      "sequence": 6,
+      "readCpuMs": 0.01599999999999952,
+      "writeCpuMs": 0.007000000000000062
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.044249999999919964,
+      "sequence": 6,
+      "readCpuMs": 0.02300000000000045,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.024041000000579515,
+      "sequence": 7,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.028374999999869033,
+      "sequence": 7,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.12200000000029831
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.050583000000187894
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.0893339999993259,
+      "sequence": 8,
+      "readCpuMs": 0.035999999999999574,
+      "writeCpuMs": 0.007000000000000062
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.053541000000222994,
+      "sequence": 8,
+      "readCpuMs": 0.02499999999999985,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.03937500000029104,
+      "sequence": 9,
+      "readCpuMs": 0.014999999999999389,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.05354200000056153,
+      "sequence": 9,
+      "readCpuMs": 0.028999999999999512,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.114875000000211
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.2049170000000231
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.05429199999980483,
+      "sequence": 10,
+      "readCpuMs": 0.022000000000000318,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.07449999999971624,
+      "sequence": 10,
+      "readCpuMs": 0.021000000000000185,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.025416999999833934,
+      "sequence": 11,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.028624999999919964,
+      "sequence": 11,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.06462499999997817
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.02491600000030303
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.024166000000150234,
+      "sequence": 12,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.023499999999330612,
+      "sequence": 12,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02616699999998673,
+      "sequence": 13,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.022708000000420725,
+      "sequence": 13,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.035667000000103144
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.06433299999935116
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.05249999999978172,
+      "sequence": 14,
+      "readCpuMs": 0.027000000000000114,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.030874999999468855,
+      "sequence": 14,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.022584000000279048,
+      "sequence": 15,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.028542000000015832,
+      "sequence": 15,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.026041000000077474
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.020749999999679858
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.022790999999415362,
+      "sequence": 16,
+      "readCpuMs": 0.009999999999999593,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02216599999974278,
+      "sequence": 16,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.029459000000315427,
+      "sequence": 17,
+      "readCpuMs": 0.011000000000000593,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.022582999999940512,
+      "sequence": 17,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.02616699999998673
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.02208399999926769
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.022582999999940512,
+      "sequence": 18,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02599999999983993,
+      "sequence": 18,
+      "readCpuMs": 0.009999999999999593,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02254200000061246,
+      "sequence": 19,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.03929199999947741,
+      "sequence": 19,
+      "readCpuMs": 0.011000000000000593,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.08133399999951507
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.022541000000273925
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.023250000000189175,
+      "sequence": 20,
+      "readCpuMs": 0.011000000000000593,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.08279099999981554,
+      "sequence": 20,
+      "readCpuMs": 0.06800000000000035,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.039082999999664025,
+      "sequence": 21,
+      "readCpuMs": 0.01599999999999952,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.046833000000333413,
+      "sequence": 21,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.03662499999973079
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.06549999999970169
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.06145799999922019,
+      "sequence": 22,
+      "readCpuMs": 0.028000000000000247,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.10516699999971024,
+      "sequence": 22,
+      "readCpuMs": 0.02599999999999998,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.07320800000070449,
+      "sequence": 23,
+      "readCpuMs": 0.02499999999999985,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.035208000000238826,
+      "sequence": 23,
+      "readCpuMs": 0.011999999999999858,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.037374999999883585
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.13000000000010914
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.04083300000002055,
+      "sequence": 24,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.005000000000000664
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.0815840000004755,
+      "sequence": 24,
+      "readCpuMs": 0.02199999999999945,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.03716699999949924,
+      "sequence": 25,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.023707999999714957,
+      "sequence": 25,
+      "readCpuMs": 0.009999999999999593,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.20033300000068266
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.6128749999998035
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.5723339999995005,
+      "sequence": 31,
+      "readCpuMs": 1.6429999999999987,
+      "writeCpuMs": 0.4390000000000019
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.3275830000002316,
+      "sequence": 31,
+      "readCpuMs": 1.651999999999999,
+      "writeCpuMs": 0.35300000000000264
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 6.049959000000854,
+      "sequence": 32,
+      "readCpuMs": 2.6750000000000003,
+      "writeCpuMs": 0.36600000000000177
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 3.6062080000001515,
+      "sequence": 32,
+      "readCpuMs": 2.548999999999999,
+      "writeCpuMs": 0.400000000000001
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.2956250000006548
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7808329999998023
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.451125000000502,
+      "sequence": 33,
+      "readCpuMs": 1.6370000000000031,
+      "writeCpuMs": 0.3599999999999992
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.2554580000005444,
+      "sequence": 33,
+      "readCpuMs": 1.6459999999999981,
+      "writeCpuMs": 0.3370000000000005
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.4241659999997864,
+      "sequence": 34,
+      "readCpuMs": 1.7290000000000014,
+      "writeCpuMs": 0.37399999999999933
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.6640419999994265,
+      "sequence": 34,
+      "readCpuMs": 1.7500000000000016,
+      "writeCpuMs": 0.3610000000000002
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.8644590000003518
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7747920000001614
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.188999999999396,
+      "sequence": 35,
+      "readCpuMs": 1.573999999999999,
+      "writeCpuMs": 0.3720000000000008
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.3640830000003916,
+      "sequence": 35,
+      "readCpuMs": 1.6040000000000012,
+      "writeCpuMs": 0.3300000000000004
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.2006250000004,
+      "sequence": 36,
+      "readCpuMs": 1.5200000000000005,
+      "writeCpuMs": 0.3240000000000014
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.133125000000291,
+      "sequence": 36,
+      "readCpuMs": 1.5639999999999994,
+      "writeCpuMs": 0.3270000000000009
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.9490829999995185
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.753500000000713
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.637542000000394,
+      "sequence": 37,
+      "readCpuMs": 1.797,
+      "writeCpuMs": 0.5229999999999991
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.5980829999998605,
+      "sequence": 37,
+      "readCpuMs": 1.705999999999999,
+      "writeCpuMs": 0.36199999999999777
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.6494999999995343,
+      "sequence": 38,
+      "readCpuMs": 1.643000000000002,
+      "writeCpuMs": 0.3799999999999984
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 3.5978329999998095,
+      "sequence": 38,
+      "readCpuMs": 1.9699999999999995,
+      "writeCpuMs": 0.3860000000000044
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.2250000000003638
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.998583000000508
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.301749999999629,
+      "sequence": 39,
+      "readCpuMs": 1.5360000000000027,
+      "writeCpuMs": 0.35500000000000115
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.594875000000684,
+      "sequence": 39,
+      "readCpuMs": 2.1009999999999986,
+      "writeCpuMs": 0.36699999999999927
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.296542000000045,
+      "sequence": 40,
+      "readCpuMs": 1.5539999999999998,
+      "writeCpuMs": 0.3280000000000019
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.186166999999841,
+      "sequence": 40,
+      "readCpuMs": 1.4979999999999993,
+      "writeCpuMs": 0.3470000000000001
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.9144580000001952
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.0045420000005834
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.5595830000002024,
+      "sequence": 41,
+      "readCpuMs": 1.5189999999999995,
+      "writeCpuMs": 0.33099999999999796
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.7394169999997757,
+      "sequence": 41,
+      "readCpuMs": 1.6059999999999963,
+      "writeCpuMs": 0.343000000000003
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 4.425207999999657,
+      "sequence": 42,
+      "readCpuMs": 1.5989999999999962,
+      "writeCpuMs": 0.4310000000000008
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.4142080000001442,
+      "sequence": 42,
+      "readCpuMs": 1.6010000000000053,
+      "writeCpuMs": 0.4139999999999977
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7697920000000522
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7858339999993404
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.212792000000263,
+      "sequence": 43,
+      "readCpuMs": 1.5220000000000025,
+      "writeCpuMs": 0.3589999999999982
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.370665999999801,
+      "sequence": 43,
+      "readCpuMs": 1.6010000000000053,
+      "writeCpuMs": 0.3809999999999994
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.871541000000434,
+      "sequence": 44,
+      "readCpuMs": 1.6299999999999994,
+      "writeCpuMs": 0.35800000000000415
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.731292000000394,
+      "sequence": 44,
+      "readCpuMs": 1.5309999999999977,
+      "writeCpuMs": 0.3870000000000054
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.2975420000002487
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7576249999992797
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.7593750000005457,
+      "sequence": 45,
+      "readCpuMs": 1.6080000000000052,
+      "writeCpuMs": 0.3549999999999942
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.5854159999998956,
+      "sequence": 45,
+      "readCpuMs": 1.7800000000000038,
+      "writeCpuMs": 0.35600000000000215
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.4871249999996508,
+      "sequence": 46,
+      "readCpuMs": 1.570000000000002,
+      "writeCpuMs": 0.35299999999999915
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.266916000000492,
+      "sequence": 46,
+      "readCpuMs": 1.5340000000000007,
+      "writeCpuMs": 0.3579999999999972
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.8811249999998836
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 2.74212499999976
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.6530830000001515,
+      "sequence": 47,
+      "readCpuMs": 1.8299999999999983,
+      "writeCpuMs": 0.3670000000000062
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.1336670000000595,
+      "sequence": 47,
+      "readCpuMs": 1.4239999999999946,
+      "writeCpuMs": 0.28399999999999953
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.679291999999805,
+      "sequence": 48,
+      "readCpuMs": 1.5060000000000004,
+      "writeCpuMs": 0.29699999999999865
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.217874999999367,
+      "sequence": 48,
+      "readCpuMs": 1.5030000000000043,
+      "writeCpuMs": 0.31899999999999984
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.8727499999995416
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7617079999999987
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.1767079999999623,
+      "sequence": 49,
+      "readCpuMs": 1.5220000000000025,
+      "writeCpuMs": 0.337999999999998
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 1.9476250000006985,
+      "sequence": 49,
+      "readCpuMs": 1.4199999999999977,
+      "writeCpuMs": 0.2720000000000014
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.480666000000383,
+      "sequence": 50,
+      "readCpuMs": 1.4969999999999983,
+      "writeCpuMs": 0.3620000000000012
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.0677080000004935,
+      "sequence": 50,
+      "readCpuMs": 1.4329999999999967,
+      "writeCpuMs": 0.2930000000000016
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7237919999997757
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.8607920000004015
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.207625000000007,
+      "sequence": 56,
+      "readCpuMs": 4.846000000000003,
+      "writeCpuMs": 0.9440000000000004
+    },
+    {
+      "session": 0,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 9.59416599999986,
+      "sequence": 56,
+      "readCpuMs": 5.072000000000007,
+      "writeCpuMs": 1.0949999999999989
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.643041000000267,
+      "sequence": 57,
+      "readCpuMs": 5.209999999999992,
+      "writeCpuMs": 1.1909999999999976
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.509417000000212,
+      "sequence": 57,
+      "readCpuMs": 5.007999999999998,
+      "writeCpuMs": 1.1839999999999906
+    },
+    {
+      "session": 0,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.243000000000393
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 6.269000000000233
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.637333000000581,
+      "sequence": 58,
+      "readCpuMs": 5.261000000000002,
+      "writeCpuMs": 1.1259999999999881
+    },
+    {
+      "session": 0,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.893540999999459,
+      "sequence": 58,
+      "readCpuMs": 4.988999999999994,
+      "writeCpuMs": 1.126000000000002
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.551042000000052,
+      "sequence": 59,
+      "readCpuMs": 5.450999999999998,
+      "writeCpuMs": 1.1579999999999924
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.882166999999754,
+      "sequence": 59,
+      "readCpuMs": 5.03300000000001,
+      "writeCpuMs": 1.0690000000000004
+    },
+    {
+      "session": 0,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.794875000000502
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.1462079999992056
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.0355829999998605,
+      "sequence": 60,
+      "readCpuMs": 5.1469999999999985,
+      "writeCpuMs": 1.2080000000000006
+    },
+    {
+      "session": 0,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.576375000000553,
+      "sequence": 60,
+      "readCpuMs": 4.971000000000004,
+      "writeCpuMs": 1.0870000000000046
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 8.05591700000059,
+      "sequence": 61,
+      "readCpuMs": 5.398,
+      "writeCpuMs": 1.1600000000000081
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.890459000000192,
+      "sequence": 61,
+      "readCpuMs": 5.051,
+      "writeCpuMs": 1.2129999999999919
+    },
+    {
+      "session": 0,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.9390000000003056
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.3261249999995925
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.311292000000321,
+      "sequence": 62,
+      "readCpuMs": 5.064999999999986,
+      "writeCpuMs": 1.364000000000004
+    },
+    {
+      "session": 0,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 8.761457999999948,
+      "sequence": 62,
+      "readCpuMs": 5.474000000000006,
+      "writeCpuMs": 1.1190000000000089
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.871374999999716,
+      "sequence": 63,
+      "readCpuMs": 5.293999999999993,
+      "writeCpuMs": 1.3289999999999969
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.546000000000276,
+      "sequence": 63,
+      "readCpuMs": 5.242999999999998,
+      "writeCpuMs": 1.0619999999999796
+    },
+    {
+      "session": 0,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.965291999999863
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.4740410000003976
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.3521249999994325,
+      "sequence": 64,
+      "readCpuMs": 5.23700000000002,
+      "writeCpuMs": 1.3050000000000006
+    },
+    {
+      "session": 0,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.534125000000131,
+      "sequence": 64,
+      "readCpuMs": 5.384,
+      "writeCpuMs": 1.1450000000000071
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.353165999999874,
+      "sequence": 65,
+      "readCpuMs": 5.156999999999995,
+      "writeCpuMs": 1.2810000000000044
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.478125000000546,
+      "sequence": 65,
+      "readCpuMs": 5.360000000000004,
+      "writeCpuMs": 1.2280000000000069
+    },
+    {
+      "session": 0,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.782999999999447
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.035291000000143
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.882792000000336,
+      "sequence": 66,
+      "readCpuMs": 4.899999999999988,
+      "writeCpuMs": 1.1770000000000114
+    },
+    {
+      "session": 0,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.328291000000718,
+      "sequence": 66,
+      "readCpuMs": 5.160999999999999,
+      "writeCpuMs": 1.2899999999999856
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.744916000000558,
+      "sequence": 67,
+      "readCpuMs": 5.366000000000009,
+      "writeCpuMs": 1.1639999999999984
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.626624999999876,
+      "sequence": 67,
+      "readCpuMs": 5.356,
+      "writeCpuMs": 1.1880000000000224
+    },
+    {
+      "session": 0,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 4.034208999999464
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.3202909999999974
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.240582999999788,
+      "sequence": 68,
+      "readCpuMs": 5.165999999999976,
+      "writeCpuMs": 1.0930000000000106
+    },
+    {
+      "session": 0,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.4409999999998035,
+      "sequence": 68,
+      "readCpuMs": 4.887000000000002,
+      "writeCpuMs": 1.258000000000009
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.655874999999469,
+      "sequence": 69,
+      "readCpuMs": 5.098999999999992,
+      "writeCpuMs": 1.2739999999999974
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.947458999999981,
+      "sequence": 69,
+      "readCpuMs": 4.7859999999999845,
+      "writeCpuMs": 1.2270000000000059
+    },
+    {
+      "session": 0,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.986291000000165
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.841958999999406
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.22845899999993,
+      "sequence": 70,
+      "readCpuMs": 5.143000000000009,
+      "writeCpuMs": 1.1690000000000034
+    },
+    {
+      "session": 0,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.625750000000153,
+      "sequence": 70,
+      "readCpuMs": 4.805000000000003,
+      "writeCpuMs": 1.1629999999999974
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.358166999999412,
+      "sequence": 71,
+      "readCpuMs": 5.214999999999997,
+      "writeCpuMs": 0.9939999999999949
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.93408399999953,
+      "sequence": 71,
+      "readCpuMs": 5.163000000000001,
+      "writeCpuMs": 0.9239999999999804
+    },
+    {
+      "session": 0,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.3995420000001104
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.51037499999984
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.296374999999898,
+      "sequence": 72,
+      "readCpuMs": 5.124000000000017,
+      "writeCpuMs": 1.0850000000000026
+    },
+    {
+      "session": 0,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.815625000000182,
+      "sequence": 72,
+      "readCpuMs": 4.837000000000008,
+      "writeCpuMs": 0.9260000000000101
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.2349590000003445,
+      "sequence": 73,
+      "readCpuMs": 4.765999999999993,
+      "writeCpuMs": 1.1270000000000169
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.663416999999754,
+      "sequence": 73,
+      "readCpuMs": 5.063000000000012,
+      "writeCpuMs": 1.1229999999999851
+    },
+    {
+      "session": 0,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.730833999999959
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 3.2276660000006814
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.753917000000001,
+      "sequence": 74,
+      "readCpuMs": 4.8020000000000005,
+      "writeCpuMs": 1.0640000000000094
+    },
+    {
+      "session": 0,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.285750000000007,
+      "sequence": 74,
+      "readCpuMs": 5.164999999999975,
+      "writeCpuMs": 0.9660000000000224
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 8.67724999999973,
+      "sequence": 75,
+      "readCpuMs": 6.096000000000018,
+      "writeCpuMs": 1.2129999999999919
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.412832999999409,
+      "sequence": 75,
+      "readCpuMs": 4.693000000000003,
+      "writeCpuMs": 1.0050000000000059
+    },
+    {
+      "session": 0,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.4897500000006403
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.04583299999922019,
+      "sequence": 6,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.023374999999759893,
+      "sequence": 6,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.03420899999946414
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.08954200000061974
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.11775000000034197,
+      "sequence": 7,
+      "readCpuMs": 0.03799999999999984,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.03133299999990413,
+      "sequence": 7,
+      "readCpuMs": 0.010000000000000026,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.022792000000663393,
+      "sequence": 8,
+      "readCpuMs": 0.00799999999999976,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.023707999999714957,
+      "sequence": 8,
+      "readCpuMs": 0.011999999999999858,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.030249999999796273
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.09929199999987759
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.06983299999956216,
+      "sequence": 9,
+      "readCpuMs": 0.022000000000000318,
+      "writeCpuMs": 0.005999999999999929
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.10833300000012969,
+      "sequence": 9,
+      "readCpuMs": 0.06899999999999962,
+      "writeCpuMs": 0.020000000000000052
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.04491599999983009,
+      "sequence": 10,
+      "readCpuMs": 0.023000000000000017,
+      "writeCpuMs": 0.005999999999999929
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.02341699999942648,
+      "sequence": 10,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.114875000000211
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.0684160000000702
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.08883400000013353,
+      "sequence": 11,
+      "readCpuMs": 0.023999999999999716,
+      "writeCpuMs": 0.015000000000000256
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.06099999999969441,
+      "sequence": 11,
+      "readCpuMs": 0.01899999999999992,
+      "writeCpuMs": 0.005999999999999929
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.08449999999993452,
+      "sequence": 12,
+      "readCpuMs": 0.03500000000000031,
+      "writeCpuMs": 0.01299999999999999
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.028624999999919964,
+      "sequence": 12,
+      "readCpuMs": 0.020000000000000052,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.03766600000017206
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.03162499999962165
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.050458000000617176,
+      "sequence": 13,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.04712500000005093,
+      "sequence": 13,
+      "readCpuMs": 0.023000000000000017,
+      "writeCpuMs": 0.00500000000000023
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.020292000000154076,
+      "sequence": 14,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.03137500000048021,
+      "sequence": 14,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.03449999999975262
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.020541999999295513
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.021999999999934516,
+      "sequence": 15,
+      "readCpuMs": 0.010999999999999725,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.020125000000007276,
+      "sequence": 15,
+      "readCpuMs": 0.00799999999999976,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.019583999999667867,
+      "sequence": 16,
+      "readCpuMs": 0.008000000000000194,
+      "writeCpuMs": 0.004000000000000097
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.04500000000007276,
+      "sequence": 16,
+      "readCpuMs": 0.01299999999999999,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.0849580000003698
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.028582999999343883
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.022417000000132248,
+      "sequence": 17,
+      "readCpuMs": 0.014000000000000123,
+      "writeCpuMs": 0.003000000000000398
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.020416999999724794,
+      "sequence": 17,
+      "readCpuMs": 0.011999999999999858,
+      "writeCpuMs": 0.004000000000000097
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02141600000049948,
+      "sequence": 18,
+      "readCpuMs": 0.010000000000000026,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.01970900000014808,
+      "sequence": 18,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.020958000000064203
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.019166000000041095
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.02124999999978172,
+      "sequence": 19,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.07445800000004965,
+      "sequence": 19,
+      "readCpuMs": 0.02400000000000015,
+      "writeCpuMs": 0.014000000000000123
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.06333300000005693,
+      "sequence": 20,
+      "readCpuMs": 0.01800000000000022,
+      "writeCpuMs": 0.004999999999999796
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.0273750000005748,
+      "sequence": 20,
+      "readCpuMs": 0.011999999999999858,
+      "writeCpuMs": 0.0039999999999996635
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.025666000000455824
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.022207999999409367
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.028333999999631487,
+      "sequence": 21,
+      "readCpuMs": 0.00899999999999946,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.020666999999775726,
+      "sequence": 21,
+      "readCpuMs": 0.010000000000000026,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.02041599999938626,
+      "sequence": 22,
+      "readCpuMs": 0.008000000000000194,
+      "writeCpuMs": 0.0029999999999999645
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.020166999999673862,
+      "sequence": 22,
+      "readCpuMs": 0.008000000000000194,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.06270899999981339
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.020750000000589353
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.021999999999934516,
+      "sequence": 23,
+      "readCpuMs": 0.009999999999999593,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.020583000000442553,
+      "sequence": 23,
+      "readCpuMs": 0.008999999999999894,
+      "writeCpuMs": 0.0020000000000002655
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.05083399999966787,
+      "sequence": 24,
+      "readCpuMs": 0.01999999999999962,
+      "writeCpuMs": 0.004000000000000531
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.02104200000030687,
+      "sequence": 24,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.002999999999999531
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.020084000000679225
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "node",
+      "wallMs": 0.026041000000077474
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "baseline",
+      "wallMs": 0.021083000000544416,
+      "sequence": 25,
+      "readCpuMs": 0.009000000000000327,
+      "writeCpuMs": 0.001999999999999398
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 1024,
+      "backend": "candidate",
+      "wallMs": 0.01970900000014808,
+      "sequence": 25,
+      "readCpuMs": 0.01000000000000046,
+      "writeCpuMs": 0.001999999999999398
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.1729590000004464,
+      "sequence": 31,
+      "readCpuMs": 1.5090000000000017,
+      "writeCpuMs": 0.35499999999999765
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.3844159999998737,
+      "sequence": 31,
+      "readCpuMs": 1.661000000000001,
+      "writeCpuMs": 0.3769999999999989
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 3.3309580000004644
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.3502079999998386
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.7415829999999914,
+      "sequence": 32,
+      "readCpuMs": 1.7320000000000009,
+      "writeCpuMs": 0.3779999999999999
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.7604580000006536,
+      "sequence": 32,
+      "readCpuMs": 1.9000000000000024,
+      "writeCpuMs": 0.4139999999999977
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.5810419999997976,
+      "sequence": 33,
+      "readCpuMs": 1.7910000000000008,
+      "writeCpuMs": 0.3849999999999999
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.7886250000001382,
+      "sequence": 33,
+      "readCpuMs": 1.974,
+      "writeCpuMs": 0.35299999999999915
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.2883339999998498
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.6297079999994821
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.3438749999995707,
+      "sequence": 34,
+      "readCpuMs": 1.6309999999999971,
+      "writeCpuMs": 0.35900000000000165
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 5.635833000000275,
+      "sequence": 34,
+      "readCpuMs": 2.052000000000002,
+      "writeCpuMs": 0.35199999999999815
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 11.856416999999965,
+      "sequence": 35,
+      "readCpuMs": 2.239999999999999,
+      "writeCpuMs": 0.46600000000000114
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 4.078417000000627,
+      "sequence": 35,
+      "readCpuMs": 2.057,
+      "writeCpuMs": 0.3720000000000008
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 2.1248340000001917
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.976209000000381
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 4.329291000000012,
+      "sequence": 36,
+      "readCpuMs": 1.8869999999999998,
+      "writeCpuMs": 0.7050000000000007
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 4.205832999999984,
+      "sequence": 36,
+      "readCpuMs": 1.5179999999999985,
+      "writeCpuMs": 0.34
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 6.112916000000041,
+      "sequence": 37,
+      "readCpuMs": 2.144,
+      "writeCpuMs": 0.5430000000000018
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 3.728499999999258,
+      "sequence": 37,
+      "readCpuMs": 1.5070000000000014,
+      "writeCpuMs": 0.3849999999999999
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.8637920000001031
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.1017910000000484
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.3256670000000668,
+      "sequence": 38,
+      "readCpuMs": 1.53,
+      "writeCpuMs": 0.3290000000000029
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.5460830000001806,
+      "sequence": 38,
+      "readCpuMs": 1.8390000000000037,
+      "writeCpuMs": 0.7159999999999944
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.790874999999687,
+      "sequence": 39,
+      "readCpuMs": 1.7000000000000002,
+      "writeCpuMs": 0.4410000000000039
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.9627500000005966,
+      "sequence": 39,
+      "readCpuMs": 1.577000000000002,
+      "writeCpuMs": 0.33400000000000096
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.701125000000502
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.8951669999996739
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.1729169999998703,
+      "sequence": 40,
+      "readCpuMs": 1.4769999999999992,
+      "writeCpuMs": 0.34899999999999515
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.113999999999578,
+      "sequence": 40,
+      "readCpuMs": 1.4450000000000018,
+      "writeCpuMs": 0.3769999999999954
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.3896249999997963,
+      "sequence": 41,
+      "readCpuMs": 1.6379999999999937,
+      "writeCpuMs": 0.36800000000000027
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 3.0774160000000848,
+      "sequence": 41,
+      "readCpuMs": 1.779999999999997,
+      "writeCpuMs": 0.565000000000003
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.9164170000003651
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 3.0681660000000193
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.0417919999999867,
+      "sequence": 42,
+      "readCpuMs": 1.464,
+      "writeCpuMs": 0.2960000000000046
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.0701669999998558,
+      "sequence": 42,
+      "readCpuMs": 1.4310000000000018,
+      "writeCpuMs": 0.33099999999999796
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.0117920000002414,
+      "sequence": 43,
+      "readCpuMs": 1.4239999999999946,
+      "writeCpuMs": 0.3140000000000018
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.0209160000003976,
+      "sequence": 43,
+      "readCpuMs": 1.4170000000000016,
+      "writeCpuMs": 0.35400000000000015
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.568040999999539
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.9346250000007785
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.542457999999897,
+      "sequence": 44,
+      "readCpuMs": 1.6279999999999974,
+      "writeCpuMs": 0.3490000000000021
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 4.124167000000853,
+      "sequence": 44,
+      "readCpuMs": 1.7430000000000014,
+      "writeCpuMs": 0.3820000000000004
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.019416000000092,
+      "sequence": 45,
+      "readCpuMs": 1.4349999999999987,
+      "writeCpuMs": 0.3160000000000038
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.220083000000159,
+      "sequence": 45,
+      "readCpuMs": 1.469000000000005,
+      "writeCpuMs": 0.3449999999999981
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.9177500000005239
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7833330000003116
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.4689580000003843,
+      "sequence": 46,
+      "readCpuMs": 1.5399999999999996,
+      "writeCpuMs": 0.3439999999999971
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 2.80304199999955,
+      "sequence": 46,
+      "readCpuMs": 1.9859999999999947,
+      "writeCpuMs": 0.4000000000000045
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 5.941374999999425,
+      "sequence": 47,
+      "readCpuMs": 1.6469999999999958,
+      "writeCpuMs": 0.5259999999999987
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.7196249999997235,
+      "sequence": 47,
+      "readCpuMs": 1.4440000000000008,
+      "writeCpuMs": 0.4299999999999998
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 1.2899999999999636
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.5840000000007421
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 3.0072079999999914,
+      "sequence": 48,
+      "readCpuMs": 1.7379999999999964,
+      "writeCpuMs": 0.32100000000000184
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.012124999999287,
+      "sequence": 48,
+      "readCpuMs": 1.7099999999999962,
+      "writeCpuMs": 0.7130000000000053
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.7170420000002196,
+      "sequence": 49,
+      "readCpuMs": 1.5320000000000056,
+      "writeCpuMs": 0.3119999999999998
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.3242499999996653,
+      "sequence": 49,
+      "readCpuMs": 1.4990000000000003,
+      "writeCpuMs": 0.32100000000000184
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7167499999995925
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "node",
+      "wallMs": 0.7315410000001066
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "baseline",
+      "wallMs": 2.2174590000004173,
+      "sequence": 50,
+      "readCpuMs": 1.5200000000000005,
+      "writeCpuMs": 0.36399999999999627
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 262144,
+      "backend": "candidate",
+      "wallMs": 3.3514169999998558,
+      "sequence": 50,
+      "readCpuMs": 1.5289999999999957,
+      "writeCpuMs": 0.4390000000000019
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.463707999999315,
+      "sequence": 56,
+      "readCpuMs": 4.845000000000002,
+      "writeCpuMs": 0.8750000000000008
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.751083000000108,
+      "sequence": 56,
+      "readCpuMs": 4.83900000000001,
+      "writeCpuMs": 1.0809999999999986
+    },
+    {
+      "session": 1,
+      "sample": 0,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.5169590000004973
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.839958999999908
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.423707999999351,
+      "sequence": 57,
+      "readCpuMs": 4.781000000000008,
+      "writeCpuMs": 0.9629999999999916
+    },
+    {
+      "session": 1,
+      "sample": 1,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.954499999999825,
+      "sequence": 57,
+      "readCpuMs": 5.510000000000001,
+      "writeCpuMs": 1.2100000000000026
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.712334000000737,
+      "sequence": 58,
+      "readCpuMs": 4.928999999999989,
+      "writeCpuMs": 1.0350000000000081
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.949291999999332,
+      "sequence": 58,
+      "readCpuMs": 5.173999999999998,
+      "writeCpuMs": 0.9789999999999938
+    },
+    {
+      "session": 1,
+      "sample": 2,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.9080839999996897
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.0150830000002316
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.352250000000822,
+      "sequence": 59,
+      "readCpuMs": 4.699000000000009,
+      "writeCpuMs": 0.9509999999999935
+    },
+    {
+      "session": 1,
+      "sample": 3,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.755916999999499,
+      "sequence": 59,
+      "readCpuMs": 4.801,
+      "writeCpuMs": 1.1380000000000001
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.517292000000452,
+      "sequence": 60,
+      "readCpuMs": 4.954,
+      "writeCpuMs": 0.9160000000000001
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.322790999999597,
+      "sequence": 60,
+      "readCpuMs": 4.671999999999995,
+      "writeCpuMs": 1.0000000000000009
+    },
+    {
+      "session": 1,
+      "sample": 4,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.3014579999999114
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 7.563000000000102
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.944292000000132,
+      "sequence": 61,
+      "readCpuMs": 5.139000000000005,
+      "writeCpuMs": 1.1980000000000046
+    },
+    {
+      "session": 1,
+      "sample": 5,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 10.525000000000546,
+      "sequence": 61,
+      "readCpuMs": 5.600000000000008,
+      "writeCpuMs": 1.230999999999982
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.306291999999303,
+      "sequence": 62,
+      "readCpuMs": 4.799999999999999,
+      "writeCpuMs": 0.8799999999999919
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.327750000000378,
+      "sequence": 62,
+      "readCpuMs": 5.12399999999999,
+      "writeCpuMs": 0.9639999999999926
+    },
+    {
+      "session": 1,
+      "sample": 6,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.6743750000005093
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.6373330000005808
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.307874999999513,
+      "sequence": 63,
+      "readCpuMs": 5.527999999999977,
+      "writeCpuMs": 1.1790000000000134
+    },
+    {
+      "session": 1,
+      "sample": 7,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.632374999999229,
+      "sequence": 63,
+      "readCpuMs": 5.249000000000004,
+      "writeCpuMs": 1.1780000000000124
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 9.573707999999897,
+      "sequence": 64,
+      "readCpuMs": 5.359000000000003,
+      "writeCpuMs": 1.474000000000003
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.987750000000233,
+      "sequence": 64,
+      "readCpuMs": 5.37700000000002,
+      "writeCpuMs": 1.224999999999976
+    },
+    {
+      "session": 1,
+      "sample": 8,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 3.0315840000002936
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 3.0289999999995416
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.058708999999908,
+      "sequence": 65,
+      "readCpuMs": 5.185999999999996,
+      "writeCpuMs": 0.9989999999999999
+    },
+    {
+      "session": 1,
+      "sample": 9,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.638208000000304,
+      "sequence": 65,
+      "readCpuMs": 5.025000000000002,
+      "writeCpuMs": 0.9510000000000074
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.920542000000751,
+      "sequence": 66,
+      "readCpuMs": 5.124999999999991,
+      "writeCpuMs": 1.0320000000000051
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.208832999999686,
+      "sequence": 66,
+      "readCpuMs": 5.1880000000000255,
+      "writeCpuMs": 1.0679999999999856
+    },
+    {
+      "session": 1,
+      "sample": 10,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.5582500000000437
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.6225000000004002
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.591084000000592,
+      "sequence": 67,
+      "readCpuMs": 5.1800000000000175,
+      "writeCpuMs": 1.2869999999999826
+    },
+    {
+      "session": 1,
+      "sample": 11,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.279250000000502,
+      "sequence": 67,
+      "readCpuMs": 4.955999999999988,
+      "writeCpuMs": 0.9849999999999859
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.959791999999652,
+      "sequence": 68,
+      "readCpuMs": 5.12399999999999,
+      "writeCpuMs": 0.9629999999999916
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.607834000000366,
+      "sequence": 68,
+      "readCpuMs": 4.865999999999982,
+      "writeCpuMs": 1.00900000000001
+    },
+    {
+      "session": 1,
+      "sample": 12,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.82024999999976
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.7342500000004293
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.980375000000095,
+      "sequence": 69,
+      "readCpuMs": 5.413000000000001,
+      "writeCpuMs": 1.2660000000000171
+    },
+    {
+      "session": 1,
+      "sample": 13,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.656000000000859,
+      "sequence": 69,
+      "readCpuMs": 4.963999999999996,
+      "writeCpuMs": 0.9269999999999834
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 8.083875000000262,
+      "sequence": 70,
+      "readCpuMs": 5.284999999999984,
+      "writeCpuMs": 1.1480000000000101
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.2690829999992275,
+      "sequence": 70,
+      "readCpuMs": 5.145999999999984,
+      "writeCpuMs": 1.1280000000000179
+    },
+    {
+      "session": 1,
+      "sample": 14,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.6625420000000304
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.6012080000000424
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 7.101500000000669,
+      "sequence": 71,
+      "readCpuMs": 5.094000000000015,
+      "writeCpuMs": 1.0979999999999879
+    },
+    {
+      "session": 1,
+      "sample": 15,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.847791000000143,
+      "sequence": 71,
+      "readCpuMs": 4.858000000000001,
+      "writeCpuMs": 1.1330000000000229
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 6.923165999999583,
+      "sequence": 72,
+      "readCpuMs": 5.120999999999986,
+      "writeCpuMs": 0.9929999999999939
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.594333000000006,
+      "sequence": 72,
+      "readCpuMs": 5.531000000000008,
+      "writeCpuMs": 0.9409999999999974
+    },
+    {
+      "session": 1,
+      "sample": 16,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 1.6598330000006172
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.4624579999999696
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 8.303875000000517,
+      "sequence": 73,
+      "readCpuMs": 5.364000000000008,
+      "writeCpuMs": 1.1990000000000056
+    },
+    {
+      "session": 1,
+      "sample": 17,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.707957999999962,
+      "sequence": 73,
+      "readCpuMs": 4.778000000000004,
+      "writeCpuMs": 1.1529999999999874
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.4395000000004075,
+      "sequence": 74,
+      "readCpuMs": 5.370000000000013,
+      "writeCpuMs": 1.0870000000000046
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.522832999999991,
+      "sequence": 74,
+      "readCpuMs": 4.834000000000005,
+      "writeCpuMs": 0.9750000000000036
+    },
+    {
+      "session": 1,
+      "sample": 18,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 3.603874999999789
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "node",
+      "wallMs": 2.049707999999555
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "baseline",
+      "wallMs": 6.839458999999806,
+      "sequence": 75,
+      "readCpuMs": 4.949000000000009,
+      "writeCpuMs": 1.1680000000000024
+    },
+    {
+      "session": 1,
+      "sample": 19,
+      "bytes": 900000,
+      "backend": "candidate",
+      "wallMs": 7.229167000000416,
+      "sequence": 75,
+      "readCpuMs": 5.011999999999989,
+      "writeCpuMs": 1.1029999999999929
+    }
+  ]
+}

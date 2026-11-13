@@ -1,0 +1,34 @@
+use std "auth" as auth
+use std "debug" as debug
+const ttl: number = 60
+const store = auth.sessions({ttlSeconds: 60})
+const issued = store.issue("typed-user", {methods: ["password"]})
+const token: string = issued.token
+debug.assert(issued.session.expiresAt - issued.session.issuedAt == ttl)
+const session = store.verify(token)
+if session != null { const subject: string = session.subject; debug.assert(subject == "typed-user") }
+const code: string = auth.totpCode("GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", {time: 59})
+const verified: boolean = auth.verifyTotp("GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", code, {time: 59}).ok
+debug.assert(verified)
+const method: string = auth.pkce().method
+debug.assert(method == "S256")
+const limits = auth.rateLimiter()
+const allowed: boolean = limits.attempt("typed-user").allowed
+debug.assert(allowed)
+limits.close(); store.close()
+print("auth types: module and nested method contracts passed")
+const biometrics = auth.biometricStatus()
+const detail: string = biometrics.detail
+const policy: string = biometrics.policy
+const retryable: boolean = biometrics.retryable
+debug.assert(detail.length > 0 and policy == "biometrics")
+# A pre-aborted signal validates typed async contracts without invoking the OS.
+const controller = new AbortController(); controller.abort()
+const local = await auth.authenticate({reason: "Check typed cancellation", timeoutMs: 10, interactive: false, cancelTitle: "Back", signal: controller.signal})
+const ok: boolean = local.ok; const nativeCode: number | null = local.nativeCode
+debug.assert(not ok and nativeCode == null and local.detail == "request-cancelled")
+const service: string = "org.arya.tests.types"
+const credentials = auth.vault({service, timeoutMs: 50, interactive: false, cancelTitle: "Back"})
+let cancelled = false
+try { const replaced: boolean = await credentials.replace("account", "secret", "Check typed replacement", {signal: controller.signal}) } catch error { debug.assert(error.code == "ARYA_AUTH_CANCELLED"); cancelled = true }
+debug.assert(cancelled)

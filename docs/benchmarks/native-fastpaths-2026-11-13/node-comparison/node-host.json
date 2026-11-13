@@ -1,0 +1,1 @@
+{"execPath":"/usr/local/bin/node","platform":"darwin","arch":"arm64","execArgv":["-p","JSON.stringify({execPath:process.execPath,platform:process.platform,arch:process.arch,execArgv:process.execArgv,nodeOptions:process.env.NODE_OPTIONS??null,nodePath:process.env.NODE_PATH??null})"],"nodeOptions":null,"nodePath":null}

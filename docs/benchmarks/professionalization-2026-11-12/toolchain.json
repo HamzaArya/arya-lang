@@ -1,0 +1,2424 @@
+{
+  "recordedAtUtc": "2026-11-12T20:16:47.290148+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "logicalCpus": 8,
+  "python": "3.13.15",
+  "controllerSha256": "e432240e5a1d8a901635cae988f9e101bbe1a98c22df135d3c371b3d2b4ff669",
+  "evidenceDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/professionalization-2026-11-12/toolchain-np8gn692",
+  "method": "Fresh process wall time. One discarded warmup per operation/SDK; nine check/startup samples and three forced build samples, alternating SDK order. Warm filesystem caches. Check includes startup, loading, lexing, parsing and validation, not isolated parsing. Build includes frontend, C generation, C11 -O2 compilation and static linking, using existing SDK libraries. Direct hello includes process launch, runtime initialization, printing and exit. No Node executable is used. Single-host measurements; no claimed production throughput.",
+  "toolchain": {
+    "argv": [
+      "cc",
+      "--version"
+    ],
+    "wallMs": 17.504,
+    "returncode": 0,
+    "stdout": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ],
+    "loadAverageAfter": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ]
+  },
+  "selectedEnvironment": {
+    "PATH": "/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/opt/homebrew/bin:/Users/hamza/.codex/tmp/arg0-macos/codex-arg0RoLurM:/Users/hamza/.opencode/bin:/opt/homebrew/opt/python@3.14/libexec/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/sbin:/usr/local/mysql-9.7.0-macos15-arm64/bin:/Users/hamza/.vscode/extensions/openai.chatgpt-26.1106.51428-darwin-arm64/bin/macos-aarch64:/usr/local/mysql-9.7.0-macos15-arm64/bin",
+    "ARYA_CC": null,
+    "CC": null,
+    "ARYA_NATIVE_LIBDIR": null,
+    "SDKROOT": null,
+    "MACOSX_DEPLOYMENT_TARGET": null,
+    "CPATH": null,
+    "C_INCLUDE_PATH": null,
+    "LIBRARY_PATH": null
+  },
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "sourceSha256": {
+    "hello": "e3bf55b0f9ba503507ab1092711fbb0af1e8916d8a1dabf49836f77f07d1c7f2",
+    "quoted65536": "7324000207f79d74f1aee6ad86d795751cef9f8acacb6ea673e54dda76b747c0",
+    "raw65536": "9a7be54be158fba8558a40b63894b8b38a46eb091e0ff4400b9eea8ee121b1b0"
+  },
+  "compilers": {
+    "before": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+      "sha256": "b61bb15a9711f81d1302ad404c69a9065592a277d67bf6c50649b73769698272",
+      "bytes": 5683016,
+      "version": {
+        "argv": [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+          "--version"
+        ],
+        "wallMs": 11.515917,
+        "returncode": 0,
+        "stdout": "Arya native 2.0.0-alpha.2 (self-hosted)\n",
+        "stderr": "",
+        "loadAverageBefore": [
+          14.2724609375,
+          13.6015625,
+          16.45751953125
+        ],
+        "loadAverageAfter": [
+          14.2724609375,
+          13.6015625,
+          16.45751953125
+        ]
+      },
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/lib",
+      "libmpdecSha256": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5"
+    },
+    "after": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+      "sha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+      "bytes": 5749112,
+      "version": {
+        "argv": [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+          "--version"
+        ],
+        "wallMs": 22.404375,
+        "returncode": 0,
+        "stdout": "Arya native 2.0.0-alpha.2 (self-hosted)\n",
+        "stderr": "",
+        "loadAverageBefore": [
+          14.2724609375,
+          13.6015625,
+          16.45751953125
+        ],
+        "loadAverageAfter": [
+          14.2724609375,
+          13.6015625,
+          16.45751953125
+        ]
+      },
+      "libraryDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/lib",
+      "libmpdecSha256": "41e757193f850b94532b3bb28575c3381b61d86737618bd78aeaccf9450383f5"
+    }
+  },
+  "warmups": [
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 16.437584,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 16.438875,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 97.524625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 101.350542,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 77.383791,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 92.860208,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 3609.3905,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-CBmuqF/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-CBmuqF/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-CBmuqF/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "executableBytes": 367304,
+      "executableSha256": "9ec6deb613fc05ba4a6bf8bf007659bb218fec60af981d1506c8cafd64d0b523",
+      "generatedCSha256": "67383e6314d605d42de55b56c3db180230c109a8b9a5c4343842d386ad0f347f",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1755.440375,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-uWyjNF/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-uWyjNF/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-uWyjNF/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        13.98974609375,
+        13.564453125,
+        16.41064453125
+      ],
+      "loadAverageAfter": [
+        13.98974609375,
+        13.564453125,
+        16.41064453125
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "2ced7a9c4ca838cdc21a2aa8c6914de2a8bdda4a734759689a942469b2719889",
+      "generatedCSha256": "e36e7c2c229caa7f13c689926e1e80dbf518eee3ff83fab801b4a1a4bf13ce94",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.729625,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": -1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.555292,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": -1
+    }
+  ],
+  "raw": [
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 17.702,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.747208,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 15.962458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 19.370125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.134875,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.498542,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 8.23025,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 8.005375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.126209,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 12.98825,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.548708,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 8.405459,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.541375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.327334,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.451208,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 9.648666,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 8.545709,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "--json"
+      ],
+      "wallMs": 11.58825,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-hello",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 55.040459,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 50.044541,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 67.65475,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 68.82725,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 69.090125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 62.96275,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 48.192875,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 87.735458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 76.108208,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 57.986417,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 80.921667,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 92.700709,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 60.787375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 55.267834,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 72.53725,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 106.309917,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 78.767125,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya",
+        "--json"
+      ],
+      "wallMs": 79.847083,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/quoted65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-quoted65536",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 84.760958,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 77.796791,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 74.741042,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.2724609375,
+        13.6015625,
+        16.45751953125
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 74.509042,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 86.166458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 91.253458,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 76.173542,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 91.793,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 84.97625,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 84.273792,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 70.805375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 68.712375,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 76.213542,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 110.816667,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 83.013709,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 85.87275,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 104.337959,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "check",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya",
+        "--json"
+      ],
+      "wallMs": 94.820542,
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/raw65536.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "loadAverageAfter": [
+        14.25048828125,
+        13.60791015625,
+        16.44287109375
+      ],
+      "operation": "check-raw65536",
+      "label": "before",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 2178.346875,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-Fnpq96/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-Fnpq96/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-Fnpq96/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        13.98974609375,
+        13.564453125,
+        16.41064453125
+      ],
+      "loadAverageAfter": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "2ced7a9c4ca838cdc21a2aa8c6914de2a8bdda4a734759689a942469b2719889",
+      "generatedCSha256": "e36e7c2c229caa7f13c689926e1e80dbf518eee3ff83fab801b4a1a4bf13ce94",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1252.093333,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-F78OBo/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-F78OBo/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-F78OBo/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "loadAverageAfter": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "executableBytes": 367304,
+      "executableSha256": "9ec6deb613fc05ba4a6bf8bf007659bb218fec60af981d1506c8cafd64d0b523",
+      "generatedCSha256": "67383e6314d605d42de55b56c3db180230c109a8b9a5c4343842d386ad0f347f",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1435.537583,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-SC6rSQ/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-SC6rSQ/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-SC6rSQ/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "loadAverageAfter": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "executableBytes": 367304,
+      "executableSha256": "9ec6deb613fc05ba4a6bf8bf007659bb218fec60af981d1506c8cafd64d0b523",
+      "generatedCSha256": "67383e6314d605d42de55b56c3db180230c109a8b9a5c4343842d386ad0f347f",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1311.064958,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-UcHRos/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-UcHRos/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-UcHRos/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        13.4296875,
+        13.455078125,
+        16.35546875
+      ],
+      "loadAverageAfter": [
+        12.67431640625,
+        13.2978515625,
+        16.28271484375
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "2ced7a9c4ca838cdc21a2aa8c6914de2a8bdda4a734759689a942469b2719889",
+      "generatedCSha256": "e36e7c2c229caa7f13c689926e1e80dbf518eee3ff83fab801b4a1a4bf13ce94",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1428.384167,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-GF8TvC/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-GF8TvC/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1.arya-GF8TvC/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        12.67431640625,
+        13.2978515625,
+        16.28271484375
+      ],
+      "loadAverageAfter": [
+        12.67431640625,
+        13.2978515625,
+        16.28271484375
+      ],
+      "executableBytes": 367368,
+      "executableSha256": "2ced7a9c4ca838cdc21a2aa8c6914de2a8bdda4a734759689a942469b2719889",
+      "generatedCSha256": "e36e7c2c229caa7f13c689926e1e80dbf518eee3ff83fab801b4a1a4bf13ce94",
+      "operation": "forced-build-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/professional-tofixed/baseline-sdk/arya",
+        "build",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello.arya",
+        "-o",
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0",
+        "--release",
+        "--force"
+      ],
+      "wallMs": 1263.346542,
+      "returncode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-qq6hre/program.c:6907:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6907 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-qq6hre/program.c:6933:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6933 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0.arya-qq6hre/program.c:6934:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6934 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "loadAverageBefore": [
+        12.67431640625,
+        13.2978515625,
+        16.28271484375
+      ],
+      "loadAverageAfter": [
+        12.67431640625,
+        13.2978515625,
+        16.28271484375
+      ],
+      "executableBytes": 367304,
+      "executableSha256": "9ec6deb613fc05ba4a6bf8bf007659bb218fec60af981d1506c8cafd64d0b523",
+      "generatedCSha256": "67383e6314d605d42de55b56c3db180230c109a8b9a5c4343842d386ad0f347f",
+      "operation": "forced-build-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.6565,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 4.164417,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 0
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 5.820583,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 4.048875,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 1
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.671708,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.700167,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 2
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.62075,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.665958,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 3
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.602834,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.716666,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 4
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.785541,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.946167,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 5
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 3.926292,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 4.10025,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 6
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.995625,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 4.142417,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 7
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-1"
+      ],
+      "wallMs": 4.007875,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "after",
+      "sample": 8
+    },
+    {
+      "argv": [
+        "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692/hello-0"
+      ],
+      "wallMs": 3.878375,
+      "returncode": 0,
+      "stdout": "ready\n",
+      "stderr": "",
+      "loadAverageBefore": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "loadAverageAfter": [
+        12.0595703125,
+        13.15966796875,
+        16.21630859375
+      ],
+      "operation": "direct-startup-hello",
+      "label": "before",
+      "sample": 8
+    }
+  ],
+  "summary": [
+    {
+      "operation": "check-hello",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 11.548708,
+          "minMs": 8.23025,
+          "maxMs": 15.962458
+        },
+        "after": {
+          "medianMs": 11.126209,
+          "minMs": 8.005375,
+          "maxMs": 19.370125
+        }
+      }
+    },
+    {
+      "operation": "check-quoted65536",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 62.96275,
+          "minMs": 48.192875,
+          "maxMs": 80.921667
+        },
+        "after": {
+          "medianMs": 76.108208,
+          "minMs": 55.040459,
+          "maxMs": 106.309917
+        }
+      }
+    },
+    {
+      "operation": "check-raw65536",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 83.013709,
+          "minMs": 70.805375,
+          "maxMs": 110.816667
+        },
+        "after": {
+          "medianMs": 84.97625,
+          "minMs": 68.712375,
+          "maxMs": 104.337959
+        }
+      }
+    },
+    {
+      "operation": "forced-build-hello",
+      "samplesPerSdk": 3,
+      "results": {
+        "before": {
+          "medianMs": 1263.346542,
+          "minMs": 1252.093333,
+          "maxMs": 1435.537583
+        },
+        "after": {
+          "medianMs": 1428.384167,
+          "minMs": 1311.064958,
+          "maxMs": 2178.346875
+        }
+      }
+    },
+    {
+      "operation": "direct-startup-hello",
+      "samplesPerSdk": 9,
+      "results": {
+        "before": {
+          "medianMs": 3.878375,
+          "minMs": 3.62075,
+          "maxMs": 5.820583
+        },
+        "after": {
+          "medianMs": 3.926292,
+          "minMs": 3.602834,
+          "maxMs": 4.142417
+        }
+      }
+    }
+  ],
+  "sdk": {
+    "argv": [
+      "xcrun",
+      "--show-sdk-path"
+    ],
+    "wallMs": 11.596458,
+    "returncode": 0,
+    "stdout": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ],
+    "loadAverageAfter": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ]
+  },
+  "sdkVersion": {
+    "argv": [
+      "xcrun",
+      "--show-sdk-version"
+    ],
+    "wallMs": 13.176625,
+    "returncode": 0,
+    "stdout": "26.5\n",
+    "stderr": "",
+    "loadAverageBefore": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ],
+    "loadAverageAfter": [
+      14.2724609375,
+      13.6015625,
+      16.45751953125
+    ]
+  },
+  "finishedAtUtc": "2026-11-12T20:17:09.897537+00:00",
+  "originalEvidenceDirectory": "/Users/hamza/Projects/github-repo/arya-lang/docs/benchmarks/professionalization-2026-11-12/toolchain-np8gn692",
+  "controllerArchivePath": "/Users/hamza/Projects/github-repo/arya-lang/.build/professionalization-2026-11-12/toolchain-np8gn692/controller-used.py",
+  "artifactRelocationNote": "Generated artifacts were moved after measurement to keep executable build artifacts outside packaged documentation. Raw argv retains the exact original measured paths.",
+  "qualificationContext": "Full native checks and a separate fresh-source build were active during this run. Per-sample load averages are retained. Treat wall-time results as contended observations; these samples do not establish a causal performance improvement or regression."
+}

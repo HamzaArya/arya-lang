@@ -1,0 +1,2 @@
+AryaAssertionError: Journal calculation closures retained preparation inputs: 3197712
+  at amodule0 (/Users/hamza/Documents/Codex/2026-11-13/task/arya-reliability/candidate/native/tests/fixtures/accounting-journal-lifetime.arya:20:7)

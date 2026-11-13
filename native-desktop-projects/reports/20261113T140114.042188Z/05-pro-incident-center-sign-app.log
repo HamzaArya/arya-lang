@@ -1,0 +1,2 @@
+["codesign", "--force", "--deep", "--sign", "-", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app"]
+/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-nah5kcq3/Incident Center.app: replacing existing signature

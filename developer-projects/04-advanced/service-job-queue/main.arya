@@ -1,0 +1,54 @@
+use std "fs" as fs
+use std "env" as env
+use std "web" as web
+use std "validate" as validate
+use std "process" as process
+use std "security" as security
+const dataFile = env.get("DATA_FILE", "data.json")
+let rows: any = []
+fn save(next) {
+  fs.writeTextAtomicSync(dataFile, JSON.stringify(next, null, 2) + "\n")
+  rows = next
+}
+fn find(id) { for row in rows { if row.id == id { return row } }; throw web.error(404, "Record not found", "NOT_FOUND") }
+fn text(value, label) { if value.trim() == "" { throw web.error(400, label + " cannot be blank", "INVALID_INPUT") }; return value.trim() }
+
+const inputSchema = validate.object({key: validate.string({min: 1, max: 100}), task: validate.string({min: 1, max: 1000})})
+const rowSchema = validate.object({id: validate.string(), key: validate.string(), task: validate.string(), state: validate.enum(["queued", "running", "done", "failed"]), attempts: validate.integer({min: 0}), lease: validate.string(), expires: validate.number(), result: validate.string()})
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null { rows = validate.parse(validate.array(rowSchema, {max: 1000}), JSON.parse(fs.readTextSync(dataFile))) }
+fn snapshot() { return JSON.parse(JSON.stringify(rows) ?? "[]") }
+let routes = {
+ "GET /health": fn() { return {status: "ready", jobs: rows.length} },
+ "GET /jobs": fn() { return rows.map(fn(row) { return {id: row.id, key: row.key, task: row.task, state: row.state, attempts: row.attempts, expires: row.expires, result: row.result} }) },
+ "POST /jobs": web.route(fn(request) {
+   const key = text(request.body.key, "Key"); const task = text(request.body.task, "Task")
+   for row in rows { if row.key == key { if row.task != task { throw web.error(409, "Key already has different work", "CONFLICT") }; return web.response(200, {id: row.id, duplicate: true}) } }
+   if rows.length >= 1000 { throw web.error(409, "Job limit reached", "LIMIT") }
+   const row = {id: security.uuid(), key: key, task: task, state: "queued", attempts: 0, lease: "", expires: 0, result: ""}; save(rows.concat([row])); return web.response(201, {id: row.id, duplicate: false})
+ }, {body: inputSchema}),
+ "POST /jobs/claim": web.route(fn(request) {
+   let next = snapshot(); const now = Date.now()
+   for row in next {
+     if row.state == "queued" or row.state == "running" and row.expires <= now {
+       row.state = "running"; row.attempts += 1; row.lease = security.randomToken(); row.expires = now + request.body.seconds * 1000; save(next); return row
+     }
+   }; return web.response(204, undefined)
+ }, {body: validate.object({seconds: validate.integer({min: 1, max: 3600})})}),
+ "POST /jobs/:id/finish": web.route(fn(request) {
+   const old = find(request.params.id)
+   if old.state != "running" or old.expires <= Date.now() or old.lease != request.body.lease { throw web.error(409, "Lease is expired or does not own this job", "LEASE_CONFLICT") }
+   let next = snapshot(); for row in next { if row.id == old.id { row.state = request.body.state; row.result = request.body.result; row.lease = ""; row.expires = 0 } }; save(next); return {id: old.id, state: request.body.state}
+ }, {body: validate.object({lease: validate.string({min: 1, max: 256}), state: validate.enum(["done", "failed"]), result: validate.string({max: 4000})})}),
+ "POST /jobs/:id/retry": fn(request) {
+   const old = find(request.params.id); if old.state != "failed" { throw web.error(409, "Only failed jobs can be retried", "INVALID_TRANSITION") }
+   let next = snapshot(); for row in next { if row.id == old.id { row.state = "queued"; row.result = "" } }; save(next); return {id: old.id, state: "queued"}
+ }
+}
+
+const appRoot = process.cwd()
+const serverOptions: any = {host: "127.0.0.1", root: appRoot, html: false, assets: false, maxBodyBytes: 65536}
+let server = web.serve(env.int("PORT", 4413), routes, serverOptions)
+print("Workline Queue: http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

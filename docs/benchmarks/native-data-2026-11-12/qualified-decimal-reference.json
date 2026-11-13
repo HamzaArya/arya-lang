@@ -1,0 +1,8 @@
+{
+  "reference": "Python _pydecimal (independent pure-Python arithmetic)",
+  "cases": 5352,
+  "seed": "0x41525941",
+  "allMatched": true,
+  "sourceSha256": "6d2c38619364197629ab3732fa666edaa3817868b3271b693f97038ebe359d46",
+  "outputSha256": "fc335f9949a3a2f4448312b03b9077ba057795ddf1fb25db0bc06b9f5d3ffc54"
+}

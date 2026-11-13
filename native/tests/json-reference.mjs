@@ -30,6 +30,21 @@ while true { let line = io.readLine(); if line == null { break }; let input: any
   const cases = ['-0', '1e400', '-1e400', '1e-400', '1.7976931348623157e308', '5e-324',
     '"\\uD800"', '"\\uDC00"', '"\\uD83D\\uDE00"', '{"a":1,"a":2,"1":3,"0":4}',
     ...['', 'undefined', 'NaN', 'Infinity', '[1,]', '{"x":}', '01', '-01', '1.', '1e+', '"a\0b"', '"\\uXYZW"', '"\\x20"', '"\\', '[]x']];
+  // Exercise exact integer conversion boundaries and the stack/heap fallback.
+  cases.push(...['0', '-0', '9007199254740991', '9007199254740992', '9007199254740993',
+    '-9007199254740991', '-9007199254740992', '-9007199254740993',
+    '18446744073709551615', '-9223372036854775808', '999999999999999999999999',
+    '0.' + '0'.repeat(126) + '1', '1' + '0'.repeat(127), '1e+21', '1e-7']);
+  // Short-value reuse must retain content across cache collisions, escapes,
+  // long values and collection. Repeated values remain ordinary strings.
+  cases.push(JSON.stringify(Array.from({ length: 320 }, (_, i) => ({
+    type: ['asset', 'expense', '__proto__', 'فارسی', '😀'][i % 5],
+    amount: i % 2 ? '100.005' : '-20.035', unique: 'value-' + i,
+    edge: 'x'.repeat(i % 2 ? 128 : 129), index: i,
+  }))));
+  cases.push('["a","\\u0061","\\ud800","\\uD800","asset","asset"]');
+  cases.push('{"a":1,"4294967295":2,"3":3,"00":4,"4294967294":5,"0":6,"a":7}');
+  cases.push(JSON.stringify({ '"': 'quote', '\\': 'slash', '\n': 'newline', 'فارسی': 'text' }));
   for (let i = 0; i < 700; i++) { const encoded = JSON.stringify(value(0)); cases.push(encoded); if (encoded.length > 1) cases.push(encoded.slice(0, -1)); }
   const expected = cases.map(text => { try { return { ok: JSON.stringify(JSON.parse(text)) }; } catch (error) { return { error: error.name }; } });
   const result = spawnSync(join(dir, 'program'), [], { input: cases.map(x => JSON.stringify(x)).join('\n') + '\n', encoding: 'utf8', timeout: 120000,

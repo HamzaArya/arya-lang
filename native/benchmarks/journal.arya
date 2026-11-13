@@ -1,0 +1,29 @@
+# Optional development benchmark. All amount results remain decimal strings.
+use std "accounting" as accounting
+use std "io" as io
+use std "json" as json
+use std "runtime" as runtime
+print("ready")
+while true {
+  const line = io.readLine(); if line == null { break }
+  const start = runtime.clock(); const request: any = json.parse(line)
+  const parsed = runtime.clock()
+  let prepared: any = null; const entries = []
+  if request.mode == "calculate" { prepared = accounting.prepareJournal(request.transactions, request.options) }
+  if request.mode == "flat-prepare" { for transaction in request.transactions { for entry in transaction.entries { entries.push(entry) } } }
+  const setup = runtime.clock(); let result: any = null
+  for iteration in range(request.iterations) {
+    if request.mode == "prepare" { result = accounting.prepareJournal(request.transactions, request.options) }
+    else if request.mode == "calculate" { result = prepared.calculate() }
+    else if request.mode == "journal" { result = accounting.journalBatch(request.transactions, request.options) }
+    else if request.mode == "flat-prepare" { result = accounting.prepareLedger(entries, request.options) }
+    else if request.mode == "validate" { result = []; for transaction in request.transactions { result.push(accounting.validateTransaction(transaction, request.options)) } }
+    else { throw new Error("Unknown journal benchmark mode.") }
+  }
+  const finished = runtime.clock()
+  # For preparation measurements, result calculation/serialization is outside
+  # the operation interval. The controller still verifies the complete report.
+  if request.mode == "prepare" or request.mode == "flat-prepare" { result = result.calculate() }
+  print(json.stringify({result: result, parseCpuMs: (parsed - start) * 1000,
+    setupCpuMs: (setup - parsed) * 1000, operationCpuMs: (finished - setup) * 1000}))
+}

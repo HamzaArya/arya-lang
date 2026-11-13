@@ -1,0 +1,113 @@
+use std "runtime" as runtime
+use std "async" as tasks
+let checks = 0
+fn equal(actual: any, expected: any) {
+  if not runtime.deepEqual(actual, expected) { throw new Error("Descriptor boundary mismatch") }
+  checks += 1
+}
+const builtin = Object.defineProperty
+let events: any = []
+const record: any = {}
+let selected: any = record
+let replacementCalls = 0
+fn target(): any { events.push("target"); runtime.collect(); return selected }
+fn key(): string { events.push("key"); runtime.collect(); return "awaited" }
+async fn delayedValue(): any {
+  events.push("value-start")
+  await tasks.sleep(0)
+  Object.defineProperty = fn(_target, _key, descriptor) { replacementCalls += 1; return descriptor.value }
+  selected = {}
+  runtime.collect()
+  events.push("value-end")
+  return {answer: 42}
+}
+# The builtin and target are captured before suspension. Literal flag fields
+# introduce no observable calls; collection must retain every captured value.
+const returned = Object.defineProperty(target(), key(), {writable: true, value: await delayedValue(), configurable: true, enumerable: true})
+equal(returned, record)
+equal(record.awaited.answer, 42)
+equal(Object.keys(selected), [])
+equal(replacementCalls, 0)
+equal(events, ["target", "key", "value-start", "value-end"])
+
+let saved: any = null
+events = []
+Object.defineProperty = fn(target, key, descriptor) {
+  events.push("custom-call")
+  equal(target, record)
+  equal(key, "custom-await")
+  saved = descriptor
+  runtime.collect()
+  return descriptor.value
+}
+async fn restoreBuiltin(): any {
+  events.push("custom-value-start")
+  await tasks.sleep(0)
+  Object.defineProperty = builtin
+  runtime.collect()
+  events.push("custom-value-end")
+  return {answer: 43}
+}
+# A captured replacement still receives a fresh mutable descriptor, in source
+# field order, even when the global method changes during awaited evaluation.
+const customResult = Object.defineProperty(record, "custom-await", {configurable: true, enumerable: true, value: await restoreBuiltin(), writable: true})
+equal(customResult.answer, 43)
+equal(Object.hasOwn(record, "custom-await"), false)
+equal(events, ["custom-value-start", "custom-value-end", "custom-call"])
+equal(Object.keys(saved), ["configurable", "enumerable", "value", "writable"])
+equal([saved.enumerable, saved.configurable, saved.writable], [true, true, true])
+runtime.collect()
+saved.value = "mutable"
+equal(saved.value, "mutable")
+
+# These descriptors must use ordinary argument/object evaluation. The custom
+# callee observes flags and duplicate-field values, rather than the builtin's
+# current flag policy masking a lowering mistake.
+Object.defineProperty = fn(_target, _key, descriptor) { return descriptor }
+const falseFlags = Object.defineProperty(record, "false", {value: 7, enumerable: false, configurable: true, writable: false})
+equal([falseFlags.value, falseFlags.enumerable, falseFlags.configurable, falseFlags.writable], [7, false, true, false])
+events = []
+fn effect(label: string, value: any): any { events.push(label); runtime.collect(); return value }
+const nonliteral = Object.defineProperty(record, "nonliteral", {enumerable: effect("enumerable", true), value: effect("value", 8), writable: effect("writable", false), configurable: effect("configurable", true)})
+equal(events, ["enumerable", "value", "writable", "configurable"])
+equal([nonliteral.value, nonliteral.enumerable, nonliteral.writable, nonliteral.configurable], [8, true, false, true])
+events = []
+const duplicate = Object.defineProperty(record, "duplicate", {value: effect("first", 1), enumerable: true, value: effect("second", 2), configurable: true})
+equal(events, ["first", "second"])
+equal(duplicate.value, 2)
+equal(Object.keys(duplicate), ["value", "enumerable", "configurable"])
+equal(duplicate.writable, undefined)
+const spreadTarget = [record]
+const spreadKey = ["spread-key"]
+equal(Object.defineProperty(...spreadTarget, "spread-target", {value: 11, enumerable: true, configurable: true, writable: true}).value, 11)
+equal(Object.defineProperty(record, ...spreadKey, {value: 12, enumerable: true, configurable: true, writable: true}).value, 12)
+const descriptor = {value: 13, enumerable: true, configurable: true, writable: true}
+equal(Object.defineProperty(record, "spread-descriptor", ...[descriptor]), descriptor)
+equal(Object.defineProperty(...[record, "spread-all", descriptor]), descriptor)
+const computed = "define" + "Property"
+equal(Object[computed](record, "computed", descriptor), descriptor)
+
+Object.defineProperty = builtin
+# Existing native semantics accept false flags; compare the observable write
+# without assuming the fuller JavaScript property-attribute contract.
+equal(Object.defineProperty(record, "false-builtin", {value: 17, enumerable: false, configurable: false, writable: false}), record)
+equal(record["false-builtin"], 17)
+fn depth(n: number): any {
+  if n == 0 {
+    const output: any = {}
+    Object.defineProperty(output, "value", {value: 77, enumerable: true, configurable: true, writable: true})
+    return output.value
+  }
+  return depth(n - 1)
+}
+let boundaries: any = []
+let successful = 0
+let limited = 0
+for n in range(500, 515) {
+  try { boundaries.push(depth(n)); successful += 1 }
+  catch error { equal(error.name, "RangeError"); equal(error.message, "Native call depth exceeds 512."); boundaries.push("depth"); limited += 1 }
+}
+equal(successful > 0 and limited > 0, true)
+equal(depth(10), 77)
+print("descriptor depth boundary:", boundaries.join(","))
+print("descriptor boundary checks:", checks)

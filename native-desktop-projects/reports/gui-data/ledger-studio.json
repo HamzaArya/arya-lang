@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "serial": 4,
+  "accounts": [
+    {
+      "code": "QA-CASH",
+      "name": "Cash native QA",
+      "type": "asset",
+      "description": "",
+      "id": "A1",
+      "version": 1,
+      "status": "open"
+    },
+    {
+      "code": "QA-BANK",
+      "name": "Bank native QA",
+      "type": "asset",
+      "description": "",
+      "id": "A2",
+      "version": 1,
+      "status": "open"
+    }
+  ],
+  "journals": [
+    {
+      "reference": "QA-NATIVE-TRANSFER",
+      "debitId": "A1",
+      "creditId": "A2",
+      "amount": "125.50",
+      "date": "2026-11-13",
+      "description": "Local GUI test posting",
+      "id": "J3",
+      "version": 1,
+      "reverses": "",
+      "reversedBy": ""
+    }
+  ],
+  "reconciliations": []
+}

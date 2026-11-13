@@ -1,0 +1,14 @@
+core: native output and GC stress passed
+decimal: native output and GC stress passed
+list: native output and GC stress passed
+json: native output and GC stress passed
+modules: live native exports passed
+publication: existing file and dangling symlink preserved
+diagnostics: invalid types, const writes and unknown imports rejected
+canonical syntax and default-parameter TDZ passed
+relocation: compiler and decimal program work without Node/Python
+native dependencies: no embedded JavaScript or Python runtime
+ASan/UBSan with GC stress passed (leak detection not run)
+native financial bridge: exact JSON-lines calculations passed
+compiler failure: partial output and staging cleaned
+typed functions: forward calls, return paths and arity verified

@@ -1,0 +1,129 @@
+# Linked only against auth-platform.m's deterministic test seams.
+use std "auth" as auth
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+let checks = 0
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), "Biometric regression: " + str(actual) + " expected " + str(expected)); checks += 1 }
+async fn denied(code, action) {
+  let failure = null
+  try { await action() } catch error { failure = error }
+  debug.assert(failure != null, "Expected " + code); equal(failure.code, code); return failure
+}
+async fn authenticate(settings) { return await auth.authenticate(settings) }
+fn vault(settings) { return auth.vault(settings) }
+async fn settle() {
+  for _index in range(200) {
+    const result = await auth.authenticate({reason: "mock.wait", interactive: false})
+    if result.code != "busy" { equal(result.code, "not-interactive"); return }
+    await tasks.sleep(5)
+  }
+  debug.assert(false, "Native operation did not settle")
+}
+const status = auth.biometricStatus()
+equal(status.available, true); equal(status.supported, true); equal(status.kind, "touch-id"); equal(status.nativeDomain, null)
+equal(status.policy, "biometrics"); equal(Object.isFrozen(status), true)
+for reason in ["mock.ok", "mock.title", "mock.face"] {
+  const result = await auth.authenticate({reason, cancelTitle: "Go back"})
+  equal(result.ok, true); equal(result.code, "ok"); equal(result.method, "biometrics"); equal(result.policy, "biometrics")
+  let kind = "touch-id"; if reason == "mock.face" { kind = "face-id" }; equal(result.kind, kind); equal(result.nativeCode, null)
+  equal(result.retryable, false); equal(Object.isFrozen(result), true)
+}
+const owner = await auth.authenticate({reason: "mock.ok", policy: "device-owner"})
+equal(owner.ok, true); equal(owner.method, "device-owner"); equal(owner.policy, "device-owner")
+const failures = [
+  ["mock.not-enrolled", "not-enrolled", "biometry-not-enrolled"],
+  ["mock.unavailable", "unavailable", "biometry-unavailable"],
+  ["mock.passcode", "unavailable", "passcode-not-set"],
+  ["mock.locked", "locked", "biometry-lockout"],
+  ["mock.denied", "denied", "authentication-failed"],
+  ["mock.user-cancel", "cancelled", "user-cancelled"],
+  ["mock.system-cancel", "cancelled", "system-cancelled"],
+  ["mock.fallback", "cancelled", "fallback-requested"],
+  ["mock.invalid-context", "invalid-context", "invalid-context"]
+]
+for failure in failures {
+  const result = await auth.authenticate({reason: failure[0]})
+  equal(result.ok, false); equal(result.code, failure[1]); equal(result.detail, failure[2]); equal(result.nativeDomain, "LocalAuthentication")
+  equal(runtime.kind(result.nativeCode), "number"); equal(result.outcomeUnknown, false)
+}
+const unknown = await auth.authenticate({reason: "mock.unknown"})
+equal(unknown.ok, false); equal(unknown.code, "platform-error"); equal(unknown.nativeDomain, null)
+equal(JSON.stringify(unknown).includes("private data"), false)
+const quiet = await auth.authenticate({reason: "mock.ok", interactive: false})
+equal(quiet.code, "not-interactive"); equal(quiet.retryable, true)
+const pending = auth.authenticate({reason: "mock.slow", timeoutMs: 1000})
+const busy = await auth.authenticate({reason: "mock.ok"})
+equal(busy.code, "busy"); equal(busy.detail, "request-in-progress"); equal((await pending).ok, true)
+const timed = await auth.authenticate({reason: "mock.slow", timeoutMs: 15})
+equal(timed.code, "timeout"); equal(timed.detail, "deadline-exceeded"); equal(timed.outcomeUnknown, false)
+equal((await auth.authenticate({reason: "mock.ok"})).code, "busy")
+await settle()
+const already = new AbortController(); already.abort()
+equal((await auth.authenticate({reason: "mock.ok", signal: already.signal})).code, "cancelled")
+async fn abortSoon(controller) { await tasks.sleep(15); controller.abort() }
+const controller = new AbortController(); const aborting = abortSoon(controller)
+const cancelled = await auth.authenticate({reason: "mock.slow", signal: controller.signal})
+equal(cancelled.code, "cancelled"); equal(cancelled.detail, "request-cancelled"); equal(cancelled.nativeDomain, null)
+await aborting; equal((await auth.authenticate({reason: "mock.ok"})).code, "busy"); await settle()
+
+const saved = auth.vault({service: "org.arya.tests.memory", timeoutMs: 1000, cancelTitle: "Go back"})
+equal(await saved.read("account", "mock.ok"), null)
+equal(await saved.replace("account", "secret", "mock.ok"), false)
+equal(await saved.remove("account", "mock.ok"), false)
+equal(await saved.store("account", "original\0سلام", "mock.title"), true)
+const duplicate = await denied("ARYA_AUTH_DUPLICATE", fn() { return saved.store("account", "overwritten", "mock.ok") })
+equal(duplicate.detail, "duplicate-item"); equal(duplicate.nativeDomain, "Security"); equal(duplicate.outcomeUnknown, false)
+equal(await saved.read("account", "mock.title"), "original\0سلام")
+equal(await saved.replace("account", "replaced", "mock.ok"), true); equal(await saved.read("account", "mock.ok"), "replaced")
+const rejectedUpdate = await denied("ARYA_AUTH_DENIED", fn() { return saved.replace("account", "wrong", "mock.update.fail") })
+equal(rejectedUpdate.detail, "authentication-failed"); equal(await saved.read("account", "mock.ok"), "replaced")
+for reason in ["mock.denied", "mock.user-cancel"] {
+  let code = "ARYA_AUTH_CANCELLED"; if reason == "mock.denied" { code = "ARYA_AUTH_DENIED" }; await denied(code, fn() { return saved.remove("account", reason) })
+  equal(await saved.read("account", "mock.ok"), "replaced")
+}
+const preabort = await denied("ARYA_AUTH_CANCELLED", fn() { return saved.read("account", "mock.ok", {signal: already.signal}) })
+equal(preabort.detail, "request-cancelled"); equal(preabort.outcomeUnknown, false)
+const readTimeout = await denied("ARYA_AUTH_TIMEOUT", fn() { return saved.read("account", "mock.read.slow", {timeoutMs: 15}) })
+equal(readTimeout.detail, "deadline-exceeded"); equal(readTimeout.outcomeUnknown, false)
+await denied("ARYA_AUTH_BUSY", fn() { return saved.read("account", "mock.ok") })
+await settle(); equal(await saved.read("account", "mock.ok"), "replaced")
+const readingController = new AbortController(); const abortReading = abortSoon(readingController)
+const readCancel = await denied("ARYA_AUTH_CANCELLED", fn() { return saved.read("account", "mock.read.slow", {signal: readingController.signal}) })
+equal(readCancel.outcomeUnknown, false); await abortReading; await settle()
+const commit = await denied("ARYA_AUTH_TIMEOUT", fn() { return saved.replace("account", "committed-after-timeout", "mock.commit.slow", {timeoutMs: 30}) })
+equal(commit.outcomeUnknown, true); await settle(); equal(await saved.read("account", "mock.ok"), "committed-after-timeout")
+const quietVault = auth.vault({service: "org.arya.tests.memory", interactive: false})
+const noUI = await denied("ARYA_AUTH_NOT_INTERACTIVE", fn() { return quietVault.read("account", "mock.ok") })
+equal(noUI.detail, "interaction-not-allowed"); equal(await quietVault.read("account", "mock.ok", {interactive: true}), "committed-after-timeout")
+for reason in ["mock.invalid-type", "mock.invalid-utf8", "mock.empty", "mock.oversize"] {
+  const malformed = await denied("ARYA_AUTH_PLATFORM", fn() { return saved.read("account", reason) })
+  equal(malformed.nativeDomain, "Security"); equal(malformed.outcomeUnknown, false)
+}
+const entitlement = await denied("ARYA_AUTH_ENTITLEMENT", fn() { return saved.read("account", "mock.entitlement") })
+equal(entitlement.detail, "missing-entitlement"); equal(entitlement.retryable, false)
+await denied("ARYA_AUTH_UNAVAILABLE", fn() { return saved.read("account", "mock.keychain-unavailable") })
+const otherPolicy = auth.vault({service: "org.arya.tests.memory", policy: "device-owner"})
+equal(await otherPolicy.read("account", "mock.ok"), null)
+equal(await otherPolicy.store("account", "owner-only", "mock.ok"), true)
+equal(await otherPolicy.read("account", "mock.ok"), "owner-only")
+equal(await saved.remove("account", "mock.ok"), true); equal(await saved.read("account", "mock.ok"), null)
+equal(await otherPolicy.read("account", "mock.ok"), "owner-only"); equal(await otherPolicy.remove("account", "mock.ok"), true)
+
+# Validation must not invoke application getters, even on a forged signal.
+let getterCalls = 0
+const evilSignal = {}; Object.defineProperty(evilSignal, "aborted", {get: fn() { getterCalls += 1; return false }})
+const copiedSignal = {}; Object.defineProperty(copiedSignal, "aborted", Object.getOwnPropertyDescriptor(controller.signal, "aborted"))
+const evilOptions = {}; Object.defineProperty(evilOptions, "reason", {get: fn() { getterCalls += 1; return "mock.ok" }})
+for settings in [evilOptions, {reason: "mock.ok", signal: evilSignal}, {reason: "mock.ok", signal: copiedSignal}, {reason: "mock.ok", signal: {aborted: false}}, {reason: "mock.ok", signal: null}, {reason: "mock.ok", timeoutMs: 0}, {reason: "mock.ok", timeoutMs: 120001}, {reason: "mock.ok", interactive: "yes"}, {reason: "mock.ok", cancelTitle: ""}, {reason: "mock.ok", cancelTitle: "x".repeat(65)}, {reason: "mock.ok", cancelTitle: "bad\n"}, {reason: "mock.ok", policy: "any"}, {reason: "\ud800"}] {
+  await denied("ARYA_AUTH_INPUT", fn() { return authenticate(settings) })
+}
+equal(getterCalls, 0)
+for settings in [{service: "test", timeoutMs: 0}, {service: "test", interactive: "yes"}, {service: "test", policy: "any"}] {
+  await denied("ARYA_AUTH_INPUT", fn() { return vault(settings) })
+}
+for settings in [{policy: "device-owner"}, {signal: evilSignal}, {timeoutMs: 0}] {
+  await denied("ARYA_AUTH_INPUT", fn() { return saved.read("account", "mock.ok", settings) })
+}
+equal(getterCalls, 0); equal((await auth.authenticate({reason: "mock.ok"})).ok, true)
+print("native biometrics:", checks, "checks passed without OS prompts or Keychain writes")

@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/gui-incident-console/.build/verified-app"]
+PASS: incident GUI HTML/escaping, create, valid/invalid lifecycle, validation, missing id, malformed JSON, history restart, corrupt-state rejection

@@ -1,0 +1,158 @@
+[
+  {
+    "kind": "sum",
+    "name": "baseline",
+    "medianCpuMs": 10.092000000000004,
+    "p95CpuMs": 10.65
+  },
+  {
+    "kind": "sum",
+    "name": "candidate",
+    "medianCpuMs": 10.088,
+    "p95CpuMs": 10.616
+  },
+  {
+    "kind": "sum",
+    "name": "node",
+    "medianCpuMs": 10.216,
+    "p95CpuMs": 11.182
+  },
+  {
+    "kind": "mix",
+    "name": "baseline",
+    "medianCpuMs": 31.856999999999967,
+    "p95CpuMs": 37.970999999999975
+  },
+  {
+    "kind": "mix",
+    "name": "candidate",
+    "medianCpuMs": 32.34599999999999,
+    "p95CpuMs": 36.75100000000003
+  },
+  {
+    "kind": "mix",
+    "name": "node",
+    "medianCpuMs": 13.683,
+    "p95CpuMs": 15.852
+  },
+  {
+    "kind": "fib",
+    "name": "baseline",
+    "medianCpuMs": 0.8449999999999847,
+    "p95CpuMs": 1.0109999999999841
+  },
+  {
+    "kind": "fib",
+    "name": "candidate",
+    "medianCpuMs": 0.8519999999999639,
+    "p95CpuMs": 0.9799999999999809
+  },
+  {
+    "kind": "fib",
+    "name": "node",
+    "medianCpuMs": 0.772,
+    "p95CpuMs": 0.999
+  },
+  {
+    "kind": "records",
+    "name": "baseline",
+    "medianCpuMs": 45.35200000000006,
+    "p95CpuMs": 56.118
+  },
+  {
+    "kind": "records",
+    "name": "candidate",
+    "medianCpuMs": 7.523999999999975,
+    "p95CpuMs": 8.147000000000016
+  },
+  {
+    "kind": "records",
+    "name": "node",
+    "medianCpuMs": 0.435,
+    "p95CpuMs": 3.631
+  },
+  {
+    "kind": "map",
+    "name": "baseline",
+    "medianCpuMs": 28.336999999999833,
+    "p95CpuMs": 32.65099999999998
+  },
+  {
+    "kind": "map",
+    "name": "candidate",
+    "medianCpuMs": 3.585999999999978,
+    "p95CpuMs": 4.3280000000001095
+  },
+  {
+    "kind": "map",
+    "name": "node",
+    "medianCpuMs": 0.471,
+    "p95CpuMs": 1.12
+  },
+  {
+    "kind": "json",
+    "name": "baseline",
+    "medianCpuMs": 4.5640000000000125,
+    "p95CpuMs": 5.73200000000007
+  },
+  {
+    "kind": "json",
+    "name": "candidate",
+    "medianCpuMs": 2.5640000000000107,
+    "p95CpuMs": 3.166000000000002
+  },
+  {
+    "kind": "json",
+    "name": "node",
+    "medianCpuMs": 0.542,
+    "p95CpuMs": 1.218
+  },
+  {
+    "kind": "strings",
+    "name": "baseline",
+    "medianCpuMs": 5.029999999999868,
+    "p95CpuMs": 7.700999999999958
+  },
+  {
+    "kind": "strings",
+    "name": "candidate",
+    "medianCpuMs": 2.1719999999999517,
+    "p95CpuMs": 3.286999999999929
+  },
+  {
+    "kind": "strings",
+    "name": "node",
+    "medianCpuMs": 0.385,
+    "p95CpuMs": 0.666
+  },
+  {
+    "kind": "decimal",
+    "name": "baseline",
+    "medianCpuMs": 6.184999999999885,
+    "p95CpuMs": 6.742000000000026
+  },
+  {
+    "kind": "decimal",
+    "name": "candidate",
+    "medianCpuMs": 5.047999999999941,
+    "p95CpuMs": 5.714999999999915
+  },
+  {
+    "kind": "decimal",
+    "name": "node",
+    "medianCpuMs": 0.174,
+    "p95CpuMs": 0.486
+  },
+  {
+    "kind": "parsed",
+    "name": "candidate",
+    "medianCpuMs": 1.2540000000000884,
+    "p95CpuMs": 2.5169999999999915
+  },
+  {
+    "kind": "parsed",
+    "name": "node",
+    "medianCpuMs": 0.121,
+    "p95CpuMs": 0.196
+  }
+]

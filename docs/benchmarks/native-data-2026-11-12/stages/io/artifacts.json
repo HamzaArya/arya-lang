@@ -1,0 +1,25 @@
+{
+  "runtimeOnly": true,
+  "runtimeSha256": "99e4f429ee2d6b87ba686b9c4253b9a46896377f22a5dd50636a7479c3f5eac4",
+  "base": "candidate",
+  "artifacts": {
+    "worker": {
+      "sha256": "d4420ee7a3b59dbff4662135b7a3bc4287a4b62d6857ae115517b83d44ef20c7",
+      "cSha256": "1d9ba8a7a1b4831e7c7fa6aa4f273e84085caa18bec9cfecf32f605ab708eb5c",
+      "bytes": 1236680,
+      "buildMs": 3997.8576659999994
+    },
+    "phases": {
+      "sha256": "d1f7f396ad95153ada7ac5384852349d38ea977bcc9a45edae81fd032e0d85b5",
+      "cSha256": "716443a39ca7d44fc02b9b0b021564b0ef6bf4d217602dc407024a8842c71f64",
+      "bytes": 540712,
+      "buildMs": 1807.169041
+    },
+    "counters": {
+      "sha256": "309534274ab501d261fac1fe3a8d409be98cbc1e19808e79423aa4de1190c7d4",
+      "cSha256": "534441efdd35ec1487363fd7b9da73c0aa798a1ae744a22126b458a6bd9548cd",
+      "bytes": 1236568,
+      "buildMs": 4025.2919580000007
+    }
+  }
+}

@@ -1,0 +1,101 @@
+use std "debug" as debug
+use std "runtime" as runtime
+use std "csv" as csv
+use std "async" as tasks
+use std "fs" as fs
+
+let checks = 0
+fn equal(actual, expected) {
+  debug.assert(runtime.deepEqual(actual, expected), "String storage value mismatch")
+  checks += 1
+}
+const n = number(args[0] ?? "512")
+const pieces = ["", "a", "سلام", "😀", "\uD800", "\uDC00", "\0", "\n", "\\", '"']
+for piece in pieces {
+  equal(piece.slice(0), piece)
+  equal(JSON.parse(JSON.stringify(piece)), piece)
+  equal(piece + "", piece)
+  equal("" + piece, piece)
+}
+let current = ""
+const prefixes = []
+const expected = []
+let parts = []
+let index = 0
+while index < n {
+  prefixes.push(current)
+  expected.push(parts.join(""))
+  const piece = pieces[index % len(pieces)]
+  current += piece
+  parts.push(piece)
+  if index % 17 == 0 { runtime.collect() }
+  index += 1
+}
+equal(current, parts.join(""))
+// Branching from old prefixes must never overwrite existing values or keys.
+const keys = new Map()
+for prefix at i in prefixes { keys.set(prefix, i) }
+for prefix at i in prefixes {
+  const left = prefix + "left"
+  const right = prefix + "right"
+  runtime.collect()
+  equal(prefix, expected[i])
+  equal(left, expected[i] + "left")
+  equal(right, expected[i] + "right")
+  debug.assert(keys.has(expected[i]))
+}
+// Let the newest owner die while an older immutable prefix remains reachable.
+fn survivor() {
+  let text = "prefix"
+  const old = text
+  let i = 0
+  while i < n { text += "tail"; i += 1 }
+  return old
+}
+const retained = survivor()
+runtime.collect()
+equal(retained, "prefix")
+// Slice/replace/JSON results must own storage independently of local inputs.
+fn transformed() {
+  let input = 'xxسلام😀\0yy'
+  return [input.slice(2, -2), input.replace("xx", "AA"), JSON.parse(JSON.stringify(input))]
+}
+const converted = transformed()
+runtime.collect()
+equal(converted, ["سلام😀\0", "AAسلام😀\0yy", "xxسلام😀\0yy"])
+const parser = csv.decoder()
+equal(parser.push('"سلام😀",'), [])
+runtime.collect()
+equal(parser.push('"a""b"\r\n'), [["سلام😀", 'a"b']])
+equal(parser.finish(), [])
+async fn delayed() {
+  let text = "start"
+  const old = text
+  text += "-سلام😀"
+  await tasks.sleep(0)
+  runtime.collect()
+  return [old, text]
+}
+equal(await delayed(), ["start", "start-سلام😀"])
+const directory = fs.tempDirectory("arya-string-storage-")
+try {
+  let text = "data:سلام😀\0"
+  const original = text
+  const writing = fs.writeText(directory + "/value", text)
+  text += "changed"
+  runtime.collect()
+  await writing
+  equal(await fs.readText(directory + "/value"), original)
+  equal(text, original + "changed")
+} finally { fs.remove(directory + "/value"); fs.removeDirectory(directory) }
+// Repeated allocation and reclamation must not retain released backing buffers.
+fn garbage() {
+  let i = 0
+  while i < n { let value = str(i) + "unretained"; value = value.slice(1); i += 1 }
+}
+garbage()
+const before = runtime.collect()
+garbage(); garbage(); garbage()
+const after = runtime.collect()
+debug.assert(after <= before + 256, "Released string buffers remain accounted as live")
+print("string storage checks:", checks)

@@ -1,0 +1,9 @@
+journal/report checks: 562
+journal retained managed-byte growth: 48012 for 2002 rows
+journal/report checks: 562
+journal retained managed-byte growth: 58218 for 2002 rows
+journal/report checks: 187
+journal retained managed-byte growth: 3076 for 130 rows
+journal snapshots: independent storage, retained names, global account/row limits and full reclamation passed
+typed journal/report contracts passed
+journal/report types: valid shapes and five invalid amount contracts passed

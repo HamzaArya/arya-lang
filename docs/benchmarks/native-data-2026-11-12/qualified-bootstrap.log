@@ -1,0 +1,125 @@
+cc -std=c11 -O2 -ffp-contract=off native/bootstrap/seed.c -o .build/independent/seed -lm
+cp native/compiler/build-cache.arya .build/independent/build-cache.arya
+cp native/compiler/checker.arya .build/independent/checker.arya
+cp native/compiler/compiler.arya .build/independent/compiler.arya
+cp native/compiler/editor.arya .build/independent/editor.arya
+cp native/compiler/lsp.arya .build/independent/lsp.arya
+cp native/compiler/project.arya .build/independent/project.arya
+cp native/compiler/scalar.arya .build/independent/scalar.arya
+cp native/compiler/standard-types.arya .build/independent/standard-types.arya
+cp native/compiler/tooling.arya .build/independent/tooling.arya
+cp native/compiler/type-model.arya .build/independent/type-model.arya
+cp native/compiler/views.arya .build/independent/views.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/accounting.arya .build/independent/stdlib/accounting.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/csv.arya .build/independent/stdlib/csv.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/finance.arya .build/independent/stdlib/finance.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/glob.arya .build/independent/stdlib/glob.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/money.arya .build/independent/stdlib/money.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/mysql.arya .build/independent/stdlib/mysql.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/path.arya .build/independent/stdlib/path.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/python.arya .build/independent/stdlib/python.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/testing.arya .build/independent/stdlib/testing.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/ui.arya .build/independent/stdlib/ui.arya
+mkdir -p .build/independent/stdlib
+cp native/libraries/web.arya .build/independent/stdlib/web.arya
+cc -std=c11 -O2 native/bootstrap/bytes.c -o .build/independent/bytes
+.build/independent/bytes native/python/worker.py native/runtime/python-worker.h
+cc -std=c11 -O2 native/bootstrap/embed.c -o .build/independent/embed
+.build/independent/embed native/runtime/core.c .build/independent/runtime-source.arya native/vendor/ryu
+.build/independent/embed native/runtime/core.c .build/independent/runtime.c native/vendor/ryu --c
+cc -std=c11 -O2 native/bootstrap/rebase.c -o .build/independent/rebase
+.build/independent/seed build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage1-seed --cc /Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/native/bootstrap/cc.sh
+ld: warning: ignoring duplicate libraries: '-lm'
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage1-seed
+.build/independent/rebase .build/independent/stage1-seed.c .build/independent/runtime.c .build/independent/stage1.c
+cc -std=c11 -O2 -ffp-contract=off -I .build/independent/lib .build/independent/stage1.c .build/independent/lib/libmpdec.a -o .build/independent/stage1 -lm -pthread
+.build/independent/stage1.c:6903:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6903 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+.build/independent/stage1.c:6929:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6929 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+.build/independent/stage1.c:6930:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6930 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+.build/independent/stage1 build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage2 --force
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage2.arya-DkU6nV/program.c:6905:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6905 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage2.arya-DkU6nV/program.c:6931:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6931 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage2.arya-DkU6nV/program.c:6932:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6932 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/stage2
+.build/independent/stage2 build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya --force
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya.arya-cPxAGr/program.c:6905:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6905 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya.arya-cPxAGr/program.c:6931:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6931 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya.arya-cPxAGr/program.c:6932:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6932 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/Users/hamza/Projects/github-repo/arya-lang/.build/performance-2026-11-12/qualified-source/.build/independent/arya
+cmp .build/independent/stage2.c .build/independent/arya.c
+      118.54 real       104.97 user         3.75 sys
+           768573440  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              835942  page reclaims
+               12977  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                  47  signals received
+                4262  voluntary context switches
+               66190  involuntary context switches
+           254724023  instructions retired
+           179578175  cycles elapsed
+             1769984  peak memory footprint

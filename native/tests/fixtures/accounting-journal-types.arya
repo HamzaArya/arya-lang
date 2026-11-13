@@ -1,0 +1,52 @@
+use std "accounting" as accounting
+use std "debug" as debug
+
+const options = {currency: "AFN", scale: 2}
+const postings = [{account: "cash", debit: "12.50", credit: "0"}, {account: "sales", debit: "0", credit: "12.50"}]
+const transaction = {id: "typed-1", entries: postings}
+const validation: {id: string, currency: string, scale: number, entryCount: number, debit: string, credit: string, balanced: boolean} = accounting.validateTransaction(transaction, options)
+const prepared = accounting.prepareJournal([transaction], options)
+const preparedCurrency: string = prepared.currency
+const preparedScale: number = prepared.scale
+const preparedLength: number = prepared.length
+const preparedCount: number = prepared.transactionCount
+const calculated = prepared.calculate({backend: "native"})
+const asynchronously = await prepared.calculateAsync()
+const direct = accounting.journalBatch([transaction], options)
+const journalCurrency: string = direct.currency
+const journalScale: number = direct.scale
+const journalBackend: string = direct.backend
+const journalEntries: number = direct.entryCount
+const journalCount: number = direct.transactionCount
+const journalDebit: string = direct.debit
+const journalCredit: string = direct.credit
+const journalDifference: string = direct.difference
+const journalBalanced: boolean = direct.balanced
+const journalPolicy: string = direct.policy
+const journalAccounts: {account: string, debit: string, credit: string, balance: string}[] = direct.accounts
+const journalTransactions: {id: string, currency: string, scale: number, entryCount: number, debit: string, credit: string, balanced: boolean}[] = direct.transactions
+const syncDebit: string = calculated.debit
+const asyncDebit: string = asynchronously.debit
+const asyncCount: number = asynchronously.transactionCount
+const trial = accounting.trialBalance(postings, options)
+const trialCurrency: string = trial.currency
+const trialScale: number = trial.scale
+const trialEntries: number = trial.entryCount
+const trialAccounts: {account: string, debit: string, credit: string}[] = trial.accounts
+const trialDebit: string = trial.debit
+const trialCredit: string = trial.credit
+const trialDifference: string = trial.difference
+const trialBalanced: boolean = trial.balanced
+const trialPolicy: string = trial.policy
+const statements = accounting.financialStatements(postings, [{account: "cash", type: "asset"}, {account: "sales", type: "revenue"}], options)
+const statementCurrency: string = statements.currency
+const statementScale: number = statements.scale
+const statementEntries: number = statements.entryCount
+const statementPolicy: string = statements.policy
+const statementAccounts: {account: string, type: string, debit: string, credit: string, balance: string, normalBalance: string}[] = statements.accounts
+const income: {revenue: string, expenses: string, netIncome: string} = statements.incomeStatement
+const balance: {assets: string, liabilities: string, equity: string, currentEarnings: string, liabilitiesAndEquity: string, difference: string, balanced: boolean} = statements.balanceSheet
+debug.assert(validation.debit == "12.50" and journalDebit == syncDebit and syncDebit == asyncDebit)
+debug.assert(journalCount == 1 and preparedCount == 1 and asyncCount == 1 and preparedLength == 2)
+debug.assert(trialDebit == "12.50" and income.netIncome == "12.50" and balance.assets == "12.50" and balance.balanced)
+print("typed journal/report contracts passed")

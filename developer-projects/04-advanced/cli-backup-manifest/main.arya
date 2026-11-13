@@ -1,0 +1,52 @@
+use std "fs" as fs
+use std "path" as path
+use std "security" as security
+use std "process" as process
+use std "validate" as validate
+const recordSchema = validate.object({path: validate.string({min: 1, max: 4096}), bytes: validate.integer({min: 0}), sha256: validate.string({min: 64, max: 64})})
+const schema = validate.object({version: validate.integer({min: 1, max: 1}), files: validate.array(recordSchema, {max: 10000})})
+fn scan(root) {
+  let files = []; let bytes = 0
+  fn visit(directory, prefix, depth) {
+    if depth > 32 { throw new Error("Tree exceeds 32 levels.") }
+    for name in fs.listSync(directory).sort() {
+      let full = path.join(directory, name); let relative = prefix + name; let info = fs.infoSync(full)
+      if info == null { throw new Error("File vanished: " + relative) }
+      if info.type == "directory" { visit(full, relative + "/", depth + 1) }
+      else if info.type == "file" {
+        if info.size > 1048576 { throw new Error("File exceeds 1 MiB: " + relative) }
+        bytes += info.size
+        if bytes > 16777216 or files.length >= 10000 { throw new Error("Tree exceeds 16 MiB or 10000 files.") }
+        let content = fs.readBytesSync(full)
+        if content.length != info.size { throw new Error("File changed while reading: " + relative) }
+        files.push({path: relative, bytes: content.length, sha256: security.hashBytes(content)})
+      } else { throw new Error("Symlinks and special files are not supported: " + relative) }
+    }
+  }
+  visit(root, "", 0); return {version: 1, files: files}
+}
+try {
+  if args.length == 0 or args[0] == "--help" { print("TextVault: create DIRECTORY MANIFEST.json | verify DIRECTORY MANIFEST.json\nBinary and text files; no symlinks. Manifest must be outside the scanned tree. Verify exits 2 on differences."); process.exit(0) }
+  if args.length != 3 or not ["create", "verify"].includes(args[0]) { throw new Error("Expected create|verify DIRECTORY MANIFEST.json.") }
+  const root = path.realPath(args[1] ?? ""); const requestedOutput = path.resolve(args[2] ?? ""); const output = path.join(path.realPath(path.dirname(requestedOutput)), path.basename(requestedOutput))
+  const rootInfo = fs.infoSync(root)
+  if rootInfo == null or rootInfo.type != "directory" { throw new Error("Source must be a directory.") }
+  if output == root or output.startsWith(root + "/") { throw new Error("Manifest must be outside the scanned directory.") }
+  const current = scan(root)
+  if args[0] == "create" {
+    if fs.existsSync(output) { throw new Error("Refusing to replace an existing manifest.") }
+    const stage = fs.tempDirectory(output + ".arya-XXXXXX")
+    const staged = path.join(stage, "manifest.json")
+    try { fs.writeTextSync(staged, JSON.stringify(current, null, 2) + "\n"); fs.publish(staged, output) }
+    finally { if fs.existsSync(staged) { fs.remove(staged) }; fs.removeDirectory(stage) }
+    print(JSON.stringify({created: output, files: current.files.length}))
+  } else {
+    const saved: any = validate.parse(schema, JSON.parse(fs.readTextSync(output)))
+    let before = {}; let after = {}; let added = []; let removed = []; let changed = []
+    for item in saved.files { if Object.hasOwn(before, item.path) { throw new Error("Manifest contains duplicate paths.") }; before[item.path] = item }
+    for item in current.files { after[item.path] = item; if not Object.hasOwn(before, item.path) { added.push(item.path) } else if before[item.path].sha256 != item.sha256 or before[item.path].bytes != item.bytes { changed.push(item.path) } }
+    for item in saved.files { if not Object.hasOwn(after, item.path) { removed.push(item.path) } }
+    const ok = added.length + removed.length + changed.length == 0
+    print(JSON.stringify({ok: ok, added: added, removed: removed, changed: changed}, null, 2)); if not ok { process.exit(2) }
+  }
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(1) }

@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/cli-release-gate/.build/verified-app"]
+PASS: 10 release gate scenarios (pass, coverage, critical, rollback, revision, missing, duplicate, malformed, skipped, usage)

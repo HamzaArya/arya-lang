@@ -1,0 +1,2215 @@
+{
+  "recordedAtUtc": "2026-11-13T02:32:20Z",
+  "boundary": "CPU ms inside warmed workload; build/startup/output excluded. Fresh processes, alternating binary order. Allocation counters from separate processes.",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "flags": "--release (-O2 -ffp-contract=off); counters add --runtime-counters",
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "sourceSha256": "95dc0858a2b5b9f7927d581ac23301711c6b9481ce215e4ce5543d623744444e",
+  "controllerSha256": "10f94511e1c94355566a720866cb5af8d0579219f0955431046e38e6ecf5a445",
+  "loadStart": [
+    8.41845703125,
+    10.470703125,
+    9.47021484375
+  ],
+  "artifacts": {
+    "before": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+      "binarySha256": "69201ddc65f21a6a9138ef37ae0bce7e26eb590aabdf05adcdb2877a5aae9933",
+      "generatedCSha256": "d430e6f3e5237cd3be78d3850f28d4d740164abb90702b15e0541118c63173f6",
+      "binaryBytes": 524680,
+      "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+      "compilerSha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+      "buildCommands": [
+        [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+          "build",
+          "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/string-storage.arya",
+          "-o",
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+          "--release"
+        ],
+        [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+          "build",
+          "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/string-storage.arya",
+          "-o",
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+          "--release",
+          "--runtime-counters"
+        ]
+      ],
+      "buildWallMs": 4352.0844590002525
+    },
+    "after": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+      "binarySha256": "266a3d663a25d7f549bb82a68a450c05390f59a18ebcc47333e18caf71bc8253",
+      "generatedCSha256": "fec6112a04bde3e96f0bd586131e44ada03386ef6cdfe0456001efed6e2faf6a",
+      "binaryBytes": 524872,
+      "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+      "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "buildCommands": [
+        [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+          "build",
+          "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/string-storage.arya",
+          "-o",
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+          "--release"
+        ],
+        [
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+          "build",
+          "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/string-storage.arya",
+          "-o",
+          "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+          "--release",
+          "--runtime-counters"
+        ]
+      ],
+      "buildWallMs": 4069.637208000131
+    }
+  },
+  "raw": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 20.964,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 19.586,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 19.522000000000002,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 21.209,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 21.31,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 22.372,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 20.881,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 25.48,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 21.821,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 19.798,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 20.436,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 22.093999999999998,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 22.200999999999997,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 20.077,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 20.703000000000003,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 22.291999999999998,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 22.171,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 20.167,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 28.538999999999998,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 25.826999999999998,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 24.82,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 26.498,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 26.512,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 24.255,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 24.284,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 26.958000000000002,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 26.684,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 24.641,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 24.669,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 28.310999999999996,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 29.016999999999996,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 40.29899999999999,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 25.085,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 26.599999999999998,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 26.444000000000003,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 24.528000000000002,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 0,
+      "cpuMs": 16.497999999999998,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 0,
+      "cpuMs": 13.837,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 1,
+      "cpuMs": 14.382000000000001,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 1,
+      "cpuMs": 16.620000000000005,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 2,
+      "cpuMs": 16.792,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 2,
+      "cpuMs": 13.902999999999999,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 3,
+      "cpuMs": 13.934,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 3,
+      "cpuMs": 16.204000000000004,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 4,
+      "cpuMs": 16.203000000000003,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 4,
+      "cpuMs": 13.735,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 5,
+      "cpuMs": 13.74,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 5,
+      "cpuMs": 15.996,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 6,
+      "cpuMs": 17.022000000000002,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 6,
+      "cpuMs": 13.826999999999998,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 7,
+      "cpuMs": 13.755999999999998,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 7,
+      "cpuMs": 16.487000000000002,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 8,
+      "cpuMs": 16.384,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "sample": 8,
+      "cpuMs": 13.802,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 8.608,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 0,
+      "cpuMs": 8.681000000000001,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 8.689,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 1,
+      "cpuMs": 8.699,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 8.601999999999999,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 2,
+      "cpuMs": 8.597999999999999,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 8.638,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 3,
+      "cpuMs": 10.929999999999998,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 10.398,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 4,
+      "cpuMs": 9.719,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 9.799000000000001,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 5,
+      "cpuMs": 9.051,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 9.462,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 6,
+      "cpuMs": 9.307,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 10.452,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 7,
+      "cpuMs": 10.169,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 8.94,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "sample": 8,
+      "cpuMs": 9.772,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "medianCpuMs": 22.093999999999998,
+      "minCpuMs": 20.964,
+      "maxCpuMs": 25.48
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "medianCpuMs": 20.167,
+      "minCpuMs": 19.522000000000002,
+      "maxCpuMs": 22.372
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "medianCpuMs": 26.684,
+      "minCpuMs": 26.444000000000003,
+      "maxCpuMs": 29.016999999999996
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "medianCpuMs": 24.669,
+      "minCpuMs": 24.255,
+      "maxCpuMs": 40.29899999999999
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "medianCpuMs": 16.487000000000002,
+      "minCpuMs": 15.996,
+      "maxCpuMs": 17.022000000000002
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "medianCpuMs": 13.826999999999998,
+      "minCpuMs": 13.735,
+      "maxCpuMs": 14.382000000000001
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "medianCpuMs": 9.051,
+      "minCpuMs": 8.601999999999999,
+      "maxCpuMs": 10.929999999999998
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "medianCpuMs": 9.307,
+      "minCpuMs": 8.597999999999999,
+      "maxCpuMs": 10.452
+    }
+  ],
+  "counters": [
+    {
+      "label": "before",
+      "mode": "short",
+      "iterations": 100000,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 404239,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 202007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 21,
+        "peakManagedBytes": 1087304,
+        "scalarCalls": 0,
+        "rootedCalls": 202006,
+        "rootPushes": 42,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 30190396,
+        "strings": 101051,
+        "stringUnits": 492367,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.892
+      }
+    },
+    {
+      "label": "after",
+      "mode": "short",
+      "iterations": 100000,
+      "checksum": 488890,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+        "short",
+        "100000"
+      ],
+      "loadBefore": [
+        7.8125,
+        10.2734375,
+        9.41162109375
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 303188,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 202007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 20,
+        "peakManagedBytes": 1086626,
+        "scalarCalls": 0,
+        "rootedCalls": 202006,
+        "rootPushes": 42,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 29381904,
+        "strings": 101051,
+        "stringUnits": 492355,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.085
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "mode": "slice",
+      "iterations": 100000,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 303239,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 101007,
+        "directCalls": 101002,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 24,
+        "peakManagedBytes": 1087274,
+        "scalarCalls": 0,
+        "rootedCalls": 101006,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 32869283,
+        "strings": 101051,
+        "stringUnits": 2424588,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 4.124
+      }
+    },
+    {
+      "label": "after",
+      "mode": "slice",
+      "iterations": 100000,
+      "checksum": 2400000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+        "slice",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 202188,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 101007,
+        "directCalls": 101002,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 23,
+        "peakManagedBytes": 1086678,
+        "scalarCalls": 0,
+        "rootedCalls": 101006,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 32060875,
+        "strings": 101051,
+        "stringUnits": 2424588,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.03
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "mode": "json",
+      "iterations": 10000,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 363261,
+        "heapObjects": 132104,
+        "environments": 1,
+        "functions": 40,
+        "genericCalls": 44007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 29,
+        "peakManagedBytes": 1096238,
+        "scalarCalls": 0,
+        "rootedCalls": 44006,
+        "rootPushes": 121047,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 34191103,
+        "strings": 110055,
+        "stringUnits": 396608,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 43997,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 5.18
+      }
+    },
+    {
+      "label": "after",
+      "mode": "json",
+      "iterations": 10000,
+      "checksum": 540000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+        "json",
+        "10000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 220209,
+        "heapObjects": 121105,
+        "environments": 1,
+        "functions": 40,
+        "genericCalls": 44007,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 26,
+        "peakManagedBytes": 1094976,
+        "scalarCalls": 0,
+        "rootedCalls": 44006,
+        "rootPushes": 121047,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 31066867,
+        "strings": 99056,
+        "stringUnits": 352612,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 43997,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 4.014
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 10999,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "mode": "append",
+      "iterations": 100000,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 101273,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 9,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 15,
+        "peakManagedBytes": 1628416,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 25132415,
+        "strings": 101051,
+        "stringUnits": 5000551087,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.649
+      }
+    },
+    {
+      "label": "after",
+      "mode": "append",
+      "iterations": 100000,
+      "checksum": 100000,
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+        "append",
+        "100000"
+      ],
+      "loadBefore": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "loadAfter": [
+        7.5869140625,
+        10.185546875,
+        9.3857421875
+      ],
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 101205,
+        "heapObjects": 101094,
+        "environments": 1,
+        "functions": 36,
+        "genericCalls": 9,
+        "directCalls": 2,
+        "numericCalls": 0,
+        "heapTemporaries": 2,
+        "gcCollections": 15,
+        "peakManagedBytes": 1627536,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 101042,
+        "environmentLookups": 32
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 25131787,
+        "strings": 101051,
+        "stringUnits": 5000551075,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.588
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    }
+  ],
+  "counterArtifacts": {
+    "before": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/before-counters",
+      "binarySha256": "2aa71f8c84908aef7893a470dc0f8d694adb59406f392cc37c429b04d4f837fc",
+      "generatedCSha256": "84dcf2e34269fc26cce1f259f313e35651287eca1d6784fdcc2bf8de4f22c816",
+      "binaryBytes": 524696
+    },
+    "after": {
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/string-storage-daxn5hhn/after-counters",
+      "binarySha256": "9a404adc144b563d88dd30cbe45fe885b4b59ec7adea9c309fa718718bfc3360",
+      "generatedCSha256": "a7383d0dda75298b0cae31ae2c62eb638b52069830e144c36190b0f240956cdc",
+      "binaryBytes": 524744
+    }
+  },
+  "hashesVerifiedUnchanged": true,
+  "loadEnd": [
+    7.5869140625,
+    10.185546875,
+    9.3857421875
+  ]
+}

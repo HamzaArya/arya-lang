@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+    "build",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/backend/src/arya/native-worker.arya",
+    "--output",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/sanitized/ledger-worker",
+    "--release",
+    "--sanitize"
+  ],
+  "compilerSha256": "8a034a4dee8dd637b657dcb7df19d8811854c73a0c52ff1a7fbeb2a42de3e8ec",
+  "binarySha256": "d508343e5dca28f21b372ad64311a2cf4838ccfdeae24b53e877803008efe53c",
+  "generatedCSha256": "ffffa46d153635774f4de78b024fa2734f1085a2a015d6e8d928d559bc5b57a2",
+  "builtAtUtc": "2026-11-13T03:27:55.352098+00:00"
+}

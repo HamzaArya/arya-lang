@@ -1,0 +1,44 @@
+{
+  "sha256": {
+    "native/runtime/json.c": "9bfa85efe30f3e7eb9cb47d62167a56e5bc499f10684fca5af6499159aca5c22",
+    "native/runtime/json-scan.h": "47718f8b0a81b3591e5c6f22fdd843c35222b966929444511566928fe580537c",
+    "native/tests/json-simd-scan.c": "fd0f7d3349481bdd7266c86b596f0ca4153fc09ae3c58eb7b4e0943c01bdfc73",
+    "native/tests/fixtures/json-simd.arya": "3eeecff673199bc4d2030213c83d98142116f5b018bcfd778a0b9c7bce42b5fc",
+    "native/tests/json-simd.sh": "f7fe885ecee3f29dcdbe3a28ccf2470c61fba0ec48416c6baed688e8faffd72a",
+    "native/benchmarks/json-simd.arya": "84507616d636d767e816ee31e587189e7bb50ce82fa51ac93fef452682a206f1",
+    "native/benchmarks/json-simd.py": "02a816f1aa61f92625f03a0ad832f540818cb593f4bfc3f535b75ec9215c0957",
+    ".build/native-fastpaths-2026-11-13/baseline-runtime/json.c": "7e2b285dc31ddff8a986892183f2510b9775fac7a7ceac205641c75529d1c812",
+    ".build/native-fastpaths-2026-11-13/json-simd/before.c": "c902882d3457774ef84a19b9812824e0b1b9728315c7eef99002e321ef066c73",
+    ".build/native-fastpaths-2026-11-13/json-simd/after.c": "0be5a94650a94579b72996294a7a7a2d09c9bfda659817989c07bbfa168f30e3",
+    ".build/native-fastpaths-2026-11-13/json-simd/baseline-pilot.arya": "8cc7904e0a571fef32da3e10506b56e7552a3817b246350009e1ed57a1dbc696"
+  },
+  "scanChecksPerVariant": 1911191,
+  "scanVariants": [
+    "NEON release",
+    "scalar release",
+    "NEON ASan/UBSan",
+    "scalar ASan/UBSan"
+  ],
+  "semanticChecksPerVariant": 7488,
+  "semanticVariants": [
+    "frozen baseline release",
+    "NEON release",
+    "NEON ASan/UBSan",
+    "scalar ASan/UBSan"
+  ],
+  "semanticEnvironment": {
+    "PATH": "/nonexistent",
+    "ARYA_GC_STRESS": "1",
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "fallbackCrossCompile": "cc -target x86_64-apple-macos13 -std=c11 -O2 -c native/tests/json-simd-scan.c (passed; execution not tested)",
+  "assemblyCommand": "xcrun llvm-objdump --disassemble --no-show-raw-insn --disassemble-symbols=_ajstring BINARY",
+  "limitations": [
+    "isolated json.c substitution excludes parallel numeric dispatch/string ownership changes",
+    "full combined SDK gate is performed separately by root",
+    "x86_64 fallback compiled but was not executed in this evidence run",
+    "ASan leak detection disabled on macOS; collector stress exercised with runtime checks",
+    "JSON errors retain existing messages; exact scan positions checked at C layer, JSON API does not expose input offsets"
+  ]
+}

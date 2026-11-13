@@ -1,0 +1,44 @@
+use std "runtime" as runtime
+fn check(value) { if !value { throw new Error("number format regression") } }
+check((1.005).toFixed(2) == "1.00")
+check((2.675).toFixed(2) == "2.67")
+check((-0).toFixed(2) == "0.00")
+check((-0.00001).toFixed(2) == "-0.00")
+check(runtime.sameValue(Number((-0.00001).toFixed(2)), -0))
+check((0.125).toFixed(2) == "0.13")
+check((-0.125).toFixed(2) == "-0.13")
+check((1000000000000000128).toFixed(0) == "1000000000000000128")
+check((1e21).toFixed(2) == "1e+21")
+check((1).toFixed(undefined) == "1")
+check((1.25).toFixed("2.9") == "1.25")
+check((1.25).toFixed(-0.4) == "1")
+const saved = (-1.125).toFixed
+check(saved(2) == "-1.13")
+check((255).toString(16) == "ff")
+check((-255).toString(16) == "-ff")
+const radix = (255).toString
+check(radix(2) == "11111111")
+let errors = 0
+for value in [0, Number.NaN, Number.POSITIVE_INFINITY] {
+  for places in [-1, 101, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY] {
+    try { value.toFixed(places) } catch error { check(error.name == "RangeError"); errors += 1 }
+  }
+}
+check(errors == 12)
+let order = ""
+const object: any = {toFixed: fn(value) { order += "call"; return value }}
+fn argument() { order += "arg"; object.toFixed = fn(_value) => "wrong"; return "result" }
+check(object.toFixed(argument()) == "result")
+check(order == "argcall")
+order = ""
+const getter: any = {}
+runtime.fieldGetter(getter, "toFixed", fn() { order += "get"; return fn(value) { order += "call"; return value } })
+check(getter.toFixed(argument()) == "result")
+check(order == "getargcall")
+let evaluated = false
+const failing: any = {}
+runtime.fieldGetter(failing, "toFixed", fn() { throw new Error("stop") })
+fn effect() { evaluated = true; return 2 }
+try { failing.toFixed(effect()) } catch error { check(error.message == "stop") }
+check(!evaluated)
+print("number formatting and dispatch passed")

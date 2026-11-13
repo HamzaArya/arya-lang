@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "mode": "release",
+  "cases": 175,
+  "invalidCases": 37,
+  "invalidErrorParity": true,
+  "postingRows": 12358,
+  "seed": "0x4A4F5552",
+  "scales": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "oracle": "Independent Python integer minor units; full ordered report equality; error codes plus optional established error parity",
+  "sourceSha256": "04e7cd03da59dbd184dbdbdc178d2d2ae18af1f5be3feaa357db5ed42a69a027",
+  "artifacts": {
+    "baseline": {
+      "compilerSha256": "fd7b3693081d673044a88c59533b8ff7b83e16560818f472190eca4f31d8cacd",
+      "binarySha256": "d236ce5d980189ef10443b11bcc23ebf54d0f4afefe7df170acdf321e3293f3a",
+      "stderr": ""
+    },
+    "candidate": {
+      "compilerSha256": "53193a587737fbbe135ec28261808df3d232228ad8f275935bce11e8a56823df",
+      "binarySha256": "027f20c9e25461b92998f35244087c735db361db3de5b01821f86ec9456268ab",
+      "stderr": ""
+    }
+  },
+  "casesSha256": "87ed15884387c44a692364d759731111caeebf9b99bfabd4d6b93b9e0acd2465"
+}

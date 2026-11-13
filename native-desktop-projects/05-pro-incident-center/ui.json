@@ -1,0 +1,384 @@
+{
+  "id": "incident-center",
+  "name": "Incident Center",
+  "subtitle": "Own incidents, coordinate services and retain a complete activity timeline.",
+  "views": [
+    {
+      "id": "incidents",
+      "label": "Incidents",
+      "columns": [
+        {
+          "key": "id",
+          "label": "ID",
+          "width": 60
+        },
+        {
+          "key": "title",
+          "label": "Incident",
+          "width": 260
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "width": 70
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 110
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "width": 120
+        },
+        {
+          "key": "service",
+          "label": "Service",
+          "width": 150
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "label": "Services",
+      "columns": [
+        {
+          "key": "id",
+          "label": "ID",
+          "width": 60
+        },
+        {
+          "key": "name",
+          "label": "Service",
+          "width": 220
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "width": 150
+        },
+        {
+          "key": "status",
+          "label": "Health",
+          "width": 120
+        },
+        {
+          "key": "activeIncidents",
+          "label": "Active incidents",
+          "width": 130
+        }
+      ]
+    },
+    {
+      "id": "timeline",
+      "label": "Activity timeline",
+      "columns": [
+        {
+          "key": "time",
+          "label": "Time",
+          "width": 200
+        },
+        {
+          "key": "entityId",
+          "label": "Record",
+          "width": 80
+        },
+        {
+          "key": "subject",
+          "label": "Subject",
+          "width": 220
+        },
+        {
+          "key": "action",
+          "label": "Action",
+          "width": 150
+        },
+        {
+          "key": "note",
+          "label": "Note",
+          "width": 300
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New incident",
+      "command": "incident-add",
+      "view": "incidents",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Incident title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "P1",
+              "label": "P1"
+            },
+            {
+              "value": "P2",
+              "label": "P2"
+            },
+            {
+              "value": "P3",
+              "label": "P3"
+            }
+          ],
+          "default": "P2"
+        },
+        {
+          "key": "serviceId",
+          "label": "Service (optional)",
+          "type": "choice",
+          "optionsView": "services",
+          "valueKey": "id",
+          "labelKey": "name"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": false,
+      "destructive": false
+    },
+    {
+      "label": "Edit incident",
+      "command": "incident-edit",
+      "view": "incidents",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Incident title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "priority",
+          "label": "Priority",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "P1",
+              "label": "P1"
+            },
+            {
+              "value": "P2",
+              "label": "P2"
+            },
+            {
+              "value": "P3",
+              "label": "P3"
+            }
+          ],
+          "default": "P2"
+        },
+        {
+          "key": "serviceId",
+          "label": "Service (optional)",
+          "type": "choice",
+          "optionsView": "services",
+          "valueKey": "id",
+          "labelKey": "name"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Advance status",
+      "command": "incident-transition",
+      "view": "incidents",
+      "fields": [
+        {
+          "key": "status",
+          "label": "Next status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "investigating",
+              "label": "Investigating"
+            },
+            {
+              "value": "resolved",
+              "label": "Resolved"
+            }
+          ],
+          "default": "investigating"
+        },
+        {
+          "key": "note",
+          "label": "Investigation or resolution note",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Add note",
+      "command": "incident-note",
+      "view": "incidents",
+      "fields": [
+        {
+          "key": "note",
+          "label": "Activity note",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Reopen incident",
+      "command": "incident-reopen",
+      "view": "incidents",
+      "fields": [
+        {
+          "key": "note",
+          "label": "Reason for reopening",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Delete resolved incident",
+      "command": "incident-delete",
+      "view": "incidents",
+      "fields": [],
+      "selection": true,
+      "destructive": true
+    },
+    {
+      "label": "New service",
+      "command": "service-add",
+      "view": "services",
+      "fields": [
+        {
+          "key": "name",
+          "label": "Service name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "status",
+          "label": "Service health",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "operational",
+              "label": "Operational"
+            },
+            {
+              "value": "degraded",
+              "label": "Degraded"
+            },
+            {
+              "value": "outage",
+              "label": "Outage"
+            }
+          ],
+          "default": "operational"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": false,
+      "destructive": false
+    },
+    {
+      "label": "Edit service",
+      "command": "service-edit",
+      "view": "services",
+      "fields": [
+        {
+          "key": "name",
+          "label": "Service name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "status",
+          "label": "Service health",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "operational",
+              "label": "Operational"
+            },
+            {
+              "value": "degraded",
+              "label": "Degraded"
+            },
+            {
+              "value": "outage",
+              "label": "Outage"
+            }
+          ],
+          "default": "operational"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Delete service",
+      "command": "service-delete",
+      "view": "services",
+      "fields": [],
+      "selection": true,
+      "destructive": true
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+let checks = 0
+fn equal(actual: any, expected: any) {
+  debug.assert(runtime.deepEqual(actual, expected), "Numeric method dispatch mismatch")
+  checks += 1
+}
+
+if args[0] == "--counts" {
+  let checksum = 0
+  let index = 0
+  while index < 10000 {
+    checksum += (index + 0.25).toFixed(2).length
+    checksum += index.toString(16).length
+    checksum += index.toString().length
+    index += 1
+  }
+  print(checksum)
+} else {
+  equal((1.005).toFixed(2), "1.00")
+  equal((-0).toFixed(2), "0.00")
+  equal((-0.004).toFixed(2), "-0.00")
+  equal((5e-324).toFixed(18), "0.000000000000000000")
+  equal((0.1).toFixed(18), "0.100000000000000006")
+  equal((0.1).toFixed(19), "0.1000000000000000056")
+  equal((1e21).toFixed(2), "1e+21")
+  equal(Infinity.toFixed(2), "Infinity")
+  equal(NaN.toFixed(), "NaN")
+  equal((1.25).toFixed("1"), "1.3")
+  equal((1.25).toFixed(undefined), "1")
+  equal((1.25).toFixed(NaN), "1")
+  equal((255).toString(16), "ff")
+  equal((-255).toString(16), "-ff")
+  equal((31).toString(2), "11111")
+  equal((35).toString(36), "z")
+  equal((-0).toString(2), "0")
+  equal(Infinity.toString(2), "Infinity")
+  equal((1.25).toString(), "1.25")
+  equal((1.25).toString(undefined), "1.25")
+  equal((31).toString("16"), "1f")
+
+  let events: any = []
+  let selected: any = 12.25
+  fn receiver(): any { events.push("receiver"); runtime.collect(); return selected }
+  fn precision(): number { events.push("argument"); selected = 99.5; runtime.collect(); return 1 }
+  equal(receiver().toFixed(precision()), "12.3")
+  equal(events, ["receiver", "argument"])
+  equal(selected, 99.5)
+  let detached: any = selected.toFixed
+  selected = 0
+  runtime.collect()
+  equal(detached(2), "99.50")
+  let detachedRadix: any = (255).toString
+  runtime.collect()
+  equal(detachedRadix(16), "ff")
+
+  events = []
+  fn key(): string { events.push("key"); runtime.collect(); return "to" + "Fixed" }
+  selected = 1.25
+  equal(receiver()[key()](precision()), "1.3")
+  equal(events, ["receiver", "key", "argument"])
+  equal((1.25).toFixed(...[2]), "1.25")
+  equal((255).toString(...[16]), "ff")
+
+  let missing: any = undefined
+  equal(missing?.toFixed(precision()), undefined)
+  events = []
+  try { missing.toFixed(precision()); debug.assert(false) } catch error { equal(error.name, "TypeError") }
+  equal(events, [])
+  let numeric: any = 7
+  try { numeric.missing(precision()); debug.assert(false) } catch error { equal(error.name, "TypeError") }
+  equal(events, ["argument"])
+  events = []
+  try { numeric.toString(precision()); debug.assert(false) } catch error { equal(error.name, "RangeError") }
+  equal(events, ["argument"])
+
+  let custom: any = {toFixed: fn(p) { return "old:" + p }}
+  fn replace(): number { custom.toFixed = fn(p) { return "new:" + p }; runtime.collect(); return 2 }
+  equal(custom.toFixed(replace()), "old:2")
+  equal(custom.toFixed(3), "new:3")
+  let accessed = 0
+  let accessor: any = {}
+  runtime.fieldGetter(accessor, "toFixed", fn() { accessed += 1; runtime.collect(); return detached })
+  equal(accessor.toFixed(1), "99.5")
+  equal(accessed, 1)
+  fn dynamic(value: any): any { return value.toFixed(2) }
+  equal(dynamic(1.25), "1.25")
+  equal(dynamic({toFixed: fn(p) { return p + 10 }}), 12)
+
+  for places in [-1, 101, Infinity, -Infinity] {
+    try { numeric.toFixed(places); debug.assert(false) } catch error { equal(error.name, "RangeError") }
+  }
+  for radix in [0, 1, 37, Infinity, NaN] {
+    try { numeric.toString(radix); debug.assert(false) } catch error { equal(error.name, "RangeError") }
+  }
+  try { (1.25).toString(16); debug.assert(false) } catch error { equal(error.name, "RangeError") }
+
+  async fn later(): any { await tasks.sleep(0); runtime.collect(); selected = 77; return 2 }
+  selected = 1.25
+  equal(selected.toFixed(await later()), "1.25")
+  equal(selected, 77)
+
+  fn depth(n: number): any { if n == 0 { return (1.25).toFixed(2) }; return depth(n - 1) }
+  let boundaries = []
+  for n in range(500, 515) {
+    try { boundaries.push(depth(n)) } catch error { equal(error.name, "RangeError"); boundaries.push("depth") }
+  }
+  equal(depth(10), "1.25")
+  print("numeric depth boundary:", boundaries.join(","))
+  print("numeric call checks:", checks)
+}

@@ -1,0 +1,27 @@
+{
+  "views" : [
+    {
+      "view" : "products",
+      "response" : {
+        "message" : "Ready. Select a product to edit it or record stock.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 products · 0 units · 0 low stock · Inventory value 0.00 (one currency)"
+      }
+    },
+    {
+      "view" : "movements",
+      "response" : {
+        "message" : "Ready. Select a product to edit it or record stock.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 stock movements · History is read-only and survives product deletion."
+      }
+    }
+  ],
+  "ok" : true
+}

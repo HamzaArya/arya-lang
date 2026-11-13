@@ -1,0 +1,16 @@
+{
+  "timestamp_utc": "2026-11-13T13:53:58.676479+00:00",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "compiler": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "source_check": "passed",
+  "release_build": "passed",
+  "worker_scenarios_passed": 26,
+  "native_gui_verification": "Owned by root integration",
+  "sha256": {
+    "main.arya": "93e31f3185b983eb8b0887f65e922b3d506ac489baaea2b875c5021b263d5762",
+    "ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+    "smoke.py": "c5e467e4a29fee724dbf39026ce07ca61abcc8be6eed67706e8ee388513e4735",
+    ".build/worker": "63f0e619b8666d0250844c4a92dd844a764fa5cfb36834db2acb7b283402a970"
+  },
+  "abandoned": false
+}

@@ -1,0 +1,24 @@
+use std "fs" as fs
+use std "process" as process
+use std "validate" as validate
+use std "list" as list
+const schema = validate.object({level: validate.enum(["debug", "info", "warn", "error"]), service: validate.string({min: 1, max: 80}), message: validate.string({max: 4096}), durationMs: validate.optional(validate.number({min: 0, max: 86400000}))})
+try {
+  if args.length == 0 or args[0] == "--help" { print("Signal Log: summarize FILE.jsonl [SERVICE]\nEach JSON line: {level, service, message, durationMs?}. Emits JSON. Invalid lines are counted."); process.exit(0) }
+  if args.length > 2 { throw new Error("Expected FILE.jsonl and optional SERVICE.") }
+  const file = fs.infoSync(args[0] ?? "")
+  if file == null or file.type != "file" or file.size > 16777216 { throw new Error("Input must be a regular file at most 16 MiB.") }
+  let counts = {debug: 0, info: 0, warn: 0, error: 0}; let invalid = []; let services = {}; let durations = []; let matched = 0
+  for line at index in fs.readTextSync(args[0] ?? "").split("\n") {
+    if line.trim() == "" { continue }
+    let row: any = null
+    try { row = validate.parse(schema, JSON.parse(line)) } catch failure { invalid.push(index + 1); continue }
+    if args[1] != undefined and row.service != args[1] { continue }
+    matched += 1; counts[row.level] += 1
+    if not Object.hasOwn(services, row.service) { services[row.service] = 0 }; services[row.service] += 1
+    if row.durationMs != undefined { durations.push(row.durationMs) }
+  }
+  let sorted = list.sortBy(durations, fn(n) => n); let p95: any = null; let average: any = null
+  if sorted.length > 0 { p95 = sorted[Math.ceil(sorted.length * 0.95) - 1]; average = list.sum(sorted) / sorted.length }
+  print(JSON.stringify({matched: matched, invalidLines: invalid, levels: counts, services: services, latency: {samples: sorted.length, averageMs: average, p95Ms: p95}}, null, 2))
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(1) }

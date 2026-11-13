@@ -1,0 +1,1030 @@
+{
+  "date": "2026-11-13",
+  "completedAtUtc": "2026-11-13T07:16:25.542690+00:00",
+  "purpose": "Remove redundant Node-profile documents from current native documentation; preserve original bodies in compat/node/docs.",
+  "deletedCopies": [
+    {
+      "duplicate": "docs/accounting-milestone.md",
+      "preserved": "compat/node/docs/accounting-milestone.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "757abbda91fd002bc4fc326d2fb3dec3daae0091dd9111e37f7db2a81010cf30",
+      "preservedSha256": "141518d0eced3d416d7ba50f2d1855356b53e964af1f4a573268988bb112d461",
+      "bytes": 9810
+    },
+    {
+      "duplicate": "docs/architecture-audit.md",
+      "preserved": "compat/node/docs/architecture-audit.md",
+      "relationship": "exact",
+      "duplicateSha256": "c5e41fa9a07b5afb748f45349d653099272bf8057fd39cd72e19add9c8c53716",
+      "preservedSha256": "c5e41fa9a07b5afb748f45349d653099272bf8057fd39cd72e19add9c8c53716",
+      "bytes": 10839
+    },
+    {
+      "duplicate": "docs/architecture-target.md",
+      "preserved": "compat/node/docs/architecture-target.md",
+      "relationship": "exact",
+      "duplicateSha256": "9fcda27846f5d54783090604aab2ca5ee85f3e47c7dea3dba95e7bca0d5719a9",
+      "preservedSha256": "9fcda27846f5d54783090604aab2ca5ee85f3e47c7dea3dba95e7bca0d5719a9",
+      "bytes": 6955
+    },
+    {
+      "duplicate": "docs/arya-editors.md",
+      "preserved": "compat/node/docs/arya-editors.md",
+      "relationship": "exact",
+      "duplicateSha256": "ab7c2f27cc5cca0a12433229487a44b9f8598117a42e579f9ca3ad35cf8855ff",
+      "preservedSha256": "ab7c2f27cc5cca0a12433229487a44b9f8598117a42e579f9ca3ad35cf8855ff",
+      "bytes": 12317
+    },
+    {
+      "duplicate": "docs/arya-master-plan.md",
+      "preserved": "compat/node/docs/arya-master-plan.md",
+      "relationship": "exact",
+      "duplicateSha256": "6b2ca5e555832935ecb35a559c059631ddd993e9581e2a0de0bd8292e6515e36",
+      "preservedSha256": "6b2ca5e555832935ecb35a559c059631ddd993e9581e2a0de0bd8292e6515e36",
+      "bytes": 20753
+    },
+    {
+      "duplicate": "docs/arya-roadmap.md",
+      "preserved": "compat/node/docs/arya-roadmap.md",
+      "relationship": "exact",
+      "duplicateSha256": "ad7413b60e30569e99622e19a5c7b2ea0822cbf0e0b2d2817fcf55797d0bcb65",
+      "preservedSha256": "ad7413b60e30569e99622e19a5c7b2ea0822cbf0e0b2d2817fcf55797d0bcb65",
+      "bytes": 6874
+    },
+    {
+      "duplicate": "docs/arya-secure-format.md",
+      "preserved": "compat/node/docs/arya-secure-format.md",
+      "relationship": "exact",
+      "duplicateSha256": "5a055e8c1486e7b5416f421df47c849c8dcbda59306d73180b5d8b107792e8ed",
+      "preservedSha256": "5a055e8c1486e7b5416f421df47c849c8dcbda59306d73180b5d8b107792e8ed",
+      "bytes": 6981
+    },
+    {
+      "duplicate": "docs/arya-specification.md",
+      "preserved": "compat/node/docs/arya-specification.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "0523913827c2f74fb37a09dcc8181f72496ff434de95b2c00a7be97562b6f8c9",
+      "preservedSha256": "ec1d99ea0cdfac258aaa17f09183388809d9421bdfb927ecb2d7116f237357f0",
+      "bytes": 53598
+    },
+    {
+      "duplicate": "docs/arya-tutorial.md",
+      "preserved": "compat/node/docs/arya-tutorial.md",
+      "relationship": "exact",
+      "duplicateSha256": "e123cdf42716d7f985da2b05199028c3b4902adc131bfa270f74e5deb28b0bf0",
+      "preservedSha256": "e123cdf42716d7f985da2b05199028c3b4902adc131bfa270f74e5deb28b0bf0",
+      "bytes": 22700
+    },
+    {
+      "duplicate": "docs/arya-web.md",
+      "preserved": "compat/node/docs/arya-web.md",
+      "relationship": "exact",
+      "duplicateSha256": "b8dd4e9ff9a0ee391a4fddbd2185060119edfe2f749828034582d7e3dcd51d55",
+      "preservedSha256": "b8dd4e9ff9a0ee391a4fddbd2185060119edfe2f749828034582d7e3dcd51d55",
+      "bytes": 13964
+    },
+    {
+      "duplicate": "docs/business-applications-plan.md",
+      "preserved": "compat/node/docs/business-applications-plan.md",
+      "relationship": "exact",
+      "duplicateSha256": "bfe0d9aeefd8059f0141185432604c570c30dea7eb3898648497580f4cdce359",
+      "preservedSha256": "bfe0d9aeefd8059f0141185432604c570c30dea7eb3898648497580f4cdce359",
+      "bytes": 8532
+    },
+    {
+      "duplicate": "docs/business-applications-report.md",
+      "preserved": "compat/node/docs/business-applications-report.md",
+      "relationship": "exact",
+      "duplicateSha256": "487a8830a464b836b2f216034ec0f6bb1a7d0d143b5eab978587233aaab56b27",
+      "preservedSha256": "487a8830a464b836b2f216034ec0f6bb1a7d0d143b5eab978587233aaab56b27",
+      "bytes": 7358
+    },
+    {
+      "duplicate": "docs/business-applications.md",
+      "preserved": "compat/node/docs/business-applications.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "f84824c272892f1644e87f810bb6d4e34b7a55f5767676d29a3dc01923dc2def",
+      "preservedSha256": "046b75f17a7a9f7ec5ecde3be9f01932fc7bf10d54bb53d3e6d4b8777c806541",
+      "bytes": 15805
+    },
+    {
+      "duplicate": "docs/community-review.md",
+      "preserved": "compat/node/docs/community-review.md",
+      "relationship": "exact",
+      "duplicateSha256": "462efde998c5cf1aa52556de50162c2e5b12ac82af70d9dd96cff35e56eda061",
+      "preservedSha256": "462efde998c5cf1aa52556de50162c2e5b12ac82af70d9dd96cff35e56eda061",
+      "bytes": 7733
+    },
+    {
+      "duplicate": "docs/compatibility-policy.md",
+      "preserved": "compat/node/docs/compatibility-policy.md",
+      "relationship": "exact",
+      "duplicateSha256": "ccf1ee02444d88418622b7cc2d28ddd20d9e9d25bf350abf22503d458729b2f4",
+      "preservedSha256": "ccf1ee02444d88418622b7cc2d28ddd20d9e9d25bf350abf22503d458729b2f4",
+      "bytes": 8175
+    },
+    {
+      "duplicate": "docs/editor-and-compiler-improvements.md",
+      "preserved": "compat/node/docs/editor-and-compiler-improvements.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "a8547a53d38acd6eeebbf4df42e86f9b762d586dd9b0a053d284bcce590ff8d1",
+      "preservedSha256": "0dd0974c806581526d8aee022edb4d8ebc85ace24b13c718636cff50cf519a36",
+      "bytes": 9948
+    },
+    {
+      "duplicate": "docs/editor-setup.md",
+      "preserved": "compat/node/docs/editor-setup.md",
+      "relationship": "exact",
+      "duplicateSha256": "3a7b48d73743188ad316bb9c279ec2e367e11bf59548f3f0c72e42c99207ead7",
+      "preservedSha256": "3a7b48d73743188ad316bb9c279ec2e367e11bf59548f3f0c72e42c99207ead7",
+      "bytes": 8468
+    },
+    {
+      "duplicate": "docs/flow-syntax.md",
+      "preserved": "compat/node/docs/flow-syntax.md",
+      "relationship": "exact",
+      "duplicateSha256": "1f920d26f396f42f59fb1e8043b34d71dff8755f8f51d9ab850a578ba0bc14b8",
+      "preservedSha256": "1f920d26f396f42f59fb1e8043b34d71dff8755f8f51d9ab850a578ba0bc14b8",
+      "bytes": 9066
+    },
+    {
+      "duplicate": "docs/implementation-roadmap.md",
+      "preserved": "compat/node/docs/implementation-roadmap.md",
+      "relationship": "exact",
+      "duplicateSha256": "9bf71c3b26b486eccf9898c77dd589595f6b7e7b9d1791af443f6dc43d08688d",
+      "preservedSha256": "9bf71c3b26b486eccf9898c77dd589595f6b7e7b9d1791af443f6dc43d08688d",
+      "bytes": 7393
+    },
+    {
+      "duplicate": "docs/interop.md",
+      "preserved": "compat/node/docs/interop.md",
+      "relationship": "exact",
+      "duplicateSha256": "2deefe171fbd7278dd9c64790819a64df36a739d2875cc4a644bae5a5cb902a2",
+      "preservedSha256": "2deefe171fbd7278dd9c64790819a64df36a739d2875cc4a644bae5a5cb902a2",
+      "bytes": 8330
+    },
+    {
+      "duplicate": "docs/learner-review-session.md",
+      "preserved": "compat/node/docs/learner-review-session.md",
+      "relationship": "exact",
+      "duplicateSha256": "0393b072fab459a8243f6a342ec2f5f89e75b55844518f8a4e31a1249981779d",
+      "preservedSha256": "0393b072fab459a8243f6a342ec2f5f89e75b55844518f8a4e31a1249981779d",
+      "bytes": 1594
+    },
+    {
+      "duplicate": "docs/learning-path.md",
+      "preserved": "compat/node/docs/learning-path.md",
+      "relationship": "exact",
+      "duplicateSha256": "6ad562bd443a0de41ade986fc0d9a1a5d8eb0e0756eb21686d3c12e7471e60b7",
+      "preservedSha256": "6ad562bd443a0de41ade986fc0d9a1a5d8eb0e0756eb21686d3c12e7471e60b7",
+      "bytes": 8502
+    },
+    {
+      "duplicate": "docs/mysql.md",
+      "preserved": "compat/node/docs/mysql.md",
+      "relationship": "exact",
+      "duplicateSha256": "16118bb0dd1a270b919a3082194f4929f8efe0c3300f031e37ca7c4d7b725707",
+      "preservedSha256": "16118bb0dd1a270b919a3082194f4929f8efe0c3300f031e37ca7c4d7b725707",
+      "bytes": 9275
+    },
+    {
+      "duplicate": "docs/native-milestone.md",
+      "preserved": "compat/node/docs/native-milestone.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "a4c61ed03a6e240a5b160f2e49643f162f4c3db9bfc8346840dd538478bb7e77",
+      "preservedSha256": "7957ad6ca3043142d0069a6e77dd52198fbe31e7f0b88a018394d3ba154c7b73",
+      "bytes": 5819
+    },
+    {
+      "duplicate": "docs/native-performance-plan.md",
+      "preserved": "compat/node/docs/native-performance-plan.md",
+      "relationship": "exact",
+      "duplicateSha256": "31810138a2842b96d5106c16254047deaee5ca84ff6a15d51070e29b90f1697a",
+      "preservedSha256": "31810138a2842b96d5106c16254047deaee5ca84ff6a15d51070e29b90f1697a",
+      "bytes": 36653
+    },
+    {
+      "duplicate": "docs/native-preview.md",
+      "preserved": "compat/node/docs/native-preview.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "09911d000ee38ab86f2233eecb6b3914c4ebd33b44c1d0e7073b242dfe842d42",
+      "preservedSha256": "5776e9ec9444a4968f07a405af24102fa4382d8c43f8b4175d6a0bb355ab5346",
+      "bytes": 6797
+    },
+    {
+      "duplicate": "docs/project-creator.md",
+      "preserved": "compat/node/docs/project-creator.md",
+      "relationship": "exact",
+      "duplicateSha256": "dd28441f26635f1b857996ae8aa2746647f6f897953e56df2a83269429df6579",
+      "preservedSha256": "dd28441f26635f1b857996ae8aa2746647f6f897953e56df2a83269429df6579",
+      "bytes": 5890
+    },
+    {
+      "duplicate": "docs/python-async.md",
+      "preserved": "compat/node/docs/python-async.md",
+      "relationship": "exact",
+      "duplicateSha256": "261a0ca4a639b49635e1a0a0641af1e0c9718a25d55419056ccd90fa9170f186",
+      "preservedSha256": "261a0ca4a639b49635e1a0a0641af1e0c9718a25d55419056ccd90fa9170f186",
+      "bytes": 11520
+    },
+    {
+      "duplicate": "docs/release-readiness.md",
+      "preserved": "compat/node/docs/release-readiness.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "76b67888427e9eb126d8c593d68d702d3ec2adb2ff8e9e4368fa133ece47d0c1",
+      "preservedSha256": "04c111750c09815528746f871ef69dcfe75d45d229ab37e01df509537ef7486a",
+      "bytes": 17712
+    },
+    {
+      "duplicate": "docs/releasing.md",
+      "preserved": "compat/node/docs/releasing.md",
+      "relationship": "exact",
+      "duplicateSha256": "5f7622e5eb1e2d638ca229072af53581ae6588e47bb5271b7638100dc83ef30a",
+      "preservedSha256": "5f7622e5eb1e2d638ca229072af53581ae6588e47bb5271b7638100dc83ef30a",
+      "bytes": 8590
+    },
+    {
+      "duplicate": "docs/security-library.md",
+      "preserved": "compat/node/docs/security-library.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "f5827bed04428d4f7b7982bd0f21d88ea0423d1a61f4f73dd2cc2af7eaa1908a",
+      "preservedSha256": "77c0012eb7e7af84978de11f2139cd06238acc641cdb1696ea4530a589b94b06",
+      "bytes": 11158
+    },
+    {
+      "duplicate": "docs/services.md",
+      "preserved": "compat/node/docs/services.md",
+      "relationship": "exact",
+      "duplicateSha256": "9890911a3a912536f2d49fff7c26223ee4642312bbe34d30ab0f9aaf8cee5769",
+      "preservedSha256": "9890911a3a912536f2d49fff7c26223ee4642312bbe34d30ab0f9aaf8cee5769",
+      "bytes": 11181
+    },
+    {
+      "duplicate": "docs/source-maps.md",
+      "preserved": "compat/node/docs/source-maps.md",
+      "relationship": "exact",
+      "duplicateSha256": "b2e1ca3251a764ffe2bf8536c6525542cf4566cc15f8909d68d1aced45fb2cb7",
+      "preservedSha256": "b2e1ca3251a764ffe2bf8536c6525542cf4566cc15f8909d68d1aced45fb2cb7",
+      "bytes": 4585
+    },
+    {
+      "duplicate": "docs/stable-release-plan.md",
+      "preserved": "compat/node/docs/stable-release-plan.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "0f25cf2201ac9df43daa001d8a032ec90db3a1904d1c9e1fca04ac942891ddc2",
+      "preservedSha256": "d61cd63d70038b657592e2feb1df88db88aa5261a2646f8c573dbd867929af34",
+      "bytes": 6713
+    },
+    {
+      "duplicate": "docs/syntax-and-debugging.md",
+      "preserved": "compat/node/docs/syntax-and-debugging.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "dac620cd7f9ad998a9369a7e98ab20c1356c6802b21e718504bfc1bba1aa4dbf",
+      "preservedSha256": "d5f98eccd4e93471853579e6ded450775cf071a3e2f85321b8cac85806788a75",
+      "bytes": 8989
+    },
+    {
+      "duplicate": "docs/syntax-migration.md",
+      "preserved": "compat/node/docs/syntax-migration.md",
+      "relationship": "exact",
+      "duplicateSha256": "f156141fd23faee7ccc6bec44ca5c0185d31733b53b06c4034855795a841f510",
+      "preservedSha256": "f156141fd23faee7ccc6bec44ca5c0185d31733b53b06c4034855795a841f510",
+      "bytes": 3666
+    },
+    {
+      "duplicate": "docs/testing-library.md",
+      "preserved": "compat/node/docs/testing-library.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "4d94430b4d902c5af0717c0f33e138d28127ba731e3479e99226b84ce4769ca2",
+      "preservedSha256": "690de390ba277c7aac88de7204653b518595b80d4b53a002985af3220178034b",
+      "bytes": 6936
+    },
+    {
+      "duplicate": "docs/tooling-evidence.md",
+      "preserved": "compat/node/docs/tooling-evidence.md",
+      "relationship": "historical-banner",
+      "duplicateSha256": "8536b6f898eba7b1c1f35848b8d75cc56a7f6c60a82aa414e9385a0daf20ba72",
+      "preservedSha256": "b6ad1571a1b136d725cdf87d1ff2d03804b558dfac2bcaa4be38d9a417ecd269",
+      "bytes": 11253
+    },
+    {
+      "duplicate": "docs/ui-apps.md",
+      "preserved": "compat/node/docs/ui-apps.md",
+      "relationship": "exact",
+      "duplicateSha256": "1477ea5f98dc4fbbe46b2c113479f45d708f27d92d8391ea8a9d0bbec7b09f60",
+      "preservedSha256": "1477ea5f98dc4fbbe46b2c113479f45d708f27d92d8391ea8a9d0bbec7b09f60",
+      "bytes": 12476
+    },
+    {
+      "duplicate": "docs/ui-library.md",
+      "preserved": "compat/node/docs/ui-library.md",
+      "relationship": "exact",
+      "duplicateSha256": "2d34467ab93072c51ba6dd1c25e2b227f5c6ae2fe36d1621d5fb72f5101ee8f3",
+      "preservedSha256": "2d34467ab93072c51ba6dd1c25e2b227f5c6ae2fe36d1621d5fb72f5101ee8f3",
+      "bytes": 22704
+    },
+    {
+      "duplicate": "docs/ui-patterns.md",
+      "preserved": "compat/node/docs/ui-patterns.md",
+      "relationship": "exact",
+      "duplicateSha256": "a714aa75b9c1190d142b94ef41db2481fea993903dc610eb0d06f75fc2bfeef8",
+      "preservedSha256": "a714aa75b9c1190d142b94ef41db2481fea993903dc610eb0d06f75fc2bfeef8",
+      "bytes": 8241
+    },
+    {
+      "duplicate": "docs/package-arya-original.mjs",
+      "preserved": "compat/node/docs/package-arya-original.mjs",
+      "relationship": "exact",
+      "duplicateSha256": "731a42aa4a051fae8246aad4203844da32a2c776d7b4970c5cf76e01f849f735",
+      "preservedSha256": "731a42aa4a051fae8246aad4203844da32a2c776d7b4970c5cf76e01f849f735",
+      "bytes": 8450
+    }
+  ],
+  "deletedFiles": 42,
+  "deletedBytes": 484303,
+  "linkRewrites": [
+    {
+      "file": "docs/README.md",
+      "beforeSha256": "90a8f58dfee5eae70fe26da4847eef7bd7e1f19a06031a8ddc5a2b651dec924f",
+      "afterSha256": "345355eca9f4a0c23e65714d5c642e79557e0b9cd50aba3514964d55f5c9256e",
+      "links": [
+        {
+          "from": "arya-master-plan.md",
+          "to": "../compat/node/docs/arya-master-plan.md"
+        },
+        {
+          "from": "implementation-roadmap.md",
+          "to": "../compat/node/docs/implementation-roadmap.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/history/README.md",
+      "beforeSha256": "7231eb8563696fd78b1f51b077d2e642d4115a3e3e03b8b151dff90e8a35fe68",
+      "afterSha256": "998c818f39d6f401076035578921964d32fe15c9a82ffbd3b577acbd7f730cd2",
+      "links": [
+        {
+          "from": "../arya-roadmap.md",
+          "to": "../../compat/node/docs/arya-roadmap.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/history/arya-1.1-native-plan.md",
+      "beforeSha256": "838a614e92e5c1a3f12269a1e81be74078059b515774e3e2e0876e03694e2f5e",
+      "afterSha256": "56f5a7458e68800477afac2eb1012bb3c081f4c31874761926770de741c049db",
+      "links": [
+        {
+          "from": "../arya-roadmap.md",
+          "to": "../../compat/node/docs/arya-roadmap.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        },
+        {
+          "from": "../compatibility-policy.md",
+          "to": "../../compat/node/docs/compatibility-policy.md"
+        },
+        {
+          "from": "../arya-specification.md",
+          "to": "../../compat/node/docs/arya-specification.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/history/arya-native-specification.md",
+      "beforeSha256": "9d0a0613c7b4b68b106d7a7a01edc800879046fde404a7195e63a67debb97474",
+      "afterSha256": "5223b5bac147eed84b13b11ec01a0ef9649cc6d6b12611dbce62d16df67611e5",
+      "links": [
+        {
+          "from": "../arya-specification.md",
+          "to": "../../compat/node/docs/arya-specification.md"
+        },
+        {
+          "from": "../syntax-and-debugging.md",
+          "to": "../../compat/node/docs/syntax-and-debugging.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/history/native-release-verification.md",
+      "beforeSha256": "f1cf9eb9e242c6ff778367f75045b79b0e5647cedebb656191af9e74694f8ccd",
+      "afterSha256": "ef3e678e09d4c374cc3ad34cac308381565075561933d20f31d9515c67f5979b",
+      "links": [
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/history/roadmap-through-1.3.0-alpha.3.md",
+      "beforeSha256": "8cb37e752eafeb77d3ce11e39b6f9d44d0fde2c2ccfb9c1f0f241f5168eca171",
+      "afterSha256": "f25823e05d441ef912fb1af38e58ce8774a0d553edd44456fa9b11b1ab16ed6e",
+      "links": [
+        {
+          "from": "../arya-roadmap.md",
+          "to": "../../compat/node/docs/arya-roadmap.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        },
+        {
+          "from": "../source-maps.md",
+          "to": "../../compat/node/docs/source-maps.md"
+        },
+        {
+          "from": "../arya-specification.md",
+          "to": "../../compat/node/docs/arya-specification.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        },
+        {
+          "from": "../flow-syntax.md",
+          "to": "../../compat/node/docs/flow-syntax.md"
+        },
+        {
+          "from": "../ui-patterns.md",
+          "to": "../../compat/node/docs/ui-patterns.md"
+        },
+        {
+          "from": "../source-maps.md",
+          "to": "../../compat/node/docs/source-maps.md"
+        },
+        {
+          "from": "../flow-syntax.md",
+          "to": "../../compat/node/docs/flow-syntax.md"
+        },
+        {
+          "from": "../flow-syntax.md#validate-assumptions-with-early-exits",
+          "to": "../../compat/node/docs/flow-syntax.md#validate-assumptions-with-early-exits"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/0.2.0-alpha.1.md",
+      "beforeSha256": "d1d0cd158ffbc040117f3341688ad9c34bdf762677dccf75aaa7e5c3c1146946",
+      "afterSha256": "14428e1a87ec02c0759380853a155448b7c89131274cbd4c2c81ba7e69f9e68e",
+      "links": [
+        {
+          "from": "../source-maps.md",
+          "to": "../../compat/node/docs/source-maps.md"
+        },
+        {
+          "from": "../arya-specification.md",
+          "to": "../../compat/node/docs/arya-specification.md"
+        },
+        {
+          "from": "../arya-roadmap.md",
+          "to": "../../compat/node/docs/arya-roadmap.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/0.2.0-alpha.2.md",
+      "beforeSha256": "b352ded68e3d9b3dd22c0aecc643dcad977189e6cd622384a89d84406a4fddbf",
+      "afterSha256": "f1dd10be5402f0874544dd73ff839fc410ed65c464cab68d484738410ec07d06",
+      "links": [
+        {
+          "from": "../arya-specification.md",
+          "to": "../../compat/node/docs/arya-specification.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/0.2.0-alpha.3.md",
+      "beforeSha256": "d6e4facc7a46337ef757fdcb464760424161db7be2af1c99cc9cdd1bc0b6b377",
+      "afterSha256": "77214806f276fb0aa77dab65f35e740e33728e46d9b820f79c0cd9f2139f11b0",
+      "links": [
+        {
+          "from": "../arya-specification.md#11-arya-modules-and-build-graphs",
+          "to": "../../compat/node/docs/arya-specification.md#11-arya-modules-and-build-graphs"
+        },
+        {
+          "from": "../interop.md",
+          "to": "../../compat/node/docs/interop.md"
+        },
+        {
+          "from": "../learning-path.md",
+          "to": "../../compat/node/docs/learning-path.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.2.0-alpha.1.md",
+      "beforeSha256": "b3e81baaf070e22127972dd3a0e322b263100ab8dfc70b0636f04e6506017666",
+      "afterSha256": "33a4eb2a47adb5e775389f516715a12782ef7e5529ae95d2a0fdb60a884ed515",
+      "links": [
+        {
+          "from": "../arya-web.md",
+          "to": "../../compat/node/docs/arya-web.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.2.0-alpha.2.md",
+      "beforeSha256": "36c4858e19e2bc02c1c50c63c06cce97eeee9d9645b7edd830b08ec07b2bd701",
+      "afterSha256": "4d10b3aeb63fed82ec8e700a1ef56681fd9b36dee675d07befae126dd86013d4",
+      "links": [
+        {
+          "from": "../arya-web.md",
+          "to": "../../compat/node/docs/arya-web.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.2.0-alpha.3.md",
+      "beforeSha256": "eac4de3097c219f8520092a9e3a05d504a2322cfc56d779c2897b0bfa2fa2260",
+      "afterSha256": "e49af3761a7f3be07f28750f62987746d9c9426c213eadafff2518e4a721ac8c",
+      "links": [
+        {
+          "from": "../project-creator.md",
+          "to": "../../compat/node/docs/project-creator.md"
+        },
+        {
+          "from": "../arya-web.md",
+          "to": "../../compat/node/docs/arya-web.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.2.0-alpha.4.md",
+      "beforeSha256": "f129d34913adf46a700f9474fba08912c81881aa4d97a1eab8d71fb9810d6512",
+      "afterSha256": "bec3e71bca34608067a9972fa2805daf371f17832b01449fcf9a4097058b3a6a",
+      "links": [
+        {
+          "from": "../ui-library.md",
+          "to": "../../compat/node/docs/ui-library.md"
+        },
+        {
+          "from": "../editor-setup.md",
+          "to": "../../compat/node/docs/editor-setup.md"
+        },
+        {
+          "from": "../mysql.md",
+          "to": "../../compat/node/docs/mysql.md"
+        },
+        {
+          "from": "../services.md",
+          "to": "../../compat/node/docs/services.md"
+        },
+        {
+          "from": "../python-async.md",
+          "to": "../../compat/node/docs/python-async.md"
+        },
+        {
+          "from": "../syntax-and-debugging.md",
+          "to": "../../compat/node/docs/syntax-and-debugging.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.1.md",
+      "beforeSha256": "3b05b9a935cf7ab0370395882ced9039fdb14279b78575ef4efd17235a420756",
+      "afterSha256": "92aece9688e07f1bd85717d66621356adfb102e1c128c532f8690ab28b47389b",
+      "links": [
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.10.md",
+      "beforeSha256": "810ce1148a5b4dd15ef8437e4a794cca28a54509805f09d431a86579120235d1",
+      "afterSha256": "e8151893db684e4adf3eebe5fcc941cb8d30c6a856a38e0f9471a468b66cfa33",
+      "links": [
+        {
+          "from": "../learner-review-session.md",
+          "to": "../../compat/node/docs/learner-review-session.md"
+        },
+        {
+          "from": "../editor-and-compiler-improvements.md",
+          "to": "../../compat/node/docs/editor-and-compiler-improvements.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.11.md",
+      "beforeSha256": "720b7de2b590100fa1af67ece5cee3149bb8e8f10967460875eeecbe76deeb77",
+      "afterSha256": "996cd675f449bc5500402609c80d54475f8fbe0585d949a9fd8369273c6660c4",
+      "links": [
+        {
+          "from": "../accounting-milestone.md",
+          "to": "../../compat/node/docs/accounting-milestone.md"
+        },
+        {
+          "from": "../architecture-audit.md",
+          "to": "../../compat/node/docs/architecture-audit.md"
+        },
+        {
+          "from": "../architecture-target.md",
+          "to": "../../compat/node/docs/architecture-target.md"
+        },
+        {
+          "from": "../implementation-roadmap.md",
+          "to": "../../compat/node/docs/implementation-roadmap.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.12.md",
+      "beforeSha256": "7b09c6c84795a591642d596733d50af921acc586bd255938a833777e48d579ba",
+      "afterSha256": "714d429556a9ed084d021ee86cae354dc9deb2745436f3f2c3a3427c77ae5cbb",
+      "links": [
+        {
+          "from": "../native-preview.md",
+          "to": "../../compat/node/docs/native-preview.md"
+        },
+        {
+          "from": "../native-milestone.md",
+          "to": "../../compat/node/docs/native-milestone.md"
+        },
+        {
+          "from": "../architecture-target.md",
+          "to": "../../compat/node/docs/architecture-target.md"
+        },
+        {
+          "from": "../implementation-roadmap.md",
+          "to": "../../compat/node/docs/implementation-roadmap.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.2.md",
+      "beforeSha256": "9ea51237a255592daa1a6c2bd12c3c5e30c2cfb3b3ca195c3296e24a5e1f566e",
+      "afterSha256": "d3b2ea6ae670bf4101644bc13bde4142afc15aba2f5ea183e63823f070c17917",
+      "links": [
+        {
+          "from": "../flow-syntax.md",
+          "to": "../../compat/node/docs/flow-syntax.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.3.md",
+      "beforeSha256": "4b4969de8b7243c77b70f273ac0189130e677b8e64056febf0436257f83b6383",
+      "afterSha256": "8f7ade9491c875d233b905907743795522e2643c171b4b0487a03a7130393def",
+      "links": [
+        {
+          "from": "../ui-patterns.md",
+          "to": "../../compat/node/docs/ui-patterns.md"
+        },
+        {
+          "from": "../ui-library.md",
+          "to": "../../compat/node/docs/ui-library.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.4.md",
+      "beforeSha256": "a22b95f5f17f41e9a89e5a88d849e944b194e233457476f9a3de814080f54482",
+      "afterSha256": "9eca7fdbfb244363589f4ba8b6a6a4a2986a540c3cf90909e6a447d70c2354b8",
+      "links": [
+        {
+          "from": "../syntax-migration.md",
+          "to": "../../compat/node/docs/syntax-migration.md"
+        },
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.5.md",
+      "beforeSha256": "445e1739e01a77913ef5309d3a38a259556d2a4792d8dabafa38af8cdad061f5",
+      "afterSha256": "305eee185a4264de0715d3ec4d3121bf2121e812e35458d2aa9f4dcac09f18b1",
+      "links": [
+        {
+          "from": "../business-applications.md",
+          "to": "../../compat/node/docs/business-applications.md"
+        },
+        {
+          "from": "../business-applications-plan.md",
+          "to": "../../compat/node/docs/business-applications-plan.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.6.md",
+      "beforeSha256": "9a98cb148ff41ee2b0b1debbe900ffd1f5a62682b46d10561b0ad57e97044344",
+      "afterSha256": "1b1a878489e03ae5729d3ebd5b5ca9f370fd8817b95a5465b90c590e6a6744bc",
+      "links": [
+        {
+          "from": "../business-applications.md",
+          "to": "../../compat/node/docs/business-applications.md"
+        },
+        {
+          "from": "../business-applications-plan.md",
+          "to": "../../compat/node/docs/business-applications-plan.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.7.md",
+      "beforeSha256": "93efbd9147b26d1665e5ffa346bedcbcad5edc3f4dec8ed1c65ca16148ae68b0",
+      "afterSha256": "6b05b87bb34282c855659c1b7a63dce2e34937b45772ea1d25db2a46a066d66e",
+      "links": [
+        {
+          "from": "../business-applications.md",
+          "to": "../../compat/node/docs/business-applications.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.8.md",
+      "beforeSha256": "3ebb6b1f129582a99e362510ddedb6360de78b1a110d34045d022f7d314e2914",
+      "afterSha256": "68eb3a4031dab0079bf4eba094e4590bb5b4ea12c7fc1f0d518dea638be84831",
+      "links": [
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        }
+      ],
+      "mode": "link-target-only"
+    },
+    {
+      "file": "docs/releases/README.md",
+      "beforeSha256": "be22f43d4e360b9eb7075d20d9e46c3ee94748ad03cbacb85229a1052103c60c",
+      "afterSha256": "43a99f09fc25b3822dd7f27754c68f63be90f868d62cd5fd08e3c00f2be92ab9",
+      "links": [
+        {
+          "from": "../release-readiness.md",
+          "to": "../../compat/node/docs/release-readiness.md"
+        },
+        {
+          "from": "../syntax-migration.md",
+          "to": "../../compat/node/docs/syntax-migration.md"
+        }
+      ],
+      "mode": "link-target-only"
+    }
+  ],
+  "linkTargetsChanged": 64,
+  "preservation": "Original compatibility copies remain byte-for-byte unchanged. Publication JSON, benchmark records, native qualification and release archives are not edited. Historical Markdown prose is unchanged by link-only repairs; archive index refreshes are recorded separately.",
+  "note": "The 42 duplicate source/doc files remain preserved under compat/node. Two current native JSON mirrors are separately preserved as retired pointers; native/manifest.json is authoritative. Root-owned CHANGELOG historical references are updated separately.",
+  "refreshedPages": [
+    {
+      "file": "docs/README.md",
+      "beforeSha256": "345355eca9f4a0c23e65714d5c642e79557e0b9cd50aba3514964d55f5c9256e",
+      "afterSha256": "a40f9da1e681d086509ddfb55ff89f0eb7b3ecf711800251496e0c96298964a0",
+      "mode": "current-navigation-or-status-refresh"
+    },
+    {
+      "file": "docs/history/README.md",
+      "beforeSha256": "998c818f39d6f401076035578921964d32fe15c9a82ffbd3b577acbd7f730cd2",
+      "afterSha256": "d40c1872e8025d8fdef6324e9beb6fe87e46b566da4599442b8b8b2ee874596a",
+      "mode": "current-navigation-or-status-refresh"
+    },
+    {
+      "file": "docs/releases/README.md",
+      "beforeSha256": "43a99f09fc25b3822dd7f27754c68f63be90f868d62cd5fd08e3c00f2be92ab9",
+      "afterSha256": "9bcc0d612eb04ee06b921313916cb0ce14854ae23ea75fab66dc18a7472fda8c",
+      "mode": "current-navigation-or-status-refresh"
+    },
+    {
+      "file": "docs/tasks/native-professionalization.md",
+      "beforeSha256": "4c77d60e54c860ab3aeea0f98fc35512a39935a003374e0f4178691c9ad13b90",
+      "afterSha256": "061876d42541cd630012a7b8527c46dd73af9c9be6c6bedd154a47c5e643e570",
+      "mode": "current-navigation-or-status-refresh"
+    },
+    {
+      "file": "docs/native-independence.md",
+      "beforeSha256": "670c1c4f50cd1b4c9691a13caae26f142119a6a51bfcda0a8a39be678020352a",
+      "afterSha256": "81da139a63e76998f681609361b18a636e2fb956211e1fd90fe470217de3325d",
+      "mode": "current-navigation-or-status-refresh"
+    }
+  ],
+  "verification": {
+    "preservedDuplicateFiles": 42,
+    "allPreservedOriginalHashesMatch": true,
+    "allDeletedRootCopiesAbsent": true,
+    "retiredPointers": 2,
+    "allRetiredPointerHashesMatch": true,
+    "historicalProseMatchesPreservedOriginalIgnoringLinkTargets": [
+      "docs/history/arya-1.1-native-plan.md",
+      "docs/history/arya-native-specification.md",
+      "docs/history/arya-native.md",
+      "docs/history/native-release-verification.md",
+      "docs/history/roadmap-through-1.3.0-alpha.3.md",
+      "docs/releases/0.2.0-alpha.1.md",
+      "docs/releases/0.2.0-alpha.2.md",
+      "docs/releases/0.2.0-alpha.3.md",
+      "docs/releases/1.2.0-alpha.1.md",
+      "docs/releases/1.2.0-alpha.2.md",
+      "docs/releases/1.2.0-alpha.3.md",
+      "docs/releases/1.2.0-alpha.4.md",
+      "docs/releases/1.3.0-alpha.1.md",
+      "docs/releases/1.3.0-alpha.10.md",
+      "docs/releases/1.3.0-alpha.11.md",
+      "docs/releases/1.3.0-alpha.12.md",
+      "docs/releases/1.3.0-alpha.2.md",
+      "docs/releases/1.3.0-alpha.3.md",
+      "docs/releases/1.3.0-alpha.4.md",
+      "docs/releases/1.3.0-alpha.5.md",
+      "docs/releases/1.3.0-alpha.6.md",
+      "docs/releases/1.3.0-alpha.7.md",
+      "docs/releases/1.3.0-alpha.8.md",
+      "docs/releases/1.3.0-alpha.9.md"
+    ],
+    "historicalProseFiles": 24,
+    "currentDocumentationCheck": {
+      "passed": true,
+      "scope": "Offline local targets, Markdown heading anchors and manifest/catalog equality; external URLs and runtime examples are not executed.",
+      "results": {
+        "repository": {
+          "guides": 38,
+          "localLinks": 318,
+          "modules": 26
+        }
+      }
+    },
+    "refreshedPagesSha256": {
+      "docs/README.md": "a40f9da1e681d086509ddfb55ff89f0eb7b3ecf711800251496e0c96298964a0",
+      "docs/history/README.md": "d40c1872e8025d8fdef6324e9beb6fe87e46b566da4599442b8b8b2ee874596a",
+      "docs/releases/README.md": "9bcc0d612eb04ee06b921313916cb0ce14854ae23ea75fab66dc18a7472fda8c",
+      "docs/tasks/native-professionalization.md": "061876d42541cd630012a7b8527c46dd73af9c9be6c6bedd154a47c5e643e570",
+      "docs/native-independence.md": "81da139a63e76998f681609361b18a636e2fb956211e1fd90fe470217de3325d"
+    }
+  },
+  "retiredNativePointers": [
+    {
+      "removedActivePath": "docs/feature-status.json",
+      "preservedSnapshot": "docs/maintenance/retired-pointers/feature-status.json",
+      "sha256": "28c0912fb93f4738cf7cf9929f60f3cbefd2150fe7135af5a7843e9ed9b83e5f",
+      "bytes": 220,
+      "replacedBy": "native/manifest.json"
+    },
+    {
+      "removedActivePath": "docs/release-status.json",
+      "preservedSnapshot": "docs/maintenance/retired-pointers/release-status.json",
+      "sha256": "7dfa6a72a6a64ac0e126f7a058ab1067e5ebbbeb6f565e5aaa2cedabfb7f7285",
+      "bytes": 339,
+      "replacedBy": "native/manifest.json"
+    }
+  ],
+  "activeFilesRemovedTotal": 44,
+  "additionalLinkRewrites": [
+    {
+      "file": "docs/history/arya-1.1-native-plan.md",
+      "beforeSha256": "56f5a7458e68800477afac2eb1012bb3c081f4c31874761926770de741c049db",
+      "afterSha256": "812fd37c1cdcf3cdee9ac43a221f88dd9564002682fdfb81bdd7c7966a55899c",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/history/native-release-verification.md",
+      "beforeSha256": "ef3e678e09d4c374cc3ad34cac308381565075561933d20f31d9515c67f5979b",
+      "afterSha256": "63fdf513ded923fa743dd59ce80eb8ecf4d154dba8635a8212a4310799181f0d",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/history/arya-native.md",
+      "beforeSha256": "18131fd1fe2586e08beb8d37ac455a9ddb46c2b6553726b6ab59fb982cb61bb2",
+      "afterSha256": "d9f7b997752b919794f8a0dcdd9f067e3333de66dbaafa0adebf3bc69a6cbd17",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/history/arya-native-specification.md",
+      "beforeSha256": "5223b5bac147eed84b13b11ec01a0ef9649cc6d6b12611dbce62d16df67611e5",
+      "afterSha256": "b0ae26ee52ae777b9fd5840f0873357b4135d81178cf0f02360b7e96bdf2e063",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/history/roadmap-through-1.3.0-alpha.3.md",
+      "beforeSha256": "f25823e05d441ef912fb1af38e58ce8774a0d553edd44456fa9b11b1ab16ed6e",
+      "afterSha256": "08b4ec2e342e6409417fc585f383776312a258508eb8a73b3a8df242a63fad30",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/releases/0.2.0-alpha.2.md",
+      "beforeSha256": "f1dd10be5402f0874544dd73ff839fc410ed65c464cab68d484738410ec07d06",
+      "afterSha256": "c13fa392f86631d850ca664cc7cfb1cbd135b93e99d35b84f45117df6d298cc8",
+      "links": [
+        {
+          "from": "../compiler-api.md",
+          "to": "../../compat/node/docs/compiler-api.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/releases/0.2.0-alpha.3.md",
+      "beforeSha256": "77214806f276fb0aa77dab65f35e740e33728e46d9b820f79c0cd9f2139f11b0",
+      "afterSha256": "9b86f6d53d56dc6457bef5570ebb8f0ddcab3ab7cd9974d2ac4473cbadbefc6d",
+      "links": [
+        {
+          "from": "../compiler-api.md",
+          "to": "../../compat/node/docs/compiler-api.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.8.md",
+      "beforeSha256": "68eb3a4031dab0079bf4eba094e4590bb5b4ea12c7fc1f0d518dea638be84831",
+      "afterSha256": "2c5ecd863b7fe51385e010a92e6c5f43659d81bd01db3f7f136787bdf810e832",
+      "links": [
+        {
+          "from": "../node-runtime.md#try-the-candidate",
+          "to": "../../compat/node/docs/node-runtime.md#try-the-candidate"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.9.md",
+      "beforeSha256": "e2f085cab0913b8e30c05ea6afa036b11118c8f2035fed610c047ec82053c42b",
+      "afterSha256": "37b292a4732fa50590ee2df828f48af7668318389563e9784958d93b31a525af",
+      "links": [
+        {
+          "from": "../node-runtime.md#try-the-candidate",
+          "to": "../../compat/node/docs/node-runtime.md#try-the-candidate"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    },
+    {
+      "file": "docs/releases/1.3.0-alpha.1.md",
+      "beforeSha256": "92aece9688e07f1bd85717d66621356adfb102e1c128c532f8690ab28b47389b",
+      "afterSha256": "3d3e5d39aac7683fea760f73c93bd070f9972061e050afd945f53ac9948d459e",
+      "links": [
+        {
+          "from": "../node-runtime.md",
+          "to": "../../compat/node/docs/node-runtime.md"
+        }
+      ],
+      "mode": "historical-profile-link-target-only"
+    }
+  ],
+  "additionalLinkTargetsChanged": 10
+}

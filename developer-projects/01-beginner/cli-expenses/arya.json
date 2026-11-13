@@ -1,0 +1,6 @@
+{
+  "name": "cli-expenses",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "cli"
+}

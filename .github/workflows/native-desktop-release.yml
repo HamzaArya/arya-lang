@@ -1,0 +1,74 @@
+name: Native desktop release qualification
+on:
+  workflow_dispatch:
+  push:
+    branches: ['release/**']
+permissions:
+  contents: read
+jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Linux native widget prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev pkg-config xvfb
+      - name: Build self-hosted native SDK
+        run: make native-sdk
+      - name: Core regressions
+        run: make native-test
+      - name: API contracts and byte safety
+        run: make native-api-test
+      - name: Linux native widget state and events
+        if: runner.os == 'Linux'
+        run: xvfb-run -a sh native/tests/gui.sh
+      - name: macOS native widget state and events
+        if: runner.os == 'macOS'
+        run: sh native/tests/gui.sh
+      - name: Package tested SDK
+        run: make native-package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-sdk-${{ matrix.os }}
+          path: artifacts/arya-native-*.tar.gz*
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence-${{ matrix.os }}
+          path: .build/release-evidence/
+  windows-cygwin:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - run: git config --global core.autocrlf input
+      - uses: actions/checkout@v4
+      - uses: cygwin/cygwin-install-action@5a1b0cd107181fa6bb6bf3f90d500f4fb3132f18 # v7
+        with:
+          install-dir: 'C:\cygwin'
+          packages: >-
+            gcc-core gcc-g++ make perl libcrypt-devel libiconv-devel
+            pkg-config zip unzip diffutils patch tar gzip bzip2 xz coreutils
+      - name: Build native Windows PE toolchain with explicit Cygwin dependency
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        run: make native-sdk CC=gcc CXX=g++
+      - name: Core and Win32 widget checks
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        run: |
+          sh native/tests/run.sh
+          sh native/tests/gui.sh
+      - name: Record dependency requirements
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+        run: |
+          mkdir -p .build/release-evidence
+          cygcheck .build/independent/arya.exe > .build/release-evidence/windows-dependencies.txt
+          .build/independent/arya --version
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-cygwin-evidence
+          path: .build/release-evidence/

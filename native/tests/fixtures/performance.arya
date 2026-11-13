@@ -1,0 +1,153 @@
+use std "debug" as debug
+use std "runtime" as runtime
+use std "list" as list
+use std "fs" as fs
+const width = number(args[0] ?? "128")
+for operation in [fn() { return fs.readText() }, fn() { return fs.writeText() }, fn() { return fs.exists() }, fn() { return fs.list() }, fn() { return fs._treeInfoSync() }] {
+  let rejected = false
+  try { await operation() } catch error { rejected = error.name == "TypeError" }
+  debug.assert(rejected, "Missing filesystem paths must throw TypeError.")
+}
+
+debug.assert(Math == Math and JSON == JSON and Promise == Promise)
+debug.assert(Buffer == Buffer and Date == Date and RegExp == RegExp)
+fn shadow(Math) { return Math.value }
+debug.assert(shadow({value: 7}) == 7)
+
+let record = {}
+let i = 0
+while i < width { record["key" + str(i)] = i; i += 1 }
+let decoded = JSON.parse(JSON.stringify(record))
+debug.assert(runtime.deepEqual(record, decoded))
+debug.assert(JSON.parse('{"same":1,"same":2}').same == 2)
+let revived = JSON.parse(JSON.stringify(record), fn(key, value) {
+  if key == "key0" { return undefined }
+  return value
+})
+debug.assert(not Object.hasOwn(revived, "key0"))
+debug.assert(revived["key" + str(width - 1)] == width - 1)
+runtime.fieldGetter(record, "computed", fn() { return 42 })
+debug.assert(record.computed == 42)
+let readonly = false
+try { record.computed = 0 } catch error { readonly = error.name == "TypeError" }
+debug.assert(readonly)
+
+let map = new Map()
+i = 0
+while i < width { map.set(i, "v" + str(i)); i += 1 }
+i = 0
+while i < width { debug.assert(map.delete(i)); i += 1 }
+debug.assert(map.size == 0 and len(map.entries()) == 0)
+map.set("a", 1); map.set("b", 2); map.delete("a"); map.set("a", 3)
+debug.assert(map.keys().join(",") == "b,a")
+let entries = []
+for pair in map { entries.push(pair[0]) }
+debug.assert(entries.join(",") == "b,a")
+map.clear(); map.set("a", 1); map.set("b", 2); map.set("c", 3)
+let visited = []
+map.forEach(fn(value, key) {
+  visited.push(key)
+  if key == "a" { map.delete("b"); map.set("d", 4) }
+})
+debug.assert(visited.join(",") == "a,c,d")
+map.clear(); map.set("old", 1)
+visited = []
+map.forEach(fn(value, key) {
+  visited.push(key)
+  if key == "old" { map.clear(); map.set("new", 2) }
+})
+debug.assert(visited.join(",") == "old,new")
+map.clear()
+map.set(NaN, 1); map.set(NaN, 2); map.set(-0, 3)
+debug.assert(map.size == 2 and map.get(NaN) == 2 and map.get(0) == 3)
+
+let identity = {}
+let unique = list.unique([NaN, NaN, -0, 0, identity, identity, {}, undefined, undefined])
+debug.assert(len(unique) == 5 and Number.isNaN(unique[0]) and Object.is(unique[1], -0))
+let rows = [{key: "a", value: 1}, {key: "b", value: 2}, {key: "a", value: 3}]
+debug.assert(list.unique(rows, "key").map(fn(row) { return row.value }).join(",") == "1,2")
+debug.assert(len(list.unique(range(width))) == width)
+
+let all = await Promise.all(range(width))
+debug.assert(len(all) == width and all[width - 1] == width - 1)
+let settled = await Promise.allSettled([Promise.resolve(1), Promise.reject("bad"), 3])
+debug.assert(settled[0].value == 1 and settled[1].reason == "bad" and settled[2].value == 3)
+debug.assert(await Promise.race([Promise.resolve("first"), Promise.resolve("second")]) == "first")
+debug.assert(await Promise.any([Promise.reject("bad"), Promise.resolve("ok")]) == "ok")
+
+let text = ""
+let snapshots = []
+i = 0
+while i < width { if i % 16 == 0 { snapshots.push(text) }; text += "x"; i += 1 }
+debug.assert(len(text) == width)
+debug.assert(str(range(width)) == range(width).join(","))
+let cycle = []; cycle.push(cycle); debug.assert(str(cycle) == "")
+i = 0
+for snapshot in snapshots { debug.assert(snapshot == "x".repeat(i * 16)); i += 1 }
+let prefix = text
+let left = prefix + "left"
+let right = prefix + "right"
+runtime.collect()
+debug.assert(prefix == "x".repeat(width) and left.endsWith("left") and right.endsWith("right"))
+let keyed = new Map([[prefix, "retained"]])
+let extended = prefix + "more"
+debug.assert(keyed.get("x".repeat(width)) == "retained" and len(extended) == width + 4)
+debug.assert("\uD800" + "\uDC00" == "𐀀")
+
+const before = runtime.collect()
+let sparse = []
+sparse[1000000] = {retained: "yes"}
+const retainedBytes = runtime.collect() - before
+debug.assert(retainedBytes < 100000, "A sparse write allocated the holes.")
+debug.assert(len(sparse) == 1000001 and sparse[0] == undefined and sparse[1000000].retained == "yes")
+sparse[999999] = "last"
+runtime.collect()
+debug.assert(sparse[999999] == "last" and sparse[1000000].retained == "yes")
+sparse.length = 2
+sparse.length = 1000001
+debug.assert(sparse[999999] == undefined and sparse[1000000] == undefined)
+sparse[1000000] = "end"
+debug.assert(sparse.pop() == "end" and len(sparse) == 1000000)
+sparse.length = 1000001
+debug.assert(sparse[1000000] == undefined and not Object.hasOwn(sparse, "1000000"))
+for operation in ["pop", "shift", "splice"] {
+  let trimmed = [1, 2, 3]
+  if operation == "splice" { trimmed.splice(1, 2) } else { trimmed[operation]() }
+  const kept = len(trimmed)
+  trimmed.length = 3
+  debug.assert(trimmed[kept] == undefined and not Object.hasOwn(trimmed, str(kept)))
+  trimmed = [1, 2, 3]
+  if operation == "splice" { trimmed.splice(1, 2) } else { trimmed[operation]() }
+  trimmed[4] = 5
+  debug.assert(trimmed[kept] == undefined and not Object.hasOwn(trimmed, str(kept)))
+}
+let frozenSparse = []; frozenSparse[1000000] = "frozen"; Object.freeze(frozenSparse)
+let frozenBytes = runtime.collect()
+let frozenRejected = false
+try { frozenSparse.reverse() } catch error { frozenRejected = error.name == "TypeError" }
+debug.assert(frozenRejected and runtime.collect() - frozenBytes < 100000)
+let sparseCopy = []
+sparseCopy[50000] = 9
+debug.assert(sparseCopy.slice(49999).join(",") == ",9")
+debug.assert(Object.keys(sparseCopy).join(",") == "50000")
+debug.assert(Array.from(sparseCopy).length == 50001)
+let sparsePair = []
+sparsePair[50000] = 1
+debug.assert(Buffer.from(sparsePair).length == 50001)
+let nestedSparse = {items: []}
+nestedSparse.items[10000] = "ok"
+debug.assert(JSON.parse(JSON.stringify(nestedSparse)).items[10000] == "ok")
+debug.assert(runtime.deepEqual(nestedSparse.items, nestedSparse.items.slice()))
+
+i = 0
+while i < width { let value = Math.random(); debug.assert(value >= 0 and value < 1); i += 1 }
+if args[1] != undefined {
+  const directory = args[1]
+  fs.writeTextSync(directory + "/first", "data")
+  fs.writeTextSync(directory + "/line\n:سلام", "data")
+  const snapshot = fs._treeInfoSync(directory)
+  debug.assert(snapshot == fs._treeInfoSync(directory))
+  fs.rename(directory + "/first", directory + "/second")
+  debug.assert(snapshot != fs._treeInfoSync(directory))
+}
+print("native performance semantics passed")

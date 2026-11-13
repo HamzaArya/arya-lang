@@ -1,0 +1,5 @@
+{
+  "name": "cli-release-gate",
+  "entry": "main.arya",
+  "target": "native"
+}

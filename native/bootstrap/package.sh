@@ -18,7 +18,7 @@ stage=$(mktemp -d "$root/.build/native-package.XXXXXX")
 trap 'rm -rf "$stage"' EXIT HUP INT TERM
 sh "$root/native/bootstrap/stage-sdk.sh" "$stage/$name"
 case "$("$stage/$name/arya" --version)" in "Arya native $version "*) ;; *) printf '%s\n' 'SDK binary and source version differ' >&2; exit 1;; esac
-tar -czf "$stage/$name.tar.gz" -C "$stage" "$name"
+COPYFILE_DISABLE=1 tar -czf "$stage/$name.tar.gz" -C "$stage" "$name"
 digest=$(shasum -a 256 "$stage/$name.tar.gz" | awk '{print $1}')
 printf '%s  %s.tar.gz\n' "$digest" "$name" > "$stage/checksum"
 ln "$stage/$name.tar.gz" "$output"

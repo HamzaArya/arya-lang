@@ -1,0 +1,6 @@
+{
+  "name": "gui-habit-tracker",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "ui"
+}

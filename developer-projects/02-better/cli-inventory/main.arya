@@ -1,0 +1,64 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "validate" as validate
+use std "runtime" as runtime
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonempty text up to " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  let result = Number(value)
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be an integer.") }
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " is outside its allowed integer range.") }
+  return result
+}
+fn load(schema) {
+  let info = fs.infoSync(file)
+  if info == null { return {nextId: 1, rows: []} }
+  if info.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 1048576 { throw new Error("Data file exceeds 1 MiB.") }
+  return validate.parse(validate.object({nextId: validate.number({integer: true, min: 1}), rows: validate.array(schema, {max: 1000})}), JSON.parse(fs.readTextSync(file)))
+}
+fn save(next) {
+  if next.rows.length > 1000 { throw new Error("This local app supports at most 1000 records.") }
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 900000 { throw new Error("Store is full; remove old records first.") }
+  fs.writeTextAtomicSync(file, encoded)
+}
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn findIndex(rows, id) {
+  let index = rows.findIndex(fn(row) { return row.id == integer(id, "ID", 1) })
+  if index < 0 { throw new Error("Record not found.") }
+  return index
+}
+const rowSchema = validate.object({id: validate.number(), sku: validate.string(), name: validate.string(), quantity: validate.number(), reorder: validate.number()})
+try {
+  let data = load(rowSchema)
+  let command = args[0] ?? "help"
+  if command == "add" {
+    if args.length != 5 { throw new Error("Usage: add SKU NAME QUANTITY REORDER") }
+    let sku = text(args[1], "SKU", 40)
+    if data.rows.some(fn(row) { return row.sku == sku }) { throw new Error("SKU already exists.") }
+    let row = {id: data.nextId, sku: sku, name: text(args[2], "Name"), quantity: integer(args[3], "Quantity"), reorder: integer(args[4], "Reorder threshold")}
+    data.rows.push(row); data.nextId += 1; save(data); print(JSON.stringify(row))
+  } else if command == "adjust" {
+    if args.length != 3 { throw new Error("Usage: adjust SKU SIGNED_DELTA") }
+    let index = data.rows.findIndex(fn(row) { return row.sku == args[1] })
+    if index < 0 { throw new Error("SKU not found.") }
+    let delta = integer(args[2], "Adjustment", -1000000)
+    let quantity = data.rows[index].quantity + delta
+    if quantity < 0 or quantity > 1000000 { throw new Error("Adjustment would make stock negative or exceed capacity.") }
+    data.rows[index].quantity = quantity; save(data); print(JSON.stringify(data.rows[index]))
+  } else if command == "list" { print(JSON.stringify(data.rows)) }
+  else if command == "low" { print(JSON.stringify(data.rows.filter(fn(row) { return row.quantity <= row.reorder }))) }
+  else if command == "delete" {
+    if args.length != 2 { throw new Error("Usage: delete SKU") }
+    let index = data.rows.findIndex(fn(row) { return row.sku == args[1] })
+    if index < 0 { throw new Error("SKU not found.") }
+    if data.rows[index].quantity != 0 { throw new Error("Only zero-stock products can be removed.") }
+    data.rows.splice(index, 1); save(data); print("Deleted")
+  } else if command == "help" { print("Stockroom | add SKU NAME QUANTITY REORDER | adjust SKU SIGNED_DELTA | list | low | delete SKU") }
+  else { throw new Error("Unknown command; run help.") }
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(1) }

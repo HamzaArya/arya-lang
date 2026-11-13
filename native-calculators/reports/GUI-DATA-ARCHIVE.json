@@ -1,0 +1,48 @@
+{
+  "date_utc": "2026-11-13T14:54:34.786481+00:00",
+  "notes": "Only the exact synthetic UI-test rows were moved, after confirming no calculator host was running. Apps now start with empty history.",
+  "stores": [
+    {
+      "id": "calc-basic",
+      "qa_rows": 3,
+      "sha256": "3aa98c4af6c14f31af3d4c5a174410275fa7c18016f94a53a49e5ad18d1b542b",
+      "archive": "reports/gui-data/calc-basic.json",
+      "last_result": "22"
+    },
+    {
+      "id": "calc-everyday",
+      "qa_rows": 4,
+      "sha256": "727ce99c50a2e7db70171d90be032cc9aef35cae3a6cc683b070f6cbae6360f3",
+      "archive": "reports/gui-data/calc-everyday.json",
+      "last_result": "20"
+    },
+    {
+      "id": "calc-scientific",
+      "qa_rows": 2,
+      "sha256": "fe3c1700bbd9b24d3265f5f64027c7f2f3cfab623402fec33fbafaaa7c107a51",
+      "archive": "reports/gui-data/calc-scientific.json",
+      "last_result": "121"
+    },
+    {
+      "id": "calc-programmer",
+      "qa_rows": 2,
+      "sha256": "81d55e49efcd672706cf1f9a720b88c75362695dbf51608a0ce0f4336cc36664",
+      "archive": "reports/gui-data/calc-programmer.json",
+      "last_result": "1"
+    },
+    {
+      "id": "calc-finance",
+      "qa_rows": 5,
+      "sha256": "914278dd798ad97fcb19eadc8fde662183ec92ccc95b067986b4ad5ab390fc3c",
+      "archive": "reports/gui-data/calc-finance.json",
+      "last_result": "85.00"
+    },
+    {
+      "id": "calc-precision",
+      "qa_rows": 4,
+      "sha256": "c5464cd271df1c0e9733db1ef6a2bf9183434aa9d1494eff739c0110a039659c",
+      "archive": "reports/gui-data/calc-precision.json",
+      "last_result": "(1/7)"
+    }
+  ]
+}

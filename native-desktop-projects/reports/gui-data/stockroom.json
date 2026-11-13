@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "nextProductId": 2,
+  "nextMovementId": 2,
+  "products": [
+    {
+      "id": 1,
+      "version": 2,
+      "quantity": 10,
+      "sku": "QA-NOTEBOOK",
+      "name": "Notebook — native QA",
+      "location": "",
+      "unitPrice": "4.25",
+      "reorder": 5,
+      "description": ""
+    }
+  ],
+  "movements": [
+    {
+      "id": 1,
+      "productId": 1,
+      "sku": "QA-NOTEBOOK",
+      "name": "Notebook — native QA",
+      "kind": "Receive",
+      "units": 10,
+      "balance": 10,
+      "date": "2026-11-13",
+      "reason": "QA delivery"
+    }
+  ]
+}

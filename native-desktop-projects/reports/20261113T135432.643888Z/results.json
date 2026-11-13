@@ -1,0 +1,90 @@
+{
+  "date_utc": "20261113T135432.643888Z",
+  "mode": "package-only",
+  "host_source_sha256": "84131f4cc193382f34da7a19e307ff601b962db4a757e1d71d2f4d3c5b62d9b4",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "projects": [
+    {
+      "path": "01-beginner-study-desk",
+      "steps": [
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-g3230ncd/Study Desk.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.307,
+          "log": "reports/20261113T135432.643888Z/01-beginner-study-desk-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-g3230ncd/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.128,
+          "log": "reports/20261113T135432.643888Z/01-beginner-study-desk-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/arya-app-stage-g3230ncd/Study Desk.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.077,
+          "log": "reports/20261113T135432.643888Z/01-beginner-study-desk-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/dist/Study Desk.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T135432.643888Z/01-beginner-study-desk-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "ui.json": "ac8de26f1945e0ce8763b58f6b362dc882233a75a59bf8b5ff1f4bb803e8b7c9",
+        "main.arya": "93e31f3185b983eb8b0887f65e922b3d506ac489baaea2b875c5021b263d5762",
+        "verification.json": "6bfb5c357e08967ceb1a55dfecd069b153418664523723f8ac6ef000dcdce065",
+        "smoke.py": "c5e467e4a29fee724dbf39026ce07ca61abcc8be6eed67706e8ee388513e4735"
+      },
+      "status": "passed",
+      "app": "dist/Study Desk.app",
+      "worker_sha256": "e50650149dafc6033865dfc42c45372d8211c7abf7b89421ef2bb4c1fb91e0a2",
+      "host_sha256": "eb91d42d41f3297b2b204550e0f144cbca4f4fa28d9a870cfe3298f2a9201d56"
+    }
+  ],
+  "host_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fmodules",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/shared/NativeHost.m",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "UniformTypeIdentifiers",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/.build/NativeHost"
+    ],
+    "exit_code": 0,
+    "seconds": 9.293,
+    "log": "reports/20261113T135432.643888Z/appkit-host.log"
+  },
+  "host_binary_sha256": "734a49f5e9306ad8a95760ddc680e3ff53f608029109ee8769938b55fc2eaec3",
+  "passed": 1,
+  "failed": 0
+}

@@ -1,0 +1,522 @@
+{
+  "seed": "0x1ed6e2",
+  "cases": 733,
+  "invalidCases": 5,
+  "invalidNode": [
+    {
+      "id": 729,
+      "task": "allocation-index",
+      "payload": {
+        "events": [
+          {
+            "side": "other",
+            "key": "x",
+            "amount": 1,
+            "replace": false
+          }
+        ]
+      },
+      "behavior": {
+        "error": {
+          "name": "TypeError",
+          "message": "Invalid allocation side"
+        }
+      }
+    },
+    {
+      "id": 730,
+      "task": "allocation-index",
+      "payload": {
+        "events": [
+          {
+            "side": "debit",
+            "key": 1,
+            "amount": 1,
+            "replace": false
+          }
+        ]
+      },
+      "behavior": {
+        "result": {
+          "debit": {
+            "1": 1
+          },
+          "credit": {}
+        }
+      }
+    },
+    {
+      "id": 731,
+      "task": "allocation-index",
+      "payload": {
+        "events": [
+          {
+            "side": "debit",
+            "key": "x",
+            "amount": "1",
+            "replace": false
+          }
+        ]
+      },
+      "behavior": {
+        "result": {
+          "debit": {
+            "x": 1
+          },
+          "credit": {}
+        }
+      }
+    },
+    {
+      "id": 732,
+      "task": "aging-settle",
+      "payload": {
+        "rows": [
+          {
+            "rowKey": "invoice:0",
+            "currencyCode": "USD",
+            "debit": "20",
+            "credit": 0,
+            "days": 0,
+            "metadata": {
+              "kind": "sale",
+              "sourceType": "invoice",
+              "sourceId": 0,
+              "reference": "I-0",
+              "typeLabel": "Invoice",
+              "date": "2026-10-01"
+            }
+          }
+        ],
+        "allocations": {
+          "debit": {},
+          "credit": {}
+        }
+      },
+      "behavior": {
+        "result": {
+          "byCurrency": {
+            "USD": {
+              "side": "receivable",
+              "current": 20,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 20,
+              "receivable": {
+                "current": 20,
+                "days1To30": 0,
+                "days31To60": 0,
+                "days61To90": 0,
+                "days90Plus": 0,
+                "total": 20
+              },
+              "payable": {
+                "current": 0,
+                "days1To30": 0,
+                "days31To60": 0,
+                "days61To90": 0,
+                "days90Plus": 0,
+                "total": 0
+              }
+            }
+          },
+          "receivable": {
+            "aging": {
+              "USD": {
+                "current": 20,
+                "days1To30": 0,
+                "days31To60": 0,
+                "days61To90": 0,
+                "days90Plus": 0,
+                "total": 20
+              }
+            },
+            "openItems": [
+              {
+                "rowKey": "invoice:0",
+                "kind": "sale",
+                "sourceType": "invoice",
+                "sourceId": 0,
+                "reference": "I-0",
+                "typeLabel": "Invoice",
+                "date": "2026-10-01",
+                "dueDate": "2026-10-01",
+                "currencyCode": "USD",
+                "amount": 20,
+                "settled": 0,
+                "remaining": 20,
+                "side": "receivable",
+                "daysOverdue": 0,
+                "bucket": "current"
+              }
+            ],
+            "unappliedByCurrency": {}
+          },
+          "payable": {
+            "aging": {
+              "USD": {
+                "current": 0,
+                "days1To30": 0,
+                "days31To60": 0,
+                "days61To90": 0,
+                "days90Plus": 0,
+                "total": 0
+              }
+            },
+            "openItems": [],
+            "unappliedByCurrency": {
+              "USD": 20
+            }
+          },
+          "openItems": [
+            {
+              "rowKey": "invoice:0",
+              "kind": "sale",
+              "sourceType": "invoice",
+              "sourceId": 0,
+              "reference": "I-0",
+              "typeLabel": "Invoice",
+              "date": "2026-10-01",
+              "dueDate": "2026-10-01",
+              "currencyCode": "USD",
+              "amount": 20,
+              "settled": 0,
+              "remaining": 20,
+              "side": "receivable",
+              "daysOverdue": 0,
+              "bucket": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 733,
+      "task": "aging-settle",
+      "payload": {
+        "rows": null,
+        "allocations": {
+          "debit": {},
+          "credit": {}
+        }
+      },
+      "behavior": {
+        "error": {
+          "name": "TypeError",
+          "message": "rows is not iterable"
+        }
+      }
+    }
+  ],
+  "invalidNative": [
+    {
+      "zone": "Asia/Kabul",
+      "id": 729,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Invalid allocation side"
+      }
+    },
+    {
+      "zone": "Asia/Kabul",
+      "id": 730,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Object.defineProperty requires a record, name and descriptor."
+      }
+    },
+    {
+      "zone": "Asia/Kabul",
+      "id": 731,
+      "result": {
+        "debit": {
+          "x": 1
+        },
+        "credit": {}
+      }
+    },
+    {
+      "zone": "Asia/Kabul",
+      "id": 732,
+      "result": {
+        "byCurrency": {
+          "USD": {
+            "side": "receivable",
+            "current": 20,
+            "days1To30": 0,
+            "days31To60": 0,
+            "days61To90": 0,
+            "days90Plus": 0,
+            "total": 20,
+            "receivable": {
+              "current": 20,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 20
+            },
+            "payable": {
+              "current": 0,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 0
+            }
+          }
+        },
+        "receivable": {
+          "aging": {
+            "USD": {
+              "current": 20,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 20
+            }
+          },
+          "openItems": [
+            {
+              "rowKey": "invoice:0",
+              "kind": "sale",
+              "sourceType": "invoice",
+              "sourceId": 0,
+              "reference": "I-0",
+              "typeLabel": "Invoice",
+              "date": "2026-10-01",
+              "dueDate": "2026-10-01",
+              "currencyCode": "USD",
+              "amount": 20,
+              "settled": 0,
+              "remaining": 20,
+              "side": "receivable",
+              "daysOverdue": 0,
+              "bucket": "current"
+            }
+          ],
+          "unappliedByCurrency": {}
+        },
+        "payable": {
+          "aging": {
+            "USD": {
+              "current": 0,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 0
+            }
+          },
+          "openItems": [],
+          "unappliedByCurrency": {
+            "USD": 20
+          }
+        },
+        "openItems": [
+          {
+            "rowKey": "invoice:0",
+            "kind": "sale",
+            "sourceType": "invoice",
+            "sourceId": 0,
+            "reference": "I-0",
+            "typeLabel": "Invoice",
+            "date": "2026-10-01",
+            "dueDate": "2026-10-01",
+            "currencyCode": "USD",
+            "amount": 20,
+            "settled": 0,
+            "remaining": 20,
+            "side": "receivable",
+            "daysOverdue": 0,
+            "bucket": "current"
+          }
+        ]
+      }
+    },
+    {
+      "zone": "Asia/Kabul",
+      "id": 733,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Value is not iterable."
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "id": 729,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Invalid allocation side"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "id": 730,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Object.defineProperty requires a record, name and descriptor."
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "id": 731,
+      "result": {
+        "debit": {
+          "x": 1
+        },
+        "credit": {}
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "id": 732,
+      "result": {
+        "byCurrency": {
+          "USD": {
+            "side": "receivable",
+            "current": 20,
+            "days1To30": 0,
+            "days31To60": 0,
+            "days61To90": 0,
+            "days90Plus": 0,
+            "total": 20,
+            "receivable": {
+              "current": 20,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 20
+            },
+            "payable": {
+              "current": 0,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 0
+            }
+          }
+        },
+        "receivable": {
+          "aging": {
+            "USD": {
+              "current": 20,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 20
+            }
+          },
+          "openItems": [
+            {
+              "rowKey": "invoice:0",
+              "kind": "sale",
+              "sourceType": "invoice",
+              "sourceId": 0,
+              "reference": "I-0",
+              "typeLabel": "Invoice",
+              "date": "2026-10-01",
+              "dueDate": "2026-10-01",
+              "currencyCode": "USD",
+              "amount": 20,
+              "settled": 0,
+              "remaining": 20,
+              "side": "receivable",
+              "daysOverdue": 0,
+              "bucket": "current"
+            }
+          ],
+          "unappliedByCurrency": {}
+        },
+        "payable": {
+          "aging": {
+            "USD": {
+              "current": 0,
+              "days1To30": 0,
+              "days31To60": 0,
+              "days61To90": 0,
+              "days90Plus": 0,
+              "total": 0
+            }
+          },
+          "openItems": [],
+          "unappliedByCurrency": {
+            "USD": 20
+          }
+        },
+        "openItems": [
+          {
+            "rowKey": "invoice:0",
+            "kind": "sale",
+            "sourceType": "invoice",
+            "sourceId": 0,
+            "reference": "I-0",
+            "typeLabel": "Invoice",
+            "date": "2026-10-01",
+            "dueDate": "2026-10-01",
+            "currencyCode": "USD",
+            "amount": 20,
+            "settled": 0,
+            "remaining": 20,
+            "side": "receivable",
+            "daysOverdue": 0,
+            "bucket": "current"
+          }
+        ]
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "id": 733,
+      "error": {
+        "code": "ARYA_NATIVE_CALCULATION",
+        "status": 500,
+        "message": "Value is not iterable."
+      }
+    }
+  ],
+  "zones": [
+    {
+      "zone": "Asia/Kabul",
+      "backend": "baseline",
+      "cases": 733
+    },
+    {
+      "zone": "Asia/Kabul",
+      "backend": "candidate",
+      "cases": 733
+    },
+    {
+      "zone": "Asia/Kabul",
+      "backend": "sanitized",
+      "cases": 48
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "backend": "baseline",
+      "cases": 733
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "backend": "candidate",
+      "cases": 733
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "backend": "sanitized",
+      "cases": 48
+    }
+  ],
+  "passed": true
+}

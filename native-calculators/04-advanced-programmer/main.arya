@@ -1,0 +1,120 @@
+use std "fs" as fs
+use std "env" as env
+use std "validate" as validate
+use std "runtime" as runtime
+use std "security" as security
+use std "math" as math
+const dataFile: string = env.get("DATA_FILE", "data.json")
+const maxBytes = 524288
+let state: any = {format: 1, lastResult: "0", lastDetails: "Hex: 0x00000000 · Binary: 00000000000000000000000000000000", history: []}
+let tokens: any = []; let cursor = 0
+fn fail(message): never { throw new Error(message) }
+fn kind(value) { return runtime.kind(value) }
+fn text(value, label, max) { if kind(value) != "string" or value.trim() == "" or value.length > max { fail(label + " must be nonblank text of at most " + str(max) + " characters.") }; return value.trim() }
+fn peek() { return tokens[cursor] }
+fn take() { const token = tokens[cursor]; cursor += 1; return token }
+fn accept(value) { if peek().text == value { cursor += 1; return true }; return false }
+fn need(value) { if not accept(value) { fail("Expected '" + value + "' at token " + str(cursor + 1) + ".") } }
+fn nesting(depth) { if depth > 32 { fail("Expression nesting exceeds 32 levels.") } }
+fn persist() {
+  const output = (JSON.stringify(state, null, 2) ?? "") + "\n"
+  if Buffer.byteLength(output, "utf8") > maxBytes { fail("Calculator storage exceeds 512 KiB.") }
+  const stage = fs.tempDirectory(dataFile + ".stage-XXXXXX"); const file = stage + "/data.json"
+  try { fs.writeTextSync(file, output); fs.rename(file, dataFile) }
+  finally { if fs.existsSync(file) { fs.remove(file) }; fs.removeDirectory(stage) }
+}
+fn record(expression, result, label, details) {
+  state.history.push({id: security.uuid(), expression: expression, result: result, kind: label, time: new Date().toISOString(), details: details})
+  if state.history.length > 100 { state.history = state.history.slice(-100) }
+  state.lastResult = result
+}
+const historySchema = validate.object({id: validate.string(), expression: validate.string({max: 512}), result: validate.string({max: 500}), kind: validate.string({max: 100}), time: validate.string({max: 50}), details: validate.string({max: 2048})})
+
+const modulus = 4294967296
+const maximum = 4294967295
+let overflow = "wrap"
+fn literal(raw): number {
+  let base = 10; let start = 0; const lower = raw.toLowerCase()
+  if lower.startsWith("0x") { base = 16; start = 2 } else if lower.startsWith("0b") { base = 2; start = 2 }
+  if start == raw.length { fail("A base prefix must be followed by digits.") }
+  let value = 0
+  for c in lower.slice(start) {
+    const digit = "0123456789abcdef".indexOf(c)
+    if digit < 0 or digit >= base { fail("Invalid digit in integer literal.") }
+    if value > math.floor((maximum - digit) / base) { fail("Integer literals must fit unsigned 32 bits (0–4294967295).") }
+    value = value * base + digit
+  }; return value
+}
+fn tokenize(source) {
+  tokens = []; cursor = 0; let i = 0
+  while i < source.length {
+    const c = source[i]
+    if " \t\r\n".includes(c) { i += 1; continue }
+    if "0123456789".includes(c) {
+      const start = i
+      while i < source.length and "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.".includes(source[i]) { i += 1 }
+      const raw = source.slice(start, i); tokens.push({text: raw, type: "number", value: literal(raw)})
+    } else if "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(c) {
+      const start = i; while i < source.length and "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(source[i]) { i += 1 }
+      const name = source.slice(start, i).toUpperCase(); if not ["AND", "OR", "XOR", "NOT"].includes(name) { fail("Use AND, OR, XOR or NOT; unknown word '" + name + "'.") }; tokens.push({text: name, type: "operator"})
+    } else if c == "<" or c == ">" { if source[i + 1] != c { fail("Shifts use << or >>.") }; tokens.push({text: c + c, type: "operator"}); i += 2 }
+    else if "+-*/%()".includes(c) { tokens.push({text: c, type: "operator"}); i += 1 }
+    else { fail("Unsupported character '" + c + "'.") }
+    if tokens.length > 256 { fail("Expression exceeds 256 tokens.") }
+  }; tokens.push({text: "<end>", type: "end"})
+}
+fn add(a, b): number { const value = a + b; if overflow == "checked" and value > maximum { fail("Unsigned 32-bit addition overflow.") }; return value % modulus }
+fn subtract(a, b): number { const value = a - b; if value < 0 { if overflow == "checked" { fail("Unsigned 32-bit subtraction underflow.") }; return value + modulus }; return value }
+fn multiply(a, b): number {
+  if overflow == "checked" { if a != 0 and b > math.floor(maximum / a) { fail("Unsigned 32-bit multiplication overflow.") }; return a * b }
+  let value = 0; let left = a; let right = b
+  while right > 0 { if right % 2 == 1 { value = (value + left) % modulus }; right = math.floor(right / 2); left = (left + left) % modulus }; return value
+}
+fn bits(a, b, op): number {
+  let left = a; let right = b; let result = 0; let place = 1
+  for index in range(32) {
+    const x = left % 2; const y = right % 2
+    if op == "AND" and x == 1 and y == 1 or op == "OR" and (x == 1 or y == 1) or op == "XOR" and x != y { result += place }
+    left = math.floor(left / 2); right = math.floor(right / 2); place *= 2
+  }; return result
+}
+fn primary(depth): number { nesting(depth); const token = take(); if token.type == "number" { return token.value }; if token.text == "(" { const value = bitOr(depth + 1); need(")"); return value }; return fail("Expected an integer or parenthesized expression.") }
+fn unary(depth): number { nesting(depth); if accept("NOT") { return maximum - unary(depth + 1) }; if accept("+") { return unary(depth + 1) }; if accept("-") { return subtract(0, unary(depth + 1)) }; return primary(depth) }
+fn product(depth): number {
+  let value = unary(depth)
+  while ["*", "/", "%"].includes(peek().text) { const op = take().text; const right = unary(depth); if op == "*" { value = multiply(value, right) } else { if right == 0 { fail("Division or remainder by zero is undefined.") }; if op == "/" { value = math.floor(value / right) } else { value = value % right } } }; return value
+}
+fn sum(depth): number { let value = product(depth); while ["+", "-"].includes(peek().text) { const op = take().text; const right = product(depth); if op == "+" { value = add(value, right) } else { value = subtract(value, right) } }; return value }
+fn shift(depth): number {
+  let value = sum(depth)
+  while peek().text == "<<" or peek().text == ">>" {
+    const op = take().text; const count = sum(depth); if count > 31 { fail("Shift counts must be between 0 and 31.") }
+    if op == ">>" { value = math.floor(value / math.pow(2, count)) }
+    else { for index in range(count) { value = add(value, value) } }
+  }; return value
+}
+fn bitAnd(depth): number { let value = shift(depth); while accept("AND") { value = bits(value, shift(depth), "AND") }; return value }
+fn bitXor(depth): number { let value = bitAnd(depth); while accept("XOR") { value = bits(value, bitAnd(depth), "XOR") }; return value }
+fn bitOr(depth): number { let value = bitXor(depth); while accept("OR") { value = bits(value, bitXor(depth), "OR") }; return value }
+fn convert(value, base, width) { let result = ""; let remaining = value; while remaining > 0 { result = "0123456789ABCDEF"[remaining % base] + result; remaining = math.floor(remaining / base) }; return result.padStart(width, "0") }
+fn calculate(expression) { tokenize(expression); const result = bitOr(0); if peek().type != "end" { fail("Unexpected token '" + peek().text + "'.") }; return result }
+fn storedResult(value) { if kind(value) != "string" or not new RegExp("^(0|[1-9][0-9]{0,9})$").test(value) { fail("Stored result must be a decimal UInt32 integer.") }; return literal(value) }
+const stateSchema = validate.object({format: validate.integer({min: 1, max: 1}), lastResult: validate.string({min: 1, max: 10}), lastDetails: validate.string({max: 200}), history: validate.array(historySchema, {max: 100})})
+try {
+  const info = fs.infoSync(dataFile)
+  if info != null { if info.type != "file" or info.size > maxBytes { fail("Storage must be a regular JSON file of at most 512 KiB.") }; state = validate.parse(stateSchema, JSON.parse(fs.readTextSync(dataFile))) }
+  storedResult(state.lastResult)
+  for row in state.history { storedResult(row.result) }
+  const command = args[0] ?? "list"; const body: any = JSON.parse(args[1] ?? "{}")
+  if kind(body) != "record" { fail("Command input must be a JSON object.") }; if body.view != undefined and body.view != "history" { fail("Unknown view.") }
+  let message = "Ready"
+  if command == "calculate" {
+    overflow = body.overflow ?? "wrap"; if not ["wrap", "checked"].includes(overflow) { fail("Choose wrap or checked overflow handling.") }
+    const expression = text(body.expression, "Expression", 512); const value = calculate(expression)
+    const details = "Hex: 0x" + convert(value, 16, 8) + " · Binary: " + convert(value, 2, 32)
+    record(expression, str(value), "UInt32 / " + overflow, details); state.lastDetails = details; message = details
+  } else if command == "clear-history" { state.history = []; message = "History cleared." }
+  else if command != "list" { fail("Unknown calculator command.") }
+  if command != "list" { persist() }
+  print(JSON.stringify({ok: true, message: message, result: state.lastResult, memory: "0", rows: state.history.slice().reverse(), summary: str(state.history.length) + " calculations · " + state.lastDetails}))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

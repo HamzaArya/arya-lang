@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/03-intermediate-support-desk/.build/worker"]
+PASS: ticket CRUD, customer/owner/priority edits, valid/invalid lifecycle, stale revisions, active/all/history views, separate-process persistence, failed-write preservation, corrupt/duplicate storage

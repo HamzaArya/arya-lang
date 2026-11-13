@@ -1,0 +1,32 @@
+{
+  "revision": "release-candidate-1",
+  "coverage": 87.5,
+  "openCritical": 0,
+  "rollback": "Restore the previous immutable application binary.",
+  "checks": [
+    {
+      "name": "build",
+      "status": "passed",
+      "revision": "release-candidate-1",
+      "tests": 1
+    },
+    {
+      "name": "unit",
+      "status": "passed",
+      "revision": "release-candidate-1",
+      "tests": 1
+    },
+    {
+      "name": "integration",
+      "status": "passed",
+      "revision": "release-candidate-1",
+      "tests": 1
+    },
+    {
+      "name": "security",
+      "status": "passed",
+      "revision": "release-candidate-1",
+      "tests": 1
+    }
+  ]
+}

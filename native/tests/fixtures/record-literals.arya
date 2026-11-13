@@ -1,0 +1,145 @@
+use std "debug" as debug
+use std "runtime" as runtime
+use std "async" as tasks
+use arya "./record-literals-module.arya" as module
+let checks = 0
+fn same(actual: any, expected: any) {
+  debug.assert(runtime.deepEqual(actual, expected), "Record literal mismatch")
+  checks += 1
+}
+fn dynamic(value: any): any { return value }
+const name = "Arya"
+const count = 3
+const enabled = true
+same({name, count, enabled}, {name: "Arya", count: 3, enabled: true})
+const action = fn(value) => value + 1
+same(({action}).action(4), 5)
+same({if: 1, "quoted key": 2}, {"if": 1, "quoted key": 2})
+same({name, name: "new", name}, {name: "Arya"})
+const base = {name: "base", count: 1}
+const extra = {count: 2, enabled: true}
+same({...base, ...extra, name}, {name: "Arya", count: 2, enabled: true})
+same(base, {name: "base", count: 1})
+same({...{}}, {})
+const nested = {value: 1}
+const shallow = {...{nested}}
+same(shallow.nested == nested, true)
+shallow.nested.value = 9
+same(nested.value, 9)
+fn counter() {
+  let current = 1
+  fn read() { return {current} }
+  fn write(next) { current = next }
+  return {read, write}
+}
+const captured = counter()
+same(captured.read().current, 1)
+captured.write(2)
+same(captured.read().current, 2)
+fn premature() { const record = {future}; const future = 1; return record }
+try { premature(); throw "missing TDZ error" }
+catch error { same(error.name, "ReferenceError") }
+const frozen = Object.freeze({amount: 1})
+const thawed = {...frozen}
+thawed.amount = 2
+same(frozen.amount, 1)
+same(thawed.amount, 2)
+const exported = {...module}
+same(exported.live, 1)
+same(exported.advance(), 2)
+same(exported.live, 1)
+same(module.live, 2)
+
+for key in ["", "__proto__", "constructor", "toString", "é", "سلام", "😀", "a\0b", "0", "10"] {
+  const record = {[key]: key, ...{plain: 1}}
+  same(record[key], key)
+  same(Object.hasOwn(record, key), true)
+  const copy = {...record, [key]: "changed"}
+  same(copy[key], "changed")
+  same(record[key], key)
+}
+same({[str(7)]: "seven"}, {"7": "seven"})
+same(Object.keys({...{"10": 10, "2": 2, alpha: 1}, beta: 2, alpha: 3}).join(","), "2,10,alpha,beta")
+
+let events: any = []
+fn note(label: string, value: any): any { events.push(label); runtime.collect(); return value }
+const ordered = {
+  [note("key", "first")]: note("value", 1),
+  ...note("spread", {second: 2}),
+  last: note("last", 3),
+}
+same(events.join(","), "key,value,spread,last")
+same(ordered, {first: 1, second: 2, last: 3})
+events = []
+let observed: any = {}
+runtime.fieldGetter(observed, "first", fn() {
+  events.push("getter")
+  observed.later = 7
+  observed.added = 99
+  runtime.collect()
+  return {value: "read"}
+})
+observed.later = 2
+const snapshot = {...observed, after: note("after", 3)}
+same(events.join(","), "getter,after")
+same(snapshot, {first: {value: "read"}, later: 7, after: 3})
+same(Object.hasOwn(snapshot, "added"), false)
+snapshot.first = {value: "mutable copy"}
+same(snapshot.first.value, "mutable copy")
+
+events = []
+let throwing: any = {}
+runtime.fieldGetter(throwing, "failure", fn() { events.push("throwing getter"); runtime.collect(); throw new Error("getter failed") })
+try { const unused = {before: note("before", 1), ...throwing, after: note("unreachable", 2)}; throw "missing error" }
+catch error { same(error.message, "getter failed") }
+same(events.join(","), "before,throwing getter")
+events = []
+try { const unused = {[note("bad key", 7)]: note("unreachable", 1)}; throw "missing error" }
+catch error { same(error.name, "TypeError"); same(error.message, "Record keys must be strings.") }
+same(events.join(","), "bad key")
+
+for value in [null, undefined, 1, true, "text", [], fn() => 1, Buffer.from("x"), new Map()] {
+  try { const unused = {...dynamic(value)}; throw "missing error" }
+  catch error { same(error.name, "TypeError"); same(error.message, "Record spread requires a record.") }
+}
+const savedAssign = Object.assign
+Object.assign = fn(..._args) { throw new Error("Object.assign must not implement syntax") }
+same({...{amount: 3}}, {amount: 3})
+Object.assign = savedAssign
+const value = 7
+const descriptorTarget: any = {}
+Object.defineProperty(descriptorTarget, "short", {value, enumerable: true, configurable: true, writable: true})
+Object.defineProperty(descriptorTarget, "computed", {["value"]: 8, enumerable: true, configurable: true, writable: true})
+Object.defineProperty(descriptorTarget, "spread", {...{value: 9}, enumerable: true, configurable: true, writable: true})
+same(descriptorTarget, {short: 7, computed: 8, spread: 9})
+
+let selected = "before"
+async fn later(): number { await tasks.sleep(0); runtime.collect(); selected = "after"; return 5 }
+const suspended = {[selected]: await later(), ...{name}}
+same(suspended, {before: 5, name: "Arya"})
+same(selected, "after")
+async fn laterRecord(): any { await tasks.sleep(0); runtime.collect(); return {ready: true} }
+same({name, ...await laterRecord()}, {name: "Arya", ready: true})
+let asyncGetterCalls = 0
+let returnedPromise: any = null
+const asyncSource: any = {}
+runtime.fieldGetter(asyncSource, "pending", fn() {
+  asyncGetterCalls += 1
+  returnedPromise = laterRecord()
+  runtime.collect()
+  return returnedPromise
+})
+const asyncCopy = {...asyncSource}
+same(asyncCopy.pending == returnedPromise, true)
+same(await asyncCopy.pending, {ready: true})
+same(asyncGetterCalls, 1)
+
+fn merge(first: {amount: number}, maybe: {amount?: string}): {amount: number | string} {
+  return {...first, ...maybe}
+}
+same(merge({amount: 1}, {}), {amount: 1})
+same(merge({amount: 1}, {amount: "2"}), {amount: "2"})
+const literalKey = {["amount"]: 3}
+const typedAmount: number = literalKey.amount
+same(typedAmount, 3)
+print("record literal checks:", checks)

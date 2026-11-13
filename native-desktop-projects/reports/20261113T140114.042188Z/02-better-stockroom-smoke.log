@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/02-better-stockroom/.build/worker"]
+PASS: 31 Stockroom worker scenarios: product CRUD, SKU/price validation, receive/issue, valuation, negative stock, audit, versions, restart, failed writes and corrupt-store preservation

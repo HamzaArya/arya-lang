@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "scope": "Offline local targets, Markdown heading anchors and manifest/catalog equality; external URLs and runtime examples are not executed.",
+  "results": {
+    "sdk": {
+      "guides": 37,
+      "localLinks": 235,
+      "modules": 26
+    }
+  },
+  "issues": []
+}

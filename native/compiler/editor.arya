@@ -37,7 +37,7 @@ export fn run(options) {
     print("Native compiler: " + process.executable()); print("Editor package: " + extension)
     for client in editors { print(client.id + " launcher: " + (client.executable ?? "not found")) }; return
   }
-  if not fs.isFile(extension) { throw "Native editor package is missing. Build make native-editor or install the complete SDK." }
+  if not fs.isFile(extension) { throw "The standalone SDK excludes editor-host JavaScript. Use arya lsp --stdio, or build make native-editor in a source checkout and install its separate VSIX." }
   let count = 0
   for client in editors { if client.executable == null { continue }; let status = process.run([client.executable, "--install-extension", extension, "--force"]); if status != 0 { throw "Editor installation failed: " + client.id + " (exit " + str(status) + ")" }; count += 1 }
   if count == 0 { throw "No selected editor launcher was found. Install from the path printed by arya editor path." }

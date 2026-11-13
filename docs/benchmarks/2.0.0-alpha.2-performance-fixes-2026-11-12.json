@@ -1,0 +1,533 @@
+{
+  "recordedAtUtc": "2026-11-12T17:28:33.967671+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "compilerSha256": "240fd9078a8777820e61a9e3f70c5f55126ba415c8e9c9220dfb46ef92b69e38",
+  "workloadSha256": "3c516bb408e1511117e042fb5f4bacf28f6050cf534038c26e595cae198af7f9",
+  "flags": "C11 -O2 -ffp-contract=off",
+  "method": "Fresh process per runtime sample; CPU timing excludes setup/build/startup. Tooling measures wall time. Random outputs range-checked; all other results checked. Single-host microbenchmarks.",
+  "runtime": [
+    {
+      "operation": "concat",
+      "n": 40000,
+      "cpu": {
+        "medianMs": 8.999,
+        "samplesMs": [
+          15.773000000000001,
+          11.043000000000001,
+          8.999,
+          7.671,
+          6.749999999999999
+        ]
+      }
+    },
+    {
+      "operation": "join",
+      "n": 40000,
+      "cpu": {
+        "medianMs": 2.843,
+        "samplesMs": [
+          3.1639999999999997,
+          2.843,
+          2.9549999999999996,
+          2.7320000000000007,
+          2.6590000000000003
+        ]
+      }
+    },
+    {
+      "operation": "record",
+      "n": 20000,
+      "cpu": {
+        "medianMs": 9.642,
+        "samplesMs": [
+          10.004000000000001,
+          9.572000000000001,
+          9.642,
+          10.058000000000002,
+          9.604
+        ]
+      }
+    },
+    {
+      "operation": "unique",
+      "n": 40000,
+      "cpu": {
+        "medianMs": 2.425,
+        "samplesMs": [
+          2.568,
+          2.377,
+          2.393,
+          2.476,
+          2.425
+        ]
+      }
+    },
+    {
+      "operation": "promise",
+      "n": 16000,
+      "cpu": {
+        "medianMs": 2.3720000000000003,
+        "samplesMs": [
+          2.426,
+          2.3369999999999997,
+          2.361,
+          2.3720000000000003,
+          2.374
+        ]
+      }
+    },
+    {
+      "operation": "map-delete",
+      "n": 16000,
+      "cpu": {
+        "medianMs": 1.9640000000000004,
+        "samplesMs": [
+          1.9680000000000002,
+          1.9640000000000004,
+          1.9500000000000004,
+          1.94,
+          1.9689999999999994
+        ]
+      }
+    },
+    {
+      "operation": "map-read",
+      "n": 16000,
+      "cpu": {
+        "medianMs": 1.7730000000000004,
+        "samplesMs": [
+          1.7609999999999995,
+          1.797,
+          1.763,
+          1.7730000000000004,
+          1.7879999999999996
+        ]
+      }
+    },
+    {
+      "operation": "json-parse",
+      "n": 20000,
+      "cpu": {
+        "medianMs": 5.0040000000000004,
+        "samplesMs": [
+          5.052000000000001,
+          4.934000000000001,
+          5.046,
+          5.0040000000000004,
+          4.946999999999999
+        ]
+      }
+    },
+    {
+      "operation": "json-stringify",
+      "n": 20000,
+      "cpu": {
+        "medianMs": 2.326,
+        "samplesMs": [
+          2.2899999999999987,
+          2.2679999999999993,
+          2.3650000000000007,
+          2.3859999999999992,
+          2.326
+        ]
+      }
+    },
+    {
+      "operation": "global-floor",
+      "n": 10000,
+      "cpu": {
+        "medianMs": 2.862,
+        "samplesMs": [
+          2.843,
+          2.862,
+          2.873,
+          2.8179999999999996,
+          2.869
+        ]
+      }
+    },
+    {
+      "operation": "cached-floor",
+      "n": 10000,
+      "cpu": {
+        "medianMs": 1.288,
+        "samplesMs": [
+          1.288,
+          1.3259999999999998,
+          1.2800000000000002,
+          1.2790000000000001,
+          1.2920000000000003
+        ]
+      }
+    },
+    {
+      "operation": "random",
+      "n": 10000,
+      "cpu": {
+        "medianMs": 1.3969999999999998,
+        "samplesMs": [
+          1.444,
+          1.4089999999999996,
+          1.3800000000000001,
+          1.3840000000000003,
+          1.3969999999999998
+        ]
+      }
+    },
+    {
+      "operation": "sparse",
+      "n": 1000000,
+      "cpu": {
+        "medianMs": 0.011000000000000159,
+        "samplesMs": [
+          0.011000000000000159,
+          0.010000000000000026,
+          0.010000000000000026,
+          0.017000000000000088,
+          0.011000000000000159
+        ]
+      },
+      "managedBytesAdded": 17039.0
+    }
+  ],
+  "tooling": {
+    "quoted65536Check": {
+      "medianMs": 32.54608399947756,
+      "samplesMs": [
+        31.76766599790426,
+        32.54608399947756,
+        32.727334000810515,
+        32.39029099859181,
+        32.92541699920548
+      ]
+    },
+    "raw65536Check": {
+      "medianMs": 36.976125000364846,
+      "samplesMs": [
+        36.976125000364846,
+        36.62550000080955,
+        36.60808399945381,
+        37.012166998465545,
+        37.526083000557264
+      ]
+    },
+    "cachedRun": {
+      "medianMs": 12.970583997230278,
+      "samplesMs": [
+        14.837124999758089,
+        13.918958000431303,
+        12.970583997230278,
+        12.581708000652725,
+        11.477500000182772
+      ]
+    },
+    "directHello": {
+      "medianMs": 3.6629589994845446,
+      "samplesMs": [
+        3.8493749998451676,
+        3.4097079987986945,
+        3.6953330018150155,
+        3.417665997403674,
+        3.6629589994845446
+      ]
+    },
+    "lsp400UnusedEdit": {
+      "medianMs": 17.16620899969712,
+      "samplesMs": [
+        17.16620899969712,
+        18.22258299944224,
+        17.143958000815473,
+        16.6115419997368,
+        17.288750001171138
+      ]
+    }
+  },
+  "evidenceDirectory": ".build/native-performance-benchmark-yxkhe_n7",
+  "originalAudit": {
+    "recordedAtUtc": "2026-11-12T15:10:46.976579+00:00",
+    "method": "Original audit on the same host, measured before implementation. These runtime and tooling samples were collected in a separate session from the post-fix samples, not interleaved. Runtime CPU timing excludes setup, build and startup. Tooling uses wall time.",
+    "runtime": [
+      {
+        "operation": "concat",
+        "n": 40000,
+        "cpu": {
+          "medianMs": 236.505,
+          "samplesMs": [
+            202.933,
+            245.191,
+            236.505
+          ]
+        }
+      },
+      {
+        "operation": "join",
+        "n": 40000,
+        "cpu": {
+          "medianMs": 3.514,
+          "samplesMs": [
+            3.514,
+            3.5250000000000004,
+            2.9059999999999997
+          ]
+        }
+      },
+      {
+        "operation": "record",
+        "n": 20000,
+        "cpu": {
+          "medianMs": 515.642,
+          "samplesMs": [
+            432.783,
+            661.639,
+            515.642
+          ]
+        }
+      },
+      {
+        "operation": "unique",
+        "n": 40000,
+        "cpu": {
+          "medianMs": 1188.926,
+          "samplesMs": [
+            1188.926,
+            1259.814,
+            1188.663
+          ]
+        }
+      },
+      {
+        "operation": "promise",
+        "n": 16000,
+        "cpu": {
+          "medianMs": 628.619,
+          "samplesMs": [
+            685.2090000000001,
+            628.619,
+            558.956
+          ]
+        }
+      },
+      {
+        "operation": "map-delete",
+        "n": 16000,
+        "cpu": {
+          "medianMs": 1219.324,
+          "samplesMs": [
+            1373.151,
+            1048.251,
+            1219.324
+          ]
+        }
+      },
+      {
+        "operation": "map-read",
+        "n": 16000,
+        "cpu": {
+          "medianMs": 1.719,
+          "samplesMs": [
+            1.6940000000000002,
+            1.719,
+            1.9909999999999997
+          ]
+        }
+      },
+      {
+        "operation": "json-parse",
+        "n": 20000,
+        "cpu": {
+          "medianMs": 437.095,
+          "samplesMs": [
+            417.11,
+            437.095,
+            505.62399999999997
+          ]
+        }
+      },
+      {
+        "operation": "json-stringify",
+        "n": 20000,
+        "cpu": {
+          "medianMs": 2.485000000000015,
+          "samplesMs": [
+            2.4829999999999575,
+            2.485000000000015,
+            3.506999999999927
+          ]
+        }
+      },
+      {
+        "operation": "global-floor",
+        "n": 10000,
+        "cpu": {
+          "medianMs": 127.166,
+          "samplesMs": [
+            146.393,
+            127.12300000000002,
+            127.166
+          ]
+        }
+      },
+      {
+        "operation": "cached-floor",
+        "n": 10000,
+        "cpu": {
+          "medianMs": 1.3290000000000004,
+          "samplesMs": [
+            1.3480000000000003,
+            1.323,
+            1.3290000000000004
+          ]
+        }
+      },
+      {
+        "operation": "random",
+        "n": 10000,
+        "cpu": {
+          "medianMs": 1422.9779999999998,
+          "samplesMs": [
+            1422.9779999999998,
+            1422.588,
+            1431.4930000000002
+          ]
+        }
+      }
+    ],
+    "tooling": {
+      "quoted65536Check": {
+        "medianMs": 923.2360830010293,
+        "samplesMs": [
+          779.174208000768,
+          923.2360830010293,
+          983.9215000010881
+        ]
+      },
+      "raw65536Check": {
+        "medianMs": 68.91937500040513,
+        "samplesMs": [
+          68.86320800003887,
+          68.91937500040513,
+          71.32520900086092
+        ]
+      },
+      "cachedRun": {
+        "medianMs": 18.059374999211286,
+        "samplesMs": [
+          18.059374999211286,
+          15.620499998476589,
+          21.964499999739928
+        ]
+      },
+      "directHello": {
+        "medianMs": 4.027625000162516,
+        "samplesMs": [
+          3.8050000002840534,
+          4.027625000162516,
+          4.741125001601176
+        ]
+      },
+      "lsp400UnusedEdit": {
+        "medianMs": 1250.3205829998478,
+        "samplesMs": [
+          1331.1776669997926,
+          1250.3205829998478,
+          950.4280000001017
+        ]
+      }
+    },
+    "sparse": {
+      "lastIndex": 1000000,
+      "storedValues": 1,
+      "managedBytesAdded": 24000168.0
+    },
+    "compilerSha256": "835280b004c754d827bfd998f19fb57c300aa8742d811081440fac9bce291c49"
+  },
+  "pairedCachedRun": {
+    "method": "7 alternating warm run commands per compiler after two warmups; separate directories with identical hello source; end-to-end process wall time on the same host. Compiler SDK dependencies and environment unchanged.",
+    "compilerSha256": {
+      "before": "835280b004c754d827bfd998f19fb57c300aa8742d811081440fac9bce291c49",
+      "after": "240fd9078a8777820e61a9e3f70c5f55126ba415c8e9c9220dfb46ef92b69e38"
+    },
+    "rawWallMs": {
+      "before": [
+        20.363291001558537,
+        15.406999998958781,
+        14.509415999782505,
+        13.665416001458652,
+        13.548250000894768,
+        13.64475000082166,
+        13.755458003288368
+      ],
+      "after": [
+        11.94887500241748,
+        11.420833001466235,
+        9.545499997329898,
+        8.769374999246793,
+        9.379167000588495,
+        8.547917001124006,
+        8.522666998032946
+      ]
+    },
+    "medianWallMs": {
+      "before": 13.755458003288368,
+      "after": 9.379167000588495
+    }
+  },
+  "accountingSmokeMeasurement": {
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "compilerSha256": "240fd9078a8777820e61a9e3f70c5f55126ba415c8e9c9220dfb46ef92b69e38",
+    "workload": "100000 identical exact invoice rows, line-v1 half-even, 5 prepared calculations per process",
+    "flags": "--release (-O2 -ffp-contract=off)",
+    "samples": {
+      "native": [
+        {
+          "rows": 100000,
+          "repetitions": 5,
+          "prepareMs": 20.809000000357628,
+          "calculateMs": 28.943000003695488,
+          "total": "3860000.00",
+          "processWallMs": 510.5404999994789,
+          "maxRssBytes": 15220736
+        },
+        {
+          "rows": 100000,
+          "repetitions": 5,
+          "prepareMs": 14.153999999165535,
+          "calculateMs": 18.128000002354383,
+          "total": "3860000.00",
+          "processWallMs": 40.321958000276936,
+          "maxRssBytes": 15204352
+        },
+        {
+          "rows": 100000,
+          "repetitions": 5,
+          "prepareMs": 11.120999999344349,
+          "calculateMs": 15.721000000834465,
+          "total": "3860000.00",
+          "processWallMs": 33.336500000586966,
+          "maxRssBytes": 15204352
+        }
+      ]
+    },
+    "medians": {
+      "native": {
+        "prepareMs": 14.153999999165535,
+        "calculateMs": 18.128000002354383,
+        "processWallMs": 40.321958000276936,
+        "maxRssBytes": 15204352
+      }
+    },
+    "startup": {
+      "native": {
+        "samples": 20,
+        "medianProcessMs": 4.272250500434893
+      }
+    },
+    "executableBytes": {
+      "hello": 367304,
+      "accounting": 593352
+    },
+    "scope": "Single-host measurements under current machine load; no universal speed or application-size claim."
+  }
+}

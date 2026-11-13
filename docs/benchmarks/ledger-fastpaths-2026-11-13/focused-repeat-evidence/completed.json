@@ -1,0 +1,81 @@
+{
+  "startedAtUtc": "2026-11-13T03:41:51.245Z",
+  "command": [
+    "/usr/local/bin/node",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat.json.evidence/driver.mjs",
+    "--app",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application",
+    "--baseline-native",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker",
+    "--native",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker",
+    "--samples",
+    "100",
+    "--sessions",
+    "3",
+    "--warmups",
+    "3",
+    "--output",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat.json"
+  ],
+  "node": "v24.16.0",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "loadStart": [
+    3.48583984375,
+    4.55322265625,
+    5.34326171875
+  ],
+  "adapter": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat-adapter.mjs",
+    "sha256": "f8c5762de120dbcbccf4bc2c972f897bd762c706b396146e5ae05af821c0b26d"
+  },
+  "originalController": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/scripts/perf-arya-calculations.mjs",
+    "sha256": "2a07eda37ee938f1e0bc31f66d80a6d3184374755c205ee5ca822eff17337382"
+  },
+  "generatedController": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat.json.evidence/driver.mjs",
+    "sha256": "46b381084023983b5d32a3ddef6ba16ce51e6b7da8b5cb77301966ab80aaf1f0"
+  },
+  "frozenAppManifest": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/BENCHMARK-SOURCES.json",
+    "sha256": "e35f659eea5158a5c4b21150a4e43e6c4d458dcc9010bd58657fc962d1df1a17"
+  },
+  "binaries": {
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/manifest.json": "e2be999c49fb3e89c9084e197b4344c142b4624182b5047ef8b0ad1ca2b425af",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker": "959bdfff7a8a320aa70a5407f07e352f610cf832e8721b2a0649c88e27a701a4",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/manifest.json": "9dc5a1b3bd18f579415f8f474b09f0330a4bed0e89773fccb156791551e0b024"
+  },
+  "selectedComparisons": [
+    [
+      "payroll-exact-30-rules",
+      "direct-rule-vs-persistent-native-round-trip"
+    ],
+    [
+      "production-schedule-12",
+      "direct-rule-vs-persistent-native-round-trip"
+    ],
+    [
+      "invoice-exact-1000",
+      "direct-rule-vs-persistent-native-round-trip"
+    ],
+    [
+      "bank-normalize-one-row",
+      "direct-rule-vs-persistent-native-round-trip"
+    ]
+  ],
+  "differences": "Original timing and assertion bodies unchanged. Relative imports point to the frozen app. Target mode omits nonselected cases/comparisons, changing preceding workload/GC history; compare before/after within this run, not directly against earlier timings.",
+  "boundary": "Aging/allocation Node is direct calculation; native includes JSON and pipe transfer. Report/production rows include their actual host service. Native production routing is not changed.",
+  "finishedAtUtc": "2026-11-13T03:42:35.765Z",
+  "loadEnd": [
+    3.646484375,
+    4.50390625,
+    5.287109375
+  ],
+  "exitCode": 0,
+  "outputSha256": "e8b98d565000e4f4abb1532ab6befddb4dca8f48f3370bd91863c4760cbf42b7",
+  "assertions": 3708,
+  "allInputsUnchanged": true
+}

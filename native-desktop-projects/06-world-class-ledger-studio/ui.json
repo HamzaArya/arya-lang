@@ -1,0 +1,405 @@
+{
+  "id": "ledger-studio",
+  "name": "Ledger Studio",
+  "subtitle": "Exact double-entry journals, reversible postings and reference-level reconciliation.",
+  "views": [
+    {
+      "id": "accounts",
+      "label": "Accounts",
+      "columns": [
+        {
+          "key": "id",
+          "label": "ID",
+          "width": 60
+        },
+        {
+          "key": "code",
+          "label": "Code",
+          "width": 100
+        },
+        {
+          "key": "name",
+          "label": "Account",
+          "width": 240
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "width": 100
+        },
+        {
+          "key": "balance",
+          "label": "Normal balance",
+          "width": 180
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 90
+        }
+      ]
+    },
+    {
+      "id": "journals",
+      "label": "Journals",
+      "columns": [
+        {
+          "key": "id",
+          "label": "ID",
+          "width": 60
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "width": 110
+        },
+        {
+          "key": "reference",
+          "label": "Reference",
+          "width": 160
+        },
+        {
+          "key": "debit",
+          "label": "Debit",
+          "width": 200
+        },
+        {
+          "key": "credit",
+          "label": "Credit",
+          "width": 200
+        },
+        {
+          "key": "amount",
+          "label": "Amount",
+          "width": 160
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 100
+        }
+      ]
+    },
+    {
+      "id": "reconciliations",
+      "label": "Reconciliation history",
+      "columns": [
+        {
+          "key": "id",
+          "label": "ID",
+          "width": 60
+        },
+        {
+          "key": "label",
+          "label": "Run",
+          "width": 190
+        },
+        {
+          "key": "account",
+          "label": "Account",
+          "width": 200
+        },
+        {
+          "key": "matched",
+          "label": "Matched",
+          "width": 90
+        },
+        {
+          "key": "exceptionCount",
+          "label": "Exceptions",
+          "width": 100
+        },
+        {
+          "key": "difference",
+          "label": "Net difference",
+          "width": 160
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New account",
+      "command": "account-add",
+      "view": "accounts",
+      "fields": [
+        {
+          "key": "code",
+          "label": "Account code",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "name",
+          "label": "Account name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "type",
+          "label": "Account type",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "asset",
+              "label": "Asset"
+            },
+            {
+              "value": "liability",
+              "label": "Liability"
+            },
+            {
+              "value": "income",
+              "label": "Income"
+            },
+            {
+              "value": "expense",
+              "label": "Expense"
+            },
+            {
+              "value": "equity",
+              "label": "Equity"
+            }
+          ],
+          "default": "asset"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": false,
+      "destructive": false
+    },
+    {
+      "label": "Edit account",
+      "command": "account-edit",
+      "view": "accounts",
+      "fields": [
+        {
+          "key": "code",
+          "label": "Account code",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "name",
+          "label": "Account name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "type",
+          "label": "Account type",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "asset",
+              "label": "Asset"
+            },
+            {
+              "value": "liability",
+              "label": "Liability"
+            },
+            {
+              "value": "income",
+              "label": "Income"
+            },
+            {
+              "value": "expense",
+              "label": "Expense"
+            },
+            {
+              "value": "equity",
+              "label": "Equity"
+            }
+          ],
+          "default": "asset"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Open / close account",
+      "command": "account-status",
+      "view": "accounts",
+      "fields": [
+        {
+          "key": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": [
+            {
+              "value": "open",
+              "label": "Open"
+            },
+            {
+              "value": "closed",
+              "label": "Closed"
+            }
+          ],
+          "default": "open"
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Delete unused account",
+      "command": "account-delete",
+      "view": "accounts",
+      "fields": [],
+      "selection": true,
+      "destructive": true
+    },
+    {
+      "label": "Reconcile selected account",
+      "command": "reconcile",
+      "view": "accounts",
+      "fields": [
+        {
+          "key": "label",
+          "label": "Reconciliation label",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "statement",
+          "label": "Statement: reference,signed-amount per line; debit positive, credit negative",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "Post journal",
+      "command": "journal-post",
+      "view": "journals",
+      "fields": [
+        {
+          "key": "reference",
+          "label": "Unique reference / idempotency key",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Posting date (YYYY-MM-DD)",
+          "type": "text",
+          "required": true,
+          "source": "newPostingDate"
+        },
+        {
+          "key": "debitId",
+          "label": "Debit account",
+          "type": "choice",
+          "required": true,
+          "optionsView": "accounts",
+          "valueKey": "id",
+          "labelKey": "displayName"
+        },
+        {
+          "key": "creditId",
+          "label": "Credit account",
+          "type": "choice",
+          "required": true,
+          "optionsView": "accounts",
+          "valueKey": "id",
+          "labelKey": "displayName"
+        },
+        {
+          "key": "amount",
+          "label": "Positive exact amount",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Posting description",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": false,
+      "destructive": false
+    },
+    {
+      "label": "Reverse journal",
+      "command": "journal-reverse",
+      "view": "journals",
+      "fields": [
+        {
+          "key": "reference",
+          "label": "New reversal reference",
+          "type": "text",
+          "required": true,
+          "default": "",
+          "source": "unusedReversalReference"
+        },
+        {
+          "key": "date",
+          "label": "Reversal date (YYYY-MM-DD)",
+          "type": "text",
+          "required": true,
+          "source": "newPostingDate"
+        },
+        {
+          "key": "description",
+          "label": "Reversal reason",
+          "type": "multiline",
+          "required": true,
+          "source": "unusedReversalReason"
+        }
+      ],
+      "selection": true,
+      "destructive": false
+    },
+    {
+      "label": "New reconciliation",
+      "command": "reconcile",
+      "view": "reconciliations",
+      "fields": [
+        {
+          "key": "accountId",
+          "label": "Account",
+          "type": "choice",
+          "required": true,
+          "optionsView": "accounts",
+          "valueKey": "id",
+          "labelKey": "displayName"
+        },
+        {
+          "key": "label",
+          "label": "Reconciliation label",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "statement",
+          "label": "Statement: reference,signed-amount per line; debit positive, credit negative",
+          "type": "multiline",
+          "required": true
+        }
+      ],
+      "selection": false,
+      "destructive": false
+    },
+    {
+      "label": "Delete report",
+      "command": "reconciliation-delete",
+      "view": "reconciliations",
+      "fields": [],
+      "selection": true,
+      "destructive": true
+    }
+  ]
+}

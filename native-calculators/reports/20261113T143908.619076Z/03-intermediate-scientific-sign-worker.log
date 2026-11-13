@@ -1,0 +1,2 @@
+["codesign", "--force", "--sign", "-", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-ufj0g7fb/Scientific Calculator.app/Contents/MacOS/arya-worker"]
+/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-ufj0g7fb/Scientific Calculator.app/Contents/MacOS/arya-worker: replacing existing signature

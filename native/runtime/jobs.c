@@ -18,6 +18,6 @@ static void ajobs_cleanup(void){while(ajobs){AJob *job=ajobs;ajobs=job->next;pth
 static int anative_job(void (*run)(void *),void *data){if(ajob_count>=64){afail("RangeError","Native worker queue exceeds 64 jobs.");return 0;}
   AJob *job=(AJob*)amemory(sizeof(*job));job->run=run;job->data=data;if(pipe(job->pipe)){free(job);afail("IOError","Cannot open native worker notification.");return 0;}fcntl(job->pipe[0],F_SETFD,FD_CLOEXEC);fcntl(job->pipe[1],F_SETFD,FD_CLOEXEC);
   pthread_attr_t options;pthread_attr_init(&options);pthread_attr_setstacksize(&options,256*1024);int status=pthread_create(&job->thread,&options,ajob_worker,job);pthread_attr_destroy(&options);if(status){close(job->pipe[0]);close(job->pipe[1]);free(job);afail("Error","Cannot start native worker.");return 0;}
-  job->next=ajobs;ajobs=job;ajob_count++;aasync_cleanup_hook=ajobs_cleanup;
+  job->next=ajobs;ajobs=job;ajob_count++;aasync_worker_cleanup=ajobs_cleanup;
   aasync_wait_fd(job->pipe[0],POLLIN,-1);pthread_join(job->thread,NULL);close(job->pipe[0]);close(job->pipe[1]);AJob **link=&ajobs;while(*link&&*link!=job)link=&(*link)->next;if(*link)*link=job->next;free(job);ajob_count--;return 1;
 }

@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "passed": 3,
+  "total": 3,
+  "mode": "check-build-smoke",
+  "evidence": [
+    "../reports/20261113T133140.200181Z/results.json",
+    "../reports/20261113T133801.993236Z/results.json"
+  ],
+  "native_compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+  "projects": [
+    {
+      "path": "05-pro/cli-ledger-audit",
+      "status": "passed",
+      "binary_sha256": "80e24d330cc131c9cfa661f488842c1effdccd828d6d2979f585b5972abdbb11",
+      "evidence": "../reports/20261113T133140.200181Z/results.json"
+    },
+    {
+      "path": "05-pro/gui-incident-console",
+      "status": "passed",
+      "binary_sha256": "742a9d479e79664bccd63829c9d09197bf8dade583db2fae8ad36575e827f943",
+      "evidence": "../reports/20261113T133140.200181Z/results.json"
+    },
+    {
+      "path": "05-pro/service-feature-flags",
+      "status": "passed",
+      "binary_sha256": "b8cccc0b0adda5b39c06445b30da38fd91c08d91b0df7b713afa5ee1f108ca15",
+      "evidence": "../reports/20261113T133801.993236Z/results.json"
+    }
+  ],
+  "note": "Original evidence remains valid for ledger audit and incident console. Targeted Unicode correction verification supersedes the original feature-flag row."
+}

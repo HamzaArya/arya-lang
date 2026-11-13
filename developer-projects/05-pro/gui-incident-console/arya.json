@@ -1,0 +1,5 @@
+{
+  "name": "gui-incident-console",
+  "entry": "main.arya",
+  "target": "native"
+}

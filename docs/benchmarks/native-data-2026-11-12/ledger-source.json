@@ -1,0 +1,27 @@
+{
+  "ledger": "/Users/hamza/Projects/github-repo/accounting-database",
+  "revision": "a1bb8f3cd3d0e5c95dd0a884a916b801d11af773",
+  "sources": {
+    "aging-settlement.arya": "d09b906c2152b63b105e4327bd02a2060de10479e315d8b31dfd237c7fff795e",
+    "bank-import.arya": "81c97a1d43c9b9323024dab202ff6149c6cd79efb1334b1f92d6c18693ea8d55",
+    "bank-matching.arya": "59d2c5ea32b10bd80fca1dcd273177ff3a93dee9df7f775dd7d536821ca82fd3",
+    "budget-variance.arya": "50d8de1c2d305a9d4aeb9be5c9a99393df6abb7d809514c3664eb4503aeab750",
+    "calculation-previews.arya": "1a601878501d663b47d66de8eba7363180ac352c5403da44c43da41910798b88",
+    "import-mappings.arya": "cfcca869f91df9d9f24376bae63a3abc1cfef72d10b81f3347d73887eb516b0f",
+    "money-policy.arya": "f1f137229a67aa08e866576d2d910f9892abed42350b79fd4ba7e6bbfdb75784",
+    "native-worker.arya": "7ccd987ea9781816ebf3c9c684f824e7c8963452788a46d93354668c0d6b89b5",
+    "report-preparation.arya": "75c9c5a8a4ab5dec72b408d88a3ff4e6b2be0ba5e355f5ccb98ad2b210c61638",
+    "schedule-rules.arya": "53808b9a1db2e79dbea4d0ce5d1739e61fa1773ca9caa9a053d5475e732a1ff8"
+  },
+  "testSourceSha256": "a9a580b773bb6712853ab67ebdf24199daccb5a832e7a993523317ccea7f9042",
+  "generatedReferences": {
+    "aging-settlement.cjs": "2098bdf92aaab3dcceb75fbf9364ea2b4ccf9efa27e91c2c167e9a26e2f68842",
+    "bank-import.cjs": "91e532ae4d8b1ac8385b724c1a95ef9cb0d3934c9863ffb90f8dbb96ebfc9f48",
+    "bank-matching.cjs": "c7ee4764def8fb29efb47085cdcf308fadbf4617d42772bbc2a9b3eb49db0dee",
+    "budget-variance.cjs": "5465d13af3142229c886775d88a4d7598ec825c818d25c5c92ca2086c5c63dd8",
+    "calculation-previews.cjs": "2b7e012fd782b1736f38170ca8f36b33c18405db664168936c277decce791b41",
+    "import-mappings.cjs": "846d515a2910526337fb409ff191e8465adc90c614113fd2fa600ea3bf2ec1df",
+    "report-preparation.cjs": "c2f7ce4ae30851f2564d210e262404aa6591a1c3977ff24c7143bc39f4dc0aa6",
+    "schedule-rules.cjs": "17f4331246cc6f000772bd83b8a67d7e8458050f9e31c08ec2a375fba7174a71"
+  }
+}

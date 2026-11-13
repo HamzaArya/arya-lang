@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "compilerSha256": "2300f2fb3208bd2029f987317819d1d991ecb561b926c8a2008d52edbc021461",
+  "checkerSha256": "1bc0c00143e2cfa1a91d35c85be2545c2f49417ce61725d28ceed47d1900e876",
+  "probes": [
+    {
+      "probe": "original-loop",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Type mismatch: expected number, received number | null. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/original-loop.arya:5:66\n"
+    },
+    {
+      "probe": "original-catch",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Type mismatch: expected number, received number | null. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/original-catch.arya:5:94\n"
+    },
+    {
+      "probe": "break-exit",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Type mismatch: expected number, received number | null. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/break-exit.arya:6:24\n"
+    },
+    {
+      "probe": "finally-throw",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Type mismatch: expected number, received number | null. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/finally-throw.arya:5:83\n"
+    },
+    {
+      "probe": "shortcircuit-false",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Type mismatch: expected number, received number | null. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/shortcircuit-false.arya:4:62\n"
+    },
+    {
+      "probe": "no-break-exit",
+      "expectedAccepted": true,
+      "exitCode": 0,
+      "output": "Check OK (native): /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/no-break-exit.arya\n"
+    },
+    {
+      "probe": "ordinary-local",
+      "expectedAccepted": true,
+      "exitCode": 0,
+      "output": "Check OK (native): /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/ordinary-local.arya\n"
+    },
+    {
+      "probe": "nested-record-limit",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Expression nesting exceeds 100. at /private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-flow-final-review-s8znh4en/nested-record-limit.arya:1:420\n"
+    },
+    {
+      "probe": "effect-walk-depth",
+      "expectedAccepted": false,
+      "exitCode": 1,
+      "output": "Compile error: Native call depth exceeds 512.\n"
+    }
+  ],
+  "scope": "Independent targeted control-flow/type acceptance and bounded recursion checks; no runtime benchmark or new performance claim."
+}

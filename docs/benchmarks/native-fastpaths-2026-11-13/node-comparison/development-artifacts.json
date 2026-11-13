@@ -1,0 +1,17 @@
+{
+  "reason": "Executable Node comparison snapshots are development-only and excluded from the standalone SDK. Original controller remains native/benchmarks/kernels.mjs; generated Node peer remains in the preserved .build comparison workspace.",
+  "files": [
+    {
+      "filename": "node.cjs",
+      "developmentOnlyPath": "native/benchmarks/evidence/native-fastpaths-2026-11-13/node.cjs",
+      "sha256": "13b86be01097bd302d660e1db623e65ed9534efc4602ec7c6c650e15240cc25f",
+      "originalSourcePath": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/node-comparison/kernels/node.cjs"
+    },
+    {
+      "filename": "kernels-controller.mjs",
+      "developmentOnlyPath": "native/benchmarks/evidence/native-fastpaths-2026-11-13/kernels-controller.mjs",
+      "sha256": "d596f919d791a1edf9c312335044114cb837801ec27e2dc1471ef1e2c9165fe4",
+      "originalSourcePath": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/kernels.mjs"
+    }
+  ]
+}

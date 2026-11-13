@@ -1,0 +1,81 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "validate" as validate
+use std "runtime" as runtime
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonempty text up to " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  let result = Number(value)
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be an integer.") }
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " is outside its allowed integer range.") }
+  return result
+}
+fn load(schema) {
+  let info = fs.infoSync(file)
+  if info == null { return {nextId: 1, rows: []} }
+  if info.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 1048576 { throw new Error("Data file exceeds 1 MiB.") }
+  return validate.parse(validate.object({nextId: validate.number({integer: true, min: 1}), rows: validate.array(schema, {max: 1000})}), JSON.parse(fs.readTextSync(file)))
+}
+fn save(next) {
+  if next.rows.length > 1000 { throw new Error("This local app supports at most 1000 records.") }
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 900000 { throw new Error("Store is full; remove old records first.") }
+  fs.writeTextAtomicSync(file, encoded)
+}
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn findIndex(rows, id) {
+  let index = rows.findIndex(fn(row) { return row.id == integer(id, "ID", 1) })
+  if index < 0 { throw new Error("Record not found.") }
+  return index
+}
+use std "web" as web
+fn endpoint(operation) {
+  return fn(request) {
+    try { return operation(request) }
+    catch failure { throw web.error(400, failure.message ?? str(failure), "APP_INPUT") }
+  }
+}
+use std "ui" as ui
+fn input(label, key, kind = "text") { return ui.field(label, ui.input({id: key, bind: key, type: kind, required: true})) }
+fn form(children, path, body) {
+  return ui.form(children, {action: ui.request(path, {method: "POST", body: body, result: "result", pending: "busy", error: "problem"})})
+}
+fn submit(label) { return ui.button(label, {type: "submit", disabled: ui.bind("busy", false)}) }
+const rowSchema = validate.object({id: validate.number(), title: validate.string(), minutes: validate.number(), done: validate.boolean()})
+let data = load(rowSchema)
+fn overview() {
+  let remaining = 0; let lines = []
+  for row in data.rows { let status = "To study"; if row.done { status = "Completed" } else { remaining += row.minutes }; lines.push("#" + str(row.id) + " · " + row.title + " · " + str(row.minutes) + " minutes · " + status) }
+  if lines.length == 0 { lines.push("No sessions yet. Add your first study session.") }
+  return "Remaining study time: " + str(remaining) + " minutes\n\n" + lines.join("\n")
+}
+fn page() {
+  return ui.page({title: "Study Planner", theme: "light", css: ":root{--accent:#245c58;--button-ink:#fff} pre{white-space:pre-wrap;line-height:1.9} .arya-page{max-width:1000px}", state: {title: "", minutes: "25", id: "", busy: false, problem: "", result: {overview: overview(), message: "Your sessions are saved on this computer."}}, body: ui.stack([
+    ui.text("ARYA / BEGINNER WORKSPACE", {class: "arya-eyebrow"}), ui.heading("A little focus, every day."), ui.text("Plan a session, finish it, then make room for the next."),
+    ui.grid([
+      ui.card([ui.heading("Plan a session", {level: 2}), form([input("Subject or task", "title"), input("Minutes (1–480)", "minutes", "number"), submit("Add session")], "/api/sessions", {title: ui.bind("title"), minutes: ui.bind("minutes")})]),
+      ui.card([ui.heading("Update a session", {level: 2}), input("Session ID from your plan", "id", "number"), ui.row([ui.button("Toggle completed", {disabled: ui.bind("busy"), action: ui.request("/api/toggle", {method: "POST", body: {id: ui.bind("id")}, result: "result", pending: "busy", error: "problem"})}), ui.button("Remove session", {variant: "danger", disabled: ui.bind("busy"), action: ui.request("/api/remove", {method: "POST", body: {id: ui.bind("id")}, result: "result", pending: "busy", error: "problem"})})])])
+    ]),
+    ui.text(ui.bind("result.message"), {role: "status", "aria-live": "polite"}), ui.text(ui.bind("problem"), {role: "alert"}),
+    ui.card([ui.heading("Your plan", {level: 2}), ui.element("pre", {}, ui.bind("result.overview"))])
+  ])})
+}
+fn result(message) { return {message: message, overview: overview(), sessions: data.rows} }
+let server = web.serve(env.int("PORT", 4102), {
+  "GET /health": fn() { return {status: "ready"} },
+  "GET /": fn() { return web.response(200, page(), {"cache-control": "no-store"}) },
+  "GET /api/sessions": fn() { return result("Loaded") },
+  "POST /api/sessions": endpoint(fn(request) {
+    let title = text(request.body.title, "Subject", 120); let minutes = integer(request.body.minutes, "Minutes", 1, 480)
+    let next = copy(data); next.rows.push({id: next.nextId, title: title, minutes: minutes, done: false}); next.nextId += 1; save(next); data = next; return result("Session added.")
+  }),
+  "POST /api/toggle": endpoint(fn(request) { let next = copy(data); let index = findIndex(next.rows, request.body.id); next.rows[index].done = not next.rows[index].done; save(next); data = next; return result("Session updated.") }),
+  "POST /api/remove": endpoint(fn(request) { let next = copy(data); next.rows.splice(findIndex(next.rows, request.body.id), 1); save(next); data = next; return result("Session removed.") })
+}, {root: process.cwd(), host: "127.0.0.1", html: false, assets: false, maxBodyBytes: 16384})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

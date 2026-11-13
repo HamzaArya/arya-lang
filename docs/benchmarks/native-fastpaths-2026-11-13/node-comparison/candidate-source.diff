@@ -1,0 +1,16 @@
+--- baseline.arya
++++ candidate.arya
+@@ -10,11 +10,11 @@
+ fn codec(n) { const value = {balance: "100.005", type: "asset", items: [1, 2, 3]}; let result = 0; for i in range(n) { const encoded: any = json.stringify(value); const decoded: any = json.parse(encoded); result += decoded.items[1] }; return result }
+ fn text(n) { let result = 0; for i in range(n) { result += len((" row " + str(i)).trim().toUpperCase().split(" ").join("-")) }; return result }
+ fn exact(n) { let result = "0"; for i in range(n) { result = decimal.add(result, "123456789012345678901234567890.005") }; return result }
+-# PARSED_KERNEL
++fn parsed(n) { const value = decimal.values.parse("123456789012345678901234567890.005"); let result = decimal.values.parse("0"); for i in range(n) { result = decimal.values.add(result, value) }; return decimal.values.format(result) }
+ fn work(kind, n) {
+   if kind == "sum" { return sum(n) }; if kind == "mix" { return mix(n) }; if kind == "fib" { return fib(n) }
+   if kind == "records" { return records(n) }; if kind == "map" { return maps(n) }; if kind == "json" { return codec(n) }
+-  if kind == "strings" { return text(n) }; return exact(n)
++  if kind == "parsed" { return parsed(n) }; if kind == "strings" { return text(n) }; return exact(n)
+ }
+ while true {
+   const line = io.readLine(); if line == null { break }; const request: any = json.parse(line)

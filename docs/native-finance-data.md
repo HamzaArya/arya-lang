@@ -126,11 +126,18 @@ reservation. Existing stable sorting is retained.
 Map/Set retain SameValueZero key equality (NaN matches NaN; signed zeros match),
 UTF-16 string value equality, object identity, and insertion/iteration order.
 Collections of at least 32 entries add a private hash index of offsets into the
-existing ordered storage. Updates retain position; deletion shifts ordered
-storage and invalidates the index; reinsertion appends; clear removes entries.
-The index rebuilds lazily and has no unrooted value/heap pointers. Lookup and
-insertion improve for larger collections; deletion remains linear. The original
-1000000 stored-value-slot bound remains (500000 Map pairs or 1000000 Set values).
+ordered storage. Updates retain position; deletion leaves a tombstone;
+reinsertion appends; clear removes entries. Later insertion may compact
+tombstones when fewer than half the stored slots are live. Compaction waits
+until active `forEach` calls finish. Those calls observe additions and skip
+deleted entries; `keys`, `values`, and `entries` return ordered snapshots.
+The index has no unrooted value/heap pointers. The live-entry limit is
+500000 Map pairs or 1000000 Set values; tombstones can retain extra storage
+until compaction, particularly during an active `forEach` call.
+Wide records and `list.unique` also use private key indexes. Sparse lists use
+demand-zero pages and collector tracking of populated pages; bulk mutators can
+materialize dense storage. Reserving capacity can therefore increase memory
+without changing list length.
 Specialized unboxed numeric/decimal vectors are still planned.
 
 ## Streaming CSV and input
@@ -181,6 +188,9 @@ bin/arya build native/examples/stream-ledger.arya -o .build/stream-ledger --rele
 It supports large imports without loading the file into one string. Files and
 fields are always data; account names such as `=print(99)` are never executed.
 
+In an installed SDK, the example is `stream-ledger.arya` beside `arya`; build it
+with `./arya build stream-ledger.arya -o .build/stream-ledger --release`.
+
 ## Diagnostics
 
 Use `arya check file.arya --json` for existing source-located machine diagnostics
@@ -194,8 +204,9 @@ requested bytes, string objects/units, JSON key hits, field-cache hits, checked
 decimal fast paths, and GC CPU milliseconds. These counts exclude realloc,
 independent malloc users, libmpdec storage and allocator metadata; use peak RSS
 alongside them. Timing builds omit counters and GC timers. `--no-data-opt`
-disables literal pooling, guarded field reads, immediate-method lowering, and
-statement temporary reuse for compiler comparisons; runtime codec/decimal
+disables literal pooling, guarded field reads, immediate-method and proven
+decimal/JSON standard-call lowering, and statement temporary reuse for compiler
+comparisons; runtime codec/decimal
 changes remain enabled.
 
 A public C embedding ABI, compact batch transport, alternative backends, SIMD,

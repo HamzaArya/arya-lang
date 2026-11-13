@@ -1,0 +1,13 @@
+use std "log" as log
+use std "debug" as debug
+let fieldsBuilt = 0
+let logger = log.create({level: "info", sink: fn(line) { throw new Error("Disabled trace emitted") }})
+fn fields() { fieldsBuilt += 1; return {secret: "private"} }
+let i = 0
+const iterations = number(args[0])
+while i < iterations {
+  if logger.enabled("trace") { logger.trace("expensive", fields()) }
+  i += 1
+}
+debug.assert(fieldsBuilt == 0)
+print("trace disabled")

@@ -1,0 +1,22 @@
+use std "auth" as auth
+use std "debug" as debug
+const status = auth.biometricStatus()
+debug.assert(not status.supported and not status.available and status.code == "unavailable")
+const result = await auth.authenticate({reason: "Unlock a test credential"})
+debug.assert(not result.ok and result.code == "unavailable")
+const vault = auth.vault({service: "org.arya.tests.unavailable"})
+let caught = 0
+for action in [fn() { return vault.store("test", "secret", "Store a test credential") }, fn() { return vault.read("test", "Read a test credential") }, fn() { return vault.remove("test", "Remove a test credential") }, fn() { return vault.replace("test", "secret", "Replace a test credential") }] {
+  try { await action() } catch error { debug.assert(error.code == "ARYA_AUTH_UNAVAILABLE" and error.detail == "platform-unavailable" and error.outcomeUnknown == false); caught += 1 }
+}
+debug.assert(caught == 4)
+let pending = []
+for _index in range(8) { pending.push(auth.authenticate({reason: "Check unavailable native authentication"})) }
+for value in await Promise.all(pending) { debug.assert(not value.ok and value.code == "unavailable") }
+print("auth portable: biometric and credential operations fail closed")
+const controller = new AbortController(); controller.abort()
+const cancelled = await auth.authenticate({reason: "Do not start a native request", signal: controller.signal})
+debug.assert(cancelled.code == "cancelled" and cancelled.nativeCode == null)
+let aborted = false
+try { await vault.replace("test", "secret", "Do not replace", {signal: controller.signal}) } catch error { debug.assert(error.code == "ARYA_AUTH_CANCELLED" and not error.outcomeUnknown); aborted = true }
+debug.assert(aborted)

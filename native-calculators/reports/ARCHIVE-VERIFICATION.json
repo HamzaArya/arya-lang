@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "date_utc": "2026-11-13T14:55:59.835420+00:00",
+  "archive": "Arya-Calculators-macOS-arm64.zip",
+  "bytes": 7499032,
+  "sha256": "4290f4b33919894a275f41af1a795cd342e5cf7479b7152a38f83e85e1427c88",
+  "apps": 6,
+  "checks": [
+    "ZIP CRC validation",
+    "six app Info.plist files",
+    "native executable bytes match delivered bundles",
+    "executable permission bits retained"
+  ]
+}

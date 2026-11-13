@@ -1,0 +1,57 @@
+use std "debug" as debug
+use std "runtime" as runtime
+let checks = 0
+fn equal(actual, expected) {
+  debug.assert(runtime.deepEqual(actual, expected), "JSON scan value mismatch")
+  checks += 1
+}
+fn rejected(text, message) {
+  let failed = false
+  try { JSON.parse(text) } catch error {
+    equal(error.name, "SyntaxError")
+    equal(error.message, message)
+    failed = true
+  }
+  debug.assert(failed, "Malformed JSON accepted")
+}
+const lengths = range(97)
+for n in [127,128,129,255,256,257,1023,1024,1025,8191,8192,8193] { lengths.push(n) }
+const units = ["", "a", "سلام", "🌉", "\uD800", "\uDC00", "\uD800x\uDC00"]
+const escapes = ['\\"', '\\\\', '\\/', '\\b', '\\f', '\\n', '\\r', '\\t', '\\u0000', '\\uD800', '\\uDC00', '\\ud83c\\udf09']
+const decoded = ['"', '\\', '/', '\b', '\f', '\n', '\r', '\t', '\0', '\uD800', '\uDC00', '🌉']
+for n in lengths {
+  const prefix = "x".repeat(n)
+  for unit in units {
+    const expected = prefix + unit + "tail"
+    equal(JSON.parse('"' + expected + '"'), expected)
+    const object: any = JSON.parse('{"' + expected + '":"value"}')
+    equal(object[expected], "value")
+  }
+  for escape at index in escapes {
+    const expected = prefix + decoded[index] + "tail"
+    equal(JSON.parse('"' + prefix + escape + 'tail"'), expected)
+    const object: any = JSON.parse('{"' + prefix + escape + 'tail":17}')
+    equal(object[expected], 17)
+  }
+  rejected('"' + prefix, "Unclosed JSON string.")
+  rejected('"' + prefix + '\\', "Incomplete JSON escape.")
+  rejected('"' + prefix + '\\q"', "Invalid JSON escape.")
+  for suffix in ['\\u', '\\u1', '\\u12', '\\u123', '\\u12xz"'] {
+    rejected('"' + prefix + suffix, "Invalid JSON Unicode escape.")
+  }
+  for control in ['\0', '\n', '\r', '\t', '\u001f'] {
+    rejected('"' + prefix + control + '"', "Control character in JSON string.")
+  }
+}
+// Deterministic varied alignment, Unicode, escapes and lengths.
+let state = 12345
+for trial in range(512) {
+  state = (state * 48271) % 2147483647
+  const length = state % 513
+  const unit = units[state % len(units)]
+  const index = state % len(escapes)
+  const prefix = unit + "x".repeat(length)
+  equal(JSON.parse('"' + prefix + escapes[index] + 'tail"'), prefix + decoded[index] + "tail")
+  if trial % 31 == 0 { runtime.collect() }
+}
+print("JSON SIMD semantic checks:", checks)

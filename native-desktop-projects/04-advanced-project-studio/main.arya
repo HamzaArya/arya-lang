@@ -1,0 +1,131 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "runtime" as runtime
+use std "validate" as validate
+use std "security" as security
+use std "datetime" as datetime
+const dataFile: string = env.get("DATA_FILE", "data.json")
+const maxBytes = 4194304
+let state: any = {format: 1, projects: [], tasks: [], history: []}
+fn clean(value, label, maximum = 160) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonblank text of at most " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn optionalText(value, label, maximum = 4000) {
+  if runtime.kind(value) != "string" or value.length > maximum { throw new Error(label + " must be text of at most " + str(maximum) + " characters.") }; return value.trim()
+}
+fn choose(value, choices, label) { if not choices.includes(value) { throw new Error("Choose a valid " + label + ".") }; return value }
+fn find(collection, id) { if runtime.kind(id) != "string" { throw new Error("Select a record first.") }; for row in collection { if row.id == id { return row } }; throw new Error("The selected record no longer exists. Refresh the view.") }
+fn version(row, supplied) { if not Number.isSafeInteger(supplied) or supplied != row.version { throw new Error("This record changed. Refresh before editing or deleting.") } }
+fn history(title, entityId, action, detail) {
+  state.history.push({id: security.uuid(), time: new Date().toISOString(), entityId: entityId, title: title, action: action, detail: detail})
+  if state.history.length > 1000 { state.history = state.history.slice(-1000) }
+}
+fn persist() {
+  const output = JSON.stringify(state, null, 2) ?? ""
+  if Buffer.byteLength(output, "utf8") + 1 > maxBytes { throw new Error("Storage limit of 4 MiB reached. Remove old records before adding more.") }
+  fs.writeTextAtomicSync(dataFile, output + "\n")
+}
+const historySchema = validate.object({id: validate.string(), time: validate.string(), entityId: validate.string(), title: validate.string(), action: validate.string(), detail: validate.string()})
+
+const statuses = ["Planned", "Doing", "Blocked", "Done"]
+const priorities = ["Low", "Normal", "High"]
+const projectSchema = validate.object({id: validate.string(), version: validate.integer({min: 1}), name: validate.string({min: 1, max: 160}), owner: validate.string({min: 1, max: 100}), description: validate.string({max: 4000}), wipLimit: validate.integer({min: 1, max: 20})})
+const taskSchema = validate.object({id: validate.string(), version: validate.integer({min: 1}), title: validate.string({min: 1, max: 160}), projectId: validate.string(), assignee: validate.string({min: 1, max: 100}), dueDate: validate.string({max: 10}), priority: validate.enum(priorities), status: validate.enum(statuses), description: validate.string({max: 4000})})
+const stateSchema = validate.object({format: validate.integer({min: 1, max: 1}), projects: validate.array(projectSchema, {max: 100}), tasks: validate.array(taskSchema, {max: 500}), history: validate.array(historySchema, {max: 1000})})
+fn active(status) { return status == "Doing" or status == "Blocked" }
+fn work(projectId, excluded = "") { return state.tasks.filter(fn(row) => row.projectId == projectId and row.id != excluded and active(row.status)).length }
+fn due(value) { if value == "" { return "" }; if runtime.kind(value) != "string" or not new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$").test(value) { throw new Error("Due date must be YYYY-MM-DD or blank.") }; try { return datetime.date(value) } catch failure { throw new Error("Due date is not a valid calendar date.") } }
+fn integrity() {
+  let ids = new Set()
+  for project in state.projects {
+    if ids.has(project.id) { throw new Error("Stored projects have duplicate IDs.") }; ids.add(project.id)
+    clean(project.name, "Project name"); clean(project.owner, "Owner", 100)
+    if work(project.id) > project.wipLimit { throw new Error("Stored active task count exceeds the project's WIP limit.") }
+  }
+  let tasks = new Set()
+  for row in state.tasks { if tasks.has(row.id) { throw new Error("Stored tasks have duplicate IDs.") }; tasks.add(row.id); find(state.projects, row.projectId); due(row.dueDate); clean(row.title, "Title"); clean(row.assignee, "Assignee", 100) }
+}
+fn projectFields(body) {
+  const limit = Number(body.wipLimit)
+  if runtime.kind(body.wipLimit) != "string" or not Number.isInteger(limit) or limit < 1 or limit > 20 { throw new Error("WIP limit must be an integer from 1 to 20.") }
+  return {name: clean(body.name, "Project name"), owner: clean(body.owner, "Owner", 100), description: optionalText(body.description ?? "", "Description"), wipLimit: limit}
+}
+fn taskFields(body) { const project = find(state.projects, body.projectId); return {title: clean(body.title, "Title"), projectId: project.id, assignee: clean(body.assignee, "Assignee", 100), dueDate: due(body.dueDate ?? ""), priority: choose(body.priority, priorities, "priority"), description: optionalText(body.description ?? "", "Description")} }
+fn execute(command, body) {
+  if command == "project-add" {
+    if state.projects.length >= 100 { throw new Error("Project limit of 100 reached.") }; const input = projectFields(body)
+    const row = {id: security.uuid(), version: 1, name: input.name, owner: input.owner, description: input.description, wipLimit: input.wipLimit}
+    state.projects.push(row); history(row.name, row.id, "Project created", "Owner: " + row.owner); return "Project created."
+  }
+  if ["project-edit", "project-delete"].includes(command) {
+    const row = find(state.projects, body.id); version(row, body.version)
+    if command == "project-delete" {
+      if state.tasks.some(fn(task) => task.projectId == row.id) { throw new Error("Move or delete the project's tasks before deleting it.") }
+      state.projects = state.projects.filter(fn(project) => project.id != row.id); history(row.name, row.id, "Project deleted", "No tasks were deleted."); return "Project deleted."
+    }
+    const input = projectFields(body)
+    if work(row.id) > input.wipLimit { throw new Error("Finish or move active tasks before lowering the WIP limit.") }
+    row.name = input.name; row.owner = input.owner; row.description = input.description; row.wipLimit = input.wipLimit; row.version += 1
+    history(row.name, row.id, "Project edited", "WIP limit: " + str(row.wipLimit)); return "Project updated."
+  }
+  if command == "task-add" {
+    if state.tasks.length >= 500 { throw new Error("Task limit of 500 reached.") }; const input = taskFields(body)
+    const row = {id: security.uuid(), version: 1, title: input.title, projectId: input.projectId, assignee: input.assignee, dueDate: input.dueDate, priority: input.priority, description: input.description, status: "Planned"}
+    state.tasks.push(row); history(row.title, row.id, "Task created", "Assignee: " + row.assignee); return "Task created."
+  }
+  if not ["task-edit", "task-transition", "task-delete"].includes(command) { throw new Error("Unknown command.") }
+  const row = find(state.tasks, body.id); version(row, body.version)
+  if command == "task-delete" { state.tasks = state.tasks.filter(fn(task) => task.id != row.id); history(row.title, row.id, "Task deleted", "History retained."); return "Task deleted." }
+  if command == "task-edit" {
+    const input = taskFields(body); const project = find(state.projects, input.projectId)
+    if active(row.status) and work(project.id, row.id) >= project.wipLimit { throw new Error("Destination project's active-work limit is full.") }
+    row.title = input.title; row.projectId = input.projectId; row.assignee = input.assignee; row.dueDate = input.dueDate; row.priority = input.priority; row.description = input.description
+    history(row.title, row.id, "Task edited", "Project: " + project.name + " · Assignee: " + row.assignee)
+  } else {
+    const next = choose(body.status, statuses, "status")
+    const allowed = {Planned: ["Doing"], Doing: ["Blocked", "Done", "Planned"], Blocked: ["Doing", "Planned"], Done: ["Planned"]}
+    if not allowed[row.status].includes(next) { throw new Error("Cannot move " + row.status + " to " + next + ". Follow the task workflow.") }
+    const project = find(state.projects, row.projectId)
+    if active(next) and not active(row.status) and work(project.id, row.id) >= project.wipLimit { throw new Error("Project WIP limit reached. Finish active work first.") }
+    history(row.title, row.id, "Status changed", row.status + " → " + next); row.status = next
+  }
+  row.version += 1; return "Task updated."
+}
+fn snapshot(view) {
+  let rows: any = []
+  const today = new Date().toISOString().slice(0, 10)
+  if view == "projects" {
+    rows = state.projects.map(fn(project) {
+      const tasks = state.tasks.filter(fn(task) => task.projectId == project.id); const done = tasks.filter(fn(task) => task.status == "Done").length
+      let progress = "0%"; if tasks.length > 0 { progress = str(Math.round(done * 100 / tasks.length)) + "%" }
+      return {id: project.id, version: project.version, name: project.name, owner: project.owner, description: project.description, wipLimit: project.wipLimit, tasks: tasks.length, done: done, active: work(project.id), progress: progress}
+    })
+  } else if view == "history" { rows = state.history.slice().reverse() }
+  else {
+    rows = state.tasks.filter(fn(task) { return view != "overdue" or task.status != "Done" and task.dueDate != "" and task.dueDate < today }).map(fn(task) {
+      const project = find(state.projects, task.projectId)
+      return {id: task.id, version: task.version, title: task.title, projectId: task.projectId, project: project.name, assignee: task.assignee, dueDate: task.dueDate, priority: task.priority, status: task.status, description: task.description}
+    })
+  }
+  return {rows: rows, summary: str(state.projects.length) + " projects · " + str(state.tasks.length) + " tasks · " + str(state.tasks.filter(fn(task) => active(task.status)).length) + " active · " + str(state.tasks.filter(fn(task) => task.status == "Done").length) + " done"}
+}
+
+try {
+  const metadata = fs.infoSync(dataFile)
+  if metadata != null {
+    if metadata.type != "file" or metadata.size > maxBytes { throw new Error("Storage must be a regular JSON file of at most 4 MiB.") }
+    state = validate.parse(stateSchema, JSON.parse(fs.readTextSync(dataFile)))
+  }
+  integrity()
+  const command = args[0] ?? "list"
+  const body: any = JSON.parse(args[1] ?? "{}")
+  if body == null or runtime.kind(body) != "record" or Array.isArray(body) { throw new Error("Command input must be a JSON object.") }
+  const view = body.view ?? "projects"
+  if not ["projects", "tasks", "overdue", "history"].includes(view) { throw new Error("Unknown application view.") }
+  let message = "Ready"
+  if command != "list" { message = execute(command, body); integrity(); persist() }
+  const result = snapshot(view)
+  print(JSON.stringify({ok: true, message: message, rows: result.rows, summary: result.summary}))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

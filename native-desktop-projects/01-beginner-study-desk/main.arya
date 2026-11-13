@@ -1,0 +1,105 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "env" as env
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200, optional = false) {
+  if runtime.kind(value) != "string" or value.length > maximum or (not optional and value.trim().length == 0) { throw new Error(label + " must be text with at most " + str(maximum) + " characters; required fields cannot be blank.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be a whole number.") }
+  let result = Number(value)
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " must be a whole number from " + str(minimum) + " to " + str(maximum) + ".") }
+  return result
+}
+fn storedInteger(value, label, minimum = 0, maximum = 1000000) { if runtime.kind(value) != "number" { throw new Error(label + " must be stored as a number.") }; return integer(value, label, minimum, maximum) }
+fn object(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn array(value, label, maximum) { if not Array.isArray(value) or value.length > maximum { throw new Error(label + " must be a list with at most " + str(maximum) + " items.") }; return value }
+fn day(value, label, optional = false) {
+  text(value, label, 10, optional)
+  if optional and value == "" { return "" }
+  if not new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$").test(value) { throw new Error(label + " must use YYYY-MM-DD.") }
+  let parsed = new Date(value + "T00:00:00Z")
+  if not Number.isFinite(parsed.getTime()) or parsed.toISOString().slice(0, 10) != value { throw new Error(label + " must be a real calendar date.") }
+  return value
+}
+fn today() { return new Date().toISOString().slice(0, 10) }
+fn load(initial) {
+  let info = fs.infoSync(file)
+  if info == null { return initial }
+  if info.type != "file" or info.size > 2097152 { throw new Error("The data store must be a regular JSON file no larger than 2 MiB.") }
+  return object(JSON.parse(fs.readTextSync(file)))
+}
+fn save(state) {
+  let encoded = JSON.stringify(state, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 2097152 { throw new Error("The data store is full (2 MiB limit). Export and archive old records first.") }
+  try { fs.writeTextAtomicSync(file, encoded) }
+  catch failure { throw new Error("Could not save the change. Your existing data was preserved. Check the data folder and available disk space.") }
+}
+fn selected(items, body) {
+  let id = integer(body.id, "Record ID", 1)
+  let index = items.findIndex(fn(item) { return item.id == id })
+  if index < 0 { throw new Error("This record no longer exists. Refresh and select another record.") }
+  if integer(body.version, "Record version", 1) != items[index].version { throw new Error("This record changed since it was displayed. Refresh before editing.") }
+  return index
+}
+
+fn validateStore(state) {
+  if state.schema != 1 { throw new Error("Unrecognized Study Desk data format.") }
+  storedInteger(state.nextId, "Stored next ID", 1)
+  array(state.sessions, "Stored sessions", 1000); array(state.notes, "Stored notes", 500)
+  let ids = new Set()
+  for item in state.sessions.concat(state.notes) {
+    object(item); storedInteger(item.id, "Stored ID", 1); storedInteger(item.version, "Stored version", 1)
+    if ids.has(item.id) or item.id >= state.nextId { throw new Error("Duplicate or inconsistent stored record ID.") }; ids.add(item.id)
+    text(item.title, "Stored title", 160)
+  }
+  for item in state.sessions {
+    storedInteger(item.minutes, "Stored minutes", 1, 480); day(item.due, "Stored due date", true); text(item.description, "Stored session notes", 4000, true)
+    if not ["Planned", "Completed"].includes(item.status) { throw new Error("Invalid stored session status.") }
+  }
+  for item in state.notes { text(item.content, "Stored note", 12000); text(item.updated, "Stored updated date", 30) }
+}
+fn sessionFields(body) {
+  return {title: text(body.title, "Subject", 160), minutes: integer(body.minutes, "Minutes", 1, 480), due: day(body.due ?? "", "Due date", true), description: text(body.description ?? "", "Session notes", 4000, true)}
+}
+fn noteFields(body) { return {title: text(body.title, "Note title", 160), content: text(body.content, "Note content", 12000)} }
+fn snapshot(state, view, message) {
+  if view == "notes" { return {ok: true, message: message, rows: state.notes.slice().reverse(), summary: str(state.notes.length) + " saved notes · Select a note to read, edit or delete it."} }
+  if view != "sessions" { throw new Error("Choose Study sessions or Notes.") }
+  let pending = 0; let minutes = 0; let overdue = 0; let current = today()
+  for item in state.sessions { if item.status == "Planned" { pending += 1; minutes += item.minutes; if item.due != "" and item.due < current { overdue += 1 } } }
+  return {ok: true, message: message, rows: state.sessions.slice().reverse(), summary: str(pending) + " planned · " + str(minutes) + " minutes remaining · " + str(overdue) + " overdue · " + str(state.sessions.length - pending) + " completed"}
+}
+try {
+  if args.length != 2 { throw new Error("Expected a command and JSON request.") }
+  let command = args[0]; let body = object(JSON.parse(args[1])); let view = body.view ?? "sessions"
+  let state = load({schema: 1, nextId: 1, sessions: [], notes: []}); validateStore(state)
+  let message = "Ready. Changes are saved on this computer."; let changed = false
+  if command == "list" {}
+  else if command == "session-add" {
+    if state.sessions.length >= 1000 { throw new Error("The session limit is 1000. Remove old completed sessions first.") }
+    let values = sessionFields(body)
+    state.sessions.push(Object.assign({id: state.nextId, version: 1, status: "Planned"}, values)); state.nextId += 1; changed = true; message = "Study session created."
+  } else if command == "session-edit" {
+    let index = selected(state.sessions, body); let values = sessionFields(body)
+    state.sessions[index] = Object.assign({}, state.sessions[index], values, {version: state.sessions[index].version + 1}); changed = true; message = "Study session updated."
+  } else if command == "session-complete" or command == "session-reopen" {
+    let index = selected(state.sessions, body); let status = "Completed"; if command == "session-reopen" { status = "Planned" }
+    if state.sessions[index].status == status { throw new Error("This session is already " + status.toLowerCase() + ".") }
+    state.sessions[index].status = status; state.sessions[index].version += 1; changed = true; message = "Session marked " + status.toLowerCase() + "."
+  } else if command == "session-delete" {
+    state.sessions.splice(selected(state.sessions, body), 1); changed = true; message = "Study session deleted."
+  } else if command == "note-add" {
+    if state.notes.length >= 500 { throw new Error("The note limit is 500. Export and remove old notes first.") }
+    state.notes.push(Object.assign({id: state.nextId, version: 1, updated: new Date().toISOString()}, noteFields(body))); state.nextId += 1; changed = true; message = "Note created."
+  } else if command == "note-edit" {
+    let index = selected(state.notes, body); state.notes[index] = Object.assign({}, state.notes[index], noteFields(body), {version: state.notes[index].version + 1, updated: new Date().toISOString()}); changed = true; message = "Note updated."
+  } else if command == "note-delete" {
+    state.notes.splice(selected(state.notes, body), 1); changed = true; message = "Note deleted."
+  } else { throw new Error("Unknown Study Desk command.") }
+  # Validate the requested view before any write so an invalid request cannot mutate data.
+  let response = snapshot(state, view, message)
+  if changed { save(state) }
+  print(JSON.stringify(response))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

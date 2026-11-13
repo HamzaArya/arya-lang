@@ -2,6 +2,7 @@
 use std "_accounting" as native
 use std "runtime" as runtime
 use std "async" as tasks
+use std "decimal" as decimal
 let activeAsync = 0
 fn failure(code, message) { let error = new Error(message); error.code = code; return error }
 fn execution(value, asynchronous) {
@@ -53,4 +54,124 @@ export fn invoiceBatch(lines, options, selected) { return prepareInvoices(lines,
 export fn ledgerBatch(entries, options, selected) { return prepareLedger(entries, options).calculate(selected) }
 export fn backendInfo() {
   return runtime.freeze({nativeAvailable: true, nativeReason: null, nativeAbi: 2, platform: runtime.platform(), maxRows: 1000000, maxAccounts: 100000, maxAsyncJobs: 2})
+}
+
+# Opt-in journal and reporting policy. The lower-level ledger API deliberately
+# remains useful for diagnosing incomplete/unbalanced imports.
+fn dataFields(value, allowed, label) {
+  if not runtime.isRecord(value) or runtime.hasAccessor(value) { throw failure("ARYA_ACCOUNTING_INPUT", label + " must contain data fields.") }
+  for key in runtime.keys(value) { if not allowed.includes(key) { throw failure("ARYA_ACCOUNTING_INPUT", "Unknown " + label + " field: " + key) } }
+}
+fn tag(value, label) {
+  if runtime.kind(value) != "string" or len(value) > 128 or value.trim() == "" { throw failure("ARYA_ACCOUNTING_INPUT", label + " must be nonblank text of at most 128 UTF-16 units.") }
+}
+fn transactionSummary(transaction, options, batches = undefined) {
+  dataFields(transaction, ["id", "entries"], "Transaction")
+  tag(transaction.id, "Transaction id")
+  if runtime.kind(transaction.entries) != "list" or len(transaction.entries) < 2 { throw failure("ARYA_ACCOUNTING_TRANSACTION", "A transaction needs at least two posting rows.") }
+  # Native preparation first enforces canonical decimals, scale, signed bounds,
+  # unknown-field rejection and the prohibition on accessor-driven inputs.
+  const prepared = native.prepareLedger(transaction.entries, options)
+  const result = native.postingSummary(prepared)
+  if not result.balanced {
+    let error = failure("ARYA_ACCOUNTING_UNBALANCED", "Transaction debits and credits differ by " + result.difference + ".")
+    error.difference = result.difference; throw error
+  }
+  if batches != undefined { batches.push(prepared) }
+  return runtime.freeze({id: transaction.id, currency: result.currency, scale: result.scale,
+    entryCount: result.entryCount, debit: result.debit, credit: result.credit, balanced: true})
+}
+export fn validateTransaction(transaction, options) { return transactionSummary(transaction, options) }
+fn journalResult(result, transactions) {
+  return runtime.freeze({currency: result.currency, scale: result.scale, backend: result.backend,
+    accounts: result.accounts, entryCount: result.entryCount, debit: result.debit, credit: result.credit,
+    difference: result.difference, balanced: result.balanced, transactionCount: len(transactions),
+    transactions: transactions, policy: "journal-v1"})
+}
+fn journalSnapshot(prepared, summaries) {
+  # Closures retain only the prepared batch and summaries, allowing caller
+  # inputs and intermediate transaction handles to be collected after prepare.
+  return runtime.freeze({currency: prepared.currency, scale: prepared.scale, length: prepared.length,
+    transactionCount: len(summaries),
+    calculate: fn(options) { return journalResult(prepared.calculate(options), summaries) },
+    calculateAsync: async fn(options) { return journalResult(await prepared.calculateAsync(options), summaries) }})
+}
+export fn prepareJournal(transactions, options) {
+  if runtime.kind(transactions) != "list" or len(transactions) > 100000 { throw failure("ARYA_ACCOUNTING_LIMIT", "Use at most 100000 transactions and one million posting rows.") }
+  # Validate policy even for an empty journal, before examining transactions.
+  const empty = native.prepareLedger([], options)
+  const selected = native.metadata(empty)
+  const policy = {currency: selected.currency, scale: selected.scale}
+  const ids = new Set(); const summaries = []; const batches = []
+  let entryCount = 0
+  for transaction at index in transactions {
+    try {
+      dataFields(transaction, ["id", "entries"], "Transaction")
+      tag(transaction.id, "Transaction id")
+      if ids.has(transaction.id) { throw failure("ARYA_ACCOUNTING_DUPLICATE", "Duplicate transaction id: " + transaction.id) }
+      if runtime.kind(transaction.entries) == "list" and len(transaction.entries) > 1000000 - entryCount { throw failure("ARYA_ACCOUNTING_LIMIT", "Journal exceeds one million posting rows.") }
+      summaries.push(transactionSummary(transaction, policy, batches)); ids.add(transaction.id)
+      entryCount += len(transaction.entries)
+    } catch error { error.transactionIndex = index; throw error }
+  }
+  # Combine immutable native snapshots without reading or parsing caller rows again.
+  const prepared = batch(native.combineLedger(batches, empty))
+  runtime.freeze(summaries)
+  return journalSnapshot(prepared, summaries)
+}
+export fn journalBatch(transactions, options, selected) { return prepareJournal(transactions, options).calculate(selected) }
+fn amount(value, scale) { return decimal.quantize(value, scale, "down") }
+export fn trialBalance(entries, options) {
+  const result = ledgerBatch(entries, options)
+  const zero = amount("0", result.scale)
+  let debit = zero; let credit = zero; const rows = []
+  for account in result.accounts {
+    let d = zero; let c = zero
+    if decimal.compare(account.balance, "0") >= 0 { d = account.balance }
+    else { c = amount(decimal.subtract("0", account.balance), result.scale) }
+    debit = decimal.add(debit, d); credit = decimal.add(credit, c)
+    rows.push(runtime.freeze({account: account.account, debit: d, credit: c}))
+  }
+  return runtime.freeze({currency: result.currency, scale: result.scale, entryCount: result.entryCount,
+    accounts: runtime.freeze(rows), debit: amount(debit, result.scale), credit: amount(credit, result.scale),
+    difference: result.difference, balanced: result.balanced, policy: "trial-balance-v1"})
+}
+export fn financialStatements(entries, chart, options) {
+  if runtime.kind(chart) != "list" or len(chart) > 100000 { throw failure("ARYA_ACCOUNTING_LIMIT", "Use a chart with at most 100000 accounts.") }
+  const classifications = new Map()
+  for account at index in chart {
+    try {
+      dataFields(account, ["account", "type"], "Chart account"); tag(account.account, "Account tag")
+      if not ["asset", "liability", "equity", "revenue", "expense"].includes(account.type) { throw failure("ARYA_ACCOUNTING_CLASSIFICATION", "Account type must be asset, liability, equity, revenue or expense.") }
+      if classifications.has(account.account) { throw failure("ARYA_ACCOUNTING_DUPLICATE", "Duplicate chart account: " + account.account) }
+      classifications.set(account.account, account.type)
+    } catch error { error.chartIndex = index; throw error }
+  }
+  const ledger = ledgerBatch(entries, options)
+  if not ledger.balanced { throw failure("ARYA_ACCOUNTING_UNBALANCED", "Financial statements require a balanced ledger; use trialBalance to diagnose differences.") }
+  const balances = new Map()
+  for account in ledger.accounts {
+    if not classifications.has(account.account) { throw failure("ARYA_ACCOUNTING_CLASSIFICATION", "Missing chart classification for account: " + account.account) }
+    balances.set(account.account, account)
+  }
+  const zero = amount("0", ledger.scale)
+  const totals = {asset: zero, liability: zero, equity: zero, revenue: zero, expense: zero}
+  const rows = []
+  for account in chart {
+    const existing = balances.get(account.account) ?? {debit: zero, credit: zero, balance: zero}
+    let balance = existing.balance
+    if ["liability", "equity", "revenue"].includes(account.type) { balance = amount(decimal.subtract("0", balance), ledger.scale) }
+    totals[account.type] = decimal.add(totals[account.type], balance)
+    rows.push(runtime.freeze({account: account.account, type: account.type, debit: existing.debit,
+      credit: existing.credit, balance: existing.balance, normalBalance: balance}))
+  }
+  const profit = amount(decimal.subtract(totals.revenue, totals.expense), ledger.scale)
+  const claims = amount(decimal.add(decimal.add(totals.liability, totals.equity), profit), ledger.scale)
+  const difference = amount(decimal.subtract(totals.asset, claims), ledger.scale)
+  return runtime.freeze({currency: ledger.currency, scale: ledger.scale, entryCount: ledger.entryCount,
+    accounts: runtime.freeze(rows), policy: "statements-v1",
+    incomeStatement: runtime.freeze({revenue: amount(totals.revenue, ledger.scale), expenses: amount(totals.expense, ledger.scale), netIncome: profit}),
+    balanceSheet: runtime.freeze({assets: amount(totals.asset, ledger.scale), liabilities: amount(totals.liability, ledger.scale),
+      equity: amount(totals.equity, ledger.scale), currentEarnings: profit, liabilitiesAndEquity: claims,
+      difference: difference, balanced: decimal.compare(difference, "0") == 0})})
 }

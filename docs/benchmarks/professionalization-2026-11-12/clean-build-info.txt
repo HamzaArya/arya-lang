@@ -1,0 +1,16 @@
+Native Arya SDK assembly identities
+assembledAtUtc: 2026-11-12T20:31:54Z
+host: Darwin 25.5.0 arm64
+version: 2.0.0-alpha.2
+compilerSha256: 5ec32e70d2aae9efdb2c3e721c11f450b7fe0dcc8d737c5c1fd5ac874d9532c9
+generatedCSha256: 4f7a5c59f5357422fff373050316305b723accb6acf957b9c130ecbf41228440
+stageTwoCSha256: 4f7a5c59f5357422fff373050316305b723accb6acf957b9c130ecbf41228440
+stageTwoThreeCIdentical: true
+
+SOURCE-SHA256SUMS describes current source inputs at assembly time.
+
+These source hashes alone do not prove that they produced this binary.
+
+The separate fresh-source verification gate supplies that build evidence.
+
+SHA256SUMS covers the actual SDK files, including these identity records.

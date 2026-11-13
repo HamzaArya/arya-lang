@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "passed": 3,
+  "total": 3,
+  "mode": "check-build-smoke",
+  "evidence": "../reports/20261113T133315.776053Z/results.json",
+  "native_compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+  "projects": [
+    {
+      "path": "06-world-class/cli-release-gate",
+      "status": "passed",
+      "binary_sha256": "b83fc81dbceeef480a6c9ad18ec3000ab9cea18b4d7353dade0f11b4eda9d711"
+    },
+    {
+      "path": "06-world-class/gui-reconciliation",
+      "status": "passed",
+      "binary_sha256": "fd723879b129af9f6ffdd0b540079015c05655b404f97407876fc75a2968c32a"
+    },
+    {
+      "path": "06-world-class/service-idempotent-ledger",
+      "status": "passed",
+      "binary_sha256": "aa5815049259461189f9b6d57be0b5abd0d4fe2b0eb047c99a43b435f135be25"
+    }
+  ]
+}

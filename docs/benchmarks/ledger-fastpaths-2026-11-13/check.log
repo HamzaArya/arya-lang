@@ -1,0 +1,132 @@
+native/tests/run.sh
+core: native output and GC stress passed
+decimal: native output and GC stress passed
+list: native output and GC stress passed
+json: native output and GC stress passed
+modules: live native exports passed
+publication: existing file and dangling symlink preserved
+diagnostics: invalid types, const writes and unknown imports rejected
+canonical syntax and default-parameter TDZ passed
+relocation: compiler and decimal program work without Node/Python
+native dependencies: no embedded JavaScript or Python runtime
+ASan/UBSan with GC stress passed (leak detection not run)
+native financial bridge: exact JSON-lines calculations passed
+compiler failure: partial output and staging cleaned
+typed functions: forward calls, return paths and arity verified
+sh native/tests/function-calls.sh
+calls: release optimized/reference semantics and GC stress passed
+calls: debug optimized/reference semantics and GC stress passed
+calls: ASan/UBSan optimized/reference with GC stress passed (leak detection not run)
+calls: depth traces and allocation bounds passed (26 vs 1767789 calloc calls)
+calls: general nonnumeric call allocation bounds passed (26 vs 1400045 calloc calls)
+sh native/tests/advanced-calls.sh
+advanced calls: release semantics passed in advanced/previous/reference modes
+advanced calls: debug semantics passed in advanced/previous/reference modes
+advanced calls: sanitized semantics passed in advanced/previous/reference modes
+advanced calls: scalar root/lookup bounds and captured-call reductions passed
+sh native/tests/data-optimization.sh
+data: release field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+data: debug field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+data: sanitized field/accessor/method ordering, JSON, closure and async cleanup lifetimes passed
+sh native/tests/fixed-format.sh
+number formatting and dispatch passed
+number formatting and dispatch passed
+data descriptor guards and aliases passed
+data descriptor guards and aliases passed
+sh native/tests/data-paths.sh
+data paths: optimized with GC stress passed
+data paths: reference with GC stress passed
+data paths: sanitized with GC stress passed
+sh native/tests/standard-calls.sh
+standard calls: ordering, roots, parsed values, aliases, shadowing, mutation, callbacks and errors passed
+standard calls: generic dispatch 1059 -> 45 with ASan/UBSan and GC stress
+sh native/tests/finance-data.sh
+finance values: parsed decimals, Money, batches, cancellation, reservation and indexed collections passed
+finance values: parsed decimals, Money, batches, cancellation, reservation and indexed collections passed
+CSV: split Unicode, quoted records, limits, backpressure and cancellation passed
+CSV: split Unicode, quoted records, limits, backpressure and cancellation passed
+sh native/tests/accounting-journal.sh
+journal/report checks: 503
+journal/report checks: 503
+journal/report checks: 128
+typed journal/report contracts passed
+journal/report types: valid shapes and five invalid amount contracts passed
+sh native/tests/security-diagnostics.sh
+security diagnostics: 67 checks passed
+security diagnostics: 67 checks passed
+security and diagnostics: release, ASan/UBSan and GC stress passed without Node/Python
+source stacks: uncaught assertions report function names and Arya line/column in both build modes
+disabled trace: 100 and 10000 guards used 108 calloc-wrapper calls each
+sh native/tests/number-format.sh
+number format: exact rounding, signed zero, subnormals, widths and fallback passed
+number format: exact rounding, signed zero, subnormals, widths and fallback passed
+sh native/tests/numeric-calls.sh
+numeric depth boundary: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+numeric call checks: 60
+numeric depth boundary: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+numeric call checks: 60
+numeric dispatch: 30000 immediate calls avoid 30000 bound functions and at least 90000 calloc calls; reference/sanitizer/GC checks passed
+sh native/tests/fixed-number.sh
+fixed number depth: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+fixed number checks: 207
+fixed number C guards: 19728 bitwise cases, 4 rounding modes, comma locale passed, replacement callees passed
+fixed number depth: 1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,depth,depth,depth,depth
+fixed number checks: 207
+fixed number C guards: 19728 bitwise cases, 4 rounding modes, comma locale passed, replacement callees passed
+fixed number: reference/ASan/UBSan/GC, source locations, depth, and 30000 avoided temporary allocations passed
+sh native/tests/descriptor-boundaries.sh
+descriptor depth boundary: 77,77,77,77,77,77,77,77,77,77,77,depth,depth,depth,depth
+descriptor boundary checks: 37
+descriptor depth boundary: 77,77,77,77,77,77,77,77,77,77,77,depth,depth,depth,depth
+descriptor boundary checks: 37
+descriptor boundaries: await, collection, callee replacement, generic descriptors and recursion limits passed in release and ASan/UBSan reference comparisons
+sh native/tests/string-storage.sh
+string storage checks: 1585
+string storage checks: 1585
+string storage checks: 241
+string storage: exact allocation, reference counts and full reclamation passed
+string storage: optimized/reference, sanitized collector stress, aliases, Unicode and async lifetimes passed
+sh native/tests/utf8-storage.sh
+UTF8 storage checks: 520
+UTF8 storage checks: 520
+UTF8 storage: 530860 guard, classifier, allocation, length-limit and reclamation checks passed.
+UTF8 storage: 530860 guard, classifier, allocation, length-limit and reclamation checks passed.
+sh native/tests/json-simd.sh
+JSON scan: 1911191 exact offset and protected-page checks passed (NEON).
+JSON scan: 1911191 exact offset and protected-page checks passed (scalar).
+JSON SIMD semantic checks: 7488
+JSON scan: 1911191 exact offset and protected-page checks passed (NEON).
+JSON scan: 1911191 exact offset and protected-page checks passed (scalar).
+JSON SIMD semantic checks: 7488
+JSON SIMD: native/scalar, ASan/UBSan, GC stress, guard pages and parser semantics passed
+sh native/tests/performance.sh
+performance: release ordering, aliases, sparse roots and GC stress passed
+performance: release text worker leaves timers runnable
+performance: release json-read worker leaves timers runnable
+performance: release json-write worker leaves timers runnable
+performance: sanitized ordering, aliases, sparse roots and GC stress passed
+performance: sanitized text worker leaves timers runnable
+performance: sanitized json-read worker leaves timers runnable
+performance: sanitized json-write worker leaves timers runnable
+sh native/tests/profile.sh
+arrays: native ASan/UBSan and GC stress passed
+regex: native ASan/UBSan and GC stress passed
+host-values: native ASan/UBSan and GC stress passed
+async-semantics: native ASan/UBSan and GC stress passed
+typed-standard: native ASan/UBSan and GC stress passed
+services: native ASan/UBSan and GC stress passed
+testing: native ASan/UBSan and GC stress passed
+security: native ASan/UBSan and GC stress passed
+files: native ASan/UBSan and GC stress passed
+path: native ASan/UBSan and GC stress passed
+web-events: native ASan/UBSan and GC stress passed
+accounting: native ASan/UBSan and GC stress passed
+finance-values: native ASan/UBSan and GC stress passed
+finance: large prepared batches and cooperative cancellation passed
+csv-stream: native ASan/UBSan and GC stress passed
+chunks: native ASan/UBSan and GC stress passed
+glob: 4368 native reference cases passed
+profile: optional Python, live MySQL, desktop and editor host have separate integration gates
+sh native/tests/distribution.sh
+Arya native 2.0.0-alpha.2 (self-hosted)
+distribution: native SDK has no JavaScript/VSIX tooling; checksums and interpreter-free analysis passed

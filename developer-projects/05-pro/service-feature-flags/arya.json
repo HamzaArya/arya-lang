@@ -1,0 +1,5 @@
+{
+  "name": "service-feature-flags",
+  "entry": "main.arya",
+  "target": "native"
+}

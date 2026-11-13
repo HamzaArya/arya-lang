@@ -1,0 +1,19 @@
+{
+  "baseRevision": "28d27826ae74386dc81a652d24752409c6e2fb6a",
+  "baselineTreeSha256": "858045ae17a97d13991c6067889033701c197aaecfc3f670c5cc94fb74cc591b",
+  "sourceSha256": {
+    "native/runtime/accounting.c": "98223b6140d0b320b23e7d6cc303c77e0e9615d59aa16d5642ce2a34128174f7",
+    "native/runtime/core.c": "ed4b0b0bb519bbeeb902c9306d947c0413de424882145778b2ec0e8c5b11a4f0",
+    "native/libraries/accounting.arya": "3e5fb94118861609937fa40e7954467ea2c7ac83a3f0381c2f42fa4bf77e01f8",
+    "native/tests/accounting-journal.sh": "2ae417c6506be58a6ccd9d27c17ea41e1edeca3b6d8f13ddf1850d9807f010f9",
+    "native/tests/fixtures/accounting-journal.arya": "896a6c75f4596277054ff0de337b7557018afd5868b6c482c3d63cc3c0bd5684",
+    "native/tests/accounting-journal-probe.c": "3f53cb1f50ab50698134203bc9953a7e14944031c54803507290c339ab02c0c7",
+    "native/tests/accounting-journal-reference.py": "59d3c45e24cb436316f3cb3bf3eee8393a7eb9abb8f6a8dd8f79917f0d048c00",
+    "native/tests/fixtures/accounting-journal-driver.arya": "04e7cd03da59dbd184dbdbdc178d2d2ae18af1f5be3feaa357db5ed42a69a027",
+    "native/benchmarks/journal.arya": "6ef2d11bc68bbcb39e28dbab2b220c777723aff1ee2991e5f281fe6ecae5f1fd",
+    "native/benchmarks/journal.py": "4ababc56ce11f859f5b67cd9e536460cce590a1d563054f4a9ae6327d33eeb6f",
+    "native/tests/journal-benchmark-guards.py": "0a8d5d50b21ac34aca701c9809180f8aedc14392b21b5ffdd9946422898661fd",
+    "native/tests/fixtures/accounting-journal-lifetime.arya": "dd12da7524878d579f30344c2cba6dc70e83132adf45b3c2ec58c58510a8310a"
+  },
+  "scope": "Locally tested source snapshot, not a release/platform qualification. Existing qualification records were not changed."
+}

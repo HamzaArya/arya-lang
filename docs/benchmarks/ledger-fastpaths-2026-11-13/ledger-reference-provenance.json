@@ -1,0 +1,35 @@
+{
+  "verifiedAtUtc": "2026-11-13T03:28:48.993540+00:00",
+  "command": [
+    "node",
+    "native/tests/ledger-aging-reference.mjs",
+    "--ledger",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application",
+    "--baseline",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker",
+    "--candidate",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker",
+    "--sanitized",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/sanitized/ledger-worker",
+    "--out",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/ledger-reference.json"
+  ],
+  "scriptSha256": "f6f271f5de2aa39f6d84bf74e67f3526949f5222a2def7f5ed98eb9fea93963b",
+  "casesSha256": "b7fb5f168f50c8b70b012789c8159062e48f4843bcef3233fbfbe04691fe1ad6",
+  "resultSha256": "138e63584377277dc8022f3dbc5b15010491129d90deff11be572950acc2fbbf",
+  "workers": {
+    "baseline": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker",
+      "sha256": "959bdfff7a8a320aa70a5407f07e352f610cf832e8721b2a0649c88e27a701a4"
+    },
+    "candidate": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker",
+      "sha256": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8"
+    },
+    "sanitized": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/sanitized/ledger-worker",
+      "sha256": "d508343e5dca28f21b372ad64311a2cf4838ccfdeae24b53e877803008efe53c"
+    }
+  },
+  "allFrozenInputsUnchanged": true
+}

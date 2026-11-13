@@ -1,0 +1,131 @@
+{
+  "id": "calc-precision",
+  "name": "Precision Calculator",
+  "subtitle": "Exact fractions, powers and controlled decimal previews.",
+  "views": [
+    {
+      "id": "history",
+      "label": "Calculation history",
+      "columns": [
+        {
+          "key": "expression",
+          "label": "Calculation",
+          "width": 350
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "width": 240
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "width": 120
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "calculator": {
+    "placeholder": "(1/3 + 1/6)^2",
+    "memory": true,
+    "keys": [
+      [
+        "7",
+        "8",
+        "9",
+        "/",
+        "(",
+        ")"
+      ],
+      [
+        "4",
+        "5",
+        "6",
+        "*",
+        "^",
+        "abs("
+      ],
+      [
+        "1",
+        "2",
+        "3",
+        "-",
+        "%"
+      ],
+      [
+        "0",
+        ".",
+        "+"
+      ]
+    ],
+    "options": [
+      {
+        "key": "precision",
+        "label": "Places",
+        "default": "20",
+        "choices": [
+          {
+            "value": "0",
+            "label": "0"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "16",
+            "label": "16"
+          },
+          {
+            "value": "20",
+            "label": "20"
+          },
+          {
+            "value": "30",
+            "label": "30"
+          },
+          {
+            "value": "50",
+            "label": "50"
+          }
+        ]
+      },
+      {
+        "key": "rounding",
+        "label": "Rounding",
+        "default": "half-even",
+        "choices": [
+          {
+            "value": "half-even",
+            "label": "Half even"
+          },
+          {
+            "value": "half-up",
+            "label": "Half up"
+          },
+          {
+            "value": "down",
+            "label": "Toward zero"
+          },
+          {
+            "value": "floor",
+            "label": "Floor"
+          },
+          {
+            "value": "ceil",
+            "label": "Ceiling"
+          }
+        ]
+      }
+    ]
+  }
+}

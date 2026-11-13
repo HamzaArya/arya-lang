@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/06-world-class-precision/.build/worker"]
+PASS: 227 real native worker calls; independent Fraction/Decimal oracles, precedence, ties, limits, memory, persistence, latest100 history, corrupt data and write failure

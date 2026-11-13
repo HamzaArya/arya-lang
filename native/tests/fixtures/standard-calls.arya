@@ -1,0 +1,31 @@
+use std "decimal" as decimal
+use std "json" as json
+use std "runtime" as runtime
+use std "debug" as debug
+let order: any = []
+fn equal(a: any, b: any): void { debug.assert(runtime.deepEqual(a, b), "Native standard call mismatch") }
+fn left(): string { order.push("left"); runtime.collect(); return "1.25" }
+fn right(): string { order.push("right"); runtime.collect(); return "2.75" }
+equal(decimal.add(left(), right()), "4")
+equal(order, ["left", "right"])
+equal(decimal.values.format(decimal.values.add(decimal.values.parse("9007199254740993.005"), decimal.values.parse("0.005"))), "9007199254740993.01")
+let detached = decimal.add; equal(detached("1", "2"), "3")
+fn shadow(decimal: any): any { return decimal.add("a", "b") }
+equal(shadow({add: fn(a, b) { return a + b }}), "ab")
+let mutable: any = {add: decimal.add}
+fn change(): string { mutable.add = decimal.subtract; runtime.collect(); return "1" }
+equal(mutable.add(change(), "2"), "3")
+equal(mutable.add("1", "2"), "-1")
+let bad: any = 2
+try { decimal.add(bad, "1"); debug.assert(false) } catch error { equal(error.code, "ARYA_DECIMAL_INPUT") }
+equal(json.stringify(json.parse('{"x":"1.005"}', fn(key, value) { runtime.collect(); if key == "x" { return decimal.quantize(value, 2, "half-up") }; return value })), '{"x":"1.01"}')
+let value = {toJSON: fn(key) { runtime.collect(); return json.parse('{"ok":true}') }}
+equal(json.stringify([value]), '[{"ok":true}]')
+let attempted = false
+try { Object.defineProperty(decimal, "add", {get: fn() { attempted = true; return decimal.subtract }}); debug.assert(false) } catch error { equal(error.name, "TypeError") }
+equal(attempted, false)
+equal(decimal.add("1", "2"), "3")
+let result = "0"
+for i in range(1000) { result = decimal.add(result, "0.1") }
+equal(result, "100")
+print("standard calls: ordering, roots, parsed values, aliases, shadowing, mutation, callbacks and errors passed")

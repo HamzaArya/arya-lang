@@ -1,0 +1,76 @@
+{
+  "environment": {
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.13.15"
+  },
+  "sourceSha256": "e77259ebea1df0dd3119ad213b025cea63a50562ad6edf4e43b0e312814e7263",
+  "boundary": "CPU time inside the numeric loop; 2000 in-process warmup calls, explicit collection before timing; 3 discarded process samples and alternating retained process order; 100000 Number(toFixed(2)) calls by default. Startup and IPC excluded. Native runtime PATH=/nonexistent.",
+  "count": 100000,
+  "checksum": "-200050.40000000043",
+  "variants": {
+    "baseline": {
+      "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/baseline-sdk/arya",
+      "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/fixed-number-division/bench/baseline",
+      "binarySha256": "c50417dff84ab7948890eb9b7ab86a93d2bbbe67cf7d8c5af3f9a834a901ba90",
+      "samplesMs": [
+        34.13099999999999,
+        33.347,
+        33.122,
+        34.36500000000001,
+        33.842999999999996,
+        33.948,
+        33.077000000000005,
+        33.285,
+        34.927
+      ],
+      "medianMs": 33.842999999999996,
+      "madMs": 0.5220000000000127,
+      "minMs": 33.077000000000005,
+      "maxMs": 34.927
+    },
+    "stack": {
+      "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/fixed-number/sdk/arya",
+      "compilerSha256": "44e2e0429151574649ec496cf2210cdb1d23dfbb77baeb740c76941db0fe2e65",
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/fixed-number-division/bench/stack",
+      "binarySha256": "79a802123403897c48bd9bc2fbaf9ab12a846e8a1269f675bc9ca5d6d851fafe",
+      "samplesMs": [
+        16.118000000000002,
+        16.160999999999998,
+        16.16,
+        16.144,
+        16.262,
+        16.152,
+        16.315,
+        16.247,
+        16.065
+      ],
+      "medianMs": 16.16,
+      "madMs": 0.04199999999999804,
+      "minMs": 16.065,
+      "maxMs": 16.315
+    },
+    "division": {
+      "compiler": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/fixed-number-division/sdk/arya",
+      "compilerSha256": "71ac48bf019bde11c3c6c6cdb2f9d2d352df79ea75e37910e76e26e84278ae5b",
+      "binary": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/fixed-number-division/bench/division",
+      "binarySha256": "502d85d1b0ec5f3fa88aea4843c23573275f84fb56e059540f6722c73252bc02",
+      "samplesMs": [
+        14.009999999999998,
+        13.880999999999998,
+        14.082,
+        14.289000000000001,
+        14.024999999999999,
+        13.964,
+        14.084,
+        13.970999999999998,
+        14.051
+      ],
+      "medianMs": 14.024999999999999,
+      "madMs": 0.05700000000000216,
+      "minMs": 13.880999999999998,
+      "maxMs": 14.289000000000001
+    }
+  }
+}

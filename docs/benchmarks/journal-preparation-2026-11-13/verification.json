@@ -1,0 +1,195 @@
+{
+  "status": "local-implementation-verified",
+  "version": "2.0.0-alpha.3",
+  "qualification": {
+    "version": "2.0.0-alpha.3",
+    "status": "verification-in-progress",
+    "scope": "Additive native record literals, tooling/type-checker support and consolidated current documentation. Full source/distribution qualification is still running.",
+    "previousQualification": "2.0.0-alpha.2.json"
+  },
+  "qualificationRecordsModified": false,
+  "sourceFiles": [
+    {
+      "file": "native/runtime/accounting.c",
+      "sha256": "98223b6140d0b320b23e7d6cc303c77e0e9615d59aa16d5642ce2a34128174f7"
+    },
+    {
+      "file": "native/runtime/core.c",
+      "sha256": "ed4b0b0bb519bbeeb902c9306d947c0413de424882145778b2ec0e8c5b11a4f0"
+    },
+    {
+      "file": "native/libraries/accounting.arya",
+      "sha256": "3e5fb94118861609937fa40e7954467ea2c7ac83a3f0381c2f42fa4bf77e01f8"
+    },
+    {
+      "file": "native/tests/accounting-journal.sh",
+      "sha256": "2ae417c6506be58a6ccd9d27c17ea41e1edeca3b6d8f13ddf1850d9807f010f9"
+    },
+    {
+      "file": "native/tests/fixtures/accounting-journal.arya",
+      "sha256": "896a6c75f4596277054ff0de337b7557018afd5868b6c482c3d63cc3c0bd5684"
+    },
+    {
+      "file": "native/tests/accounting-journal-probe.c",
+      "sha256": "3f53cb1f50ab50698134203bc9953a7e14944031c54803507290c339ab02c0c7"
+    },
+    {
+      "file": "native/tests/accounting-journal-reference.py",
+      "sha256": "59d3c45e24cb436316f3cb3bf3eee8393a7eb9abb8f6a8dd8f79917f0d048c00"
+    },
+    {
+      "file": "native/tests/fixtures/accounting-journal-driver.arya",
+      "sha256": "04e7cd03da59dbd184dbdbdc178d2d2ae18af1f5be3feaa357db5ed42a69a027"
+    },
+    {
+      "file": "native/benchmarks/journal.arya",
+      "sha256": "6ef2d11bc68bbcb39e28dbab2b220c777723aff1ee2991e5f281fe6ecae5f1fd"
+    },
+    {
+      "file": "native/benchmarks/journal.py",
+      "sha256": "4ababc56ce11f859f5b67cd9e536460cce590a1d563054f4a9ae6327d33eeb6f"
+    },
+    {
+      "file": "native/tests/journal-benchmark-guards.py",
+      "sha256": "0a8d5d50b21ac34aca701c9809180f8aedc14392b21b5ffdd9946422898661fd"
+    },
+    {
+      "file": "native/tests/fixtures/accounting-journal-lifetime.arya",
+      "sha256": "dd12da7524878d579f30344c2cba6dc70e83132adf45b3c2ec58c58510a8310a"
+    }
+  ],
+  "currentSourceMatchesTestedFiles": true,
+  "originalCompilerSha256": "9c811fddd8115aaf886c3100deb7bcb1d551662d5ccf539671fe848e4747356b",
+  "originalGeneratedCSha256": "44508dc18e9d9d33029d501eab5e744eca77523fe1a9f8d52114d592033fd85b",
+  "originalStageTwoCSha256": "44508dc18e9d9d33029d501eab5e744eca77523fe1a9f8d52114d592033fd85b",
+  "originalStageTwoThreeCIdentical": true,
+  "passed": [
+    {
+      "location": "original checkout",
+      "command": "make native",
+      "evidence": "original-build.log"
+    },
+    {
+      "location": "original checkout",
+      "command": "sh native/tests/accounting-journal.sh",
+      "evidence": "original-journal-tests.log"
+    },
+    {
+      "location": "original checkout",
+      "command": "python3 native/tests/accounting-journal-reference.py --mode sanitized --output ORIGINAL_ORACLE_JSON",
+      "evidence": "original-oracle.json",
+      "validCases": 175,
+      "invalidCases": 37,
+      "postingRows": 12358
+    },
+    {
+      "location": "isolated final candidate",
+      "command": "make native",
+      "result": "stage-two/stage-three C identical; make -q native returned zero"
+    },
+    {
+      "location": "isolated final candidate",
+      "command": "sh native/tests/accounting-journal.sh",
+      "evidence": "journal-tests.log",
+      "modes": [
+        "release",
+        "reference without call/data optimizations",
+        "ASan/UBSan + GC stress"
+      ]
+    },
+    {
+      "location": "isolated final candidate",
+      "command": "python3 native/tests/accounting-journal-reference.py --baseline-compiler BASELINE/arya --mode release",
+      "evidence": "oracle-release.json",
+      "validCases": 175,
+      "invalidErrorParityCases": 37
+    },
+    {
+      "location": "isolated final candidate",
+      "command": "python3 native/tests/accounting-journal-reference.py --mode sanitized",
+      "evidence": "oracle-sanitized.json"
+    },
+    {
+      "location": "isolated candidate before closure helper",
+      "command": "python3 native/tests/accounting-reference.py",
+      "evidence": "accounting-oracle.log",
+      "batches": 85,
+      "rows": 7600,
+      "roundingModes": 9
+    },
+    {
+      "location": "isolated candidate before closure helper",
+      "command": "sh native/tests/run.sh (outside sandbox)",
+      "evidence": "core-tests.log"
+    },
+    {
+      "location": "isolated candidate before closure helper",
+      "command": "existing native/tests/fixtures/accounting.arya in release and ASan/UBSan + GC stress",
+      "evidence": [
+        "legacy-accounting-release.log",
+        "legacy-accounting-sanitized.log"
+      ]
+    },
+    {
+      "location": "optional benchmark controller",
+      "command": "python3 native/tests/journal-benchmark-guards.py",
+      "evidence": "benchmark-guards.log",
+      "tests": 4
+    },
+    {
+      "location": "isolated final comparison",
+      "command": "python3 native/benchmarks/journal.py measure --out FINAL_EVIDENCE --samples 9 --sessions 2",
+      "evidence": "final/results.json",
+      "retainedSamples": 540,
+      "discardedWarmups": 180,
+      "separateCounterRuns": 2,
+      "independentFullResultChecks": 722
+    },
+    {
+      "location": "original source",
+      "command": "git diff --check -- native/runtime/accounting.c native/runtime/core.c native/libraries/accounting.arya",
+      "result": "passed"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "command": "sh native/tests/run.sh (sandboxed)",
+      "reason": "At the relocation step, Clang could not create temporary files under its deliberately empty environment. Reproduced; unchanged suite then passed outside sandbox.",
+      "evidence": "core-sandbox-attempt.log",
+      "resolved": true
+    },
+    {
+      "command": "partial second snapshot copy",
+      "reason": "Host ran out of disk space. Removed only this task's partial candidate and recreated the snapshot with APFS copy-on-write; source worktree was unchanged.",
+      "resolved": true
+    }
+  ],
+  "expectedRegressionDemonstration": {
+    "baseline": "reference build of accounting-journal-lifetime.arya fails retained-memory bound (3197712 extra bytes)",
+    "candidate": "reference 58218 bytes; optimized release 48012 bytes",
+    "evidence": "lifetime-baseline-reference.log"
+  },
+  "notRun": [
+    "complete make check on final source",
+    "fresh-source/distribution qualification on final source",
+    "other platform qualification",
+    "Node/PHP semantic-equivalent performance comparison",
+    "RSS",
+    "sustained/concurrent throughput",
+    "full application/database service"
+  ],
+  "performanceLimits": [
+    "Shared development host; no detected competing builds/benchmarks",
+    "Prepared-calculation medians 2.5-6.5 microseconds higher",
+    "Peak managed bytes +1.3%; requested runtime allocation bytes -26.7% for separate diagnostic",
+    "Startup samples insufficient for a speed claim",
+    "Measured binaries from isolated snapshot; original compiler separately rebuilt and verified, not retimed"
+  ],
+  "remainingBlockers": [],
+  "restrictionsObserved": [
+    "No deploy/publish/push",
+    "No version change",
+    "No Ledger modification or real accounting-data operation",
+    "Historical benchmark/qualification records preserved"
+  ]
+}

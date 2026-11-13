@@ -1,0 +1,16 @@
+use std "runtime" as runtime
+const count = number(args[0])
+const places = number(args[1])
+fn work(n) {
+  let sum = 0; let i = 0
+  while i < n {
+    sum += Number(((i % 40000 - 20000) / 1000).toFixed(places))
+    i += 1
+  }
+  return sum
+}
+work(2000)
+runtime.collect()
+const start = runtime.clock()
+const sum = work(count)
+print(sum, (runtime.clock() - start) * 1000)

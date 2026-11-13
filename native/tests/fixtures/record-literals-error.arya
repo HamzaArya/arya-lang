@@ -1,0 +1,6 @@
+fn invalid(value: any): any {
+  return {
+    ...value,
+  }
+}
+invalid(7)

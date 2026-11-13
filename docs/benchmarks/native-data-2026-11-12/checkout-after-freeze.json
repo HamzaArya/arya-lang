@@ -1,0 +1,72 @@
+{
+  "note": "The qualified source and staged SDK are frozen. Later cache/metadata/packaging edits in the shared checkout are preserved, not attributed to the measured binaries.",
+  "revision": "28d27826ae74386dc81a652d24752409c6e2fb6a",
+  "changedSinceFreeze": [
+    {
+      "file": "Makefile",
+      "qualifiedSha256": "fb036fcafed1c2e9f68ea0a397991e2fd0b6ef9f0210d88c0d4a670bb4822c17",
+      "checkoutSha256": "e3f53fdfd26a890976a14666d9cc5a3b92745085d8f1a5e669d795338d1b15d1"
+    },
+    {
+      "file": "native/benchmarks/ledger-pool.mjs",
+      "qualifiedSha256": "88b8f582c328e2870ba32911eac4348040c757134ff89cff584a49f879443719",
+      "checkoutSha256": "3741d3ff71ee00d628733a0c0e381025eb11ed4015d0062b03aa6b4ed4009ed1"
+    },
+    {
+      "file": "native/bootstrap/stage-sdk.sh",
+      "qualifiedSha256": "4fa2b7168b17174f020d76118ed43920f5fb24dac0f3ca6d1aa355f591e2ee6e",
+      "checkoutSha256": "6afca4abc45a87afe4c6b39dd185e8f1c4aa14f1ff0a6b8b01944a5956ce63a8"
+    },
+    {
+      "file": "native/bootstrap/verify-clean.sh",
+      "qualifiedSha256": "096872b87d3b304d17885dea106f69363b540e01810dc4f1a0c38f3825b9dfda",
+      "checkoutSha256": "10b9420cc384cf2528aed810f81d4a7d161d6e973b2037ce6ee12184b2b77282"
+    },
+    {
+      "file": "native/compiler/build-cache.arya",
+      "qualifiedSha256": "07516ee1ce20cec4b302eecf1c935d17adbd40ead9df374a01edaa1cf4e68726",
+      "checkoutSha256": "bc11721f213cbb51d3868af9080b23fcfc5fc00a69218b30e9d2967b2df22b0d"
+    },
+    {
+      "file": "native/compiler/standard-types.arya",
+      "qualifiedSha256": "189d213e446c3e611f324caba0f4c1d8bb42f912284d91ea3b7eadfec2973c12",
+      "checkoutSha256": "ec4f02eb75ef1208cf3f1e0f68b19a8d52fe239193fac825b6d956e15951569b"
+    },
+    {
+      "file": "native/manifest.json",
+      "qualifiedSha256": "6c7c9d591d72cfac173a8f61902340ad5ce70fedb4700db64248e419d94245ce",
+      "checkoutSha256": "44c8ccee9b12df911b6dfb95837e164679a6e035f4d43c80d3a1b1df6003af14"
+    },
+    {
+      "file": "native/runtime/core.c",
+      "qualifiedSha256": "fe1a21ea977bf44815f8f32f7ff90d05fbbc56336f113bec06c7262d250f4f66",
+      "checkoutSha256": "b1acd05e490df3f6dfc4da871e3f70e180275af93077cb3e8c2999987d153d10"
+    },
+    {
+      "file": "native/runtime/fs-worker.c",
+      "qualifiedSha256": "4644a0193f8bbc110bf33d00c93ae3c1370298ed7616f664642f71f1ded19c14",
+      "checkoutSha256": "4b0b9afd66aa6ca36cd611ed18d35c756f077aabd5cd1253de456a3e821ddf4d"
+    },
+    {
+      "file": "native/runtime/sparse.c",
+      "qualifiedSha256": "6fa37ab4fde1881c1b780c010cd8d7ecf1463e83af4a324e9cc55fe47d840017",
+      "checkoutSha256": "92d7601257ee1ea368777d99730879538d97cffdc56f6f5adec4323a95f830bf"
+    },
+    {
+      "file": "native/tests/fixtures/performance.arya",
+      "qualifiedSha256": "6956b429bf791edbe3ad004db789ac219a63c6004df79bbf0fd70d5c3927a735",
+      "checkoutSha256": "4c4ad38bf4bcb7536d085e90e021377530a8f5d0826534c40349a9fcc6bb3af1"
+    },
+    {
+      "file": "native/tests/performance.sh",
+      "qualifiedSha256": "8a17867fd5b702cda8cef3ad70ac82e5ce006d9f4e329779c9fd8bde35989ba2",
+      "checkoutSha256": "9639bdc615c60b580302d81f32a73a6db50b2664d23ecc137c4c427cf6b85e75"
+    }
+  ],
+  "newNativeFilesSinceFreeze": [
+    "native/benchmarks/__pycache__/performance-audit.cpython-313.pyc",
+    "native/runtime/fs-tree.c",
+    "native/tests/__pycache__/performance-reference.cpython-313.pyc"
+  ],
+  "frozenInputsStillMatch": true
+}

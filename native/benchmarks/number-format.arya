@@ -1,0 +1,18 @@
+use std "runtime" as runtime
+const values = [1.005, 2.55, -0.004, 0, 123456.789, -98765.4321, 1e20, 5e-324]
+const places = number(args[0])
+const count = number(args[1])
+fn work(n) {
+  let checksum = 0; let i = 0
+  while i < n {
+    const text = values[i % values.length].toFixed(places)
+    checksum += text.length + text.charCodeAt(0)
+    i += 1
+  }
+  return checksum
+}
+work(2000)
+runtime.collect()
+const start = runtime.clock()
+const result = work(count)
+print(result, (runtime.clock() - start) * 1000)

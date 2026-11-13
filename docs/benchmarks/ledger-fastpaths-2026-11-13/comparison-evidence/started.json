@@ -1,0 +1,54 @@
+{
+  "startedAtUtc": "2026-11-13T03:25:08.760Z",
+  "command": [
+    "/usr/local/bin/node",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/final-comparison.json.evidence/driver.mjs",
+    "--app",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application",
+    "--baseline-native",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker",
+    "--native",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker",
+    "--samples",
+    "20",
+    "--sessions",
+    "2",
+    "--warmups",
+    "3",
+    "--output",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/final-comparison.json"
+  ],
+  "node": "v24.16.0",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "loadStart": [
+    5.95068359375,
+    5.62646484375,
+    5.45947265625
+  ],
+  "adapter": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger-targets.mjs",
+    "sha256": "f97d7b35dd738c60999a96314b822c71a10f6871790a8f9365530e2abf599578"
+  },
+  "originalController": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/scripts/perf-arya-calculations.mjs",
+    "sha256": "2a07eda37ee938f1e0bc31f66d80a6d3184374755c205ee5ca822eff17337382"
+  },
+  "generatedController": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/final-comparison.json.evidence/driver.mjs",
+    "sha256": "183fd88d81c50dc75df57378d0b192afaa6abf34b925599a8c449ebd831a4214"
+  },
+  "frozenAppManifest": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/application/BENCHMARK-SOURCES.json",
+    "sha256": "e35f659eea5158a5c4b21150a4e43e6c4d458dcc9010bd58657fc962d1df1a17"
+  },
+  "binaries": {
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/ledger-worker": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/candidate/manifest.json": "e2be999c49fb3e89c9084e197b4344c142b4624182b5047ef8b0ad1ca2b425af",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/ledger-worker": "959bdfff7a8a320aa70a5407f07e352f610cf832e8721b2a0649c88e27a701a4",
+    "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline/manifest.json": "9dc5a1b3bd18f579415f8f474b09f0330a4bed0e89773fccb156791551e0b024"
+  },
+  "selectedComparisons": "all original comparisons",
+  "differences": "Original timing and assertion bodies unchanged. Relative imports point to the frozen app. Target mode omits nonselected cases/comparisons, changing preceding workload/GC history; compare before/after within this run, not directly against earlier timings.",
+  "boundary": "Aging/allocation Node is direct calculation; native includes JSON and pipe transfer. Report/production rows include their actual host service. Native production routing is not changed."
+}

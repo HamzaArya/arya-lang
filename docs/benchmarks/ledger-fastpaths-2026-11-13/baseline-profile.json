@@ -1,0 +1,1571 @@
+{
+  "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+  "sourceSha256": "a3fc317095c2f435b7f9c58b7ee19e6eef92f43cee73145f00b7ad9cbbf91826",
+  "phaseBinarySha256": "1602e905ab8934ee7a7394e5f9ff0caf4f90d27d53730e9523477c2fdaf135c4",
+  "instrumentedBinarySha256": "793615217051841de36e4543e27b058748b361cbc19da21d7baabbaca8b4f992",
+  "method": "Uninstrumented phase CPU, 3 discarded warmups and 9 retained samples in one persistent process per microkernel. Separate per-helper instrumented builds; inclusive helper totals overlap and incur clock overhead. amemory/aresize timings cover runtime allocator calls; libmpdec allocator hooks are measured separately from runtime allocation. Requested runtime bytes count amemory allocations, not every realloc. Managed bytes are live+uncollected, not RSS. macOS maxRSS is bytes, Linux KiB. Phase instrumentation itself perturbs CPU; use phase binary for timing.",
+  "summary": [
+    {
+      "task": "aging-settle",
+      "parseCpuMs": 1.1380000000000001,
+      "calculateCpuMs": 5.376000000000006,
+      "stringifyCpuMs": 1.0819999999999996
+    },
+    {
+      "task": "allocation-index",
+      "parseCpuMs": 5.223999999999992,
+      "calculateCpuMs": 7.912000000000003,
+      "stringifyCpuMs": 1.1889999999999956
+    },
+    {
+      "task": "rounding",
+      "parseCpuMs": 0.3490000000000021,
+      "calculateCpuMs": 2.5860000000000016,
+      "stringifyCpuMs": 0.005999999999999062
+    },
+    {
+      "task": "rounding-detached",
+      "parseCpuMs": 0.5479999999999929,
+      "calculateCpuMs": 4.768999999999996,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "properties",
+      "parseCpuMs": 3.909000000000003,
+      "calculateCpuMs": 0.4479999999999901,
+      "stringifyCpuMs": 0.0050000000000050004
+    },
+    {
+      "task": "updates",
+      "parseCpuMs": 4.170000000000007,
+      "calculateCpuMs": 1.2220000000000009,
+      "stringifyCpuMs": 1.0579999999999896
+    },
+    {
+      "task": "descriptors",
+      "parseCpuMs": 3.9930000000000034,
+      "calculateCpuMs": 1.4020000000000006,
+      "stringifyCpuMs": 1.021000000000001
+    },
+    {
+      "task": "sorting",
+      "parseCpuMs": 3.1940000000000026,
+      "calculateCpuMs": 0.7609999999999978,
+      "stringifyCpuMs": 1.893999999999993
+    },
+    {
+      "task": "allocation",
+      "parseCpuMs": 0.33500000000000196,
+      "calculateCpuMs": 2.102,
+      "stringifyCpuMs": 1.705999999999999
+    }
+  ],
+  "raw": [
+    {
+      "task": "aging-settle",
+      "sample": 0,
+      "parseCpuMs": 1.1380000000000001,
+      "calculateCpuMs": 5.740000000000002,
+      "stringifyCpuMs": 1.0669999999999984
+    },
+    {
+      "task": "aging-settle",
+      "sample": 1,
+      "parseCpuMs": 1.1509999999999994,
+      "calculateCpuMs": 6.254000000000002,
+      "stringifyCpuMs": 1.0819999999999996
+    },
+    {
+      "task": "aging-settle",
+      "sample": 2,
+      "parseCpuMs": 1.6189999999999953,
+      "calculateCpuMs": 5.417000000000005,
+      "stringifyCpuMs": 1.0909999999999949
+    },
+    {
+      "task": "aging-settle",
+      "sample": 3,
+      "parseCpuMs": 1.0489999999999944,
+      "calculateCpuMs": 5.351999999999996,
+      "stringifyCpuMs": 1.0539999999999994
+    },
+    {
+      "task": "aging-settle",
+      "sample": 4,
+      "parseCpuMs": 1.0669999999999984,
+      "calculateCpuMs": 5.362000000000005,
+      "stringifyCpuMs": 1.1140000000000039
+    },
+    {
+      "task": "aging-settle",
+      "sample": 5,
+      "parseCpuMs": 1.486000000000001,
+      "calculateCpuMs": 5.132999999999999,
+      "stringifyCpuMs": 1.0619999999999936
+    },
+    {
+      "task": "aging-settle",
+      "sample": 6,
+      "parseCpuMs": 1.0369999999999964,
+      "calculateCpuMs": 5.376000000000006,
+      "stringifyCpuMs": 1.1369999999999991
+    },
+    {
+      "task": "aging-settle",
+      "sample": 7,
+      "parseCpuMs": 1.0720000000000036,
+      "calculateCpuMs": 5.404000000000006,
+      "stringifyCpuMs": 1.0769999999999946
+    },
+    {
+      "task": "aging-settle",
+      "sample": 8,
+      "parseCpuMs": 1.474000000000003,
+      "calculateCpuMs": 5.354999999999999,
+      "stringifyCpuMs": 1.0960000000000136
+    },
+    {
+      "task": "allocation-index",
+      "sample": 0,
+      "parseCpuMs": 4.062999999999997,
+      "calculateCpuMs": 9.90300000000001,
+      "stringifyCpuMs": 1.0789999999999966
+    },
+    {
+      "task": "allocation-index",
+      "sample": 1,
+      "parseCpuMs": 5.212999999999996,
+      "calculateCpuMs": 7.203000000000001,
+      "stringifyCpuMs": 1.1700000000000044
+    },
+    {
+      "task": "allocation-index",
+      "sample": 2,
+      "parseCpuMs": 5.223999999999992,
+      "calculateCpuMs": 8.472000000000007,
+      "stringifyCpuMs": 1.2320000000000109
+    },
+    {
+      "task": "allocation-index",
+      "sample": 3,
+      "parseCpuMs": 4.053000000000001,
+      "calculateCpuMs": 8.618000000000015,
+      "stringifyCpuMs": 1.1499999999999844
+    },
+    {
+      "task": "allocation-index",
+      "sample": 4,
+      "parseCpuMs": 5.649999999999988,
+      "calculateCpuMs": 7.912000000000003,
+      "stringifyCpuMs": 1.1889999999999956
+    },
+    {
+      "task": "allocation-index",
+      "sample": 5,
+      "parseCpuMs": 6.137000000000004,
+      "calculateCpuMs": 8.466000000000001,
+      "stringifyCpuMs": 1.2609999999999844
+    },
+    {
+      "task": "allocation-index",
+      "sample": 6,
+      "parseCpuMs": 5.777000000000005,
+      "calculateCpuMs": 7.858000000000004,
+      "stringifyCpuMs": 1.4550000000000118
+    },
+    {
+      "task": "allocation-index",
+      "sample": 7,
+      "parseCpuMs": 4.265999999999992,
+      "calculateCpuMs": 7.887000000000005,
+      "stringifyCpuMs": 1.3859999999999983
+    },
+    {
+      "task": "allocation-index",
+      "sample": 8,
+      "parseCpuMs": 5.370999999999987,
+      "calculateCpuMs": 7.342000000000015,
+      "stringifyCpuMs": 1.1059999999999959
+    },
+    {
+      "task": "rounding",
+      "sample": 0,
+      "parseCpuMs": 0.3689999999999978,
+      "calculateCpuMs": 2.4440000000000017,
+      "stringifyCpuMs": 0.005999999999999062
+    },
+    {
+      "task": "rounding",
+      "sample": 1,
+      "parseCpuMs": 0.3799999999999984,
+      "calculateCpuMs": 2.7410000000000005,
+      "stringifyCpuMs": 0.011000000000000593
+    },
+    {
+      "task": "rounding",
+      "sample": 2,
+      "parseCpuMs": 0.36499999999999727,
+      "calculateCpuMs": 2.5860000000000016,
+      "stringifyCpuMs": 0.005999999999999062
+    },
+    {
+      "task": "rounding",
+      "sample": 3,
+      "parseCpuMs": 0.3459999999999991,
+      "calculateCpuMs": 2.8300000000000027,
+      "stringifyCpuMs": 0.011000000000000593
+    },
+    {
+      "task": "rounding",
+      "sample": 4,
+      "parseCpuMs": 0.3300000000000004,
+      "calculateCpuMs": 2.4209999999999994,
+      "stringifyCpuMs": 0.005999999999999062
+    },
+    {
+      "task": "rounding",
+      "sample": 5,
+      "parseCpuMs": 0.38599999999999746,
+      "calculateCpuMs": 2.8719999999999994,
+      "stringifyCpuMs": 0.0039999999999970615
+    },
+    {
+      "task": "rounding",
+      "sample": 6,
+      "parseCpuMs": 0.343000000000003,
+      "calculateCpuMs": 2.391999999999998,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "rounding",
+      "sample": 7,
+      "parseCpuMs": 0.3480000000000011,
+      "calculateCpuMs": 2.709000000000003,
+      "stringifyCpuMs": 0.0049999999999980616
+    },
+    {
+      "task": "rounding",
+      "sample": 8,
+      "parseCpuMs": 0.3490000000000021,
+      "calculateCpuMs": 2.4159999999999946,
+      "stringifyCpuMs": 0.005999999999999062
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 0,
+      "parseCpuMs": 0.5709999999999986,
+      "calculateCpuMs": 5.017,
+      "stringifyCpuMs": 0.007000000000000062
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 1,
+      "parseCpuMs": 0.5590000000000005,
+      "calculateCpuMs": 5.0349999999999975,
+      "stringifyCpuMs": 0.011000000000004062
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 2,
+      "parseCpuMs": 0.5749999999999991,
+      "calculateCpuMs": 4.889999999999999,
+      "stringifyCpuMs": 0.007000000000000062
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 3,
+      "parseCpuMs": 0.5840000000000012,
+      "calculateCpuMs": 4.700999999999997,
+      "stringifyCpuMs": 0.0039999999999970615
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 4,
+      "parseCpuMs": 0.5259999999999987,
+      "calculateCpuMs": 4.821000000000006,
+      "stringifyCpuMs": 0.008999999999995123
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 5,
+      "parseCpuMs": 0.5339999999999998,
+      "calculateCpuMs": 4.765999999999999,
+      "stringifyCpuMs": 0.0049999999999980616
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 6,
+      "parseCpuMs": 0.5249999999999977,
+      "calculateCpuMs": 4.728999999999997,
+      "stringifyCpuMs": 0.0050000000000050004
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 7,
+      "parseCpuMs": 0.5479999999999929,
+      "calculateCpuMs": 4.768999999999996,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "rounding-detached",
+      "sample": 8,
+      "parseCpuMs": 0.5350000000000077,
+      "calculateCpuMs": 4.626999999999992,
+      "stringifyCpuMs": 0.004000000000004
+    },
+    {
+      "task": "properties",
+      "sample": 0,
+      "parseCpuMs": 4.741000000000002,
+      "calculateCpuMs": 0.40799999999999864,
+      "stringifyCpuMs": 0.0029999999999960614
+    },
+    {
+      "task": "properties",
+      "sample": 1,
+      "parseCpuMs": 3.909000000000003,
+      "calculateCpuMs": 0.38699999999999846,
+      "stringifyCpuMs": 0.007000000000000062
+    },
+    {
+      "task": "properties",
+      "sample": 2,
+      "parseCpuMs": 3.0760000000000023,
+      "calculateCpuMs": 0.44399999999999995,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "properties",
+      "sample": 3,
+      "parseCpuMs": 4.370999999999993,
+      "calculateCpuMs": 0.5970000000000003,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "properties",
+      "sample": 4,
+      "parseCpuMs": 3.8980000000000126,
+      "calculateCpuMs": 0.4479999999999901,
+      "stringifyCpuMs": 0.009000000000009
+    },
+    {
+      "task": "properties",
+      "sample": 5,
+      "parseCpuMs": 3.2029999999999976,
+      "calculateCpuMs": 0.9409999999999974,
+      "stringifyCpuMs": 0.0050000000000050004
+    },
+    {
+      "task": "properties",
+      "sample": 6,
+      "parseCpuMs": 5.963999999999997,
+      "calculateCpuMs": 0.5310000000000037,
+      "stringifyCpuMs": 0.017000000000003124
+    },
+    {
+      "task": "properties",
+      "sample": 7,
+      "parseCpuMs": 3.936000000000009,
+      "calculateCpuMs": 0.38699999999999846,
+      "stringifyCpuMs": 0.0030000000000030003
+    },
+    {
+      "task": "properties",
+      "sample": 8,
+      "parseCpuMs": 3.168000000000004,
+      "calculateCpuMs": 0.6899999999999962,
+      "stringifyCpuMs": 0.0060000000000060005
+    },
+    {
+      "task": "updates",
+      "sample": 0,
+      "parseCpuMs": 4.043000000000005,
+      "calculateCpuMs": 1.0909999999999949,
+      "stringifyCpuMs": 1.011000000000005
+    },
+    {
+      "task": "updates",
+      "sample": 1,
+      "parseCpuMs": 4.000999999999998,
+      "calculateCpuMs": 1.0949999999999989,
+      "stringifyCpuMs": 1.0450000000000044
+    },
+    {
+      "task": "updates",
+      "sample": 2,
+      "parseCpuMs": 4.057999999999992,
+      "calculateCpuMs": 1.6720000000000068,
+      "stringifyCpuMs": 1.0860000000000036
+    },
+    {
+      "task": "updates",
+      "sample": 3,
+      "parseCpuMs": 4.367999999999997,
+      "calculateCpuMs": 1.363000000000003,
+      "stringifyCpuMs": 1.0639999999999956
+    },
+    {
+      "task": "updates",
+      "sample": 4,
+      "parseCpuMs": 4.3020000000000005,
+      "calculateCpuMs": 1.255000000000006,
+      "stringifyCpuMs": 1.0579999999999896
+    },
+    {
+      "task": "updates",
+      "sample": 5,
+      "parseCpuMs": 4.170000000000007,
+      "calculateCpuMs": 1.1889999999999956,
+      "stringifyCpuMs": 1.0750000000000064
+    },
+    {
+      "task": "updates",
+      "sample": 6,
+      "parseCpuMs": 4.643999999999996,
+      "calculateCpuMs": 1.2220000000000009,
+      "stringifyCpuMs": 1.0380000000000111
+    },
+    {
+      "task": "updates",
+      "sample": 7,
+      "parseCpuMs": 4.003000000000006,
+      "calculateCpuMs": 1.0000000000000009,
+      "stringifyCpuMs": 1.0270000000000001
+    },
+    {
+      "task": "updates",
+      "sample": 8,
+      "parseCpuMs": 4.383999999999999,
+      "calculateCpuMs": 1.4490000000000058,
+      "stringifyCpuMs": 1.0880000000000056
+    },
+    {
+      "task": "descriptors",
+      "sample": 0,
+      "parseCpuMs": 4.235999999999997,
+      "calculateCpuMs": 1.4279999999999986,
+      "stringifyCpuMs": 1.021000000000001
+    },
+    {
+      "task": "descriptors",
+      "sample": 1,
+      "parseCpuMs": 3.9930000000000034,
+      "calculateCpuMs": 1.2129999999999919,
+      "stringifyCpuMs": 0.9790000000000076
+    },
+    {
+      "task": "descriptors",
+      "sample": 2,
+      "parseCpuMs": 3.814999999999999,
+      "calculateCpuMs": 1.2260000000000049,
+      "stringifyCpuMs": 0.9929999999999939
+    },
+    {
+      "task": "descriptors",
+      "sample": 3,
+      "parseCpuMs": 4.036999999999999,
+      "calculateCpuMs": 1.4020000000000006,
+      "stringifyCpuMs": 1.0620000000000074
+    },
+    {
+      "task": "descriptors",
+      "sample": 4,
+      "parseCpuMs": 3.9770000000000083,
+      "calculateCpuMs": 1.5229999999999966,
+      "stringifyCpuMs": 1.0830000000000006
+    },
+    {
+      "task": "descriptors",
+      "sample": 5,
+      "parseCpuMs": 4.047000000000009,
+      "calculateCpuMs": 1.4809999999999963,
+      "stringifyCpuMs": 1.1680000000000024
+    },
+    {
+      "task": "descriptors",
+      "sample": 6,
+      "parseCpuMs": 4.747999999999989,
+      "calculateCpuMs": 1.9689999999999985,
+      "stringifyCpuMs": 1.0720000000000174
+    },
+    {
+      "task": "descriptors",
+      "sample": 7,
+      "parseCpuMs": 3.885,
+      "calculateCpuMs": 1.1899999999999966,
+      "stringifyCpuMs": 1.0060000000000069
+    },
+    {
+      "task": "descriptors",
+      "sample": 8,
+      "parseCpuMs": 3.8449999999999873,
+      "calculateCpuMs": 1.2860000000000094,
+      "stringifyCpuMs": 0.9889999999999899
+    },
+    {
+      "task": "sorting",
+      "sample": 0,
+      "parseCpuMs": 3.159000000000002,
+      "calculateCpuMs": 0.7609999999999978,
+      "stringifyCpuMs": 1.8770000000000038
+    },
+    {
+      "task": "sorting",
+      "sample": 1,
+      "parseCpuMs": 3.3149999999999986,
+      "calculateCpuMs": 0.8709999999999968,
+      "stringifyCpuMs": 1.8589999999999995
+    },
+    {
+      "task": "sorting",
+      "sample": 2,
+      "parseCpuMs": 3.2080000000000024,
+      "calculateCpuMs": 1.0710000000000024,
+      "stringifyCpuMs": 1.909999999999995
+    },
+    {
+      "task": "sorting",
+      "sample": 3,
+      "parseCpuMs": 3.158000000000008,
+      "calculateCpuMs": 0.7439999999999947,
+      "stringifyCpuMs": 1.9600000000000035
+    },
+    {
+      "task": "sorting",
+      "sample": 4,
+      "parseCpuMs": 3.1940000000000026,
+      "calculateCpuMs": 0.7589999999999958,
+      "stringifyCpuMs": 1.7350000000000003
+    },
+    {
+      "task": "sorting",
+      "sample": 5,
+      "parseCpuMs": 3.155999999999992,
+      "calculateCpuMs": 0.7330000000000114,
+      "stringifyCpuMs": 1.893999999999993
+    },
+    {
+      "task": "sorting",
+      "sample": 6,
+      "parseCpuMs": 3.312999999999983,
+      "calculateCpuMs": 1.0390000000000121,
+      "stringifyCpuMs": 1.900999999999986
+    },
+    {
+      "task": "sorting",
+      "sample": 7,
+      "parseCpuMs": 3.151999999999988,
+      "calculateCpuMs": 0.7010000000000072,
+      "stringifyCpuMs": 1.806000000000002
+    },
+    {
+      "task": "sorting",
+      "sample": 8,
+      "parseCpuMs": 3.261000000000014,
+      "calculateCpuMs": 1.1069999999999969,
+      "stringifyCpuMs": 1.9740000000000035
+    },
+    {
+      "task": "allocation",
+      "sample": 0,
+      "parseCpuMs": 0.3480000000000011,
+      "calculateCpuMs": 1.7549999999999997,
+      "stringifyCpuMs": 1.7090000000000023
+    },
+    {
+      "task": "allocation",
+      "sample": 1,
+      "parseCpuMs": 0.3270000000000009,
+      "calculateCpuMs": 1.7529999999999977,
+      "stringifyCpuMs": 1.6420000000000046
+    },
+    {
+      "task": "allocation",
+      "sample": 2,
+      "parseCpuMs": 0.3310000000000049,
+      "calculateCpuMs": 2.1639999999999993,
+      "stringifyCpuMs": 1.5949999999999993
+    },
+    {
+      "task": "allocation",
+      "sample": 3,
+      "parseCpuMs": 0.3249999999999989,
+      "calculateCpuMs": 2.102,
+      "stringifyCpuMs": 1.690999999999998
+    },
+    {
+      "task": "allocation",
+      "sample": 4,
+      "parseCpuMs": 0.33400000000000096,
+      "calculateCpuMs": 2.1820000000000035,
+      "stringifyCpuMs": 1.6409999999999967
+    },
+    {
+      "task": "allocation",
+      "sample": 5,
+      "parseCpuMs": 0.3480000000000011,
+      "calculateCpuMs": 2.6419999999999986,
+      "stringifyCpuMs": 1.8719999999999986
+    },
+    {
+      "task": "allocation",
+      "sample": 6,
+      "parseCpuMs": 0.3470000000000001,
+      "calculateCpuMs": 2.1140000000000048,
+      "stringifyCpuMs": 1.8449999999999993
+    },
+    {
+      "task": "allocation",
+      "sample": 7,
+      "parseCpuMs": 0.33700000000000396,
+      "calculateCpuMs": 1.7449999999999966,
+      "stringifyCpuMs": 1.7869999999999968
+    },
+    {
+      "task": "allocation",
+      "sample": 8,
+      "parseCpuMs": 0.33500000000000196,
+      "calculateCpuMs": 1.8530000000000073,
+      "stringifyCpuMs": 1.705999999999999
+    }
+  ],
+  "diagnostics": [
+    {
+      "task": "aging-settle",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 25.630000000000003,
+          "gcCpuMs": 0.056,
+          "allocatorCpuMs": 5.841,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 4322,
+          "requestedBytes": 789046,
+          "managedBytes": 1582390
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 89.10400000000001,
+          "gcCpuMs": 0.332,
+          "allocatorCpuMs": 16.156,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 9213,
+          "requestedBytes": 5125909,
+          "managedBytes": 2871430
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.2739999999999867,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0030000000000001137,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 813232,
+          "managedBytes": 813230
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":5.702000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.184000,\"objects\":225,\"requestedBytes\":9269996,\"managedBytes\":455578,\"maxRssPlatformUnits\":11304960}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":31.332000,\"gcCpuMs\":0.056000,\"allocatorCpuMs\":6.025000,\"objects\":4547,\"requestedBytes\":10059042,\"managedBytes\":2037968,\"maxRssPlatformUnits\":13025280}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":120.436000,\"gcCpuMs\":0.388000,\"allocatorCpuMs\":22.181000,\"objects\":13760,\"requestedBytes\":15184951,\"managedBytes\":4909398,\"maxRssPlatformUnits\":16302080}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":121.710000,\"gcCpuMs\":0.388000,\"allocatorCpuMs\":22.184000,\"objects\":13762,\"requestedBytes\":15998183,\"managedBytes\":5722628,\"maxRssPlatformUnits\":17219584}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":7285,\"inclusiveCpuMs\":11.536000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":48898,\"inclusiveCpuMs\":13.912000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":40072,\"inclusiveCpuMs\":53.553000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":2005,\"inclusiveCpuMs\":1.762000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":7,\"inclusiveCpuMs\":3.642000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":33051,\"inclusiveCpuMs\":10.224000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":41964,\"inclusiveCpuMs\":11.972000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":21033,\"inclusiveCpuMs\":6.328000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":33051,\"heapObjects\":13765,\"environments\":2,\"functions\":143,\"genericCalls\":23485,\"directCalls\":20044,\"numericCalls\":0,\"heapTemporaries\":2005,\"gcCollections\":3,\"peakManagedBytes\":6681340,\"scalarCalls\":0,\"rootedCalls\":21038,\"rootPushes\":56292,\"environmentLookups\":2045}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18393816,\"strings\":9811,\"stringUnits\":1152982,\"jsonKeyHits\":11990,\"fieldCacheHits\":41556,\"decimalFastPaths\":0,\"gcCpuMs\":0.823000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":7285,\"toFixedFallbacks\":0,\"globalCacheHits\":21029,\"dataDescriptorCalls\":10}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":33051,\"heapObjects\":13765,\"environments\":2,\"functions\":143,\"genericCalls\":23485,\"directCalls\":20044,\"numericCalls\":0,\"heapTemporaries\":2005,\"gcCollections\":3,\"peakManagedBytes\":6681364,\"scalarCalls\":0,\"rootedCalls\":21038,\"rootPushes\":56292,\"environmentLookups\":2045}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18393876,\"strings\":9811,\"stringUnits\":1152994,\"jsonKeyHits\":11990,\"fieldCacheHits\":41556,\"decimalFastPaths\":0,\"gcCpuMs\":1.326000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":7285,\"toFixedFallbacks\":0,\"globalCacheHits\":21029,\"dataDescriptorCalls\":10}\n"
+    },
+    {
+      "task": "allocation-index",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 79.67800000000001,
+          "gcCpuMs": 0.223,
+          "allocatorCpuMs": 19.73,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3733806,
+          "managedBytes": 6047406
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 84.85199999999999,
+          "gcCpuMs": 0.832,
+          "allocatorCpuMs": 9.89,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 9617,
+          "requestedBytes": 2305847,
+          "managedBytes": 1603308
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.2249999999999943,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.010999999999999233,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 373806,
+          "managedBytes": 373804
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":7.844000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.137000,\"objects\":225,\"requestedBytes\":11209368,\"managedBytes\":1425264,\"maxRssPlatformUnits\":13729792}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":87.522000,\"gcCpuMs\":0.223000,\"allocatorCpuMs\":19.867000,\"objects\":20318,\"requestedBytes\":14943174,\"managedBytes\":7472670,\"maxRssPlatformUnits\":19972096}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":172.374000,\"gcCpuMs\":1.055000,\"allocatorCpuMs\":29.757000,\"objects\":29935,\"requestedBytes\":17249021,\"managedBytes\":9075978,\"maxRssPlatformUnits\":21823488}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":173.599000,\"gcCpuMs\":1.055000,\"allocatorCpuMs\":29.768000,\"objects\":29937,\"requestedBytes\":17622827,\"managedBytes\":9449782,\"maxRssPlatformUnits\":21872640}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":9565,\"inclusiveCpuMs\":13.730000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":80200,\"inclusiveCpuMs\":21.546000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":50097,\"inclusiveCpuMs\":59.169000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":9565,\"inclusiveCpuMs\":8.797000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":59442,\"inclusiveCpuMs\":15.658000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":59097,\"inclusiveCpuMs\":14.129000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":48260,\"inclusiveCpuMs\":12.429000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":59442,\"heapObjects\":29940,\"environments\":2,\"functions\":99,\"genericCalls\":38269,\"directCalls\":48699,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":4,\"peakManagedBytes\":9860134,\"scalarCalls\":0,\"rootedCalls\":38268,\"rootPushes\":137068,\"environmentLookups\":43}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18647560,\"strings\":19819,\"stringUnits\":1249074,\"jsonKeyHits\":39996,\"fieldCacheHits\":82461,\"decimalFastPaths\":0,\"gcCpuMs\":1.896000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":9565,\"toFixedFallbacks\":0,\"globalCacheHits\":48258,\"dataDescriptorCalls\":10000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":59442,\"heapObjects\":29940,\"environments\":2,\"functions\":99,\"genericCalls\":38269,\"directCalls\":48699,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":4,\"peakManagedBytes\":9860130,\"scalarCalls\":0,\"rootedCalls\":38268,\"rootPushes\":137068,\"environmentLookups\":43}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18647550,\"strings\":19819,\"stringUnits\":1249072,\"jsonKeyHits\":39996,\"fieldCacheHits\":82461,\"decimalFastPaths\":0,\"gcCpuMs\":4.035000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":9565,\"toFixedFallbacks\":0,\"globalCacheHits\":48258,\"dataDescriptorCalls\":10000}\n"
+    },
+    {
+      "task": "rounding",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.345999999999999,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.426,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1274,
+          "managedBytes": 394874
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 29.058999999999997,
+          "gcCpuMs": 0.151,
+          "allocatorCpuMs": 8.685,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 10023,
+          "requestedBytes": 2025735,
+          "managedBytes": 1500620
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.018000000000000682,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0019999999999988916,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 412,
+          "managedBytes": 410
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":4.633000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.161000,\"objects\":225,\"requestedBytes\":8726224,\"managedBytes\":183692,\"maxRssPlatformUnits\":10616832}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.979000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.587000,\"objects\":232,\"requestedBytes\":8727498,\"managedBytes\":578566,\"maxRssPlatformUnits\":11141120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":39.038000,\"gcCpuMs\":0.151000,\"allocatorCpuMs\":11.272000,\"objects\":10255,\"requestedBytes\":10753233,\"managedBytes\":2079186,\"maxRssPlatformUnits\":12845056}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":39.056000,\"gcCpuMs\":0.151000,\"allocatorCpuMs\":11.274000,\"objects\":10257,\"requestedBytes\":10753645,\"managedBytes\":2079596,\"maxRssPlatformUnits\":12845056}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":10000,\"inclusiveCpuMs\":14.411000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":91,\"inclusiveCpuMs\":0.027000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":82,\"inclusiveCpuMs\":0.102000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":30503,\"inclusiveCpuMs\":8.826000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":10082,\"inclusiveCpuMs\":2.452000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":2.910000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":30503,\"heapObjects\":10260,\"environments\":2,\"functions\":86,\"genericCalls\":10008,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":2,\"peakManagedBytes\":2080548,\"scalarCalls\":0,\"rootedCalls\":10007,\"rootPushes\":20100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":10754878,\"strings\":10155,\"stringUnits\":120262,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.409000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":10000,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":30503,\"heapObjects\":10260,\"environments\":2,\"functions\":86,\"genericCalls\":10008,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":2,\"peakManagedBytes\":2080598,\"scalarCalls\":0,\"rootedCalls\":10007,\"rootPushes\":20100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":10755003,\"strings\":10155,\"stringUnits\":120287,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.462000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":10000,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":0}\n"
+    },
+    {
+      "task": "rounding-detached",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.4319999999999995,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.5010000000000003,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1292,
+          "managedBytes": 394892
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 43.653000000000006,
+          "gcCpuMs": 0.861,
+          "allocatorCpuMs": 15.828999999999999,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 30023,
+          "requestedBytes": 5705735,
+          "managedBytes": 282824
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.018000000000000682,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0010000000000012221,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 412,
+          "managedBytes": 410
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":4.329000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.143000,\"objects\":225,\"requestedBytes\":8726260,\"managedBytes\":183710,\"maxRssPlatformUnits\":10616832}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.761000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.644000,\"objects\":232,\"requestedBytes\":8727552,\"managedBytes\":578602,\"maxRssPlatformUnits\":11141120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":53.414000,\"gcCpuMs\":0.861000,\"allocatorCpuMs\":18.473000,\"objects\":30255,\"requestedBytes\":14433287,\"managedBytes\":861426,\"maxRssPlatformUnits\":12926976}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":53.432000,\"gcCpuMs\":0.861000,\"allocatorCpuMs\":18.474000,\"objects\":30257,\"requestedBytes\":14433699,\"managedBytes\":861836,\"maxRssPlatformUnits\":12926976}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":10000,\"inclusiveCpuMs\":13.643000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":91,\"inclusiveCpuMs\":0.033000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":82,\"inclusiveCpuMs\":0.117000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":60503,\"inclusiveCpuMs\":15.954000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":10082,\"inclusiveCpuMs\":2.522000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":2.463000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":60503,\"heapObjects\":30260,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":5,\"peakManagedBytes\":2217282,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":14434992,\"strings\":10155,\"stringUnits\":120292,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.912000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":10000,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":60503,\"heapObjects\":30260,\"environments\":2,\"functions\":10086,\"genericCalls\":20008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":5,\"peakManagedBytes\":2217282,\"scalarCalls\":0,\"rootedCalls\":20007,\"rootPushes\":30100,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":14435057,\"strings\":10155,\"stringUnits\":120305,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.842000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":10000,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":0}\n"
+    },
+    {
+      "task": "properties",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 68.278,
+          "gcCpuMs": 0.234,
+          "allocatorCpuMs": 15.539,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 12861,
+          "requestedBytes": 2346490,
+          "managedBytes": 4749178
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 1.1069999999999993,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0009999999999994458,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 0,
+          "requestedBytes": 1008,
+          "managedBytes": 0
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 0.022999999999996135,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.008000000000000895,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 2,
+          "requestedBytes": 386,
+          "managedBytes": 384
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":8.890000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.201000,\"objects\":225,\"requestedBytes\":10908064,\"managedBytes\":1274612,\"maxRssPlatformUnits\":13352960}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":77.168000,\"gcCpuMs\":0.234000,\"allocatorCpuMs\":15.740000,\"objects\":13086,\"requestedBytes\":13254554,\"managedBytes\":6023790,\"maxRssPlatformUnits\":18366464}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":78.275000,\"gcCpuMs\":0.234000,\"allocatorCpuMs\":15.741000,\"objects\":13086,\"requestedBytes\":13255562,\"managedBytes\":6023790,\"maxRssPlatformUnits\":18399232}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":78.298000,\"gcCpuMs\":0.234000,\"allocatorCpuMs\":15.749000,\"objects\":13088,\"requestedBytes\":13255948,\"managedBytes\":6024174,\"maxRssPlatformUnits\":18399232}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":36080,\"inclusiveCpuMs\":8.927000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":36067,\"inclusiveCpuMs\":44.692000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":20158,\"inclusiveCpuMs\":5.607000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":39067,\"inclusiveCpuMs\":10.144000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":20158,\"heapObjects\":13091,\"environments\":2,\"functions\":79,\"genericCalls\":3008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6025126,\"scalarCalls\":0,\"rootedCalls\":3007,\"rootPushes\":39086,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13257181,\"strings\":6994,\"stringUnits\":670737,\"jsonKeyHits\":35988,\"fieldCacheHits\":11999,\"decimalFastPaths\":0,\"gcCpuMs\":0.747000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":20158,\"heapObjects\":13091,\"environments\":2,\"functions\":79,\"genericCalls\":3008,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6025122,\"scalarCalls\":0,\"rootedCalls\":3007,\"rootPushes\":39086,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13257171,\"strings\":6994,\"stringUnits\":670735,\"jsonKeyHits\":35988,\"fieldCacheHits\":11999,\"decimalFastPaths\":0,\"gcCpuMs\":0.686000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n"
+    },
+    {
+      "task": "updates",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 80.812,
+          "gcCpuMs": 0.225,
+          "allocatorCpuMs": 20.290999999999997,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3733788,
+          "managedBytes": 6047388
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 14.628,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.0650000000000013,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 1,
+          "requestedBytes": 524480,
+          "managedBytes": 1048784
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.0600000000000023,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.007999999999999119,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 374208,
+          "managedBytes": 374192
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":9.685000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.170000,\"objects\":225,\"requestedBytes\":11209332,\"managedBytes\":1425246,\"maxRssPlatformUnits\":13729792}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":90.497000,\"gcCpuMs\":0.225000,\"allocatorCpuMs\":20.461000,\"objects\":20318,\"requestedBytes\":14943120,\"managedBytes\":7472634,\"maxRssPlatformUnits\":19988480}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":105.125000,\"gcCpuMs\":0.225000,\"allocatorCpuMs\":22.526000,\"objects\":20319,\"requestedBytes\":15467600,\"managedBytes\":8521418,\"maxRssPlatformUnits\":20561920}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":106.185000,\"gcCpuMs\":0.225000,\"allocatorCpuMs\":22.534000,\"objects\":20322,\"requestedBytes\":15841808,\"managedBytes\":8895610,\"maxRssPlatformUnits\":20594688}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":50079,\"inclusiveCpuMs\":12.408000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":50067,\"inclusiveCpuMs\":59.470000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":30636,\"inclusiveCpuMs\":8.300000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":59067,\"inclusiveCpuMs\":14.252000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":30636,\"heapObjects\":20325,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9306168,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":50087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16867056,\"strings\":10227,\"stringUnits\":1210741,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":0.777000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":30636,\"heapObjects\":20325,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9306166,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":50087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16867051,\"strings\":10227,\"stringUnits\":1210740,\"jsonKeyHits\":39996,\"fieldCacheHits\":20001,\"decimalFastPaths\":0,\"gcCpuMs\":1.055000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n"
+    },
+    {
+      "task": "descriptors",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 80.964,
+          "gcCpuMs": 0.286,
+          "allocatorCpuMs": 20.031,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 20093,
+          "requestedBytes": 3733796,
+          "managedBytes": 6047396
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 20.783999999999992,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.196999999999999,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 28,
+          "requestedBytes": 529588,
+          "managedBytes": 1054614
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.1530000000000058,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.01699999999999946,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 374208,
+          "managedBytes": 374192
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":7.766000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.138000,\"objects\":225,\"requestedBytes\":11209348,\"managedBytes\":1425254,\"maxRssPlatformUnits\":13729792}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":88.730000,\"gcCpuMs\":0.286000,\"allocatorCpuMs\":20.169000,\"objects\":20318,\"requestedBytes\":14943144,\"managedBytes\":7472650,\"maxRssPlatformUnits\":19972096}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":109.514000,\"gcCpuMs\":0.286000,\"allocatorCpuMs\":22.366000,\"objects\":20346,\"requestedBytes\":15472732,\"managedBytes\":8527264,\"maxRssPlatformUnits\":20545536}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":110.667000,\"gcCpuMs\":0.286000,\"allocatorCpuMs\":22.383000,\"objects\":20349,\"requestedBytes\":15846940,\"managedBytes\":8901456,\"maxRssPlatformUnits\":20594688}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":50093,\"inclusiveCpuMs\":12.967000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":50080,\"inclusiveCpuMs\":60.488000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":30689,\"inclusiveCpuMs\":8.260000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":59080,\"inclusiveCpuMs\":14.150000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":10000,\"inclusiveCpuMs\":2.564000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":30689,\"heapObjects\":20352,\"environments\":2,\"functions\":92,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9312036,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":60099,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16872243,\"strings\":10240,\"stringUnits\":1210866,\"jsonKeyHits\":39996,\"fieldCacheHits\":30000,\"decimalFastPaths\":0,\"gcCpuMs\":0.976000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":10000}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":30689,\"heapObjects\":20352,\"environments\":2,\"functions\":92,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":9312034,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":60099,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":16872238,\"strings\":10240,\"stringUnits\":1210865,\"jsonKeyHits\":39996,\"fieldCacheHits\":30000,\"decimalFastPaths\":0,\"gcCpuMs\":0.821000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":9999,\"dataDescriptorCalls\":10000}\n"
+    },
+    {
+      "task": "sorting",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 66.348,
+          "gcCpuMs": 0.296,
+          "allocatorCpuMs": 15.11,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 12861,
+          "requestedBytes": 2346484,
+          "managedBytes": 4749172
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 4.090999999999994,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.7010000000000005,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 338180,
+          "managedBytes": 243654
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.9050000000000011,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.03500000000000014,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 1229317,
+          "managedBytes": 1229294
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":7.316000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.146000,\"objects\":225,\"requestedBytes\":10908052,\"managedBytes\":1274606,\"maxRssPlatformUnits\":13336576}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":73.664000,\"gcCpuMs\":0.296000,\"allocatorCpuMs\":15.256000,\"objects\":13086,\"requestedBytes\":13254536,\"managedBytes\":6023778,\"maxRssPlatformUnits\":18350080}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":77.755000,\"gcCpuMs\":0.296000,\"allocatorCpuMs\":15.957000,\"objects\":13093,\"requestedBytes\":13592716,\"managedBytes\":6267432,\"maxRssPlatformUnits\":18890752}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":79.660000,\"gcCpuMs\":0.296000,\"allocatorCpuMs\":15.992000,\"objects\":13096,\"requestedBytes\":14822033,\"managedBytes\":7496726,\"maxRssPlatformUnits\":19021824}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":36080,\"inclusiveCpuMs\":8.591000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":36068,\"inclusiveCpuMs\":43.568000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":1,\"inclusiveCpuMs\":4.062000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":20174,\"inclusiveCpuMs\":5.388000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":42068,\"inclusiveCpuMs\":10.621000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":3000,\"inclusiveCpuMs\":0.747000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":20174,\"heapObjects\":13099,\"environments\":2,\"functions\":81,\"genericCalls\":6009,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":8954402,\"scalarCalls\":0,\"rootedCalls\":3008,\"rootPushes\":51088,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18465076,\"strings\":6996,\"stringUnits\":2013461,\"jsonKeyHits\":35988,\"fieldCacheHits\":6001,\"decimalFastPaths\":0,\"gcCpuMs\":1.030000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":2999,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":20174,\"heapObjects\":13099,\"environments\":2,\"functions\":81,\"genericCalls\":6009,\"directCalls\":4,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":8954384,\"scalarCalls\":0,\"rootedCalls\":3008,\"rootPushes\":51088,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":18465031,\"strings\":6996,\"stringUnits\":2013452,\"jsonKeyHits\":35988,\"fieldCacheHits\":6001,\"decimalFastPaths\":0,\"gcCpuMs\":0.886000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":2999,\"dataDescriptorCalls\":0}\n"
+    },
+    {
+      "task": "allocation",
+      "parts": [
+        {
+          "phase": "parse",
+          "cpuMs": 5.578999999999999,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 2.521,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 7,
+          "requestedBytes": 1278,
+          "managedBytes": 394878
+        },
+        {
+          "phase": "calculation",
+          "cpuMs": 58.659,
+          "gcCpuMs": 0.243,
+          "allocatorCpuMs": 13.383,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 10001,
+          "requestedBytes": 1601168,
+          "managedBytes": 3913376
+        },
+        {
+          "phase": "serialization",
+          "cpuMs": 1.9479999999999933,
+          "gcCpuMs": 0.0,
+          "allocatorCpuMs": 0.0020000000000024443,
+          "decimalAllocatorCpuMs": 0.0,
+          "decimalRequestedBytes": 0,
+          "objects": 3,
+          "requestedBytes": 778357,
+          "managedBytes": 778334
+        }
+      ],
+      "stderr": "ARYA_PHASE {\"cpuMs\":3.637000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":0.139000,\"objects\":225,\"requestedBytes\":8726232,\"managedBytes\":183696,\"maxRssPlatformUnits\":10616832}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":9.216000,\"gcCpuMs\":0.000000,\"allocatorCpuMs\":2.660000,\"objects\":232,\"requestedBytes\":8727510,\"managedBytes\":578574,\"maxRssPlatformUnits\":11141120}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":67.875000,\"gcCpuMs\":0.243000,\"allocatorCpuMs\":16.043000,\"objects\":10233,\"requestedBytes\":10328678,\"managedBytes\":4491950,\"maxRssPlatformUnits\":15220736}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_PHASE {\"cpuMs\":69.823000,\"gcCpuMs\":0.243000,\"allocatorCpuMs\":16.045000,\"objects\":10236,\"requestedBytes\":11107035,\"managedBytes\":5270284,\"maxRssPlatformUnits\":16465920}\nARYA_DECIMAL_PHASE {\"allocatorCpuMs\":0.000000,\"requestedBytes\":0}\nARYA_HELPER {\"name\":\"anumber_invoke\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"akey_find\",\"calls\":30076,\"inclusiveCpuMs\":7.872000}\nARYA_HELPER {\"name\":\"aset\",\"calls\":30067,\"inclusiveCpuMs\":38.956000}\nARYA_HELPER {\"name\":\"aobject_function\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"alist_standard\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_HELPER {\"name\":\"amemory\",\"calls\":10455,\"inclusiveCpuMs\":3.079000}\nARYA_HELPER {\"name\":\"aresize\",\"calls\":50067,\"inclusiveCpuMs\":12.978000}\nARYA_HELPER {\"name\":\"aglobal\",\"calls\":0,\"inclusiveCpuMs\":0.000000}\nARYA_DECIMAL_ALLOCATIONS {\"mallocCalls\":0,\"callocCalls\":0,\"reallocCalls\":0,\"freeCalls\":0,\"requestedBytes\":0,\"allocatorCpuMs\":0.000000}\nARYA_RUNTIME_COUNTERS {\"callocCalls\":10455,\"heapObjects\":10239,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6169006,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":20087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13352693,\"strings\":141,\"stringUnits\":907862,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.514000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n",
+      "countersOnlyStderr": "ARYA_RUNTIME_COUNTERS {\"callocCalls\":10455,\"heapObjects\":10239,\"environments\":2,\"functions\":79,\"genericCalls\":8,\"directCalls\":10004,\"numericCalls\":0,\"heapTemporaries\":2,\"gcCollections\":3,\"peakManagedBytes\":6168984,\"scalarCalls\":0,\"rootedCalls\":7,\"rootPushes\":20087,\"environmentLookups\":42}\nARYA_ALLOCATION_DETAIL {\"requestedBytes\":13352638,\"strings\":141,\"stringUnits\":907851,\"jsonKeyHits\":0,\"fieldCacheHits\":3,\"decimalFastPaths\":0,\"gcCpuMs\":0.467000}\nARYA_NUMBER_DETAIL {\"toFixedFastPaths\":0,\"toFixedFallbacks\":0,\"globalCacheHits\":0,\"dataDescriptorCalls\":0}\n"
+    }
+  ],
+  "nodeProfiles": [
+    {
+      "task": "aging-settle",
+      "raw": [
+        {
+          "parseCpuMs": 1.107,
+          "calculateCpuMs": 6.724,
+          "stringifyCpuMs": 1.024,
+          "memory": {
+            "rss": 68485120,
+            "heapTotal": 13500416,
+            "heapUsed": 9050832,
+            "external": 2720544,
+            "arrayBuffers": 222266
+          },
+          "resources": {
+            "userCPUTime": 86137,
+            "systemCPUTime": 58921,
+            "maxRSS": 66880,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2397,
+            "majorPageFault": 2363,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 130,
+            "involuntaryContextSwitches": 2299
+          }
+        },
+        {
+          "parseCpuMs": 1.959,
+          "calculateCpuMs": 4.086,
+          "stringifyCpuMs": 0.668,
+          "memory": {
+            "rss": 69173248,
+            "heapTotal": 13713408,
+            "heapUsed": 9390744,
+            "external": 2670368,
+            "arrayBuffers": 172090
+          },
+          "resources": {
+            "userCPUTime": 94233,
+            "systemCPUTime": 59525,
+            "maxRSS": 67552,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2489,
+            "majorPageFault": 2364,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 144,
+            "involuntaryContextSwitches": 2321
+          }
+        },
+        {
+          "parseCpuMs": 0.654,
+          "calculateCpuMs": 3.79,
+          "stringifyCpuMs": 1.302,
+          "memory": {
+            "rss": 69566464,
+            "heapTotal": 13926400,
+            "heapUsed": 9680624,
+            "external": 2708256,
+            "arrayBuffers": 209978
+          },
+          "resources": {
+            "userCPUTime": 101527,
+            "systemCPUTime": 60180,
+            "maxRSS": 67968,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2561,
+            "majorPageFault": 2367,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 157,
+            "involuntaryContextSwitches": 2359
+          }
+        },
+        {
+          "parseCpuMs": 0.855,
+          "calculateCpuMs": 5.118,
+          "stringifyCpuMs": 0.86,
+          "memory": {
+            "rss": 70041600,
+            "heapTotal": 14139392,
+            "heapUsed": 9836512,
+            "external": 2715936,
+            "arrayBuffers": 217658
+          },
+          "resources": {
+            "userCPUTime": 109399,
+            "systemCPUTime": 60939,
+            "maxRSS": 68400,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2627,
+            "majorPageFault": 2380,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 169,
+            "involuntaryContextSwitches": 2397
+          }
+        },
+        {
+          "parseCpuMs": 1.344,
+          "calculateCpuMs": 2.281,
+          "stringifyCpuMs": 0.592,
+          "memory": {
+            "rss": 70385664,
+            "heapTotal": 14352384,
+            "heapUsed": 10117144,
+            "external": 2708256,
+            "arrayBuffers": 209978
+          },
+          "resources": {
+            "userCPUTime": 115302,
+            "systemCPUTime": 61485,
+            "maxRSS": 68832,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2692,
+            "majorPageFault": 2385,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 188,
+            "involuntaryContextSwitches": 2421
+          }
+        },
+        {
+          "parseCpuMs": 0.614,
+          "calculateCpuMs": 2.177,
+          "stringifyCpuMs": 0.583,
+          "memory": {
+            "rss": 70647808,
+            "heapTotal": 14565376,
+            "heapUsed": 10365600,
+            "external": 2716448,
+            "arrayBuffers": 218170
+          },
+          "resources": {
+            "userCPUTime": 119552,
+            "systemCPUTime": 61841,
+            "maxRSS": 69136,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2758,
+            "majorPageFault": 2385,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 206,
+            "involuntaryContextSwitches": 2433
+          }
+        },
+        {
+          "parseCpuMs": 0.658,
+          "calculateCpuMs": 2.21,
+          "stringifyCpuMs": 0.62,
+          "memory": {
+            "rss": 71237632,
+            "heapTotal": 18972672,
+            "heapUsed": 10555784,
+            "external": 2715424,
+            "arrayBuffers": 217146
+          },
+          "resources": {
+            "userCPUTime": 124248,
+            "systemCPUTime": 62486,
+            "maxRSS": 69568,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 2844,
+            "majorPageFault": 2385,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 234,
+            "involuntaryContextSwitches": 2459
+          }
+        },
+        {
+          "parseCpuMs": 0.68,
+          "calculateCpuMs": 2.425,
+          "stringifyCpuMs": 0.609,
+          "memory": {
+            "rss": 73908224,
+            "heapTotal": 20004864,
+            "heapUsed": 13312424,
+            "external": 2921248,
+            "arrayBuffers": 422970
+          },
+          "resources": {
+            "userCPUTime": 128747,
+            "systemCPUTime": 63034,
+            "maxRSS": 72176,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 3007,
+            "majorPageFault": 2385,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 252,
+            "involuntaryContextSwitches": 2472
+          }
+        },
+        {
+          "parseCpuMs": 0.609,
+          "calculateCpuMs": 2.206,
+          "stringifyCpuMs": 0.586,
+          "memory": {
+            "rss": 73121792,
+            "heapTotal": 19185664,
+            "heapUsed": 10777128,
+            "external": 2715016,
+            "arrayBuffers": 216738
+          },
+          "resources": {
+            "userCPUTime": 133046,
+            "systemCPUTime": 63424,
+            "maxRSS": 72608,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 3072,
+            "majorPageFault": 2385,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 263,
+            "involuntaryContextSwitches": 2486
+          }
+        }
+      ],
+      "median": {
+        "parseCpuMs": 0.68,
+        "calculateCpuMs": 2.425,
+        "stringifyCpuMs": 0.62
+      },
+      "gcTraceEvidence": {
+        "lines": 12,
+        "jsonSha256": "9292a9ccc719397691e1f412a63353c88f11c133a5f353e4d761f2d565b01cea",
+        "rawStdoutPath": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline-profile/aging-settle-node.stdout"
+      }
+    },
+    {
+      "task": "allocation-index",
+      "raw": [
+        {
+          "parseCpuMs": 3.351,
+          "calculateCpuMs": 7.649,
+          "stringifyCpuMs": 2.701,
+          "memory": {
+            "rss": 86704128,
+            "heapTotal": 28753920,
+            "heapUsed": 16881288,
+            "external": 3223804,
+            "arrayBuffers": 725526
+          },
+          "resources": {
+            "userCPUTime": 139100,
+            "systemCPUTime": 16851,
+            "maxRSS": 84672,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 5721,
+            "majorPageFault": 93,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 232,
+            "involuntaryContextSwitches": 499
+          }
+        },
+        {
+          "parseCpuMs": 2.238,
+          "calculateCpuMs": 6.24,
+          "stringifyCpuMs": 1.8,
+          "memory": {
+            "rss": 87719936,
+            "heapTotal": 29458432,
+            "heapUsed": 17154720,
+            "external": 3222780,
+            "arrayBuffers": 724502
+          },
+          "resources": {
+            "userCPUTime": 150987,
+            "systemCPUTime": 18965,
+            "maxRSS": 85664,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 5858,
+            "majorPageFault": 93,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 245,
+            "involuntaryContextSwitches": 648
+          }
+        },
+        {
+          "parseCpuMs": 1.815,
+          "calculateCpuMs": 5.47,
+          "stringifyCpuMs": 1.563,
+          "memory": {
+            "rss": 88522752,
+            "heapTotal": 30162944,
+            "heapUsed": 18271872,
+            "external": 3223292,
+            "arrayBuffers": 725014
+          },
+          "resources": {
+            "userCPUTime": 161981,
+            "systemCPUTime": 20548,
+            "maxRSS": 86448,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 5982,
+            "majorPageFault": 93,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 307,
+            "involuntaryContextSwitches": 712
+          }
+        },
+        {
+          "parseCpuMs": 1.726,
+          "calculateCpuMs": 4.527,
+          "stringifyCpuMs": 1.598,
+          "memory": {
+            "rss": 89243648,
+            "heapTotal": 30867456,
+            "heapUsed": 19034968,
+            "external": 3223292,
+            "arrayBuffers": 725014
+          },
+          "resources": {
+            "userCPUTime": 172855,
+            "systemCPUTime": 21592,
+            "maxRSS": 87152,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6101,
+            "majorPageFault": 93,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 376,
+            "involuntaryContextSwitches": 729
+          }
+        },
+        {
+          "parseCpuMs": 1.713,
+          "calculateCpuMs": 5.174,
+          "stringifyCpuMs": 1.89,
+          "memory": {
+            "rss": 89980928,
+            "heapTotal": 31571968,
+            "heapUsed": 19780456,
+            "external": 3223804,
+            "arrayBuffers": 725526
+          },
+          "resources": {
+            "userCPUTime": 184432,
+            "systemCPUTime": 22682,
+            "maxRSS": 87872,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6221,
+            "majorPageFault": 93,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 485,
+            "involuntaryContextSwitches": 748
+          }
+        },
+        {
+          "parseCpuMs": 3.045,
+          "calculateCpuMs": 6.377,
+          "stringifyCpuMs": 1.94,
+          "memory": {
+            "rss": 90832896,
+            "heapTotal": 32276480,
+            "heapUsed": 20429248,
+            "external": 3223292,
+            "arrayBuffers": 725014
+          },
+          "resources": {
+            "userCPUTime": 198544,
+            "systemCPUTime": 23908,
+            "maxRSS": 88704,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6347,
+            "majorPageFault": 94,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 607,
+            "involuntaryContextSwitches": 782
+          }
+        },
+        {
+          "parseCpuMs": 1.764,
+          "calculateCpuMs": 4.894,
+          "stringifyCpuMs": 1.587,
+          "memory": {
+            "rss": 91586560,
+            "heapTotal": 32980992,
+            "heapUsed": 21058744,
+            "external": 3223292,
+            "arrayBuffers": 725014
+          },
+          "resources": {
+            "userCPUTime": 209702,
+            "systemCPUTime": 25037,
+            "maxRSS": 89440,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6468,
+            "majorPageFault": 94,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 690,
+            "involuntaryContextSwitches": 813
+          }
+        },
+        {
+          "parseCpuMs": 1.661,
+          "calculateCpuMs": 4.347,
+          "stringifyCpuMs": 1.528,
+          "memory": {
+            "rss": 92323840,
+            "heapTotal": 33685504,
+            "heapUsed": 21751080,
+            "external": 3223292,
+            "arrayBuffers": 725014
+          },
+          "resources": {
+            "userCPUTime": 219906,
+            "systemCPUTime": 26047,
+            "maxRSS": 90160,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6588,
+            "majorPageFault": 94,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 776,
+            "involuntaryContextSwitches": 829
+          }
+        },
+        {
+          "parseCpuMs": 1.664,
+          "calculateCpuMs": 4.453,
+          "stringifyCpuMs": 1.536,
+          "memory": {
+            "rss": 93028352,
+            "heapTotal": 34390016,
+            "heapUsed": 22441168,
+            "external": 3223144,
+            "arrayBuffers": 724866
+          },
+          "resources": {
+            "userCPUTime": 230197,
+            "systemCPUTime": 27149,
+            "maxRSS": 90848,
+            "sharedMemorySize": 0,
+            "unsharedDataSize": 0,
+            "unsharedStackSize": 0,
+            "minorPageFault": 6706,
+            "majorPageFault": 94,
+            "swappedOut": 0,
+            "fsRead": 0,
+            "fsWrite": 0,
+            "ipcSent": 0,
+            "ipcReceived": 0,
+            "signalsCount": 0,
+            "voluntaryContextSwitches": 902,
+            "involuntaryContextSwitches": 859
+          }
+        }
+      ],
+      "median": {
+        "parseCpuMs": 1.764,
+        "calculateCpuMs": 5.174,
+        "stringifyCpuMs": 1.598
+      },
+      "gcTraceEvidence": {
+        "lines": 9,
+        "jsonSha256": "d9620d0c26c0bf5ebbda92383d9aae6322e1eb5780730da3576276019aa42c4f",
+        "rawStdoutPath": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline-profile/allocation-index-node.stdout"
+      }
+    }
+  ],
+  "retention": {
+    "fullProfilePath": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/baseline-profile/profile.json",
+    "fullProfileSha256": "b10de6132f77582513e96a98203b7196966b352c5b31ddc18ea3e16159a6cca4",
+    "note": "Only verbose Node GC trace lines omitted from this exported JSON. Native phase samples, counters, diagnostics and Node phase samples are retained. Full trace remains in the local artifact directory."
+  }
+}

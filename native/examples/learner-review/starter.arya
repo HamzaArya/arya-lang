@@ -1,0 +1,10 @@
+# Monetary inputs remain strings; rounding is explicit.
+use std "decimal" as decimal
+
+fn orderTotal(price: string, quantity: string): string {
+  return decimal.quantize(decimal.multiply(price, quantity), 2, "half-even")
+}
+
+let price: string = args[0] ?? "19.95"
+let quantity: string = args[1] ?? "3"
+print("Total: " + orderTotal(price, quantity))

@@ -1,0 +1,2 @@
+smoke: relocated SDK build with cc-only PATH, execution without interpreter PATH and GC stress passed
+stream: relocated SDK build with cc-only PATH, execution without interpreter PATH and GC stress passed

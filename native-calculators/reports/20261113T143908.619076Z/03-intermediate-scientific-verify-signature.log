@@ -1,0 +1,1 @@
+["codesign", "--verify", "--deep", "--strict", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-ufj0g7fb/Scientific Calculator.app"]

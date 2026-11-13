@@ -1,0 +1,18 @@
+{
+  "createdAtUtc": "2026-11-13T03:34:36.372174+00:00",
+  "sourceAdapter": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/ledger-targets.mjs",
+  "sourceAdapterSha256": "f97d7b35dd738c60999a96314b822c71a10f6871790a8f9365530e2abf599578",
+  "focusedAdapter": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/focused-repeat-adapter.mjs",
+  "focusedAdapterSha256": "f8c5762de120dbcbccf4bc2c972f897bd762c706b396146e5ae05af821c0b26d",
+  "change": "Only the target-selection array differs. Original frozen application controller timing, payload generation, backend rotation and parity assertions remain unchanged. Filtering changes preceding workload/GC history; compare baseline/candidate within this repeat, not against previous sessions.",
+  "plannedOptions": {
+    "samples": 100,
+    "sessions": 3,
+    "warmups": 3
+  },
+  "retainedAdapterSnapshot": {
+    "path": "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/evidence/ledger-fastpaths-2026-11-13/focused-repeat-adapter.mjs",
+    "sha256": "f8c5762de120dbcbccf4bc2c972f897bd762c706b396146e5ae05af821c0b26d",
+    "byteIdenticalToRunAdapter": true
+  }
+}

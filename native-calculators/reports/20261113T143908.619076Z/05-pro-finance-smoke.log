@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/05-pro-finance/.build/worker"]
+PASS: 240 real native worker calls; independent Fraction/Decimal oracles, precedence, ties, limits, memory, persistence, latest100 history, corrupt data and write failure; finance worksheets checked at250-digit reference precision

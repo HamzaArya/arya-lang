@@ -1,0 +1,12 @@
+✔ native execution matches 813 deterministic calculation cases in both time zones after relocation (658.897083ms)
+✔ native pool reuses processes, switches task backends, propagates errors and checks cancellation (503.011042ms)
+✔ native queue limits, timeouts and missing artifacts remain explicit failures (7.684416ms)
+✔ large native report batches pass the real host preparation and output checks (80.433208ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1444.27075

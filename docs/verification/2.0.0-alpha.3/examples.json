@@ -1,0 +1,1599 @@
+{
+  "scope": "All 12 Arya fences in the language reference, all four Arya fences and documented CLI/template commands in getting-started. Local macOS ARM64 execution only; not platform qualification or a performance benchmark.",
+  "label": "delivery-d81770ed",
+  "startedAtUtc": "2026-11-13T08:42:48.528133+00:00",
+  "compiler": "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+  "compilerSha256": "d81770edc81829af37c01780e7636dca211a6630d3723a4a978bd227b0d4a1a5",
+  "workspace": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c",
+  "environment": {
+    "system": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "optionalController": "Python 3; not a native build/runtime requirement"
+  },
+  "documents": {
+    "docs/arya-language.md": "07c88fc582ce949e6de38769a6e3236fd31afa53f03d89b2f689105cfa1a2bff",
+    "docs/getting-started.md": "70b24f7dc55c780a0d30dcda821aa232605496c908834cfea8bf856e503f89ee"
+  },
+  "snippets": [
+    {
+      "document": "docs/arya-language.md",
+      "fence": 1,
+      "line": 7,
+      "source": "use std \"list\" as list\n\nconst currency = \"AFN\"\nconst defaults = {currency, scale: 2}\nconst field = \"rounding\"\nconst settings = {...defaults, [field]: \"half-even\"}\nconst people = [{name: \"Samira\", score: 95}, {name: \"Hamza\", score: 85}]\n\nfn greeting(name: string = \"World\"): string => \"Hello, \" + name\nfor person at index in people |> list.sortBy(\"score\", \"desc\") {\n  print(index + 1, greeting(person.name))\n}\nprint(JSON.stringify(settings))\n",
+      "sourceSha256": "3a03cae3645937a2295c85727a486057919103d49f288a1469a8da0135b3159f",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 508328,
+          "sha256": "f8dc5c94632a87543ec22e8fa65152a415aaf6440db65587c86a3c46c3071cf1"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 582913,
+          "sha256": "30c2df485e54c1c18f94e3affb35b6769bbb59f4532512b9a273f22f06002e1f"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 2,
+      "line": 29,
+      "source": "let count = 1\ncount += 2\nconst profile = {name: \"Arya\"}\nprofile.name = \"Ledger\"\nprint(count, profile.name)\n",
+      "sourceSha256": "da9b0db39f20b06bc4ac6a7e92b6666ecd3d21d9f34aa38f9451b4d83093c73f",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384232,
+          "sha256": "0755c183bf99ae2c30ff0ee96db2e08ad3c006ddb6c41d4cb0937f05cc8811bf"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 576887,
+          "sha256": "4982fa5e407b694480cb6b96361326a77801de66f20e8b24cf965263b8b457df"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 3,
+      "line": 47,
+      "source": "const name = \"Ledger\"\nconst defaults = {host: \"127.0.0.1\", port: 8080}\nconst key = \"currency\"\nconst settings = {...defaults, name, [key]: \"AFN\", port: 9000}\nprint(settings.name, settings.port, settings[key])\n",
+      "sourceSha256": "ac6ed6c4b5222fdeadf37e437ade222c336e60a8949ac970fd5bb86628a53c53",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384408,
+          "sha256": "8e9a8f2d539954d5bc76757a03bd6b72fc8ed6acb3ba182e2bd489a181689110"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 578489,
+          "sha256": "34f12362de411b9d010118e2678cd843e316f453a9dcad8a6fe4dd7ac4faced3"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 4,
+      "line": 69,
+      "source": "const shared = {amount: 1}\nconst original = {shared}\nconst copy = {...original}\ncopy.shared.amount = 2\nprint(original.shared.amount) # 2\n",
+      "sourceSha256": "4dddc4bb334d2cbb8e865f9b30b99b7cfe5b621f1227142404cd96bae6f314f1",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384312,
+          "sha256": "cc203a66cbe2a91f0c6d4ce89b702839de8058ade7e4ff423d8bc1e57226d2d0"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 577399,
+          "sha256": "c10c3b5e482ac1c0bcfbae4d2f2776f49b2a5b8fa51eedb17316a1d8d488532a"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 5,
+      "line": 81,
+      "source": "const first = [1, 2]\nconst values = [...first, 3]\nfor value at index in values {\n  print(index, value)\n}\nlet total = 0\nfor value in values { total += value }\nprint(total)\n",
+      "sourceSha256": "deaadc8a915587d3bd93f7feaa0727f21b45f11d7744cc7e3ce2b5a0baff8dd7",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384168,
+          "sha256": "0e0b3c950061356097094ca0ef86c6f6922f47f0f7333d6a808521bc379ae2bc"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 578380,
+          "sha256": "8f9b1d97ea088ca27a5691a3d70b0f39ee2d4ba42c260061295e0e03b4072faa"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 6,
+      "line": 96,
+      "source": "fn multiply(left: number, right: number = 2): number {\n  return left * right\n}\nfn greeting(name = \"World\") => \"Hello, \" + name\nfn total(...values: number[]): number {\n  let result = 0\n  for value in values { result += value }\n  return result\n}\nprint(multiply(4), greeting(), total(...[1, 2, 3]))\n",
+      "sourceSha256": "7c7ab857fafdb1b6aff961eb51f4215b761a3d73d338ac539d26d25079571ce9",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384392,
+          "sha256": "37ae353762466c93c250b1a81ad2a237fe7bdd7e785034e39135bd2bbb4fdf26"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 581055,
+          "sha256": "73631a8246c5b1f76eff1bbb2add3f99775b5437f0fb5f5baa614b03c55988ba"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 7,
+      "line": 113,
+      "source": "fn describe(amount: number): string {\n  guard amount >= 0 else { return \"invalid\" }\n  if amount == 0 { return \"empty\" }\n  else { return \"positive\" }\n}\nlet remaining = 3\nwhile remaining > 0 {\n  remaining -= 1\n  if remaining == 1 { continue }\n  print(describe(remaining))\n}\n",
+      "sourceSha256": "ce6e204f61916c1ba3600fcdb18c94f95017de42a46987d609d9d7f56cb594da",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384296,
+          "sha256": "47f15d9c27628eb459809a69de099f36dcae30df83bdefaf23fa36ee7b679266"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 578656,
+          "sha256": "e885e3a0692879fe1b7f7a424cb5baeb90deab13522bfebeefea973cbe141e0c"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 8,
+      "line": 143,
+      "source": "use std \"list\" as list\nuse std \"async\" as tasks\n\nconst values = [3, 1, 2]\nconst selected = values |> list.filter(fn(value) => value > 1)\nprint(selected)\nasync fn ready(value: number): number {\n  await tasks.sleep(1)\n  return value\n}\nprint(await ready(3))\nprint(4 |> await ready())\n",
+      "sourceSha256": "dea62f9f246318e84c56bcdb393beb262bfc110800d30c75a08f857a96d40a15",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 507976,
+          "sha256": "13c55fffcbd8fc0abb1e362411dd109364798c532a36b892a86f087da59cd543"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 580919,
+          "sha256": "4a3255c3c54bee3ab2090bdf568608165c33ce39b650a1c81053cd4dc4cc1582"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 9,
+      "line": 164,
+      "source": "export const currency = \"AFN\"\nexport fn label(amount: string): string => amount + \" \" + currency\n",
+      "sourceSha256": "51ae3c3a065467c77630edd05146d45c9bd58b788a6f5a62495728dc78601672",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384136,
+          "sha256": "df28e78ceb2d579cee657b154d906dbafa4ac1e808d4ee24cf7d1dfa1faacd16"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 576676,
+          "sha256": "e06efba96ef2b75c2c023e7554969d5f5dcdabf3d709063d9b6f7b5a7e9e6efe"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 10,
+      "line": 171,
+      "source": "use arya \"./prices.arya\" as prices\nuse std \"decimal\" as decimal\nprint(prices.label(decimal.multiply(\"19.95\", \"3\")))\n",
+      "sourceSha256": "72ed90881d710c9fe68118cb0c5740c68772b1633f06c996eaaae5979ade99ed",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 490760,
+          "sha256": "ea585a4d48b224cd5d7481fcd892d7c4b5c6c187a86d8ac9f50b6af1662c1a3e"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 579386,
+          "sha256": "df7ea24b89f710459598555f94954589956df3a529e3a9540d8a34bcadbb975e"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 11,
+      "line": 183,
+      "source": "fn title(person: {name: string, label?: string}): string {\n  return person.label ?? person.name\n}\nfn increment(value: number): number => value + 1\nconst action: fn(number): number = increment\nconst values: number[] = [1, 2]\nprint(title({name: \"Samira\"}), action(values[0] ?? 0))\n",
+      "sourceSha256": "ea7617153999748128dc206a7fa54ccd135479f5834bac8f712f7a19f72d82ae",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 384296,
+          "sha256": "2830e457d1bb9d1e06349bc32cb84d5251783cc6efc6d73734a24dfbc46e1a9d"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 580222,
+          "sha256": "780559e836322ea361ee3ebfdf5a6b9ca3b5bac6c460b1833b40645b86146621"
+        }
+      ]
+    },
+    {
+      "document": "docs/arya-language.md",
+      "fence": 12,
+      "line": 197,
+      "source": "try {\n  throw new Error(\"The operation failed\")\n} catch error {\n  print(error.message)\n} finally {\n  print(\"cleanup\")\n}\n",
+      "sourceSha256": "5cf7eaea41ed95251aa237dc184a8561142f92d63afafdf5b5f66387bcc7f683",
+      "artifactsBeforeCleanup": [
+        {
+          "path": "program",
+          "bytes": 385160,
+          "sha256": "c3eab14a0fb85b5cc98edc372ad9d62d221d7d8c9754e11b8037a5763cfb29c9"
+        },
+        {
+          "path": "program.NOTICE",
+          "bytes": 33033,
+          "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+        },
+        {
+          "path": "program.c",
+          "bytes": 577120,
+          "sha256": "b5485944759f861b12fcd4c25d09b24a946972414533038cce937baaed63a066"
+        }
+      ]
+    },
+    {
+      "document": "docs/getting-started.md",
+      "fence": 1,
+      "line": 21,
+      "source": "use std \"decimal\" as decimal\n\nfn total(price: string, quantity: string): string {\n  return decimal.quantize(decimal.multiply(price, quantity), 2, \"half-even\")\n}\n\nprint(total(\"9007199254740993.01\", \"3\"))\n",
+      "sourceSha256": "c076683cafd1454d18026add1393055d46a244091a3ac56cb1cd1087dcf2731a"
+    },
+    {
+      "document": "docs/getting-started.md",
+      "fence": 2,
+      "line": 37,
+      "source": "use std \"decimal\" as decimal\n\nexport fn total(price: string, quantity: string): string {\n  return decimal.quantize(decimal.multiply(price, quantity), 2, \"half-even\")\n}\n",
+      "sourceSha256": "2d0bf3d8dcee7314e30fb4cab271565f07862c38cbaeefbfb447015760b61d24"
+    },
+    {
+      "document": "docs/getting-started.md",
+      "fence": 3,
+      "line": 47,
+      "source": "use arya \"./lib/prices.arya\" as prices\nprint(prices.total(\"19.95\", \"3\"))\n",
+      "sourceSha256": "cad4d587a16bee16251f8dda2fe8185172aecb936ceb024151bdc6ee025e4237"
+    },
+    {
+      "document": "docs/getting-started.md",
+      "fence": 4,
+      "line": 58,
+      "source": "const currency = \"AFN\"\nconst defaults = {currency, scale: 0}\nconst roundingKey: string = \"rounding\"\nconst options = {...defaults, [roundingKey]: \"half-even\", scale: 2}\nprint(JSON.stringify(options))\n",
+      "sourceSha256": "822bed08ca180d743603dd2b1645f17bcbe8afed8ed06d6c5b189cccbfa93143"
+    }
+  ],
+  "commands": [
+    {
+      "name": "compiler version",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "--version"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Arya native 2.0.0-alpha.3 (self-hosted)\n",
+      "stderr": "",
+      "durationSeconds": 0.009743624999828171,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/01-compiler-version.log",
+      "logSha256": "f6d5a0b64b45c1119db038badc4f8267bfd89d1ac90cfb8c78dee314177af6e8"
+    },
+    {
+      "name": "language fence 1 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.008159707998856902,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/02-language-fence-1-check.log",
+      "logSha256": "5870f82366b0688a8a98bea43f9b00f8cd47be0a086e119bfb7d10279e13065f"
+    },
+    {
+      "name": "language fence 1 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/program.arya-bAAsa3/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/program.arya-bAAsa3/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/program.arya-bAAsa3/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 3.274771874999715,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/03-language-fence-1-build.log",
+      "logSha256": "94ef78e14dd00afeed180e528d569d286473a78b0f75cdff6fd228bb24690109"
+    },
+    {
+      "name": "language fence 1 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-01",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "1 Hello, Samira\n2 Hello, Hamza\n{\"currency\":\"AFN\",\"scale\":2,\"rounding\":\"half-even\"}\n",
+      "stderr": "",
+      "durationSeconds": 1.2460724170014146,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/04-language-fence-1-execute.log",
+      "logSha256": "c03ee69eacdea9f476185bc2af1916d7560e6893577391440585c5f238678549",
+      "expectedStdout": "1 Hello, Samira\n2 Hello, Hamza\n{\"currency\":\"AFN\",\"scale\":2,\"rounding\":\"half-even\"}\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 2 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.008655165998789016,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/05-language-fence-2-check.log",
+      "logSha256": "27c113cf517a4febe5e93255e8c93ead0e1b36edf418cc6f8062b96b2fb278ba"
+    },
+    {
+      "name": "language fence 2 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/program.arya-ZSfHAQ/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/program.arya-ZSfHAQ/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/program.arya-ZSfHAQ/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.4928876250014582,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/06-language-fence-2-build.log",
+      "logSha256": "d545f0d982d09a324dae86885355e3f06a2a1bd7307314dcb5c57136e6be0f9e"
+    },
+    {
+      "name": "language fence 2 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-02",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "3 Ledger\n",
+      "stderr": "",
+      "durationSeconds": 0.43996037499891827,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/07-language-fence-2-execute.log",
+      "logSha256": "e4eaa10d3cc7e8ec0a28906163e3ce2180e3f0b37ac7340326c8589681e4a493",
+      "expectedStdout": "3 Ledger\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 3 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.0076930409995839,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/08-language-fence-3-check.log",
+      "logSha256": "fab2e2c3d082bc7e4554a7bea57d29f64f79d7b99adc576ac4a9c7361f721bb8"
+    },
+    {
+      "name": "language fence 3 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/program.arya-bdnOs8/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/program.arya-bdnOs8/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/program.arya-bdnOs8/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.1539358340014587,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/09-language-fence-3-build.log",
+      "logSha256": "fd76b78a6813b0f075e18dbbceb3c2ba3321af4dc629de7ec56c76b597204c33"
+    },
+    {
+      "name": "language fence 3 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-03",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Ledger 9000 AFN\n",
+      "stderr": "",
+      "durationSeconds": 0.4446390839984815,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/10-language-fence-3-execute.log",
+      "logSha256": "cd03f1a1c5aa6c0e09b04f54b412825fd184c8e87cd8e8576c7be2ae5e059e7c",
+      "expectedStdout": "Ledger 9000 AFN\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 4 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.006958166999538662,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/11-language-fence-4-check.log",
+      "logSha256": "a230c8704881655749b64a3e9ffe0dc6679b8224741b2ea60ace1193d34d2541"
+    },
+    {
+      "name": "language fence 4 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/program.arya-uALPxZ/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/program.arya-uALPxZ/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/program.arya-uALPxZ/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.376791292001144,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/12-language-fence-4-build.log",
+      "logSha256": "1262473c630f75226fc6e7b8e861265085984fa4f2ec825c87c279d954c0415b"
+    },
+    {
+      "name": "language fence 4 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-04",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "2\n",
+      "stderr": "",
+      "durationSeconds": 0.5570124999976542,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/13-language-fence-4-execute.log",
+      "logSha256": "cf8e61ca094899671e79f15f0189b0bff11eabc357e90f07261e42d663a493e3",
+      "expectedStdout": "2\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 5 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.012155625001469161,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/14-language-fence-5-check.log",
+      "logSha256": "1b6febf5ed9661676ff012caf43663255146db7b8dc076f45a1ce931f96c6141"
+    },
+    {
+      "name": "language fence 5 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/program.arya-qgWOuC/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/program.arya-qgWOuC/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/program.arya-qgWOuC/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.325897167000221,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/15-language-fence-5-build.log",
+      "logSha256": "db9acd6642a94bb4560e195bb660ce0097b4474dd16f653c0a14e3d44a8725c9"
+    },
+    {
+      "name": "language fence 5 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-05",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "0 1\n1 2\n2 3\n6\n",
+      "stderr": "",
+      "durationSeconds": 0.5105900840026152,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/16-language-fence-5-execute.log",
+      "logSha256": "e9be0adacfc74a2d843742f70a94e54ff4e57585573451ccacd8f6f209b5707c",
+      "expectedStdout": "0 1\n1 2\n2 3\n6\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 6 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.0071986670009209774,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/17-language-fence-6-check.log",
+      "logSha256": "c8a4535c45bb5e73b751a0bb208ab61b8390110fbb45721dcec5da390b896df1"
+    },
+    {
+      "name": "language fence 6 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/program.arya-8TKOlW/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/program.arya-8TKOlW/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/program.arya-8TKOlW/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.3561469170017517,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/18-language-fence-6-build.log",
+      "logSha256": "3c9407ba77eea6b0f8eeb93d08fac792db49c1f8af2b0b00e15b53606b680ff3"
+    },
+    {
+      "name": "language fence 6 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-06",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "8 Hello, World 6\n",
+      "stderr": "",
+      "durationSeconds": 0.44371008399684797,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/19-language-fence-6-execute.log",
+      "logSha256": "18d8ee995628b89844f344d47773b422bf82013b1be2cbcad26d8960ffde8327",
+      "expectedStdout": "8 Hello, World 6\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 7 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.008602249999967171,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/20-language-fence-7-check.log",
+      "logSha256": "965337710d1af2f8402bf40e7eadd0bcb307d9a4149d2f13b3b1dfbb80c8ddfa"
+    },
+    {
+      "name": "language fence 7 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/program.arya-nxqT38/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/program.arya-nxqT38/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/program.arya-nxqT38/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.1737905840018357,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/21-language-fence-7-build.log",
+      "logSha256": "9b007f3539d2e30844cd1d798a8784eaeb4c4745f02c60b289ede40401a2d8fc"
+    },
+    {
+      "name": "language fence 7 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-07",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "positive\nempty\n",
+      "stderr": "",
+      "durationSeconds": 0.8461393340003269,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/22-language-fence-7-execute.log",
+      "logSha256": "a86784a07d792d38260709dae8bcb98cfab0458321d029fbae60d359bf4f7d80",
+      "expectedStdout": "positive\nempty\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 8 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.007098582998878555,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/23-language-fence-8-check.log",
+      "logSha256": "b197064e4a4f836dab4d021c2b52f52a66927f36d462d7b6b5b2477f15eb145f"
+    },
+    {
+      "name": "language fence 8 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/program.arya-uokGgr/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/program.arya-uokGgr/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/program.arya-uokGgr/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.9252555419989221,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/24-language-fence-8-build.log",
+      "logSha256": "e4a00596ce220609c9cbe4b4820f7b6e32b1b7a910c037a377979e15330400be"
+    },
+    {
+      "name": "language fence 8 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-08",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "3,2\n3\n4\n",
+      "stderr": "",
+      "durationSeconds": 0.417341917000158,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/25-language-fence-8-execute.log",
+      "logSha256": "946c471bf90e322621f48f029c0be36c05a26d42f767ba01754d19a6703035d0",
+      "expectedStdout": "3,2\n3\n4\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 9 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.006434082999476232,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/26-language-fence-9-check.log",
+      "logSha256": "81038224c4bfbbb834ca7dd430da3540066ca9c6f9db7e109c144fe370bff854"
+    },
+    {
+      "name": "language fence 9 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/program.arya-Wr7vbG/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/program.arya-Wr7vbG/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/program.arya-Wr7vbG/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.2120031250015018,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/27-language-fence-9-build.log",
+      "logSha256": "f5fb70e1dcfd02d75ae3e5d782d6820404b39a478535167d7382bf669bc3068e"
+    },
+    {
+      "name": "language fence 9 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-09",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "durationSeconds": 0.5197381250000035,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/28-language-fence-9-execute.log",
+      "logSha256": "9b80db68505bd82dc3f8b83c01a230935d06acd309a47d1bee044377b176425b",
+      "expectedStdout": "",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 10 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.00836695800171583,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/29-language-fence-10-check.log",
+      "logSha256": "d67a7a2473e23f41d098ce93bb1b08fbea778c9be142efd445d5008f9e74f38d"
+    },
+    {
+      "name": "language fence 10 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/program.arya-N7Nsw3/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/program.arya-N7Nsw3/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/program.arya-N7Nsw3/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.9147763330001908,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/30-language-fence-10-build.log",
+      "logSha256": "11b02dfcaa4aee2599f9192a06e31241c6c88f471c8a8067d04d7fc801bfae09"
+    },
+    {
+      "name": "language fence 10 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-10",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "59.85 AFN\n",
+      "stderr": "",
+      "durationSeconds": 0.4421357089995581,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/31-language-fence-10-execute.log",
+      "logSha256": "346d6532355c208a944d4dd44bf20dc948c199e52fd25ac931b05fa61c64af6c",
+      "expectedStdout": "59.85 AFN\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 11 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.0067391669981589075,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/32-language-fence-11-check.log",
+      "logSha256": "5e1ada0f5ce2997d4073d37fbab6a54894c9aa651b706f6612e8d054802564a0"
+    },
+    {
+      "name": "language fence 11 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/program.arya-zaSHcB/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/program.arya-zaSHcB/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/program.arya-zaSHcB/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.4711494999974093,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/33-language-fence-11-build.log",
+      "logSha256": "85177d144a528a9b4674247137c80ff10c9c8152374021018980ca44a16fa9c4"
+    },
+    {
+      "name": "language fence 11 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-11",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Samira 2\n",
+      "stderr": "",
+      "durationSeconds": 0.4242008330002136,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/34-language-fence-11-execute.log",
+      "logSha256": "9c88d97bf2ed11336783ef4a5a653f1c655d5626504645574b708ed221f8f6d3",
+      "expectedStdout": "Samira 2\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "language fence 12 check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.007502832999307429,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/35-language-fence-12-check.log",
+      "logSha256": "d558968229dfe88367bed6d09178805f3d8d51e508430e81f2e22d580eb8f8a3"
+    },
+    {
+      "name": "language fence 12 build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./program",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/program\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/program.arya-mKNfw3/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/program.arya-mKNfw3/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/program.arya-mKNfw3/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.4093250420010008,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/36-language-fence-12-build.log",
+      "logSha256": "ad7f9d78537a65aa94e75d8a4798e0f2992364cf299df646472c668b462743c0"
+    },
+    {
+      "name": "language fence 12 execute",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12/program"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/language-12",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "The operation failed\ncleanup\n",
+      "stderr": "",
+      "durationSeconds": 0.46172137499888777,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/37-language-fence-12-execute.log",
+      "logSha256": "b5efb336d8b44487da3fd957794e8d220fe186ea69282e5cca1dde7bd852306e",
+      "expectedStdout": "The operation failed\ncleanup\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "quickstart create CLI project",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "prices",
+        "--template",
+        "cli"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya cli project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.009744457998749567,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/38-quickstart-create-cli-project.log",
+      "logSha256": "d15181ed22244c9a4f3759e75db783b2548737df2cd803f7f650edb418c48c56"
+    },
+    {
+      "name": "quickstart check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.006844583000201965,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/39-quickstart-check.log",
+      "logSha256": "ac301fa1106d725567ba3b0fb4f4c18d97b69827229889d4d42a6db6a24aaaa8"
+    },
+    {
+      "name": "quickstart test",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "test",
+        "main.test.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "ok 1 - decimal totals preserve cents\n1..1\n# suites 0\n# pass 1\n# fail 0\n# skipped 0\n# todo 0\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.test.arya-KHu5JX/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.test.arya-KHu5JX/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.test.arya-KHu5JX/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 6.210770166002476,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/40-quickstart-test.log",
+      "logSha256": "654a13eb152b5182222aba828ba83e56f60ec0c741f6e17b5c1a105a80076cad"
+    },
+    {
+      "name": "quickstart run with arguments",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "run",
+        "main.arya",
+        "--",
+        "19.95",
+        "3"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Total: 59.85\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-iqken6/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-iqken6/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-iqken6/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 2.6223531249997905,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/41-quickstart-run-with-arguments.log",
+      "logSha256": "5a8f10c98d40d7230bbaf08737ab3b0ffd7029d938993fe1225d48f239c704ff",
+      "expectedStdout": "Total: 59.85\n"
+    },
+    {
+      "name": "quickstart release build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-UJj1i7/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-UJj1i7/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-UJj1i7/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.8474504170008004,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/42-quickstart-release-build.log",
+      "logSha256": "4e5dd49eff4047fdcb67bf9b7d84f4522fb72ea84eb82ff6264146c75019f5ce"
+    },
+    {
+      "name": "quickstart standalone with arguments",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices",
+        "19.95",
+        "3"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Total: 59.85\n",
+      "stderr": "",
+      "durationSeconds": 1.063986000001023,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/43-quickstart-standalone-with-arguments.log",
+      "logSha256": "ef13c908804218db63b813e2805bd84efc6729a141f808f75e20741dc211aa9d",
+      "expectedStdout": "Total: 59.85\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "quickstart exact decimal",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "run",
+        "exact.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "27021597764222979.03\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/exact.arya-tk1czA/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/exact.arya-tk1czA/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/exact.arya-tk1czA/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 2.55735279199871,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/44-quickstart-exact-decimal.log",
+      "logSha256": "61bf60c20ecaaa05236003117db140ddecbe03bb3d903057517bbc6d51868e6d",
+      "expectedStdout": "27021597764222979.03\n"
+    },
+    {
+      "name": "quickstart module check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.0663717089992133,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/45-quickstart-module-check.log",
+      "logSha256": "ac301fa1106d725567ba3b0fb4f4c18d97b69827229889d4d42a6db6a24aaaa8"
+    },
+    {
+      "name": "quickstart module run",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "run",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-SsUUTl/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-SsUUTl/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/main.arya-SsUUTl/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 2.3741807080004946,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/46-quickstart-module-run.log",
+      "logSha256": "b775bb6b96d8c1cd88933e8c269f47624048c8dfec66da18776e534a8a6286c4",
+      "expectedStdout": "59.85\n"
+    },
+    {
+      "name": "quickstart record syntax check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "records.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/records.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.054326125002262415,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/47-quickstart-record-syntax-check.log",
+      "logSha256": "2f3b937762faa003ea5076e837fee58706188ba6aebfbf4afc64ecf7dda8c135"
+    },
+    {
+      "name": "quickstart record syntax run",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "run",
+        "records.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "{\"currency\":\"AFN\",\"scale\":2,\"rounding\":\"half-even\"}\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/records.arya-MFpNDr/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/records.arya-MFpNDr/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/.arya/native/records.arya-MFpNDr/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 2.3321162499996717,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/48-quickstart-record-syntax-run.log",
+      "logSha256": "3ee06110ce1dab5f7013dd399c069885b028d604759846717989f42407481ae2",
+      "expectedStdout": "{\"currency\":\"AFN\",\"scale\":2,\"rounding\":\"half-even\"}\n"
+    },
+    {
+      "name": "quickstart formatter",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "fmt",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "durationSeconds": 0.006224875000043539,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/49-quickstart-formatter.log",
+      "logSha256": "f9d9d9f17426005ffde89e0663b035d98e38f025ed834bd1f01e04bc9390a00b"
+    },
+    {
+      "name": "quickstart formatting check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "fmt",
+        "main.arya",
+        "--check"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "durationSeconds": 0.006216957997821737,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/50-quickstart-formatting-check.log",
+      "logSha256": "48b9cc89796e870feb0a5470b20cdb072d144e8e819b94967cac8608e02d46ae"
+    },
+    {
+      "name": "quickstart lint",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "lint",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "durationSeconds": 0.006673666001006495,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/51-quickstart-lint.log",
+      "logSha256": "07c1aa8be15393680fb4296c31a6858b3defa67d4a2ba6ceccb7eb923f44bf1e"
+    },
+    {
+      "name": "quickstart JSON check",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya",
+        "--json"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/main.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+      "stderr": "",
+      "durationSeconds": 0.007167457999457838,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/52-quickstart-json-check.log",
+      "logSha256": "25d688c2e9332481404348ed4277666689e09fbd2a4b41da01c72ca9f715ce96"
+    },
+    {
+      "name": "quickstart protects existing release output",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "",
+      "stderr": "Compile error: Native output already exists; choose another path or explicitly use --force.\n",
+      "durationSeconds": 0.00810754199846997,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/53-quickstart-protects-existing-release-output.log",
+      "logSha256": "06225ac9289917e24251540afb26231b15b3607fda174b7ca2ee7b113dbdf43b"
+    },
+    {
+      "name": "quickstart intentional release replacement",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices",
+        "--release",
+        "--force"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-FMV8p1/program.c:6939:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6939 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-FMV8p1/program.c:6965:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6965 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices.arya-FMV8p1/program.c:6966:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.8500204169977224,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/54-quickstart-intentional-release-replacement.log",
+      "logSha256": "9b037c7e1916c47d969931dc50f8a34da9f25dadef9687e1712458fbe7df38b9"
+    },
+    {
+      "name": "quickstart replaced standalone",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": "",
+      "durationSeconds": 0.9571764169995731,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/55-quickstart-replaced-standalone.log",
+      "logSha256": "c6253c919acba3de97c07d2b7a5ad842c20ed4f5c451fb830c2f45be28c9fbf6",
+      "expectedStdout": "59.85\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "quickstart sanitizer build",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "build",
+        "main.arya",
+        "-o",
+        "./prices-debug",
+        "--debug",
+        "--sanitize"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices-debug\n",
+      "stderr": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices-debug.arya-oVjvSL/program.c:6940:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6940 |   if(swapcontext(&from->context,&to->context)){fputs(\"Arya: native context switch failed\\n\",stderr);exit(70);}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here\n   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices-debug.arya-oVjvSL/program.c:6966:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6966 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail(\"Error\",\"Cannot create native async task.\");}\n      |      ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here\n   38 | int  getcontext(ucontext_t *);\n      |      ^\n/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices-debug.arya-oVjvSL/program.c:6967:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]\n 6967 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);\n      |                                                                                                        ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here\n   41 | void makecontext(ucontext_t *, void (*)(), int, ...);\n      |      ^\n3 warnings generated.\n",
+      "durationSeconds": 1.0211740420018032,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/56-quickstart-sanitizer-build.log",
+      "logSha256": "f15af421756b7bfeb16da54e1b4349c1695a3eca67887725eaf36fc4427f18d7"
+    },
+    {
+      "name": "quickstart sanitizer standalone",
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices/prices-debug"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/prices",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "59.85\n",
+      "stderr": "",
+      "durationSeconds": 1.2607196670032863,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/57-quickstart-sanitizer-standalone.log",
+      "logSha256": "2c56e3d5ab8e4b16db48474548b631711398de1fb622a638258c3df107949a14",
+      "expectedStdout": "59.85\n",
+      "PATH": "/nonexistent"
+    },
+    {
+      "name": "quickstart create cli template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "my-cli",
+        "--template",
+        "cli"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya cli project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-cli\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-cli'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.009354958001495106,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/58-quickstart-create-cli-template.log",
+      "logSha256": "268cd78f245169065fd33e905704e2666b5dd501f2498c5f1a85b8d7c15bdf9d"
+    },
+    {
+      "name": "quickstart check cli template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-cli",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-cli/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.007194458001322346,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/59-quickstart-check-cli-template.log",
+      "logSha256": "0b73137db6f14eb5ee5f3071ab8f638258eb2711a82fbfd6d14e32a581046fd4"
+    },
+    {
+      "name": "quickstart create api template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "my-api",
+        "--template",
+        "api"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya api project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-api\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-api'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.007870540997828357,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/60-quickstart-create-api-template.log",
+      "logSha256": "31286d5655a275d5067b2fbbb8893687b36891171ef811f421e1b8f267c3f17d"
+    },
+    {
+      "name": "quickstart check api template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-api",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-api/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.16762562499934575,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/61-quickstart-check-api-template.log",
+      "logSha256": "8504e4585e63686db3349de19781d017ee722663615c4ce958d074a0b6216176"
+    },
+    {
+      "name": "quickstart create web template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "my-web",
+        "--template",
+        "web"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya web project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-web\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-web'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.009629582997149555,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/62-quickstart-create-web-template.log",
+      "logSha256": "1e37ba84efe055d7bdcf6cba6b417afc683e48a836acb38c94ec0f9e36e84971"
+    },
+    {
+      "name": "quickstart check web template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-web",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-web/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.15152908300296986,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/63-quickstart-check-web-template.log",
+      "logSha256": "8b3d170e137da98a247db891bd925b71e164962c80b17e48b2861d30857f3d36"
+    },
+    {
+      "name": "quickstart create ui template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "my-ui",
+        "--template",
+        "ui"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya ui project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-ui\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-ui'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.007764707999740494,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/64-quickstart-create-ui-template.log",
+      "logSha256": "8308a76a0099b5d2f7ad8f3b893c35a5364b0d18bdb768d60cdd5ab04b995276"
+    },
+    {
+      "name": "quickstart check ui template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-ui",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-ui/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.4011092920009105,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/65-quickstart-check-ui-template.log",
+      "logSha256": "328b4413b873be91d568b1ac57f84c20191b60b2da735bce1dde6d51567044b7"
+    },
+    {
+      "name": "quickstart create desktop template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "create",
+        "my-desktop",
+        "--template",
+        "desktop"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Created native Arya desktop project: /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-desktop\ncd '/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-desktop'\narya run main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.008523375003278488,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/66-quickstart-create-desktop-template.log",
+      "logSha256": "157d2ab7f4bc25797dba3bab28acbf6afecf9623109c8dd34fc6a1eb6ee69c4c"
+    },
+    {
+      "name": "quickstart check desktop template",
+      "command": [
+        "/private/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.t6ugj0/source/.build/independent/arya",
+        "check",
+        "main.arya"
+      ],
+      "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-desktop",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "Check OK (native): /Users/hamza/Projects/github-repo/arya-lang/.build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/tutorial/my-desktop/main.arya\n",
+      "stderr": "",
+      "durationSeconds": 0.4127974170005473,
+      "passed": true,
+      "log": ".build/syntax-docs-2026-11-13/delivery-d81770ed-1d5ioj0c/logs/67-quickstart-check-desktop-template.log",
+      "logSha256": "1be863e0bb4f1e9776ea2a3c11681106bfd3504ba629d6bde790ecdf9eafc6e5"
+    }
+  ],
+  "passed": true,
+  "languageFenceStart": 1,
+  "limitations": [
+    "Desktop/browser/server templates are generated and checked, not launched.",
+    "Sanitizer leak detection is disabled on this host; address/undefined checks remain enabled."
+  ],
+  "tutorialArtifactsBeforeCleanup": [
+    {
+      "path": ".gitignore",
+      "bytes": 22,
+      "sha256": "6b3d12b46db06647f827bb0c7e6aa0e2fb8eef33095a0dcb6b4b27ebbc69b2fa"
+    },
+    {
+      "path": ".vscode/settings.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "Makefile",
+      "bytes": 232,
+      "sha256": "e773f21e16eee14996d12682fb33043e736f771ea204b39d192389e02028765e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 306,
+      "sha256": "a13bec9ce3ee1215380e84a17d238b5dcb537f7c9c840c7d1a3c19910cdec26c"
+    },
+    {
+      "path": "arya.json",
+      "bytes": 92,
+      "sha256": "4432206c4b3987692ef3724a68cee7c8e275432b1a75d88a9b774e09a6792718"
+    },
+    {
+      "path": "prices-debug",
+      "bytes": 2467576,
+      "sha256": "0babef2046a67286fe0c734b94bda103b5afd6455bebc5cd207835377d692e74"
+    },
+    {
+      "path": "prices-debug.NOTICE",
+      "bytes": 33033,
+      "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5"
+    },
+    {
+      "path": "prices-debug.c",
+      "bytes": 579626,
+      "sha256": "421a4de1e8a4b74b3c419b4e5167aed202bbacdde6284caffff696e82919030a"
+    }
+  ],
+  "finishedAtUtc": "2026-11-13T08:43:40.067043+00:00",
+  "commandCount": 67,
+  "cleanup": "Only generated outputs/caches in this newly created workspace were removed after recording hashes/output. Sources and command logs remain. Prior preview evidence is untouched."
+}

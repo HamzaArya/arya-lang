@@ -18,6 +18,10 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
+#ifndef MAP_ANONYMOUS
+#define MAP_ANONYMOUS MAP_ANON
+#endif
 #ifdef __linux__
 #include <sys/syscall.h>
 #endif
@@ -29,10 +33,15 @@ typedef struct AV AV;
 typedef struct AH AH;
 typedef struct ARoot ARoot;
 typedef struct AFrame AFrame;
+typedef struct AKeyIndex AKeyIndex;
+typedef struct { AV *data; size_t bytes,page_size,count,capacity,bitmap_bytes; size_t *pages; unsigned char *bitmap; } ASparse;
+/* Shared buffers never move. Keep their metadata and UTF-16 storage in one
+ * allocation; AH string views retain their own immutable prefix length. */
+typedef struct { size_t capacity, used, references; uint16_t chars[]; } AStringBuffer;
 typedef AV (*ACode)(AV, int, AV *);
 enum { AUINIT, AUNDEF, ANULL, ABOOL, ANUM, ASTR, ALIST, ARECORD, AFUNC, AENV, AREF, APROMISE, ADATE, AAITER, AGETTER, ABYTES, AHANDLE };
 struct AV { int t; double n; AH *p; };
-struct AH { AH *next; unsigned mark,flags; uint64_t serial; int t, scope; size_t len, cap; AV *data; uint16_t *chars; ACode code; AV parent,tag; const char *name; void *external; void (*finalize)(AH *); };
+struct AH { AH *next; unsigned mark,flags; uint64_t serial; int t, scope; size_t len, cap; AV *data; uint16_t *chars; ACode code; AV parent,tag; const char *name; ASparse *sparse; AKeyIndex *keys; void *external; void (*finalize)(AH *); };
 struct ARoot { ARoot *prev; AV *values; size_t count; };
 struct AFrame { AFrame *prev; const char *file, *name; int line, column; ARoot roots; };
 static AH *aheap;
@@ -49,7 +58,7 @@ static struct {
   size_t calloc_calls, heap_objects, environments, functions;
   size_t generic_calls, direct_calls, numeric_calls, heap_temporaries;
   size_t scalar_calls, rooted_calls, root_pushes, environment_lookups;
-  size_t requested_bytes, strings, string_units, json_key_hits, field_cache_hits, decimal_fast_paths;
+  size_t requested_bytes, strings, string_units, json_key_hits, field_cache_hits, decimal_fast_paths, tofixed_fast_paths, tofixed_fallbacks, global_cache_hits, data_descriptor_calls;
   double gc_cpu_ms;
 } acounters;
 #define ACOUNT(field) (++acounters.field)
@@ -57,6 +66,7 @@ static void acounters_report(void) {
   fprintf(stderr,"ARYA_RUNTIME_COUNTERS {\"callocCalls\":%zu,\"heapObjects\":%zu,\"environments\":%zu,\"functions\":%zu,\"genericCalls\":%zu,\"directCalls\":%zu,\"numericCalls\":%zu,\"heapTemporaries\":%zu,\"gcCollections\":%zu,\"peakManagedBytes\":%zu,\"scalarCalls\":%zu,\"rootedCalls\":%zu,\"rootPushes\":%zu,\"environmentLookups\":%zu}\n",
     acounters.calloc_calls,acounters.heap_objects,acounters.environments,acounters.functions,acounters.generic_calls,acounters.direct_calls,acounters.numeric_calls,acounters.heap_temporaries,acollections,apeakh,acounters.scalar_calls,acounters.rooted_calls,acounters.root_pushes,acounters.environment_lookups);
   fprintf(stderr,"ARYA_ALLOCATION_DETAIL {\"requestedBytes\":%zu,\"strings\":%zu,\"stringUnits\":%zu,\"jsonKeyHits\":%zu,\"fieldCacheHits\":%zu,\"decimalFastPaths\":%zu,\"gcCpuMs\":%.6f}\n",acounters.requested_bytes,acounters.strings,acounters.string_units,acounters.json_key_hits,acounters.field_cache_hits,acounters.decimal_fast_paths,acounters.gc_cpu_ms);
+  fprintf(stderr,"ARYA_NUMBER_DETAIL {\"toFixedFastPaths\":%zu,\"toFixedFallbacks\":%zu,\"globalCacheHits\":%zu,\"dataDescriptorCalls\":%zu}\n",acounters.tofixed_fast_paths,acounters.tofixed_fallbacks,acounters.global_cache_hits,acounters.data_descriptor_calls);
 }
 #define AADD(field,n) (acounters.field+=(n))
 #else
@@ -71,12 +81,24 @@ static int anumtruth(double n) { return n!=0&&!isnan(n); }
 static AV ap(AH *p) { AV v = {p->t,0,p}; return v; }
 static void aroot(ARoot *r, AV *values, size_t count) { ACOUNT(root_pushes); r->prev=aroots; r->values=values; r->count=count; aroots=r; }
 static void aunroot(ARoot *r) { aroots=r->prev; }
+static void akey_release(AH *h);
+static void asparse_release(AH *h);
+static void alist_dense(AH *h);
+static void astring_release(AH *h) {
+  AStringBuffer *buffer=h->external;
+  if(buffer&&!--buffer->references) { aallocated-=sizeof(*buffer)+(buffer->capacity+1)*sizeof(uint16_t);free(buffer); }
+}
 static void amark(AV v) {
   /* Iterative marking avoids overflowing the C stack on deeply linked graphs. */
   AH **work=NULL; size_t count=0, cap=0;
   if(v.p && v.t>=ASTR && !v.p->mark) { cap=64; work=(AH**)malloc(cap*sizeof(AH*)); if(!work) { fputs("Arya: out of memory\n",stderr); exit(70); } work[count++]=v.p; v.p->mark=1; }
-  while(count) { AH *h=work[--count]; size_t total=h->len+2;
-    for(size_t i=0;i<total;i++) { AV child=i<h->len ? h->data[i] : i==h->len?h->parent:h->tag; if(!child.p || child.t<ASTR || child.p->mark) continue;
+  while(count) { AH *h=work[--count];size_t stride=h->sparse?h->sparse->page_size/sizeof(AV)+2:0;
+    size_t children=h->sparse?h->sparse->count*stride:h->len,total=children+2;
+    for(size_t i=0;i<total;i++) { AV child;
+      if(i>=children)child=i==children?h->parent:h->tag;
+      else if(!h->sparse)child=h->data[i];
+      else {ASparse *s=h->sparse;size_t page=s->pages[i/stride],at=page*s->page_size/sizeof(AV)+i%stride;
+        if(at>=h->len||at*sizeof(AV)>=(page+1)*s->page_size)continue;child=h->data[at];} if(!child.p || child.t<ASTR || child.p->mark) continue;
       child.p->mark=1; if(count==cap) { cap*=2; AH **next=(AH**)realloc(work,cap*sizeof(AH*)); if(!next) { free(work); fputs("Arya: out of memory\n",stderr); exit(70); } work=next; } work[count++]=child.p;
     }
   }
@@ -92,7 +114,7 @@ static void agc(void) {
   for(ARoot *r=aroots;r;r=r->prev) for(size_t i=0;i<r->count;i++) amark(r->values[i]);
   if(afailed) amark(aerror);
   AH **link=&aheap;
-  while(*link) { AH *h=*link; if(h->mark) { h->mark=0; link=&h->next; } else { *link=h->next; aallocated-=sizeof(AH)+h->cap*sizeof(AV)+(h->t==ASTR ? (size_t)h->scope*sizeof(uint16_t):h->t==ABYTES&&!(h->flags&4)?(size_t)h->scope:0);if(h->finalize)h->finalize(h);free(h->data);if(!(h->t==ABYTES&&(h->flags&4)))free(h->chars);free(h); } }
+  while(*link) { AH *h=*link; if(h->mark) { h->mark=0; link=&h->next; } else { *link=h->next; aallocated-=sizeof(AH)+(h->sparse?0:h->cap*sizeof(AV))+(h->t==ABYTES&&!(h->flags&4)?(size_t)h->scope:0);if(h->finalize)h->finalize(h);akey_release(h);if(h->sparse)asparse_release(h);else free(h->data);if(h->t==ASTR)astring_release(h);else if(!(h->t==ABYTES&&(h->flags&4)))free(h->chars);free(h); } }
   athreshold=aallocated*2+1024*1024; acollections++;
 #ifdef ARYA_RUNTIME_COUNTERS
   acounters.gc_cpu_ms+=(double)(clock()-started)*1000/CLOCKS_PER_SEC;
@@ -105,9 +127,41 @@ static AH *aalloc(int t, size_t len) {
   AH *h=(AH*)amemory(sizeof(AH)); h->t=t; h->len=h->cap=len; h->parent=av(AUNDEF); if(len) h->data=(AV*)amemory(len*sizeof(AV));
   h->next=aheap; aheap=h; aallocated+=sizeof(AH)+len*sizeof(AV); if(aallocated>apeakh) apeakh=aallocated; return h;
 }
-static AV as16(const uint16_t *s, size_t n) { if(n>16777216)return afail("RangeError","Strings exceed the 16 Mi UTF-16 unit limit.");ACOUNT(strings);AADD(string_units,n);AH *h=aalloc(ASTR,0); h->scope=(int)n; h->chars=(uint16_t*)amemory((n+1)*sizeof(uint16_t)); if(n) memcpy(h->chars,s,n*sizeof(uint16_t)); aallocated+=n*sizeof(uint16_t);if(aallocated>apeakh)apeakh=aallocated;return ap(h); }
+static AStringBuffer *astring_buffer(size_t capacity) {
+  size_t bytes=sizeof(AStringBuffer)+(capacity+1)*sizeof(uint16_t);
+  AStringBuffer *buffer=amemory(bytes);buffer->capacity=capacity;buffer->references=1;
+  aallocated+=bytes;if(aallocated>apeakh)apeakh=aallocated;return buffer;
+}
+static AV as16(const uint16_t *s,size_t n) {
+  if(n>16777216)return afail("RangeError","Strings exceed the 16 Mi UTF-16 unit limit.");
+  ACOUNT(strings);AADD(string_units,n);AH *h=aalloc(ASTR,0);AStringBuffer *buffer=astring_buffer(n);
+  buffer->used=n;h->scope=(int)n;h->external=buffer;h->chars=buffer->chars;if(n)memcpy(h->chars,s,n*sizeof(uint16_t));return ap(h);
+}
+/* memcpy permits unaligned input without aliasing violations. The repeated
+ * masks test each byte/unit independently on either byte order; tail loads
+ * never reach beyond the supplied span. */
+static int aascii_bytes(const char *s,size_t n) {
+  if(n && (unsigned char)s[n-1]>=128)return 0;
+  while(n>=8){uint64_t word;memcpy(&word,s,sizeof(word));if(word&UINT64_C(0x8080808080808080))return 0;s+=8;n-=8;}
+  while(n--){if((unsigned char)*s++>=128)return 0;}return 1;
+}
+static int aascii_units(const uint16_t *s,size_t n) {
+  if(n && s[n-1]>=128)return 0;
+  while(n>=4){uint64_t word;memcpy(&word,s,sizeof(word));if(word&UINT64_C(0xff80ff80ff80ff80))return 0;s+=4;n-=4;}
+  while(n--){if(*s++>=128)return 0;}return 1;
+}
 static AV astrn(const char *s,size_t n) {
   if(n>67108864)return afail("RangeError","UTF-8 input exceeds 64 MiB.");
+  if(aascii_bytes(s,n)){
+    if(n>16777216)return afail("RangeError","Strings exceed the 16 Mi UTF-16 unit limit.");
+    /* The raw source may belong to an otherwise unrooted byte buffer. Finish
+     * reading it before aalloc can collect, as the general decoder does. The
+     * pending buffer cannot be reclaimed until attached to its new header. */
+    AStringBuffer *buffer=astring_buffer(n);
+    for(size_t i=0;i<n;i++)buffer->chars[i]=(unsigned char)s[i];
+    ACOUNT(strings);AADD(string_units,n);AH *h=aalloc(ASTR,0);
+    buffer->used=n;h->scope=(int)n;h->external=buffer;h->chars=buffer->chars;return ap(h);
+  }
   size_t used=0; uint16_t *u=(uint16_t*)amemory((n+1)*sizeof(uint16_t));
   for(size_t i=0;i<n;) { unsigned c=(unsigned char)s[i++], cp=c; int extra=0;
     if(c>=0xc2 && c<=0xdf) { cp=c&31; extra=1; } else if(c>=0xe0 && c<=0xef) { cp=c&15; extra=2; } else if(c>=0xf0 && c<=0xf4) { cp=c&7; extra=3; } else if(c>=128) cp=0xfffd;
@@ -120,6 +174,10 @@ static AV astrn(const char *s,size_t n) {
 }
 static AV astr(const char *s) { return astrn(s,strlen(s)); }
 static char *autf8bytes(AV s,size_t *written) {
+  if(aascii_units(s.p->chars,(size_t)s.p->scope)){
+    size_t n=(size_t)s.p->scope;char *out=(char*)amemory(n+1);
+    for(size_t i=0;i<n;i++)out[i]=(char)s.p->chars[i];out[n]=0;if(written)*written=n;return out;
+  }
   size_t n=(size_t)s.p->scope, at=0; char *out=(char*)amemory(n*3+1);
   for(size_t i=0;i<n;i++) { unsigned c=s.p->chars[i]; if(c>=0xd800 && c<=0xdbff && i+1<n && s.p->chars[i+1]>=0xdc00 && s.p->chars[i+1]<=0xdfff) c=0x10000+((c-0xd800)<<10)+(s.p->chars[++i]-0xdc00); else if(c>=0xd800 && c<=0xdfff) c=0xfffd;
     if(c<128) out[at++]=(char)c; else if(c<2048) { out[at++]=(char)(0xc0|(c>>6)); out[at++]=(char)(0x80|(c&63)); } else if(c<65536) { out[at++]=(char)(0xe0|(c>>12)); out[at++]=(char)(0x80|((c>>6)&63)); out[at++]=(char)(0x80|(c&63)); } else { out[at++]=(char)(0xf0|(c>>18)); out[at++]=(char)(0x80|((c>>12)&63)); out[at++]=(char)(0x80|((c>>6)&63)); out[at++]=(char)(0x80|(c&63)); }
@@ -127,13 +185,17 @@ static char *autf8bytes(AV s,size_t *written) {
   out[at]=0; if(written)*written=at; return out;
 }
 static char *autf8(AV s) { return autf8bytes(s,NULL); }
-static int aseq(AV x, AV y) { return x.t==ASTR && y.t==ASTR && x.p->scope==y.p->scope && !memcmp(x.p->chars,y.p->chars,(size_t)x.p->scope*sizeof(uint16_t)); }
+static int aseq(AV x, AV y) { return x.t==ASTR && y.t==ASTR && (x.p==y.p || (x.p->scope==y.p->scope && !memcmp(x.p->chars,y.p->chars,(size_t)x.p->scope*sizeof(uint16_t)))); }
 static int aeq(AV x, AV y) { if(x.t!=y.t) return 0; if(x.t==ANUM || x.t==ABOOL) return x.n==y.n; if(x.t==ASTR) return aseq(x,y); if(x.t>=ALIST) return x.p==y.p; return 1; }
+#include "index.c"
+
 static AV afail(const char *name, const char *message);
 static AV acall(AV fn,int argc,AV *argv);
 static AV aread(AV v) { if(v.t==AUINIT) return afail("ReferenceError","Cannot access binding before initialization."); if(v.t==AREF) return aread(v.p->parent.p->data[(size_t)v.n]);if(v.t==AGETTER)return acall(v.p->parent,0,NULL); return v; }
 static int atruth(AV v) { return !(v.t==AUNDEF || v.t==ANULL || (v.t==ABOOL && !v.n) || (v.t==ANUM && (!v.n || isnan(v.n))) || (v.t==ASTR && !v.p->scope)); }
-static void aresize(AH *h, size_t size) { if(size<=h->cap) return; size_t cap=h->cap ? h->cap*2:8; if(cap<size) cap=size; if(cap>SIZE_MAX/sizeof(AV)) { fputs("Arya: allocation too large\n",stderr); exit(70); } AV *p=(AV*)realloc(h->data,cap*sizeof(AV)); if(!p) { fputs("Arya: out of memory\n",stderr); exit(70); } memset(p+h->cap,0,(cap-h->cap)*sizeof(AV)); aallocated+=(cap-h->cap)*sizeof(AV); h->cap=cap; h->data=p; }
+static void aresize(AH *h, size_t size) { if(h->sparse)alist_dense(h);if(size<=h->cap) return; size_t cap=h->cap ? h->cap*2:8; if(cap<size) cap=size; if(cap>SIZE_MAX/sizeof(AV)) { fputs("Arya: allocation too large\n",stderr); exit(70); } AV *p=(AV*)realloc(h->data,cap*sizeof(AV)); if(!p) { fputs("Arya: out of memory\n",stderr); exit(70); } memset(p+h->cap,0,(cap-h->cap)*sizeof(AV)); aallocated+=(cap-h->cap)*sizeof(AV); h->cap=cap; h->data=p; }
+#include "sparse.c"
+
 static AV aenv(AV parent, int scope, size_t count) { ACOUNT(environments); AH *h=aalloc(AENV,count); h->parent=parent; h->scope=scope; return ap(h); }
 static AH *afind(AV env,int scope) { ACOUNT(environment_lookups); AH *h=env.p; while(h && h->scope!=scope) h=h->parent.p; if(!h) { fputs("Arya: invalid lexical environment\n",stderr); exit(70); } return h; }
 static AV agetvar(AV env,int scope,size_t slot) { return aread(afind(env,scope)->data[slot]); }
@@ -203,11 +265,21 @@ static AV atostring(AV v) {
       aformat_number(v.n,buf);
       return astr(buf);
     case ARECORD:return astr("[object Object]"); case AFUNC:return astr("[function]");
-    case ALIST: { /* Preserve primitive list-to-string conversion, detect cycles. */
-      static AH *active[128]; static int depth; if(depth>=128) return astr(""); for(int j=0;j<depth;j++) if(active[j]==v.p) return astr(""); active[depth++]=v.p;
-      AV roots[2]={astr(""),av(AUNDEF)}; ARoot r; aroot(&r,roots,2);
-      for(size_t i=0;i<v.p->len;i++) { roots[1]=(v.p->data[i].t==ANULL || v.p->data[i].t==AUNDEF || v.p->data[i].t==AUINIT)?astr(""):atostring(v.p->data[i]); if(afailed){aunroot(&r);return av(AUNDEF);}size_t a=(size_t)roots[0].p->scope,b=(size_t)roots[1].p->scope;if(a>16777216-b){aunroot(&r);return afail("RangeError","Concatenation exceeds the string limit.");}uint16_t *u=(uint16_t*)amemory((a+b+2)*sizeof(uint16_t)); memcpy(u,roots[0].p->chars,a*sizeof(uint16_t)); if(i) u[a++]=','; memcpy(u+a,roots[1].p->chars,b*sizeof(uint16_t)); roots[0]=as16(u,a+b); free(u); }
-      AV result=roots[0]; aunroot(&r); depth--; return result;
+    case ALIST: { /* Linear conversion, with rooted recursion/cycle checks. */
+      static AH *active[128];static int depth;
+      if(depth>=128)return astr("");for(int j=0;j<depth;j++)if(active[j]==v.p)return astr("");active[depth++]=v.p;
+      AV roots[2]={v,av(AUNDEF)};ARoot r;aroot(&r,roots,2);
+      size_t length=0,capacity=64;uint16_t *units=amemory(capacity*sizeof(uint16_t));
+      for(size_t i=0;i<v.p->len&&!afailed;i++) {
+        AV item=v.p->data[i];size_t size=0;
+        if(item.t!=ANULL&&item.t!=AUNDEF&&item.t!=AUINIT){roots[1]=atostring(item);if(afailed)break;size=(size_t)roots[1].p->scope;}
+        size_t separator=i?1:0;
+        if(size>16777216-length||separator>16777216-length-size){afail("RangeError","Concatenation exceeds the string limit.");break;}
+        size_t needed=length+separator+size;
+        if(needed>capacity){size_t next=capacity;while(next<needed)next*=2;if(next>16777216)next=16777216;uint16_t *grown=realloc(units,next*sizeof(uint16_t));if(!grown){free(units);fputs("Arya: out of memory\n",stderr);exit(70);}units=grown;capacity=next;}
+        if(separator)units[length++]=',';if(size){memcpy(units+length,roots[1].p->chars,size*sizeof(uint16_t));length+=size;}
+      }
+      AV result=afailed?av(AUNDEF):as16(units,length);free(units);aunroot(&r);depth--;return result;
     }
     default:return astr("undefined");
   }
@@ -230,9 +302,24 @@ static double atonumber(AV v) {
   if(i<len&&(text[i]=='e'||text[i]=='E')){i++;if(i<len&&(text[i]=='+'||text[i]=='-'))i++;size_t begin=i;while(i<len&&text[i]>='0'&&text[i]<='9')i++;if(i==begin){free(text);return NAN;}}
   if(i!=len){free(text);return NAN;}double result=strtod(text,NULL);free(text);return result;
 }
+/* A string is an immutable prefix. Appends may share unused storage after
+ * that prefix; branching from an older prefix allocates a separate buffer.
+ * Buffers never move while shared, so retained aliases and keys stay valid. */
 static AV aconcat(AV x,AV y) {
-  AV roots[2]={av(AUNDEF),av(AUNDEF)}; ARoot r; aroot(&r,roots,2); roots[0]=atostring(x); roots[1]=atostring(y);
-  if(afailed){aunroot(&r);return av(AUNDEF);}size_t a=(size_t)roots[0].p->scope,b=(size_t)roots[1].p->scope;if(a>16777216-b){aunroot(&r);return afail("RangeError","Concatenation exceeds the string limit.");}uint16_t *u=(uint16_t*)amemory((a+b+1)*sizeof(uint16_t)); memcpy(u,roots[0].p->chars,a*sizeof(uint16_t)); memcpy(u+a,roots[1].p->chars,b*sizeof(uint16_t)); AV result=as16(u,a+b); free(u); aunroot(&r); return result;
+  AV roots[2]={av(AUNDEF),av(AUNDEF)};ARoot r;aroot(&r,roots,2);roots[0]=atostring(x);roots[1]=atostring(y);
+  if(afailed){aunroot(&r);return av(AUNDEF);}
+  size_t a=(size_t)roots[0].p->scope,b=(size_t)roots[1].p->scope;
+  if(a>16777216-b){aunroot(&r);return afail("RangeError","Concatenation exceeds the string limit.");}
+  if(!b){AV result=roots[0];aunroot(&r);return result;}
+  AH *h=aalloc(ASTR,0);AStringBuffer *buffer=roots[0].p->external;
+  if(buffer&&buffer->used==a&&buffer->capacity>=a+b)buffer->references++;
+  else {
+    size_t capacity=a+b;if(capacity<64)capacity=64;else if(capacity<=8388608)capacity*=2;else capacity=16777216;
+    buffer=astring_buffer(capacity);if(a)memcpy(buffer->chars,roots[0].p->chars,a*sizeof(uint16_t));
+  }
+  memcpy(buffer->chars+a,roots[1].p->chars,b*sizeof(uint16_t));buffer->used=a+b;buffer->chars[a+b]=0;
+  h->scope=(int)(a+b);h->external=buffer;h->chars=buffer->chars;ACOUNT(strings);AADD(string_units,a+b);
+  AV result=ap(h);aunroot(&r);return result;
 }
 static int aorder(AV x,AV y) { size_t a=(size_t)x.p->scope,b=(size_t)y.p->scope,n=a<b?a:b; for(size_t i=0;i<n;i++) if(x.p->chars[i]!=y.p->chars[i]) return x.p->chars[i]<y.p->chars[i]?-1:1; return a==b?0:(a<b?-1:1); }
 static double apower(double x,double y) { if(isinf(y) && fabs(x)==1) return NAN; return pow(x,y); }
@@ -258,6 +345,7 @@ static AV apromise_get(AV object,AV key);
 static AV adate_get(AV object,AV key);
 static AV abytes_get(AV object,AV key);
 static AV acollection_get(AV object,AV key);
+static AV astd(const char *name);
 static AV acollection_invoke(AV object,AV key,int argc,AV *argv);
 #ifdef ARYA_PYTHON
 static int apython_reference(AV value);
@@ -266,6 +354,7 @@ static AV apython_get(AV value,AV key);
 #endif
 static AV aiter_get(AV object,AV key);
 static AV anumber_method(AV env,int argc,AV *argv);
+static AV anumber_invoke(double value,AV key,int argc,AV *argv);
 static AV advalue_property(AV value,AV key);
 static AV acsv_property(AV value,AV key);
 static AV aget(AV object,AV key) {
@@ -287,7 +376,7 @@ static AV aget(AV object,AV key) {
   if(aurl_is(object,0)||aurl_is(object,1))return aurl_get(object,key);
 #endif
   if(object.t==ANUM&&(akey(key,"toFixed")||akey(key,"toString"))){AV roots[2]={object,key};ARoot r;aroot(&r,roots,2);AV env=alist(2,roots);roots[0]=env;AV result=afunction(anumber_method,env,"number method");aunroot(&r);return result;}
-  if(object.t==ARECORD||object.t==AFUNC) { if(key.t!=ASTR) return afail("TypeError","Record keys must be strings."); for(size_t i=0;i<object.p->len;i+=2) if(aseq(key,object.p->data[i])) return aread(object.p->data[i+1]); return av(AUNDEF); }
+  if(object.t==ARECORD||object.t==AFUNC) { if(key.t!=ASTR) return afail("TypeError","Record keys must be strings."); size_t slot=akey_find(object.p,key,2);return slot==SIZE_MAX?av(AUNDEF):aread(object.p->data[slot+1]); }
   if(object.t==ALIST || object.t==ASTR) {
     if(akey(key,"length")) return an(object.t==ALIST?(double)object.p->len:object.p->scope);
     size_t index; if(aindex(key,&index)) { if(object.t==ALIST) return index<object.p->len&&object.p->data[index].t!=AUINIT?object.p->data[index]:av(AUNDEF); return index<(size_t)object.p->scope?as16(object.p->chars+index,1):av(AUNDEF); }
@@ -308,13 +397,14 @@ static AV aget_cached(AV object,AV key,AFieldCache *cache) {
   if((object.t!=ARECORD&&object.t!=AFUNC)||key.t!=ASTR)return aget(object,key);
   size_t slot=cache->slot;
   if(slot<object.p->len&&aseq(key,object.p->data[slot])){ACOUNT(field_cache_hits);return aread(object.p->data[slot+1]);}
-  for(size_t i=0;i<object.p->len;i+=2)if(aseq(key,object.p->data[i])){cache->slot=i;return aread(object.p->data[i+1]);}
+  size_t found=akey_find(object.p,key,2);if(found!=SIZE_MAX){cache->slot=found;return aread(object.p->data[found+1]);}
   return av(AUNDEF);
 }
 /* Resolve before evaluating arguments, as a normal property call does. The
  * receiver stays in a caller root; detached methods retain the generic path. */
 static AV aimmediate_get(AV object,AV key,int *direct) {
   *direct=0;
+  if(object.t==ANUM&&(akey(key,"toFixed")||akey(key,"toString"))){*direct=1;return av(AUNDEF);}
   if(object.t==ALIST||object.t==ASTR){
     if(object.t==ALIST&&object.p->tag.t==ARECORD)for(size_t i=0;i<object.p->tag.p->len;i+=2)if(aseq(key,object.p->tag.p->data[i]))return aget(object,key);
     const char *names[]={"push","pop","includes","indexOf","slice","join","map","filter","flatMap","forEach","reduce","sort","toSorted","reverse","concat","toLowerCase","toUpperCase","trim","startsWith","endsWith","split","replace","replaceAll"};
@@ -329,7 +419,7 @@ static AV aimmediate_get(AV object,AV key,int *direct) {
 static AV aimmediate_call(AV callee,AV object,AV key,int direct,int argc,AV *argv) {
   if(!direct)return acall_rooted(callee,argc,argv);
   ACOUNT(direct_calls);if(!acall_enter())return av(AUNDEF);
-  AV result=object.t==ALIST?aarray_method(object,key,argc,argv):object.t==ASTR?atext_method(object,key,argc,argv):acollection_invoke(object,key,argc,argv);
+  AV result=object.t==ANUM?anumber_invoke(object.n,key,argc,argv):object.t==ALIST?aarray_method(object,key,argc,argv):object.t==ASTR?atext_method(object,key,argc,argv):acollection_invoke(object,key,argc,argv);
   adepth--;return result;
 }
 static AV aset(AV object,AV key,AV value) {
@@ -343,11 +433,11 @@ static AV aset(AV object,AV key,AV value) {
   if(object.t==ARECORD||object.t==AFUNC) {
     if(object.p->scope<0) return afail("TypeError","Cannot assign a module or standard-library namespace.");
     if(key.t!=ASTR) return afail("TypeError","Record keys must be strings.");
-    for(size_t i=0;i<object.p->len;i+=2) if(aseq(key,object.p->data[i])) { if(object.p->data[i+1].t==AREF||object.p->data[i+1].t==AGETTER) return afail("TypeError","Cannot assign a readonly property."); object.p->data[i+1]=value; return value; }
-    aresize(object.p,object.p->len+2); object.p->data[object.p->len++]=key; object.p->data[object.p->len++]=value; return value;
+    size_t slot=akey_find(object.p,key,2);if(slot!=SIZE_MAX) { if(object.p->data[slot+1].t==AREF||object.p->data[slot+1].t==AGETTER)return afail("TypeError","Cannot assign a readonly property.");object.p->data[slot+1]=value;return value; }
+    slot=object.p->len;aresize(object.p,slot+2);object.p->data[object.p->len++]=key;object.p->data[object.p->len++]=value;akey_added(object.p,slot,2);return value;
   }
-  if(object.t==ALIST) { if(object.p->scope<0)return afail("TypeError","Cannot assign a readonly list."); size_t index; if(akey(key,"length")) { double n=atonumber(value); if(!isfinite(n)||n<0||floor(n)!=n||n>10000000) return afail("RangeError","Invalid native list length."); aresize(object.p,(size_t)n); for(size_t i=object.p->len;i<(size_t)n;i++) object.p->data[i]=av(AUINIT); object.p->len=(size_t)n; return value; }
-    if(!aindex(key,&index) || index>10000000) return afail("RangeError","Native list index must be between 0 and 10000000."); aresize(object.p,index+1); while(object.p->len<=index) object.p->data[object.p->len++]=av(AUINIT); object.p->data[index]=value; return value;
+  if(object.t==ALIST) { if(object.p->scope<0)return afail("TypeError","Cannot assign a readonly list."); size_t index; if(akey(key,"length")) { double n=atonumber(value); if(!isfinite(n)||n<0||floor(n)!=n||n>10000000) return afail("RangeError","Invalid native list length."); alist_length(object.p,(size_t)n); return value; }
+    if(!aindex(key,&index) || index>10000000) return afail("RangeError","Native list index must be between 0 and 10000000."); alist_store(object.p,index,value); return value;
   }
   return afail("TypeError","Cannot assign this property.");
 }
@@ -492,6 +582,9 @@ static AV aappend_value(AV list,AV value);
 #ifdef ARYA_DESKTOP
 #include "desktop.c"
 #endif
+#ifdef ARYA_GUI
+#include "gui.c"
+#endif
 #ifdef ARYA_PYTHON
 #include "python.c"
 #endif
@@ -499,25 +592,52 @@ static AV aappend_value(AV list,AV value);
 #ifdef ARYA_HTTP
 #include "http.c"
 #endif
-#if defined(ARYA_CRYPTO) || defined(ARYA_MYSQL)
 #include "jobs.c"
-#endif
+#include <dirent.h>
+#include "fs-worker.c"
+#include "fs-atomic.c"
+#include "fs-tree.c"
 #ifdef ARYA_CRYPTO
 #include "security.c"
+#endif
+#ifdef ARYA_AUTH
+#include "auth.c"
 #endif
 #ifdef ARYA_MYSQL
 #include "mysql.c"
 #endif
 #include <dirent.h>
 static AV astdcall(AV env,int argc,AV *argv);
-static AV astd_async(AV env,int argc,AV *argv){acurrent_task->state=0;atask_yield();return astdcall(env,argc,argv);}
+static AV astd_async(AV env,int argc,AV *argv) {
+  acurrent_task->state=0;atask_yield();int id=(int)env.n;
+  if(id==10||id==11||id==13||id==14||(id>=15&&id<=17))return afile_async(id,argc,argv);
+  if(id==202||id==203) {
+    AV roots[3]={argc?argv[0]:av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,roots,3);
+    if(id==202){roots[1]=afile_async(10,argc,argv);if(!afailed)roots[2]=ajson(200,1,roots+1);}
+    else {
+      roots[1]=argc>1?argv[1]:av(AUNDEF);AV options[3]={roots[1],av(ANULL),an(2)};roots[1]=ajson(201,3,options);
+      if(!afailed){roots[1]=aconcat(roots[1],astr("\n"));AV output[2]={roots[0],roots[1]};roots[2]=afile_async(11,2,output);}
+    }
+    AV result=roots[2];aunroot(&root);return afailed?av(AUNDEF):result;
+  }
+  return astdcall(env,argc,argv);
+}
 static AV astdcall(AV env,int argc,AV *argv) {
+#ifdef ARYA_AUTH
+  if(env.n>=2000&&env.n<=2011)return aauth_operation((int)env.n,argc,argv);
+#endif
+  if(env.n==69)return afile_tree_info(argc,argv);
+  if(env.n>=15&&env.n<=17)return afile_operation((int)env.n,argc,argv,0);
+  if(env.n==18||env.n==19)return afile_atomic((int)env.n,argc,argv);
   if(env.n==1900)return acsv_decoder(argc,argv);
 #ifdef ARYA_ACCOUNTING
-  if(env.n>=1800&&env.n<=1805)return aaccounting_operation((int)env.n,argc,argv);
+  if(env.n>=1800&&env.n<=1807)return aaccounting_operation((int)env.n,argc,argv);
 #endif
 #ifdef ARYA_DESKTOP
   if(env.n==1700)return adesktop_operation(argc,argv);
+#endif
+#ifdef ARYA_GUI
+  if(env.n==1710||env.n==1711)return agui_operation((int)env.n,argc,argv);
 #endif
 #ifdef ARYA_PYTHON
   if(env.n>=1600&&env.n<=1603)return apython_operation((int)env.n,argc,argv);
@@ -530,7 +650,7 @@ static AV astdcall(AV env,int argc,AV *argv) {
 #endif
   if(env.n>=1300&&env.n<=1322)return aruntime_objects((int)env.n,argc,argv);
 #ifdef ARYA_CRYPTO
-  if(env.n>=1200&&env.n<=1213)return asecurity((int)env.n,argc,argv);
+  if(env.n>=1200&&env.n<=1214)return asecurity((int)env.n,argc,argv);
 #endif
   if(env.n>=1000&&env.n<=1025)return amath((int)env.n,argc,argv);
   if(env.n>=400&&env.n<=402)return aasync_library((int)env.n,argc,argv);
@@ -577,6 +697,8 @@ static AV astdcall(AV env,int argc,AV *argv) {
   if(id==35){
 #ifdef __APPLE__
     return astr("darwin");
+#elif defined(__CYGWIN__)
+    return astr("cygwin");
 #elif defined(_WIN32)
     return astr("win32");
 #else
@@ -585,16 +707,26 @@ static AV astdcall(AV env,int argc,AV *argv) {
   }
   return afail("TypeError","Unknown standard-library function.");
 }
+/* Generated callers retain the selected function and all evaluated arguments
+ * in caller roots. Guard identity/convention before bypassing generic dispatch;
+ * copied or mutable targets still have the normal fallback. */
+static AV astandard_call(AV fn,int id,int argc,AV *argv) {
+  if(fn.t!=AFUNC||fn.p->code!=astdcall||(fn.p->flags&1)||fn.p->parent.t!=ANUM||fn.p->parent.n!=id)return acall_rooted(fn,argc,argv);
+  ACOUNT(direct_calls);if(!acall_enter())return av(AUNDEF);
+  AV result=id>=100&&id<=107?adecimal(id,argc,argv):id>=110&&id<=118?adecimal_values(id,argc,argv):astdcall(an(id),argc,argv);
+  adepth--;return result;
+}
 static void astdfield(AV obj,const char *key,int id) { AV roots[3]={obj,av(AUNDEF),av(AUNDEF)}; ARoot r; aroot(&r,roots,3); roots[1]=astr(key); roots[2]=afunction(astdcall,an(id),key); aset(obj,roots[1],roots[2]); aunroot(&r); }
 static void astdasyncfield(AV obj,const char *key,int id){AV r[3]={obj,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,3);r[1]=astr(key);r[2]=aasyncfunction(astd_async,an(id),key);aset(obj,r[1],r[2]);aunroot(&root);}
 static AV astd(const char *name) {
   AV roots[3]={arecord(),av(AUNDEF),av(AUNDEF)}; ARoot r; aroot(&r,roots,3);
   if(!strcmp(name,"list")) {const char *names[]={"map","flatMap","filter","find","reduce","groupBy","sortBy","take","unique","sum","reserve"};for(int i=0;i<11;i++)astdfield(roots[0],names[i],300+i);}
 #ifdef ARYA_ACCOUNTING
-  else if(!strcmp(name,"_accounting")){const char *names[]={"prepareInvoices","prepareLedger","metadata","begin","step","finish"};for(int i=0;i<6;i++)astdfield(roots[0],names[i],1800+i);}
+  else if(!strcmp(name,"_accounting")){const char *names[]={"prepareInvoices","prepareLedger","metadata","begin","step","finish","postingSummary","combineLedger"};for(int i=0;i<8;i++)astdfield(roots[0],names[i],1800+i);}
 #endif
 #ifdef ARYA_DESKTOP
   else if(!strcmp(name,"desktop")){astdfield(roots[0],"open",1700);}
+  else if(!strcmp(name,"gui")){astdfield(roots[0],"window",1710);astdfield(roots[0],"platform",1711);}
 #endif
 #ifdef ARYA_PYTHON
   else if(!strcmp(name,"_python")){astdasyncfield(roots[0],"run",1600);astdfield(roots[0],"runSync",1601);astdfield(roots[0],"metadata",1602);astdfield(roots[0],"bind",1603);}
@@ -607,7 +739,10 @@ static AV astd(const char *name) {
 #endif
   else if(!strcmp(name,"async")){astdfield(roots[0],"map",400);astdfield(roots[0],"each",401);astdfield(roots[0],"sleep",402);}
 #ifdef ARYA_CRYPTO
-  else if(!strcmp(name,"security")){const char *names[]={"randomToken","uuid","generateKey","hash","hmac","verifyHmac","timingSafeEqual","hashPassword","verifyPassword","passwordNeedsUpgrade","verifyPasswordAndUpgrade","keyring","encrypt","decrypt"};for(int i=0;i<14;i++){if(i==7||i==8||i==10)astdasyncfield(roots[0],names[i],1200+i);else astdfield(roots[0],names[i],1200+i);}}
+  else if(!strcmp(name,"security")){const char *names[]={"randomToken","uuid","generateKey","hash","hmac","verifyHmac","timingSafeEqual","hashPassword","verifyPassword","passwordNeedsUpgrade","verifyPasswordAndUpgrade","keyring","encrypt","decrypt","hashBytes"};for(int i=0;i<15;i++){if(i==7||i==8||i==10)astdasyncfield(roots[0],names[i],1200+i);else astdfield(roots[0],names[i],1200+i);}}
+#endif
+#ifdef ARYA_AUTH
+  else if(!strcmp(name,"_auth")){const char *names[]={"sessions","generateTotpSecret","totpCode","verifyTotp","pkce","biometricStatus","authenticate","vaultStore","vaultRead","vaultRemove","monotonic","vaultReplace"};for(int i=0;i<12;i++){if((i>=6&&i<=9)||i==11)astdasyncfield(roots[0],names[i],2000+i);else astdfield(roots[0],names[i],2000+i);}}
 #endif
   else if(!strcmp(name,"env")){const char *names[]={"get","require","int","bool"};for(int i=0;i<4;i++)astdfield(roots[0],names[i],500+i);}
   else if(!strcmp(name,"datetime")){const char *names[]={"date","instant","zoned","fromDate","toDate","dateAt","atOffset"};for(int i=0;i<7;i++)astdfield(roots[0],names[i],510+i);}
@@ -618,7 +753,7 @@ static AV astd(const char *name) {
   else if(!strcmp(name,"decimal")) {const char *names[]={"from","add","subtract","multiply","compare","divide","quantize","toNumber"};for(int i=0;i<8;i++)astdfield(roots[0],names[i],100+i);const char *modes[]={"up","down","ceil","floor","half-up","half-down","half-even","half-ceil","half-floor"};roots[2]=alist(9,NULL);for(int i=0;i<9;i++)roots[2].p->data[i]=astr(modes[i]);roots[2].p->scope=-2;roots[1]=astr("roundingModes");aset(roots[0],roots[1],roots[2]);roots[2]=arecord();const char *values[]={"parse","format","add","subtract","multiply","compare","divide","quantize","toNumber"};for(int i=0;i<9;i++)astdfield(roots[2],values[i],110+i);roots[2].p->scope=-2;roots[1]=astr("values");aset(roots[0],roots[1],roots[2]);}
   else if(!strcmp(name,"io")) { astdfield(roots[0],"print",0); astdfield(roots[0],"readLine",1); astdfield(roots[0],"write",2);astdfield(roots[0],"readChunk",3); }
   else if(!strcmp(name,"_csv")){astdfield(roots[0],"decoder",1900);}
-  else if(!strcmp(name,"fs")) { astdasyncfield(roots[0],"readText",10);astdfield(roots[0],"readTextSync",10);astdasyncfield(roots[0],"writeText",11);astdfield(roots[0],"writeTextSync",11);astdasyncfield(roots[0],"list",14);astdfield(roots[0],"listSync",14);astdfield(roots[0],"appendText",12);astdasyncfield(roots[0],"exists",13);astdfield(roots[0],"existsSync",13); astdfield(roots[0],"makeDirectory",60); astdfield(roots[0],"rename",61); astdfield(roots[0],"remove",62); astdfield(roots[0],"tempDirectory",63); astdfield(roots[0],"removeDirectory",64); astdfield(roots[0],"publish",65); astdfield(roots[0],"isFile",66);astdfield(roots[0],"infoSync",67);astdfield(roots[0],"publishDirectory",68); }
+  else if(!strcmp(name,"fs")) { astdasyncfield(roots[0],"readText",10);astdfield(roots[0],"readTextSync",10);astdasyncfield(roots[0],"writeText",11);astdfield(roots[0],"writeTextSync",11);astdasyncfield(roots[0],"list",14);astdfield(roots[0],"listSync",14);astdfield(roots[0],"appendText",12);astdasyncfield(roots[0],"readBytes",15);astdfield(roots[0],"readBytesSync",15);astdasyncfield(roots[0],"writeBytes",16);astdfield(roots[0],"writeBytesSync",16);astdasyncfield(roots[0],"appendBytes",17);astdfield(roots[0],"appendBytesSync",17);astdfield(roots[0],"writeTextAtomicSync",18);astdfield(roots[0],"writeBytesAtomicSync",19);astdasyncfield(roots[0],"exists",13);astdfield(roots[0],"existsSync",13); astdfield(roots[0],"makeDirectory",60); astdfield(roots[0],"rename",61); astdfield(roots[0],"remove",62); astdfield(roots[0],"tempDirectory",63); astdfield(roots[0],"removeDirectory",64); astdfield(roots[0],"publish",65); astdfield(roots[0],"isFile",66);astdfield(roots[0],"infoSync",67);astdfield(roots[0],"publishDirectory",68);astdfield(roots[0],"_treeInfoSync",69); }
   else if(!strcmp(name,"math")) { const char *names[]={"sqrt","abs","floor","ceil","round","pow","sin","cos","min","max"}; for(int i=0;i<10;i++) astdfield(roots[0],names[i],20+i);const char *extra[]={"acos","acosh","asin","asinh","atan","atanh","atan2","cbrt","clz32","cosh","exp","expm1","fround","f16round","hypot","imul","log","log10","log1p","log2","random","sign","sinh","tan","tanh","trunc"};for(int i=0;i<26;i++)astdfield(roots[0],extra[i],1000+i);const char *constants[]={"PI","E","LN2","LN10","LOG2E","LOG10E","SQRT1_2","SQRT2"};double values[]={3.14159265358979323846,2.71828182845904523536,0.69314718055994530942,2.30258509299404568402,1.44269504088896340736,0.43429448190325182765,0.70710678118654752440,1.41421356237309504880};for(int i=0;i<8;i++)aput(roots[0],constants[i],an(values[i])); }
   else if(!strcmp(name,"runtime")) { astdfield(roots[0],"clock",30); astdfield(roots[0],"collect",31); astdfield(roots[0],"codeUnit",32);astdfield(roots[0],"keys",34);astdfield(roots[0],"platform",35);const char *names[]={"kind","sameValue","deepEqual","freeze","context","exitCode","defer","onFinish","elapsed","fieldGetter","error","readFrame","writeFrame","tag","hasAccessor","errorMatches","stringFromCodes","randomUUID","isRecord","jsonParse","jsonStringify","uriEncode","uriDecode"};for(int i=0;i<23;i++)astdfield(roots[0],names[i],1300+i); }
   else if(!strcmp(name,"process")) { astdfield(roots[0],"run",40); astdfield(roots[0],"exit",41); astdfield(roots[0],"env",42); astdfield(roots[0],"cwd",43); astdfield(roots[0],"executable",44); astdfield(roots[0],"error",45);astdfield(roots[0],"onSignal",46); }
@@ -632,7 +767,7 @@ static int areport(void) { if(!afailed) return 0; AV root=aerror; ARoot r; aroot
 static AV aiternext(AV iterable, AV *position) {
   if(iterable.t==AAITER){AV r[3]={iterable,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,3);r[1]=aprop(iterable,"next");r[2]=acall(r[1],0,NULL);if(!afailed)r[2]=aawait(r[2]);AV result=av(AUNDEF);if(!afailed){r[1]=aprop(r[2],"done");result=atruth(r[1])?av(AUINIT):aprop(r[2],"value");}aunroot(&root);return result;}
   size_t i=(size_t)position->n;
-  if(iterable.t==AHANDLE&&iterable.p->name&&(!strcmp(iterable.p->name,"arya.map")||!strcmp(iterable.p->name,"arya.set"))){int set=!strcmp(iterable.p->name,"arya.set");size_t step=set?1:2;if(i>=iterable.p->len/step)return av(AUINIT);position->n++;if(set)return iterable.p->data[i];AV r[2]={iterable,av(AUNDEF)};ARoot root;aroot(&root,r,2);r[1]=alist(2,iterable.p->data+2*i);AV result=r[1];aunroot(&root);return result;}
+  if(iterable.t==AHANDLE&&iterable.p->name&&(!strcmp(iterable.p->name,"arya.map")||!strcmp(iterable.p->name,"arya.set"))){int set=!strcmp(iterable.p->name,"arya.set");size_t step=set?1:2;while(i<iterable.p->len/step&&iterable.p->data[i*step].t==AUINIT)i++;if(i>=iterable.p->len/step)return av(AUINIT);position->n=(double)i+1;if(set)return iterable.p->data[i];AV r[2]={iterable,av(AUNDEF)};ARoot root;aroot(&root,r,2);r[1]=alist(2,iterable.p->data+2*i);AV result=r[1];aunroot(&root);return result;}
   if(iterable.t==ALIST) { if(i>=iterable.p->len) return av(AUINIT); position->n++; return iterable.p->data[i].t==AUINIT?av(AUNDEF):iterable.p->data[i]; }
   if(iterable.t==ASTR) { if(i>=(size_t)iterable.p->scope) return av(AUINIT); size_t count=1; unsigned c=iterable.p->chars[i]; if(c>=0xd800 && c<=0xdbff && i+1<(size_t)iterable.p->scope && iterable.p->chars[i+1]>=0xdc00 && iterable.p->chars[i+1]<=0xdfff) count=2; position->n+=(double)count; return as16(iterable.p->chars+i,count); }
   return afail("TypeError","Value is not iterable.");

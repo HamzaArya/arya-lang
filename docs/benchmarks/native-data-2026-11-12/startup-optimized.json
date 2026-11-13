@@ -1,0 +1,230 @@
+{
+  "boundary": "Fresh process, module initialization, one empty report, stdio transfer and final cleanup/exit. Warm filesystem cache; two discarded warm launches. Node loads the existing generated report bundle; native loads the full worker.",
+  "raw": [
+    {
+      "sample": 0,
+      "name": "baseline",
+      "wallMs": 2.7587500000000063
+    },
+    {
+      "sample": 0,
+      "name": "optimized",
+      "wallMs": 3.182124999999999
+    },
+    {
+      "sample": 0,
+      "name": "node",
+      "wallMs": 38.820542
+    },
+    {
+      "sample": 1,
+      "name": "node",
+      "wallMs": 38.382417000000004
+    },
+    {
+      "sample": 1,
+      "name": "optimized",
+      "wallMs": 3.471834000000001
+    },
+    {
+      "sample": 1,
+      "name": "baseline",
+      "wallMs": 3.515541000000013
+    },
+    {
+      "sample": 2,
+      "name": "baseline",
+      "wallMs": 2.823707999999982
+    },
+    {
+      "sample": 2,
+      "name": "optimized",
+      "wallMs": 2.8888330000000053
+    },
+    {
+      "sample": 2,
+      "name": "node",
+      "wallMs": 42.655708000000004
+    },
+    {
+      "sample": 3,
+      "name": "node",
+      "wallMs": 39.64558299999999
+    },
+    {
+      "sample": 3,
+      "name": "optimized",
+      "wallMs": 3.344875000000002
+    },
+    {
+      "sample": 3,
+      "name": "baseline",
+      "wallMs": 3.289041999999995
+    },
+    {
+      "sample": 4,
+      "name": "baseline",
+      "wallMs": 3.482040999999981
+    },
+    {
+      "sample": 4,
+      "name": "optimized",
+      "wallMs": 3.4691669999999704
+    },
+    {
+      "sample": 4,
+      "name": "node",
+      "wallMs": 40.04679199999998
+    },
+    {
+      "sample": 5,
+      "name": "node",
+      "wallMs": 39.988207999999986
+    },
+    {
+      "sample": 5,
+      "name": "optimized",
+      "wallMs": 3.383207999999968
+    },
+    {
+      "sample": 5,
+      "name": "baseline",
+      "wallMs": 2.8122079999999983
+    },
+    {
+      "sample": 6,
+      "name": "baseline",
+      "wallMs": 2.6746669999999995
+    },
+    {
+      "sample": 6,
+      "name": "optimized",
+      "wallMs": 2.93754100000001
+    },
+    {
+      "sample": 6,
+      "name": "node",
+      "wallMs": 39.820583
+    },
+    {
+      "sample": 7,
+      "name": "node",
+      "wallMs": 40.232124999999996
+    },
+    {
+      "sample": 7,
+      "name": "optimized",
+      "wallMs": 3.4130409999999642
+    },
+    {
+      "sample": 7,
+      "name": "baseline",
+      "wallMs": 2.865332999999964
+    },
+    {
+      "sample": 8,
+      "name": "baseline",
+      "wallMs": 3.4356669999999667
+    },
+    {
+      "sample": 8,
+      "name": "optimized",
+      "wallMs": 3.130375000000015
+    },
+    {
+      "sample": 8,
+      "name": "node",
+      "wallMs": 40.376124999999945
+    },
+    {
+      "sample": 9,
+      "name": "node",
+      "wallMs": 39.41195800000003
+    },
+    {
+      "sample": 9,
+      "name": "optimized",
+      "wallMs": 3.601415999999972
+    },
+    {
+      "sample": 9,
+      "name": "baseline",
+      "wallMs": 2.8616670000000113
+    },
+    {
+      "sample": 10,
+      "name": "baseline",
+      "wallMs": 2.7280419999999594
+    },
+    {
+      "sample": 10,
+      "name": "optimized",
+      "wallMs": 2.852290999999923
+    },
+    {
+      "sample": 10,
+      "name": "node",
+      "wallMs": 38.89383299999997
+    },
+    {
+      "sample": 11,
+      "name": "node",
+      "wallMs": 40.575166999999965
+    },
+    {
+      "sample": 11,
+      "name": "optimized",
+      "wallMs": 3.3746659999999338
+    },
+    {
+      "sample": 11,
+      "name": "baseline",
+      "wallMs": 2.922125000000051
+    },
+    {
+      "sample": 12,
+      "name": "baseline",
+      "wallMs": 3.051249999999982
+    },
+    {
+      "sample": 12,
+      "name": "optimized",
+      "wallMs": 2.905458000000067
+    },
+    {
+      "sample": 12,
+      "name": "node",
+      "wallMs": 37.12341700000002
+    },
+    {
+      "sample": 13,
+      "name": "node",
+      "wallMs": 39.789084
+    },
+    {
+      "sample": 13,
+      "name": "optimized",
+      "wallMs": 3.570500000000038
+    },
+    {
+      "sample": 13,
+      "name": "baseline",
+      "wallMs": 3.0014580000000706
+    },
+    {
+      "sample": 14,
+      "name": "baseline",
+      "wallMs": 2.71875
+    },
+    {
+      "sample": 14,
+      "name": "optimized",
+      "wallMs": 2.835583999999926
+    },
+    {
+      "sample": 14,
+      "name": "node",
+      "wallMs": 40.20179099999996
+    }
+  ]
+}

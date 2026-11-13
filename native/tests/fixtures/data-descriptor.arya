@@ -1,0 +1,66 @@
+use std "runtime" as runtime
+fn check(value) { if !value { throw new Error("descriptor regression") } }
+const reference = Object.defineProperty
+const record: any = {}
+const alias = record
+for key in ["__proto__", "constructor", "toString", "0", "2", "10"] {
+  Object.defineProperty(record, key, {value: key, enumerable: true, configurable: true, writable: true})
+  check(alias[key] == key)
+}
+check(Object.keys(record).join(",") == "0,2,10,__proto__,constructor,toString")
+# Spread arguments retain the normal argument expansion and arity checks.
+const spreadTarget = [record]
+Object.defineProperty(...spreadTarget, "spread-target", {value: 3, enumerable: true, configurable: true, writable: true})
+const spreadKey = ["spread-key"]
+Object.defineProperty(record, ...spreadKey, {value: 4, enumerable: true, configurable: true, writable: true})
+check(record["spread-target"] == 3 and record["spread-key"] == 4)
+const nested = {amount: 1}
+Object.defineProperty(record, "nested", {value: nested, enumerable: true, configurable: true, writable: true})
+nested.amount = 2
+check(alias.nested.amount == 2)
+# A raw native getter returned by fieldGetter is read through descriptor.value.
+# A fast path must preserve that read, including its side effects and errors.
+let getterReads = 0
+const tagged: any = {}
+Object.defineProperty(record, "tagged", {value: runtime.fieldGetter(tagged, "source", fn() { getterReads += 1; return 7 }), enumerable: true, configurable: true, writable: true})
+check(getterReads == 1 and record.tagged == 7)
+let getterThrew = false
+try { Object.defineProperty(record, "throwing", {value: runtime.fieldGetter(tagged, "failure", fn() { throw new Error("descriptor value") }), enumerable: true, configurable: true, writable: true}) } catch error { check(error.message == "descriptor value"); getterThrew = true }
+# Native defineProperty currently writes undefined before propagating this
+# getter error. Keep that established mutation in both compilation modes.
+check(getterThrew and Object.hasOwn(record, "throwing") and record.throwing == undefined)
+const readonly = Object.freeze({})
+let errors = 0
+try { Object.defineProperty(readonly, "x", {value: 1, enumerable: true, configurable: true, writable: true}) } catch error { check(error.name == "TypeError"); errors += 1 }
+try { Object.defineProperty(record, 1, {value: 1, enumerable: true, configurable: true, writable: true}) } catch error { check(error.name == "TypeError"); errors += 1 }
+try { Object.defineProperty(null, "x", {value: 1, enumerable: true, configurable: true, writable: true}) } catch error { check(error.name == "TypeError"); errors += 1 }
+check(errors == 3)
+let saved: any = null
+let order = ""
+Object.defineProperty = fn(target, key, descriptor) {
+  order += "call"
+  saved = descriptor
+  check(target == record and key == "custom")
+  return descriptor.value
+}
+fn value() { order += "value"; Object.defineProperty = reference; return nested }
+check(Object.defineProperty(record, "custom", {writable: true, value: value(), configurable: true, enumerable: true}) == nested)
+check(order == "valuecall")
+check(Object.keys(saved).join(",") == "writable,value,configurable,enumerable")
+check(saved.value == nested and saved.writable and saved.enumerable and saved.configurable)
+saved.value = 5
+check(saved.value == 5)
+Object.defineProperty = reference
+fn shadow() {
+  const Object = {defineProperty: fn(_target, _key, descriptor) => descriptor}
+  return Object.defineProperty(record, "x", {value: nested, enumerable: true, configurable: true, writable: true})
+}
+check(shadow().value == nested)
+Object.defineProperty(record, "get", {get: fn() => nested.amount, enumerable: true})
+check(record.get == 2)
+order = ""
+runtime.fieldGetter(Object, "defineProperty", fn() { order += "get"; return reference })
+fn lastValue() { order += "value"; return 9 }
+Object.defineProperty(record, "last", {value: lastValue(), enumerable: true, configurable: true, writable: true})
+check(order == "getvalue" and record.last == 9)
+print("data descriptor guards and aliases passed")

@@ -1,0 +1,40 @@
+{
+  "timestamp_utc": "2026-11-13T14:43:52.782055+00:00",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "compiler": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "source_check": "passed",
+  "release_build": "passed",
+  "worker_calls_passed": 87,
+  "native_gui_verification": "Root integration must rebuild corrected source",
+  "persistence_regressions": [
+    "Unused fixed temporary symlink preserves external sentinel",
+    "Unused temporary symlink to store cannot replace store with symlink",
+    "Existing DATA_FILE symlink rejected/preserved",
+    "Dangling DATA_FILE symlink rejected/preserved",
+    "Unwritable parent rejects saves and preserves bytes",
+    "Private staging directories cleaned up"
+  ],
+  "sha256": {
+    "main.arya": "724e527ee6d998f04eb8fbfbe761ba35118923db88bde8f5b910c06d76288f38",
+    "ui.json": "712ef0c65abd03466ca1cd4b160e852031a20292311ff7c6dde111eb89cf47ab",
+    "smoke.py": "8925442781b6a078e7715c2313fa23ba09aab89165066b74e97e11cd39d29e08",
+    ".build/worker": "a3d9e9671ecb8c693b2abf008955b4bd9e4086276e5fdbb1c205132927950291"
+  },
+  "abandoned": false,
+  "previous_development_verification": {
+    "timestamp_utc": "2026-11-13T14:25:31.015176+00:00",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "compiler": "Arya native 2.0.0-alpha.3 (self-hosted)",
+    "source_check": "passed",
+    "release_build": "passed",
+    "worker_calls_passed": 83,
+    "native_gui_verification": "Root integration",
+    "sha256": {
+      "main.arya": "af78d591ee69026bf9d575330f410af73cd5c1942e90c545f19176b8f26db39f",
+      "ui.json": "712ef0c65abd03466ca1cd4b160e852031a20292311ff7c6dde111eb89cf47ab",
+      "smoke.py": "f4b2bdada83766e850d74783bf07da98242b95e4b45d3e6912fc055e02f802a7",
+      ".build/worker": "310d9e909a168095170c2ae887b67746c0ba8b06eafb6a3de7868a05ba0bfe62"
+    },
+    "abandoned": false
+  }
+}

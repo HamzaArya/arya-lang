@@ -1,0 +1,284 @@
+{
+  "date_utc": "20261113T144507.870261Z",
+  "mode": "check-build-test-package",
+  "host_source_sha256": "071b00991c69e79d8818ede6d1bfc0be984b378a499207990d4a39b4db33fe67",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "projects": [
+    {
+      "path": "01-beginner-basic",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.074,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/01-beginner-basic/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 4.339,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/01-beginner-basic/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 1.617,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-smoke.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Calculator.iconset",
+            "0"
+          ],
+          "exit_code": 0,
+          "seconds": 0.826,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-icon.log"
+        },
+        {
+          "command": [
+            "iconutil",
+            "-c",
+            "icns",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Calculator.iconset",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app/Contents/Resources/Calculator.icns"
+          ],
+          "exit_code": 0,
+          "seconds": 0.076,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-icon-package.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.04,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.022,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.021,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-no3014at/Pocket Calculator.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T144507.870261Z/01-beginner-basic-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "b7da17d864700b9d69e9b6364ecc63e1fe14379f4bba87dd8f77b31a6f8d9b8a",
+        "README.md": "6566f0148e619275ac81aa43f32ff17c3de454fd16c74525f4109bc8356732a9",
+        "ui.json": "712ef0c65abd03466ca1cd4b160e852031a20292311ff7c6dde111eb89cf47ab",
+        "main.arya": "724e527ee6d998f04eb8fbfbe761ba35118923db88bde8f5b910c06d76288f38",
+        "verification.json": "cb9fd44b269e6a23fe8900ef9d3c96a071349cea8dcc95705c636bcbcacd2f86",
+        "smoke.py": "8925442781b6a078e7715c2313fa23ba09aab89165066b74e97e11cd39d29e08"
+      },
+      "status": "passed",
+      "app": "dist/Pocket Calculator.app",
+      "worker_sha256": "055a4f7b3bc25a64f2b6a6d6751330216b13e72086cccdea81354061746784ef",
+      "host_sha256": "68f45f4950a36d1db48f93cff59f596e37b19f5ba9ab3cdd9e588044ff259c7f"
+    },
+    {
+      "path": "02-better-everyday",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "seconds": 0.075,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-check.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/02-better-everyday/.build/worker",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "seconds": 3.986,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-build.log"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/02-better-everyday/.build/worker"
+          ],
+          "exit_code": 0,
+          "seconds": 1.416,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-smoke.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Calculator.iconset",
+            "1"
+          ],
+          "exit_code": 0,
+          "seconds": 0.177,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-icon.log"
+        },
+        {
+          "command": [
+            "iconutil",
+            "-c",
+            "icns",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Calculator.iconset",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Everyday Calculator.app/Contents/Resources/Calculator.icns"
+          ],
+          "exit_code": 0,
+          "seconds": 0.077,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-icon-package.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Everyday Calculator.app/Contents/MacOS/arya-worker"
+          ],
+          "exit_code": 0,
+          "seconds": 0.041,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-sign-worker.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--force",
+            "--deep",
+            "--sign",
+            "-",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Everyday Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.02,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-sign-app.log"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Everyday Calculator.app"
+          ],
+          "exit_code": 0,
+          "seconds": 0.022,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-verify-signature.log"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/arya-app-stage-g15tb0qc/Everyday Calculator.app/Contents/MacOS/NativeHost",
+            "--protocol-check"
+          ],
+          "exit_code": 0,
+          "log": "reports/20261113T144507.870261Z/02-better-everyday-protocol.log"
+        }
+      ],
+      "inputs_sha256": {
+        "REPORT.md": "2b9a1f358fe50548ed662e976334b30f29204b2e8fd670ab455aec9b6635c5e2",
+        "README.md": "ffd4e7c2661733d9080fefd65959dd943dc30a6efc545b40a56570bfa9374fc1",
+        "ui.json": "96f376940895ec75f4017f994c0f2f99616257e8646c8d7355351306a9ee0fcc",
+        "main.arya": "d377ed888dfac23a60e9c75068155869bcfc84f28dbc13448056bbe615fa20e6",
+        "verification.json": "3bbf401654574364027f5d519cbb6810bb23f4c67af1877e8a56b09836661357",
+        "smoke.py": "d7b9d53df85c113ee36e0616595b52cf69d58147f6e1a60be1a91a9a76ee0d31"
+      },
+      "status": "passed",
+      "app": "dist/Everyday Calculator.app",
+      "worker_sha256": "f540cc1482954f3e7eb5eafcbcb0a25366921de77b6f6b19d87f137c2a6de2cf",
+      "host_sha256": "84349584fef6afe42b13664b5fabd873134313c32e20a9e8d04b4ae38f7112f9"
+    }
+  ],
+  "host_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fmodules",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/NativeHost.m",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "UniformTypeIdentifiers",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/NativeHost"
+    ],
+    "exit_code": 0,
+    "seconds": 1.562,
+    "log": "reports/20261113T144507.870261Z/appkit-host.log"
+  },
+  "host_binary_sha256": "5ce95ed6ee9802d53eadcc67616997da527a767528e7a166facce71adcef6ae8",
+  "icon_build": {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-Wall",
+      "-Wextra",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/Icon.m",
+      "-framework",
+      "Cocoa",
+      "-o",
+      "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon"
+    ],
+    "exit_code": 0,
+    "seconds": 1.197,
+    "log": "reports/20261113T144507.870261Z/icon-build.log"
+  },
+  "passed": 2,
+  "failed": 0
+}

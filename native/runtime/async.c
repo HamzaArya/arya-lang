@@ -38,6 +38,7 @@ typedef struct ARejection {struct ARejection *next;AV promise;} ARejection;
 static ATask amain_task={.fd=-1},*acurrent_task=&amain_task,*atasks;
 static ATask *alast_switcher;
 static void (*aasync_cleanup_hook)(void);
+static void (*aasync_worker_cleanup)(void);
 static void (*aasync_finish_hook)(void);
 static int (*asignal_event_hook)(void);
 static int asignal_event_fd=-1;
@@ -215,25 +216,40 @@ static AV apromise_get(AV object,AV key) {
   int mode=akey(key,"then")?0:akey(key,"catch")?1:akey(key,"finally")?2:-1;if(mode<0)return av(AUNDEF);
   AV r[3]={object,key,av(AUNDEF)};ARoot root;aroot(&root,r,3);r[2]=alist(2,NULL);r[2].p->data[0]=object;r[2].p->data[1]=an(mode);AV fn=afunction(apromise_method,r[2],"promise method");aunroot(&root);return fn;
 }
+typedef struct { size_t index; uint64_t serial; } AReadyPromise;
+static int apromise_ready_order(const void *left,const void *right) {
+  const AReadyPromise *a=left,*b=right;
+  if(a->serial!=b->serial)return a->serial<b->serial?-1:1;
+  return a->index<b->index?-1:a->index>b->index;
+}
 static AV apromise_combine_body(AV env,int argc,AV *argv) {
   (void)argc;(void)argv;int mode=(int)env.p->data[1].n;AV input=env.p->data[0];
   AV r[5]={env,av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,5);
   size_t n=input.p->len;r[1]=alist((int)n,NULL);r[2]=alist((int)n,NULL);r[3]=alist((int)n,NULL);
   for(size_t i=0;i<n;i++){AV value=input.p->data[i];if(value.t==APROMISE)r[1].p->data[i]=value;else{r[4]=apromise_new();apromise_resolve(r[4],value);r[1].p->data[i]=r[4];}r[1].p->data[i].p->name="observed";r[3].p->data[i]=an((double)++aschedule_serial);}
   if(acurrent_task!=&amain_task){acurrent_task->state=0;atask_yield();}
-  size_t finished=0;
-  while(finished<n&&!afailed){int progress=0;
-    for(size_t step=0;step<n;step++){size_t i=n;uint64_t earliest=UINT64_MAX;
-      for(size_t candidate=0;candidate<n;candidate++){if(r[3].p->data[candidate].t==ABOOL)continue;AV p=r[1].p->data[candidate];if(!apromise_state(p))continue;uint64_t ready=p.p->serial,registered=(uint64_t)r[3].p->data[candidate].n;if(ready<registered)ready=registered;if(ready<earliest){earliest=ready;i=candidate;}}
-      if(i==n)break;AV p=r[1].p->data[i];int state=apromise_state(p);
-      progress=1;r[3].p->data[i]=ab(1);finished++;r[4]=p.p->data[0];
-      if(mode==4||(mode==3&&state==2)){if(state==2)athrow(r[4]);AV result=r[4];aunroot(&root);return result;}
-      if(mode==6&&state==1){AV result=r[4];aunroot(&root);return result;}
+  AReadyPromise *ready=amemory((n?n:1)*sizeof(*ready));size_t finished=0;
+  while(finished<n&&!afailed) {
+    size_t count=0;
+    for(size_t i=0;i<n;i++) {
+      if(r[3].p->data[i].t==ABOOL)continue;AV p=r[1].p->data[i];if(!apromise_state(p))continue;
+      uint64_t serial=p.p->serial,registered=(uint64_t)r[3].p->data[i].n;if(serial<registered)serial=registered;
+      ready[count++]=(AReadyPromise){i,serial};
+    }
+    /* Sort a completed batch once, instead of rescanning n inputs n times.
+     * Registration order breaks ties exactly as the former selection loop did. */
+    qsort(ready,count,sizeof(*ready),apromise_ready_order);
+    for(size_t item=0;item<count&&!afailed;item++) {
+      size_t i=ready[item].index;AV p=r[1].p->data[i];int state=apromise_state(p);
+      r[3].p->data[i]=ab(1);finished++;r[4]=p.p->data[0];
+      if(mode==4||(mode==3&&state==2)){if(state==2)athrow(r[4]);AV result=r[4];free(ready);aunroot(&root);return result;}
+      if(mode==6&&state==1){AV result=r[4];free(ready);aunroot(&root);return result;}
       if(mode==5){AV value=r[4];r[4]=arecord();aput(r[4],"status",astr(state==1?"fulfilled":"rejected"));aput(r[4],state==1?"value":"reason",value);}
       r[2].p->data[i]=r[4];
     }
-    if(!progress&&finished<n){r[4]=alist(0,NULL);for(size_t i=0;i<n;i++)if(r[3].p->data[i].t!=ABOOL){aresize(r[4].p,r[4].p->len+1);r[4].p->data[r[4].p->len++]=r[1].p->data[i];}aasync_suspend(r[4],-1);}
+    if(!count&&finished<n){r[4]=alist(0,NULL);for(size_t i=0;i<n;i++)if(r[3].p->data[i].t!=ABOOL){aresize(r[4].p,r[4].p->len+1);r[4].p->data[r[4].p->len++]=r[1].p->data[i];}aasync_suspend(r[4],-1);}
   }
+  free(ready);
   if(mode==6){afail("AggregateError","All promises were rejected.");AV error=aerror;afailed=0;r[4]=error;aput(error,"errors",r[2]);athrow(error);}
   if(mode==4&&n==0){r[4]=apromise_new();aawait(r[4]);}
   AV result=r[2];aunroot(&root);return result;
@@ -276,10 +292,11 @@ static int aasync_drain(void) {
   while(arejections){ARejection *r=arejections;arejections=r->next;free(r);}return !afailed;
 }
 static void aasync_shutdown(void) {
+  if(aasync_worker_cleanup)aasync_worker_cleanup();
   if(aasync_cleanup_hook)aasync_cleanup_hook();
   while(atasks){ATask *t=atasks;atasks=t->next;free(t->stack);free(t);}atask_count=0;
   while(arejections){ARejection *r=arejections;arejections=r->next;free(r);}
   for(int i=0;i<4;i++)amain_task.local[i]=av(AUNDEF);
   for(int i=0;i<16;i++)aextra_roots[i]=av(AUNDEF);
-  aasync_finish_hook=NULL;aasync_cleanup_hook=NULL;
+  aasync_finish_hook=NULL;aasync_cleanup_hook=NULL;aasync_worker_cleanup=NULL;
 }

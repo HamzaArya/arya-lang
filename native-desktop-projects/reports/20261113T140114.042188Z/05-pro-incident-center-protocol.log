@@ -1,0 +1,38 @@
+{
+  "views" : [
+    {
+      "view" : "incidents",
+      "response" : {
+        "message" : "Current data loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 active incidents · 0 urgent P1 · 0 services · 0 activity entries"
+      }
+    },
+    {
+      "view" : "services",
+      "response" : {
+        "message" : "Current data loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 active incidents · 0 urgent P1 · 0 services · 0 activity entries"
+      }
+    },
+    {
+      "view" : "timeline",
+      "response" : {
+        "message" : "Current data loaded.",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 active incidents · 0 urgent P1 · 0 services · 0 activity entries"
+      }
+    }
+  ],
+  "ok" : true
+}

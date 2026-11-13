@@ -1,0 +1,17 @@
+{
+  "driver": {
+    "path": "/usr/bin/clang",
+    "sha256": "179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818",
+    "bytes": 118928
+  },
+  "selectedClang": {
+    "path": "/Library/Developer/CommandLineTools/usr/bin/clang",
+    "sha256": "f30550eab15fdf5ab8c0dc54c52679711241e5d4b636b027e18c09fef531775d",
+    "bytes": 290664032
+  },
+  "armNeonHeader": {
+    "path": "/Library/Developer/CommandLineTools/usr/lib/clang/21/include/arm_neon.h",
+    "sha256": "313df8f7c6eb48551871d403158cb57c85ab5761fa3c433a041e5901b816cfcb",
+    "bytes": 3188137
+  }
+}

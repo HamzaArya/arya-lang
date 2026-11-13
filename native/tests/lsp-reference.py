@@ -135,6 +135,37 @@ with tempfile.TemporaryDirectory(prefix="arya-native-lsp-") as temporary:
             send("textDocument/didChange", {"textDocument": {"uri": uri, "version": 6}, "contentChanges": [{"text": nested}]})
             signature = request("textDocument/signatureHelp", {"textDocument": {"uri": uri}, "position": point(nested, "{nested")})
             assert signature["activeParameter"] == 1, signature
+            # Shorthand refers to a binding while its record key remains stable
+            # when that binding is renamed. Computed keys are ordinary reads.
+            composition = 'const name = "Arya"\nconst field = "tag"\nconst source = {name, ["tag"]: 1}\nconst dynamic = {[field]: 2}\nconst copied = {...source, active: true}\nprint(JSON.stringify(copied))\n'
+            send("textDocument/didChange", {"textDocument": {"uri": uri, "version": 7}, "contentChanges": [{"text": composition}]})
+            shorthand_params = {"textDocument": {"uri": uri}, "position": point(composition, "{name", 1)}
+            definition = request("textDocument/definition", shorthand_params)
+            assert definition["range"]["start"] == point(composition, "name ="), definition
+            renamed = request("textDocument/rename", {**shorthand_params, "newName": "title"})
+            edits = renamed["documentChanges"][0]["edits"]
+            assert {edit["newText"] for edit in edits} == {"title", "name: title"}, renamed
+            assert len(edits) == 2, renamed
+            computed_params = {"textDocument": {"uri": uri}, "position": point(composition, "[field]", 1)}
+            renamed = request("textDocument/rename", {**computed_params, "newName": "key"})
+            edits = renamed["documentChanges"][0]["edits"]
+            assert len(edits) == 2 and all(edit["newText"] == "key" for edit in edits), renamed
+            composition += "copied.\n"
+            send("textDocument/didChange", {"textDocument": {"uri": uri, "version": 8}, "contentChanges": [{"text": composition}]})
+            completed = request("textDocument/completion", {"textDocument": {"uri": uri}, "position": point(composition, "copied.\n", len("copied."))})
+            assert {"name", "tag", "active"} <= {item["label"] for item in completed}, completed
+            # New standard auth contracts must reach member completion through
+            # both the module and its opaque native session-store result.
+            auth_source = 'use std "auth" as auth\nconst store = auth.sessions()\nauth.\nstore.\n'
+            send("textDocument/didChange", {"textDocument": {"uri": uri, "version": 9}, "contentChanges": [{"text": auth_source}]})
+            completed = request("textDocument/completion", {"textDocument": {"uri": uri}, "position": {"line": 2, "character": len("auth.")}})
+            assert {"sessions", "verifyTotp", "authenticate", "vault", "pkce"} <= {item["label"] for item in completed}, completed
+            completed = request("textDocument/completion", {"textDocument": {"uri": uri}, "position": {"line": 3, "character": len("store.")}})
+            assert {"issue", "verify", "rotate", "consume", "revoke", "close"} <= {item["label"] for item in completed}, completed
+            vault_source = 'use std "auth" as auth\nconst vault = auth.vault({service: "org.arya.types"})\nvault.\n'
+            send("textDocument/didChange", {"textDocument": {"uri": uri, "version": 10}, "contentChanges": [{"text": vault_source}]})
+            completed = request("textDocument/completion", {"textDocument": {"uri": uri}, "position": {"line": 2, "character": len("vault.")}})
+            assert {"store", "read", "replace", "remove"} <= {item["label"] for item in completed}, completed
             send("textDocument/didClose", {"textDocument": {"uri": uri}})
             first, second = root / "first", root / "second"
             first.mkdir(); second.mkdir()
@@ -155,7 +186,7 @@ with tempfile.TemporaryDirectory(prefix="arya-native-lsp-") as temporary:
             server.stdin.close()
             assert server.wait(timeout=10) == 0, error_file.read_text()
             assert not error_file.read_text(), error_file.read_text()
-            print("native LSP: transport, diagnostics, navigation, safe rename, nested signatures, incomplete member chains, unsaved URIs, workspace boundaries, format, tokens and fixes passed")
+            print("native LSP: transport, diagnostics, navigation, safe/shorthand rename, record spread completion, nested signatures, incomplete member chains, unsaved URIs, workspace boundaries, format, tokens and fixes passed")
         finally:
             if server.poll() is None:
                 server.kill()

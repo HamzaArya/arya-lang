@@ -15,9 +15,26 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Linux native widget prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev pkg-config xvfb
       - name: Fresh source build, tests and installed SDK without Node or Python
         run: make native-clean-test
       - name: Build local native compiler for optional arithmetic reference
         run: make native
       - name: Independent pure-Python decimal reference (test only)
         run: python3 native/tests/decimal-reference.py
+      - name: Seeded compiler robustness (Python controller only)
+        run: python3 native/tests/parser-fuzz.py --compiler .build/independent/arya
+      - name: Exact binary64 formatting reference (Python controller only)
+        run: python3 native/tests/number-format-reference.py
+      - name: Type and native language-server references (Python controller only)
+        run: |
+          python3 native/tests/types-reference.py .build/independent/arya
+          python3 native/tests/lsp-reference.py .build/independent/arya
+      - name: Current documentation links and library inventory (Python controller only)
+        run: python3 native/tests/docs-reference.py
+      - name: Native authentication HTTP integration (Python controller only)
+        run: |
+          make native-sdk
+          python3 native/tests/auth-http.py

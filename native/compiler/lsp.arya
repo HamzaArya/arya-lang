@@ -3,9 +3,40 @@ use std "runtime" as runtime
 use std "fs" as fs
 use std "path" as path
 use std "process" as process
-fn position(source, offset) { let line = 0; let column = 0; let index = 0; while index < offset and index < len(source) { if source[index] == "\n" { line += 1; column = 0 } else { column += 1 }; index += 1 }; return {line: line, character: column} }
-fn offset(source, point) { let index = 0; let line = 0; while index < len(source) and line < point.line { if source[index] == "\n" { line += 1 }; index += 1 }; let column = 0; while index < len(source) and source[index] != "\n" and column < point.character { index += 1; column += 1 }; return index }
-fn span(source, token) { return {start: position(source, token.start), end: position(source, token.end ?? (token.start + len(token.text)))} }
+use std "math" as math
+# A bounded block index keeps arbitrary UTF-16 positions cheap, even for a
+# single very long line or a malformed file containing millions of newlines.
+let indexedSource = null
+let indexedLines = []
+let indexedStarts = []
+fn indexSource(source) {
+  if indexedSource == source { indexedSource = source; return }
+  indexedSource = source; indexedLines = [0]; indexedStarts = [0]
+  let line = 0; let start = 0; let i = 0
+  while i < len(source) {
+    if runtime.codeUnit(source, i) == 10 { line += 1; start = i + 1 }
+    i += 1
+    if i % 256 == 0 { indexedLines.push(line); indexedStarts.push(start) }
+  }
+}
+fn position(source, at) {
+  indexSource(source); at = math.max(0, math.min(at, len(source)))
+  let block = math.floor(at / 256); let line = indexedLines[block]; let start = indexedStarts[block]; let i = block * 256
+  while i < at { if runtime.codeUnit(source, i) == 10 { line += 1; start = i + 1 }; i += 1 }
+  return {line: line, character: at - start}
+}
+fn offset(source, point) {
+  indexSource(source); let low = 0; let high = len(indexedLines)
+  while low < high { let mid = math.floor((low + high) / 2); if indexedLines[mid] < point.line { low = mid + 1 } else { high = mid } }
+  let block = math.max(0, low - 1); let line = indexedLines[block]; let i = block * 256
+  while i < len(source) and line < point.line { if runtime.codeUnit(source, i) == 10 { line += 1 }; i += 1 }
+  let end = source.indexOf("\n", i); if end < 0 { end = len(source) }
+  return math.min(end, i + math.max(0, point.character))
+}
+fn span(source, token) {
+  if token.kind == "word" { return {start: {line: token.line, character: token.column}, end: {line: token.line, character: token.column + (token.end ?? (token.start + len(token.text))) - token.start}} }
+  return {start: position(source, token.start), end: position(source, token.end ?? (token.start + len(token.text)))}
+}
 fn filePath(uri) {
   if not uri.startsWith("file://") { return null }
   let value = uri.slice(7); if value.startsWith("localhost/") { value = value.slice(9) }; if not value.startsWith("/") or value.toLowerCase().includes("%2f") or value.toLowerCase().includes("%5c") { return null }
@@ -89,7 +120,7 @@ export fn serve(version, analyze, describe, fields, format, keywords) {
     let changes = []
     for item in workspace().documents {
       let edits = []; if item.analysis.bindings.includes(value) { edits.push({range: span(item.source, value.token), newText: replacement}) }
-      for ref in item.analysis.references { if ref.binding == value { let text = replacement; if ref.access == "member" and ref.token.kind == "string" { text = runtime.jsonStringify(replacement) }; edits.push({range: span(item.source, ref.token), newText: text}) } }
+      for ref in item.analysis.references { if ref.binding == value { let text = replacement; if ref.node.shorthand != undefined { text = ref.node.shorthand + ": " + replacement }; if ref.access == "member" and ref.token.kind == "string" { text = runtime.jsonStringify(replacement) }; edits.push({range: span(item.source, ref.token), newText: text}) } }
       if edits.length > 0 { let uri = documentUri(item.filename); let revision = null; if open[uri] != undefined { revision = open[uri].version }; changes.push({textDocument: {uri: uri, version: revision}, edits: edits}) }
     }
     return {documentChanges: changes}

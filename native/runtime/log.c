@@ -15,13 +15,19 @@ static AV alog_clean(ALogClean *state,AV value,int depth) {
   for(size_t i=0;i<n&&!afailed;i++){r[2]=list?an((double)i):value.p->data[i*2];if(error&&!akey(r[2],"name")&&!akey(r[2],"message")&&!akey(r[2],"code")&&!akey(r[2],"driverCode")&&!akey(r[2],"sqlState"))continue;
     AV item=list?value.p->data[i]:value.p->data[i*2+1];if(item.t!=AGETTER&&item.t!=AUINIT)item=aread(item);if(item.t==AUINIT)item=av(AUNDEF);if(!list&&alog_secret(r[2],state->redact))r[3]=astr("[Redacted]");else r[3]=alog_clean(state,item,depth+1);
     if(list)aappend_value(r[1],r[3]);else aset(r[1],r[2],r[3]);}
-  if(error&&aprop(r[1],"name").t==AUNDEF)aput(r[1],"name",astr("Error"));AV result=r[1];aunroot(&root);return result;
+  if(error&&aprop(r[1],"name").t==AUNDEF)aput(r[1],"name",astr("Error"));state->count--;AV result=r[1];aunroot(&root);return result;
 }
 static AV alog_fields(AV value,AV redact){if(value.t!=ARECORD)return acoded_error("ARYA_LOG_CONFIG","Log fields must be a record.");ALogClean state={0};state.redact=redact;return alog_clean(&state,value,0);}
 static void alog_merge(AV to,AV from){for(size_t i=0;i<from.p->len&&!afailed;i+=2)aset(to,from.p->data[i],from.p->data[i+1]);}
 static AV alog_make(AV settings,AV bindings);
 static AV alog_method(AV env,int argc,AV *argv) {
   AV settings=env.p->data[0],bindings=env.p->data[1];int method=(int)env.p->data[2].n;
+  /* This guard performs no formatting, allocation, clock read or sink call. */
+  if(method==7){
+    const char *levels[]={"trace","debug","info","warn","error","fatal"};
+    for(int i=0;i<6;i++)if(argc&&akey(argv[0],levels[i]))return ab(i>=(int)settings.p->data[1].n);
+    return acoded_error("ARYA_LOG_CONFIG","enabled expects trace, debug, info, warn, error or fatal.");
+  }
   if(method!=6&&method<(int)settings.p->data[1].n)return av(AUNDEF);
   AV r[6]={env,av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,6);
   r[1]=argc>1?argv[1]:av(AUNDEF);if(method==6)r[1]=argc?argv[0]:av(AUNDEF);if(r[1].t==AUNDEF)r[1]=arecord();r[2]=alog_fields(r[1],settings.p->data[3]);if(afailed)goto done;
@@ -31,7 +37,7 @@ static AV alog_method(AV env,int argc,AV *argv) {
   if(settings.p->data[2].t==AFUNC)acall(settings.p->data[2],1,&r[4]);else{size_t n;char *text=autf8bytes(r[4],&n);fwrite(text,1,n,stdout);free(text);}r[5]=av(AUNDEF);
 done:;AV result=r[5];aunroot(&root);return afailed?av(AUNDEF):result;
 }
-static AV alog_make(AV settings,AV bindings){AV r[4]={settings,bindings,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,4);r[2]=arecord();const char *names[]={"trace","debug","info","warn","error","fatal","child"};for(int i=0;i<7;i++){r[3]=alist(3,NULL);r[3].p->data[0]=settings;r[3].p->data[1]=bindings;r[3].p->data[2]=an(i);r[3]=afunction(alog_method,r[3],names[i]);aput(r[2],names[i],r[3]);}r[2].p->scope=-2;AV result=r[2];aunroot(&root);return result;}
+static AV alog_make(AV settings,AV bindings){AV r[4]={settings,bindings,av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,4);r[2]=arecord();const char *names[]={"trace","debug","info","warn","error","fatal","child","enabled"};for(int i=0;i<8;i++){r[3]=alist(3,NULL);r[3].p->data[0]=settings;r[3].p->data[1]=bindings;r[3].p->data[2]=an(i);r[3]=afunction(alog_method,r[3],names[i]);aput(r[2],names[i],r[3]);}r[2].p->scope=-2;AV result=r[2];aunroot(&root);return result;}
 static AV alog_create(int argc,AV *argv){AV r[6]={argc?argv[0]:av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF),av(AUNDEF)};ARoot root;aroot(&root,r,6);if(r[0].t==AUNDEF)r[0]=arecord();const char *names[]={"name","level","sink","redact"};if(!aplain_options(r[0],names,4)){afailed=0;acoded_error("ARYA_LOG_CONFIG","Unknown or invalid logger options.");goto done;}
   r[1]=aprop(r[0],"name");if(r[1].t==AUNDEF)r[1]=astr("arya");int empty=r[1].t!=ASTR;if(!empty){empty=1;for(int i=0;i<r[1].p->scope;i++)if(!aspace(r[1].p->chars[i]))empty=0;}if(empty){acoded_error("ARYA_LOG_CONFIG","Logger name must be nonempty text.");goto done;}
   r[2]=aprop(r[0],"level");if(r[2].t==AUNDEF)r[2]=astr("info");const char *levels[]={"trace","debug","info","warn","error","fatal","silent"};int level=-1;for(int i=0;i<7;i++)if(akey(r[2],levels[i]))level=i;if(level<0){acoded_error("ARYA_LOG_CONFIG","Unknown logger level.");goto done;}

@@ -1,0 +1,14 @@
+/* Measured AppKit action test; calls real control actions, not a fake backend. */
+#include <assert.h>
+#include "appkit.m"
+static void expect_event(AGWindow *window,const char *type,const char *id,int index){AGuiEvent event={0};int seen=0;for(int i=0;i<100;i++){int result=arya_gui_poll((__bridge void*)window,&event);if(result==1){if(!strcmp(event.type,type)&&!strcmp(event.id,id)){assert(event.state.index==index);seen=1;}arya_gui_dispose_state(&event.state);}if(seen)break;}assert(seen);}
+int main(void){@autoreleasepool{
+  void *pointer=arya_gui_window("Arya AppKit native action test",480,420);assert(pointer);AGWindow *window=(__bridge AGWindow*)pointer;
+  AGuiSpec button={0};button.kind=AG_BUTTON;button.id="button";button.text="Click";button.x=20;button.y=20;button.width=120;button.height=30;button.enabled=1;button.index=-1;button.mask=AG_TEXT|AG_RECT|AG_ENABLED;assert(arya_gui_add(pointer,&button));
+  [(NSButton *)window.controls[@"button"].widget performClick:nil];expect_event(window,"click","button",-1);
+  const char *labels[]={"Same","Same","Other"};AGuiSpec select=button;select.kind=AG_SELECT;select.id="choice";select.text=NULL;select.y=70;select.items=labels;select.count=3;select.index=1;select.mask=AG_RECT|AG_ITEMS|AG_INDEX|AG_ENABLED;assert(arya_gui_add(pointer,&select));
+  NSPopUpButton *popup=(NSPopUpButton *)window.controls[@"choice"].widget;assert(popup.numberOfItems==3);assert(popup.indexOfSelectedItem==1);[popup selectItemAtIndex:2];[popup sendAction:popup.action to:popup.target];expect_event(window,"change","choice",2);
+  AGuiSpec input=button;input.kind=AG_INPUT;input.id="input";input.text="before";input.y=120;assert(arya_gui_add(pointer,&input));NSTextField *field=(NSTextField*)window.controls[@"input"].widget;field.stringValue=@"after 😀";[[NSNotificationCenter defaultCenter]postNotificationName:NSControlTextDidChangeNotification object:field];expect_event(window,"change","input",-1);[field sendAction:field.action to:field.target];expect_event(window,"submit","input",-1);
+  AGuiSpec multi=input;multi.kind=AG_TEXTAREA;multi.id="notes";multi.y=170;multi.height=130;assert(arya_gui_add(pointer,&multi));NSTextView *view=(NSTextView*)window.controls[@"notes"].widget;view.string=@"line1\nline2";[view didChangeText];expect_event(window,"change","notes",-1);assert(view.frame.size.width>0&&view.frame.size.height>0);
+  arya_gui_close(pointer);expect_event(window,"close","",-1);AGuiEvent event={0};assert(arya_gui_poll(pointer,&event)==-1);arya_gui_release(pointer);assert(ag_windows==0);puts("AppKit native actions PASS: button, duplicate select labels, input/change/submit, multiline, close.");return 0;
+}}

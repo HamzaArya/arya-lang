@@ -1,0 +1,18 @@
+arrays: native ASan/UBSan and GC stress passed
+regex: native ASan/UBSan and GC stress passed
+host-values: native ASan/UBSan and GC stress passed
+async-semantics: native ASan/UBSan and GC stress passed
+typed-standard: native ASan/UBSan and GC stress passed
+services: native ASan/UBSan and GC stress passed
+testing: native ASan/UBSan and GC stress passed
+security: native ASan/UBSan and GC stress passed
+files: native ASan/UBSan and GC stress passed
+path: native ASan/UBSan and GC stress passed
+web-events: native ASan/UBSan and GC stress passed
+accounting: native ASan/UBSan and GC stress passed
+finance-values: native ASan/UBSan and GC stress passed
+finance: large prepared batches and cooperative cancellation passed
+csv-stream: native ASan/UBSan and GC stress passed
+chunks: native ASan/UBSan and GC stress passed
+glob: 4368 native reference cases passed
+profile: optional Python, live MySQL, desktop and editor host have separate integration gates

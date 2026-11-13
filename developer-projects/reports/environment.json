@@ -1,0 +1,12 @@
+{
+  "captured_at": "2026-11-13T13:21:54.728619+00:00",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "compiler_version": "Arya native 2.0.0-alpha.3 (self-hosted)",
+  "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+  "git_head": "28d27826ae74386dc81a652d24752409c6e2fb6a",
+  "preexisting_changes_outside_project_folder": 281,
+  "scope": "New files only under developer-projects; no compiler/runtime changes planned",
+  "tracks": 6,
+  "planned_projects": 18,
+  "gui_target": "Browser UI rendered by Arya std ui with native std web server"
+}

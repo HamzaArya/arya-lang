@@ -1,0 +1,6 @@
+{
+  "name": "Workline Queue",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "api"
+}

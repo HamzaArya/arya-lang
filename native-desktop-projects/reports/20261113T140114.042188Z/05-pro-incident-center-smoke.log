@@ -1,0 +1,2 @@
+["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/native-desktop-projects/05-pro-incident-center/.build/worker"]
+PASS: 31 native incident worker commands; CRUD, service dependencies, lifecycle, notes, reopen, timeline, stale versions, corrupt store and failed-save rollback

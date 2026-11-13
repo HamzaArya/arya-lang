@@ -1,0 +1,49 @@
+{
+  "views" : [
+    {
+      "view" : "projects",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 projects · 0 tasks · 0 active · 0 done"
+      }
+    },
+    {
+      "view" : "tasks",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 projects · 0 tasks · 0 active · 0 done"
+      }
+    },
+    {
+      "view" : "overdue",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 projects · 0 tasks · 0 active · 0 done"
+      }
+    },
+    {
+      "view" : "history",
+      "response" : {
+        "message" : "Ready",
+        "rows" : [
+
+        ],
+        "ok" : true,
+        "summary" : "0 projects · 0 tasks · 0 active · 0 done"
+      }
+    }
+  ],
+  "ok" : true
+}

@@ -1,0 +1,193 @@
+{
+  "id": "study-desk",
+  "name": "Study Desk",
+  "subtitle": "Plan focused work, track progress and keep your study notes.",
+  "views": [
+    {
+      "id": "sessions",
+      "label": "Study sessions",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Subject",
+          "width": 260
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "width": 110
+        },
+        {
+          "key": "due",
+          "label": "Due date",
+          "width": 110
+        },
+        {
+          "key": "minutes",
+          "label": "Minutes",
+          "width": 80
+        },
+        {
+          "key": "description",
+          "label": "Notes",
+          "width": 250
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "label": "Notes",
+      "columns": [
+        {
+          "key": "title",
+          "label": "Title",
+          "width": 240
+        },
+        {
+          "key": "content",
+          "label": "Content",
+          "width": 440
+        },
+        {
+          "key": "updated",
+          "label": "Updated",
+          "width": 200
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New session",
+      "command": "session-add",
+      "view": "sessions",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Subject",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "minutes",
+          "label": "Planned minutes (1–480)",
+          "type": "text",
+          "default": "25",
+          "required": true
+        },
+        {
+          "key": "due",
+          "label": "Due date (YYYY-MM-DD, optional)",
+          "type": "text"
+        },
+        {
+          "key": "description",
+          "label": "Session notes",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit session",
+      "command": "session-edit",
+      "view": "sessions",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Subject",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "minutes",
+          "label": "Planned minutes (1–480)",
+          "type": "text",
+          "default": "25",
+          "required": true
+        },
+        {
+          "key": "due",
+          "label": "Due date (YYYY-MM-DD, optional)",
+          "type": "text"
+        },
+        {
+          "key": "description",
+          "label": "Session notes",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Complete",
+      "command": "session-complete",
+      "view": "sessions",
+      "selection": true,
+      "fields": []
+    },
+    {
+      "label": "Reopen",
+      "command": "session-reopen",
+      "view": "sessions",
+      "selection": true,
+      "fields": []
+    },
+    {
+      "label": "Delete session",
+      "command": "session-delete",
+      "view": "sessions",
+      "selection": true,
+      "fields": [],
+      "destructive": true
+    },
+    {
+      "label": "New note",
+      "command": "note-add",
+      "view": "notes",
+      "selection": false,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Note title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "content",
+          "label": "Note content",
+          "type": "multiline",
+          "required": true
+        }
+      ]
+    },
+    {
+      "label": "Edit note",
+      "command": "note-edit",
+      "view": "notes",
+      "selection": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "Note title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "content",
+          "label": "Note content",
+          "type": "multiline",
+          "required": true
+        }
+      ]
+    },
+    {
+      "label": "Delete note",
+      "command": "note-delete",
+      "view": "notes",
+      "selection": true,
+      "fields": [],
+      "destructive": true
+    }
+  ]
+}

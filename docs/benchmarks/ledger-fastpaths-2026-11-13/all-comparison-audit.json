@@ -1,0 +1,1953 @@
+{
+  "source": ".build/ledger-fastpaths-2026-11-13/measurement/final-comparison.json",
+  "sourceSha256": "bdbf3d646a7ca63d378fbdf660d77dd57cd4a04ed692fb722415d333f1398135",
+  "method": "Read-only analysis of the existing40samples/backend, nearest-rank quantiles and20samples/session. No new timings. Interquartile overlap and session direction are descriptive and are not tests of statistical significance. Pooled medians can move opposite to both session medians when distributions differ. Payload shapes are evaluated from the frozen fixture-construction block without executing calculations.",
+  "results": [
+    {
+      "name": "reports-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 1.7164999999999964,
+          "p25Ms": 1.9368340000000899,
+          "medianMs": 2.0271670000001905,
+          "p75Ms": 2.138374999994994,
+          "p95Ms": 2.310083000000077,
+          "maxMs": 2.535415999999941
+        },
+        "native": {
+          "count": 40,
+          "minMs": 1.5626670000001468,
+          "p25Ms": 1.7860830000063288,
+          "medianMs": 1.912499999999909,
+          "p75Ms": 2.1103330000000824,
+          "p95Ms": 2.440499999999929,
+          "maxMs": 2.703999999999951
+        },
+        "node": {
+          "count": 40,
+          "minMs": 1.8799580000002152,
+          "p25Ms": 1.9546660000050906,
+          "medianMs": 2.069833000000017,
+          "p75Ms": 2.2623750000057044,
+          "p95Ms": 2.665791999999783,
+          "maxMs": 3.074791000006371
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 2.055166999999983,
+          "candidateMedianMs": 1.974917000000005,
+          "candidateChangePercent": -3.9047921653071915,
+          "candidateDeltaMs": -0.08024999999997817
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 2.022207999994862,
+          "candidateMedianMs": 1.8387910000019474,
+          "candidateChangePercent": -9.070135218206065,
+          "candidateDeltaMs": -0.1834169999929145
+        }
+      ],
+      "candidateChangePercent": -5.656514732149375,
+      "candidateDeltaMs": -0.1146670000002814,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 51663,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 1000,
+          "types": 8
+        },
+        "sha256WithId1": "0a79e2d9d1ab7723a1a8be73d8521eafd5bef6953a84e303069aa5a75421e9f3",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "reports-1000",
+      "boundary": "generic-report-worker-pool",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 2.243083999999726,
+          "p25Ms": 2.4991659999941476,
+          "medianMs": 2.596625000005588,
+          "p75Ms": 2.854291000003286,
+          "p95Ms": 3.78574999999546,
+          "maxMs": 3.908957999999984
+        },
+        "native": {
+          "count": 40,
+          "minMs": 1.9451669999998558,
+          "p25Ms": 2.3585000000020955,
+          "medianMs": 2.545333000001847,
+          "p75Ms": 2.6898330000040005,
+          "p95Ms": 3.167417000000114,
+          "maxMs": 5.016875000001164
+        },
+        "node": {
+          "count": 40,
+          "minMs": 3.3748340000001917,
+          "p25Ms": 3.694915999999921,
+          "medianMs": 4.050458000005165,
+          "p75Ms": 4.620167000000038,
+          "p95Ms": 6.651541000000179,
+          "maxMs": 64.97262500000215
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 2.5614580000001297,
+          "candidateMedianMs": 2.610209000000168,
+          "candidateChangePercent": 1.9032519760244337,
+          "candidateDeltaMs": 0.0487510000000384
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 2.607791999995243,
+          "candidateMedianMs": 2.4890420000010636,
+          "candidateChangePercent": -4.5536607211923315,
+          "candidateDeltaMs": -0.11874999999417923
+        }
+      ],
+      "candidateChangePercent": -1.975333365566101,
+      "candidateDeltaMs": -0.05129200000374112,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 51663,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 1000,
+          "types": 8
+        },
+        "sha256WithId1": "0a79e2d9d1ab7723a1a8be73d8521eafd5bef6953a84e303069aa5a75421e9f3",
+        "inputNote": ""
+      },
+      "boundaryNote": "Actual pool, admission and native round trip; owned mode avoids an additional input structuredClone for native."
+    },
+    {
+      "name": "reports-1000",
+      "boundary": "owned-report-worker-pool",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 1.805540999999721,
+          "p25Ms": 2.0489160000001903,
+          "medianMs": 2.1297499999996035,
+          "p75Ms": 2.256959000005736,
+          "p95Ms": 2.529332999998587,
+          "maxMs": 4.1037499999997635
+        },
+        "native": {
+          "count": 40,
+          "minMs": 1.6832920000015292,
+          "p25Ms": 1.8947079999998095,
+          "medianMs": 1.9658330000020214,
+          "p75Ms": 2.1740830000053393,
+          "p95Ms": 3.024499999999989,
+          "maxMs": 10.819790999994439
+        },
+        "node": {
+          "count": 40,
+          "minMs": 3.2211670000001504,
+          "p25Ms": 3.4542089999999916,
+          "medianMs": 3.61804100000154,
+          "p75Ms": 3.795333000000028,
+          "p95Ms": 6.890875000000051,
+          "maxMs": 13.145333999993454
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 2.1390419999997903,
+          "candidateMedianMs": 1.952209000000039,
+          "candidateChangePercent": -8.734424101993776,
+          "candidateDeltaMs": -0.18683299999975134
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 2.1057919999948354,
+          "candidateMedianMs": 1.9658330000020214,
+          "candidateChangePercent": -6.646382928283378,
+          "candidateDeltaMs": -0.13995899999281392
+        }
+      ],
+      "candidateChangePercent": -7.696537152135818,
+      "candidateDeltaMs": -0.16391699999758202,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 51663,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 1000,
+          "types": 8
+        },
+        "sha256WithId1": "0a79e2d9d1ab7723a1a8be73d8521eafd5bef6953a84e303069aa5a75421e9f3",
+        "inputNote": ""
+      },
+      "boundaryNote": "Actual pool, admission and native round trip; owned mode avoids an additional input structuredClone for native."
+    },
+    {
+      "name": "reports-1000",
+      "boundary": "report-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 1.9963329999955022,
+          "p25Ms": 2.1674160000038682,
+          "medianMs": 2.3379579999964335,
+          "p75Ms": 2.459999999999127,
+          "p95Ms": 3.360916999998153,
+          "maxMs": 9.630666999999448
+        },
+        "native": {
+          "count": 40,
+          "minMs": 2.0792920000003505,
+          "p25Ms": 2.1942909999997937,
+          "medianMs": 2.286000000000058,
+          "p75Ms": 2.3802919999998267,
+          "p95Ms": 3.1522079999999733,
+          "maxMs": 8.387042000000292
+        },
+        "node": {
+          "count": 40,
+          "minMs": 2.061459000004106,
+          "p25Ms": 2.1977909999986878,
+          "medianMs": 2.2859589999998207,
+          "p75Ms": 2.339916999997513,
+          "p95Ms": 2.6612089999998716,
+          "maxMs": 2.854750000000422
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 2.3652499999998327,
+          "candidateMedianMs": 2.3603330000000824,
+          "candidateChangePercent": -0.20788500157491452,
+          "candidateDeltaMs": -0.00491699999975026
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 2.2720419999968726,
+          "candidateMedianMs": 2.236457999999402,
+          "candidateChangePercent": -1.5661682309358493,
+          "candidateDeltaMs": -0.03558399999747053
+        }
+      ],
+      "candidateChangePercent": -2.222366697624789,
+      "candidateDeltaMs": -0.05195799999637529,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 51663,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 1000,
+          "types": 8
+        },
+        "sha256WithId1": "0a79e2d9d1ab7723a1a8be73d8521eafd5bef6953a84e303069aa5a75421e9f3",
+        "inputNote": ""
+      },
+      "boundaryNote": "Full report host validation and shaping; <=2000 prepared rows use synchronous Node under all backend labels."
+    },
+    {
+      "name": "reports-10000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 18.095541000002413,
+          "p25Ms": 19.353708999995433,
+          "medianMs": 22.40441600000031,
+          "p75Ms": 27.45808399999987,
+          "p95Ms": 38.972749999999905,
+          "maxMs": 91.6739579999994
+        },
+        "native": {
+          "count": 40,
+          "minMs": 16.801791999998386,
+          "p25Ms": 18.242208999996365,
+          "medianMs": 21.39816700000665,
+          "p75Ms": 27.840541999999914,
+          "p95Ms": 52.04487499999959,
+          "maxMs": 409.838667
+        },
+        "node": {
+          "count": 40,
+          "minMs": 16.418000000005122,
+          "p25Ms": 17.075792000003275,
+          "medianMs": 18.193417000002228,
+          "p75Ms": 22.434291999998095,
+          "p95Ms": 44.237208000000464,
+          "maxMs": 87.84370800000033
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 27.45808399999987,
+          "candidateMedianMs": 27.840541999999914,
+          "candidateChangePercent": 1.392879415767112,
+          "candidateDeltaMs": 0.3824580000000424
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 19.353708999995433,
+          "candidateMedianMs": 18.242208999996365,
+          "candidateChangePercent": -5.743085214308696,
+          "candidateDeltaMs": -1.1114999999990687
+        }
+      ],
+      "candidateChangePercent": -4.491297608443112,
+      "candidateDeltaMs": -1.0062489999936588,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 525288,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 10000,
+          "types": 8
+        },
+        "sha256WithId1": "12afe58412a99c214ee8b16ba190a7a20cbdd746990bd93011402a1c07a94f72",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "reports-10000",
+      "boundary": "generic-report-worker-pool",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 23.739207999999053,
+          "p25Ms": 25.02404099999694,
+          "medianMs": 27.796292000000903,
+          "p75Ms": 30.228916999999456,
+          "p95Ms": 37.614958000000115,
+          "maxMs": 38.97070900000108
+        },
+        "native": {
+          "count": 40,
+          "minMs": 22.89045900000201,
+          "p25Ms": 24.69862500000454,
+          "medianMs": 27.969334000000345,
+          "p75Ms": 31.639999999999418,
+          "p95Ms": 37.67283299999872,
+          "maxMs": 43.85033300000032
+        },
+        "node": {
+          "count": 40,
+          "minMs": 30.82824999999866,
+          "p25Ms": 32.31604200000584,
+          "medianMs": 34.4888749999991,
+          "p75Ms": 36.864040999998906,
+          "p95Ms": 43.18475000000035,
+          "maxMs": 64.38745899999958
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 29.82800000000134,
+          "candidateMedianMs": 30.708083000000443,
+          "candidateChangePercent": 2.950526351076377,
+          "candidateDeltaMs": 0.8800829999991038
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 25.02404099999694,
+          "candidateMedianMs": 24.69862500000454,
+          "candidateChangePercent": -1.3004134703601289,
+          "candidateDeltaMs": -0.32541599999240134
+        }
+      ],
+      "candidateChangePercent": 0.622536272102181,
+      "candidateDeltaMs": 0.17304199999944103,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 525288,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 10000,
+          "types": 8
+        },
+        "sha256WithId1": "12afe58412a99c214ee8b16ba190a7a20cbdd746990bd93011402a1c07a94f72",
+        "inputNote": ""
+      },
+      "boundaryNote": "Actual pool, admission and native round trip; owned mode avoids an additional input structuredClone for native."
+    },
+    {
+      "name": "reports-10000",
+      "boundary": "owned-report-worker-pool",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 19.360290999997233,
+          "p25Ms": 20.216082999999344,
+          "medianMs": 23.17279200000121,
+          "p75Ms": 24.30108300000029,
+          "p95Ms": 27.023583000000144,
+          "maxMs": 30.351791999999477
+        },
+        "native": {
+          "count": 40,
+          "minMs": 18.605040999995254,
+          "p25Ms": 19.305916999997862,
+          "medianMs": 22.648709000000963,
+          "p75Ms": 24.363375000000815,
+          "p95Ms": 28.783833999999842,
+          "maxMs": 30.832750000001397
+        },
+        "node": {
+          "count": 40,
+          "minMs": 31.18391700000211,
+          "p25Ms": 32.27254200000607,
+          "medianMs": 33.549833000000945,
+          "p75Ms": 34.37329200000022,
+          "p95Ms": 40.027374999999665,
+          "maxMs": 56.144540999994206
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 24.205582999999024,
+          "candidateMedianMs": 24.31237499999952,
+          "candidateChangePercent": 0.4411874731565124,
+          "candidateDeltaMs": 0.10679200000049605
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 20.216082999999344,
+          "candidateMedianMs": 19.305916999997862,
+          "candidateChangePercent": -4.5021876888886485,
+          "candidateDeltaMs": -0.9101660000014817
+        }
+      ],
+      "candidateChangePercent": -2.2616307952887937,
+      "candidateDeltaMs": -0.5240830000002461,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 525288,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 10000,
+          "types": 8
+        },
+        "sha256WithId1": "12afe58412a99c214ee8b16ba190a7a20cbdd746990bd93011402a1c07a94f72",
+        "inputNote": ""
+      },
+      "boundaryNote": "Actual pool, admission and native round trip; owned mode avoids an additional input structuredClone for native."
+    },
+    {
+      "name": "reports-10000",
+      "boundary": "report-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 24.14958299999853,
+          "p25Ms": 25.415374999996857,
+          "medianMs": 27.49474999999984,
+          "p75Ms": 29.764874999998938,
+          "p95Ms": 44.029749999999694,
+          "maxMs": 55.72133300000132
+        },
+        "native": {
+          "count": 40,
+          "minMs": 22.90612500000134,
+          "p25Ms": 24.910499999998137,
+          "medianMs": 28.05041700000038,
+          "p75Ms": 29.61162499999773,
+          "p95Ms": 34.90983299999789,
+          "maxMs": 37.995209000000614
+        },
+        "node": {
+          "count": 40,
+          "minMs": 35.20991700000013,
+          "p25Ms": 36.40320800000336,
+          "medianMs": 37.12995899999987,
+          "p75Ms": 38.35383300000103,
+          "p95Ms": 46.335917000000336,
+          "maxMs": 94.66829200000029
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 28.46916699999929,
+          "candidateMedianMs": 29.130750000000262,
+          "candidateChangePercent": 2.323857947796615,
+          "candidateDeltaMs": 0.6615830000009737
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 25.415374999996857,
+          "candidateMedianMs": 24.910499999998137,
+          "candidateChangePercent": -1.9864943956120373,
+          "candidateDeltaMs": -0.5048749999987194
+        }
+      ],
+      "candidateChangePercent": 2.0209930986844427,
+      "candidateDeltaMs": 0.5556670000005397,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "report-groups",
+        "directFrameBytesWithId1": 525288,
+        "topLevelKeys": [
+          "rows",
+          "types"
+        ],
+        "arrayLengths": {
+          "rows": 10000,
+          "types": 8
+        },
+        "sha256WithId1": "12afe58412a99c214ee8b16ba190a7a20cbdd746990bd93011402a1c07a94f72",
+        "inputNote": ""
+      },
+      "boundaryNote": "Full report host validation and shaping; <=2000 prepared rows use synchronous Node under all backend labels."
+    },
+    {
+      "name": "invoice-exact-1",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-posting-policy",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.08545800000138115,
+          "p25Ms": 0.14145900000039546,
+          "medianMs": 0.2275420000005397,
+          "p75Ms": 0.3910410000025877,
+          "p95Ms": 0.7832080000007409,
+          "maxMs": 3.6507499999988795
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.10124999999970896,
+          "p25Ms": 0.1392919999998412,
+          "medianMs": 0.2008750000004511,
+          "p75Ms": 0.370667000002868,
+          "p95Ms": 0.6980420000036247,
+          "maxMs": 0.885708000001614
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.0708329999979469,
+          "p25Ms": 0.08700000000135333,
+          "medianMs": 0.11329200000182027,
+          "p75Ms": 0.19333399999595713,
+          "p95Ms": 0.3554999999978463,
+          "maxMs": 0.7912920000017039
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.1579169999986334,
+          "candidateMedianMs": 0.1556670000009035,
+          "candidateChangePercent": -1.4247991019012307,
+          "candidateDeltaMs": -0.0022499999977299012
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.2921249999999418,
+          "candidateMedianMs": 0.31212499999674037,
+          "candidateChangePercent": 6.846384252221682,
+          "candidateDeltaMs": 0.01999999999679858
+        }
+      ],
+      "candidateChangePercent": -11.719594624300278,
+      "candidateDeltaMs": -0.026667000000088592,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "invoice-exact",
+        "directFrameBytesWithId1": 136,
+        "topLevelKeys": [
+          "lines",
+          "discount",
+          "fxRate"
+        ],
+        "arrayLengths": {
+          "lines": 1
+        },
+        "sha256WithId1": "19c6e00f6624181b1b03e85dc619094e100c82e8b1e25c670c8adb41599d72d7",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "invoice-exact-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-posting-policy",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.8505410000034317,
+          "p25Ms": 0.9634160000005068,
+          "medianMs": 1.2194999999992433,
+          "p75Ms": 2.0216660000005504,
+          "p95Ms": 2.8191250000018044,
+          "maxMs": 17.192541000003985
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.7279170000001614,
+          "p25Ms": 0.9042499999995925,
+          "medianMs": 1.3554169999988517,
+          "p75Ms": 2.0384999999951106,
+          "p95Ms": 2.7921669999996084,
+          "maxMs": 10.660958000000392
+        },
+        "node": {
+          "count": 40,
+          "minMs": 1.5640829999974812,
+          "p25Ms": 1.6146670000016456,
+          "medianMs": 2.271999999999025,
+          "p75Ms": 4.295458000000508,
+          "p95Ms": 5.111041000003752,
+          "maxMs": 7.095249999998487
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.9634160000005068,
+          "candidateMedianMs": 0.9042499999995925,
+          "candidateChangePercent": -6.141272306135992,
+          "candidateDeltaMs": -0.05916600000091421
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 1.8971249999958673,
+          "candidateMedianMs": 1.805791999999201,
+          "candidateChangePercent": -4.814284772846555,
+          "candidateDeltaMs": -0.09133299999666633
+        }
+      ],
+      "candidateChangePercent": 11.14530545302934,
+      "candidateDeltaMs": 0.13591699999960838,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": true,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "invoice-exact",
+        "directFrameBytesWithId1": 45561,
+        "topLevelKeys": [
+          "lines",
+          "discount",
+          "fxRate"
+        ],
+        "arrayLengths": {
+          "lines": 1000
+        },
+        "sha256WithId1": "6c469e5a2703b3668d2d96a4b086339df233dbd8e23f1e9bb9763125efbadf05",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "invoice-exact-10000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-posting-policy",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 7.448374999999942,
+          "p25Ms": 8.099458999997296,
+          "medianMs": 8.318334000003233,
+          "p75Ms": 8.82787499999904,
+          "p95Ms": 9.750499999998283,
+          "maxMs": 11.253458999999566
+        },
+        "native": {
+          "count": 40,
+          "minMs": 6.4050829999978305,
+          "p25Ms": 6.826457999999548,
+          "medianMs": 7.3038329999981215,
+          "p75Ms": 7.699583000001439,
+          "p95Ms": 8.648833000002924,
+          "maxMs": 14.13770900000236
+        },
+        "node": {
+          "count": 40,
+          "minMs": 14.902625000002445,
+          "p25Ms": 15.402541000003112,
+          "medianMs": 15.642291999996814,
+          "p75Ms": 15.954083000000537,
+          "p95Ms": 16.806166999998823,
+          "maxMs": 17.226332999998704
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 8.694499999997788,
+          "candidateMedianMs": 7.43525000000227,
+          "candidateChangePercent": -14.483294036411964,
+          "candidateDeltaMs": -1.259249999995518
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 8.285875000001397,
+          "candidateMedianMs": 6.990749999997206,
+          "candidateChangePercent": -15.630515787457245,
+          "candidateDeltaMs": -1.295125000004191
+        }
+      ],
+      "candidateChangePercent": -12.195963759145966,
+      "candidateDeltaMs": -1.0145010000051116,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": false,
+      "payload": {
+        "task": "invoice-exact",
+        "directFrameBytesWithId1": 454825,
+        "topLevelKeys": [
+          "lines",
+          "discount",
+          "fxRate"
+        ],
+        "arrayLengths": {
+          "lines": 10000
+        },
+        "sha256WithId1": "aa0089a157ade11006759e407ff792f329d57b87966470dfd5f20309d0adb184",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "payroll-exact-30-rules",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-posting-policy",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.21187500000087311,
+          "p25Ms": 0.262416999998095,
+          "medianMs": 0.2910410000004049,
+          "p75Ms": 0.4273749999993015,
+          "p95Ms": 0.8685000000041327,
+          "maxMs": 2.9637090000032913
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.22362499999871943,
+          "p25Ms": 0.26116600000023027,
+          "medianMs": 0.3187079999988782,
+          "p75Ms": 0.532666999999492,
+          "p95Ms": 0.9237500000017462,
+          "maxMs": 3.7253339999988384
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.2779999999984284,
+          "p25Ms": 0.3193329999994603,
+          "medianMs": 0.3770409999997355,
+          "p75Ms": 0.5061250000035216,
+          "p95Ms": 0.9312500000014552,
+          "maxMs": 1.100125000004482
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.29083299999911105,
+          "candidateMedianMs": 0.30583300000216695,
+          "candidateChangePercent": 5.1575990355639645,
+          "candidateDeltaMs": 0.015000000003055902
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.29991700000391575,
+          "candidateMedianMs": 0.46695899999758694,
+          "candidateChangePercent": 55.696075911498944,
+          "candidateDeltaMs": 0.1670419999936712
+        }
+      ],
+      "candidateChangePercent": 9.506220772480445,
+      "candidateDeltaMs": 0.02766699999847333,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "payroll-exact",
+        "directFrameBytesWithId1": 2784,
+        "topLevelKeys": [
+          "gross",
+          "rules"
+        ],
+        "arrayLengths": {
+          "rules": 30
+        },
+        "sha256WithId1": "6dc22fee7d322bc9f63bd100c8611ad60df0be170bc27cea171fa329b867ea4a",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "budget-exact-totals-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-production-budget",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.9730420000050799,
+          "p25Ms": 1.1756249999998545,
+          "medianMs": 1.3004999999975553,
+          "p75Ms": 1.3745409999974072,
+          "p95Ms": 1.5409160000017437,
+          "maxMs": 1.7909580000014103
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.8401670000021113,
+          "p25Ms": 1.0149170000004233,
+          "medianMs": 1.1468749999985448,
+          "p75Ms": 1.2853329999998095,
+          "p95Ms": 1.5508330000011483,
+          "maxMs": 1.6046669999996084
+        },
+        "node": {
+          "count": 40,
+          "minMs": 2.257332999994105,
+          "p25Ms": 2.370707999998558,
+          "medianMs": 2.484500000002299,
+          "p75Ms": 3.370582999999897,
+          "p95Ms": 4.4227500000015425,
+          "maxMs": 6.076874999998836
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 1.3457089999974414,
+          "candidateMedianMs": 1.254084000000148,
+          "candidateChangePercent": -6.808678547699953,
+          "candidateDeltaMs": -0.09162499999729334
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 1.2521249999990687,
+          "candidateMedianMs": 1.1229999999995925,
+          "candidateChangePercent": -10.312468803000673,
+          "candidateDeltaMs": -0.12912499999947613
+        }
+      ],
+      "candidateChangePercent": -11.812764321360959,
+      "candidateDeltaMs": -0.15362499999901047,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "budget-totals",
+        "directFrameBytesWithId1": 54255,
+        "topLevelKeys": [
+          "rows"
+        ],
+        "arrayLengths": {
+          "rows": 1000
+        },
+        "sha256WithId1": "84618d5682f924807097567e77a2776bc52f126ce4b80347fc2e1f57d22c1bb6",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "budget-exact-totals-10000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "exact-api-not-production-budget",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 10.487958000005165,
+          "p25Ms": 10.719209000002593,
+          "medianMs": 11.184541999999055,
+          "p75Ms": 11.394083999999566,
+          "p95Ms": 12.252707999999984,
+          "maxMs": 16.588375000002998
+        },
+        "native": {
+          "count": 40,
+          "minMs": 9.150165999999444,
+          "p25Ms": 9.508458999996947,
+          "medianMs": 9.976124999993772,
+          "p75Ms": 10.224958000002516,
+          "p95Ms": 10.819250000000466,
+          "maxMs": 19.102875000000495
+        },
+        "node": {
+          "count": 40,
+          "minMs": 22.980624999996508,
+          "p25Ms": 23.63104200000089,
+          "medianMs": 24.122666999999637,
+          "p75Ms": 24.46141599999828,
+          "p95Ms": 25.548915999999736,
+          "maxMs": 25.826666999997542
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 11.394083999999566,
+          "candidateMedianMs": 10.155541000000085,
+          "candidateChangePercent": -10.870053266234725,
+          "candidateDeltaMs": -1.2385429999994813
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 10.719209000002593,
+          "candidateMedianMs": 9.508458999996947,
+          "candidateChangePercent": -11.295143139809605,
+          "candidateDeltaMs": -1.2107500000056461
+        }
+      ],
+      "candidateChangePercent": -10.804349431611826,
+      "candidateDeltaMs": -1.2084170000052836,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": false,
+      "payload": {
+        "task": "budget-totals",
+        "directFrameBytesWithId1": 542343,
+        "topLevelKeys": [
+          "rows"
+        ],
+        "arrayLengths": {
+          "rows": 10000
+        },
+        "sha256WithId1": "80bc2a454d21e061918d6a0956d0f2b77ae4165be981c8b4c68283fc4bc3ed9c",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-1",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.05783299999893643,
+          "p25Ms": 0.09862499999871943,
+          "medianMs": 0.13633399999889662,
+          "p75Ms": 0.1500000000014552,
+          "p95Ms": 0.16970800000126474,
+          "maxMs": 0.2615409999998519
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.05687500000203727,
+          "p25Ms": 0.10616699999809498,
+          "medianMs": 0.13812500000130967,
+          "p75Ms": 0.15066599999772734,
+          "p95Ms": 0.21229099999982282,
+          "maxMs": 0.3812079999988782
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.06341700000484707,
+          "p25Ms": 0.08049999999639113,
+          "medianMs": 0.10074999999778811,
+          "p75Ms": 0.11779199999728007,
+          "p95Ms": 0.17641700000240235,
+          "maxMs": 0.1937499999985448
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.14716699999917182,
+          "candidateMedianMs": 0.14637500000026193,
+          "candidateChangePercent": -0.5381641257308667,
+          "candidateDeltaMs": -0.0007919999989098869
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.09862499999871943,
+          "candidateMedianMs": 0.10616699999809498,
+          "candidateChangePercent": 7.647148288439509,
+          "candidateDeltaMs": 0.007541999999375548
+        }
+      ],
+      "candidateChangePercent": 1.3136855094309174,
+      "candidateDeltaMs": 0.0017910000024130568,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 103,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 1
+        },
+        "sha256WithId1": "e10f1c87713a0d1a9bd08e49faea4a073457ba8f387cc1a5b58bf2dcc910fc7e",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-1",
+      "boundary": "production-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.04724999999598367,
+          "p25Ms": 0.08495899999979883,
+          "medianMs": 0.11899999999877764,
+          "p75Ms": 0.13741700000173296,
+          "p95Ms": 0.16108300000269082,
+          "maxMs": 0.18545799999992596
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.05133399999613175,
+          "p25Ms": 0.08479200000147102,
+          "medianMs": 0.11512500000026193,
+          "p75Ms": 0.14525000000139698,
+          "p95Ms": 0.1971250000060536,
+          "maxMs": 0.4086250000000291
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.05174999999871943,
+          "p25Ms": 0.08254200000374112,
+          "medianMs": 0.10870799999975134,
+          "p75Ms": 0.12862499999755528,
+          "p95Ms": 0.16995800000222516,
+          "maxMs": 0.2471670000013546
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.13654200000019046,
+          "candidateMedianMs": 0.13925000000017462,
+          "candidateChangePercent": 1.9832725461619072,
+          "candidateDeltaMs": 0.0027079999999841675
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.08495899999979883,
+          "candidateMedianMs": 0.08479200000147102,
+          "candidateChangePercent": -0.1965654001673811,
+          "candidateDeltaMs": -0.00016699999832781032
+        }
+      ],
+      "candidateChangePercent": -3.2563025197945406,
+      "candidateDeltaMs": -0.0038749999985157046,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 103,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 1
+        },
+        "sha256WithId1": "e10f1c87713a0d1a9bd08e49faea4a073457ba8f387cc1a5b58bf2dcc910fc7e",
+        "inputNote": "Service fixture uses cost100000.02, not direct fixture amount100000.015, plus startDate2024-01-31 and numeric units/totalUnits."
+      },
+      "boundaryNote": "Full production host validation, normalization, dates, rounding and shaping; <60 periods use synchronous Node under all backend labels."
+    },
+    {
+      "name": "production-schedule-12",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.0788749999992433,
+          "p25Ms": 0.12904100000014296,
+          "medianMs": 0.1545829999995476,
+          "p75Ms": 0.17041600000084145,
+          "p95Ms": 0.5215410000018892,
+          "maxMs": 1.177917000000889
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.0861670000012964,
+          "p25Ms": 0.13633300000219606,
+          "medianMs": 0.16554199999882258,
+          "p75Ms": 0.196749999999156,
+          "p95Ms": 0.5416250000016589,
+          "maxMs": 2.1232920000002196
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.15141600000060862,
+          "p25Ms": 0.1796249999970314,
+          "medianMs": 0.39304100000299513,
+          "p75Ms": 0.42812500000582077,
+          "p95Ms": 0.5991659999999683,
+          "maxMs": 1.0330829999984417
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.1682920000021113,
+          "candidateMedianMs": 0.16879100000005565,
+          "candidateChangePercent": 0.2965084483742997,
+          "candidateDeltaMs": 0.0004989999979443382
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.12904100000014296,
+          "candidateMedianMs": 0.13633300000219606,
+          "candidateChangePercent": 5.650917151947854,
+          "candidateDeltaMs": 0.007292000002053101
+        }
+      ],
+      "candidateChangePercent": 7.0893953405659405,
+      "candidateDeltaMs": 0.010958999999274965,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 148,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 12
+        },
+        "sha256WithId1": "e6a84558482ecfc786d3ef11403ea7bcb989950121add81f89f92abdb5629a18",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-12",
+      "boundary": "production-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.23487499999828287,
+          "p25Ms": 0.28091700000004494,
+          "medianMs": 0.3256249999976717,
+          "p75Ms": 0.37312499999825377,
+          "p95Ms": 0.5524579999982961,
+          "maxMs": 0.6782920000005106
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.21141700000225683,
+          "p25Ms": 0.26533300000301097,
+          "medianMs": 0.3039169999974547,
+          "p75Ms": 0.3406249999970896,
+          "p95Ms": 0.4718750000029104,
+          "maxMs": 0.5365829999936977
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.2100830000017595,
+          "p25Ms": 0.28320800000074087,
+          "medianMs": 0.33312500000101863,
+          "p75Ms": 0.3922080000047572,
+          "p95Ms": 0.4560830000009446,
+          "maxMs": 0.5214589999959571
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.28545799999847077,
+          "candidateMedianMs": 0.26533300000301097,
+          "candidateChangePercent": -7.0500739147501985,
+          "candidateDeltaMs": -0.020124999995459802
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.35741600000619655,
+          "candidateMedianMs": 0.3406249999970896,
+          "candidateChangePercent": -4.697887058446137,
+          "candidateDeltaMs": -0.016791000009106938
+        }
+      ],
+      "candidateChangePercent": -6.666564299538491,
+      "candidateDeltaMs": -0.021708000000216998,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 148,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 12
+        },
+        "sha256WithId1": "e6a84558482ecfc786d3ef11403ea7bcb989950121add81f89f92abdb5629a18",
+        "inputNote": "Service fixture uses cost100000.02, not direct fixture amount100000.015, plus startDate2024-01-31 and numeric units/totalUnits."
+      },
+      "boundaryNote": "Full production host validation, normalization, dates, rounding and shaping; <60 periods use synchronous Node under all backend labels."
+    },
+    {
+      "name": "production-schedule-60",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.18558299999858718,
+          "p25Ms": 0.2019170000021404,
+          "medianMs": 0.24662499999976717,
+          "p75Ms": 0.3726660000029369,
+          "p95Ms": 0.5320829999982379,
+          "maxMs": 1.1476670000047307
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.18370900000081747,
+          "p25Ms": 0.20358300000225427,
+          "medianMs": 0.2713750000038999,
+          "p75Ms": 0.40525000000343425,
+          "p95Ms": 0.5447090000016033,
+          "maxMs": 0.6926670000029844
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.46116600000095787,
+          "p25Ms": 0.5410000000010768,
+          "medianMs": 0.8169999999990978,
+          "p75Ms": 2.8759590000045137,
+          "p95Ms": 3.556125000002794,
+          "maxMs": 4.083208000003651
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.20883300000059535,
+          "candidateMedianMs": 0.20737500000177533,
+          "candidateChangePercent": -0.6981655192502378,
+          "candidateDeltaMs": -0.0014579999988200143
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.3726660000029369,
+          "candidateMedianMs": 0.3997499999968568,
+          "candidateChangePercent": 7.267633750786606,
+          "candidateDeltaMs": 0.02708399999391986
+        }
+      ],
+      "candidateChangePercent": 10.035478967726764,
+      "candidateDeltaMs": 0.024750000004132744,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 341,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 60
+        },
+        "sha256WithId1": "dd4964e9f0c3f10880443c3e30e6bd3fd0662be8bfb83a50dcfe824d2c7d5a26",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-60",
+      "boundary": "production-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.651040999997349,
+          "p25Ms": 0.7575839999990421,
+          "medianMs": 0.854749999998603,
+          "p75Ms": 1.3267919999998412,
+          "p95Ms": 2.392290999996476,
+          "maxMs": 11.28845800000272
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.6509579999983544,
+          "p25Ms": 0.7352500000015425,
+          "medianMs": 0.8315419999998994,
+          "p75Ms": 1.3273749999934807,
+          "p95Ms": 1.683666999997513,
+          "maxMs": 3.760500000003958
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.7398329999996349,
+          "p25Ms": 0.8682909999988624,
+          "medianMs": 1.2617499999978463,
+          "p75Ms": 2.02483399999619,
+          "p95Ms": 3.009749999997439,
+          "maxMs": 3.6720839999979944
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.7805829999997513,
+          "candidateMedianMs": 0.745041999998648,
+          "candidateChangePercent": -4.553135284923537,
+          "candidateDeltaMs": -0.035541000001103384
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 1.2223750000048312,
+          "candidateMedianMs": 1.292874999999185,
+          "candidateChangePercent": 5.767460885086417,
+          "candidateDeltaMs": 0.07049999999435386
+        }
+      ],
+      "candidateChangePercent": -2.7151798770098323,
+      "candidateDeltaMs": -0.0232079999987036,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 341,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 60
+        },
+        "sha256WithId1": "dd4964e9f0c3f10880443c3e30e6bd3fd0662be8bfb83a50dcfe824d2c7d5a26",
+        "inputNote": "Service fixture uses cost100000.02, not direct fixture amount100000.015, plus startDate2024-01-31 and numeric units/totalUnits."
+      },
+      "boundaryNote": "Full production host validation, normalization, dates, rounding and shaping; <60 periods use synchronous Node under all backend labels."
+    },
+    {
+      "name": "production-schedule-120",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.2009169999982987,
+          "p25Ms": 0.23337499999979627,
+          "medianMs": 0.2818750000005821,
+          "p75Ms": 0.5350840000028256,
+          "p95Ms": 1.300374999998894,
+          "maxMs": 5.674749999998312
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.20241700000042329,
+          "p25Ms": 0.22895799999969313,
+          "medianMs": 0.2845840000009048,
+          "p75Ms": 0.43337500000052387,
+          "p95Ms": 1.197875000005297,
+          "maxMs": 8.707249999999476
+        },
+        "node": {
+          "count": 40,
+          "minMs": 2.1196249999993597,
+          "p25Ms": 2.147666000000754,
+          "medianMs": 2.2615829999995185,
+          "p75Ms": 4.406875000000582,
+          "p95Ms": 5.564707999998063,
+          "maxMs": 6.304334000000381
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.23337499999979627,
+          "candidateMedianMs": 0.22895799999969313,
+          "candidateChangePercent": -1.8926620246843107,
+          "candidateDeltaMs": -0.004417000000103144
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.38079199999629054,
+          "candidateMedianMs": 0.409124999998312,
+          "candidateChangePercent": 7.4405449700354565,
+          "candidateDeltaMs": 0.028333000002021436
+        }
+      ],
+      "candidateChangePercent": 0.9610643016646048,
+      "candidateDeltaMs": 0.0027090000003227033,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 581,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 120
+        },
+        "sha256WithId1": "e7d0f34a1d7942510fb2f7125956af9191055c5fb867cb3f751ad075fdadd53b",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-120",
+      "boundary": "production-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 1.0560420000001614,
+          "p25Ms": 1.1461659999986296,
+          "medianMs": 1.850125000004482,
+          "p75Ms": 2.2752919999984442,
+          "p95Ms": 2.765040999998746,
+          "maxMs": 3.4694579999995767
+        },
+        "native": {
+          "count": 40,
+          "minMs": 1.0327089999991586,
+          "p25Ms": 1.164375000000291,
+          "medianMs": 1.802125000001979,
+          "p75Ms": 2.1616250000006403,
+          "p95Ms": 2.5739160000011907,
+          "maxMs": 14.208249999996042
+        },
+        "node": {
+          "count": 40,
+          "minMs": 1.9931250000008731,
+          "p25Ms": 2.123750000002474,
+          "medianMs": 3.409457999998267,
+          "p75Ms": 4.712249999996857,
+          "p95Ms": 5.556875000002037,
+          "maxMs": 5.696875000001455
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 1.1461659999986296,
+          "candidateMedianMs": 1.164375000000291,
+          "candidateChangePercent": 1.58868785164481,
+          "candidateDeltaMs": 0.01820900000166148
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 2.2491249999948195,
+          "candidateMedianMs": 2.1572920000035083,
+          "candidateChangePercent": -4.08305452082578,
+          "candidateDeltaMs": -0.09183299999131123
+        }
+      ],
+      "candidateChangePercent": -2.5944192961225188,
+      "candidateDeltaMs": -0.04800000000250293,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 581,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 120
+        },
+        "sha256WithId1": "e7d0f34a1d7942510fb2f7125956af9191055c5fb867cb3f751ad075fdadd53b",
+        "inputNote": "Service fixture uses cost100000.02, not direct fixture amount100000.015, plus startDate2024-01-31 and numeric units/totalUnits."
+      },
+      "boundaryNote": "Full production host validation, normalization, dates, rounding and shaping; <60 periods use synchronous Node under all backend labels."
+    },
+    {
+      "name": "production-schedule-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.8389170000009472,
+          "p25Ms": 0.9573749999981374,
+          "medianMs": 1.1350000000020373,
+          "p75Ms": 1.2527499999996508,
+          "p95Ms": 1.7843750000029104,
+          "maxMs": 17.55975000000035
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.8069170000017039,
+          "p25Ms": 1.0027079999999842,
+          "medianMs": 1.1553749999984575,
+          "p75Ms": 1.2557079999969574,
+          "p95Ms": 1.5768749999988358,
+          "maxMs": 2.6217089999991003
+        },
+        "node": {
+          "count": 40,
+          "minMs": 9.826375000000553,
+          "p25Ms": 10.479708000002574,
+          "medianMs": 11.142457999998442,
+          "p75Ms": 12.131874999999127,
+          "p95Ms": 13.345832999999402,
+          "maxMs": 23.724708000001556
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 1.097834000000148,
+          "candidateMedianMs": 1.0985829999990528,
+          "candidateChangePercent": 0.0682252507122838,
+          "candidateDeltaMs": 0.0007489999989047647
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 1.1729580000028363,
+          "candidateMedianMs": 1.2250410000051488,
+          "candidateChangePercent": 4.440312441041061,
+          "candidateDeltaMs": 0.052083000002312474
+        }
+      ],
+      "candidateChangePercent": 1.7951541847033958,
+      "candidateDeltaMs": 0.02037499999642023,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 4102,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 1000
+        },
+        "sha256WithId1": "eebc4b0258db17d9b5013891fbe26dff2650db77f72ed36ae53a7c75a86bc1a8",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "production-schedule-1000",
+      "boundary": "production-service-including-host-validation",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 6.183499999999185,
+          "p25Ms": 6.392915999997058,
+          "medianMs": 6.563459000000876,
+          "p75Ms": 6.7412920000024315,
+          "p95Ms": 6.9177920000001905,
+          "maxMs": 7.036958000004233
+        },
+        "native": {
+          "count": 40,
+          "minMs": 6.075791000002937,
+          "p25Ms": 6.316667000006419,
+          "medianMs": 6.506333000004815,
+          "p75Ms": 6.643458000002283,
+          "p95Ms": 6.940000000002328,
+          "maxMs": 7.169125000000349
+        },
+        "node": {
+          "count": 40,
+          "minMs": 8.879209000006085,
+          "p25Ms": 8.980124999998225,
+          "medianMs": 9.290124999999534,
+          "p75Ms": 9.568167000004905,
+          "p95Ms": 10.227417000001878,
+          "maxMs": 11.380792000003566
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 6.563459000000876,
+          "candidateMedianMs": 6.513834000001225,
+          "candidateChangePercent": -0.7560799876961899,
+          "candidateDeltaMs": -0.049624999999650754
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 6.5633750000051805,
+          "candidateMedianMs": 6.428542000001471,
+          "candidateChangePercent": -2.0543241854016125,
+          "candidateDeltaMs": -0.13483300000370946
+        }
+      ],
+      "candidateChangePercent": -0.8703642392837829,
+      "candidateDeltaMs": -0.05712599999606027,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "schedule-production",
+        "directFrameBytesWithId1": 4102,
+        "topLevelKeys": [
+          "amount",
+          "units",
+          "totalUnits"
+        ],
+        "arrayLengths": {
+          "units": 1000
+        },
+        "sha256WithId1": "eebc4b0258db17d9b5013891fbe26dff2650db77f72ed36ae53a7c75a86bc1a8",
+        "inputNote": "Service fixture uses cost100000.02, not direct fixture amount100000.015, plus startDate2024-01-31 and numeric units/totalUnits."
+      },
+      "boundaryNote": "Full production host validation, normalization, dates, rounding and shaping; <60 periods use synchronous Node under all backend labels."
+    },
+    {
+      "name": "aging-settlement-1000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 9.708458999994036,
+          "p25Ms": 10.140583000000333,
+          "medianMs": 10.46191700000054,
+          "p75Ms": 10.82512499999575,
+          "p95Ms": 12.549584000000323,
+          "maxMs": 14.684875000002648
+        },
+        "native": {
+          "count": 40,
+          "minMs": 7.736749999996391,
+          "p25Ms": 8.174584000000323,
+          "medianMs": 8.427666999999929,
+          "p75Ms": 8.734542000001966,
+          "p95Ms": 10.161000000000058,
+          "maxMs": 13.949416999999812
+        },
+        "node": {
+          "count": 40,
+          "minMs": 2.266250000000582,
+          "p25Ms": 2.3524580000012065,
+          "medianMs": 2.444540999997116,
+          "p75Ms": 2.6871659999997064,
+          "p95Ms": 3.8395830000008573,
+          "maxMs": 4.262041999998473
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 10.473792000000685,
+          "candidateMedianMs": 8.474417000001267,
+          "candidateChangePercent": -19.08931359338898,
+          "candidateDeltaMs": -1.999374999999418
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 10.272875000002387,
+          "candidateMedianMs": 8.376541999998153,
+          "candidateChangePercent": -18.45961330205802,
+          "candidateDeltaMs": -1.8963330000042333
+        }
+      ],
+      "candidateChangePercent": -19.444333194389774,
+      "candidateDeltaMs": -2.034250000000611,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": false,
+      "payload": {
+        "task": "aging-settle",
+        "directFrameBytesWithId1": 204894,
+        "topLevelKeys": [
+          "rows",
+          "allocations"
+        ],
+        "arrayLengths": {
+          "rows": 1000
+        },
+        "sha256WithId1": "95537b1ab6d88df594af3af08ec6cf99a8670413239a853896b06ef00844c4ac",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "allocation-index-10000",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "production-shared-rule",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 18.13591699999961,
+          "p25Ms": 19.26708399999916,
+          "medianMs": 19.79899999999907,
+          "p75Ms": 20.885833000000275,
+          "p95Ms": 23.380084000000352,
+          "maxMs": 24.973666999998386
+        },
+        "native": {
+          "count": 40,
+          "minMs": 15.450792000003275,
+          "p25Ms": 16.462917000000743,
+          "medianMs": 16.98674999999639,
+          "p75Ms": 17.84112499999901,
+          "p95Ms": 19.677625000000262,
+          "maxMs": 35.42437499999869
+        },
+        "node": {
+          "count": 40,
+          "minMs": 3.3384169999990263,
+          "p25Ms": 3.474332999998296,
+          "medianMs": 3.562416000000667,
+          "p75Ms": 3.710833000001003,
+          "p95Ms": 4.021582999997918,
+          "maxMs": 9.866042000001471
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 20.518667000000278,
+          "candidateMedianMs": 17.384791000000405,
+          "candidateChangePercent": -15.27329236348458,
+          "candidateDeltaMs": -3.133875999999873
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 19.26708399999916,
+          "candidateMedianMs": 16.56916700000147,
+          "candidateChangePercent": -14.002726100108376,
+          "candidateDeltaMs": -2.6979169999976875
+        }
+      ],
+      "candidateChangePercent": -14.204000202044597,
+      "candidateDeltaMs": -2.8122500000026776,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": false,
+      "payload": {
+        "task": "allocation-index",
+        "directFrameBytesWithId1": 689537,
+        "topLevelKeys": [
+          "events"
+        ],
+        "arrayLengths": {
+          "events": 10000
+        },
+        "sha256WithId1": "9d9e24fc5dc03b5187cd30f8518d8f046ecca244c5b042e1bf5f2e6a468cfae3",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "bank-score-one-pair",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "score-only-not-full-bank-review",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.11683400000038091,
+          "p25Ms": 0.1422500000007858,
+          "medianMs": 0.19279200000164565,
+          "p75Ms": 0.3565840000010212,
+          "p95Ms": 0.8040409999957774,
+          "maxMs": 3.734375
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.12095899999985704,
+          "p25Ms": 0.15529200000310084,
+          "medianMs": 0.1867500000007567,
+          "p75Ms": 0.33116700000391575,
+          "p95Ms": 0.5657920000012382,
+          "maxMs": 0.8211669999982405
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.07249999999839929,
+          "p25Ms": 0.09558300000207964,
+          "medianMs": 0.14058400000067195,
+          "p75Ms": 0.16287500000180444,
+          "p95Ms": 0.2163749999999709,
+          "maxMs": 4.2994589999980235
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.14570800000001327,
+          "candidateMedianMs": 0.15633299999899464,
+          "candidateChangePercent": 7.291981222019661,
+          "candidateDeltaMs": 0.010624999998981366
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.3253340000010212,
+          "candidateMedianMs": 0.2804580000010901,
+          "candidateChangePercent": -13.793824192918724,
+          "candidateDeltaMs": -0.04487599999993108
+        }
+      ],
+      "candidateChangePercent": -3.1339474671342016,
+      "candidateDeltaMs": -0.006042000000888947,
+      "sessionDirectionFlips": true,
+      "pooledDirectionDiffersFromBothSessions": false,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "bank-score",
+        "directFrameBytesWithId1": 76,
+        "topLevelKeys": [
+          "left",
+          "right"
+        ],
+        "arrayLengths": {},
+        "sha256WithId1": "fcdb19c6d83bb457eae4b19e6be4d3bc20f5c2750d6e29b9855f95e18d0ae716",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    },
+    {
+      "name": "bank-normalize-one-row",
+      "boundary": "direct-rule-vs-persistent-native-round-trip",
+      "contract": "one-row-not-full-csv-parser",
+      "byBackend": {
+        "baselineNative": {
+          "count": 40,
+          "minMs": 0.1449170000050799,
+          "p25Ms": 0.1788330000017595,
+          "medianMs": 0.2795830000031856,
+          "p75Ms": 0.4650000000037835,
+          "p95Ms": 0.5579999999972642,
+          "maxMs": 0.6265419999981532
+        },
+        "native": {
+          "count": 40,
+          "minMs": 0.15041699999710545,
+          "p25Ms": 0.16337499999644933,
+          "medianMs": 0.3034590000024764,
+          "p75Ms": 0.4615830000038841,
+          "p95Ms": 0.5594170000040322,
+          "maxMs": 0.7667920000021695
+        },
+        "node": {
+          "count": 40,
+          "minMs": 0.0672919999997248,
+          "p25Ms": 0.07766699999774573,
+          "medianMs": 0.12762500000098953,
+          "p75Ms": 0.14487499999813735,
+          "p95Ms": 0.17533299999922747,
+          "maxMs": 0.23674999999639113
+        }
+      },
+      "sessions": [
+        {
+          "session": 0,
+          "baselineMedianMs": 0.1788330000017595,
+          "candidateMedianMs": 0.16337499999644933,
+          "candidateChangePercent": -8.643818537494807,
+          "candidateDeltaMs": -0.015458000005310168
+        },
+        {
+          "session": 1,
+          "baselineMedianMs": 0.4650000000037835,
+          "candidateMedianMs": 0.4615830000038841,
+          "candidateChangePercent": -0.7348387096498099,
+          "candidateDeltaMs": -0.003416999999899417
+        }
+      ],
+      "candidateChangePercent": 8.539861150005091,
+      "candidateDeltaMs": 0.023875999999290798,
+      "sessionDirectionFlips": false,
+      "pooledDirectionDiffersFromBothSessions": true,
+      "combinedIqrOverlaps": true,
+      "payload": {
+        "task": "bank-normalize",
+        "directFrameBytesWithId1": 164,
+        "topLevelKeys": [
+          "row",
+          "currency"
+        ],
+        "arrayLengths": {},
+        "sha256WithId1": "179db2dd6bfb506baea4d206ea5be66987e51a0548516f5c0634204055aef51b",
+        "inputNote": ""
+      },
+      "boundaryNote": "Native includes persistent process JSON request/response; Node calls rules directly. Native versus baseline uses the same boundary."
+    }
+  ]
+}

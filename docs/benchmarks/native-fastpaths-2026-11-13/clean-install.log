@@ -1,0 +1,40 @@
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/application.arya-aeMAE8/program.c:6912:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6912 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/application.arya-aeMAE8/program.c:6938:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6938 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/application.arya-aeMAE8/program.c:6939:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6939 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/application
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/services.arya-NAFCGv/program.c:6919:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6919 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/services.arya-NAFCGv/program.c:6945:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6945 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/services.arya-NAFCGv/program.c:6946:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6946 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/var/folders/x3/tv0cqqj13wsfm2jgyl3b5lv00000gn/T/arya-native-clean.ct8W4J/installed SDK's location/arya-native-2.0.0-alpha.2-darwin-arm64/services

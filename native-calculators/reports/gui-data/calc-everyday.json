@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "nextId": 5,
+  "history": [
+    {
+      "id": 1,
+      "expression": "200 * (1 + 15%)",
+      "result": "229.99999999999997",
+      "kind": "Expression",
+      "time": "2026-11-13T14:30:28.787Z",
+      "details": "Percent divides its value by 100. Multiplication is explicit; arithmetic uses finite binary64 numbers."
+    },
+    {
+      "id": 2,
+      "expression": "sqrt(81) + square(3)",
+      "result": "18",
+      "kind": "Expression",
+      "time": "2026-11-13T14:30:37.390Z",
+      "details": "Percent divides its value by 100. Multiplication is explicit; arithmetic uses finite binary64 numbers."
+    },
+    {
+      "id": 3,
+      "expression": "2+3",
+      "result": "5",
+      "kind": "Expression",
+      "time": "2026-11-13T14:30:48.451Z",
+      "details": "Percent divides its value by 100. Multiplication is explicit; arithmetic uses finite binary64 numbers."
+    },
+    {
+      "id": 4,
+      "expression": "(2+3)*4",
+      "result": "20",
+      "kind": "Expression",
+      "time": "2026-11-13T14:46:32.993Z",
+      "details": "Percent divides its value by 100. Multiplication is explicit; arithmetic uses finite binary64 numbers."
+    }
+  ],
+  "lastResult": "20",
+  "memory": "18"
+}

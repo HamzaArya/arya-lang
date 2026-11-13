@@ -1,0 +1,125 @@
+use std "fs" as fs
+use std "env" as env
+use std "runtime" as runtime
+fn fail(message) { throw new Error(message) }
+fn record(value) { if not runtime.isRecord(value) { fail("Expected a JSON object.") }; return value }
+fn text(value,label,limit=160) { if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { fail(label + " must be non-empty text, at most " + str(limit) + " characters.") }; return value.trim() }
+fn optionalText(value,label,limit=2000) { if value == undefined { return "" }; if runtime.kind(value) != "string" or value.length > limit { fail(label + " must be text, at most " + str(limit) + " characters.") }; return value.trim() }
+fn rows(value,maximum) { if not Array.isArray(value) or value.length > maximum { fail("Invalid stored collection or capacity exceeded.") }; return value }
+fn integer(value) { return Number.isSafeInteger(value) and value >= 1 }
+fn version(item,body) { if not integer(item.version) or str(body.version) != str(item.version) { fail("This record changed. Refresh, select it again and retry.") } }
+fn choose(value,values,label) { if not values.includes(value) { fail("Invalid " + label + ".") }; return value }
+fn find(items,id,label) { let found = items.find(fn(item) { return item.id == id }); if found == undefined { fail(label + " not found. Refresh the view.") }; return found }
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn fresh(next,prefix) { let id = prefix + str(next.serial); next.serial += 1; return id }
+const dataFile = env.get("DATA_FILE","data.json")
+fn readStore(fallback) {
+  let info = fs.infoSync(dataFile)
+  if info == null { return fallback }
+  if info.type != "file" { fail("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 4194304 { fail("Data store is invalid or exceeds 4 MiB.") }
+  return record(JSON.parse(fs.readTextSync(dataFile)))
+}
+fn persist(next) {
+  let encoded = JSON.stringify(next,null,2); if Buffer.byteLength(encoded,"utf8") > 4194304 { fail("Data store would exceed 4 MiB. Export/archive data before continuing.") }
+  try { fs.writeTextAtomicSync(dataFile, encoded) }
+  catch problem { fail("Could not save changes. Existing data is unchanged; check the data folder.") }
+}
+fn validateIds(items,prefix,serial) {
+  let seen = new Set()
+  for item in items {
+    record(item); let id = text(item.id,"Stored identifier",40)
+    if not id.startsWith(prefix) or not new RegExp("^[1-9][0-9]*$").test(id.slice(prefix.length)) or number(id.slice(prefix.length)) >= serial or seen.has(id) or not integer(item.version) { fail("Invalid or duplicate stored identifier/version.") }; seen.add(id)
+  }
+}
+use std "decimal" as decimal
+use std "datetime" as datetime
+fn amount(value,positive=false) {
+  if runtime.kind(value) != "string" or not new RegExp("^-?[0-9]{1,18}(\\.[0-9]{1,2})?$").test(value) { fail("Amount must be a decimal string with up to 18 integer and two fractional digits.") }
+  let normalized = decimal.quantize(value,2,"half-even"); if positive and decimal.compare(normalized,"0") <= 0 { fail("Posting amount must be positive.") }; return normalized
+}
+fn storedTotal(value) { if runtime.kind(value) != "string" or not new RegExp("^-?[0-9]{1,24}\\.[0-9]{2}$").test(value) { fail("Invalid stored decimal total.") }; return value }
+fn day(value) { text(value,"Date",10); return datetime.date(value) }
+fn code(value) { let result = text(value,"Account code",40); if not new RegExp("^[A-Za-z0-9][A-Za-z0-9._-]*$").test(result) { fail("Account code uses letters, digits, dots, underscores and hyphens.") }; return result }
+let state = {schema:1,serial:1,accounts:[],journals:[],reconciliations:[]}
+fn validateState(value) {
+  if value.schema != 1 or not integer(value.serial) { fail("Unsupported or corrupt ledger store.") }; rows(value.accounts,500); rows(value.journals,5000); rows(value.reconciliations,100)
+  validateIds(value.accounts,"A",value.serial); validateIds(value.journals,"J",value.serial); validateIds(value.reconciliations,"R",value.serial)
+  let codes = new Set(); let references = new Set()
+  for account in value.accounts { code(account.code); if codes.has(account.code) { fail("Duplicate stored account code.") }; codes.add(account.code); text(account.name,"Account name",100); choose(account.type,["asset","liability","income","expense","equity"],"account type"); choose(account.status,["open","closed"],"account status"); optionalText(account.description,"Description") }
+  for entry in value.journals {
+    referenceText(entry.reference); if references.has(entry.reference) { fail("Duplicate stored journal reference.") }; references.add(entry.reference); find(value.accounts,entry.debitId,"Debit account"); find(value.accounts,entry.creditId,"Credit account")
+    if entry.debitId == entry.creditId { fail("A journal cannot debit and credit the same account.") }; amount(entry.amount,true); day(entry.date); text(entry.description,"Journal description",1000)
+    if entry.reverses != "" { let original = find(value.journals,entry.reverses,"Original journal"); if original.reversedBy != entry.id or original.reverses != "" or entry.debitId != original.creditId or entry.creditId != original.debitId or decimal.compare(entry.amount,original.amount) != 0 { fail("Broken reversal relationship.") } }
+    if entry.reversedBy != "" { let reversal = find(value.journals,entry.reversedBy,"Reversal journal"); if reversal.reverses != entry.id or entry.reverses != "" { fail("Broken reversal link.") } }
+  }
+  for run in value.reconciliations { text(run.label,"Reconciliation label",100); find(value.accounts,run.accountId,"Reconciled account"); storedTotal(run.statementTotal); storedTotal(run.bookTotal); storedTotal(run.difference); if run.difference != decimal.quantize(decimal.subtract(run.statementTotal,run.bookTotal),2,"half-even") or not Number.isSafeInteger(run.matched) or run.matched < 0 or run.matched > 5000 { fail("Invalid stored reconciliation summary.") }; rows(run.exceptions,10000); for item in run.exceptions { text(item,"Reconciliation exception",400) }; text(run.created,"Created timestamp",40) }
+}
+fn balance(accountId,entries) { let total = "0.00"; for entry in entries { if entry.debitId == accountId { total = decimal.add(total,entry.amount) }; if entry.creditId == accountId { total = decimal.subtract(total,entry.amount) } }; return decimal.quantize(total,2,"half-even") }
+fn accountFields(body) { return {code:code(body.code),name:text(body.name,"Account name",100),type:choose(body.type,["asset","liability","income","expense","equity"],"account type"),description:optionalText(body.description,"Description")} }
+fn referenceText(value) {
+  let reference = text(value,"Reference",100)
+  if reference.includes(",") or reference.includes("\n") or reference.includes("\r") { fail("References cannot contain commas or line breaks because statement rows use reference,amount.") }
+  return reference
+}
+fn postingFields(body) { return {reference:referenceText(body.reference),debitId:text(body.debitId,"Debit account id",40),creditId:text(body.creditId,"Credit account id",40),amount:amount(body.amount,true),date:day(body.date),description:text(body.description,"Description",1000)} }
+fn samePosting(left,right) { return left.reference == right.reference and left.debitId == right.debitId and left.creditId == right.creditId and decimal.compare(left.amount,right.amount) == 0 and left.date == right.date and left.description == right.description }
+fn ensurePosting(next,fields) { let debit = find(next.accounts,fields.debitId,"Debit account"); let credit = find(next.accounts,fields.creditId,"Credit account"); if debit.id == credit.id { fail("Choose two different accounts.") }; if debit.status != "open" or credit.status != "open" { fail("Both posting accounts must be open.") }; if next.journals.length >= 5000 { fail("Maximum 5,000 journal entries reached.") } }
+fn statementRows(value) {
+  text(value,"Statement rows",200000); let result = []; let seen = new Set()
+  for line in value.trim().split("\n") { if line.trim() == "" { continue }; let parts = line.split(","); if parts.length != 2 { fail("Use reference,signed-amount per line without a header.") }; let reference = referenceText(parts[0]); if seen.has(reference) { fail("Duplicate statement reference: " + reference) }; seen.add(reference); result.push({reference:reference,amount:amount(parts[1].trim())}); if result.length > 5000 { fail("Maximum 5,000 statement rows.") } }
+  return result
+}
+fn act(command,body) {
+  if command == "list" { return "Current ledger loaded." }; let next = copy(state); let message = "Saved."
+  if command == "account-add" {
+    if next.accounts.length >= 500 { fail("Maximum 500 accounts reached.") }; let fields = accountFields(body); if next.accounts.some(fn(item) { return item.code == fields.code }) { fail("Account code already exists.") }; let item = Object.assign(fields,{id:fresh(next,"A"),version:1,status:"open"}); next.accounts.push(item); message = "Created account " + item.id + "."
+  } else if command == "account-edit" {
+    let item = find(next.accounts,body.id,"Account"); version(item,body); let fields = accountFields(body); if next.accounts.some(fn(row) { return row.id != item.id and row.code == fields.code }) { fail("Account code already exists.") }; if fields.type != item.type and next.journals.some(fn(row) { return row.debitId == item.id or row.creditId == item.id }) { fail("Cannot change the type of an account with journal history.") }; Object.assign(item,fields); item.version += 1; message = "Updated account."
+  } else if command == "account-status" {
+    let item = find(next.accounts,body.id,"Account"); version(item,body); let status = choose(body.status,["open","closed"],"account status"); if status == "closed" and decimal.compare(balance(item.id,next.journals),"0") != 0 { fail("Only a zero-balance account can close.") }; item.status = status; item.version += 1; message = "Account is now " + status + "."
+  } else if command == "account-delete" {
+    let item = find(next.accounts,body.id,"Account"); version(item,body); if next.journals.some(fn(row) { return row.debitId == item.id or row.creditId == item.id }) or next.reconciliations.some(fn(row) { return row.accountId == item.id }) { fail("Account has ledger history. Close it instead of deleting it.") }; next.accounts = next.accounts.filter(fn(row) { return row.id != item.id }); message = "Deleted unused account."
+  } else if command == "journal-post" {
+    let fields = postingFields(body); let previous = next.journals.find(fn(row) { return row.reference == fields.reference })
+    if previous != undefined { if previous.reverses != "" or not samePosting(previous,fields) { fail("Reference already belongs to a different posting.") }; return "Identical posting replayed; no duplicate journal created." }
+    ensurePosting(next,fields); let entry = Object.assign(fields,{id:fresh(next,"J"),version:1,reverses:"",reversedBy:""}); next.journals.push(entry); message = "Posted balanced journal " + entry.id + "."
+  } else if command == "journal-reverse" {
+    let original = find(next.journals,body.id,"Journal"); let reference = referenceText(body.reference); let fields = {reference:reference,debitId:original.creditId,creditId:original.debitId,amount:original.amount,date:day(body.date),description:text(body.description,"Reversal reason",1000)}
+    let previous = next.journals.find(fn(row) { return row.reference == reference })
+    if previous != undefined { if previous.reverses == original.id and samePosting(previous,fields) { return "Identical reversal replayed; no duplicate journal created." }; fail("Reversal reference belongs to another operation.") }
+    version(original,body); if original.reversedBy != "" or original.reverses != "" { fail("Only an original, unreversed journal can be reversed.") }; ensurePosting(next,fields)
+    let entry = Object.assign(fields,{id:fresh(next,"J"),version:1,reverses:original.id,reversedBy:""}); original.reversedBy = entry.id; original.version += 1; next.journals.push(entry); message = "Reversal " + entry.id + " posted; original journal retained."
+  } else if command == "reconcile" {
+    let accountId = text(body.accountId ?? body.id,"Account id",40); let account = find(next.accounts,accountId,"Account"); if body.id == accountId { version(account,body) }
+    let label = text(body.label,"Reconciliation label",100); let statement = statementRows(body.statement); let book = []
+    for entry in next.journals { if entry.debitId == accountId { book.push({reference:entry.reference,amount:entry.amount}) }; if entry.creditId == accountId { book.push({reference:entry.reference,amount:decimal.quantize(decimal.subtract("0",entry.amount),2,"half-even")}) } }
+    let bookByReference = new Map(); for item in book { bookByReference.set(item.reference,item) }; let statementReferences = new Set(); for item in statement { statementReferences.add(item.reference) }
+    let exceptions = []; let matched = 0; let statementTotal = "0.00"; let bookTotal = "0.00"
+    for item in statement { statementTotal = decimal.add(statementTotal,item.amount); let other = bookByReference.get(item.reference); if other == undefined { exceptions.push(item.reference + ": absent from account journal") } else if decimal.compare(item.amount,other.amount) != 0 { exceptions.push(item.reference + ": statement " + item.amount + ", books " + other.amount) } else { matched += 1 } }
+    for item in book { bookTotal = decimal.add(bookTotal,item.amount); if not statementReferences.has(item.reference) { exceptions.push(item.reference + ": missing from statement (" + item.amount + ")") } }
+    statementTotal = decimal.quantize(statementTotal,2,"half-even"); bookTotal = decimal.quantize(bookTotal,2,"half-even")
+    let report = {id:fresh(next,"R"),version:1,accountId:accountId,label:label,statementTotal:statementTotal,bookTotal:bookTotal,difference:decimal.quantize(decimal.subtract(statementTotal,bookTotal),2,"half-even"),matched:matched,exceptions:exceptions,created:new Date().toISOString()}
+    next.reconciliations = next.reconciliations.concat([report]).slice(-100); message = "Saved " + report.id + ": " + str(matched) + " matched, " + str(exceptions.length) + " exceptions. See Reconciliation history."
+  } else if command == "reconciliation-delete" {
+    let item = find(next.reconciliations,body.id,"Reconciliation report"); version(item,body); next.reconciliations = next.reconciliations.filter(fn(row) { return row.id != item.id }); message = "Deleted reconciliation report. Journal unchanged."
+  } else { fail("Unknown command.") }
+  validateState(next); persist(next); state = next; return message
+}
+fn snapshot(view,message) {
+  let output = []; let totalDebits = "0.00"; let accountTotals = {}
+  for entry in state.journals { totalDebits = decimal.add(totalDebits,entry.amount); accountTotals[entry.debitId] = decimal.add(accountTotals[entry.debitId] ?? "0.00",entry.amount); accountTotals[entry.creditId] = decimal.subtract(accountTotals[entry.creditId] ?? "0.00",entry.amount) }
+  totalDebits = decimal.quantize(totalDebits,2,"half-even")
+  if view == "accounts" {
+    output = state.accounts.map(fn(item) { let signed = decimal.quantize(accountTotals[item.id] ?? "0.00",2,"half-even"); let normal = signed; if ["liability","income","equity"].includes(item.type) { normal = decimal.quantize(decimal.subtract("0",signed),2,"half-even") }; return Object.assign({},item,{displayName:item.code + " · " + item.name,balance:normal,debitMinusCredit:signed}) })
+  } else if view == "journals" {
+    output = state.journals.slice().reverse().map(fn(entry) { let debit = find(state.accounts,entry.debitId,"Debit account"); let credit = find(state.accounts,entry.creditId,"Credit account"); let status = "Posted"; if entry.reversedBy != "" { status = "Reversed" }; if entry.reverses != "" { status = "Reversal" }; return Object.assign({},entry,{debit:debit.code + " · " + debit.name,credit:credit.code + " · " + credit.name,status:status}) })
+  } else if view == "reconciliations" {
+    output = state.reconciliations.slice().reverse().map(fn(run) { let account = find(state.accounts,run.accountId,"Account"); return Object.assign({},run,{account:account.code + " · " + account.name,exceptionCount:run.exceptions.length,details:run.exceptions.join("\n")}) })
+  } else { fail("Unknown view.") }
+  return {ok:true,message:message,rows:output,summary:str(state.accounts.length) + " accounts · " + str(state.journals.length) + " journals · total debits = credits " + totalDebits + " · " + str(state.reconciliations.length) + " reconciliations"}
+}
+try {
+  let body = record(JSON.parse(args[1] ?? "{}")); let view = body.view ?? "accounts"; choose(view,["accounts","journals","reconciliations"],"view")
+  state = readStore(state); validateState(state); let message = act(args[0] ?? "list",body); print(JSON.stringify(snapshot(view,message)))
+} catch problem { print(JSON.stringify({ok:false,message:problem.message ?? str(problem)})) }

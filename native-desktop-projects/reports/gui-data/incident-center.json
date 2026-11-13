@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "serial": 3,
+  "incidents": [
+    {
+      "title": "Local network issue — native QA",
+      "owner": "Operations",
+      "priority": "P2",
+      "serviceId": "",
+      "description": "",
+      "id": "I1",
+      "version": 1,
+      "status": "open",
+      "created": "2026-11-13T14:07:43.698Z"
+    }
+  ],
+  "services": [],
+  "events": [
+    {
+      "id": "E2",
+      "version": 1,
+      "entityId": "I1",
+      "subject": "Local network issue — native QA",
+      "action": "Created",
+      "note": "Incident opened by owner Operations",
+      "time": "2026-11-13T14:07:43.703Z"
+    }
+  ]
+}

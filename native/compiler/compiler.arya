@@ -15,7 +15,7 @@ use arya "./build-cache.arya" as build_cache
 use arya "./checker.arya" as checker
 use arya "./editor.arya" as editor
 
-const VERSION = "2.0.0-alpha.2"
+const VERSION = "2.0.0"
 let scopeCounter = 0
 let functionCounter = 0
 let definitions = []
@@ -28,12 +28,14 @@ let semanticChecking = false
 let inferenceDepth = 0
 let refinements = []
 let needsCrypto = false
+let needsAuth = false
 let needsURL = false
 let needsHTTP = false
 let needsMySQL = false
 let needsPython = false
 let needsRegex = false
 let needsDesktop = false
+let needsGUI = false
 let needsAccounting = false
 let standardDirectory = ""
 let sourceOverlay = {}
@@ -121,11 +123,12 @@ fn tokenize(source) {
       token.kind = "string"
       let close = c
       i += 1; column += 1
-      let value = ""
+      let parts = []; let start = i
       while i < len(source) and source[i] != close {
         c = source[i]
         if c == "\n" { fail(token, "Close the string before the end of the line.") }
         if c == "\\" {
+          parts.push(source.slice(start, i))
           i += 1; column += 1
           c = source[i]
           if c == "n" { c = "\n" }
@@ -141,10 +144,12 @@ fn tokenize(source) {
             c = runtime.stringFromCodes([unit])
           }
           else if c != "\\" and c != '"' and c != "'" { fail(token, "Unsupported escape.") }
+          parts.push(c); start = i + 1
         }
-        value += c; i += 1; column += 1
+        i += 1; column += 1
       }
       if i >= len(source) { fail(token, "Unclosed string.") }
+      parts.push(source.slice(start, i)); let value = parts.join("")
       i += 1; column += 1; token.text = value; token.value = value
     } else {
       let pair = source.slice(i, i + 2)
@@ -251,7 +256,7 @@ fn nativeGlobal(node) {
 }
 fn freshValue(node) {
   if node == null { return true }
-  if node.kind == "object" { for field in node.fields { if not freshValue(field.value) { return false } }; return true }
+  if node.kind == "object" { for field in node.fields { if field.spread or not freshValue(field.value) { return false } }; return true }
   if node.kind == "list" { for item in node.items { if not freshValue(item) { return false } }; return true }
   return node.kind == "literal" or node.kind == "function"
 }
@@ -371,7 +376,18 @@ fn inferValue(node) {
   }
   if node.kind == "function" { return functionType(node) }
   if node.kind == "list" { let values = []; for item in node.items { let type = inferred(item); if item.kind == "spread" and types.kind(type) == "array" { type = type.value }; values.push(type) }; return types.array(types.union(values)) }
-  if node.kind == "object" { let fields = {}; for item in node.fields { fields[item.key] = inferred(item.value) }; return types.record(fields) }
+  if node.kind == "object" {
+    let result = types.record({})
+    for item in node.fields {
+      if item.spread { result = types.recordSpread(result, inferred(item.value)) }
+      else {
+        let key = item.key
+        if item.computed != undefined { if item.computed.kind == "literal" and item.computed.token.kind == "string" { key = item.computed.value } else { result = "any" } }
+        result = types.recordField(result, key, inferred(item.value))
+      }
+    }
+    return result
+  }
   if node.kind == "spread" { return inferred(node.value) }
   if node.kind == "member" { return memberType(inferred(node.object), node.key, node.token) }
   if node.kind == "chain" {
@@ -503,9 +519,21 @@ fn primary(p) {
     if not is(p, "}") {
       while true {
         lines(p); if is(p, "}") { break }
-        let key = take(p)
-        if key.kind != "word" and key.kind != "string" { fail(key, "Expected a record key.") }
-        expect(p, ":"); lines(p); fields.push({key: key.text, value: expression(p, 0)}); lines(p)
+        let key = current(p)
+        if match(p, "...") { lines(p); fields.push({spread: true, token: key, value: expression(p, 0)}) }
+        else if match(p, "[") {
+          lines(p); let computed = expression(p, 0); lines(p); expect(p, "]"); expect(p, ":"); lines(p)
+          fields.push({computed: computed, token: key, value: expression(p, 0)})
+        } else {
+          take(p)
+          if key.kind != "word" and key.kind != "string" { fail(key, "Expected a record key, computed [key], or ...record.") }
+          if match(p, ":") { lines(p); fields.push({key: key.text, token: key, value: expression(p, 0)}) }
+          else {
+            if key.kind != "word" or has(reserved, key.text) { fail(key, "Record shorthand requires a binding name; use key: value for this field.") }
+            fields.push({key: key.text, token: key, value: {kind: "name", token: key, name: key.text, scope: p.scope, shorthand: key.text}})
+          }
+        }
+        lines(p)
         if not match(p, ",") { break }
       }
     }
@@ -526,7 +554,12 @@ fn unary(p) {
   let token = current(p)
   if token.text == "await" and token.kind != "string" and not p.asyncAllowed { fail(token, "Use await at top level or in an async fn.") }
   if has(["not", "!", "-", "+", "await"], token.text) and token.kind != "string" {
-    take(p); return {kind: "unary", token: token, operator: token.text, value: unary(p)}
+    take(p)
+    p.depth += 1
+    if p.depth > 100 { fail(token, "Expression nesting exceeds 100.") }
+    let operand = unary(p)
+    p.depth -= 1
+    return {kind: "unary", token: token, operator: token.text, value: operand}
   }
   let value = primary(p)
   let chaining = false
@@ -639,7 +672,7 @@ fn statement(p) {
     if not has(["std", "arya", "python"], bridge.text) { fail(bridge, "Native imports use std, arya or an explicit python bridge.") }
     let module = take(p)
     if module.kind != "string" or module.text == "" { fail(module, "Expected a library path.") }
-    if bridge.text == "std" and not has(["io", "fs", "math", "process", "path", "runtime", "decimal", "json", "list", "env", "datetime", "validate", "debug", "log", "async", "security", "testing", "web", "_http", "mysql", "_mysql", "python", "_python", "ui", "_path", "desktop", "accounting", "_accounting", "money", "finance", "csv", "_csv"], module.text) { fail(module, "Unknown standard library.") }
+    if bridge.text == "std" and not has(["io", "fs", "math", "process", "path", "runtime", "decimal", "json", "list", "env", "datetime", "validate", "debug", "log", "async", "security", "auth", "_auth", "testing", "web", "_http", "mysql", "_mysql", "python", "_python", "ui", "_path", "desktop", "gui", "accounting", "_accounting", "money", "finance", "csv", "_csv"], module.text) { fail(module, "Unknown standard library.") }
     if bridge.text == "arya" and ((module.text.slice(0, 2) != "./" and module.text.slice(0, 3) != "../") or module.text.slice(-5) != ".arya" or module.text.includes("\\")) { fail(module, "Use a relative path ending in .arya.") }
     expect(p, "as"); let b = declare(p, name(p), "import"); b.annotation = annotation(p); ending(p)
     let imported = {kind: "import", token: token, bridge: bridge.text, specifier: module.text, binding: b}
@@ -723,7 +756,7 @@ fn parseMode(source, filename, recover) {
     fake = {text: builtin, line: 0, column: 0, start: 0}
     declare(p, fake, "builtin")
   }
-  let result = {scope: p.scope, statements: [], filename: filename, diagnostics: []}
+  let result = {scope: p.scope, statements: [], filename: filename, tokens: p.tokens, diagnostics: []}
   p.scope.start = 0; p.scope.end = len(source)
   separators(p)
   while current(p).kind != "eof" {
@@ -761,16 +794,18 @@ fn load(filename, active) {
   if source == undefined { source = fs.readTextSync(filename) }
   sourceBytes += len(source)
   if sourceBytes > 16777216 { throw "Project exceeds 16 MiB." }
-  let unit = {filename: filename, ast: parseMode(source, filename, analysisRecover), id: len(loaded)}
+  let unit = {filename: filename, source: source, ast: parseMode(source, filename, analysisRecover), id: len(loaded)}
   loaded.push(unit); active.push(filename)
   for s in unit.ast.statements {
     if s.kind == "import" and s.bridge == "std" and s.specifier == "security" { needsCrypto = true }
+    if s.kind == "import" and s.bridge == "std" and has(["auth", "_auth"], s.specifier) { needsAuth = true; needsCrypto = true }
     if s.kind == "import" and s.bridge == "std" and s.specifier == "desktop" { needsDesktop = true }
+    if s.kind == "import" and s.bridge == "std" and s.specifier == "gui" { needsGUI = true }
     if s.kind == "import" and s.bridge == "std" and s.specifier == "_accounting" { needsAccounting = true }
     if s.kind == "import" and s.bridge == "std" and s.specifier == "_http" { needsHTTP = true }
     if s.kind == "import" and s.bridge == "std" and s.specifier == "_mysql" { needsMySQL = true }
     if s.kind == "import" and (s.bridge == "python" or s.bridge == "std" and s.specifier == "_python") { needsPython = true }
-    if s.kind == "import" and s.bridge == "std" and has(["testing", "web", "mysql", "python", "ui", "path", "accounting", "money", "finance", "csv"], s.specifier) { s.unit = load(path.join(standardDirectory, s.specifier + ".arya"), active) }
+    if s.kind == "import" and s.bridge == "std" and has(["testing", "web", "mysql", "python", "ui", "path", "accounting", "money", "finance", "csv", "auth"], s.specifier) { s.unit = load(path.join(standardDirectory, s.specifier + ".arya"), active) }
     if s.kind == "import" and s.bridge == "arya" { s.unit = load(path.resolve(path.dirname(filename), s.specifier), active) }
   }
   active.pop(); units.push(unit); return unit
@@ -895,6 +930,21 @@ fn enterScope(e, parent, s) {
   return temp(e, "aenv(" + parent + "," + str(s.id) + "," + str(len(s.bindings)) + ")")
 }
 fn dynamicCallName() { if callOptimization and advancedCallOptimization { return "acall_rooted" }; return "acall" }
+fn standardTarget(node) {
+  if not dataOptimization or node.kind != "member" or node.key.kind != "literal" { return null }
+  let base = node.object; let parsed = false
+  if base.kind == "member" and base.key.kind == "literal" and base.key.value == "values" { parsed = true; base = base.object }
+  if base.kind != "name" or nativeGlobal(base) { return null }
+  let imported = binding(base)
+  if imported.kind != "import" or imported.imported.bridge != "std" or imported.imported.unit != undefined { return null }
+  let module = imported.imported.specifier; let names = []; let first = 0
+  if module == "decimal" {
+    if parsed { names = ["parse", "format", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber"]; first = 110 }
+    else { names = ["from", "add", "subtract", "multiply", "compare", "divide", "quantize", "toNumber"]; first = 100 }
+  } else if module == "json" and not parsed { names = ["parse", "stringify"]; first = 200 }
+  let index = names.indexOf(node.key.value)
+  if index < 0 { return null }; return first + index
+}
 fn emitCall(e, node, callee, args) {
   let target = stableFunction(node)
   if target == null { return temp(e, dynamicCallName() + "(" + callee + "," + args.count + "," + args.data + ")") }
@@ -959,6 +1009,39 @@ fn emitViewNode(e, node, env) {
   let raw = "av(AUNDEF)"; if node.raw != null { raw = literalString(e, node.raw) }
   return temp(e, "ahtml_element(" + tag + "," + attributes + "," + children + "," + raw + ")")
 }
+# Only a fresh, ordinary data descriptor with true flags can disappear. The
+# runtime checks the resolved callee; a replacement receives a real descriptor.
+# Constant flags have no effects, so evaluating value in source order is enough.
+fn defineDataDescriptor(node) {
+  if node.callee.kind != "member" or node.callee.key.kind != "literal" or node.callee.key.value != "defineProperty" { return null }
+  let object = node.callee.object
+  if object.kind != "name" or object.name != "Object" or not nativeGlobal(object) or len(node.arguments) != 3 { return null }
+  if node.arguments[0].kind == "spread" or node.arguments[1].kind == "spread" { return null }
+  let descriptor = node.arguments[2]
+  if descriptor.kind != "object" or len(descriptor.fields) != 4 { return null }
+  let names = ["value", "enumerable", "configurable", "writable"]
+  let seen = []; let value = null; let order = 0; let place = 1
+  for field in descriptor.fields {
+    if field.spread or field.computed != undefined { return null }
+    let index = names.indexOf(field.key)
+    if index < 0 or seen.includes(field.key) { return null }
+    seen.push(field.key)
+    if index == 0 { value = field.value }
+    else if field.value.kind != "literal" or field.value.value != true { return null }
+    order += index * place; place *= 4
+  }
+  return {value: value, order: order}
+}
+# Preserve both call boundaries while eliding a fixed-format string which only
+# the selected builtin Number would read. Dynamic receivers retain their call.
+fn fixedNumberArgument(node) {
+  if node.callee.kind != "name" or node.callee.name != "Number" or not nativeGlobal(node.callee) or len(node.arguments) != 1 { return null }
+  let inner = node.arguments[0]
+  if inner.kind != "call" or inner.callee.kind != "member" { return null }
+  let key = inner.callee.key
+  if key.kind != "literal" or key.value != "toFixed" or (key.type != "string" and key.token.kind != "string") { return null }
+  return inner
+}
 fn expr(e, node, env) {
   location(e, node.token)
   if node.kind == "view" { let children = temp(e, "alist(0,NULL)"); for child in node.children { let value = emitViewNode(e, child, env); temp(e, "aappend_value(" + children + "," + value + ")") }; let document = 0; if node.html { document = 1 }; return temp(e, "ahtml_children(" + children + "," + str(document) + ")") }
@@ -975,21 +1058,12 @@ fn expr(e, node, env) {
   }
   if node.kind == "name" {
     if nativeGlobal(node) {
-      if has(["Object", "Array", "Number", "Map", "Set", "parseInt", "parseFloat", "isNaN", "isFinite", "console", "performance", "AbortController", "AbortSignal"], node.name) { return temp(e, "aglobal(" + quote(node.name) + ")") }
-      if node.name == "String" { return temp(e, "abuilt(2)") }
-      if node.name == "Boolean" { return temp(e, "abuilt(5)") }
-      if node.name == "JSON" { return temp(e, "astd(\"json\")") }
-      if node.name == "Math" { return temp(e, "astd(\"math\")") }
-      if has(["Error", "TypeError", "RangeError", "SyntaxError", "ReferenceError", "URIError", "EvalError", "AggregateError"], node.name) { return temp(e, "aerror_global(" + quote(node.name) + ")") }
-      if node.name == "Buffer" { return temp(e, "abuffer_global()") }
-      if node.name == "RegExp" { needsRegex = true; return temp(e, "aregex_global()") }
-      if node.name == "URL" or node.name == "URLSearchParams" { needsURL = true; let params = "0"; if node.name == "URLSearchParams" { params = "1" }; return temp(e, "aurl_global(" + params + ")") }
-      if has(["encodeURIComponent", "encodeURI", "decodeURIComponent", "decodeURI"], node.name) { let id = ["encodeURIComponent", "encodeURI", "decodeURIComponent", "decodeURI"].indexOf(node.name); return temp(e, "afunction(auri_function,an(" + str(id) + ")," + quote(node.name) + ")") }
-      if node.name == "Date" { return temp(e, "adate_global()") }
-      if node.name == "Promise" { return temp(e, "apromise_global()") }
-      if node.name == "setTimeout" or node.name == "setInterval" { let id = 0; if node.name == "setInterval" { id = 2 }; return temp(e, "afunction(atimer_call,an(" + str(id) + "),\"timer\")") }
-      if node.name == "clearTimeout" or node.name == "clearInterval" { return temp(e, "afunction(atimer_call,an(1),\"clear timer\")") }
-      if node.name == "queueMicrotask" { return temp(e, "afunction(atimer_call,an(3),\"microtask\")") }
+      if node.name == "undefined" { return "av(AUNDEF)" }
+      if node.name == "NaN" { return "an(NAN)" }
+      if node.name == "Infinity" { return "an(INFINITY)" }
+      if node.name == "RegExp" { needsRegex = true }
+      if node.name == "URL" or node.name == "URLSearchParams" { needsURL = true }
+      return temp(e, "aglobal(" + quote(node.name) + ")")
     }
     if node.name == "undefined" or node.name == "NaN" or node.name == "Infinity" {
       let s = node.scope
@@ -1014,7 +1088,15 @@ fn expr(e, node, env) {
   if node.kind == "object" {
     let object = temp(e, "arecord()")
     for field in node.fields {
-      let key = literalString(e, field.key)
+      if field.spread {
+        let value = expr(e, field.value, env); location(e, field.token)
+        temp(e, "arecord_spread(" + object + "," + value + ")"); continue
+      }
+      let key = ""
+      if field.computed != undefined {
+        key = expr(e, field.computed, env); location(e, field.token)
+        key = temp(e, "(" + key + ".t==ASTR?" + key + ":afail(\"TypeError\",\"Record keys must be strings.\"))")
+      } else { key = literalString(e, field.key) }
       let value = expr(e, field.value, env)
       temp(e, "aset(" + object + "," + key + "," + value + ")")
     }
@@ -1091,6 +1173,45 @@ fn expr(e, node, env) {
     return temp(e, dynamicCallName() + "(" + callee + "," + values.count + "," + values.data + ")")
   }
   if node.kind == "call" {
+    if dataOptimization {
+      let fixed = fixedNumberArgument(node)
+      if fixed != null {
+        # The outer callee is selected before any receiver/key/argument work.
+        let number = expr(e, node.callee, env)
+        checkMemberExport(fixed.callee.object, fixed.callee.key, fixed.token)
+        let object = expr(e, fixed.callee.object, env)
+        let key = expr(e, fixed.callee.key, env)
+        let direct = "im" + str(e.caches); e.caches += 1
+        let folded = "nf" + str(e.caches); e.caches += 1
+        emit(e, "int " + direct + "," + folded + ";")
+        location(e, fixed.callee.token)
+        let method = temp(e, "aimmediate_get(" + object + "," + key + ",&" + direct + ")")
+        let args = emitArguments(e, fixed.arguments, env, null)
+        location(e, fixed.token)
+        let value = temp(e, "afixed_number_prepare(" + number + "," + method + "," + object + "," + key + "," + direct + "," + args.count + "," + args.data + ",&" + folded + ")")
+        location(e, node.token)
+        return temp(e, "afixed_number_finish(" + number + "," + value + "," + folded + ")")
+      }
+      let descriptor = defineDataDescriptor(node)
+      if descriptor != null {
+        # Resolve the callee before arguments, including a possible getter.
+        let callee = expr(e, node.callee, env)
+        let object = expr(e, node.arguments[0], env)
+        let key = expr(e, node.arguments[1], env)
+        let value = expr(e, descriptor.value, env)
+        location(e, node.token)
+        return temp(e, "adefine_data_call(" + callee + "," + object + "," + key + "," + value + "," + str(descriptor.order) + ")")
+      }
+    }
+    let standard = standardTarget(node.callee)
+    if standard != null {
+      # Evaluate the namespace/callee before every argument. The runtime guard
+      # checks the actual selected native function, not just a source name.
+      let callee = expr(e, node.callee, env)
+      let args = emitArguments(e, node.arguments, env, null)
+      location(e, node.token)
+      return temp(e, "astandard_call(" + callee + "," + str(standard) + "," + args.count + "," + args.data + ")")
+    }
     if dataOptimization and node.callee.kind == "member" and node.callee.key.kind == "literal" and (node.callee.key.type == "string" or node.callee.key.token.kind == "string") {
       if has(["match", "matchAll", "search"], node.callee.key.value) { needsRegex = true }
       checkMemberExport(node.callee.object, node.callee.key, node.token)
@@ -1482,12 +1603,26 @@ fn checkTypes() {
   }
   semanticChecking = false; typeCheckEnabled = false
 }
-fn generate() {
+fn validateProgram() {
   checkTypes()
+  for unit in units {
+    let analysis = tooling.inspect(unit.ast, fn(node) { if nativeGlobal(node) { return null }; return binding(node) }, fn(_node) { return null }, undefined, true)
+    for error in analysis.diagnostics { if error.code != "ARYA_UNREACHABLE" { fail(error.token, error.message, error.code) } }
+    for ref in analysis.references {
+      if ref.access == "write" or ref.access == "readwrite" {
+        if has(["const", "import", "builtin"], ref.binding.kind) { fail(ref.token, "Cannot assign to const '" + ref.binding.name + "'.") }
+      }
+    }
+    for member in analysis.members { if member.key.kind == "literal" { checkMemberExport(member.object, member.key, member.token) } }
+  }
+}
+fn generate() {
+  validateProgram()
   prepareCalls()
   let modules = []
   for unit in units { modules.push(finish(emitter(unit, "amodule" + str(unit.id)), unit.ast, [], true)) }
   let features = ""; if needsCrypto { features = "#define ARYA_CRYPTO 1\n" }
+  if needsAuth { features += "#define ARYA_AUTH 1\n" }
   if runtimeCounters { features += "#define ARYA_RUNTIME_COUNTERS 1\n" }
   if debugBuild { features += "#define ARYA_NATIVE_DEBUG 1\n" }
   if needsURL { features += "#define ARYA_URL 1\n" }
@@ -1496,32 +1631,33 @@ fn generate() {
   if needsPython { features += "#define ARYA_PYTHON 1\n" }
   if needsRegex { features += "#define ARYA_REGEX 1\n" }
   if needsDesktop { features += "#define ARYA_DESKTOP 1\n" }
+  if needsGUI { features += "#define ARYA_GUI 1\n" }
   if needsAccounting { features += "#define ARYA_ACCOUNTING 1\n" }
   let literalCount = len(stringLiterals)
   let literalSize = literalCount; if literalSize == 0 { literalSize = 1 }
-  let text = "/* Generated by Arya " + VERSION + "; self-hosted native compiler. */\n" + features + runtime_source.source + "\nstatic AV amod[" + str(len(units)) + "],ans[" + str(len(units)) + "],aprogramArgs,aliterals[" + str(literalSize) + "];\n"
-  text += prototypes.join("\n") + "\n" + definitions.join("\n") + "\n" + modules.join("\n")
-  text += "\nstatic AV arya_entry(AV closure,int argc,AV *argv){(void)closure;(void)argc;(void)argv;\n"
-  for unit in units { text += "amodule" + str(unit.id) + "(av(AUNDEF),0,NULL);if(afailed)return av(AUNDEF);\n" }
-  text += "return av(AUNDEF);}\n"
-  text += "\nint main(int argc,char **argv){ARoot modules,names,argsRoot,literalRoot;aroot(&literalRoot,aliterals," + str(literalCount) + ");\n"
+  let chunks = ["/* Generated by Arya " + VERSION + "; self-hosted native compiler. */\n" + features + runtime_source.source + "\nstatic AV amod[" + str(len(units)) + "],ans[" + str(len(units)) + "],aprogramArgs,aliterals[" + str(literalSize) + "];\n"]
+  chunks.push(prototypes.join("\n") + "\n" + definitions.join("\n") + "\n" + modules.join("\n"))
+  chunks.push("\nstatic AV arya_entry(AV closure,int argc,AV *argv){(void)closure;(void)argc;(void)argv;\n")
+  for unit in units { chunks.push("amodule" + str(unit.id) + "(av(AUNDEF),0,NULL);if(afailed)return av(AUNDEF);\n") }
+  chunks.push("return av(AUNDEF);}\n")
+  chunks.push("\nint main(int argc,char **argv){ARoot modules,names,argsRoot,literalRoot;aroot(&literalRoot,aliterals," + str(literalCount) + ");\n")
   let literalIndex = 0
   for literal in stringLiterals {
     let codes = []; let i = 0
     while i < len(literal) { codes.push(str(runtime.codeUnit(literal, i))); i += 1 }
     let data = codes.join(","); if data == "" { data = "0" }
-    text += "aliterals[" + str(literalIndex) + "]=as16((const uint16_t[]){" + data + "}," + str(len(literal)) + ");if(afailed)goto literal_failure;\n"
+    chunks.push("aliterals[" + str(literalIndex) + "]=as16((const uint16_t[]){" + data + "}," + str(len(literal)) + ");if(afailed)goto literal_failure;\n")
     literalIndex += 1
   }
-  text += "aroot(&modules,amod," + str(len(units)) + ");aroot(&names,ans," + str(len(units)) + ");aroot(&argsRoot,&aprogramArgs,1);aprogramArgs=alist(0,NULL);for(int i=1;i<argc;i++){AV value=astr(argv[i]);aresize(aprogramArgs.p,aprogramArgs.p->len+1);aprogramArgs.p->data[aprogramArgs.p->len++]=value;}\n"
-  text += "AV entry=aasyncfunction(arya_entry,av(AUNDEF),\"module initialization\");entry.p->flags|=2;entry=acall(entry,0,NULL);if(!afailed)aawait(entry);\n"
-  text += "finished:;if(!afailed)aasync_drain();int status=areport();if(!status)status=aprogram_status;aasync_shutdown();aunroot(&argsRoot);aunroot(&names);aunroot(&modules);aunroot(&literalRoot);afailed=0;agc();acounters_report();return status;literal_failure:;int failed=areport();aunroot(&literalRoot);afailed=0;agc();acounters_report();return failed;}\n"
-  return text
+  chunks.push("aroot(&modules,amod," + str(len(units)) + ");aroot(&names,ans," + str(len(units)) + ");aroot(&argsRoot,&aprogramArgs,1);aprogramArgs=alist(0,NULL);for(int i=1;i<argc;i++){AV value=astr(argv[i]);aresize(aprogramArgs.p,aprogramArgs.p->len+1);aprogramArgs.p->data[aprogramArgs.p->len++]=value;}\n")
+  chunks.push("AV entry=aasyncfunction(arya_entry,av(AUNDEF),\"module initialization\");entry.p->flags|=2;entry=acall(entry,0,NULL);if(!afailed)aawait(entry);\n")
+  chunks.push("finished:;if(!afailed)aasync_drain();int status=areport();if(!status)status=aprogram_status;aasync_shutdown();aunroot(&argsRoot);aunroot(&names);aunroot(&modules);aunroot(&literalRoot);afailed=0;agc();acounters_report();return status;literal_failure:;int failed=areport();aunroot(&literalRoot);afailed=0;agc();acounters_report();return failed;}\n")
+  return chunks.join("")
 }
 fn resetAnalysis(root) {
   scopeCounter = 0; functionCounter = 0; definitions = []; prototypes = []; units = []; loaded = []; sourceBytes = 0
   projectRoot = root; projectBoundaries = []; standardBindings = {}; currentFile = ""; typeCheckEnabled = false; semanticChecking = false; inferenceDepth = 0; refinements = []; sourceOverlay = {}
-  needsCrypto = false; needsURL = false; needsHTTP = false; needsMySQL = false; needsPython = false; needsRegex = false; needsDesktop = false; needsAccounting = false
+  needsCrypto = false; needsAuth = false; needsURL = false; needsHTTP = false; needsMySQL = false; needsPython = false; needsRegex = false; needsDesktop = false; needsGUI = false; needsAccounting = false
   standardDirectory = path.join(path.dirname(process.executable()), "stdlib")
   analysisRecover = false
   callOptimization = true; advancedCallOptimization = true; runtimeCounters = false; debugBuild = false; nativeFunctions = []
@@ -1549,13 +1685,13 @@ fn analyzeSources(snapshots, root, boundaries) {
   let errors = []
   for snapshot in snapshots { try { load(snapshot.filename, []) } catch error { errors.push({filename: error.file ?? snapshot.filename, error: error}) } }
   for unit in loaded { for error in unit.ast.diagnostics { errors.push({filename: unit.filename, error: error}) } }
-  if len(errors) == 0 { try { generate() } catch error { errors.push({filename: error.file ?? currentFile, error: error}) } }
+  if len(errors) == 0 { try { validateProgram() } catch error { errors.push({filename: error.file ?? currentFile, error: error}) } }
   let documents = []
   for unit in loaded {
     if unit.filename.slice(0, len(standardDirectory) + 1) == standardDirectory + "/" { continue }
     let source = sourceOverlay[unit.filename]; if source == undefined { source = fs.readTextSync(unit.filename) }
     let analysis = tooling.inspect(unit.ast, fn(node) { if nativeGlobal(node) { return null }; return binding(node) }, inferred, memberBinding)
-    let tokens = []; try { tokens = tokenize(source) } catch _failure { }
+    let tokens = unit.ast.tokens
     documents.push({filename: unit.filename, source: source, ast: unit.ast, analysis: analysis, tokens: tokens})
   }
   return {documents: documents, errors: errors}
@@ -1638,28 +1774,40 @@ fn main() {
     i += 1
   }
   if command != "run" and len(programArgs) > 0 { throw "Program arguments require arya run." }
+  let automaticRun = command == "run" and not explicitOutput
+  let buildFlags = {calls: callOptimization, advancedCalls: advancedCallOptimization, data: dataOptimization, counters: runtimeCounters}
+  if automaticRun {
+    for suffix in ["", ".c", ".NOTICE", ".BUILD"] { let info = fs.infoSync(output + suffix); if info != null and info.type != "file" { throw "Native run output must be a regular file: " + output + suffix } }
+    if not force and build_cache.reusable(output, filename, compiler, libraryDirectory, mode, sanitize, buildFlags) { let runArgs = [output]; for argument in programArgs { runArgs.push(argument) }; process.exit(process.run(runArgs)) }
+  }
   if command == "check" { analysisRecover = true }
   load(filename, [])
   let syntaxErrors = []; for unit in loaded { for error in unit.ast.diagnostics { syntaxErrors.push(error) } }
   if len(syntaxErrors) > 0 { let first = syntaxErrors[0]; first.diagnostics = syntaxErrors; throw first }
   debugBuild = mode == "-O0"
-  let code = generate()
-  if command == "check" { if args.includes("--json") { print(runtime.jsonStringify({ok: true, command: "check", file: filename, target: "native", diagnostics: []})) } else { print("Check OK (native): " + filename) }; return }
+  if command == "check" { validateProgram(); if args.includes("--json") { print(runtime.jsonStringify({ok: true, command: "check", file: filename, target: "native", diagnostics: []})) } else { print("Check OK (native): " + filename) }; return }
   for unit in loaded { if output == unit.filename { throw "Output cannot replace source." } }
-  let automaticRun = command == "run" and not explicitOutput
+  let code = generate()
   let cacheConfiguration = null
   if automaticRun {
-    for suffix in ["", ".c", ".NOTICE", ".BUILD"] { let info = fs.infoSync(output + suffix); if info != null and info.type != "file" { throw "Native run output must be a regular file: " + output + suffix } }
-    cacheConfiguration = build_cache.configuration(compiler, libraryDirectory, mode, sanitize, needsMySQL)
-    if not force and build_cache.reusable(output, filename, code, cacheConfiguration) { let runArgs = [output]; for argument in programArgs { runArgs.push(argument) }; process.exit(process.run(runArgs)) }
+    cacheConfiguration = build_cache.configuration(compiler, libraryDirectory, mode, sanitize, needsMySQL, buildFlags)
     force = true
   }
   if not force and (fs.existsSync(output) or fs.existsSync(output + ".c") or fs.existsSync(output + ".NOTICE")) { throw "Native output already exists; choose another path or explicitly use --force." }
-  let invocation = [compiler, "-std=c11", mode, "-ffp-contract=off", "-I", libraryDirectory, "SOURCE", "-o", "OUTPUT", path.join(libraryDirectory, "libmpdec.a"), "-lm"]
+  let invocation = [compiler, "-std=c11", mode, "-ffp-contract=off", "-I", libraryDirectory, "SOURCE", "-o", "OUTPUT", path.join(libraryDirectory, "libmpdec.a"), "-lm", "-pthread"]
   if needsCrypto { if not fs.existsSync(path.join(libraryDirectory, "libcrypto.a")) { throw "Native crypto SDK missing; build make native-crypto." }; invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libcrypto.a")); invocation.push("-pthread"); if runtime.platform() == "linux" { invocation.push("-ldl") } }
+  if needsAuth and runtime.platform() == "darwin" {
+    if not fs.existsSync(path.join(libraryDirectory, "libarya-auth.a")) { throw "Native authentication SDK missing; build make native-auth." }
+    invocation.push(path.join(libraryDirectory, "libarya-auth.a")); for framework in ["Foundation", "LocalAuthentication", "Security"] { invocation.push("-framework"); invocation.push(framework) }
+  }
   if needsURL { if not fs.existsSync(path.join(libraryDirectory, "libada.a")) { throw "Native URL SDK missing; build make native-url." }; invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libada.a")); if runtime.platform() == "darwin" { invocation.push("-lc++") } else { invocation.push("-lstdc++") } }
   if needsHTTP { if not fs.existsSync(path.join(libraryDirectory, "libllhttp.a")) { throw "Native HTTP SDK missing; build make native-http." }; invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libllhttp.a")) }
   if needsRegex { if not fs.existsSync(path.join(libraryDirectory, "libpcre2-16.a")) { throw "Native regex SDK missing; build make native-regex." }; invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libpcre2-16.a")) }
+  if needsGUI {
+    if not fs.existsSync(path.join(libraryDirectory, "libarya-gui.a")) or not fs.existsSync(path.join(libraryDirectory, "gui-link-flags")) { throw "Native GUI SDK missing; build make native-gui (GTK 3 development files required on Linux)." }
+    invocation.push(path.join(libraryDirectory, "libarya-gui.a"))
+    for flag in fs.readTextSync(path.join(libraryDirectory, "gui-link-flags")).split("\n") { if flag != "" { invocation.push(flag) } }
+  }
   if needsDesktop {
     if runtime.platform() != "darwin" { throw "Native desktop currently requires macOS AppKit/WebKit." }
     if not fs.existsSync(path.join(libraryDirectory, "libarya-desktop.a")) { throw "Native desktop SDK missing; build make native-desktop." }
@@ -1692,7 +1840,7 @@ fn main() {
     catch error { fs.remove(output + ".c"); fs.remove(output + ".NOTICE"); fs.remove(staged); fs.remove(cfile); fs.remove(notices); project.removeStage(stage); throw error }
     fs.remove(staged); fs.remove(cfile); fs.remove(notices)
   }
-  if automaticRun { fs.writeTextSync(path.join(stage, "BUILD"), build_cache.save(output, filename, output, cacheConfiguration)); fs.rename(path.join(stage, "BUILD"), output + ".BUILD") }
+  if automaticRun { fs.writeTextSync(path.join(stage, "BUILD"), build_cache.save(output, filename, cacheConfiguration, loaded)); fs.rename(path.join(stage, "BUILD"), output + ".BUILD") }
   } catch error { if fs.infoSync(stage) != null { project.removeStage(stage) }; throw error }
   if fs.infoSync(stage) != null { project.removeStage(stage) }
   if command == "build" { print(output); return }

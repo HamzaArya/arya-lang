@@ -1,0 +1,70 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "process" as process
+fn text(value, label, limit = 120) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { throw new Error(label + " must be non-empty text (max " + str(limit) + ").") }
+  return value.trim()
+}
+fn record(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn rows(value, limit = 1000) { if not Array.isArray(value) or value.length > limit { throw new Error("Expected an array of at most " + str(limit) + " rows.") }; return value }
+fn readJSON(file) { let info = fs.infoSync(file); if info == null or info.size > 1048576 { throw new Error("Input file missing or exceeds 1 MiB.") }; return JSON.parse(fs.readTextSync(file)) }
+use std "decimal" as decimal
+fn storedAmount(value) {
+  if runtime.kind(value) != "string" or not new RegExp("^-?[0-9]{1,24}\\.[0-9]{2}$").test(value) { throw new Error("Invalid stored decimal total.") }
+  return value
+}
+fn amount(value) {
+  if runtime.kind(value) != "string" or not new RegExp("^-?[0-9]{1,18}(\\.[0-9]{1,2})?$").test(value) { throw new Error("Amount must be a decimal string with up to 18 integer and 2 fractional digits.") }
+  return decimal.quantize(value, 2, "half-even")
+}
+use std "web" as web
+use std "env" as env
+const dataFile = env.get("DATA_FILE", "data.json")
+fn save(next) {
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded,"utf8") > 1048576 { throw web.error(409,"Stored data would exceed 1 MiB. Archive data before adding more.") }
+  try { fs.writeTextAtomicSync(dataFile, encoded) }
+  catch failure { throw web.error(503,"Could not persist the change. Existing data is unchanged.") }
+}
+fn safe(handler) { return fn(request) { try { return handler(request) } catch failure { if failure.aryaHttpStatus != undefined { throw failure }; throw web.error(400, failure.message ?? str(failure)) } } }
+fn accountName(value) {
+  let name = text(value,"Account",100)
+  if not new RegExp("^[A-Za-z0-9][A-Za-z0-9._-]*$").test(name) { throw new Error("Account must use letters, digits, dots, underscores or hyphens.") }
+  return name
+}
+let state = {entries: []}
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null {
+  state = record(readJSON(dataFile)); rows(state.entries,10000); let keys = new Set(); let balances = {}
+  for entry at index in state.entries {
+    record(entry); text(entry.key,"Stored key",100); accountName(entry.account); let value = amount(entry.amount)
+    let expected = decimal.quantize(decimal.add(balances[entry.account] ?? "0.00",value),2,"half-even")
+    if keys.has(entry.key) or entry.sequence != index + 1 or decimal.compare(value,"0") == 0 or decimal.compare(expected,"0") < 0 or storedAmount(entry.balance) != expected { throw new Error("Invalid stored posting or broken running balance.") }
+    keys.add(entry.key); balances[entry.account] = expected
+  }
+}
+fn balance(account) { let total = "0.00"; for entry in state.entries { if entry.account == account { total = decimal.add(total,entry.amount) } }; return decimal.quantize(total,2,"half-even") }
+fn post(request) {
+  let b = record(request.body); let key = text(b.key,"Idempotency key",100); let account = accountName(b.account); let value = amount(b.amount)
+  if decimal.compare(value,"0") == 0 { throw new Error("Amount must not be zero.") }
+  let old = state.entries.find(fn(item) { return item.key == key })
+  if old != undefined {
+    if old.account != account or decimal.compare(old.amount,value) != 0 { throw web.error(409,"Idempotency key already describes a different posting.") }
+    return {replayed: true, entry: old}
+  }
+  if state.entries.length >= 10000 { throw web.error(409,"Ledger capacity reached.") }
+  let nextBalance = decimal.quantize(decimal.add(balance(account),value),2,"half-even")
+  if decimal.compare(nextBalance,"0") < 0 { throw web.error(409,"Insufficient funds.") }
+  let entry = {sequence: state.entries.length + 1, key: key, account: account, amount: value, balance: nextBalance}
+  let next = {entries: state.entries.concat([entry])}; save(next); state = next
+  return web.response(201,{replayed: false, entry: entry})
+}
+let server = web.serve(env.int("PORT", 8613), {
+  "GET /health": fn() { return {status: "ok", postings: state.entries.length} },
+  "GET /entries": fn() { return state },
+  "GET /balance/:account": safe(fn(request) { let account = accountName(request.params.account); return {account: account, balance: balance(account)} }),
+  "POST /entries": safe(post)
+}, {host: "127.0.0.1", root: process.cwd(), html: false, assets: false, maxBodyBytes: 1048576})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

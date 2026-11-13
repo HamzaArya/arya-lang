@@ -1,0 +1,19 @@
+native/tests/run.sh
+sh native/tests/function-calls.sh
+sh native/tests/advanced-calls.sh
+sh native/tests/data-optimization.sh
+sh native/tests/fixed-format.sh
+sh native/tests/data-paths.sh
+sh native/tests/standard-calls.sh
+sh native/tests/finance-data.sh
+sh native/tests/accounting-journal.sh
+sh native/tests/security-diagnostics.sh
+sh native/tests/number-format.sh
+sh native/tests/numeric-calls.sh
+sh native/tests/fixed-format.sh
+sh native/tests/descriptor-boundaries.sh
+sh native/tests/string-storage.sh
+sh native/tests/json-simd.sh
+sh native/tests/performance.sh
+sh native/tests/profile.sh
+sh native/tests/distribution.sh

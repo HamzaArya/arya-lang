@@ -1,6 +1,6 @@
 # Native Arya 1.2 preview
 
-> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
+> Historical native documentation. The Node.js-only 1.3 source line retires this compiler/profile. Use [runtime and migration](../../compat/node/docs/node-runtime.md) for current development; the implementation described below remains in [the historical source](https://github.com/HamzaArya/arya-lang/tree/1d3d553826f6dc1f67c6a1f9a7a9f8955a23cfda). Results and commands below apply only to their older versions.
 
 
 Arya has a C11 native backend and an Arya-written native compiler. Native programs compile ahead of time to machine-code executables. They run without Node.js, Python, an Arya installation, a C compiler, or a JavaScript engine. OS libraries remain dependencies; the macOS arm64 artifact links to libSystem.

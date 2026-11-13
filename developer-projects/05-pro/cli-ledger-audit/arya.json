@@ -1,0 +1,5 @@
+{
+  "name": "cli-ledger-audit",
+  "entry": "main.arya",
+  "target": "native"
+}

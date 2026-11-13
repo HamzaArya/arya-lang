@@ -1,0 +1,110 @@
+{
+  "builtAtUtc": "2026-11-13T02:42:18.229086+00:00",
+  "status": "build-only complete; no timed workload executed",
+  "loadEnd": [
+    7.794921875,
+    9.26513671875,
+    9.27587890625
+  ],
+  "nodeVersions": {
+    "node": "24.16.0",
+    "acorn": "8.16.0",
+    "ada": "3.4.4",
+    "amaro": "1.1.9",
+    "ares": "1.34.6",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.3",
+    "llhttp": "9.4.1",
+    "merve": "1.2.2",
+    "modules": "137",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.68.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "3.5.6",
+    "simdjson": "4.6.1",
+    "simdutf": "6.4.0",
+    "sqlite": "3.53.0",
+    "tz": "2026b",
+    "undici": "7.25.0",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "13.6.233.17-node.49",
+    "zlib": "1.3.1-e00f703",
+    "zstd": "1.5.7"
+  },
+  "files": {
+    "artifacts.json": {
+      "sha256": "92ebeed4cba499357d377bf387f424a27505c8574e6be0a31f784ffff0316022",
+      "bytes": 689
+    },
+    "baseline": {
+      "sha256": "8c3a923618c324e926fff65930ce328b9019bd2380c057026e26aa57e393fde1",
+      "bytes": 541800
+    },
+    "baseline-counters": {
+      "sha256": "33af13990e9675a535b28aab5de121babf95f85c129a6e1c7b906165fad87059",
+      "bytes": 541816
+    },
+    "baseline-counters.NOTICE": {
+      "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+      "bytes": 33033
+    },
+    "baseline-counters.c": {
+      "sha256": "efe5d9c6a3e6b7352dc9f6d383ba9ec142bf65852d46452ead1aaf398b0ee624",
+      "bytes": 608783
+    },
+    "baseline.NOTICE": {
+      "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+      "bytes": 33033
+    },
+    "baseline.arya": {
+      "sha256": "8b721df8ab895225f7246b30be90ea6f1e4955962a59539dd67f7471ebefe1b6",
+      "bytes": 1995
+    },
+    "baseline.c": {
+      "sha256": "bfe077b097fb0bad2760080e498cab758422558bce2766a04f34b50f573c9cef",
+      "bytes": 608751
+    },
+    "candidate": {
+      "sha256": "a494149a622f208b1a74c709715f847f722f1b75d4c7ba7e3e18885a780cb012",
+      "bytes": 542264
+    },
+    "candidate-counters": {
+      "sha256": "0524fb705db6122325fbd1376d629c7b7bafd97471d940ada8867be27eeb9479",
+      "bytes": 542136
+    },
+    "candidate-counters.NOTICE": {
+      "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+      "bytes": 33033
+    },
+    "candidate-counters.c": {
+      "sha256": "ed2f26400b0191fd200d6a99a282ad5073028fbc0e6df3f50cf5a17d04f53cc6",
+      "bytes": 621478
+    },
+    "candidate.NOTICE": {
+      "sha256": "74ec5357d6ae5cb6ce8b2ece9e2f3d9db1ea764527a3a7d3a3f357e85dfd07d5",
+      "bytes": 33033
+    },
+    "candidate.arya": {
+      "sha256": "d9013e00511b45a36f9fb0a1cf52b2f67dd73cec1b82e27344b4712a2e15753d",
+      "bytes": 2255
+    },
+    "candidate.c": {
+      "sha256": "08baeba6be43661419c35f7ba724ea684fb7d3a46774f76aa565a4e20fe9c843",
+      "bytes": 621446
+    },
+    "node.cjs": {
+      "sha256": "13b86be01097bd302d660e1db623e65ed9534efc4602ec7c6c650e15240cc25f",
+      "bytes": 1378
+    }
+  },
+  "sourceDifferenceVerified": "Only parsed function replacement and parsed dispatch insertion; preserved in candidate-source.diff",
+  "buildLog": "Kernel binaries prepared\n",
+  "preparationSha256": "6ccbf5f087284633c00a1c8564ca3547e8cef24bf0be79de83eff646c57db941",
+  "semanticsReviewSha256": "414a24e1e19567854375e326caea061144d5aa81405dcd4c237c96185d132ff2"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Signal Log",
+  "entry": "main.arya",
+  "target": "native",
+  "template": "cli"
+}

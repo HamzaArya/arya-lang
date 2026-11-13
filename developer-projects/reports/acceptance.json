@@ -1,0 +1,911 @@
+{
+  "generated_utc": "2026-11-13T13:42:57.949640+00:00",
+  "scope": "18 standalone native Arya applications; six simulated developer tracks",
+  "platform": "macOS ARM64",
+  "passed": 18,
+  "failed": 0,
+  "qualification": "Each selected row has check/build/smoke exit zero and matches current source/test inputs and existing verified executable. Resumed smoke evidence retains original failed run separately.",
+  "browser_evidence": "reports/browser-qa.md",
+  "projects": [
+    {
+      "project": "01-beginner/cli-expenses",
+      "result": "passed",
+      "evidence": "reports/20261113T132826.232092Z/results.json",
+      "binary_sha256": "7325461fc6af4067b847902d563973370763a06e20badc2b967a512e22e290c3",
+      "source_sha256": "4a69ed0827c4337b3aaf398cbf7998aa6e29f39736632193151a0ee1e1f1e98c",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.073,
+          "log": "reports/20261113T132826.232092Z/01-beginner--cli-expenses--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/cli-expenses/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 7.914,
+          "log": "reports/20261113T132826.232092Z/01-beginner--cli-expenses--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/cli-expenses/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.668,
+          "log": "reports/20261113T132826.232092Z/01-beginner--cli-expenses--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "01-beginner/gui-study-planner",
+      "result": "passed",
+      "evidence": "reports/20261113T133145.356576Z/results.json",
+      "binary_sha256": "9cfa6354ad9b60f02d77d4d96a55d9e40da41ee1c96ab73b43458e1c389eb3e2",
+      "source_sha256": "5c9e674fa8ed256217b429320205524ff87af7033d0560afc18c01e9e1d22a49",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.503,
+          "log": "reports/20261113T133145.356576Z/01-beginner--gui-study-planner--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/gui-study-planner/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 39.596,
+          "log": "reports/20261113T133145.356576Z/01-beginner--gui-study-planner--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/gui-study-planner/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 2.586,
+          "log": "reports/20261113T133145.356576Z/01-beginner--gui-study-planner--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "01-beginner/service-notes",
+      "result": "passed",
+      "evidence": "reports/20261113T132826.232092Z/results.json",
+      "binary_sha256": "b35d790fd808b26bda741b88e89472899126a7da8be66147917e1c6745b216b9",
+      "source_sha256": "e3e5e8205e44e69065c1f69c2aa43880324db7d577807f14607b1456f90effb6",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.469,
+          "log": "reports/20261113T132826.232092Z/01-beginner--service-notes--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/service-notes/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 39.567,
+          "log": "reports/20261113T132826.232092Z/01-beginner--service-notes--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/01-beginner/service-notes/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 4.863,
+          "log": "reports/20261113T132826.232092Z/01-beginner--service-notes--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "02-better/cli-inventory",
+      "result": "passed",
+      "evidence": "reports/20261113T132827.374167Z/results.json",
+      "binary_sha256": "a35a94f30650a497f20712e5568904a00d353d1c879abf817faf0ee0bfed271d",
+      "source_sha256": "853bc5a8d4966b952f405bf6e642503732e4339f72f9b283031d66b7ba91b1fd",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.07,
+          "log": "reports/20261113T132827.374167Z/02-better--cli-inventory--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/cli-inventory/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 6.937,
+          "log": "reports/20261113T132827.374167Z/02-better--cli-inventory--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/cli-inventory/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 2.429,
+          "log": "reports/20261113T132827.374167Z/02-better--cli-inventory--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "02-better/gui-habit-tracker",
+      "result": "passed",
+      "evidence": "reports/20261113T133146.556905Z/results.json",
+      "binary_sha256": "aa1d229bf11b47f6cf002fb0fbab66e62ee2faf87d4ba7545e6ff2352cc4a534",
+      "source_sha256": "bceba7dc79841edd44ff6675b4b961943b3ef68a7dd215d1c23a6d72085d7455",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.611,
+          "log": "reports/20261113T133146.556905Z/02-better--gui-habit-tracker--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/gui-habit-tracker/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 39.137,
+          "log": "reports/20261113T133146.556905Z/02-better--gui-habit-tracker--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/gui-habit-tracker/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 3.337,
+          "log": "reports/20261113T133146.556905Z/02-better--gui-habit-tracker--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "02-better/service-bookmarks",
+      "result": "passed",
+      "evidence": "reports/20261113T132827.374167Z/results.json",
+      "binary_sha256": "136df50fc600af4fa64535cbd5e7c024081965ee1418ff4e935b3077bc28a120",
+      "source_sha256": "b5db075f4b60fb3bfee9cdf77042477ea0ea1115a5db78ee1a037a8e8ee85968",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.362,
+          "log": "reports/20261113T132827.374167Z/02-better--service-bookmarks--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/service-bookmarks/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 40.628,
+          "log": "reports/20261113T132827.374167Z/02-better--service-bookmarks--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/02-better/service-bookmarks/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 6.0,
+          "log": "reports/20261113T132827.374167Z/02-better--service-bookmarks--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "03-intermediate/cli-log-analyzer",
+      "result": "passed",
+      "evidence": "reports/20261113T132927.563792Z/results.json",
+      "binary_sha256": "ac0afe79fb7de2d517f2e28b501a11abc3e621f0f0841cad7bc3c082c0a4f3b6",
+      "source_sha256": "e0d3c5c9ba74c1a9fa4fb45a7d87c0a6029c6193ffc32174c4ddcf89a67cc86d",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.08,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/cli-log-analyzer/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 12.195,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/cli-log-analyzer/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.306,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "03-intermediate/gui-support-desk",
+      "result": "passed",
+      "evidence": "reports/20261113T133254.839934Z/results.json",
+      "binary_sha256": "0806ee4945fdb7107b0bf76f6487c3c6d6395429ce8d90dc19ac2e3582635b49",
+      "source_sha256": "4bfee3ea689ff377581ed82b208ec96e3e8d96c8474d0912ce18fd3dad361533",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.82,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 83.998,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 3.038,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "03-intermediate/service-reservations",
+      "result": "passed",
+      "evidence": "reports/20261113T133423.493719Z/results.json",
+      "binary_sha256": "19767d7deb9968b7b5e27efee8c19158eb689fafc7681d95feb06ae48a97841b",
+      "source_sha256": "9aadd773be239a34c3eec4047bd4aaa82f3da32e77210b82ed57f8c4e878d42f",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.793,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/service-reservations/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 40.846,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/service-reservations/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.923,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "04-advanced/cli-backup-manifest",
+      "result": "passed",
+      "evidence": "reports/20261113T133508.368270Z/results.json",
+      "binary_sha256": "cb9b7b6f117561ea276d9502010c3497013a264fd33e4856bd178aba820ddfe3",
+      "source_sha256": "699c00d9a43002e4d883dd9e34228db141b44d490d7bdcddbe6d80d9ecb809af",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.57,
+          "log": "reports/20261113T133508.368270Z/04-advanced--cli-backup-manifest--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/cli-backup-manifest/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 28.456,
+          "log": "reports/20261113T133508.368270Z/04-advanced--cli-backup-manifest--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/cli-backup-manifest/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 2.641,
+          "log": "reports/20261113T133508.368270Z/04-advanced--cli-backup-manifest--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "04-advanced/gui-project-board",
+      "result": "passed",
+      "evidence": "reports/20261113T134135.634563Z/results.json",
+      "binary_sha256": "63b21a84a8f1e829c0e84a65b0157e4ce1302fe23d21ab1f9358ea49acb4fbad",
+      "source_sha256": "d2cd041f7cfee3e2f345d74a147c30da6f35717cf3976be845d9769bbd57f408",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.527,
+          "log": "reports/20261113T133508.368270Z/04-advanced--gui-project-board--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 209.159,
+          "log": "reports/20261113T133508.368270Z/04-advanced--gui-project-board--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.562,
+          "log": "reports/20261113T134135.634563Z/04-advanced--gui-project-board--smoke-resumed.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "04-advanced/service-job-queue",
+      "result": "passed",
+      "evidence": "reports/20261113T133508.368270Z/results.json",
+      "binary_sha256": "6eb74c82c214d41bb55790cdb3460a614d98797d19a2338a2c042bae5f7c4f4b",
+      "source_sha256": "b8049116b48989a599076721acce111bf899c3946dd51fa7e2bfb852c4682728",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.891,
+          "log": "reports/20261113T133508.368270Z/04-advanced--service-job-queue--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/service-job-queue/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 23.958,
+          "log": "reports/20261113T133508.368270Z/04-advanced--service-job-queue--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/service-job-queue/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 7.702,
+          "log": "reports/20261113T133508.368270Z/04-advanced--service-job-queue--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "05-pro/cli-ledger-audit",
+      "result": "passed",
+      "evidence": "reports/20261113T133140.200181Z/results.json",
+      "binary_sha256": "80e24d330cc131c9cfa661f488842c1effdccd828d6d2979f585b5972abdbb11",
+      "source_sha256": "07a5e1b06afb446050acc1b033f80ce3835ff6c4a94429440fc1df8b5b6b7d47",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.02,
+          "log": "reports/20261113T133140.200181Z/05-pro--cli-ledger-audit--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/cli-ledger-audit/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 3.072,
+          "log": "reports/20261113T133140.200181Z/05-pro--cli-ledger-audit--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/cli-ledger-audit/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.845,
+          "log": "reports/20261113T133140.200181Z/05-pro--cli-ledger-audit--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "05-pro/gui-incident-console",
+      "result": "passed",
+      "evidence": "reports/20261113T133140.200181Z/results.json",
+      "binary_sha256": "742a9d479e79664bccd63829c9d09197bf8dade583db2fae8ad36575e827f943",
+      "source_sha256": "0720c5499c33de44454a8982ae36c7109ee31798ed5b023e2eb1b08ddc6e28bb",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.491,
+          "log": "reports/20261113T133140.200181Z/05-pro--gui-incident-console--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/gui-incident-console/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 39.703,
+          "log": "reports/20261113T133140.200181Z/05-pro--gui-incident-console--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/gui-incident-console/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.382,
+          "log": "reports/20261113T133140.200181Z/05-pro--gui-incident-console--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "05-pro/service-feature-flags",
+      "result": "passed",
+      "evidence": "reports/20261113T133801.993236Z/results.json",
+      "binary_sha256": "b8cccc0b0adda5b39c06445b30da38fd91c08d91b0df7b713afa5ee1f108ca15",
+      "source_sha256": "596931834087210683be369880dd8afecda9d280e4dd6b2c0df194f2ac5b37c1",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.39,
+          "log": "reports/20261113T133801.993236Z/05-pro--service-feature-flags--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/service-feature-flags/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 52.765,
+          "log": "reports/20261113T133801.993236Z/05-pro--service-feature-flags--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/05-pro/service-feature-flags/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 2.398,
+          "log": "reports/20261113T133801.993236Z/05-pro--service-feature-flags--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "06-world-class/cli-release-gate",
+      "result": "passed",
+      "evidence": "reports/20261113T133315.776053Z/results.json",
+      "binary_sha256": "b83fc81dbceeef480a6c9ad18ec3000ab9cea18b4d7353dade0f11b4eda9d711",
+      "source_sha256": "8e74a5fd7b3f594d8795956b015f5326dced1d5011761c7641a3fa54c4ec7468",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.077,
+          "log": "reports/20261113T133315.776053Z/06-world-class--cli-release-gate--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/cli-release-gate/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 14.231,
+          "log": "reports/20261113T133315.776053Z/06-world-class--cli-release-gate--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/cli-release-gate/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 3.275,
+          "log": "reports/20261113T133315.776053Z/06-world-class--cli-release-gate--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "06-world-class/gui-reconciliation",
+      "result": "passed",
+      "evidence": "reports/20261113T133315.776053Z/results.json",
+      "binary_sha256": "fd723879b129af9f6ffdd0b540079015c05655b404f97407876fc75a2968c32a",
+      "source_sha256": "8b3e15aae05758fbc93d42a1a66f734e67830b673eb41c7f58060567bf76e38a",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.916,
+          "log": "reports/20261113T133315.776053Z/06-world-class--gui-reconciliation--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/gui-reconciliation/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 92.439,
+          "log": "reports/20261113T133315.776053Z/06-world-class--gui-reconciliation--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/gui-reconciliation/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.933,
+          "log": "reports/20261113T133315.776053Z/06-world-class--gui-reconciliation--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    },
+    {
+      "project": "06-world-class/service-idempotent-ledger",
+      "result": "passed",
+      "evidence": "reports/20261113T133315.776053Z/results.json",
+      "binary_sha256": "aa5815049259461189f9b6d57be0b5abd0d4fe2b0eb047c99a43b435f135be25",
+      "source_sha256": "6c4cb246fa36e71a215c41da52b04d4b648c22b5ce89af1706ef156e3cc6f271",
+      "compiler_sha256": "a028cce0e2888b846ac288aaabc7eac4d17e53329735a671aee4d2682e886771",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.684,
+          "log": "reports/20261113T133315.776053Z/06-world-class--service-idempotent-ledger--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 36.518,
+          "log": "reports/20261113T133315.776053Z/06-world-class--service-idempotent-ledger--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/06-world-class/service-idempotent-ledger/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 6.921,
+          "log": "reports/20261113T133315.776053Z/06-world-class--service-idempotent-ledger--smoke.log",
+          "name": "smoke"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+use std "validate" as validate
+
+const defaults = {host: "127.0.0.1", port: 8080}
+const name = "ledger"
+const settings = {...defaults, name, port: 9000}
+const field = "currency"
+const customer = {name: "Samira", [field]: "AFN"}
+
+# Spreading makes a shallow record copy. Validate external data first.
+const schema = validate.object({name: validate.string(), currency: validate.string()})
+const checked = validate.parse(schema, customer)
+print(JSON.stringify(settings))
+print(JSON.stringify({...checked, active: true}))

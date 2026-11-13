@@ -1,0 +1,82 @@
+# A complete direct-native editor: GUI state/events, validated local JSON,
+# explicit save, search, edit, completion and confirmed deletion.
+use std "gui" as gui
+use std "fs" as fs
+use std "process" as process
+use std "runtime" as runtime
+const filename = process.env("DATA_FILE") ?? "native-task-desk.json"
+let tasks = []
+let nextId = 1
+const info = fs.infoSync(filename)
+if info != null {
+  if info.type != "file" or info.size > 8388608 { throw "Task storage must be a regular JSON file, at most 8 MiB." }
+  const saved = runtime.jsonParse(fs.readTextSync(filename))
+  if runtime.kind(saved) != "record" or saved.version != 1 or runtime.kind(saved.tasks) != "list" or len(saved.tasks) > 1000 { throw "Invalid task storage; existing data was not changed." }
+  let seen = {}
+  for task in saved.tasks {
+    if runtime.kind(task) != "record" or runtime.kind(task.id) != "number" or task.id < 1 or task.id > 1000000000 or task.id % 1 != 0 or seen[str(task.id)] == true or runtime.kind(task.title) != "string" or len(task.title.trim()) == 0 or len(task.title) > 200 or runtime.kind(task.notes) != "string" or len(task.notes) > 6000 or runtime.kind(task.done) != "boolean" { throw "Invalid task record; existing data was not changed." }
+    seen[str(task.id)] = true; if task.id >= nextId { nextId = task.id + 1 }
+  }
+  tasks = saved.tasks
+}
+const window = gui.window({title: "Arya Native Task Desk", width: 850, height: 650})
+window.add({id: "heading", type: "label", text: "Native Task Desk — " + gui.platform(), x: 24, y: 20, width: 780, height: 28})
+window.add({id: "searchLabel", type: "label", text: "Search tasks", x: 24, y: 62, width: 330, height: 24})
+window.add({id: "search", type: "input", x: 24, y: 90, width: 330, height: 30})
+window.add({id: "tasks", type: "list", items: [], x: 24, y: 134, width: 330, height: 365})
+window.add({id: "new", type: "button", text: "New task", x: 24, y: 515, width: 150, height: 34})
+window.add({id: "titleLabel", type: "label", text: "Title (required, up to 200 characters)", x: 385, y: 62, width: 420, height: 24})
+window.add({id: "title", type: "input", x: 385, y: 90, width: 420, height: 30})
+window.add({id: "notesLabel", type: "label", text: "Notes (up to 6000 characters)", x: 385, y: 134, width: 420, height: 24})
+window.add({id: "notes", type: "textarea", x: 385, y: 166, width: 420, height: 250})
+window.add({id: "done", type: "checkbox", text: "Completed", x: 385, y: 432, width: 220, height: 28})
+window.add({id: "save", type: "button", text: "Save task", x: 385, y: 480, width: 135, height: 36})
+window.add({id: "delete", type: "button", text: "Delete…", enabled: false, x: 535, y: 480, width: 120, height: 36})
+window.add({id: "confirm", type: "button", text: "Confirm delete", enabled: false, x: 670, y: 480, width: 135, height: 36})
+window.add({id: "summary", type: "label", x: 24, y: 570, width: 780, height: 24})
+window.add({id: "status", type: "label", text: "Create a task or select one to edit. Changes are saved only with Save task.", x: 24, y: 602, width: 780, height: 24})
+let selectedId = 0
+let visible = []
+fn status(text: string) { window.set("status", {text: text}) }
+fn render() {
+  visible = []; let labels = []; let completed = 0; let selected = -1
+  const query = window.get("search").text.toLowerCase()
+  for task in tasks {
+    if task.done { completed += 1 }
+    if (task.title + " " + task.notes).toLowerCase().includes(query) {
+      if task.id == selectedId { selected = len(visible) }
+      visible.push(task.id); let prefix = "○ "; if task.done { prefix = "✓ " }; labels.push(prefix + task.title)
+    }
+  }
+  window.set("tasks", {items: labels, index: selected})
+  window.set("summary", {text: str(len(tasks)) + " tasks · " + str(completed) + " completed · " + str(len(visible)) + " shown"})
+}
+fn selectTask(id: number) {
+  selectedId = id; window.set("confirm", {enabled: false}); window.set("delete", {enabled: id != 0})
+  if id == 0 { window.set("title", {text: ""}); window.set("notes", {text: ""}); window.set("done", {checked: false}); status("New task: enter a title and choose Save task."); return }
+  for task in tasks { if task.id == id { window.set("title", {text: task.title}); window.set("notes", {text: task.notes}); window.set("done", {checked: task.done}); status("Editing task #" + str(id) + ". Choose Save task to persist changes."); return } }
+}
+fn save(candidate) { fs.writeTextAtomicSync(filename, (runtime.jsonStringify({version: 1, tasks: candidate}) ?? "") + "\n"); tasks = candidate }
+render()
+while true {
+  const event = await window.nextEvent()
+  if event == null or event.type == "close" { break }
+  try {
+    if event.id == "search" and event.type == "change" { render() }
+    else if event.id == "tasks" and event.type == "change" and event.index >= 0 { selectTask(visible[event.index] ?? 0) }
+    else if event.id == "new" and event.type == "click" { selectTask(0); render() }
+    else if event.id == "save" and event.type == "click" {
+      const title = window.get("title").text.trim(); const notes = window.get("notes").text
+      if len(title) == 0 or len(title) > 200 or len(notes) > 6000 { throw "Use a title of 1–200 characters and notes of at most 6000 characters." }
+      if selectedId == 0 and len(tasks) >= 1000 { throw "This desk supports at most 1000 tasks." }
+      if selectedId == 0 and nextId > 1000000000 { throw "Task id limit reached." }
+      let id = selectedId; if id == 0 { id = nextId }
+      const edited = {id: id, title: title, notes: notes, done: window.get("done").checked}
+      let candidate = []; for task in tasks { if task.id == id { candidate.push(edited) } else { candidate.push(task) } }; if selectedId == 0 { candidate.push(edited) }
+      save(candidate); if selectedId == 0 { nextId += 1 }; selectedId = id; window.set("delete", {enabled: true}); window.set("confirm", {enabled: false}); render(); status("Saved task #" + str(id) + ".")
+    }
+    else if event.id == "delete" and event.type == "click" and selectedId != 0 { window.set("confirm", {enabled: true}); status("Delete task #" + str(selectedId) + "? Choose Confirm delete, or select another task to cancel.") }
+    else if event.id == "confirm" and event.type == "click" and selectedId != 0 { let candidate = []; for task in tasks { if task.id != selectedId { candidate.push(task) } }; save(candidate); selectTask(0); render(); status("Task deleted and storage updated.") }
+  } catch error { status("Error: " + str(error.message ?? error)) }
+}
+window.close()

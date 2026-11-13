@@ -1,0 +1,35 @@
+{
+  "format": 1,
+  "tickets": [
+    {
+      "id": "03d447b2-e1db-423a-ab56-9854f437d0c5",
+      "version": 2,
+      "title": "Printer issue — native QA",
+      "customer": "Local test customer",
+      "owner": "Support desk",
+      "priority": "Normal",
+      "status": "Investigating",
+      "description": "Test ticket created through AppKit.",
+      "created": "2026-11-13T14:03:20.419Z",
+      "updated": "2026-11-13T14:04:07.622Z"
+    }
+  ],
+  "history": [
+    {
+      "id": "34a401dc-0c80-46c4-a857-4b3f68a288e3",
+      "time": "2026-11-13T14:03:20.433Z",
+      "entityId": "03d447b2-e1db-423a-ab56-9854f437d0c5",
+      "title": "Printer issue — native QA",
+      "action": "Created",
+      "detail": "Local test customer · Owner: Support desk · Normal"
+    },
+    {
+      "id": "661e9ecc-0163-47a2-82e3-e1cef0737f00",
+      "time": "2026-11-13T14:04:07.620Z",
+      "entityId": "03d447b2-e1db-423a-ab56-9854f437d0c5",
+      "title": "Printer issue — native QA",
+      "action": "Status changed",
+      "detail": "Open → Investigating. Investigating locally"
+    }
+  ]
+}

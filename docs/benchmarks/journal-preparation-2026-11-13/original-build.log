@@ -1,0 +1,71 @@
+mkdir -p .build/independent/stdlib
+cp native/libraries/accounting.arya .build/independent/stdlib/accounting.arya
+.build/independent/embed native/runtime/core.c .build/independent/runtime-source.arya native/vendor/ryu
+.build/independent/embed native/runtime/core.c .build/independent/runtime.c native/vendor/ryu --c
+.build/independent/seed build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage1-seed --cc /Users/hamza/Projects/github-repo/arya-lang/native/bootstrap/cc.sh
+ld: warning: ignoring duplicate libraries: '-lm'
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage1-seed
+.build/independent/rebase .build/independent/stage1-seed.c .build/independent/runtime.c .build/independent/stage1.c
+cc -std=c11 -O2 -ffp-contract=off -I .build/independent/lib .build/independent/stage1.c .build/independent/lib/libmpdec.a -o .build/independent/stage1 -lm -pthread
+.build/independent/stage1.c:6938:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6938 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+.build/independent/stage1.c:6964:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6964 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+.build/independent/stage1.c:6965:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6965 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+.build/independent/stage1 build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage2 --force
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage2.arya-6YuY1F/program.c:6940:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6940 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage2.arya-6YuY1F/program.c:6966:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6966 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage2.arya-6YuY1F/program.c:6967:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6967 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/stage2
+.build/independent/stage2 build .build/independent/compiler.arya -o /Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya --force
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya.arya-xyDNXB/program.c:6940:6: warning: 'swapcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6940 |   if(swapcontext(&from->context,&to->context)){fputs("Arya: native context switch failed\n",stderr);exit(70);}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:47:6: note: 'swapcontext' has been explicitly marked deprecated here
+   47 | int  swapcontext(ucontext_t * __restrict, const ucontext_t * __restrict);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya.arya-xyDNXB/program.c:6966:6: warning: 'getcontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6966 |   if(getcontext(&t->context)){free(t->stack);free(t);aunroot(&root);return afail("Error","Cannot create native async task.");}
+      |      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:38:6: note: 'getcontext' has been explicitly marked deprecated here
+   38 | int  getcontext(ucontext_t *);
+      |      ^
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya.arya-xyDNXB/program.c:6967:104: warning: 'makecontext' is deprecated: first deprecated in macOS 10.6 - No longer supported [-Wdeprecated-declarations]
+ 6967 |   t->context.uc_stack.ss_sp=t->stack;t->context.uc_stack.ss_size=t->stack_size;t->context.uc_link=NULL;makecontext(&t->context,atask_entry,0);
+      |                                                                                                        ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ucontext.h:41:6: note: 'makecontext' has been explicitly marked deprecated here
+   41 | void makecontext(ucontext_t *, void (*)(), int, ...);
+      |      ^
+3 warnings generated.
+/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya
+cmp .build/independent/stage2.c .build/independent/arya.c

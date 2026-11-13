@@ -1,0 +1,1009 @@
+{
+  "boundary": "Unchanged Ledger AryaWorkerPool.run: v8 size check, structured clone/admission, worker or JSON-lines transfer, pure report, result delivery. One persistent slot/backend. Three warmups, nine alternating samples/session, two sessions. Event-loop probe follows the original application performance script.",
+  "node": "v24.16.0",
+  "sources": {
+    "/Users/hamza/Projects/github-repo/accounting-database/backend/src/services/aryaWorkerPool.js": "27b1780d8420ceda305ac09a41c3f5b8fbf3f8999eb86a010dff4220cda1019e",
+    "/Users/hamza/Projects/github-repo/accounting-database/backend/src/services/aryaNativeWorker.js": "332beb06f4e552bbb2707d89227ff2d9d4a22b8c3b176fc2f7020969af2bb2ea",
+    "/Users/hamza/Projects/github-repo/accounting-database/backend/src/workers/aryaCalculation.worker.cjs": "4d40a27dc6f9dc7e0ef21aaade484a89b0ce0c8ad76a4bca94b3f0f2ae5b729c"
+  },
+  "binaries": {
+    "baseline-controlled": "684438f31228a1bc618fb4a170bf767e11d35227b352a9b682aab98d62acda01",
+    "qualified": "7553da125e2e5d3b4c7eddc08f76cf21c90122a5234d249fbfb05b5ca4ff8595"
+  },
+  "raw": [
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "baseline-controlled",
+      "wallMs": 15.282457999999991,
+      "timerDelayMs": 1.4948329999999999
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "qualified",
+      "wallMs": 4.179541999999998,
+      "timerDelayMs": 1.0544170000000008
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 0,
+      "name": "node",
+      "wallMs": 4.740000000000009,
+      "timerDelayMs": 0.42958300000000804
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "node",
+      "wallMs": 5.130750000000006,
+      "timerDelayMs": 0.805374999999998
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "qualified",
+      "wallMs": 3.6799589999999966,
+      "timerDelayMs": 0.540916999999979
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 1,
+      "name": "baseline-controlled",
+      "wallMs": 12.135749999999973,
+      "timerDelayMs": 0.9522499999999923
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "baseline-controlled",
+      "wallMs": 13.638041000000044,
+      "timerDelayMs": 0.8644160000000056
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "qualified",
+      "wallMs": 3.74008299999997,
+      "timerDelayMs": 0.5542909999999779
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 2,
+      "name": "node",
+      "wallMs": 4.434542000000022,
+      "timerDelayMs": 0.9981250000000159
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "node",
+      "wallMs": 4.354249999999979,
+      "timerDelayMs": 1.1343749999999773
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "qualified",
+      "wallMs": 3.416499999999985,
+      "timerDelayMs": 0.21812499999998636
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 3,
+      "name": "baseline-controlled",
+      "wallMs": 12.360083000000031,
+      "timerDelayMs": 0.8248330000000124
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "baseline-controlled",
+      "wallMs": 10.340082999999993,
+      "timerDelayMs": 0.34745800000001736
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "qualified",
+      "wallMs": 3.7396249999999895,
+      "timerDelayMs": 0.5452909999999633
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 4,
+      "name": "node",
+      "wallMs": 4.111582999999996,
+      "timerDelayMs": 0.7821249999999509
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "node",
+      "wallMs": 4.348707999999988,
+      "timerDelayMs": 1.130125000000021
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "qualified",
+      "wallMs": 3.700749999999971,
+      "timerDelayMs": 0.5290829999999573
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 5,
+      "name": "baseline-controlled",
+      "wallMs": 12.531499999999994,
+      "timerDelayMs": 0.8301659999999629
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "baseline-controlled",
+      "wallMs": 11.588082999999983,
+      "timerDelayMs": 1.5947499999999764
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "qualified",
+      "wallMs": 3.359708000000012,
+      "timerDelayMs": 0.1452920000000404
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 6,
+      "name": "node",
+      "wallMs": 4.3366249999999695,
+      "timerDelayMs": 1.1292499999999563
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 7,
+      "name": "node",
+      "wallMs": 4.192875000000015,
+      "timerDelayMs": 0.9729580000000055
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 7,
+      "name": "qualified",
+      "wallMs": 2.9776659999999993,
+      "timerDelayMs": 0.8905829999999924
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 7,
+      "name": "baseline-controlled",
+      "wallMs": 10.861792000000037,
+      "timerDelayMs": 0.8700000000000045
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 8,
+      "name": "baseline-controlled",
+      "wallMs": 11.093666999999982,
+      "timerDelayMs": 0.7794579999999769
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 8,
+      "name": "qualified",
+      "wallMs": 4.761207999999954,
+      "timerDelayMs": 0.6749169999999935
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "sample": 8,
+      "name": "node",
+      "wallMs": 4.537915999999996,
+      "timerDelayMs": 1.376958000000002
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "baseline-controlled",
+      "wallMs": 201.19137499999988,
+      "timerDelayMs": 0.18316699999991215
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "qualified",
+      "wallMs": 34.02320799999961,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 0,
+      "name": "node",
+      "wallMs": 40.69225000000006,
+      "timerDelayMs": 0.50262500000008
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "node",
+      "wallMs": 39.46025000000009,
+      "timerDelayMs": 0.48700000000008004
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "qualified",
+      "wallMs": 38.6274999999996,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 1,
+      "name": "baseline-controlled",
+      "wallMs": 406.046292,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "baseline-controlled",
+      "wallMs": 245.54245900000024,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "qualified",
+      "wallMs": 43.09787499999993,
+      "timerDelayMs": 0.6824160000001029
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 2,
+      "name": "node",
+      "wallMs": 48.57570899999973,
+      "timerDelayMs": 0.8175000000001091
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "node",
+      "wallMs": 41.95941700000003,
+      "timerDelayMs": 4.413750000000164
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "qualified",
+      "wallMs": 35.6569999999997,
+      "timerDelayMs": 1.3191249999999854
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 3,
+      "name": "baseline-controlled",
+      "wallMs": 343.8395840000003,
+      "timerDelayMs": 0.4719589999999698
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "baseline-controlled",
+      "wallMs": 391.34012500000017,
+      "timerDelayMs": 0.5180000000000291
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "qualified",
+      "wallMs": 56.959957999999915,
+      "timerDelayMs": 10.72058300000026
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 4,
+      "name": "node",
+      "wallMs": 44.80833299999995,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "node",
+      "wallMs": 46.39712499999996,
+      "timerDelayMs": 0.9613330000001952
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "qualified",
+      "wallMs": 43.067541999999776,
+      "timerDelayMs": 0.02216699999962657
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 5,
+      "name": "baseline-controlled",
+      "wallMs": 493.0410410000004,
+      "timerDelayMs": 0.7975830000000315
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "baseline-controlled",
+      "wallMs": 333.89437499999985,
+      "timerDelayMs": 0.07637499999964348
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "qualified",
+      "wallMs": 39.05637499999921,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 6,
+      "name": "node",
+      "wallMs": 42.707250000000386,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 7,
+      "name": "node",
+      "wallMs": 37.724208000000544,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 7,
+      "name": "qualified",
+      "wallMs": 32.58158299999923,
+      "timerDelayMs": 1.13866599999983
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 7,
+      "name": "baseline-controlled",
+      "wallMs": 377.2790839999998,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 8,
+      "name": "baseline-controlled",
+      "wallMs": 405.58258300000034,
+      "timerDelayMs": 4.952500000000327
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 8,
+      "name": "qualified",
+      "wallMs": 44.40845799999988,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "sample": 8,
+      "name": "node",
+      "wallMs": 38.843832999999904,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 0,
+      "name": "node",
+      "wallMs": 4.6359590000001845,
+      "timerDelayMs": 1.4293339999994714
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 0,
+      "name": "qualified",
+      "wallMs": 3.735125000000153,
+      "timerDelayMs": 1.670082999999977
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 0,
+      "name": "baseline-controlled",
+      "wallMs": 13.140292000000045,
+      "timerDelayMs": 1.8994169999996302
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 1,
+      "name": "baseline-controlled",
+      "wallMs": 10.851666999999907,
+      "timerDelayMs": 0.8607499999998254
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 1,
+      "name": "qualified",
+      "wallMs": 4.135833000000275,
+      "timerDelayMs": 0.942417000000205
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 1,
+      "name": "node",
+      "wallMs": 4.702957999999853,
+      "timerDelayMs": 0.3921249999993961
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 2,
+      "name": "node",
+      "wallMs": 4.473041999999623,
+      "timerDelayMs": 0.15504199999941193
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 2,
+      "name": "qualified",
+      "wallMs": 3.639249999999265,
+      "timerDelayMs": 0.44458299999951123
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 2,
+      "name": "baseline-controlled",
+      "wallMs": 12.549292000000605,
+      "timerDelayMs": 0.9184580000001006
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 3,
+      "name": "baseline-controlled",
+      "wallMs": 13.302458999999544,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 3,
+      "name": "qualified",
+      "wallMs": 3.637416999999914,
+      "timerDelayMs": 1.5749589999995806
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 3,
+      "name": "node",
+      "wallMs": 4.723041999999623,
+      "timerDelayMs": 1.528707999999824
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 4,
+      "name": "node",
+      "wallMs": 4.180416999999579,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 4,
+      "name": "qualified",
+      "wallMs": 3.2443750000002183,
+      "timerDelayMs": 0.7169999999996435
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 4,
+      "name": "baseline-controlled",
+      "wallMs": 10.622916999999688,
+      "timerDelayMs": 0.6310829999993075
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 5,
+      "name": "baseline-controlled",
+      "wallMs": 12.237832999999227,
+      "timerDelayMs": 1.8112080000000788
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 5,
+      "name": "qualified",
+      "wallMs": 3.830457999999453,
+      "timerDelayMs": 0.5170829999997295
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 5,
+      "name": "node",
+      "wallMs": 4.358750000000327,
+      "timerDelayMs": 0.035125000000334694
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 6,
+      "name": "node",
+      "wallMs": 7.84362499999952,
+      "timerDelayMs": 1.3142909999996846
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 6,
+      "name": "qualified",
+      "wallMs": 4.087374999999156,
+      "timerDelayMs": 0.9025419999998121
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 6,
+      "name": "baseline-controlled",
+      "wallMs": 12.624541000000136,
+      "timerDelayMs": 0.8561250000002474
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 7,
+      "name": "baseline-controlled",
+      "wallMs": 12.167875000000095,
+      "timerDelayMs": 0.8777909999998883
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 7,
+      "name": "qualified",
+      "wallMs": 3.102958999999828,
+      "timerDelayMs": 1.0380419999992228
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 7,
+      "name": "node",
+      "wallMs": 4.392667000000074,
+      "timerDelayMs": 1.2006670000000668
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 8,
+      "name": "node",
+      "wallMs": 4.257166000000325,
+      "timerDelayMs": 1.0403749999995853
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 8,
+      "name": "qualified",
+      "wallMs": 3.760207999999693,
+      "timerDelayMs": 0.5374169999995502
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "sample": 8,
+      "name": "baseline-controlled",
+      "wallMs": 11.478790999999546,
+      "timerDelayMs": 0.815958000000137
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 0,
+      "name": "node",
+      "wallMs": 40.757166999999754,
+      "timerDelayMs": 0.5007919999998194
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 0,
+      "name": "qualified",
+      "wallMs": 36.7412919999997,
+      "timerDelayMs": 0.41287499999998545
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 0,
+      "name": "baseline-controlled",
+      "wallMs": 203.79429100000016,
+      "timerDelayMs": 1.349790999999641
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 1,
+      "name": "baseline-controlled",
+      "wallMs": 341.2162499999995,
+      "timerDelayMs": 4.689332999999351
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 1,
+      "name": "qualified",
+      "wallMs": 38.296666999998706,
+      "timerDelayMs": 0.39208299999882
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 1,
+      "name": "node",
+      "wallMs": 43.063500000000204,
+      "timerDelayMs": 1.0259580000001733
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 2,
+      "name": "node",
+      "wallMs": 37.78058400000009,
+      "timerDelayMs": 0.7717090000005555
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 2,
+      "name": "qualified",
+      "wallMs": 38.648583000000144,
+      "timerDelayMs": 0.20045800000116287
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 2,
+      "name": "baseline-controlled",
+      "wallMs": 194.2692500000012,
+      "timerDelayMs": 0.4790420000008453
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 3,
+      "name": "baseline-controlled",
+      "wallMs": 368.0225410000003,
+      "timerDelayMs": 2.837207999999009
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 3,
+      "name": "qualified",
+      "wallMs": 31.286833000000115,
+      "timerDelayMs": 0.695000000001528
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 3,
+      "name": "node",
+      "wallMs": 37.25066699999843,
+      "timerDelayMs": 0.3742919999986043
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 4,
+      "name": "node",
+      "wallMs": 38.57954099999915,
+      "timerDelayMs": 0.33591599999999744
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 4,
+      "name": "qualified",
+      "wallMs": 35.516584000000876,
+      "timerDelayMs": 0.7897919999995793
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 4,
+      "name": "baseline-controlled",
+      "wallMs": 343.15599999999904,
+      "timerDelayMs": 0.1340409999993426
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 5,
+      "name": "baseline-controlled",
+      "wallMs": 381.46829199999956,
+      "timerDelayMs": 0.21466700000019046
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 5,
+      "name": "qualified",
+      "wallMs": 33.64312500000051,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 5,
+      "name": "node",
+      "wallMs": 38.50862500000039,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 6,
+      "name": "node",
+      "wallMs": 38.79624999999942,
+      "timerDelayMs": 3.4786669999994047
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 6,
+      "name": "qualified",
+      "wallMs": 37.968417000000045,
+      "timerDelayMs": 0.8897500000002765
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 6,
+      "name": "baseline-controlled",
+      "wallMs": 372.8001669999994,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 7,
+      "name": "baseline-controlled",
+      "wallMs": 343.5048340000012,
+      "timerDelayMs": 0.018834000000424567
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 7,
+      "name": "qualified",
+      "wallMs": 38.08416700000089,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 7,
+      "name": "node",
+      "wallMs": 37.59820800000125,
+      "timerDelayMs": 0.5645000000004075
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 8,
+      "name": "node",
+      "wallMs": 36.67250000000058,
+      "timerDelayMs": 0.6012090000003809
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 8,
+      "name": "qualified",
+      "wallMs": 38.977208000000246,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "sample": 8,
+      "name": "baseline-controlled",
+      "wallMs": 368.04604199999994,
+      "timerDelayMs": 0.017041999999491964
+    }
+  ],
+  "firstRequest": [
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "node",
+      "wallMs": 48.640042,
+      "timerDelayMs": 0.9513330000000053
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "qualified",
+      "wallMs": 12.521249999999995,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 1000,
+      "name": "baseline-controlled",
+      "wallMs": 15.825999999999993,
+      "timerDelayMs": 1.6108329999999995
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "node",
+      "wallMs": 55.83237500000007,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "qualified",
+      "wallMs": 41.85795899999994,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 0,
+      "rows": 10000,
+      "name": "baseline-controlled",
+      "wallMs": 301.97950000000003,
+      "timerDelayMs": 0.5750829999999496
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "name": "baseline-controlled",
+      "wallMs": 15.739542000000256,
+      "timerDelayMs": 1.028124999999818
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "name": "qualified",
+      "wallMs": 7.789375000000291,
+      "timerDelayMs": 0.07316699999955745
+    },
+    {
+      "session": 1,
+      "rows": 1000,
+      "name": "node",
+      "wallMs": 33.21604099999968,
+      "timerDelayMs": 1.0290409999997792
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "name": "baseline-controlled",
+      "wallMs": 290.96783400000004,
+      "timerDelayMs": 0
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "name": "qualified",
+      "wallMs": 38.79224999999951,
+      "timerDelayMs": 0.1794579999996131
+    },
+    {
+      "session": 1,
+      "rows": 10000,
+      "name": "node",
+      "wallMs": 42.156583000000865,
+      "timerDelayMs": 0
+    }
+  ],
+  "summary": [
+    {
+      "rows": 1000,
+      "name": "baseline-controlled",
+      "medianMs": 12.167875000000095,
+      "p95Ms": 15.282457999999991,
+      "medianTimerDelayMs": 0.8607499999998254
+    },
+    {
+      "rows": 1000,
+      "name": "qualified",
+      "medianMs": 3.700749999999971,
+      "p95Ms": 4.761207999999954,
+      "medianTimerDelayMs": 0.5542909999999779
+    },
+    {
+      "rows": 1000,
+      "name": "node",
+      "medianMs": 4.392667000000074,
+      "p95Ms": 7.84362499999952,
+      "medianTimerDelayMs": 0.9981250000000159
+    },
+    {
+      "rows": 10000,
+      "name": "baseline-controlled",
+      "medianMs": 343.8395840000003,
+      "p95Ms": 493.0410410000004,
+      "medianTimerDelayMs": 0.18316699999991215
+    },
+    {
+      "rows": 10000,
+      "name": "qualified",
+      "medianMs": 38.08416700000089,
+      "p95Ms": 56.959957999999915,
+      "medianTimerDelayMs": 0.20045800000116287
+    },
+    {
+      "rows": 10000,
+      "name": "node",
+      "medianMs": 38.843832999999904,
+      "p95Ms": 48.57570899999973,
+      "medianTimerDelayMs": 0.5007919999998194
+    }
+  ]
+}

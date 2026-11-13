@@ -1,0 +1,151 @@
+use std "fs" as fs
+use std "env" as env
+use std "runtime" as runtime
+use std "decimal" as decimal
+use arya "./rational.arya" as rational
+const precise = false
+fn fail(message) { throw new Error(message) }
+fn text(value,label,maximum=2048) { if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { fail(label + " must contain 1–" + str(maximum) + " characters.") }; return value.trim() }
+fn record(value) { if not runtime.isRecord(value) { fail("Expected a JSON object.") }; return value }
+fn options(body) {
+  let raw = body.precision ?? "2"
+  if runtime.kind(raw) != "string" or not new RegExp("^(0|[1-9][0-9]?)$").test(raw) or number(raw) > 50 { fail("Precision must be an integer from 0 to 50 decimal places.") }
+  let rounding = body.rounding ?? "half-even"; if not ["half-even","half-up","down","floor","ceil"].includes(rounding) { fail("Choose Half even, Half up, Toward zero, Floor or Ceiling rounding.") }; return {places:number(raw),rounding:rounding}
+}
+const dataFile = env.get("DATA_FILE","data.json")
+let state = {schema:1,nextId:1,lastResult:"0",memory:"0",history:[]}
+fn storedValue(value) {
+  text(value,"Stored result",800)
+  if precise { rational.reset(); if rational.exact(rational.evaluate(value)) != value { fail("Stored fraction is not canonical.") } }
+  else { if not new RegExp("^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$").test(value) or value.length > 400 { fail("Stored decimal is invalid.") }; decimal.from(value) }
+}
+fn validateStore(value) {
+  record(value); if value.schema != 1 or not Number.isSafeInteger(value.nextId) or value.nextId < 1 or value.nextId > 1000000000 or not Array.isArray(value.history) or value.history.length > 100 { fail("Unsupported or corrupt calculator store.") }
+  storedValue(value.lastResult); storedValue(value.memory); let seen = new Set()
+  for row in value.history {
+    record(row); if runtime.kind(row.id) != "string" or not new RegExp("^H[1-9][0-9]*$").test(row.id) or number(row.id.slice(1)) >= value.nextId or seen.has(row.id) { fail("Invalid stored history identifier.") }; seen.add(row.id)
+    text(row.expression,"Stored expression"); storedValue(row.result); text(row.kind,"Stored kind",40); text(row.time,"Stored time",40); text(row.details,"Stored details",2000)
+  }
+}
+fn load() {
+  let info = fs.infoSync(dataFile); if info == null { return }
+  if info.type != "file" or info.size > 1048576 { fail("Store must be a regular file (not a symlink) and at most 1 MiB.") }
+  state = record(JSON.parse(fs.readTextSync(dataFile))); validateStore(state)
+}
+fn save(next) {
+  let encoded = JSON.stringify(next,null,2); if Buffer.byteLength(encoded,"utf8") > 1048576 { fail("History store exceeds 1 MiB.") }
+  let stage = undefined
+  try {
+    stage = fs.tempDirectory(dataFile + ".stage-XXXXXX")
+    fs.writeTextSync(stage + "/data.json",encoded)
+    fs.rename(stage + "/data.json",dataFile)
+  } catch error { fail("Could not save calculator state. Existing history and memory are unchanged.") }
+  finally {
+    if stage != undefined {
+      try { if fs.infoSync(stage + "/data.json") != null { fs.remove(stage + "/data.json") } } catch cleanupError {}
+      try { fs.removeDirectory(stage) } catch cleanupError {}
+    }
+  }
+  state = next
+}
+fn remember(next,expression,result,kind,details) { if next.nextId >= 1000000000 { fail("History sequence capacity reached.") }; next.lastResult = result; next.history.push({id:"H" + str(next.nextId),expression:expression,result:result,kind:kind,time:new Date().toISOString(),details:details}); next.nextId += 1; next.history = next.history.slice(-100) }
+fn resultText(value,selected) { if precise { return rational.exact(value) }; return rational.format(value,selected.places,selected.rounding) }
+fn snapshot(message) { return {ok:true,message:message,result:state.lastResult,memory:state.memory,rows:state.history.slice().reverse(),summary:str(state.history.length) + " saved calculations · " + "Exact expressions; explicit final rounding"} }
+fn financialValue(raw,label,positive=false) {
+  text(raw,label,43); if not new RegExp("^(0|[1-9][0-9]{0,29})(\\.[0-9]{1,12})?$").test(raw) { fail(label + " must be a nonnegative decimal with up to 30 integer and 12 fractional digits.") }
+  let value = decimal.from(raw); if positive and decimal.compare(value,"0") <= 0 { fail(label + " must be positive.") }; return value
+}
+fn monthsValue(raw,maximum) { if runtime.kind(raw) != "string" or not new RegExp("^[1-9][0-9]*$").test(raw) or number(raw) > maximum { fail("Months must be an integer from 1 to " + str(maximum) + ".") }; return number(raw) }
+# A coefficient represents a value times 10^200. Directed integer division
+# provides conservative bounds without exceeding the decimal API's scale cap.
+const workScale = "1" + "0".repeat(200)
+fn fixedMultiply(left,right,rounding) { return decimal.divide(decimal.multiply(left,right),workScale,0,rounding) }
+fn workPower(base,count,rounding) {
+  let result = workScale
+  while count > 0 {
+    if count % 2 == 1 { result = fixedMultiply(result,base,rounding) }
+    count = Math.floor(count / 2); if count > 0 { base = fixedMultiply(base,base,rounding) }
+  }; return result
+}
+fn roundedRatio(numerator,denominator,selected) { return decimal.quantize(decimal.divide(numerator,denominator,selected.places,selected.rounding),selected.places,selected.rounding) }
+fn agreed(lowN,lowD,highN,highD,selected) {
+  let low = roundedRatio(lowN,lowD,selected); let high = roundedRatio(highN,highD,selected)
+  if low == high { return low }; return undefined
+}
+fn exactWorksheet(command,principal,rate,months,selected) {
+  try {
+    let factor = "(1+(" + rate + "/1200))^" + str(months)
+    let expression = principal + "*(" + factor + ")"
+    if command == "loan" { expression = principal + "*(" + rate + "/1200)*(" + factor + ")/((" + factor + ")-1)" }
+    rational.reset(); let value = rational.evaluate(expression); let principalValue = rational.evaluate(principal)
+    if command == "compound" { return {result:rational.format(value,selected.places,selected.rounding),extra:rational.format(rational.subtract(value,principalValue),selected.places,selected.rounding),interest:"0"} }
+    let total = rational.evaluate(rational.exact(value) + "*" + str(months))
+    return {result:rational.format(value,selected.places,selected.rounding),extra:rational.format(total,selected.places,selected.rounding),interest:rational.format(rational.subtract(total,principalValue),selected.places,selected.rounding)}
+  } catch problem { fail("Requested rounding is ambiguous at 200 working places and exceeds the exact fallback budget. Reduce precision or simplify the inputs.") }
+}
+fn worksheet(command,body,selected) {
+  let principal = financialValue(body.principal,"Principal / price",command != "discount"); let rate = financialValue(body.rate,"Annual rate / discount percent"); if decimal.compare(rate,"100") > 0 { fail("Rate must be between 0 and 100 percent.") }
+  if command == "discount" {
+    return {result:roundedRatio(decimal.multiply(principal,decimal.subtract("100",rate)),"100",selected),expression:principal + " * (1 - " + rate + "%)",details:"Discount saving: " + roundedRatio(decimal.multiply(principal,rate),"100",selected) + ". Exact arithmetic; final rounding only."}
+  }
+  let maximum = 600; if command == "compound" { maximum = 1200 }; let months = monthsValue(body.months,maximum)
+  let lowN = principal; let lowD = "1"; let highN = principal; let highD = "1"
+  if rate == "0" {
+    if command == "loan" { lowD = str(months); highD = str(months) }
+  } else if months == 1 {
+    # Exact algebraic cancellation avoids repeating-rate error on half-cent ties.
+    lowN = decimal.multiply(principal,decimal.add("1200",rate)); highN = lowN; lowD = "1200"; highD = lowD
+  } else {
+    let rateNumerator = decimal.multiply(rate,workScale)
+    let rateLow = decimal.divide(rateNumerator,"1200",0,"floor"); let rateHigh = decimal.divide(rateNumerator,"1200",0,"ceil")
+    let factorLow = workPower(decimal.add(workScale,rateLow),months,"floor"); let factorHigh = workPower(decimal.add(workScale,rateHigh),months,"ceil")
+    if command == "compound" {
+      lowN = decimal.multiply(principal,factorLow); highN = decimal.multiply(principal,factorHigh); lowD = workScale; highD = workScale
+    } else {
+      # f/(f-1) decreases with f: pair low rate with HIGH factor, and vice versa.
+      lowN = decimal.multiply(decimal.multiply(principal,rateLow),factorHigh)
+      lowD = decimal.multiply(workScale,decimal.subtract(factorHigh,workScale))
+      highN = decimal.multiply(decimal.multiply(principal,rateHigh),factorLow)
+      highD = decimal.multiply(workScale,decimal.subtract(factorLow,workScale))
+    }
+  }
+  let result = agreed(lowN,lowD,highN,highD,selected); let extra = undefined; let interest = "0"
+  if command == "compound" {
+    extra = agreed(decimal.subtract(lowN,decimal.multiply(principal,lowD)),lowD,decimal.subtract(highN,decimal.multiply(principal,highD)),highD,selected)
+  } else {
+    let totalLow = decimal.multiply(lowN,str(months)); let totalHigh = decimal.multiply(highN,str(months))
+    extra = agreed(totalLow,lowD,totalHigh,highD,selected)
+    interest = agreed(decimal.subtract(totalLow,decimal.multiply(principal,lowD)),lowD,decimal.subtract(totalHigh,decimal.multiply(principal,highD)),highD,selected)
+  }
+  let proof = "200-place directed fixed-point bounds agree after selected rounding."
+  if result == undefined or extra == undefined or interest == undefined {
+    let exactResult = exactWorksheet(command,principal,rate,months,selected); result = exactResult.result; extra = exactResult.extra; interest = exactResult.interest; proof = "Exact rational fallback resolved a rounding boundary."
+  }
+  let expression = "Compound " + principal + " at " + rate + "% APR for " + str(months) + " months"
+  let details = "Monthly compounding, no contributions or fees. Growth: " + extra + ". " + proof
+  if command == "loan" {
+    expression = "Loan " + principal + " at " + rate + "% APR over " + str(months) + " months"
+    details = "Equal monthly payments; rate APR/1200. Total from unrounded payment: " + extra + "; interest: " + interest + ". " + proof + " No fees or cent-adjusted final-payment schedule."
+  }
+  return {result:result,expression:expression,details:details}
+}
+
+try {
+  let body = record(JSON.parse(args[1] ?? "{}")); if (body.view ?? "history") != "history" { fail("Unknown calculator view.") }
+  load(); rational.reset(); let command = args[0] ?? "list"; let selected = options(body); let message = "Ready."
+  if command != "list" {
+    let next = JSON.parse(JSON.stringify(state))
+    if command == "calculate" {
+      let expression = text(body.expression,"Expression"); let value = rational.evaluate(expression); let result = resultText(value,selected); let preview = rational.format(value,selected.places,selected.rounding)
+      remember(next,expression,result,"Expression","Exact value: " + rational.exact(value) + "; decimal (" + str(selected.places) + " places, " + selected.rounding + "): " + preview)
+      if precise { message = "Decimal preview: " + preview + " (" + selected.rounding + ")" } else { message = "Rounded once to " + str(selected.places) + " places using " + selected.rounding + "." }
+    } else if command == "clear-history" { next.history = []; message = "History cleared. Last result and memory retained." }
+    else if command == "memory-clear" { next.memory = "0"; message = "Memory cleared." }
+    else if command == "memory-recall" { next.lastResult = next.memory; message = "Memory recalled." }
+    else if ["memory-store","memory-add","memory-subtract"].includes(command) {
+      let value = rational.evaluate(text(body.value,"Memory value",800)); if command == "memory-add" { value = rational.add(rational.evaluate(next.memory),value) }; if command == "memory-subtract" { value = rational.subtract(rational.evaluate(next.memory),value) }; next.memory = resultText(value,selected); message = "Memory: " + next.memory
+    } else if ["loan","compound","discount"].includes(command) { let value = worksheet(command,body,selected); remember(next,value.expression,value.result,command,value.details); next.history[next.history.length-1].reusable = false; message = value.details }
+    else { fail("Unknown calculator command.") }
+    save(next)
+  }; print(JSON.stringify(snapshot(message)))
+} catch problem { print(JSON.stringify({ok:false,message:problem.message ?? str(problem)})) }

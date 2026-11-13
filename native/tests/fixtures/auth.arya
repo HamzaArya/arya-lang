@@ -1,0 +1,133 @@
+use std "auth" as auth
+use std "runtime" as runtime
+use std "async" as tasks
+use std "debug" as debug
+
+let checks = 0
+fn equal(actual, expected) { debug.assert(runtime.deepEqual(actual, expected), "Authentication regression: " + str(actual) + " expected " + str(expected)); checks += 1 }
+fn rejects(code, action) { let caught = false; try { action() } catch error { equal(error.code, code); caught = true }; debug.assert(caught, "Expected " + code) }
+
+# RFC 6238 Appendix B, all six timestamps and all three HMAC algorithms.
+const secrets = ["GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA", "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA"]
+const algorithms = ["SHA1", "SHA256", "SHA512"]
+const vectors = [
+  [59, "94287082", "46119246", "90693936"],
+  [1111111109, "07081804", "68084774", "25091201"],
+  [1111111111, "14050471", "67062674", "99943326"],
+  [1234567890, "89005924", "91819424", "93441116"],
+  [2000000000, "69279037", "90698825", "38618901"],
+  [20000000000, "65353130", "77737706", "47863826"]
+]
+for vector in vectors {
+  for index in range(3) {
+    const settings = {algorithm: algorithms[index], digits: 8, time: vector[0], window: 0}
+    equal(auth.totpCode(secrets[index], settings), vector[index + 1])
+    const verified = auth.verifyTotp(secrets[index], vector[index + 1], settings)
+    equal(verified.ok, true); equal(verified.counter, Math.floor(vector[0] / 30))
+  }
+}
+equal(auth.totpCode(secrets[0], {time: 59}), "287082")
+equal(auth.verifyTotp(secrets[0], "287082", {time: 89, window: 1}).ok, true)
+equal(auth.verifyTotp(secrets[0], "287082", {time: 89, window: 0}).ok, false)
+equal(auth.verifyTotp(secrets[0], "287082", {time: 59, lastCounter: 1}).ok, false)
+equal(auth.verifyTotp(secrets[0], "287082", {time: 59, lastCounter: 0}).counter, 1)
+equal(auth.verifyTotp(secrets[0], "28x082", {time: 59}).ok, false)
+equal(auth.verifyTotp(secrets[0], "287082\0", {time: 59}).ok, false)
+equal(auth.verifyTotp(secrets[0], "000000", {time: 0}).counter, null)
+for size in [20, 21, 32, 64] { const secret = auth.generateTotpSecret(size); const code = auth.totpCode(secret); equal(auth.verifyTotp(secret, code).ok, true) }
+equal(auth.totpUri(secrets[0], {issuer: "Arya App", account: "سلام@example.com"}), "otpauth://totp/Arya%20App:%D8%B3%D9%84%D8%A7%D9%85%40example.com?secret=" + secrets[0] + "&issuer=Arya%20App&algorithm=SHA1&digits=6&period=30")
+rejects("ARYA_AUTH_INPUT", fn() { auth.totpUri(secrets[0], {issuer: "a:b", account: "c"}) })
+for bad in ["", secrets[0].toLowerCase(), secrets[0] + "=", secrets[1].slice(0, -1) + "B"] { rejects("ARYA_AUTH_INPUT", fn() { auth.totpCode(bad) }) }
+for settings in [{digits: 7}, {period: 0}, {time: -1}, {time: NaN}, {window: 3}, {lastCounter: -2}, {algorithm: "MD5"}, {typo: true}] { rejects("ARYA_AUTH_INPUT", fn() { auth.totpCode(secrets[0], settings) }) }
+
+# RFC 7636 Appendix B.
+const pkce = auth.pkce("dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk")
+equal(pkce.challenge, "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"); equal(pkce.method, "S256")
+const randomPkce = auth.pkce(); equal(randomPkce.verifier.length, 43); equal(auth.pkce(randomPkce.verifier).challenge, randomPkce.challenge)
+for verifier in ["short", "x".repeat(129), "x".repeat(42) + "=", "x".repeat(42) + "\0"] { rejects("ARYA_AUTH_INPUT", fn() { auth.pkce(verifier) }) }
+
+const store = auth.sessions({maxSessions: 2, ttlSeconds: 60})
+const methods = ["password", "totp"]
+const issued = store.issue("user:سلام", {methods})
+equal(issued.token.length, 43); equal(issued.session.subject, "user:سلام")
+equal(issued.session.expiresAt - issued.session.issuedAt, 60)
+methods.push("forged"); equal(store.verify(issued.token).methods, ["password", "totp"])
+equal(Object.isFrozen(issued), true); equal(Object.isFrozen(issued.session.methods), true)
+equal(store.verify(issued.token), issued.session)
+equal(auth.requireMethods(store.verify(issued.token), ["totp"]).subject, "user:سلام")
+rejects("ARYA_AUTH_REQUIRED", fn() { auth.requireMethods(store.verify(issued.token), ["biometrics"]) })
+rejects("ARYA_AUTH_REQUIRED", fn() { auth.requireMethods(null, ["password"]) })
+const second = store.issue("other")
+rejects("ARYA_AUTH_CAPACITY", fn() { store.issue("overflow") })
+const rotated = store.rotate(issued.token)
+equal(rotated.token == issued.token, false); equal(rotated.session, issued.session)
+equal(store.verify(issued.token), null); equal(store.rotate(issued.token), null)
+equal(store.verify(rotated.token), issued.session); equal(store.stats().active, 2)
+equal(store.consume(rotated.token), issued.session); equal(store.consume(rotated.token), null)
+equal(store.revoke(second.token), true); equal(store.revoke(second.token), false)
+equal(store.stats().active, 0)
+for token in ["", "x", "x".repeat(43), "A".repeat(42) + "B", "A".repeat(43) + "\0", "A".repeat(43) + " "] { equal(store.verify(token), null); equal(store.revoke(token), false) }
+for subject in ["", "a\0b", "a\nb", "x".repeat(257), "🔐".repeat(65), "\ud800"] { rejects("ARYA_AUTH_INPUT", fn() { store.issue(subject) }) }
+for settings in [{methods: ["Password"]}, {methods: ["password", "password"]}, {methods: ["x".repeat(33)]}, {other: true}] { rejects("ARYA_AUTH_INPUT", fn() { store.issue("user", settings) }) }
+const poisoned = {}; let calls = 0
+runtime.fieldGetter(poisoned, "ttlSeconds", fn() { calls += 1; return 60 })
+rejects("ARYA_AUTH_INPUT", fn() { auth.sessions(poisoned) }); equal(calls, 0)
+const poisonedMethods = {}; runtime.fieldGetter(poisonedMethods, "methods", fn() { calls += 1; return [] })
+rejects("ARYA_AUTH_INPUT", fn() { store.issue("user", poisonedMethods) }); equal(calls, 0)
+
+# Table churn exercises collision chains, tombstones, rehash and revocation.
+const churn = auth.sessions({maxSessions: 16})
+let keep = []
+for i in range(300) {
+  const item = churn.issue("user" + str(i % 3))
+  if i % 2 == 0 { equal(churn.consume(item.token).subject, "user" + str(i % 3)) } else { equal(churn.revoke(item.token), true) }
+  if i % 50 == 0 { keep.push(churn.issue("retained")) }
+  for retained in keep { equal(churn.verify(retained.token).subject, "retained") }
+}
+equal(churn.revokeAll("retained"), 6); equal(churn.stats().active, 0); churn.close(); churn.close()
+rejects("ARYA_AUTH_CLOSED", fn() { churn.verify("A".repeat(43)) })
+
+const reset = auth.challenges({purpose: "password-reset", maxChallenges: 4})
+const email = auth.challenges({purpose: "email-verification"})
+const link = reset.issue("account-42")
+equal(email.consume(link.token), null); equal(reset.consume(link.token).subject, "account-42"); equal(reset.consume(link.token), null)
+const single = reset.issue("only-once")
+const raced = await Promise.all([Promise.resolve().then(fn() { return reset.consume(single.token) }), Promise.resolve().then(fn() { return reset.consume(single.token) })])
+equal(raced.filter(fn(value) { return value != null }).length, 1)
+reset.close(); email.close()
+
+const recovery = auth.recoveryCodes({count: 3})
+equal(new Set(recovery.codes).size, 3)
+const consumed = auth.consumeRecoveryCode(recovery.codes[0], recovery.hashes)
+equal(consumed.ok, true); equal(consumed.hashes.length, 2); equal(recovery.hashes.length, 3)
+equal(auth.consumeRecoveryCode(recovery.codes[0], consumed.hashes).ok, false)
+equal(auth.consumeRecoveryCode("invalid", consumed.hashes).ok, false)
+equal(auth.consumeRecoveryCode(recovery.codes[1], consumed.hashes).ok, true)
+
+equal(auth.bearer("Bearer " + issued.token), issued.token); equal(auth.bearer("bEaReR abc=="), "abc==")
+for header in [null, "", "Basic abc", "Bearer ", "Bearer  abc", "Bearer abc,def", "Bearer abc def", "Bearer abc\n", "Bearer =abc", "Bearer abc=def"] { equal(auth.bearer(header), null) }
+
+const limiter = auth.rateLimiter({maxAttempts: 2, maxEntries: 1, windowSeconds: 60})
+equal(limiter.attempt("user").remaining, 1); equal(limiter.attempt("user").allowed, true)
+const denied = limiter.attempt("user"); equal(denied.allowed, false); equal(denied.retryAfter > 0, true)
+equal(limiter.attempt("another").allowed, false); equal(limiter.stats().active, 1)
+equal(limiter.reset("user"), true); equal(limiter.attempt("another").allowed, true)
+limiter.close(); rejects("ARYA_AUTH_CLOSED", fn() { limiter.attempt("user") })
+
+# Expiry uses monotonic deadlines; neither verify nor rotate extends them.
+const expiring = auth.sessions({ttlSeconds: 1, maxSessions: 2})
+const expiringToken = expiring.issue("expires")
+const shortLimiter = auth.rateLimiter({maxAttempts: 1, windowSeconds: 1, maxEntries: 1})
+equal(shortLimiter.attempt("one").allowed, true)
+await tasks.sleep(1100)
+equal(expiring.verify(expiringToken.token), null); equal(expiring.rotate(expiringToken.token), null)
+equal(expiring.stats().active, 0); equal(expiring.issue("replacement").session.subject, "replacement")
+equal(shortLimiter.attempt("two").allowed, true); shortLimiter.close(); expiring.close()
+
+# Native capability probing is noninteractive and never claims a successful
+# authentication. Real prompts and Keychain mutation belong in manual tests.
+const status = auth.biometricStatus()
+equal(runtime.kind(status.available), "boolean"); equal(runtime.kind(status.supported), "boolean")
+rejects("ARYA_AUTH_INPUT", fn() { auth.biometricStatus({policy: "any"}) })
+store.close()
+print("native auth:", checks, "checks passed")

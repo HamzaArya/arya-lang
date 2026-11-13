@@ -1,0 +1,244 @@
+{
+  "id": "stockroom",
+  "name": "Stockroom",
+  "subtitle": "Know what is on hand, what is running low and where every unit went.",
+  "views": [
+    {
+      "id": "products",
+      "label": "Products",
+      "columns": [
+        {
+          "key": "sku",
+          "label": "SKU",
+          "width": 100
+        },
+        {
+          "key": "name",
+          "label": "Product",
+          "width": 200
+        },
+        {
+          "key": "quantity",
+          "label": "On hand",
+          "width": 80
+        },
+        {
+          "key": "unitPrice",
+          "label": "Unit price",
+          "width": 100
+        },
+        {
+          "key": "value",
+          "label": "Value",
+          "width": 110
+        },
+        {
+          "key": "reorder",
+          "label": "Low at",
+          "width": 70
+        },
+        {
+          "key": "stockStatus",
+          "label": "Status",
+          "width": 100
+        },
+        {
+          "key": "location",
+          "label": "Location",
+          "width": 130
+        }
+      ]
+    },
+    {
+      "id": "movements",
+      "label": "Stock movements",
+      "columns": [
+        {
+          "key": "date",
+          "label": "Date",
+          "width": 100
+        },
+        {
+          "key": "sku",
+          "label": "SKU",
+          "width": 100
+        },
+        {
+          "key": "name",
+          "label": "Product",
+          "width": 160
+        },
+        {
+          "key": "kind",
+          "label": "Movement",
+          "width": 95
+        },
+        {
+          "key": "units",
+          "label": "Units",
+          "width": 65
+        },
+        {
+          "key": "balance",
+          "label": "Balance",
+          "width": 75
+        },
+        {
+          "key": "reason",
+          "label": "Reason / reference",
+          "width": 300
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": "New product",
+      "command": "product-add",
+      "view": "products",
+      "selection": false,
+      "fields": [
+        {
+          "key": "sku",
+          "label": "SKU",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "name",
+          "label": "Product name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "location",
+          "label": "Shelf / location",
+          "type": "text"
+        },
+        {
+          "key": "unitPrice",
+          "label": "Unit price (one currency)",
+          "type": "text",
+          "default": "0.00",
+          "required": true
+        },
+        {
+          "key": "reorder",
+          "label": "Low stock threshold",
+          "type": "text",
+          "default": "5",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Edit product",
+      "command": "product-edit",
+      "view": "products",
+      "selection": true,
+      "fields": [
+        {
+          "key": "sku",
+          "label": "SKU",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "name",
+          "label": "Product name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "location",
+          "label": "Shelf / location",
+          "type": "text"
+        },
+        {
+          "key": "unitPrice",
+          "label": "Unit price (one currency)",
+          "type": "text",
+          "default": "0.00",
+          "required": true
+        },
+        {
+          "key": "reorder",
+          "label": "Low stock threshold",
+          "type": "text",
+          "default": "5",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "multiline"
+        }
+      ]
+    },
+    {
+      "label": "Receive stock",
+      "command": "receive",
+      "view": "products",
+      "selection": true,
+      "fields": [
+        {
+          "key": "units",
+          "label": "Units",
+          "type": "text",
+          "default": "1",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Movement date (YYYY-MM-DD; blank = today UTC)",
+          "type": "text"
+        },
+        {
+          "key": "reason",
+          "label": "Reason / reference",
+          "type": "multiline",
+          "required": true
+        }
+      ]
+    },
+    {
+      "label": "Issue stock",
+      "command": "issue",
+      "view": "products",
+      "selection": true,
+      "fields": [
+        {
+          "key": "units",
+          "label": "Units",
+          "type": "text",
+          "default": "1",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Movement date (YYYY-MM-DD; blank = today UTC)",
+          "type": "text"
+        },
+        {
+          "key": "reason",
+          "label": "Reason / reference",
+          "type": "multiline",
+          "required": true
+        }
+      ]
+    },
+    {
+      "label": "Delete product",
+      "command": "product-delete",
+      "view": "products",
+      "selection": true,
+      "fields": [],
+      "destructive": true
+    }
+  ]
+}

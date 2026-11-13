@@ -1,0 +1,127 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "env" as env
+const file = env.get("DATA_FILE", "data.json")
+const numericPattern = new RegExp("^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)([eE][+-]?[0-9]+)?$")
+fn text(value, label, maximum, blank = false) {
+  if runtime.kind(value) != "string" or value.length > maximum or (not blank and value.trim().length == 0) { throw new Error(label + " must be text with at most " + str(maximum) + " characters; required values cannot be blank.") }
+  return value.trim()
+}
+fn object(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON request object.") }; return value }
+fn finite(value) { if not Number.isFinite(value) { throw new Error("The result is outside the finite number range. Try smaller values.") }; return value }
+fn numeric(value) {
+  text(value, "Number", 1024)
+  if not numericPattern.test(value.trim()) { throw new Error("Enter a finite decimal number, optionally using scientific notation.") }
+  return finite(Number(value))
+}
+fn display(value) { finite(value); if value == 0 { return "0" }; return str(value) }
+fn compute(left, operation, right) {
+  if operation == "+" { return finite(left + right) }
+  if operation == "-" { return finite(left - right) }
+  if operation == "*" { return finite(left * right) }
+  if operation == "/" { if right == 0 { throw new Error("Cannot divide by zero.") }; return finite(left / right) }
+  throw new Error("Unsupported arithmetic operation.")
+}
+fn load() {
+  let info = fs.infoSync(file)
+  if info == null { return {schema: 1, nextId: 1, history: [], lastResult: "0", memory: "0"} }
+  if info.type != "file" or info.size > 262144 { throw new Error("The calculator store must be a JSON file no larger than 256 KiB.") }
+  let state = object(JSON.parse(fs.readTextSync(file)))
+  if state.schema != 1 or not Number.isSafeInteger(state.nextId) or state.nextId < 1 or not Array.isArray(state.history) or state.history.length > 100 { throw new Error("The saved calculator state is invalid. Restore a backup instead of overwriting it.") }
+  numeric(state.lastResult); numeric(state.memory)
+  let previous = 0
+  for row in state.history {
+    object(row)
+    if not Number.isSafeInteger(row.id) or row.id <= previous or row.id >= state.nextId { throw new Error("Saved history has inconsistent entry IDs.") }
+    previous = row.id; text(row.expression, "Saved expression", 1024); numeric(row.result); text(row.kind, "Saved calculation kind", 40); text(row.time, "Saved timestamp", 40); text(row.details, "Saved details", 1000, true)
+  }
+  return state
+}
+fn save(state) {
+  let encoded = JSON.stringify(state, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 262144 { throw new Error("History is too large to save. Clear old history first.") }
+  let stage = undefined
+  try {
+    stage = fs.tempDirectory(file + ".stage-XXXXXX")
+    fs.writeTextSync(stage + "/data.json", encoded)
+    fs.rename(stage + "/data.json", file)
+  } catch failure { throw new Error("Could not save. The previous history and memory were preserved. Check the data folder and disk space.") }
+  finally {
+    if stage != undefined {
+      try { if fs.existsSync(stage + "/data.json") { fs.remove(stage + "/data.json") }; fs.removeDirectory(stage) } catch cleanupFailure {}
+    }
+  }
+}
+fn snapshot(state, message) {
+  return {ok: true, message: message, result: state.lastResult, memory: state.memory, rows: state.history.slice().reverse(), summary: str(state.history.length) + " of 100 recent calculations · Binary64 arithmetic"}
+}
+fn recordResult(state, expression, value, kind, details) {
+  let result = display(value)
+  if state.nextId >= 9007199254740991 { throw new Error("History ID capacity reached. Export your history and start a new store.") }
+  state.history.push({id: state.nextId, expression: expression, result: result, kind: kind, time: new Date().toISOString(), details: details})
+  if state.history.length > 100 { state.history.shift() }
+  state.nextId += 1; state.lastResult = result
+}
+
+fn tokenize(source, limit) {
+  let tokens = []; let index = 0
+  while index < source.length {
+    let character = source[index]
+    if character == " " or character == "\t" or character == "\n" or character == "\r" { index += 1; continue }
+    if "0123456789.".includes(character) {
+      let start = index; let digits = 0
+      while index < source.length and "0123456789".includes(source[index]) { index += 1; digits += 1 }
+      if source[index] == "." { index += 1; while index < source.length and "0123456789".includes(source[index]) { index += 1; digits += 1 } }
+      if digits == 0 { throw new Error("A decimal point needs digits (for example 0.5).") }
+      if source[index] == "e" or source[index] == "E" {
+        index += 1; if source[index] == "+" or source[index] == "-" { index += 1 }
+        let exponentStart = index
+        while index < source.length and "0123456789".includes(source[index]) { index += 1 }
+        if index == exponentStart { throw new Error("Scientific notation needs an exponent, for example 1e3.") }
+      }
+      let numberText = source.slice(start, index)
+      tokens.push({kind: "number", value: numeric(numberText), text: numberText})
+    } else if "+-*/()%".includes(character) {
+      tokens.push({kind: character, text: character}); index += 1
+    } else if "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(character) {
+      let start = index
+      while index < source.length and "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(source[index]) { index += 1 }
+      let name = source.slice(start, index); tokens.push({kind: "name", text: name})
+    } else { throw new Error("Unsupported character at position " + str(index + 1) + ": " + character) }
+    if tokens.length > limit { throw new Error("This expression has too many parts. Split it into smaller calculations.") }
+  }
+  tokens.push({kind: "end", text: ""}); return tokens
+}
+
+fn evaluate(source) {
+  let tokens = tokenize(source, 8); let position = 0
+  fn signedNumber() {
+    let sign = 1
+    if tokens[position].kind == "+" or tokens[position].kind == "-" { if tokens[position].kind == "-" { sign = -1 }; position += 1 }
+    if tokens[position].kind != "number" { throw new Error("Enter signed numbers with at most one +, -, * or / operation. Parentheses, functions and operation chains are not supported here.") }
+    let value = tokens[position].value; position += 1; return sign * value
+  }
+  let left = signedNumber()
+  if tokens[position].kind == "end" { return left }
+  let operation = tokens[position].kind
+  if not ["+", "-", "*", "/"].includes(operation) { throw new Error("Pocket Calculator supports only +, -, * and / between two signed numbers.") }
+  position += 1; let right = signedNumber()
+  if tokens[position].kind != "end" { throw new Error("Use one operation at a time. For example 12 + 7; calculation chains need Everyday Calculator.") }
+  return compute(left, operation, right)
+}
+try {
+  if args.length != 2 { throw new Error("Expected a calculator command and JSON request.") }
+  let command = args[0]; let body = object(JSON.parse(args[1]))
+  if body.view != "history" { throw new Error("Choose the calculation history view.") }
+  let state = load(); let message = "Ready. Enter a number or one arithmetic operation."; let changed = false
+  if command == "list" {}
+  else if command == "calculate" {
+    let expression = text(body.expression, "Expression", 256)
+    let result = evaluate(expression)
+    recordResult(state, expression, result, "Basic arithmetic", "One operation using finite binary64 numbers.")
+    changed = true; message = expression + " = " + state.lastResult
+  } else if command == "clear-history" { state.history = []; changed = true; message = "History cleared. The current result was kept." }
+  else { throw new Error("Unknown Pocket Calculator command.") }
+  if changed { save(state) }
+  print(JSON.stringify(snapshot(state, message)))
+} catch failure { print(JSON.stringify({ok: false, message: failure.message ?? str(failure)})) }

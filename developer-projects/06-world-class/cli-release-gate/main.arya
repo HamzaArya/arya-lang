@@ -1,0 +1,30 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "process" as process
+fn text(value, label, limit = 120) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { throw new Error(label + " must be non-empty text (max " + str(limit) + ").") }
+  return value.trim()
+}
+fn record(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn rows(value, limit = 1000) { if not Array.isArray(value) or value.length > limit { throw new Error("Expected an array of at most " + str(limit) + " rows.") }; return value }
+fn readJSON(file) { let info = fs.infoSync(file); if info == null or info.size > 1048576 { throw new Error("Input file missing or exceeds 1 MiB.") }; return JSON.parse(fs.readTextSync(file)) }
+# Evaluate supplied evidence; this command never deploys or fetches remote data.
+try {
+  if args.length != 1 { throw new Error("Usage: release-gate evidence.json") }
+  let evidence = record(readJSON(args[0])); let revision = text(evidence.revision, "Revision"); let checks = rows(evidence.checks, 100)
+  let required = ["build", "unit", "integration", "security"]; let reasons = []; let seen = new Set()
+  if not Number.isFinite(evidence.coverage) or evidence.coverage < 0 or evidence.coverage > 100 { throw new Error("Coverage must be a number from 0 to 100.") }
+  if evidence.coverage < 80 { reasons.push("Coverage is below the required 80%.") }
+  for check in checks {
+    record(check); let name = text(check.name, "Check name"); if seen.has(name) { reasons.push("Duplicate check: " + name) }; seen.add(name)
+    if not ["passed", "failed", "skipped"].includes(check.status) { throw new Error("Check status must be passed, failed or skipped.") }
+    if check.revision != revision { reasons.push(name + ": evidence belongs to a different revision.") }
+    if check.status != "passed" { reasons.push(name + ": check did not pass.") }
+    if not Number.isSafeInteger(check.tests) or check.tests < 1 { reasons.push(name + ": no positive test count supplied.") }
+  }
+  for name in required { if not seen.has(name) { reasons.push("Missing required check: " + name) } }
+  if evidence.openCritical != 0 or not Number.isSafeInteger(evidence.openCritical) { reasons.push("Critical findings must be the integer zero.") }
+  if runtime.kind(evidence.rollback) != "string" or evidence.rollback.trim().length < 10 { reasons.push("A concrete rollback command or procedure is required.") }
+  print(JSON.stringify({allowed: reasons.length == 0, revision: revision, coverage: evidence.coverage, reasons: reasons}, null, 2))
+  if reasons.length > 0 { process.exit(1) }
+} catch failure { process.error(failure.message ?? str(failure)); process.exit(2) }

@@ -1,0 +1,22 @@
+{
+  "reviewedAtUtc": "2026-11-13T02:42:00.026172+00:00",
+  "comparisonBoundary": "Warmed per-process CPU for work dispatch and kernel execution, excluding request parse, interprocess transfer, result encoding, process startup and compilation. Native uses runtime.clock(); Node uses process.cpuUsage().",
+  "samplePlan": "Two fresh sessions. Per workload: three discarded warmups, nine retained samples per backend per session; n/n+1 and backend order alternate. Peers persist across workloads inside each session.",
+  "statisticCaveat": "The unchanged controller selects the lower middle observation for 18 retained samples as medianCpuMs, rather than averaging the two central values. Its nearest-rank p95 for 18 observations is the maximum. Fib alternates 24/25, so pooled summaries cover both parameter values.",
+  "correctness": "For every warmup and retained request the controller requires deep equality of outputs across included backends. This compares output semantics for these inputs; it is not exhaustive equivalence of language APIs.",
+  "commonKernels": [
+    "sum",
+    "mix",
+    "fib",
+    "records",
+    "map",
+    "json",
+    "strings",
+    "decimal"
+  ],
+  "parsedKernel": "The controller injects a parsed-decimal implementation into candidate. Baseline has no parsed function or parsed workload samples. All common function bodies are otherwise unchanged, but whole-program source hashes differ.",
+  "decimalScope": "Node uses built-in BigInt at fixed scale 3, adds one positive constant repeatedly, then formats the total. Arya decimal reparses decimal strings on every addition; parsed reuses immutable parsed values. This does not compare arbitrary decimal scales, division, rounding, negative values, decimal libraries, or financial-report semantics. Only the same exact fixed-scale accumulation result is asserted.",
+  "workloadLimits": "Small fixed ASCII string/JSON shapes, limited collections and arithmetic kernels; no application-throughput, I/O, startup, peak-memory or universal speed claim follows.",
+  "counterBoundary": "Counter-enabled native executables run separately from timed peers after each workload in session zero; instrumented diagnostic CPU is not included in raw timing samples. Their work can perturb host/cache state.",
+  "preparationOnly": true
+}

@@ -1,0 +1,92 @@
+use std "fs" as fs
+use std "env" as env
+use std "process" as process
+use std "validate" as validate
+use std "runtime" as runtime
+const file = env.get("DATA_FILE", "data.json")
+fn text(value, label, maximum = 200) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { throw new Error(label + " must be nonempty text up to " + str(maximum) + " characters.") }
+  return value.trim()
+}
+fn integer(value, label, minimum = 0, maximum = 1000000) {
+  let result = Number(value)
+  if runtime.kind(value) != "string" and runtime.kind(value) != "number" { throw new Error(label + " must be an integer.") }
+  if str(value).trim() == "" or not Number.isSafeInteger(result) or result < minimum or result > maximum { throw new Error(label + " is outside its allowed integer range.") }
+  return result
+}
+fn load(schema) {
+  let info = fs.infoSync(file)
+  if info == null { return {nextId: 1, rows: []} }
+  if info.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+  if info.size > 1048576 { throw new Error("Data file exceeds 1 MiB.") }
+  return validate.parse(validate.object({nextId: validate.number({integer: true, min: 1}), rows: validate.array(schema, {max: 1000})}), JSON.parse(fs.readTextSync(file)))
+}
+fn save(next) {
+  if next.rows.length > 1000 { throw new Error("This local app supports at most 1000 records.") }
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded, "utf8") > 900000 { throw new Error("Store is full; remove old records first.") }
+  fs.writeTextAtomicSync(file, encoded)
+}
+fn copy(value) { return JSON.parse(JSON.stringify(value)) }
+fn findIndex(rows, id) {
+  let index = rows.findIndex(fn(row) { return row.id == integer(id, "ID", 1) })
+  if index < 0 { throw new Error("Record not found.") }
+  return index
+}
+use std "web" as web
+fn endpoint(operation) {
+  return fn(request) {
+    try { return operation(request) }
+    catch failure { throw web.error(400, failure.message ?? str(failure), "APP_INPUT") }
+  }
+}
+use std "ui" as ui
+fn input(label, key, kind = "text") { return ui.field(label, ui.input({id: key, bind: key, type: kind, required: true})) }
+fn form(children, path, body) {
+  return ui.form(children, {action: ui.request(path, {method: "POST", body: body, result: "result", pending: "busy", error: "problem"})})
+}
+fn submit(label) { return ui.button(label, {type: "submit", disabled: ui.bind("busy", false)}) }
+const rowSchema = validate.object({id: validate.number(), name: validate.string(), dates: validate.array(validate.string())})
+let data = load(rowSchema)
+fn day(value) {
+  if runtime.kind(value) != "string" or not new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$").test(value) { throw new Error("Date must use YYYY-MM-DD.") }
+  let parsed = new Date(value + "T00:00:00Z")
+  if not Number.isFinite(parsed.getTime()) or parsed.toISOString().slice(0, 10) != value { throw new Error("Enter a real calendar date.") }
+  return value
+}
+fn overview() {
+  let lines = []
+  for row in data.rows { lines.push("#" + str(row.id) + " · " + row.name + " · " + str(row.dates.length) + " check-ins\n   " + row.dates.join(", ")) }
+  if lines.length == 0 { return "No habits yet. Choose something small enough to repeat." }
+  return lines.join("\n\n")
+}
+fn result(message) { return {message: message, overview: overview(), habits: data.rows} }
+fn page() {
+  return ui.page({title: "Habit Garden", theme: "light", css: ":root{--accent:#6c4b95;--button-ink:#fff} pre{white-space:pre-wrap;line-height:1.8} .arya-page{max-width:1000px}", state: {name: "", id: "", date: new Date().toISOString().slice(0, 10), busy: false, problem: "", result: {overview: overview(), message: "One check-in per habit per date. Dates are chosen by you."}}, body: ui.stack([
+    ui.text("ARYA / BETTER WORKSPACE", {class: "arya-eyebrow"}), ui.heading("Small habits. Visible progress."), ui.text("Keep a simple calendar of the things you want to repeat."),
+    ui.grid([
+      ui.card([ui.heading("Plant a habit", {level: 2}), form([input("Habit name", "name"), submit("Create habit")], "/api/habits", {name: ui.bind("name")})]),
+      ui.card([ui.heading("Record a day", {level: 2}), form([input("Habit ID", "id", "number"), input("Date", "date", "date"), submit("Check in / undo")], "/api/checkin", {id: ui.bind("id"), date: ui.bind("date")}), ui.button("Remove habit", {variant: "danger", disabled: ui.bind("busy"), action: ui.request("/api/remove", {method: "POST", body: {id: ui.bind("id")}, result: "result", pending: "busy", error: "problem"})})])
+    ]), ui.text(ui.bind("result.message"), {role: "status", "aria-live": "polite"}), ui.text(ui.bind("problem"), {role: "alert"}),
+    ui.card([ui.heading("Your garden", {level: 2}), ui.element("pre", {}, ui.bind("result.overview"))])
+  ])})
+}
+let server = web.serve(env.int("PORT", 4202), {
+  "GET /health": fn() { return {status: "ready"} },
+  "GET /": fn() { return web.response(200, page(), {"cache-control": "no-store"}) },
+  "GET /api/habits": fn() { return result("Loaded") },
+  "POST /api/habits": endpoint(fn(request) {
+    let name = text(request.body.name, "Habit name", 100)
+    if data.rows.some(fn(row) { return row.name.toLowerCase() == name.toLowerCase() }) { throw new Error("That habit already exists.") }
+    let next = copy(data); next.rows.push({id: next.nextId, name: name, dates: []}); next.nextId += 1; save(next); data = next; return result("Habit planted.")
+  }),
+  "POST /api/checkin": endpoint(fn(request) {
+    let date = day(request.body.date); let next = copy(data); let index = findIndex(next.rows, request.body.id); let dates = next.rows[index].dates; let position = dates.indexOf(date)
+    let message = "Check-in recorded."
+    if position >= 0 { dates.splice(position, 1); message = "Check-in undone." } else { if dates.length >= 366 { throw new Error("A habit can keep up to 366 check-ins.") }; dates.push(date); dates.sort() }
+    save(next); data = next; return result(message)
+  }),
+  "POST /api/remove": endpoint(fn(request) { let next = copy(data); next.rows.splice(findIndex(next.rows, request.body.id), 1); save(next); data = next; return result("Habit removed.") })
+}, {root: process.cwd(), host: "127.0.0.1", html: false, assets: false, maxBodyBytes: 16384})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

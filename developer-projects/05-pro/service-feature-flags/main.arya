@@ -1,0 +1,61 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "process" as process
+fn text(value, label, limit = 120) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { throw new Error(label + " must be non-empty text (max " + str(limit) + ").") }
+  return value.trim()
+}
+fn record(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn rows(value, limit = 1000) { if not Array.isArray(value) or value.length > limit { throw new Error("Expected an array of at most " + str(limit) + " rows.") }; return value }
+fn readJSON(file) { let info = fs.infoSync(file); if info == null or info.size > 1048576 { throw new Error("Input file missing or exceeds 1 MiB.") }; return JSON.parse(fs.readTextSync(file)) }
+use std "web" as web
+use std "env" as env
+const dataFile = env.get("DATA_FILE", "data.json")
+fn save(next) {
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded,"utf8") > 1048576 { throw web.error(409,"Stored data would exceed 1 MiB. Archive data before adding more.") }
+  try { fs.writeTextAtomicSync(dataFile, encoded) }
+  catch failure { throw web.error(503,"Could not persist the change. Existing data is unchanged.") }
+}
+fn safe(handler) { return fn(request) { try { return handler(request) } catch failure { if failure.aryaHttpStatus != undefined { throw failure }; throw web.error(400, failure.message ?? str(failure)) } } }
+let state = {flags: []}
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null {
+  state = record(readJSON(dataFile)); rows(state.flags); let keys = new Set()
+  for flag in state.flags {
+    record(flag); text(flag.key,"Stored flag key",64)
+    if not new RegExp("^[a-z][a-z0-9-]*$").test(flag.key) or keys.has(flag.key) or runtime.kind(flag.enabled) != "boolean" or not Number.isInteger(flag.rollout) or flag.rollout < 0 or flag.rollout > 100 or not Number.isSafeInteger(flag.version) or flag.version < 1 { throw new Error("Invalid stored flag.") }
+    keys.add(flag.key)
+  }
+}
+fn lookup(key) { return state.flags.find(fn(flag) { return flag.key == key }) }
+fn setFlag(request) {
+  let b = record(request.body); let key = text(b.key,"Flag key",64)
+  if not new RegExp("^[a-z][a-z0-9-]*$").test(key) { throw new Error("Flag key must use lowercase letters, digits and hyphens.") }
+  if runtime.kind(b.enabled) != "boolean" or not Number.isInteger(b.rollout) or b.rollout < 0 or b.rollout > 100 or not Number.isSafeInteger(b.version) or b.version < 0 { throw new Error("Provide enabled boolean, rollout 0..100 and current version integer.") }
+  let previous = lookup(key); let version = 0; if previous != undefined { version = previous.version }
+  if b.version != version { throw web.error(409, "Version conflict. Reload before saving.") }
+  if previous == undefined and state.flags.length >= 1000 { throw web.error(409,"Flag limit reached.") }
+  let flag = {key: key, enabled: b.enabled, rollout: b.rollout, version: version + 1}
+  let next = {flags: state.flags.filter(fn(item) { return item.key != key }).concat([flag])}
+  save(next); state = next; return flag
+}
+fn evaluate(request) {
+  let b = record(request.body); let flag = lookup(text(b.key,"Flag key",64)); let subject = text(b.subject,"Subject",200)
+  if flag == undefined { throw web.error(404,"Flag not found.") }
+  let input = flag.key + ":" + subject; let bucket = 0; let index = 0
+  while index < input.length {
+    bucket = (bucket * 31 + input.charCodeAt(index)) % 10000
+    index += 1
+  }
+  return {key: flag.key, subject: subject, enabled: flag.enabled and bucket < flag.rollout * 100, bucket: bucket, version: flag.version}
+}
+let server = web.serve(env.int("PORT", 8513), {
+  "GET /health": fn() { return {status: "ok", flags: state.flags.length} },
+  "GET /flags": fn() { return state },
+  "POST /flags": safe(setFlag),
+  "POST /evaluate": safe(evaluate)
+}, {host: "127.0.0.1", root: process.cwd(), html: false, assets: false, maxBodyBytes: 1048576})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

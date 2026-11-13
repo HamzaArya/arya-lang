@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "--test",
+    "scripts/test-arya-native.mjs"
+  ],
+  "cwd": "/Users/hamza/Projects/github-repo/arya-lang/.build/ledger-fastpaths-2026-11-13/measurement/integration-application",
+  "startedAtUtc": "2026-11-13T03:28:27.505515+00:00",
+  "finishedAtUtc": "2026-11-13T03:28:29.815132+00:00",
+  "exitCode": 0,
+  "sourceManifestSha256": "83ffe67f7bcf8212e2a729caadeea96a1be65dbc6adf741c697e505e67cdc5b6",
+  "testScriptSha256": "47b9eb915aa5c2861dc406dda09ee44e704428fcc9f467e9bb0f4cbebd378a01",
+  "candidateSha256": "714d4be3b5a1326b7946080959c5833715d9a56217b88ff33b428095894902c8",
+  "allInputsUnchanged": true,
+  "stdoutSha256": "26ac1ad02a24a262a723f946da4f713e6dff0310a11b500dac57ce4341a428b7",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

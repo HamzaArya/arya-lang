@@ -1,0 +1,3 @@
+{"level": "info", "service": "api", "message": "GET /health", "durationMs": 4}
+{"level": "warn", "service": "api", "message": "Slow report", "durationMs": 420}
+{"level": "error", "service": "worker", "message": "Upstream timeout", "durationMs": 1000}

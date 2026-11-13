@@ -1,0 +1,1 @@
+["clang", "-fobjc-arc", "-Wall", "-Wextra", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/shared/Icon.m", "-framework", "Cocoa", "-o", "/Users/hamza/Projects/github-repo/arya-lang/native-calculators/.build/Icon"]

@@ -1,0 +1,79 @@
+use std "runtime" as runtime
+use std "fs" as fs
+use std "process" as process
+fn text(value, label, limit = 120) {
+  if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > limit { throw new Error(label + " must be non-empty text (max " + str(limit) + ").") }
+  return value.trim()
+}
+fn record(value) { if not runtime.isRecord(value) { throw new Error("Expected a JSON object.") }; return value }
+fn rows(value, limit = 1000) { if not Array.isArray(value) or value.length > limit { throw new Error("Expected an array of at most " + str(limit) + " rows.") }; return value }
+fn readJSON(file) { let info = fs.infoSync(file); if info == null or info.size > 1048576 { throw new Error("Input file missing or exceeds 1 MiB.") }; return JSON.parse(fs.readTextSync(file)) }
+use std "web" as web
+use std "env" as env
+const dataFile = env.get("DATA_FILE", "data.json")
+fn save(next) {
+  let encoded = JSON.stringify(next, null, 2)
+  if Buffer.byteLength(encoded,"utf8") > 1048576 { throw web.error(409,"Stored data would exceed 1 MiB. Archive data before adding more.") }
+  try { fs.writeTextAtomicSync(dataFile, encoded) }
+  catch failure { throw web.error(503,"Could not persist the change. Existing data is unchanged.") }
+}
+fn safe(handler) { return fn(request) { try { return handler(request) } catch failure { if failure.aryaHttpStatus != undefined { throw failure }; throw web.error(400, failure.message ?? str(failure)) } } }
+use std "ui" as ui
+let state = {incidents: []}
+const storedInfo = fs.infoSync(dataFile)
+if storedInfo != null and storedInfo.type != "file" { throw new Error("Data store must be a regular file; symlinks are not allowed.") }
+if storedInfo != null {
+  state = record(readJSON(dataFile)); rows(state.incidents)
+  for item at index in state.incidents {
+    record(item); text(item.title,"Stored title",160); text(item.owner,"Stored owner",80)
+    if item.id != str(index + 1) or not ["P1","P2","P3"].includes(item.priority) or not ["open","investigating","resolved"].includes(item.status) { throw new Error("Invalid stored incident.") }
+    rows(item.history,3); if item.history.length == 0 { throw new Error("Incident history is missing.") }; for event in item.history { text(event,"History event",540) }
+  }
+}
+fn create(request) {
+  let b = record(request.body); let title = text(b.title,"Title",160); let owner = text(b.owner,"Owner",80)
+  if not ["P1","P2","P3"].includes(b.priority) { throw new Error("Priority must be P1, P2 or P3.") }
+  if state.incidents.length >= 1000 { throw web.error(409,"Incident capacity reached.") }
+  let incident = {id: str(state.incidents.length + 1), title: title, owner: owner, priority: b.priority, status: "open", history: ["Created"]}
+  let next = {incidents: state.incidents.concat([incident])}; save(next); state = next
+  return {message: "Incident #" + incident.id + " created. Refresh the board below.", incident: incident}
+}
+fn transition(request) {
+  let b = record(request.body); let id = text(b.id,"Incident id"); let status = text(b.status,"Status"); let note = text(b.note,"Update note",500)
+  let found = state.incidents.find(fn(item) { return item.id == id }); if found == undefined { throw web.error(404,"Incident not found.") }
+  if not ((found.status == "open" and status == "investigating") or (found.status == "investigating" and status == "resolved")) { throw web.error(409,"Allowed transitions: open → investigating → resolved.") }
+  let updated = Object.assign({},found,{status: status, history: found.history.concat([status + ": " + note])})
+  let next = {incidents: state.incidents.map(fn(item) { if item.id == id { return updated }; return item })}; save(next); state = next
+  return {message: "Incident #" + id + " is now " + status + ". Refresh the board below.", incident: updated}
+}
+fn page() {
+  let open = state.incidents.filter(fn(item) { return item.status != "resolved" }).length
+  return ui.page({title: "Incident console", theme: "dark", state: {title: "", owner: "", priority: "P2", id: "", status: "investigating", note: "", result: null, busy: false, problem: ""}, body: ui.stack([
+    ui.text("OPERATIONS / PRO TRACK", {class: "arya-eyebrow"}), ui.heading("Keep incidents moving."), ui.text("Track ownership, priority and an explicit resolution history."),
+    ui.row([ui.stat("Active incidents",open),ui.stat("Total incidents",state.incidents.length),ui.link("Refresh board","/")]),
+    ui.grid([
+      ui.card([ui.heading("Declare an incident",{level:2}),ui.form([
+        ui.label("Incident title","title"),ui.input({id:"title",bind:"title",required:true,maxlength:160}),
+        ui.label("Owner","owner"),ui.input({id:"owner",bind:"owner",required:true,maxlength:80}),
+        ui.label("Priority","priority"),ui.select([{value:"P1",label:"P1 — urgent"},{value:"P2",label:"P2 — high"},{value:"P3",label:"P3 — normal"}],{id:"priority",bind:"priority"}),
+        ui.button("Create incident",{type:"submit",disabled:ui.bind("busy")})
+      ],{action:ui.request("/incidents",{method:"POST",body:{title:ui.bind("title"),owner:ui.bind("owner"),priority:ui.bind("priority")},result:"result",pending:"busy",error:"problem"})})]),
+      ui.card([ui.heading("Update an incident",{level:2}),ui.form([
+        ui.label("Incident id","incident-id"),ui.input({id:"incident-id",bind:"id",required:true}),
+        ui.label("Next status","status"),ui.select([{value:"investigating",label:"Investigating"},{value:"resolved",label:"Resolved"}],{id:"status",bind:"status"}),
+        ui.label("Update note","note"),ui.textarea({id:"note",bind:"note",required:true,maxlength:500}),
+        ui.button("Save update",{type:"submit",disabled:ui.bind("busy")})
+      ],{action:ui.request("/transition",{method:"POST",body:{id:ui.bind("id"),status:ui.bind("status"),note:ui.bind("note")},result:"result",pending:"busy",error:"problem"})})])
+    ]),ui.text(ui.bind("result.message","Ready."),{role:"status","aria-live":"polite"}),ui.text(ui.bind("problem"),{role:"alert"}),
+    ui.table([{key:"id",label:"ID"},{key:"title",label:"Incident"},{key:"owner",label:"Owner"},{key:"priority",label:"Priority"},{key:"status",label:"Status"},{key:"historyText",label:"History"}],state.incidents.map(fn(item) { return Object.assign({},item,{historyText:item.history.join(" → ")}) }),{caption:"Persisted incident board"})
+  ])})
+}
+let server = web.serve(env.int("PORT", 8512), {
+  "GET /": fn() { return web.response(200,page(),{"cache-control":"no-store"}) },
+  "GET /health": fn() { return {status:"ok"} },
+  "GET /incidents": fn() { return state },
+  "POST /incidents": safe(create),
+  "POST /transition": safe(transition)
+}, {host: "127.0.0.1", root: process.cwd(), html: false, assets: false, maxBodyBytes: 1048576})
+print("Listening at http://127.0.0.1:" + str(server.address().port))
+for signal in ["SIGINT", "SIGTERM"] { process.onSignal(signal, async fn() { await web.shutdown(server) }, {once: true}) }

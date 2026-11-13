@@ -1,0 +1,93 @@
+use std "runtime" as runtime
+use std "async" as tasks
+let checks = 0
+fn same(actual: any, expected: any) {
+  if not Object.is(actual, expected) { throw new Error("Fixed-number mismatch: " + str(actual) + " / " + str(expected)) }
+  checks += 1
+}
+fn fused(value: any, places: any): any { return Number(value.toFixed(places)) }
+fn ordinary(value: any, places: any): any { const text = value.toFixed(places); return Number(text) }
+
+if args[0] == "--counts" {
+  let total = 0
+  for i in range(10000) {
+    if args[1] == "fused" { total += fused(i + 0.25, 2) }
+    else { total += ordinary(i + 0.25, 2) }
+  }
+  print(total)
+} else {
+  for value in [0, -0, 5e-324, -5e-324, 1.005, -1.005, 2.675, -0.004, 0.125, 1.25, 123456.789, 9007199254740991, 1e20, 1e21, Infinity, -Infinity, NaN] {
+    for places in [0, 1, 2, 6, 17, 18, 19, 50, 100] { same(fused(value, places), ordinary(value, places)) }
+  }
+  for places in [undefined, NaN, -0.5, 2.9, "2", true, false, null, [], [2]] { same(fused(-1.255, places), ordinary(-1.255, places)) }
+  same(Number((-0.004).toFixed(2)), -0)
+  same(Number((-0).toFixed(2)), 0)
+  same(Number((1.25).toFixed()), 1)
+  same(Number((1.25)["toFixed"](2)), 1.25)
+  same(Number((1.25).toFixed(...[2])), 1.25)
+  const stored = (1.25).toFixed
+  same(Number(stored(2)), 1.25)
+  const absent: any = undefined
+  same(Number(absent?.toFixed(2)), NaN)
+
+  let events: any = []
+  let selected: any = 1.25
+  fn receiver(): any { events.push("receiver"); runtime.collect(); return selected }
+  fn precision(): number { events.push("precision"); selected = 99; runtime.collect(); return 2 }
+  same(Number(receiver().toFixed(precision())), 1.25)
+  same(events.join(","), "receiver,precision")
+  same(selected, 99)
+  events = []
+  fn key(): string { events.push("key"); runtime.collect(); return "toFixed" }
+  selected = 2.75
+  same(Number(receiver()[key()](precision())), 2.75)
+  same(events.join(","), "receiver,key,precision")
+  events = []
+  fn extra(): any { events.push("extra"); runtime.collect(); return {} }
+  selected = 1.25
+  same(Number(selected.toFixed(precision(), extra())), 1.25)
+  same(events.join(","), "precision,extra")
+
+  events = []
+  let custom: any = {toFixed: fn(p) { events.push("old-call"); return "4.25" }}
+  fn replace(): number { events.push("replace"); custom.toFixed = fn(p) { return "9.5" }; runtime.collect(); return 2 }
+  same(Number(custom.toFixed(replace())), 4.25)
+  same(events.join(","), "replace,old-call")
+  same(Number(custom.toFixed(2)), 9.5)
+  let reads = 0
+  let accessed: any = {}
+  runtime.fieldGetter(accessed, "toFixed", fn() { reads += 1; runtime.collect(); return fn(_p) { return "3.75" } })
+  same(Number(accessed.toFixed(2)), 3.75)
+  same(reads, 1)
+  same(Number(({toFixed: fn(_p) { return {} }}).toFixed(2)), NaN)
+  fn shadowed(): any {
+    const Number = fn(value) { runtime.collect(); return "custom:" + value }
+    return Number((1.25).toFixed(2))
+  }
+  same(shadowed(), "custom:1.25")
+
+  selected = 1.25
+  events = []
+  async fn later(): any { events.push("start"); await tasks.sleep(0); runtime.collect(); selected = 77; events.push("end"); return 2 }
+  same(Number(receiver().toFixed(await later())), 1.25)
+  same(events.join(","), "receiver,start,end")
+  same(selected, 77)
+  for places in [-1, 101, Infinity, -Infinity] {
+    try { fused(1.25, places); throw "missing error" } catch error { same(error.name, "RangeError"); same(error.message, "toFixed places must be from 0 to 100.") }
+  }
+  try { Number(absent.toFixed(extra())); throw "missing error" } catch error { same(error.name, "TypeError") }
+  let missing: any = {}
+  try { Number(missing.toFixed(extra())); throw "missing error" } catch error { same(error.name, "TypeError") }
+
+  fn depth(n: number): any { if n == 0 { return Number((1.25).toFixed(2)) }; return depth(n - 1) }
+  let boundaries: any = []
+  let limited = 0
+  for n in range(500, 515) {
+    try { boundaries.push(depth(n)) }
+    catch error { same(error.name, "RangeError"); same(error.message, "Native call depth exceeds 512."); boundaries.push("depth"); limited += 1 }
+  }
+  same(limited > 0, true)
+  same(depth(10), 1.25)
+  print("fixed number depth:", boundaries.join(","))
+  print("fixed number checks:", checks)
+}

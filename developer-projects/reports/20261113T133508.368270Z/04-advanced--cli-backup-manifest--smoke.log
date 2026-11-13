@@ -1,0 +1,2 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/cli-backup-manifest/.build/verified-app"]
+PASS: nested Unicode text, SHA-256 create/verify, change/add/remove, overwrite refusal, symlink refusal, inside-tree output, binary refusal, malformed manifest

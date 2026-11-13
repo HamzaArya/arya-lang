@@ -1,0 +1,11 @@
+command: ["/usr/local/bin/python3", "smoke.py", "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/.build/verified-app"]
+Traceback (most recent call last):
+  File "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/smoke.py", line 41, in <module>
+    with Server(root) as s:
+         ~~~~~~^^^^^^
+  File "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/smoke.py", line 33, in __enter__
+    def __enter__(self):return self.start()
+                               ~~~~~~~~~~^^
+  File "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/04-advanced/gui-project-board/smoke.py", line 18, in start
+    raise AssertionError("Server did not become ready")
+AssertionError: Server did not become ready

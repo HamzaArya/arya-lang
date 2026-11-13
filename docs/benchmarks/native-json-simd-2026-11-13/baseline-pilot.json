@@ -1,0 +1,115 @@
+{
+  "note": "Baseline pilot before SIMD edit; three processes each, not final comparison",
+  "load": [
+    10.818359375,
+    10.12353515625,
+    8.830078125
+  ],
+  "raw": [
+    {
+      "mode": "ascii8192",
+      "iterations": 2000,
+      "sample": 0,
+      "checksum": 16384000,
+      "cpuMs": 15.426
+    },
+    {
+      "mode": "ascii8192",
+      "iterations": 2000,
+      "sample": 1,
+      "checksum": 16384000,
+      "cpuMs": 19.849999999999998
+    },
+    {
+      "mode": "ascii8192",
+      "iterations": 2000,
+      "sample": 2,
+      "checksum": 16384000,
+      "cpuMs": 17.397999999999996
+    },
+    {
+      "mode": "unicode8192",
+      "iterations": 2000,
+      "sample": 0,
+      "checksum": 16384000,
+      "cpuMs": 16.971
+    },
+    {
+      "mode": "unicode8192",
+      "iterations": 2000,
+      "sample": 1,
+      "checksum": 16384000,
+      "cpuMs": 16.262
+    },
+    {
+      "mode": "unicode8192",
+      "iterations": 2000,
+      "sample": 2,
+      "checksum": 16384000,
+      "cpuMs": 15.951
+    },
+    {
+      "mode": "escaped8192",
+      "iterations": 2000,
+      "sample": 0,
+      "checksum": 16378000,
+      "cpuMs": 17.046
+    },
+    {
+      "mode": "escaped8192",
+      "iterations": 2000,
+      "sample": 1,
+      "checksum": 16378000,
+      "cpuMs": 16.602
+    },
+    {
+      "mode": "escaped8192",
+      "iterations": 2000,
+      "sample": 2,
+      "checksum": 16378000,
+      "cpuMs": 16.435
+    },
+    {
+      "mode": "short",
+      "iterations": 10000,
+      "sample": 0,
+      "checksum": 40000,
+      "cpuMs": 11.084999999999999
+    },
+    {
+      "mode": "short",
+      "iterations": 10000,
+      "sample": 1,
+      "checksum": 40000,
+      "cpuMs": 11.453999999999999
+    },
+    {
+      "mode": "short",
+      "iterations": 10000,
+      "sample": 2,
+      "checksum": 40000,
+      "cpuMs": 11.168999999999999
+    },
+    {
+      "mode": "rows",
+      "iterations": 300,
+      "sample": 0,
+      "checksum": 30000,
+      "cpuMs": 10.412999999999998
+    },
+    {
+      "mode": "rows",
+      "iterations": 300,
+      "sample": 1,
+      "checksum": 30000,
+      "cpuMs": 8.86
+    },
+    {
+      "mode": "rows",
+      "iterations": 300,
+      "sample": 2,
+      "checksum": 30000,
+      "cpuMs": 8.820000000000002
+    }
+  ]
+}

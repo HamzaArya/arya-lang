@@ -1,0 +1,23 @@
+{
+  "format": 1,
+  "lastResult": "121",
+  "memory": "0",
+  "history": [
+    {
+      "id": "cc1cd237-360c-4551-8bb0-d03730fe2e96",
+      "expression": "sin(30) + sqrt(9)",
+      "result": "3.5",
+      "kind": "Scientific",
+      "time": "2026-11-13T14:32:21.640Z",
+      "details": "Angle mode: deg; binary64 real arithmetic"
+    },
+    {
+      "id": "d2cc99a1-2142-4423-a64e-97db6ad46e40",
+      "expression": "sin(pi/2) + 5!",
+      "result": "121",
+      "kind": "Scientific",
+      "time": "2026-11-13T14:32:38.358Z",
+      "details": "Angle mode: rad; binary64 real arithmetic"
+    }
+  ]
+}

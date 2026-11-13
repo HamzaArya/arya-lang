@@ -1,0 +1,27 @@
+use std "accounting" as accounting
+use std "json" as json
+
+const options = {currency: "AFN", scale: 2}
+const journal = [
+  {id: "sale-001", entries: [
+    {account: "cash", debit: "100.25", credit: "0"},
+    {account: "sales", debit: "0", credit: "100.25"}
+  ]},
+  {id: "rent-001", entries: [
+    {account: "rent", debit: "25.10", credit: "0"},
+    {account: "cash", debit: "0", credit: "25.10"}
+  ]}
+]
+const prepared = accounting.prepareJournal(journal, options)
+print(json.stringify(await prepared.calculateAsync(), null, 2))
+
+const entries = []
+for transaction in journal { for row in transaction.entries { entries.push(row) } }
+const chart = [
+  {account: "cash", type: "asset"},
+  {account: "sales", type: "revenue"},
+  {account: "rent", type: "expense"}
+]
+print(json.stringify(accounting.trialBalance(entries, options), null, 2))
+print(json.stringify(accounting.financialStatements(entries, chart, options), null, 2))
+# Net income and cash: 75.15 AFN. Trial balance: 100.25 each side.

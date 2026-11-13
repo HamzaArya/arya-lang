@@ -1,0 +1,5 @@
+{
+  "name": "gui-reconciliation",
+  "entry": "main.arya",
+  "target": "native"
+}

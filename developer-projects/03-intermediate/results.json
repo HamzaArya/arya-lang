@@ -1,0 +1,171 @@
+{
+  "passed": 3,
+  "expected": 3,
+  "projects": [
+    {
+      "report": "reports/20261113T132927.563792Z/results.json",
+      "path": "03-intermediate/cli-log-analyzer",
+      "kind": "CLI",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.08,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/cli-log-analyzer/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 12.195,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/cli-log-analyzer/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.306,
+          "log": "reports/20261113T132927.563792Z/03-intermediate--cli-log-analyzer--smoke.log",
+          "name": "smoke"
+        }
+      ],
+      "missing_files": [],
+      "inputs_sha256": {
+        "arya.json": "2e68d1d7bf76e901b13356e0ed9f6824d2f6a20d395831c780783bdeca9e495e",
+        "main.arya": "e0d3c5c9ba74c1a9fa4fb45a7d87c0a6029c6193ffc32174c4ddcf89a67cc86d",
+        "smoke.py": "4ab7d818d8d3e6ba06635f18e446f3727f89679ea6056f747533d35c476d166f"
+      },
+      "status": "passed",
+      "binary_sha256": "ac0afe79fb7de2d517f2e28b501a11abc3e621f0f0841cad7bc3c082c0a4f3b6"
+    },
+    {
+      "report": "reports/20261113T133254.839934Z/results.json",
+      "path": "03-intermediate/gui-support-desk",
+      "kind": "GUI",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.82,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 83.998,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/gui-support-desk/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 3.038,
+          "log": "reports/20261113T133254.839934Z/03-intermediate--gui-support-desk--smoke.log",
+          "name": "smoke"
+        }
+      ],
+      "missing_files": [],
+      "inputs_sha256": {
+        "arya.json": "97799bd3152da3fdcf2afb7f4e54f6d184669ecec22f07aeb1e600b52a2a1c8f",
+        "main.arya": "4bfee3ea689ff377581ed82b208ec96e3e8d96c8474d0912ce18fd3dad361533",
+        "smoke.py": "0578392516a1bbbc27c7d33640fca13cb8467d75394df9b7a03bbb624004f2dd"
+      },
+      "status": "passed",
+      "binary_sha256": "0806ee4945fdb7107b0bf76f6487c3c6d6395429ce8d90dc19ac2e3582635b49"
+    },
+    {
+      "report": "reports/20261113T133423.493719Z/results.json",
+      "path": "03-intermediate/service-reservations",
+      "kind": "Service",
+      "steps": [
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "check",
+            "main.arya"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 0.793,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--check.log",
+          "name": "check"
+        },
+        {
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/bin/arya",
+            "build",
+            "main.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/service-reservations/.build/verified-app",
+            "--release",
+            "--force"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 40.846,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--build.log",
+          "name": "build"
+        },
+        {
+          "command": [
+            "/usr/local/bin/python3",
+            "smoke.py",
+            "/Users/hamza/Projects/github-repo/arya-lang/developer-projects/03-intermediate/service-reservations/.build/verified-app"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "seconds": 1.923,
+          "log": "reports/20261113T133423.493719Z/03-intermediate--service-reservations--smoke.log",
+          "name": "smoke"
+        }
+      ],
+      "missing_files": [],
+      "inputs_sha256": {
+        "arya.json": "78909f6dc72f3d471ea6454801cdc624b5b83b533082bd67ea85adcc6f5085e7",
+        "main.arya": "9aadd773be239a34c3eec4047bd4aaa82f3da32e77210b82ed57f8c4e878d42f",
+        "smoke.py": "79ce1ca558edbbb4ac8f47502f80edeeb0e6ec1eef74a39d14db49fc396527a4"
+      },
+      "status": "passed",
+      "binary_sha256": "19767d7deb9968b7b5e27efee8c19158eb689fafc7681d95feb06ae48a97841b"
+    }
+  ]
+}

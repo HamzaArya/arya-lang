@@ -1,0 +1,55 @@
+{
+  "purpose": "Exact retained controller and reproduction details for the supplemental integer-ratio oracle. No performance timings.",
+  "controllerSha256": "ae34bf0544aa18772fd5a9f58756775e6721e26e3b5bf21e4af67c03cb8d8f65",
+  "evidenceController": "docs/benchmarks/native-fastpaths-2026-11-13/fixed-wide-reference.py",
+  "executedController": ".build/native-fastpaths-2026-11-13/fixed-wide-reference.py",
+  "workingDirectory": "/Users/hamza/Projects/github-repo/arya-lang",
+  "pythonExecutable": "/usr/local/bin/python3",
+  "pythonVersion": "3.13.15 (v3.13.15:4061bc4c35f, Aug  5 2026, 09:08:51) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": "0x61727961",
+  "compilerEnvironment": {
+    "ARYA_NATIVE_BIN": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya"
+  },
+  "executedCommands": [
+    [
+      "/usr/local/bin/python3",
+      ".build/native-fastpaths-2026-11-13/fixed-wide-reference.py"
+    ],
+    [
+      "/usr/local/bin/python3",
+      ".build/native-fastpaths-2026-11-13/fixed-wide-reference.py",
+      "--sanitize"
+    ]
+  ],
+  "reproduction": "Copy the retained controller byte-for-byte back to .build/native-fastpaths-2026-11-13/fixed-wide-reference.py before execution: its root lookup intentionally matches that original path. Use ARYA_NATIVE_BIN to select the retained qualified SDK compiler; the controller enforces compiler SHA d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0. Python is optional evidence tooling, not a language dependency. Existing logs must not be overwritten.",
+  "results": {
+    "release": {
+      "log": "docs/benchmarks/native-fastpaths-2026-11-13/number-reference-wide-release.log",
+      "logSha256": "af8b3de30b612bf5852265869c5dc43f0272227734c70cace9c4ed111d2e9f3c",
+      "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "runtimeEnvironment": {
+        "PATH": "/nonexistent",
+        "ARYA_GC_STRESS": "1",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "cases": 15150,
+      "inputSha256": "aa209db40aac11968897d203429ab3c53a2c2e60f1f848ab86f7b4d75d9236cd",
+      "outputSha256": "aed0f2facad3a9eed87687f308ffd4bd76b6fa3d85866e77f5ba3f0289e57f85"
+    },
+    "sanitize": {
+      "log": "docs/benchmarks/native-fastpaths-2026-11-13/number-reference-wide-sanitize.log",
+      "logSha256": "0edf5497d81847ecaf721f8f94cb12fdddb33c58f629df97b0cae607e6677baf",
+      "compilerSha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "runtimeEnvironment": {
+        "PATH": "/nonexistent",
+        "ARYA_GC_STRESS": "1",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "cases": 15150,
+      "inputSha256": "aa209db40aac11968897d203429ab3c53a2c2e60f1f848ab86f7b4d75d9236cd",
+      "outputSha256": "aed0f2facad3a9eed87687f308ffd4bd76b6fa3d85866e77f5ba3f0289e57f85"
+    }
+  }
+}

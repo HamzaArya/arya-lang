@@ -1,0 +1,5233 @@
+{
+  "recordedAtUtc": "2026-11-13T02:31:19.357806+00:00",
+  "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "cpuCount": 8,
+  "ccCommand": "cc",
+  "cc": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "sourceSha256": {
+    "kernels": "3c516bb408e1511117e042fb5f4bacf28f6050cf534038c26e595cae198af7f9",
+    "stream": "8d00f09068b3efe5404180968e4e62074dddc33721b1d94ce575a5c1dbd93ac7"
+  },
+  "controllerSha256": "b0a40eaaeab84a8e447e054f0dd4ce681c265419c1af8dbc46e959e491ef32c0",
+  "evidenceDirectory": "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm",
+  "method": "Release -O2 -ffp-contract=off; one discarded process per workload/SDK; alternating SDK order; fresh process per sample; warm filesystem caches. Kernels report CPU inside the operation and independently checked scalar checksums (not full data equality). CSV reports whole-process child CPU and wall time including input/output, startup and cleanup, with independent full exact-output equality. Instrumented allocation runs are separate and their timings are excluded.",
+  "runtimeEnvironment": {
+    "PATH": "/nonexistent"
+  },
+  "compilers": {
+    "before": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+      "sha256": "6d20a40c5d45733d48313392f2c764e505b231b384aa3ae724f4e1adf6743ae2",
+      "builds": [
+        {
+          "kind": "kernels",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/performance.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+            "--release"
+          ],
+          "wallMs": 4146.540875,
+          "binarySha256": "a7c0e8c68d50792871dff46410865c89527d09c84a3a621e0f3645ddb16ecbd5",
+          "generatedCSha256": "b71f1745408ea0df1880bd10879382f6572f6853fedd7cbd09c98f495424d7a5",
+          "bytes": 575016
+        },
+        {
+          "kind": "kernels-counters",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/performance.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+            "--release",
+            "--runtime-counters"
+          ],
+          "wallMs": 3952.895042,
+          "binarySha256": "33a08b4e4247ff1ceb8e4aa0c490ff05a4f42f0da069790f7257e241f212e01c",
+          "generatedCSha256": "828b316a4a43f1cb9e04978693984a39d4b5576c4c191633104461bf56379a39",
+          "bytes": 574984
+        },
+        {
+          "kind": "stream",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/examples/stream-ledger.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+            "--release"
+          ],
+          "wallMs": 4097.463875,
+          "binarySha256": "ab446496220abfe52c13851efe44e172bb3d51e9db4faa836bf4f4bab891dc0f",
+          "generatedCSha256": "94dfa3bd60b441ee4ce44219e556e931c99786a16fbe54e867050645d494f32e",
+          "bytes": 627480
+        },
+        {
+          "kind": "stream-counters",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/native-fastpaths-2026-11-13/baseline-sdk/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/examples/stream-ledger.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream-counters",
+            "--release",
+            "--runtime-counters"
+          ],
+          "wallMs": 3428.218625,
+          "binarySha256": "d00bf6715016a9bb2a08e3d4d9d54962b4819b0507fa479a5af9024ab0a58437",
+          "generatedCSha256": "1339e992b5738ab9b189eadf679a9d3d85e1015f50d401b46c4391757338c63b",
+          "bytes": 644440
+        }
+      ]
+    },
+    "after": {
+      "path": "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+      "sha256": "d6a89f0e72cb7dd81550efc2a3c2347ed0fe88b4bf37f42786940aac50eb49f0",
+      "builds": [
+        {
+          "kind": "kernels",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/performance.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+            "--release"
+          ],
+          "wallMs": 3515.240375,
+          "binarySha256": "bc0dfc0f1705d73518232b7f2163165f3a9af1d539e89477abf5fb990fc895ed",
+          "generatedCSha256": "d8f12eae395308bb74f5264a9229f5eb4246e399497f7a2b0361ac53c0bbd52f",
+          "bytes": 575208
+        },
+        {
+          "kind": "kernels-counters",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/benchmarks/performance.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+            "--release",
+            "--runtime-counters"
+          ],
+          "wallMs": 3433.995875,
+          "binarySha256": "9a440ecf037b0a10a1665d393f4140a31772639ee5864f79db0301e086eadc95",
+          "generatedCSha256": "ff355a4bd5d1d70bb9f81f8c2feeea40eee9669354e32fd558ddeab796115fef",
+          "bytes": 575032
+        },
+        {
+          "kind": "stream",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/examples/stream-ledger.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+            "--release"
+          ],
+          "wallMs": 4024.19175,
+          "binarySha256": "592f15667553e668416cab000241fc804f32cfb75bf9c693c90781a6899b76e5",
+          "generatedCSha256": "4bb028dfb90fbed0f66dbf46bb788732fa2a2aed3a0432a43fcfeaab59e61f4b",
+          "bytes": 627720
+        },
+        {
+          "kind": "stream-counters",
+          "command": [
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/independent/arya",
+            "build",
+            "/Users/hamza/Projects/github-repo/arya-lang/native/examples/stream-ledger.arya",
+            "-o",
+            "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream-counters",
+            "--release",
+            "--runtime-counters"
+          ],
+          "wallMs": 3614.023209,
+          "binarySha256": "34f4b7c735d8c98dd0742de1c70fcc107969ce2a9c5bde3d34bf4bfd137c1c09",
+          "generatedCSha256": "68596664d60004350961db9fd1ba7627b530c45dd9415bf51a248a08d4db3f4b",
+          "bytes": 644024
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "wide.json": {
+      "sha256": "6742a101fb5cbcf21cee278aa8ce261a45ea1a99b6ee71ffbfd74113e86c8ed6",
+      "bytes": 317781
+    },
+    "10000.csv": {
+      "sha256": "c2ff51430a609732ecb9bff144bd9508b556c8693a9bf9eeddbd635c6cd39323",
+      "bytes": 199716
+    },
+    "100000.csv": {
+      "sha256": "60e0340440524a6badd7228e6901addc23d354c681e5e9d0716cc3d00b1eab0f",
+      "bytes": 1997016
+    }
+  },
+  "warmups": [
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.7440000000000007,
+      "childCpuMs": 9.691000000000116,
+      "wallMs": 588.671333,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "01c462b75ce66d37480d2da0181aad959e23a5b39e38a5d5985908e6ff704db5",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.663,
+      "childCpuMs": 8.010000000002293,
+      "wallMs": 582.688333,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ed6db9ddad014f3c22832f4ca0df6d969fb87f9e9a30c3b13cc52922aeb2a5c8",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 8.385,
+      "childCpuMs": 13.139000000002454,
+      "wallMs": 14.7445,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "d93a2e3a2fd22c7331f9893d699f4b0f3763a897a3dd07116a27f954ab5da03f",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 9.915999999999999,
+      "childCpuMs": 15.331999999997237,
+      "wallMs": 29.593125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "a69e30b700a5d1d850b47dec39d429c3a8b17ad6fd43a22104fe83bb3ad9ccf5",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.7669999999999995,
+      "childCpuMs": 8.440000000003778,
+      "wallMs": 10.159166,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1efd630d6730e59d852b4f1ae2aab607bd88a62dc3acd8eb598e58dc5dc920cf",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.183999999999999,
+      "childCpuMs": 9.599999999998943,
+      "wallMs": 11.42875,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "966c84e3a942b66f0fa348549490507e72d523e9952e3b487b9b5378b4493de4",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.9980000000000007,
+      "childCpuMs": 10.790999999997553,
+      "wallMs": 12.758958,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "afe91e278d715f18d1030aea137e4e0ab199440fa9016289448dba7c535c1cfa",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.9729999999999999,
+      "childCpuMs": 11.953000000001879,
+      "wallMs": 14.424667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "9eb6bfc3a87ece86abff0d7a3f6593140f5e070f85a631b56cb93f9b65686d13",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.6980000000000004,
+      "childCpuMs": 5.504999999999427,
+      "wallMs": 7.123667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "03fbeae02b71f1232d1ed70e165bc5361b21da433bdd038e461c5f884b46a324",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.729,
+      "childCpuMs": 5.106000000001387,
+      "wallMs": 6.622667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "c58a2912e6f6809c1d0d19ccfd9a28359209b52fb9783302b1b783b0933bc542",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.864,
+      "childCpuMs": 6.854000000000582,
+      "wallMs": 8.568666,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "952cffcd4ff81942c421dded358ec4402694ee823b97ae37c3a1d07133e6f4fa",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.8469999999999998,
+      "childCpuMs": 6.778999999998092,
+      "wallMs": 8.523834,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "16309851f74d4f3047848c97cb1f01e136816805bca8c3461dc7328019e50f2b",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 18.640999999995245,
+      "childCpuMs": 18.640999999995245,
+      "wallMs": 576.45625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 19.866000000000383,
+      "childCpuMs": 19.866000000000383,
+      "wallMs": 576.695416,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": -1
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 119.07099999999815,
+      "childCpuMs": 119.07099999999815,
+      "wallMs": 124.403208,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": -1
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 123.90400000000312,
+      "childCpuMs": 123.90400000000312,
+      "wallMs": 128.610042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": -1
+    }
+  ],
+  "raw": [
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.676,
+      "childCpuMs": 7.284000000002067,
+      "wallMs": 9.5215,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1a2b8ec10a328fa20f28d8ac5415cb4c5dfedd39763c0a48dc2b6bfa21760e3b",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.6860000000000004,
+      "childCpuMs": 6.975999999998095,
+      "wallMs": 8.565834,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "2394a9ead9105b7f923bbbaba13bcdc8fc887c53eb4059e4b6aadbd69fe6b08b",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.673,
+      "childCpuMs": 7.004999999999484,
+      "wallMs": 8.627916,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "2c3ead031fb7253b02b61385a758b2dd3de78d82e9be2ede37a23f69db4a92a7",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.6690000000000005,
+      "childCpuMs": 7.096000000000657,
+      "wallMs": 8.466333,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "91938034449d04f7031e91782f636e03177f850a8f1253513e3aab6fe9476fe8",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.5649999999999995,
+      "childCpuMs": 6.770999999996974,
+      "wallMs": 8.221583,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "01ba42d0fdc81a2c16732998a5e7168ac6e9edd220cec26fb24b27bdad57c66e",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.609,
+      "childCpuMs": 6.787000000002763,
+      "wallMs": 8.295375,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "6e5820a203b87411ab039e368098ad9bfe08acdb6951709ced3374989dcde56a",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.807999999999999,
+      "childCpuMs": 8.94699999999915,
+      "wallMs": 14.136333,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "7ce0b6a53839ce932a50ea8b7be65b97b16e1f220486f5d5476d16baeac68e25",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.855,
+      "childCpuMs": 7.689000000002721,
+      "wallMs": 9.216417,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "dc438e944346fccff643e293a1b6c34db8dad8e1157243043bec73954fb42777",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.7140000000000004,
+      "childCpuMs": 7.50799999999785,
+      "wallMs": 9.150542,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "79bebeab0c740c9a407d865c868bc3082b8e4ad8120f0f227078d8ab74ed3d4b",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.7439999999999993,
+      "childCpuMs": 7.825000000000415,
+      "wallMs": 9.30175,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "6b4ef2c0baa1c4b82c2ac2009060c6e5b7c848d56327367eb2439fe2428fcab7",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.7620000000000005,
+      "childCpuMs": 8.462999999998999,
+      "wallMs": 33.065583,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ed53b8ee5f1d292f371987ee412b8605100e21460a342fa611f33ba1e9bc85ca",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 6.696000000000001,
+      "childCpuMs": 11.02600000000109,
+      "wallMs": 42.591,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ae038f038e93cc7bb373bfdfbccff2ee70f682c79e1e6dbfe856839526efbb1c",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.9819999999999993,
+      "childCpuMs": 8.243000000000222,
+      "wallMs": 32.7755,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "be59da3e3238e20c0b5c4cf197a510ad6ffa64b2227c2be4bddcb2871539447f",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.591,
+      "childCpuMs": 7.146999999999792,
+      "wallMs": 63.914375,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "925e22c5138421eb03ae22e62a04256fd9e8268b3143b4af907502f1bb976a85",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.657,
+      "childCpuMs": 7.052999999999088,
+      "wallMs": 8.715459,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "10884be5b6a3f71e2fdab3c465fa5b6bf9c7f3b6149ae3b1b7d371fc38bb8202",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.5719999999999996,
+      "childCpuMs": 6.6670000000002005,
+      "wallMs": 8.174375,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ac7dc522e5ea7f9f00becec0467d706406e987dd9445c511219aab5645c010b3",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.585,
+      "childCpuMs": 7.336999999999705,
+      "wallMs": 9.0605,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "37593cc9b4fe298fd859d31e3df2b6181693de90f5784c23d7ee5b89cdaa1e3c",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.597,
+      "childCpuMs": 6.6150000000000375,
+      "wallMs": 8.170209,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "f904138088b3de050eb5688a7369ed136368d3234cd99abad850bd1881d5f4b2",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 10.326,
+      "childCpuMs": 15.219999999999345,
+      "wallMs": 17.254958,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "725ad5b8fa59a2e0962b61360184c36e9ea5d48b2d629c959b77bcc3bfa7d17c",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.348,
+      "childCpuMs": 13.777999999998514,
+      "wallMs": 15.767083,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "cbf2184b5a1436ea0b8069196c4a9556e5c532f7d8cc57b8778100d7df78dd1f",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.518,
+      "childCpuMs": 14.041999999999888,
+      "wallMs": 16.656458,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "7a64117a3b60a8a2db63263c471b9d0a4c91089b6778c1ce99e46e6be7b639f9",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 9.653,
+      "childCpuMs": 14.504999999999768,
+      "wallMs": 16.448834,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "db1b349a95c0de820edb157b155f5f7a4b3ccbdc8cd6145654d0661a68c2cebf",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 8.86,
+      "childCpuMs": 13.31800000000527,
+      "wallMs": 15.093333,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1ca4635973d56aeeea0a3de331905765a64228a7f1faf3ee68e233c71850dba1",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.451999999999998,
+      "childCpuMs": 13.998999999998318,
+      "wallMs": 15.958709,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b61beb229807c706723dbf014ba60a03409c8f6a9481e6bf7dc4898a7259c62b",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.565,
+      "childCpuMs": 13.880000000000337,
+      "wallMs": 15.848084,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "178f5c9e9f7e601364d13e937252ad72f1a96ab32a96dea8f8092857fd403a14",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 9.772,
+      "childCpuMs": 15.359999999997598,
+      "wallMs": 17.071042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b2f2685ed21a7e96f3e60c0ef00207106efaf097e39307916fbc6c0ef8fa24e2",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 11.530999999999999,
+      "childCpuMs": 17.406999999998618,
+      "wallMs": 19.314042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "8946ecadb5ead41d186371e07983f2030bc1a37b8db8bf042f71c9488f7e3c8a",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.715000000000002,
+      "childCpuMs": 14.73100000000116,
+      "wallMs": 17.049042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "57f38c337c19b35f606183392fd7a7a058a5ca74d1ea8499490e2850b71121d4",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.918999999999999,
+      "childCpuMs": 15.247000000002231,
+      "wallMs": 18.24175,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "a3965aa9cac3ec7553209d10c5b2dab39bfcb20d0378f76ae2865c1e89bd7d56",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 12.007000000000001,
+      "childCpuMs": 18.969000000002012,
+      "wallMs": 23.995416,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "6598c0f9469eb57f5c0f0a17c0e84233f9acd09ade86c47ccc0c89823001865e",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 17.485,
+      "childCpuMs": 24.717999999996465,
+      "wallMs": 39.973125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b4c15b15d3024e64af0f84fe0f1155d152db30531baba97ab41fba04319d27be",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.332999999999998,
+      "childCpuMs": 14.836999999999989,
+      "wallMs": 18.278334,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3bb4dfd162cd11a58ae4563a6fd208080e32ef7729389bf35874a84996a14cb4",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 9.808000000000002,
+      "childCpuMs": 14.151000000001801,
+      "wallMs": 16.583416,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3ecd004bdc502797d960520a5eb49b3fa81723d75c1f5b03ba4b2e3417646372",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 11.690000000000001,
+      "childCpuMs": 17.213999999999174,
+      "wallMs": 20.39775,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "151f9e5f113298cdf727a1982570d3800b6320e072367b1d1146435e31ce3a09",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 9.249,
+      "childCpuMs": 15.452999999997274,
+      "wallMs": 17.786209,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "4264eda59b3aa0d0db2292f547d7babe0bbd47d232ef6a72e79de335287afcc2",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 10.943,
+      "childCpuMs": 17.518000000002587,
+      "wallMs": 21.1225,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ccd2a15ae272cc6d8b8d0403763d10ea8bf44e20554164bf33ef505d28ab54e2",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.129999999999999,
+      "childCpuMs": 9.651999999999106,
+      "wallMs": 12.197375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "87fb86884d55211b6223517dddbead04c72feab12ea2c15e6b812ff416c49120",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 4.647000000000001,
+      "childCpuMs": 9.494999999997589,
+      "wallMs": 12.662958,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3ffc6f4ea3aa6f1ed351c68b97a5e6aa907008ca1a233be053a64203d07519ca",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 6.212,
+      "childCpuMs": 12.342000000000297,
+      "wallMs": 15.305083,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "58aef33a53db417eb40d7eb0130f55d68906d6aad707bd9f62d3b9f3849b4812",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.46,
+      "childCpuMs": 10.608000000001283,
+      "wallMs": 12.698792,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "37b27d309688ca8d0155e80d650f203725b06154ab4703917813e0ded8128818",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.077,
+      "childCpuMs": 9.509999999998797,
+      "wallMs": 11.388084,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b07f0374c6f07bb5fa3feca787c6cb537dafdd6abad09b53a6baafb095fdd51a",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 4.026000000000001,
+      "childCpuMs": 9.021000000000612,
+      "wallMs": 11.013833,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "dc2df1a3d565d9f642e5620d07d1b0396801fc3bb06cf52f7560e0e15851cd02",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.596,
+      "childCpuMs": 8.37500000000091,
+      "wallMs": 10.120583,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1c9a01e7e0abfab86b1df6ae51c92d24a83188f2958f59f7e1632e81ff387913",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 3.673,
+      "childCpuMs": 8.748000000000644,
+      "wallMs": 10.511833,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3468cc5d2906c0450faee9ec8c631f81546fba9b24a3d6956f123b2c9a4cb439",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 3.953,
+      "childCpuMs": 8.820999999997525,
+      "wallMs": 10.493667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "cbb4a3c66ee23a244bfb5872d46adb0331cebc1ea3c96ddda61f36f8230cef31",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.593000000000001,
+      "childCpuMs": 8.36800000000082,
+      "wallMs": 10.297667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ec82e93e8c0da32c51afc31ce8ef206892ae37401c1d4ea29b06437492342a1d",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.5450000000000004,
+      "childCpuMs": 9.581000000000728,
+      "wallMs": 12.061,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b5349839691a64c9984fea794dbd257045e26908a53a09b8c269a68d5f7fc2e4",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.271,
+      "childCpuMs": 9.378000000001663,
+      "wallMs": 11.296125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "15f19a6012c335b480e36f163a5434e9d731e575e737ecc679de65f80f581f0e",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.276,
+      "childCpuMs": 9.938999999995701,
+      "wallMs": 11.425375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "7aba752bad59c2c0a506b62500053d0bb6369f411f1bbae6afbdbde47d40a807",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.7459999999999996,
+      "childCpuMs": 8.826000000002665,
+      "wallMs": 10.990958,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "e5dadcef82e11e3322c9d3e38485060cc6f12d94523cc17a119c325df17f0a1e",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.6429999999999993,
+      "childCpuMs": 8.348999999999052,
+      "wallMs": 10.075625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "6058b384076f82146b67ce2b8dd3da3c9688c884166f1b54b728553245bdbef3",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 3.75,
+      "childCpuMs": 8.58000000000203,
+      "wallMs": 10.277584,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "2e5bcbc6279e23316fe66924436a76e4cdb754711b9b63f463ae61e28cad92a2",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 3.838,
+      "childCpuMs": 8.734000000000464,
+      "wallMs": 10.356625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "d1a5fc5ba4cb3c450345d51a76ba7d05708eb24e0b03d7f309e144c9369fdd01",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 4.016999999999999,
+      "childCpuMs": 8.725999999999345,
+      "wallMs": 10.483584,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ae18aaaf929ff667ae7cf5a0b5b0a388532547ef508b0d0629768e72a1dd8da5",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8750000000000008,
+      "childCpuMs": 9.873999999996386,
+      "wallMs": 11.560541,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "e72617b99a6345b10430465c9c6790337ffdb99360676a2b900f80fe31e106e0",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.9059999999999988,
+      "childCpuMs": 9.481000000004514,
+      "wallMs": 11.038417,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "2b76a7ab97bfe405895189d42ed420f9614767a0f4a83057b13ed04c902779de",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.8929999999999997,
+      "childCpuMs": 9.378999999999138,
+      "wallMs": 11.192834,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "0eefe25e732bdc7945d1161ed1cbf5c244bfcc59ebb6ca38594e53a875306eb2",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8560000000000009,
+      "childCpuMs": 9.5119999999973,
+      "wallMs": 11.191916,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "fe5c14be17810d2153ed4dff5c8ff12195f86453a236bc3d94c7a76b3150a4f5",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.9340000000000008,
+      "childCpuMs": 9.83500000000248,
+      "wallMs": 11.707125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "af222fba88805eef703532f58962b627ee568319d8e9d1632c6d6d159ef6e728",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.9159999999999984,
+      "childCpuMs": 9.723000000001036,
+      "wallMs": 11.4135,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "066c337e7afc5708916a9b48a081cf0d2af12ddcf67cc5ed5aaa63fc87898590",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 1.0039999999999998,
+      "childCpuMs": 9.320999999999913,
+      "wallMs": 11.098625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "8709befe7155007fd36c2e8d23816a449e483d9c7591faaf2594b792da5051eb",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8719999999999996,
+      "childCpuMs": 10.518999999998613,
+      "wallMs": 13.379166,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "40163458f907aaae493f74458da33891de652ac5d0d970c8f2dd9db01b1878a4",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8679999999999999,
+      "childCpuMs": 9.356000000000364,
+      "wallMs": 11.030084,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "363f77338e5c09f82af261913e508ac5d2746133f0e6d4dba360f640ebbea660",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.8989999999999996,
+      "childCpuMs": 9.057999999999566,
+      "wallMs": 10.746542,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "92c69cef13ca4eb564f54f8eeb6dd8e3c8d39b0b301054cfe4d2a3adc4fc8ded",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.856,
+      "childCpuMs": 8.932000000001494,
+      "wallMs": 10.748917,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "e3a6a7f573b06533ea4a618a74dd0b061659b814e050439dff78c7a5714b20fa",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8739999999999998,
+      "childCpuMs": 9.768999999998584,
+      "wallMs": 11.452125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5a3a8761f6662db71e8e717e8e992fa809b7ebb873f73cb6851876a317572405",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.947,
+      "childCpuMs": 10.293000000000774,
+      "wallMs": 11.731875,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "bd9721164e808ab206f018148b7421991e2d2ecb197cfa3613feedc9631debf4",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.8979999999999995,
+      "childCpuMs": 9.74599999999981,
+      "wallMs": 11.787583,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "8b3e69339b9fb61a5f18957ab35b91dead4ea8791e7562fb025f0a01d6d93a63",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.8900000000000001,
+      "childCpuMs": 9.422000000000708,
+      "wallMs": 11.299458,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "d4f4cf0afd9e3a5772abff1bf67436b60e98bfb828c9668ffd9e46d9df0f5ea1",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.8839999999999993,
+      "childCpuMs": 10.13099999999767,
+      "wallMs": 11.789792,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "9a14e928c8c0bd943a111d5f8ba97be2c0945ab72ce94d047aa962c57f3c9016",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.9300000000000012,
+      "childCpuMs": 10.194000000002035,
+      "wallMs": 11.626917,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3d7a5400a37f4af8e20bf378951a4e79ff3be1fbe4525e982ee89fdbeeff8fcd",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.8739999999999998,
+      "childCpuMs": 9.371999999999048,
+      "wallMs": 11.345917,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5a3a8761f6662db71e8e717e8e992fa809b7ebb873f73cb6851876a317572405",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7999999999999996,
+      "childCpuMs": 5.593999999998545,
+      "wallMs": 7.410125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "e351a17d89421f459461e447e3019e7862c76d17d5260cb71a377becc768786f",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.6710000000000003,
+      "childCpuMs": 5.231999999999459,
+      "wallMs": 6.970584,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5ea78670550f7d114ef3f9ae23347d78213d68d9e65c37a7eab801e928063dfe",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.7580000000000005,
+      "childCpuMs": 5.27800000000056,
+      "wallMs": 6.933292,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "7fae634334f4e44a83101290ce1a6515e4247e8601b7258e6caeb04d8018c0a9",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7559999999999998,
+      "childCpuMs": 5.613999999997787,
+      "wallMs": 8.598375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "27a3aa84110b2708f5fef844f1fbf115f1670a75a57a764602c78cfee1d49eb4",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7619999999999996,
+      "childCpuMs": 5.275000000001029,
+      "wallMs": 7.077959,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "bec5689d44cdf03704c35f8fbaf2992c74493536428529454e6971c4902d8fcb",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.6910000000000003,
+      "childCpuMs": 5.334000000001282,
+      "wallMs": 6.999667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "395241481641b7f76c1f1312668e5fc2045ee3ce380d03bf5a33d0255c336f27",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.7339999999999998,
+      "childCpuMs": 5.162999999999585,
+      "wallMs": 6.798125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "9afb4687f436b57ad4e4b90dfacb1800c67f13c8a9fd3139f3b3f157c95344b3",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7989999999999997,
+      "childCpuMs": 5.9739999999983695,
+      "wallMs": 8.174375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5a5fc25c2018e3ed061995678332821ed2843bf5e60c360afa301ebfe6257285",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.6829999999999996,
+      "childCpuMs": 5.135000000002776,
+      "wallMs": 6.829917,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "91c67536294d338de98104da01663767434e19a9553879337750f01e185ce7df",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.7230000000000005,
+      "childCpuMs": 5.32299999999708,
+      "wallMs": 7.112708,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "4df24d93807d903c00885c187ec7948a429d202d42120b6bca1617d41f9ee4bc",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.7640000000000005,
+      "childCpuMs": 5.560000000002674,
+      "wallMs": 7.261209,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "c74c18fc672dc680672b900519dafe41c70d9816b9b5b6d29c94e75a444a3f7c",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.6940000000000002,
+      "childCpuMs": 5.108999999997366,
+      "wallMs": 6.8445,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "271c3a54c659496d9398dad4836e8a29952bcbdad6a55121ea61302885123143",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7029999999999996,
+      "childCpuMs": 5.329000000003248,
+      "wallMs": 7.0575,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "30ce370abc946fdf44d352fcc3d628303df2e1c4fd6a52fd6092f10dee347bb1",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.839,
+      "childCpuMs": 5.742999999998943,
+      "wallMs": 7.251042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5b8eb68ef6a141d9995ee3e4bbb0088dd87b25d65d6e79d92565365b054fa731",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.8230000000000004,
+      "childCpuMs": 5.5669999999992115,
+      "wallMs": 7.186958,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "5838a57b1d12b9e925c750e92c4548bf266a5c95d01a0e17d9db0328e7dc2624",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.7790000000000001,
+      "childCpuMs": 5.570999999999771,
+      "wallMs": 7.019625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "3394d98885548ec179bee14f9e9110781eee5962f2b273c64af3f92010d71992",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.774,
+      "childCpuMs": 5.330999999998198,
+      "wallMs": 7.080875,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "ccc70bdc24b6e9b134604a7d341633bcd9cec4c18366f43e4e50d17c3c28b6ec",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.7860000000000003,
+      "childCpuMs": 5.63900000000217,
+      "wallMs": 7.055667,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1b142677d536ac74ad899f034f23a0df44c59e026d2d32adb1449e5a27a12e3f",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.9030000000000002,
+      "childCpuMs": 6.872999999998797,
+      "wallMs": 8.396708,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "62050b620e20877b7a05963d895e6a10c3e1d5d0acae6f4d387c6f47bda44499",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.8570000000000002,
+      "childCpuMs": 6.64599999999993,
+      "wallMs": 8.255375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "aba034d409bfa84ed15339bc4c39951d8a9ab41ff9db99639720d922a812760d",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.894,
+      "childCpuMs": 7.069000000001324,
+      "wallMs": 9.727792,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1138498ca49361ef5a4a09ead49f36408ab95eee3aeba745448851ad083fc4f4",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 2.0100000000000007,
+      "childCpuMs": 7.5070000000003745,
+      "wallMs": 9.163458,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "4712fbfd370ba517e710f1f6c1361e5bffaba159c2b14a309634c72f4254cf4f",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.915,
+      "childCpuMs": 7.59700000000052,
+      "wallMs": 9.201166,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "7c8e8f2032d5890743bf529c2f616f0e71c0ec5137f2ba1c957674c2fe3e7f1b",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.9989999999999999,
+      "childCpuMs": 6.923000000000457,
+      "wallMs": 8.581375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "8d6b2fd888755375cf0abab0d88e9c0527e3acf1eb8981bb6ccbf4174206f500",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.8569999999999993,
+      "childCpuMs": 6.7609999999973525,
+      "wallMs": 8.312125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "c076c63594531d711288a08302b5454d30b2ba589577f80769aea0c846f0fef7",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.895,
+      "childCpuMs": 7.620000000002847,
+      "wallMs": 8.778541,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "f0a1af553672f7875cfd5d03ba7ea0f5bd47de7db900ebc9af5d295b6b540569",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.9060000000000006,
+      "childCpuMs": 6.921999999999429,
+      "wallMs": 8.521209,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "43dfb9d387a109a71337045b241455dacdc984b83113e233391a81303902fa05",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.9230000000000003,
+      "childCpuMs": 6.889999999998508,
+      "wallMs": 8.412292,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "98c0e879a43e9b9225bf13de770bce382429d24e46bc665816c28618acff7bfe",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.8990000000000005,
+      "childCpuMs": 6.768000000000995,
+      "wallMs": 8.339583,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "6c2825fbcb72c10fea508034c6e0c60d7e703ce0f3a92c7ddaa1e55aaa0436b6",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.9960000000000004,
+      "childCpuMs": 6.920000000000925,
+      "wallMs": 8.487125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "82f98f02298f7d2ef319536d318b0aa19230be576d3e2f2f8d0b75a366559a6a",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.8999999999999997,
+      "childCpuMs": 6.792000000000797,
+      "wallMs": 8.526291,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "787a7741ad76d4d6ffd9f4ffcaf37e2b358ec422191ba1ee4a216ca7e3b7ebfe",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.9420000000000002,
+      "childCpuMs": 7.075999999997862,
+      "wallMs": 9.034708,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1c7da79a08f567741d926cfeff16d1bc5ce4a8bc2251ab9d2bd7b58aef1b387a",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.8780000000000003,
+      "childCpuMs": 6.8129999999975155,
+      "wallMs": 8.483792,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "01bef63a86b45e1c8f54f7684a112224c705a3348f1dedcc18243d317d2afee2",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 2.012,
+      "childCpuMs": 6.863000000002728,
+      "wallMs": 8.430666,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "f4368942cd77d7db778b66aa916823a5b02a7c8e5208c4b4749f2e3bdd440790",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.8989999999999996,
+      "childCpuMs": 6.862999999999175,
+      "wallMs": 8.561042,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "2a22b7bcd71467d98efd5f9f19cd21e2122f8d3266ce389b360eb77211dfb1c5",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 2.012,
+      "childCpuMs": 7.328000000001111,
+      "wallMs": 9.03025,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "f4368942cd77d7db778b66aa916823a5b02a7c8e5208c4b4749f2e3bdd440790",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 17.666000000001958,
+      "childCpuMs": 17.666000000001958,
+      "wallMs": 19.567833,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.469000000000733,
+      "childCpuMs": 16.469000000000733,
+      "wallMs": 18.353375,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.866999999997745,
+      "childCpuMs": 16.866999999997745,
+      "wallMs": 18.40775,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 16.846000000001027,
+      "childCpuMs": 16.846000000001027,
+      "wallMs": 18.484125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 17.20600000000161,
+      "childCpuMs": 17.20600000000161,
+      "wallMs": 19.856084,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.075999999998203,
+      "childCpuMs": 16.075999999998203,
+      "wallMs": 17.662208,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.010000000001412,
+      "childCpuMs": 16.010000000001412,
+      "wallMs": 17.6275,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 16.600000000000392,
+      "childCpuMs": 16.600000000000392,
+      "wallMs": 18.10475,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 16.638000000000375,
+      "childCpuMs": 16.638000000000375,
+      "wallMs": 19.763625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.36699999999891,
+      "childCpuMs": 16.36699999999891,
+      "wallMs": 18.04225,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 15.807999999999822,
+      "childCpuMs": 15.807999999999822,
+      "wallMs": 18.399458,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 17.728000000001742,
+      "childCpuMs": 17.728000000001742,
+      "wallMs": 19.047041,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 18.246000000001317,
+      "childCpuMs": 18.246000000001317,
+      "wallMs": 19.85675,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 15.995999999997679,
+      "childCpuMs": 15.995999999997679,
+      "wallMs": 17.6965,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 15.616999999998882,
+      "childCpuMs": 15.616999999998882,
+      "wallMs": 17.291125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 17.490000000002226,
+      "childCpuMs": 17.490000000002226,
+      "wallMs": 19.368917,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 17.39099999999638,
+      "childCpuMs": 17.39099999999638,
+      "wallMs": 19.299833,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 16.369000000000966,
+      "childCpuMs": 16.369000000000966,
+      "wallMs": 18.240791,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "sample": 8
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 122.15299999999729,
+      "childCpuMs": 122.15299999999729,
+      "wallMs": 126.254708,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 115.91400000000363,
+      "childCpuMs": 115.91400000000363,
+      "wallMs": 118.9945,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 0
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 125.03599999999793,
+      "childCpuMs": 125.03599999999793,
+      "wallMs": 133.615084,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 140.56099999999816,
+      "childCpuMs": 140.56099999999816,
+      "wallMs": 157.254167,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 1
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 119.63599999999985,
+      "childCpuMs": 119.63599999999985,
+      "wallMs": 122.068834,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 113.54299999999995,
+      "childCpuMs": 113.54299999999995,
+      "wallMs": 115.857458,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 2
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 117.84800000000217,
+      "childCpuMs": 117.84800000000217,
+      "wallMs": 122.47325,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 122.34699999999776,
+      "childCpuMs": 122.34699999999776,
+      "wallMs": 124.826416,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 3
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 119.35800000000185,
+      "childCpuMs": 119.35800000000185,
+      "wallMs": 122.092458,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 117.99399999999949,
+      "childCpuMs": 117.99399999999949,
+      "wallMs": 120.070792,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 4
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 129.12899999999894,
+      "childCpuMs": 129.12899999999894,
+      "wallMs": 133.836834,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 136.8469999999995,
+      "childCpuMs": 136.8469999999995,
+      "wallMs": 144.155375,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 5
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 121.1190000000002,
+      "childCpuMs": 121.1190000000002,
+      "wallMs": 123.657667,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 114.2440000000029,
+      "childCpuMs": 114.2440000000029,
+      "wallMs": 118.3115,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 6
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 112.8199999999957,
+      "childCpuMs": 112.8199999999957,
+      "wallMs": 115.082958,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 118.5650000000038,
+      "childCpuMs": 118.5650000000038,
+      "wallMs": 123.138708,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 7
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 121.30699999999806,
+      "childCpuMs": 121.30699999999806,
+      "wallMs": 124.356667,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 8
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 114.24300000000187,
+      "childCpuMs": 114.24300000000187,
+      "wallMs": 117.278291,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "sample": 8
+    }
+  ],
+  "allocationRuns": [
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": 3.962,
+      "childCpuMs": 7.753000000001009,
+      "wallMs": 602.09,
+      "loadBefore": [
+        11.14404296875,
+        11.12353515625,
+        9.65576171875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "b6078fde9c4d4ee28f1fe2d273d62abc8312f1de5a91505f4df23385354cd152",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 40444,
+        "heapObjects": 40165,
+        "environments": 1,
+        "functions": 64,
+        "genericCalls": 6,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 6,
+        "peakManagedBytes": 1254372,
+        "scalarCalls": 0,
+        "rootedCalls": 5,
+        "rootPushes": 40070,
+        "environmentLookups": 40020
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 15111746,
+        "strings": 40093,
+        "stringUnits": 800020790,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.7
+      }
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": 3.797,
+      "childCpuMs": 7.543999999999329,
+      "wallMs": 596.287333,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "concat",
+        "40000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "982dbb0544b8183ffc7f048ccfbc590c55212f44b72b002d3290d695dafb2c74",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 40340,
+        "heapObjects": 40165,
+        "environments": 1,
+        "functions": 64,
+        "genericCalls": 6,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 6,
+        "peakManagedBytes": 1252836,
+        "scalarCalls": 0,
+        "rootedCalls": 5,
+        "rootPushes": 40070,
+        "environmentLookups": 40020
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 15110914,
+        "strings": 40093,
+        "stringUnits": 800020790,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.681
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": 12.714,
+      "childCpuMs": 18.162000000000234,
+      "wallMs": 20.893666,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "1833a8630c5cb5bbe8390ed67db2bab073211ca89e6f0cab2bc44f301eb17d75",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 140441,
+        "heapObjects": 40168,
+        "environments": 1,
+        "functions": 64,
+        "genericCalls": 20006,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 5,
+        "peakManagedBytes": 9271870,
+        "scalarCalls": 0,
+        "rootedCalls": 20005,
+        "rootPushes": 20071,
+        "environmentLookups": 40023
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 20205077,
+        "strings": 40095,
+        "stringUnits": 238584,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.579
+      }
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": 10.397,
+      "childCpuMs": 14.78699999999833,
+      "wallMs": 16.760916,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "record",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "81535211eb014394966f85f309c0dfabeaf80f806d05e55919f5c295799720b2",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 100346,
+        "heapObjects": 40168,
+        "environments": 1,
+        "functions": 64,
+        "genericCalls": 20006,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 5,
+        "peakManagedBytes": 9062902,
+        "scalarCalls": 0,
+        "rootedCalls": 20005,
+        "rootPushes": 20071,
+        "environmentLookups": 40023
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 19884317,
+        "strings": 40095,
+        "stringUnits": 238584,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 2.955
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": 4.845999999999999,
+      "childCpuMs": 10.388999999999982,
+      "wallMs": 12.76875,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "94b680a674ca8d38387a957b0c99ee55a440e496e948aab188666e2ccb0cc41b",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 60473,
+        "heapObjects": 20180,
+        "environments": 1,
+        "functions": 68,
+        "genericCalls": 9,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 6949308,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 20080,
+        "environmentLookups": 31
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 14945123,
+        "strings": 20101,
+        "stringUnits": 467517,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.594
+      }
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": 3.6990000000000007,
+      "childCpuMs": 9.28700000000049,
+      "wallMs": 11.207125,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "json-parse",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "4f6e407a6174fe49b208804cf34f6fa82be9f1a86541ac095a92b7860fcac48e",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 40372,
+        "heapObjects": 20180,
+        "environments": 1,
+        "functions": 68,
+        "genericCalls": 9,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 6788502,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 20080,
+        "environmentLookups": 31
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 14784322,
+        "strings": 20101,
+        "stringUnits": 467518,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.946
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": 0.9680000000000001,
+      "childCpuMs": 10.550000000002058,
+      "wallMs": 12.183416,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "edee234cc897d4bbb5401303ce0dd8ee97d38614e35c3543fe47663ec1079e31",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 60481,
+        "heapObjects": 20182,
+        "environments": 1,
+        "functions": 68,
+        "genericCalls": 10,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 7585152,
+        "scalarCalls": 0,
+        "rootedCalls": 9,
+        "rootPushes": 20083,
+        "environmentLookups": 31
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 15580999,
+        "strings": 20103,
+        "stringUnits": 785301,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.477
+      }
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": 0.9179999999999996,
+      "childCpuMs": 9.181999999999135,
+      "wallMs": 10.859625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "json-stringify",
+        "20000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "91972ac1938fcaa1cfdc7f895c1d274fba720fe73c6f6fb7730addd844ff682c",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 40375,
+        "heapObjects": 20181,
+        "environments": 1,
+        "functions": 68,
+        "genericCalls": 10,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 7424134,
+        "scalarCalls": 0,
+        "rootedCalls": 9,
+        "rootPushes": 20083,
+        "environmentLookups": 31
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 15419971,
+        "strings": 20102,
+        "stringUnits": 785297,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 1.085
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 1,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": 1.761,
+      "childCpuMs": 5.3909999999994795,
+      "wallMs": 7.146209,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "f77b195b5997ffae21fe5b765595af889970b0e5e9e02eec076fd20fc6f245bc",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 32482,
+        "heapObjects": 16191,
+        "environments": 1,
+        "functions": 72,
+        "genericCalls": 10,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 4904726,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 85,
+        "environmentLookups": 27
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 14632220,
+        "strings": 101,
+        "stringUnits": 834,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.968
+      }
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": 1.8080000000000005,
+      "childCpuMs": 5.442000000002167,
+      "wallMs": 7.384625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "promise",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "955bad66474170ca682e486b49aa6164256a01c5664160ddce3a914d58923554",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 32381,
+        "heapObjects": 16191,
+        "environments": 1,
+        "functions": 72,
+        "genericCalls": 10,
+        "directCalls": 0,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 4,
+        "peakManagedBytes": 4903944,
+        "scalarCalls": 0,
+        "rootedCalls": 8,
+        "rootPushes": 85,
+        "environmentLookups": 27
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 14631503,
+        "strings": 101,
+        "stringUnits": 847,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.982
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": 1.8839999999999995,
+      "childCpuMs": 7.307999999998316,
+      "wallMs": 9.02825,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-kernels-counters",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "44fdd6414ae0e49cca9dfbfdff1687d02ae4e67e92918fc75625033135e81fec",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 439,
+        "heapObjects": 169,
+        "environments": 1,
+        "functions": 65,
+        "genericCalls": 7,
+        "directCalls": 32000,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 2,
+        "peakManagedBytes": 1085020,
+        "scalarCalls": 0,
+        "rootedCalls": 6,
+        "rootPushes": 72,
+        "environmentLookups": 48028
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 8965339,
+        "strings": 94,
+        "stringUnits": 812,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.047
+      }
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": 1.9029999999999994,
+      "childCpuMs": 7.264000000002824,
+      "wallMs": 8.647708,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-kernels-counters",
+        "map-read",
+        "16000",
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/wide.json"
+      ],
+      "outputSha256": "09670cd4a19f6bcb8f81a5c6b5045fa5d9fb005774352c3f750e862ee55f53f2",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 345,
+        "heapObjects": 169,
+        "environments": 1,
+        "functions": 65,
+        "genericCalls": 7,
+        "directCalls": 32000,
+        "numericCalls": 0,
+        "heapTemporaries": 1,
+        "gcCollections": 2,
+        "peakManagedBytes": 1084268,
+        "scalarCalls": 0,
+        "rootedCalls": 6,
+        "rootPushes": 72,
+        "environmentLookups": 48028
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 8964587,
+        "strings": 94,
+        "stringUnits": 812,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 0,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 0.047
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 0,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": 18.91300000000129,
+      "childCpuMs": 18.91300000000129,
+      "wallMs": 574.285625,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream-counters",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 106794,
+        "heapObjects": 52725,
+        "environments": 104,
+        "functions": 273,
+        "genericCalls": 51373,
+        "directCalls": 21023,
+        "numericCalls": 0,
+        "heapTemporaries": 0,
+        "gcCollections": 5,
+        "peakManagedBytes": 6880638,
+        "scalarCalls": 0,
+        "rootedCalls": 51268,
+        "rootPushes": 2865,
+        "environmentLookups": 1812
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 24749268,
+        "strings": 21060,
+        "stringUnits": 384552,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 1306,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 3.077
+      }
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": 18.954000000000804,
+      "childCpuMs": 18.954000000000804,
+      "wallMs": 589.36225,
+      "loadBefore": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "loadAfter": [
+        10.65185546875,
+        11.021484375,
+        9.62841796875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream-counters",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "a4d0c9d0a41780a37ddfd908d1a752160e59437802a5676dbac0eb72e0c60846",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 85431,
+        "heapObjects": 52624,
+        "environments": 104,
+        "functions": 273,
+        "genericCalls": 51373,
+        "directCalls": 21023,
+        "numericCalls": 0,
+        "heapTemporaries": 0,
+        "gcCollections": 5,
+        "peakManagedBytes": 6769798,
+        "scalarCalls": 0,
+        "rootedCalls": 51268,
+        "rootPushes": 2865,
+        "environmentLookups": 1812
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 24559376,
+        "strings": 20959,
+        "stringUnits": 383946,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 1306,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 2.616
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 101,
+        "dataDescriptorCalls": 0
+      }
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": 121.16599999999877,
+      "childCpuMs": 121.16599999999877,
+      "wallMs": 125.815167,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/before-stream-counters",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 1007280,
+        "heapObjects": 502941,
+        "environments": 104,
+        "functions": 327,
+        "genericCalls": 501643,
+        "directCalls": 201077,
+        "numericCalls": 0,
+        "heapTemporaries": 0,
+        "gcCollections": 38,
+        "peakManagedBytes": 6956090,
+        "scalarCalls": 0,
+        "rootedCalls": 501511,
+        "rootPushes": 3243,
+        "environmentLookups": 1866
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 145673495,
+        "strings": 201087,
+        "stringUnits": 3700253,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 1306,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 25.613
+      }
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": 114.16799999999938,
+      "childCpuMs": 114.16799999999938,
+      "wallMs": 119.574541,
+      "loadBefore": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "loadAfter": [
+        10.359375,
+        10.95458984375,
+        9.61279296875
+      ],
+      "command": [
+        "/Users/hamza/Projects/github-repo/arya-lang/.build/fastpaths-benchmark-hbmos_rm/after-stream-counters",
+        "USD",
+        "2",
+        "half-even"
+      ],
+      "outputSha256": "65c79ba670c8adad540a3d8418992e7afafd356eec4e60ac73dbbb0db945793e",
+      "ARYA_RUNTIME_COUNTERS": {
+        "callocCalls": 805890,
+        "heapObjects": 502840,
+        "environments": 104,
+        "functions": 327,
+        "genericCalls": 501643,
+        "directCalls": 201077,
+        "numericCalls": 0,
+        "heapTemporaries": 0,
+        "gcCollections": 42,
+        "peakManagedBytes": 6866210,
+        "scalarCalls": 0,
+        "rootedCalls": 501511,
+        "rootPushes": 3243,
+        "environmentLookups": 1866
+      },
+      "ARYA_ALLOCATION_DETAIL": {
+        "requestedBytes": 144043387,
+        "strings": 200986,
+        "stringUnits": 3699647,
+        "jsonKeyHits": 0,
+        "fieldCacheHits": 1306,
+        "decimalFastPaths": 0,
+        "gcCpuMs": 22.67
+      },
+      "ARYA_NUMBER_DETAIL": {
+        "toFixedFastPaths": 0,
+        "toFixedFallbacks": 0,
+        "globalCacheHits": 101,
+        "dataDescriptorCalls": 0
+      }
+    }
+  ],
+  "summary": [
+    {
+      "label": "before",
+      "workload": "concat",
+      "cpuMs": {
+        "median": 3.676,
+        "min": 3.5649999999999995,
+        "max": 6.696000000000001
+      },
+      "wallMs": {
+        "median": 9.150542,
+        "min": 8.174375,
+        "max": 42.591
+      }
+    },
+    {
+      "label": "after",
+      "workload": "concat",
+      "cpuMs": {
+        "median": 3.673,
+        "min": 3.591,
+        "max": 3.807999999999999
+      },
+      "wallMs": {
+        "median": 8.715459,
+        "min": 8.170209,
+        "max": 63.914375
+      }
+    },
+    {
+      "label": "before",
+      "workload": "record",
+      "cpuMs": {
+        "median": 10.326,
+        "min": 8.86,
+        "max": 17.485
+      },
+      "wallMs": {
+        "median": 17.786209,
+        "min": 15.093333,
+        "max": 39.973125
+      }
+    },
+    {
+      "label": "after",
+      "workload": "record",
+      "cpuMs": {
+        "median": 9.565,
+        "min": 9.332999999999998,
+        "max": 10.943
+      },
+      "wallMs": {
+        "median": 16.656458,
+        "min": 15.767083,
+        "max": 21.1225
+      }
+    },
+    {
+      "label": "before",
+      "workload": "json-parse",
+      "cpuMs": {
+        "median": 4.077,
+        "min": 3.673,
+        "max": 4.46
+      },
+      "wallMs": {
+        "median": 11.296125,
+        "min": 10.277584,
+        "max": 12.698792
+      }
+    },
+    {
+      "label": "after",
+      "workload": "json-parse",
+      "cpuMs": {
+        "median": 3.7459999999999996,
+        "min": 3.5450000000000004,
+        "max": 6.212
+      },
+      "wallMs": {
+        "median": 10.990958,
+        "min": 10.075625,
+        "max": 15.305083
+      }
+    },
+    {
+      "label": "before",
+      "workload": "json-stringify",
+      "cpuMs": {
+        "median": 0.8750000000000008,
+        "min": 0.8560000000000009,
+        "max": 0.947
+      },
+      "wallMs": {
+        "median": 11.626917,
+        "min": 11.030084,
+        "max": 13.379166
+      }
+    },
+    {
+      "label": "after",
+      "workload": "json-stringify",
+      "cpuMs": {
+        "median": 0.8979999999999995,
+        "min": 0.856,
+        "max": 1.0039999999999998
+      },
+      "wallMs": {
+        "median": 11.192834,
+        "min": 10.746542,
+        "max": 11.787583
+      }
+    },
+    {
+      "label": "before",
+      "workload": "promise",
+      "cpuMs": {
+        "median": 1.7619999999999996,
+        "min": 1.6829999999999996,
+        "max": 1.7999999999999996
+      },
+      "wallMs": {
+        "median": 7.077959,
+        "min": 6.829917,
+        "max": 8.598375
+      }
+    },
+    {
+      "label": "after",
+      "workload": "promise",
+      "cpuMs": {
+        "median": 1.7580000000000005,
+        "min": 1.6710000000000003,
+        "max": 1.839
+      },
+      "wallMs": {
+        "median": 7.055667,
+        "min": 6.798125,
+        "max": 7.261209
+      }
+    },
+    {
+      "label": "before",
+      "workload": "map-read",
+      "cpuMs": {
+        "median": 1.9060000000000006,
+        "min": 1.895,
+        "max": 2.012
+      },
+      "wallMs": {
+        "median": 8.526291,
+        "min": 8.396708,
+        "max": 9.201166
+      }
+    },
+    {
+      "label": "after",
+      "workload": "map-read",
+      "cpuMs": {
+        "median": 1.8990000000000005,
+        "min": 1.8569999999999993,
+        "max": 2.012
+      },
+      "wallMs": {
+        "median": 8.483792,
+        "min": 8.255375,
+        "max": 9.727792
+      }
+    },
+    {
+      "label": "before",
+      "workload": "csv-10000",
+      "cpuMs": {
+        "median": 17.39099999999638,
+        "min": 16.600000000000392,
+        "max": 18.246000000001317
+      },
+      "wallMs": {
+        "median": 19.368917,
+        "min": 18.10475,
+        "max": 19.85675
+      }
+    },
+    {
+      "label": "after",
+      "workload": "csv-10000",
+      "cpuMs": {
+        "median": 16.075999999998203,
+        "min": 15.616999999998882,
+        "max": 16.866999999997745
+      },
+      "wallMs": {
+        "median": 18.04225,
+        "min": 17.291125,
+        "max": 18.40775
+      }
+    },
+    {
+      "label": "before",
+      "workload": "csv-100000",
+      "cpuMs": {
+        "median": 121.30699999999806,
+        "min": 118.5650000000038,
+        "max": 140.56099999999816
+      },
+      "wallMs": {
+        "median": 124.356667,
+        "min": 122.068834,
+        "max": 157.254167
+      }
+    },
+    {
+      "label": "after",
+      "workload": "csv-100000",
+      "cpuMs": {
+        "median": 115.91400000000363,
+        "min": 112.8199999999957,
+        "max": 129.12899999999894
+      },
+      "wallMs": {
+        "median": 118.9945,
+        "min": 115.082958,
+        "max": 133.836834
+      }
+    }
+  ]
+}

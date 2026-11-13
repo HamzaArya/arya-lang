@@ -1,0 +1,73 @@
+use std "fs" as fs
+use std "env" as env
+use std "runtime" as runtime
+use std "decimal" as decimal
+use arya "./rational.arya" as rational
+const precise = true
+fn fail(message) { throw new Error(message) }
+fn text(value,label,maximum=2048) { if runtime.kind(value) != "string" or value.trim().length == 0 or value.length > maximum { fail(label + " must contain 1–" + str(maximum) + " characters.") }; return value.trim() }
+fn record(value) { if not runtime.isRecord(value) { fail("Expected a JSON object.") }; return value }
+fn options(body) {
+  let raw = body.precision ?? "20"
+  if runtime.kind(raw) != "string" or not new RegExp("^(0|[1-9][0-9]?)$").test(raw) or number(raw) > 50 { fail("Precision must be an integer from 0 to 50 decimal places.") }
+  let rounding = body.rounding ?? "half-even"; if not ["half-even","half-up","down","floor","ceil"].includes(rounding) { fail("Choose Half even, Half up, Toward zero, Floor or Ceiling rounding.") }; return {places:number(raw),rounding:rounding}
+}
+const dataFile = env.get("DATA_FILE","data.json")
+let state = {schema:1,nextId:1,lastResult:"0",memory:"0",history:[]}
+fn storedValue(value) {
+  text(value,"Stored result",800)
+  if precise { rational.reset(); if rational.exact(rational.evaluate(value)) != value { fail("Stored fraction is not canonical.") } }
+  else { if not new RegExp("^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$").test(value) or value.length > 400 { fail("Stored decimal is invalid.") }; decimal.from(value) }
+}
+fn validateStore(value) {
+  record(value); if value.schema != 1 or not Number.isSafeInteger(value.nextId) or value.nextId < 1 or value.nextId > 1000000000 or not Array.isArray(value.history) or value.history.length > 100 { fail("Unsupported or corrupt calculator store.") }
+  storedValue(value.lastResult); storedValue(value.memory); let seen = new Set()
+  for row in value.history {
+    record(row); if runtime.kind(row.id) != "string" or not new RegExp("^H[1-9][0-9]*$").test(row.id) or number(row.id.slice(1)) >= value.nextId or seen.has(row.id) { fail("Invalid stored history identifier.") }; seen.add(row.id)
+    text(row.expression,"Stored expression"); storedValue(row.result); text(row.kind,"Stored kind",40); text(row.time,"Stored time",40); text(row.details,"Stored details",2000)
+  }
+}
+fn load() {
+  let info = fs.infoSync(dataFile); if info == null { return }
+  if info.type != "file" or info.size > 1048576 { fail("Store must be a regular file (not a symlink) and at most 1 MiB.") }
+  state = record(JSON.parse(fs.readTextSync(dataFile))); validateStore(state)
+}
+fn save(next) {
+  let encoded = JSON.stringify(next,null,2); if Buffer.byteLength(encoded,"utf8") > 1048576 { fail("History store exceeds 1 MiB.") }
+  let stage = undefined
+  try {
+    stage = fs.tempDirectory(dataFile + ".stage-XXXXXX")
+    fs.writeTextSync(stage + "/data.json",encoded)
+    fs.rename(stage + "/data.json",dataFile)
+  } catch error { fail("Could not save calculator state. Existing history and memory are unchanged.") }
+  finally {
+    if stage != undefined {
+      try { if fs.infoSync(stage + "/data.json") != null { fs.remove(stage + "/data.json") } } catch cleanupError {}
+      try { fs.removeDirectory(stage) } catch cleanupError {}
+    }
+  }
+  state = next
+}
+fn remember(next,expression,result,kind,details) { if next.nextId >= 1000000000 { fail("History sequence capacity reached.") }; next.lastResult = result; next.history.push({id:"H" + str(next.nextId),expression:expression,result:result,kind:kind,time:new Date().toISOString(),details:details}); next.nextId += 1; next.history = next.history.slice(-100) }
+fn resultText(value,selected) { if precise { return rational.exact(value) }; return rational.format(value,selected.places,selected.rounding) }
+fn snapshot(message) { return {ok:true,message:message,result:state.lastResult,memory:state.memory,rows:state.history.slice().reverse(),summary:str(state.history.length) + " saved calculations · " + "Exact fractions; decimal preview"} }
+
+try {
+  let body = record(JSON.parse(args[1] ?? "{}")); if (body.view ?? "history") != "history" { fail("Unknown calculator view.") }
+  load(); rational.reset(); let command = args[0] ?? "list"; let selected = options(body); let message = "Ready."
+  if command != "list" {
+    let next = JSON.parse(JSON.stringify(state))
+    if command == "calculate" {
+      let expression = text(body.expression,"Expression"); let value = rational.evaluate(expression); let result = resultText(value,selected); let preview = rational.format(value,selected.places,selected.rounding)
+      remember(next,expression,result,"Expression","Exact value: " + rational.exact(value) + "; decimal (" + str(selected.places) + " places, " + selected.rounding + "): " + preview)
+      if precise { message = "Decimal preview: " + preview + " (" + selected.rounding + ")" } else { message = "Rounded once to " + str(selected.places) + " places using " + selected.rounding + "." }
+    } else if command == "clear-history" { next.history = []; message = "History cleared. Last result and memory retained." }
+    else if command == "memory-clear" { next.memory = "0"; message = "Memory cleared." }
+    else if command == "memory-recall" { next.lastResult = next.memory; message = "Memory recalled." }
+    else if ["memory-store","memory-add","memory-subtract"].includes(command) {
+      let value = rational.evaluate(text(body.value,"Memory value",800)); if command == "memory-add" { value = rational.add(rational.evaluate(next.memory),value) }; if command == "memory-subtract" { value = rational.subtract(rational.evaluate(next.memory),value) }; next.memory = resultText(value,selected); message = "Memory: " + next.memory
+    }
+    else { fail("Unknown calculator command.") }
+    save(next)
+  }; print(JSON.stringify(snapshot(message)))
+} catch problem { print(JSON.stringify({ok:false,message:problem.message ?? str(problem)})) }

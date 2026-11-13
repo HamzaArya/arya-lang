@@ -1,0 +1,8 @@
+use std "security" as security
+use std "testing" as testing
+const bytes = Buffer.from([0, 1, 2, 255, 128, 0])
+testing.equal(security.hashBytes(bytes), "325a9141fdffb564a014df4bc82e28c683288f007927f47c266d7f9823e9281a")
+testing.equal(security.hashBytes(Buffer.alloc(0)), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+testing.equal(security.hashBytes(Buffer.from("سلام😀")), security.hash("سلام😀"))
+testing.throws(fn() { security.hashBytes("wrong") })
+print("binary SHA256 passed")

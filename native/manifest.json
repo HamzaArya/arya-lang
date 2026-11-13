@@ -1,25 +1,25 @@
 {
   "name": "arya-native",
-  "version": "2.0.0-alpha.2",
-  "status": "qualified-native-alpha",
+  "version": "2.0.0",
+  "status": "release-in-preparation",
   "compiler": "Self-hosted Arya frontend, C11 ahead-of-time backend, native managed value runtime",
   "requiresNodeForCompiler": false,
   "requiresNodeForPrograms": false,
   "requiresPythonForBuildOrCorePrograms": false,
   "legacyStandardModulesWithNativeImplementations": 18,
-  "publicNativeModules": 26,
-  "qualifiedPlatforms": [
-    "darwin-arm64"
-  ],
+  "publicNativeModules": 27,
+  "qualifiedPlatforms": [],
   "build": {
     "core": "POSIX shell, make, C11 compiler",
     "fullSourceSDK": "core tools plus C++20 for Ada URL and Perl for OpenSSL configuration",
     "commands": [
       "make native",
-      "make native-editor",
-      "make native-test",
-      "make native-profile-test",
-      "make native-clean-test"
+      "make native-sdk",
+      "make check",
+      "make native-clean-test",
+      "make native-package",
+      "make native-source-package",
+      "make native-editor"
     ]
   },
   "language": [
@@ -27,7 +27,7 @@
     "booleans",
     "UTF-16 strings",
     "dense and sparse lists",
-    "records",
+    "records with shorthand fields, string computed keys and shallow record spread",
     "functions and closures",
     "relative modules with live exports",
     "if/while/for-at",
@@ -88,6 +88,14 @@
         "existsSync",
         "listSync",
         "appendText",
+        "readBytes",
+        "readBytesSync",
+        "writeBytes",
+        "writeBytesSync",
+        "appendBytes",
+        "appendBytesSync",
+        "writeTextAtomicSync",
+        "writeBytesAtomicSync",
         "makeDirectory",
         "rename",
         "remove",
@@ -271,6 +279,7 @@
         "uuid",
         "generateKey",
         "hash",
+        "hashBytes",
         "hmac",
         "verifyHmac",
         "timingSafeEqual",
@@ -281,6 +290,30 @@
         "keyring",
         "encrypt",
         "decrypt"
+      ]
+    },
+    "auth": {
+      "implementation": "native",
+      "members": [
+        "hashPassword",
+        "verifyPassword",
+        "verifyPasswordAndUpgrade",
+        "passwordNeedsUpgrade",
+        "sessions",
+        "challenges",
+        "generateTotpSecret",
+        "totpCode",
+        "verifyTotp",
+        "totpUri",
+        "pkce",
+        "recoveryCodes",
+        "consumeRecoveryCode",
+        "bearer",
+        "requireMethods",
+        "rateLimiter",
+        "biometricStatus",
+        "authenticate",
+        "vault"
       ]
     },
     "testing": {
@@ -451,8 +484,17 @@
         "prepareInvoices",
         "prepareLedger",
         "invoiceBatch",
-        "ledgerBatch"
+        "ledgerBatch",
+        "validateTransaction",
+        "prepareJournal",
+        "journalBatch",
+        "trialBalance",
+        "financialStatements"
       ]
+    },
+    "gui": {
+      "implementation": "native",
+      "members": ["window", "platform"]
     },
     "desktop": {
       "implementation": "native",
@@ -502,11 +544,15 @@
     "python": "An explicit Python import/call needs a separately installed Python interpreter. Core compilation/execution never launches it.",
     "mysql": "A separately installed MySQL C client SDK selected by ARYA_MYSQL_PREFIX; not bundled. Prepared statements, exact DECIMAL/BIGINT strings and bounded pools.",
     "desktop": "macOS AppKit/WebKit system frameworks, linked only by explicit desktop imports.",
-    "editor": "The editor supplies its own extension host. The extension transports requests to the bundled native LSP; it is not a Node language compiler."
+    "gui": "Direct native controls, linked only by explicit gui imports: AppKit/Cocoa on macOS, GTK 3 on Linux, Win32 user32/gdi32/comctl32 on Windows. Windows Cygwin builds additionally depend on cygwin1.dll; a standalone MinGW runtime is not qualified. See docs/native-gui.md for measured platform status.",
+    "auth": "OpenSSL for authentication primitives; on macOS, Foundation/LocalAuthentication/Security for biometric policies and device-local access-controlled Keychain credentials. Other hosts fail closed for local authentication and vault operations.",
+    "editor": "Separate optional VSIX executes JavaScript transport in the editor host. Standalone SDK excludes it; native LSP requires no JavaScript engine."
   },
   "limits": {
-    "decimal": "4096 context digits; 1024-character canonical input/output; output scales 0–100; nine explicit rounding modes",
-    "accounting": "1000000 rows, 100000 accounts, signed 64-bit per-line minor units, checked signed 128-bit products/aggregates, scales 0–6, two active cooperative asynchronous calculations",
+    "gui": "16 live windows, 128 controls/window, 256 queued events/window, 1000 items/select or list, 16384 UTF-16 units/editable text. Direct label/button/input/textarea/checkbox/select/list/progress widgets; fixed geometry with resize events, one pending nextEvent/window. No browser or WebKit dependency.",
+    "auth": "Process-local opaque stores: at most 65536 entries, 1-2592000 second sessions and 1-3600 second challenges. TOTP: SHA1/SHA256/SHA512, 6/8 digits, 15-120 second period, at most two adjacent steps each side. macOS native credentials: 16384 UTF-8 bytes; one active local operation per process, cancellable with 1-120000 ms deadlines and native AbortSignal. In-place replacement preserves item access controls. Persistent/distributed storage, provider token exchange and WebAuthn verification are application integrations.",
+    "decimal": "4096 context digits; 1024-character canonical input/output; output scales 0\u2013100; nine explicit rounding modes",
+    "accounting": "1000000 rows, 100000 accounts, signed 64-bit per-line minor units, checked signed 128-bit products/aggregates, scales 0\u20136, two active cooperative asynchronous calculations",
     "strings": "16 Mi UTF-16 units",
     "buffers": "16 MiB",
     "asyncTasks": 512,
@@ -514,9 +560,9 @@
     "modules": 1024,
     "source": "16 Mi UTF-16 units per project",
     "regex": "PCRE2 native semantics, no JIT, bounded execution; not a full ECMAScript engine",
-    "csv": "65536 UTF-16 units per push; defaults: field 65536 units, record 1048576 units, 1024 columns; field/record configurable up to 1048576, columns up to 1024; readChunk 1–1048576 input bytes plus at most three carried UTF-8 bytes",
+    "csv": "65536 UTF-16 units per push; defaults: field 65536 units, record 1048576 units, 1024 columns; field/record configurable up to 1048576, columns up to 1024; readChunk 1\u20131048576 input bytes plus at most three carried UTF-8 bytes",
     "json": "16 Mi UTF-16 input units, 16 MiB UTF-8 output, 100000 value nodes and depth 128; JSON-lines io.readLine frames are 1 MiB",
-    "money": "Explicit three-letter uppercase currency tag, scale 0–100 and explicit rounding; exact parsed amount with decimal bounds",
+    "money": "Explicit three-letter uppercase currency tag, scale 0\u2013100 and explicit rounding; exact parsed amount with decimal bounds",
     "finance": "100000 rows/periods, two active cooperative prepared calculations, 4096-row cancellation chunks; decimal bounds for all intermediates"
   },
   "compatibility": {
@@ -539,6 +585,7 @@
       "rooted immutable literal pool",
       "guarded field offsets with generic fallback",
       "immediate list/string/Map/Set method calls",
+      "guarded decimal/JSON standard-library calls",
       "statement-lifetime temporary reuse"
     ],
     "runtime": [
@@ -548,16 +595,38 @@
       "checked decimal integer operations with libmpdec fallback",
       "opaque immutable parsed decimals",
       "ordered Map/Set hash side indexes",
-      "list capacity reservation"
+      "record and unique-value hash indexes",
+      "stable collection deletion tombstones",
+      "tracked demand-zero sparse list pages",
+      "list capacity reservation",
+      "bounded line reads with one stdio lock per frame"
     ],
     "diagnostics": [
       "allocation/string/fast-path counters",
       "instrumented GC CPU time",
-      "bounded immutable checker binding state"
+      "bounded immutable checker binding state",
+      "content and dependency aware native run cache",
+      "bounded UTF-16 editor position index"
     ],
     "comparisonFlag": "--no-data-opt disables compiler data optimizations only",
+    "measurement": {
+      "scope": "Frozen local snapshot; later working-tree changes are separate",
+      "sourceArchiveSha256": "3d5faac71326887a467736eab2adea901ac979c15293f372f3a2cd3243667a8a",
+      "compilerSha256": "02ee8b454cc3a36c190250e7765346eab90ef326e99136e8bf5ce33dc4e35daa",
+      "evidence": "docs/benchmarks/native-data-2026-11-12/qualified-compiler.json"
+    },
     "documentation": "docs/native-data-performance.md",
     "contracts": "docs/native-finance-data.md"
   },
-  "qualification": "qualification/2.0.0-alpha.2.json"
+  "qualification": "qualification/2.0.0.json",
+  "distribution": "Standalone SDK contains native tooling and no .js/.cjs/.mjs/.vsix tool files. Optional browser UI/desktop content and Python interoperability retain explicit external host requirements.",
+  "previousQualification": "qualification/2.0.0-alpha.3.json",
+  "syntaxUpdate": {
+    "since": "2.0.0-alpha.3",
+    "recordShorthand": "{name} reads the existing binding",
+    "computedKeys": "{[expression]: value} requires a string key, validated before the value expression",
+    "recordSpread": "{...record} snapshots own stored keys and shallow-copies their current values in Object.keys order; non-record inputs reject",
+    "compatibility": "Additive syntax; existing canonical fn/let/const/use forms preserved",
+    "documentation": "docs/arya-language.md"
+  }
 }

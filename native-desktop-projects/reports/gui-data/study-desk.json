@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "nextId": 2,
+  "sessions": [
+    {
+      "id": 1,
+      "version": 2,
+      "status": "Completed",
+      "title": "Native GUI verification",
+      "minutes": 30,
+      "due": "",
+      "description": "Check a real AppKit workflow."
+    }
+  ],
+  "notes": []
+}
