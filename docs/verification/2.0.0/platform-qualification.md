@@ -225,3 +225,30 @@ identities, results and hashes of the retained complete official logs. The
 shipping SDK origins remain the separately identified macOS `0dc38b7` and Linux
 `25f1915` desktop jobs; this later fresh-source proof does not change those
 binary provenance records.
+
+## Windows crypto link dependency
+
+[Windows run 43488694656](https://github.com/HamzaArya/arya-lang/actions/runs/43488694656)
+at `c87190b` passed bootstrap, binary checksum/installer checks and validated
+bootstrap capture. Eleven of twelve collected runtime gates passed, including
+the full core fixture gate, arrays/collections, process execution, explicit
+Python platform rejection, UInt32, exact decimal remainder, editor paths,
+all eight public Win32 widgets and real actions, byte/atomic APIs and all HTTP
+relocation scenarios. The security-bytes application failed during ordinary
+`arya build`: OpenSSL's native certificate store referenced Windows functions
+from Crypt32, but the compiler did not link that library. Editor-host and
+packaged SDK checks were skipped after the failure.
+
+The vendored OpenSSL 3.5.9 `Configurations/10-main.conf` Cygwin-common target
+explicitly requires `-lcrypt32`. The corrected compiler adds that dependency
+for Cygwin crypto applications. The retry also runs established security and
+diagnostic behavior checks and a crypto program through the relocated SDK.
+Runtime, editor and distribution checks now collect independent outcomes, with
+a mandatory final gate requiring every outcome to pass before a qualified SDK
+can be uploaded. No assertion or native source-identity check is relaxed.
+
+[windows-crypto-link-failure.json](windows-crypto-link-failure.json) preserves
+the exact passed/failed gates, unavailable sanitizer/file-size-limit coverage,
+immutable artifacts and log checksum. This compiler-input change requires
+fresh platform qualification; the preserved older bootstrap cannot be reused
+as unchanged source.

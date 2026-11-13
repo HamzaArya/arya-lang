@@ -134,6 +134,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
       - name: Restore verified Windows bootstrap bytes for current gates
+        id: restore
         if: env.BOOTSTRAP_ARTIFACT != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -142,26 +143,54 @@ jobs:
           python3 native/bootstrap/windows-bootstrap-artifact.py restore
           --run "$BOOTSTRAP_RUN" --sha "$BOOTSTRAP_SHA" --artifact "$BOOTSTRAP_ARTIFACT"
       - name: Core and Win32 widget checks
+        id: runtime
+        if: always() && (steps.bootstrap.outcome == 'success' || steps.restore.outcome == 'success')
+        continue-on-error: true
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-runtime-test.sh
       - name: Native Windows editor paths and protocol
+        id: editor
+        if: always() && (steps.bootstrap.outcome == 'success' || steps.restore.outcome == 'success')
+        continue-on-error: true
         shell: pwsh
         run: |
           $env:PATH = "C:\cygwin\bin;" + $env:PATH
           node native/tests/windows-editor-reference.cjs "$env:GITHUB_WORKSPACE\.build\independent\arya.exe"
       - name: Package and relocate the tested Windows Cygwin SDK
+        id: distribution
+        if: always() && (steps.bootstrap.outcome == 'success' || steps.restore.outcome == 'success')
+        continue-on-error: true
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-sdk-test.sh
-      - uses: actions/upload-artifact@v4
-        with:
-          name: native-sdk-windows-cygwin-x64
-          path: artifacts/arya-native-*-windows-cygwin-x64.tar.gz*
       - name: Record dependency requirements
+        id: dependencies
+        if: always() && (steps.bootstrap.outcome == 'success' || steps.restore.outcome == 'success')
+        continue-on-error: true
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
           mkdir -p .build/release-evidence
           cygcheck .build/independent/arya.exe > .build/release-evidence/windows-dependencies.txt
           .build/independent/arya --version
+      - name: Require every Windows qualification gate
+        id: qualification
+        if: always()
+        env:
+          RUNTIME_OUTCOME: ${{ steps.runtime.outcome }}
+          EDITOR_OUTCOME: ${{ steps.editor.outcome }}
+          DISTRIBUTION_OUTCOME: ${{ steps.distribution.outcome }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: |
+          mkdir -p .build/release-evidence
+          printf 'runtime=%s\neditor=%s\ndistribution=%s\ndependencies=%s\n' "$RUNTIME_OUTCOME" "$EDITOR_OUTCOME" "$DISTRIBUTION_OUTCOME" "$DEPENDENCIES_OUTCOME" | tee .build/release-evidence/windows-required-gates.txt
+          for outcome in "$RUNTIME_OUTCOME" "$EDITOR_OUTCOME" "$DISTRIBUTION_OUTCOME" "$DEPENDENCIES_OUTCOME"; do
+            test "$outcome" = success || exit 1
+          done
+      - uses: actions/upload-artifact@v4
+        if: success() && steps.qualification.outcome == 'success'
+        with:
+          name: native-sdk-windows-cygwin-x64
+          path: artifacts/arya-native-*-windows-cygwin-x64.tar.gz*
       - uses: actions/upload-artifact@v4
         if: always()
         with:

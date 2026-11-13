@@ -20,11 +20,14 @@ native_cc=$(command -v gcc)
 env -u ARYA_NATIVE_LIBDIR "$sdk/arya.exe" build "$root/native/tests/fixtures/decimal.arya" --cc "$native_cc" -o "$temporary/relocated decimal.exe" --release > .build/release-evidence/windows-relocated-build.log 2>&1 || { cat .build/release-evidence/windows-relocated-build.log >&2; exit 1; }
 "$temporary/relocated decimal.exe" > "$temporary/decimal.actual"
 diff -u native/tests/fixtures/decimal.expected "$temporary/decimal.actual"
+env -u ARYA_NATIVE_LIBDIR "$sdk/arya.exe" build "$root/native/tests/fixtures/security-bytes.arya" --cc "$native_cc" -o "$temporary/relocated crypto.exe" --release > .build/release-evidence/windows-relocated-crypto-build.log 2>&1 || { cat .build/release-evidence/windows-relocated-crypto-build.log >&2; exit 1; }
+ARYA_GC_STRESS=1 "$temporary/relocated crypto.exe" > "$temporary/crypto.actual"
+diff -u native/tests/fixtures/security-bytes.expected "$temporary/crypto.actual"
 env -u ARYA_NATIVE_LIBDIR "$sdk/arya.exe" build "$root/native/tests/fixtures/gui.arya" --cc "$native_cc" -o "$temporary/relocated widgets.exe" --release > .build/release-evidence/windows-relocated-gui-build.log 2>&1 || { cat .build/release-evidence/windows-relocated-gui-build.log >&2; exit 1; }
 ARYA_GC_STRESS=1 "$temporary/relocated widgets.exe" > .build/release-evidence/windows-relocated-gui.log
-cygcheck "$sdk/arya.exe" "$temporary/relocated widgets.exe" > .build/release-evidence/windows-relocated-dependencies.txt
+cygcheck "$sdk/arya.exe" "$temporary/relocated widgets.exe" "$temporary/relocated crypto.exe" > .build/release-evidence/windows-relocated-dependencies.txt
 sh "$sdk/install.sh" "$sdk" --prefix "$temporary/installed SDK" > .build/release-evidence/windows-install.log 2>&1 || { cat .build/release-evidence/windows-install.log >&2; exit 1; }
 "$temporary/installed SDK/bin/arya" --version > .build/release-evidence/windows-installed-version.txt
 env -u ARYA_NATIVE_LIBDIR "$temporary/installed SDK/bin/arya" create "$temporary/new native project" --template native-gui > .build/release-evidence/windows-installed-create.log 2>&1 || { cat .build/release-evidence/windows-installed-create.log >&2; exit 1; }
 env -u ARYA_NATIVE_LIBDIR "$temporary/installed SDK/bin/arya" build "$temporary/new native project/main.arya" --cc "$native_cc" -o "$temporary/installed native application.exe" --release > .build/release-evidence/windows-installed-project.log 2>&1 || { cat .build/release-evidence/windows-installed-project.log >&2; exit 1; }
-printf '%s\n' 'Windows/Cygwin archive checksums, relocated SDK, decimal output, native GUI, installer and generated project PASS.'
+printf '%s\n' 'Windows/Cygwin archive checksums, relocated SDK, decimal and binary crypto output, native GUI, installer and generated project PASS.'

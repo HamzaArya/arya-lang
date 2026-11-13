@@ -19,7 +19,7 @@ else
 fi
 cat .build/release-evidence/windows-sanitizer-capability.log
 failed=0
-for gate in run array-empty collection-mutation process-run python-platform bitwise32 decimal-remainder security-bytes editor-paths gui; do
+for gate in run array-empty collection-mutation process-run python-platform bitwise32 decimal-remainder security-bytes security-diagnostics editor-paths gui; do
   if sh "native/tests/$gate.sh" > ".build/release-evidence/windows-$gate.log" 2>&1; then
     printf 'Windows gate PASS: %s\n' "$gate"
   else

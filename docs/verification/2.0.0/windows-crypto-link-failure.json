@@ -1,0 +1,99 @@
+{
+  "status": "failed",
+  "sourceCommit": "c87190bd266b009e6fb7d2492cd06034fdb79755",
+  "workflowRun": 43488694656,
+  "job": 132103837073,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43488694656/job/132103837073",
+  "bootstrap": "passed",
+  "captureValidation": "passed",
+  "runtimeGates": [
+    {
+      "name": "run",
+      "status": "pass"
+    },
+    {
+      "name": "array-empty",
+      "status": "pass"
+    },
+    {
+      "name": "collection-mutation",
+      "status": "pass"
+    },
+    {
+      "name": "process-run",
+      "status": "pass"
+    },
+    {
+      "name": "python-platform",
+      "status": "pass"
+    },
+    {
+      "name": "bitwise",
+      "status": "pass"
+    },
+    {
+      "name": "decimal-remainder",
+      "status": "pass"
+    },
+    {
+      "name": "security-bytes",
+      "status": "fail"
+    },
+    {
+      "name": "editor-paths",
+      "status": "pass"
+    },
+    {
+      "name": "gui",
+      "status": "pass"
+    },
+    {
+      "name": "api-contracts",
+      "status": "pass"
+    },
+    {
+      "name": "web-relocation",
+      "status": "pass"
+    }
+  ],
+  "failure": {
+    "gate": "security-bytes",
+    "phase": "Ordinary user arya build native link",
+    "library": "libcrypto.a(winstore_store)",
+    "unresolvedWindowsSymbols": [
+      "CertFreeCertificateContext",
+      "CertCloseStore",
+      "CertOpenSystemStoreW",
+      "CertFindCertificateInStore"
+    ],
+    "cause": "Compiler link invocation omitted -lcrypt32 required by vendored OpenSSL Cygwin-common ex_libs.",
+    "fix": "Add -lcrypt32 after libcrypto.a for Cygwin crypto applications; fresh compiler artifacts require requalification."
+  },
+  "skippedAfterFailure": [
+    "Native Windows Node editor protocol",
+    "Packaged/relocated SDK and managed native installation"
+  ],
+  "instrumentation": {
+    "ASanUBSan": "Unavailable: actual Cygwin linker reports absent -lasan/-lubsan; release/debug and GC stress ran.",
+    "RLIMIT_FSIZE": "Unavailable: owned-child probe reports ValueError: current limit exceeds maximum limit; all byte and atomic preservation tests remained enabled."
+  },
+  "earlyChecksumFixture": {
+    "status": "passed",
+    "defaultShasumMarker": "binary (*)",
+    "textMarkerVerificationExitCode": 0,
+    "actualInstallerWithBinaryBytes": "passed"
+  },
+  "unqualifiedBootstrapArtifact": {
+    "id": 14070925991,
+    "sizeBytes": 10109518,
+    "sha256": "6d39783d7f9b99631b1a88cd0d5e68f478ea46c927af0cbe902a1222f1b9bcd4"
+  },
+  "evidenceArtifact": {
+    "id": 14070408970,
+    "sizeBytes": 46065,
+    "sha256": "5e2b13e6c303aa2aa85aaec6d8e418fcf120dde888a2f29d15909979218a1eb8",
+    "downloadVerified": true
+  },
+  "jobLogSHA256": "4a532d890c0bd049e7dea651b8e0bfb57ac5cb31f154bb4f12151009560c749a",
+  "qualification": "No Windows release SDK qualified by this failed run."
+}

@@ -1796,7 +1796,13 @@ fn main() {
   }
   if not force and (fs.existsSync(output) or fs.existsSync(output + ".c") or fs.existsSync(output + ".NOTICE")) { throw "Native output already exists; choose another path or explicitly use --force." }
   let invocation = [compiler, "-std=c11", mode, "-ffp-contract=off", "-I", libraryDirectory, "SOURCE", "-o", "OUTPUT", path.join(libraryDirectory, "libmpdec.a"), "-lm", "-pthread"]
-  if needsCrypto { if not fs.existsSync(path.join(libraryDirectory, "libcrypto.a")) { throw "Native crypto SDK missing; build make native-crypto." }; invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libcrypto.a")); invocation.push("-pthread"); if runtime.platform() == "linux" { invocation.push("-ldl") } }
+  if needsCrypto {
+    if not fs.existsSync(path.join(libraryDirectory, "libcrypto.a")) { throw "Native crypto SDK missing; build make native-crypto." }
+    invocation.push("-I"); invocation.push(path.join(libraryDirectory, "include")); invocation.push(path.join(libraryDirectory, "libcrypto.a")); invocation.push("-pthread")
+    if runtime.platform() == "linux" { invocation.push("-ldl") }
+    # OpenSSL's Cygwin target uses the native Windows certificate store.
+    if runtime.platform() == "cygwin" { invocation.push("-lcrypt32") }
+  }
   if needsAuth and runtime.platform() == "darwin" {
     if not fs.existsSync(path.join(libraryDirectory, "libarya-auth.a")) { throw "Native authentication SDK missing; build make native-auth." }
     invocation.push(path.join(libraryDirectory, "libarya-auth.a")); for framework in ["Foundation", "LocalAuthentication", "Security"] { invocation.push("-framework"); invocation.push(framework) }
