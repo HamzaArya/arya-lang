@@ -252,3 +252,23 @@ the exact passed/failed gates, unavailable sanitizer/file-size-limit coverage,
 immutable artifacts and log checksum. This compiler-input change requires
 fresh platform qualification; the preserved older bootstrap cannot be reused
 as unchanged source.
+
+## Compiler-fix Unix qualification
+
+[Desktop run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933)
+qualified new macOS and Linux SDKs at exact compiler-fix source
+`ce80487668e082ffd263c5239d737de7074e4dc4`. Both targets passed bootstrap, full
+native regressions, API/byte/HTTP checks, real native widget actions, managed
+installation and SDK packaging. The new macOS job is `132128996700`; the Linux
+job is `132128996654`. All downloaded SDK checksums and all 260 selected native
+build inputs matched. The Linux replacement is recorded separately in
+[linux-sdk-generation-2.json](linux-sdk-generation-2.json), preserving its earlier
+candidate's history.
+
+[Independent run 43495958819](https://github.com/HamzaArya/arya-lang/actions/runs/43495958819)
+also passed every fresh-source, core/profile, installed SDK, reference and
+native authentication HTTP integration gate on both macOS and Linux at that
+same source. Exact jobs, successful steps and complete official log hashes are
+preserved in [final-unix-independent-generation-2.json](final-unix-independent-generation-2.json).
+Windows is undergoing its own fresh qualification; the new Unix results do not
+substitute for that platform's remaining checks.

@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "generation": 2,
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "workflowRun": 43495958819,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958819",
+  "scope": "Fresh-source native build, core/profile tests and managed installer after the Cygwin Crypt32 compiler fix, followed by every independent reference and native authentication HTTP integration gate. Matching platform SDKs are separately qualified by desktop run43495958933.",
+  "jobs": [
+    {
+      "platform": "macOS",
+      "job": 132128997103,
+      "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958819/job/132128997103",
+      "startedAt": "2026-11-13T19:50:34Z",
+      "completedAt": "2026-11-13T20:12:36Z",
+      "status": "passed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Linux native widget prerequisites",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Fresh source build, tests and installed SDK without Node or Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build local native compiler for optional arithmetic reference",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent pure-Python decimal reference (test only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seeded compiler robustness (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Exact binary64 formatting reference (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Type and native language-server references (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Current documentation links and library inventory (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Native authentication HTTP integration (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ],
+      "jobLogSHA256": "74840fe9b679f5d1c69d71f28802a08ea1d3200be84971574578c7a746e32803"
+    },
+    {
+      "platform": "Linux",
+      "job": 132128996158,
+      "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958819/job/132128996158",
+      "startedAt": "2026-11-13T19:50:31Z",
+      "completedAt": "2026-11-13T20:22:36Z",
+      "status": "passed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Linux native widget prerequisites",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh source build, tests and installed SDK without Node or Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build local native compiler for optional arithmetic reference",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent pure-Python decimal reference (test only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seeded compiler robustness (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Exact binary64 formatting reference (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Type and native language-server references (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Current documentation links and library inventory (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Native authentication HTTP integration (Python controller only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ],
+      "jobLogSHA256": "49ad1af26d49758f36cd163e0d26557c5f6b117e9109f40d1da94466f29e88bb"
+    }
+  ],
+  "historicalCandidate": "Earlier c871 proof remains in final-unix-independent.json."
+}
