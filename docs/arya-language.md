@@ -1,6 +1,6 @@
 # Arya language reference
 
-This is the native **2.0.0-alpha.3** language. Record shorthand, computed keys and record spread were added in alpha.3; older SDKs require the explicit-field alternatives below. Start with [installation](installing.md) and [getting started](getting-started.md). The [native profile](native-profile.md) defines runtime limits and host-library compatibility.
+This is the native **2.0.0** language, currently undergoing stable release qualification. Record shorthand, computed keys and record spread were added in alpha.3; older SDKs require the explicit-field alternatives below. Start with [installation](installing.md) and [getting started](getting-started.md). The [native profile](native-profile.md) defines runtime limits and host-library compatibility.
 
 ## A complete example
 

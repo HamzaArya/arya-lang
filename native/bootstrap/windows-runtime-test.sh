@@ -9,22 +9,6 @@ export LC_ALL=C.UTF-8
 mkdir -p .build/release-evidence
 work=$(mktemp -d "$root/.build/windows-runtime.XXXXXX")
 trap 'rm -rf "$work"' EXIT HUP INT TERM
-. "$root/native/tests/runtime-path.sh"
-arya_test_prepare_runtime_path "$work"
-printf '%s\n' 'Isolated Windows tests use empty POSIX PATH; Cygwin supplies its native DLL loader directory.'
-cat > "$work/isolation.c" <<'C'
-#include <stdio.h>
-#include <stdlib.h>
-int main(void) {
-  const char *path = getenv("PATH");
-  if (!path || *path) return 1;
-  puts("Empty POSIX PATH: native DLL loading and absolute C toolchain passed.");
-  return 0;
-}
-C
-env -i PATH= "$(command -v gcc)" "$work/isolation.c" -o "$work/isolation.exe" > .build/release-evidence/windows-path-isolation.log 2>&1 || { cat .build/release-evidence/windows-path-isolation.log >&2; exit 1; }
-env -i PATH= "$work/isolation.exe" >> .build/release-evidence/windows-path-isolation.log 2>&1 || { cat .build/release-evidence/windows-path-isolation.log >&2; exit 1; }
-cat .build/release-evidence/windows-path-isolation.log
 printf '%s\n' 'int main(void) { return 0; }' > "$work/probe.c"
 if gcc -fsanitize=address,undefined "$work/probe.c" -o "$work/probe.exe" > .build/release-evidence/windows-sanitizer-capability.log 2>&1 && "$work/probe.exe" >> .build/release-evidence/windows-sanitizer-capability.log 2>&1; then
   export ARYA_TEST_SANITIZERS=required

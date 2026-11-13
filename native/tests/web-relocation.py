@@ -3,6 +3,7 @@ import http.client
 import json
 import os
 from pathlib import Path
+import re
 import selectors
 import subprocess
 import sys
@@ -13,6 +14,17 @@ compiler = Path(os.environ.get("ARYA_NATIVE_BIN", root / ".build/independent/ary
 sanitized = os.environ.get("ARYA_TEST_SANITIZERS") != "unavailable"
 if not sanitized and sys.platform != "cygwin":
     raise SystemExit("Sanitizer fallback requires the recorded Cygwin capability gate.")
+
+def check_stderr(error, binary, scenario):
+    # GCC's ASan reports this documented instrumentation limitation on Linux
+    # when the native scheduler switches contexts. Preserve the warning in the
+    # gate log and reject every other diagnostic, including sanitizer findings.
+    context_warning = r"==[0-9]+==WARNING: ASan doesn't fully support makecontext/swapcontext functions and may produce false positives in some cases!\n"
+    if error and binary.stem == "server-sanitized" and re.fullmatch(context_warning, error):
+        print(f"{binary.name}/{scenario}: {error.rstrip()}", flush=True)
+    else:
+        assert not error, error
+
 with tempfile.TemporaryDirectory(prefix="web-relocation-", dir=root / ".build") as directory:
     work = Path(directory)
     source = work / "source"
@@ -42,6 +54,7 @@ with tempfile.TemporaryDirectory(prefix="web-relocation-", dir=root / ".build") 
     environment = {"PATH": runtime_path, "ARYA_GC_STRESS": "1", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1"}
     for binary in binaries:
         for scenario in ("api", "explicit", "external"):
+            print(f"HTTP relocation: {binary.name}/{scenario}", flush=True)
             server = subprocess.Popen([str(binary), scenario, str(content)], cwd=installed,
                                       env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             selector = selectors.DefaultSelector()
@@ -70,17 +83,27 @@ with tempfile.TemporaryDirectory(prefix="web-relocation-", dir=root / ".build") 
                     assert status == 404, (status, body)
                 assert request("POST", "/stop")[0] == 200
                 output, error = server.communicate(timeout=10)
-                assert server.returncode == 0 and not error, (output, error, server.returncode)
+                assert server.returncode == 0, (output, error, server.returncode)
+                check_stderr(error, binary, scenario)
+            except Exception as failure:
+                if server.poll() is None:
+                    server.kill()
+                output, error = server.communicate(timeout=10)
+                raise AssertionError(
+                    f"{binary.name}/{scenario}: {failure}; exit={server.returncode}; "
+                    f"stdout={output!r}; stderr={error!r}"
+                ) from failure
             finally:
                 selector.close()
                 if server.poll() is None:
                     server.kill()
                     server.communicate(timeout=10)
         for scenario in ("html", "assets", "invalid"):
+            print(f"HTTP relocation: {binary.name}/{scenario}", flush=True)
             result = subprocess.run([str(binary), scenario], cwd=installed, env=environment,
                                     capture_output=True, text=True, timeout=10)
             assert result.returncode == 3 and result.stdout.startswith("startup-error "), result
             if scenario == "invalid":
                 assert result.stdout.strip() == "startup-error TypeError", result
-            assert not result.stderr, result.stderr
+            check_stderr(result.stderr, binary, scenario)
     print("HTTP relocation: API-only source removal, explicit static root, disabled assets and invalid options passed in both modes")

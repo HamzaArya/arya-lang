@@ -19,7 +19,7 @@ These helpers are native implementations, not an embedded JavaScript engine. Sup
 | Value | Native contract |
 | --- | --- |
 | Object / Array | Record keys/entries/values, assignment and data/accessor helpers; dense/sparse list construction, iteration and collection methods. Getter fields are readonly; complete JavaScript descriptor flags/prototypes and named list properties are outside this profile. |
-| Number / String / Boolean / Math | Binary64 conversions/classification, UTF-16 string operations, the 36 Math functions and eight constants in the supported source profile |
+| Number / String / Boolean / Math | Binary64 conversions/classification, UTF-16 string operations, the 42 Math functions and eight constants in the supported source profile |
 | JSON | Parse/stringify, reviver/replacer, indentation and `toJSON`; values cross foreign boundaries as JSON data |
 | Map / Set | Native identity/value lookup, insertion order, size, mutation and iteration; no JavaScript prototype hierarchy |
 | Buffer | Bounded allocation/from/concat, encodings, shared subarrays, byte indexing and common checked numeric reads/writes; no Node streams or arbitrary typed-array platform |

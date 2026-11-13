@@ -18,7 +18,7 @@ Use [Install Arya](installing.md) for platform status, source builds, transferri
 | `SOURCE-SHA256SUMS` | Hashes of repository inputs; the source files themselves are not all bundled |
 | `SHA256SUMS` | Hashes of the actual installed SDK files |
 | `LICENSE`, `NOTICE`, `THIRD-PARTY-NOTICES.txt` | Distribution and dependency notices |
-| `qualification/` | Historical qualification records; consult their snapshot identities |
+| `qualification/` | Current and historical qualification records; match their platform and snapshot identities to the installed artifact |
 | `examples/` | Complete native example sources, including record composition, financial workers and streaming reports |
 | `decimal.arya`, `calculation-worker.arya`, other root examples | Compatibility copies retained for earlier SDK commands |
 

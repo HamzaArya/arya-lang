@@ -7,10 +7,20 @@ on:
         type: choice
         default: all
         options: [all, linux, macos, windows]
+      windows_bootstrap_run:
+        description: Optional original run ID for exact Windows bootstrap reuse (target windows only)
+        type: string
+      windows_bootstrap_sha:
+        description: Exact 40-character source SHA of that bootstrap run
+        type: string
+      windows_bootstrap_artifact:
+        description: Immutable windows-bootstrap-sdk-unqualified artifact ID
+        type: string
   push:
     branches: ['release/**']
 permissions:
   contents: read
+  actions: read
 jobs:
   unix:
     if: github.event_name != 'workflow_dispatch' || inputs.target != 'windows'
@@ -66,6 +76,11 @@ jobs:
     if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'windows'
     runs-on: windows-latest
     timeout-minutes: 120
+    env:
+      BOOTSTRAP_RUN: ${{ inputs.windows_bootstrap_run }}
+      BOOTSTRAP_SHA: ${{ inputs.windows_bootstrap_sha }}
+      BOOTSTRAP_ARTIFACT: ${{ inputs.windows_bootstrap_artifact }}
+      QUALIFICATION_TARGET: ${{ inputs.target }}
     steps:
       - run: git config --global core.autocrlf input
       - uses: actions/checkout@v4
@@ -75,6 +90,17 @@ jobs:
           packages: >-
             gcc-core gcc-g++ make perl libcrypt-devel libiconv-devel
             pkg-config zip unzip diffutils patch tar gzip bzip2 xz coreutils python3
+      - name: Validate bootstrap reuse inputs
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: |
+          if test -n "$BOOTSTRAP_RUN$BOOTSTRAP_SHA$BOOTSTRAP_ARTIFACT"; then
+            test "$QUALIFICATION_TARGET" = windows
+            test -n "$BOOTSTRAP_RUN" && test -n "$BOOTSTRAP_SHA" && test -n "$BOOTSTRAP_ARTIFACT"
+          fi
+          python3 native/tests/windows-bootstrap-reference.py
+      - name: Empty-PATH native compiler and DLL loading
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: sh native/bootstrap/windows-path-test.sh
       - name: Direct Win32 backend action probe
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
@@ -83,10 +109,32 @@ jobs:
           gcc -std=c11 native/gui/platform-test.c -lcomctl32 -lgdi32 -luser32 -o .build/gui/platform-actions.exe
           .build/gui/platform-actions.exe 2>&1 | tee .build/release-evidence/windows-native-actions.log
       - name: Build native Windows PE toolchain with explicit Cygwin dependency
+        id: bootstrap
+        if: env.BOOTSTRAP_ARTIFACT == ''
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: |
           mkdir -p .build/release-evidence
           make native-sdk CC=gcc CXX=g++ 2>&1 | tee .build/release-evidence/windows-bootstrap.log
+      - name: Preserve unqualified Windows bootstrap SDK
+        id: capture
+        if: steps.bootstrap.outcome == 'success'
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: python3 native/bootstrap/windows-bootstrap-artifact.py capture
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.capture.outcome == 'success'
+        with:
+          name: windows-bootstrap-sdk-unqualified
+          path: .build/windows-bootstrap-capture/windows-bootstrap-sdk.tar.gz*
+          if-no-files-found: error
+          retention-days: 14
+      - name: Restore verified Windows bootstrap bytes for current gates
+        if: env.BOOTSTRAP_ARTIFACT != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
+        run: >-
+          python3 native/bootstrap/windows-bootstrap-artifact.py restore
+          --run "$BOOTSTRAP_RUN" --sha "$BOOTSTRAP_SHA" --artifact "$BOOTSTRAP_ARTIFACT"
       - name: Core and Win32 widget checks
         shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
         run: sh native/bootstrap/windows-runtime-test.sh
