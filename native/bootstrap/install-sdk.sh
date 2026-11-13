@@ -6,10 +6,12 @@ test "$#" -ge 1 || { usage >&2; exit 2; }
 case "$1" in --help|-h) usage; exit 0;; esac
 sdk=$1
 shift
-prefix=${HOME:?HOME is required unless invoking from an environment with HOME set}/.local
+prefix=
+prefix_supplied=false
 while test "$#" -gt 0; do
-  case "$1" in --prefix) test "$#" -ge 2 || { usage >&2; exit 2; }; prefix=$2; shift 2;; *) usage >&2; exit 2;; esac
+  case "$1" in --prefix) test "$#" -ge 2 || { usage >&2; exit 2; }; prefix=$2; prefix_supplied=true; shift 2;; *) usage >&2; exit 2;; esac
 done
+if test "$prefix_supplied" = false; then prefix=${HOME:?HOME is required when --prefix is omitted}/.local; fi
 case "$prefix" in /*) ;; *) printf '%s\n' 'Installation prefix must be absolute.' >&2; exit 2;; esac
 sdk=$(CDPATH= cd -- "$sdk" && pwd)
 os=$(uname -s | tr '[:upper:]' '[:lower:]')

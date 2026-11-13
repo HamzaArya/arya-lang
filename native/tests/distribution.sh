@@ -30,4 +30,16 @@ env -i PATH=/nonexistent "$work/auth-local" > "$work/auth-status.json"
 grep -Eq '"supported":(true|false)' "$work/auth-status.json"
 if env -i PATH=/nonexistent "$work/sdk/arya" editor install --editor code > "$work/editor.log" 2>&1; then exit 1; fi
 grep -q 'standalone SDK excludes editor-host JavaScript' "$work/editor.log"
+prefix="$work/installed SDK"
+sh "$work/sdk/install.sh" "$work/sdk" --prefix "$prefix" > "$work/install.log" 2>&1 || { cat "$work/install.log" >&2; exit 1; }
+installed="$prefix/bin/arya"
+env -i PATH=/nonexistent "$installed" --version
+project="$work/installed CLI project"
+env -u ARYA_NATIVE_LIBDIR -u ARYA_C_COMPILER "$installed" create "$project" --template cli > "$work/create.log" 2>&1 || { cat "$work/create.log" >&2; exit 1; }
+env -i PATH=/nonexistent "$installed" check "$project/main.arya" --json > "$work/installed-check.json"
+env -u ARYA_NATIVE_LIBDIR -u ARYA_C_COMPILER "$installed" build "$project/main.arya" -o "$work/installed native program" --release > "$work/installed-build.log" 2>&1 || { cat "$work/installed-build.log" >&2; exit 1; }
+env -i PATH=/nonexistent "$work/installed native program" 19.95 3 > "$work/installed-output.txt"
+printf 'Total: 59.85\n' > "$work/installed-expected.txt"
+diff -u "$work/installed-expected.txt" "$work/installed-output.txt"
+printf '%s\n' 'installation: real versioned prefix, generated CLI project, check/build/run and paths containing spaces passed'
 printf '%s\n' 'distribution: native SDK has no JavaScript/VSIX tooling; checksums and interpreter-free analysis passed'

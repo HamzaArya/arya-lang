@@ -106,6 +106,12 @@ with tempfile.TemporaryDirectory(prefix='arya-distribution-test-') as temporary:
     run('sh', installer, source, '--prefix', unmanaged, good=False)
     assert (unmanaged / 'bin/arya').read_text() == 'preserve me'
     run('sh', installer, source, '--prefix', 'relative', good=False)
+    without_home = {key: value for key, value in os.environ.items() if key != 'HOME'}
+    explicit_prefix = base / 'explicit prefix without HOME'
+    run('sh', installer, source, '--prefix', explicit_prefix, env=without_home)
+    assert run(explicit_prefix / 'bin/arya', '--version').stdout.strip() == 'Arya native 2.0.0 fixture'
+    run('sh', installer, source, env=without_home, good=False)
+    run('sh', installer, source, '--prefix', '', env=without_home, good=False)
     assert not list(prefix.glob('.arya-install*'))
     # Host-routing fixtures only: shell scripts named .exe do not qualify Windows.
     tools = base / 'cygwin fixture tools'

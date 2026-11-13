@@ -72,6 +72,19 @@ language defects and are not reported as newly implemented.
   profiles and the real CLI-launch environment fixed the harness. Both bundled and
   portable editor packages then passed all ten language-service checks. Their
   failures, successful retries and exact hashes are in the [distribution record](verification/2.0.0/distribution.json).
+- The real installer smoke added to the Unix distribution gate exposed an
+  environment dependency: supplying `--prefix` still evaluated `HOME` before
+  parsing arguments. The installer now requires `HOME` only for its default
+  location. Explicit-prefix installation without `HOME`, missing-default rejection
+  and empty-prefix rejection passed the packaging regressions. The Unix gate now
+  installs a real SDK into a path containing spaces, creates a CLI project with
+  the installed command, checks and builds it, and requires the exact native output.
+- Linux's relocated HTTP test exited successfully but emitted GCC's exact ASan
+  `makecontext/swapcontext` capability warning. The harness now retains that warning
+  in its log only for sanitizer builds; all other stderr still fails. Fifteen
+  focused acceptance/rejection cases passed. The same final macOS HTTP test also
+  passed locally with the original 15-second startup bound; an earlier preliminary
+  stage-one timeout has no established cause and remains in the evidence.
 
 ## Release gates and publication
 
