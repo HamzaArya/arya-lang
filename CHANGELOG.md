@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 — stable release qualification in progress
+## 2.0.0 — stable
 
 - Add `std "gui"` for direct AppKit, GTK 3 and Win32 widgets and queued native events. Platform implementations are qualified separately. Windows builds use Cygwin’s POSIX runtime; a standalone MSVC/MinGW port is not claimed.
 - Add bounded binary filesystem reads/writes/appends, atomic text/byte replacement and SHA-256 over raw buffers. Upgrade the earlier applications to use the repaired APIs.
@@ -135,7 +135,7 @@ These changes are not in the frozen 1.3.0-alpha.7 archives. The new release is 1
   and [phase evidence](compat/node/docs/business-applications-plan.md).
 
 
-Arya is experimental. Versioned release notes contain compatibility details; [release readiness](compat/node/docs/release-readiness.md) records actual qualification.
+These retained 1.3 prereleases are experimental. Their versioned release notes contain compatibility details; [historical release readiness](compat/node/docs/release-readiness.md) records their qualification.
 
 ## Unreleased documentation
 

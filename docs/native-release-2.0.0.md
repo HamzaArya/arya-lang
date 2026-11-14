@@ -10,7 +10,7 @@ binary snapshots.
 
 | Reported problem | Implementation | Evidence |
 | --- | --- | --- |
-| Desktop module required web content | New `std gui` with AppKit, GTK 3 and Win32 controls, queued events, a native project template and persistent Task Desk example | AppKit and GTK widget/action/template gates passed with qualified native SDKs; [GUI report](native-gui-report.md). Windows qualification remains pending. |
+| Desktop module required web content | New `std gui` with AppKit, GTK 3 and Win32 controls, queued events, a native project template and persistent Task Desk example | AppKit, GTK and public Win32 widget/action/template gates passed with qualified native SDKs; [GUI report](native-gui-report.md). |
 | Public filesystem only supported text | Six byte-file APIs and `security.hashBytes(Buffer)` preserve arbitrary binary content | macOS API/byte-oracle, limit, error, sanitizer and GC-stress gates passed; binary TextVault create/verify passed. |
 | Application saves used predictable temporary paths | Atomic text/byte replacement uses exclusive random siblings and checked writes; 20 old stores migrated | [API repair report](native-api-repairs.md): 20 functional suites and 60 storage-entry checks passed. The six desktop workers were also rebuilt in the final application CI. |
 | Valid inferred HTTP options rejected | Readonly input records for server options; four application `any` workarounds removed | Typed positive/negative checks and actual rebuilt server application suites passed. |
@@ -20,8 +20,8 @@ binary snapshots.
 | API-only services required their original source folder | `web.serve` resolves a static root only when HTML or assets are enabled | The relocated executable/source-removal HTTP regression passed in macOS qualification. |
 | Collection iteration lost pending entries during mutation | Each Map/Set traversal retains its own compaction guard through exhaustion or abrupt completion | [Collection mutation regression](verification/2.0.0/collection-mutation.md): 26 checks per optimized/reference/sanitizer mode, with GC stress; repeated successfully in macOS qualification. |
 | Empty array operations invoked undefined C behavior | Guard zero-length pointer arithmetic and memory copies in concat, slice, unshift, splice, copyWithin and sort | Focused fresh/retained-storage sanitizer regression and the original failing CSV path passed in macOS qualification. |
-| Windows editor paths mixed native and POSIX forms | Cygwin mount-aware conversions and Windows file-URI transport | Unix URI/editor-path checks passed. Actual Windows editor transport and complete distribution qualification remain pending. |
-| No versioned installation and stable editor package | Checksum-verified versioned installers and bundled/portable VSIX modes derived from version 2.0.0 | [Actual macOS/Linux installers and both macOS editor-host gates passed](verification/2.0.0/distribution.md); Windows qualification remains pending. |
+| Windows editor paths mixed native and POSIX forms | Cygwin mount-aware conversions and Windows file-URI transport | Unix path checks and actual native Windows CLI/LSP transport passed, including Unicode/space paths, definitions, hover and rename file URIs. |
+| No versioned installation and stable editor package | Checksum-verified versioned installers and bundled/portable VSIX modes derived from version 2.0.0 | [Both actual macOS editor hosts passed](verification/2.0.0/generation-2/distribution.md); native macOS/Linux/Windows SDK installation and relocation gates passed. |
 
 Atomic visibility is not an fsync durability guarantee. Stateful examples retain
 single-writer and size limits. Business features outside the earlier application
@@ -63,8 +63,8 @@ language defects and are not reported as newly implemented.
 - Cygwin `fork` could not clone the compiler's managed task stack. Windows
   `process.run` now uses direct process spawning; a Windows runner subsequently
   completed the full self-hosted SDK bootstrap. Later Windows test isolation
-  removed the required Cygwin DLL search path. That harness repair and the complete
-  Windows SDK/editor/native GUI rerun remain pending. Missing Cygwin sanitizer
+  removed the required Cygwin DLL search path. The corrected harness and the complete
+  Windows SDK/editor/native GUI rerun subsequently passed. Missing Cygwin sanitizer
   libraries and unsupported file-size fault injection are recorded as unavailable,
   not as successful sanitizer or injection results.
 - The first portable VSIX host attempts hit macOS's IPC socket-path limit and then
@@ -108,58 +108,74 @@ language defects and are not reported as newly implemented.
   adds that dependency for crypto builds on Cygwin, matching the vendored
   OpenSSL configuration. This changes compiler source, so the earlier SDK,
   application and bundled-editor results remain historical; final artifacts
-  require fresh qualification. No source-identity exception permits their reuse.
+  required fresh qualification, which subsequently passed on all three targets. No source-identity exception permits their reuse.
   The next Windows run also exercises security diagnostics and crypto from a
   relocated SDK. Its workflow collects runtime, editor, installation and
   dependency results independently, then rejects qualification unless every
-  required group passed.
+  required group passed. The final Windows job passed that aggregate gate.
 
 ## Release gates and publication
 
-Version: **2.0.0**. Status: **qualification in progress**, not yet a published stable
-release. [Machine-readable qualification](../native/qualification/2.0.0.json) is
-updated only from actual results. Prior alpha evidence is not reused as proof of
-this release.
+Version: **2.0.0 stable**. Platform qualification is complete for macOS ARM64,
+Linux x64 and Windows x64 with Cygwin. Final archive assembly and public release
+are separate steps; this source snapshot does not claim publication before it
+occurs. The [machine-readable qualification](../native/qualification/2.0.0.json)
+records exact compiler identities and the publication state at assembly time.
 
-Fresh qualification of the corrected compiler at
-`ce80487668e082ffd263c5239d737de7074e4dc4` is in progress in
-[desktop workflow 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933)
-and [independent workflow 43495958819](https://github.com/HamzaArya/arya-lang/actions/runs/43495958819).
-The results below identify the preceding generation and do not qualify the
-changed compiler. New artifacts are staged separately; earlier files remain intact.
+The corrected native compiler/runtime/library source is
+`ce80487668e082ffd263c5239d737de7074e4dc4`.
+[Desktop workflow 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933)
+passed every platform job:
 
-The preceding compiler/runtime/library snapshot is commit
-`0dc38b789df2840aa2977769065479c578e70649`.
-[Desktop workflow 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848)
-passed every macOS gate, including core regressions, API contracts, HTTP relocation,
-AppKit and SDK packaging. The macOS job in
-[independent workflow 43470021846](https://github.com/HamzaArya/arya-lang/actions/runs/43470021846)
-also passed the fresh source build, installed SDK and independent reference gates.
-The qualified ARM64 compiler has minimum macOS 15.0 and SHA-256
-`fdd021f30cdbb09165898beb01ce189d76af4d4714ad119640748695ba2e07d1`.
+- macOS job `132128996700`: bootstrap, core, API/byte/HTTP, AppKit and SDK
+  installation/packaging. The ARM64 compiler requires macOS 15.0 and has SHA-256
+  `06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94`.
+- Linux job `132128996654`: bootstrap, core, API/HTTP, GTK, relocation and actual
+  managed installation on Ubuntu 24.04 x64. Its ELF compiler has SHA-256
+  `13e39ee60c94e8a8b985d575c399ab6fe4031a47e04d5dbc5416b1b1197d01ff`.
+- Windows job `132128996419`: fresh self-hosted PE bootstrap, runtime/Win32/API
+  and crypto checks, native editor transport, relocated SDK, managed installation
+  and dependency inspection. Its mandatory aggregate required actual success
+  from runtime, editor, distribution and dependency groups. Cygwin remains a
+  required runtime; this is not a standalone MSVC/MinGW package.
 
-[Application workflow 43475142800](https://github.com/HamzaArya/arya-lang/actions/runs/43475142800),
-from application/controller commit `5d3286445587fec596b76f912f70cc1575679c75`,
-passed all twelve application builds and suites using that exact qualified SDK.
-It verified native host/worker protocols, signatures, archive extraction and
-checksums. These AppKit application bundles target macOS 26 ARM64 and are ad-hoc
-signed; they are not notarized or Windows/Linux ports. Automated CI is separate
-from the earlier recorded manual GUI sessions.
+[Independent workflow 43495958819](https://github.com/HamzaArya/arya-lang/actions/runs/43495958819)
+also passed on macOS and Linux: fresh-source compilation and installed SDK use
+without Node/Python, then all arithmetic/compiler/type/LSP/documentation and
+native authentication HTTP references. Exact platform proofs and retained logs
+are linked from [platform qualification](verification/2.0.0/platform-qualification.md).
 
-The actual macOS versioned installer, installed CLI build/run, bundled VSIX and
-portable VSIX gates also passed; their identities are recorded in
-[distribution qualification](verification/2.0.0/distribution.md).
+[Application workflow 43496335481](https://github.com/HamzaArya/arya-lang/actions/runs/43496335481),
+job `132130301288`, rebuilt all twelve applications using the new qualified Mac
+SDK. All engine suites, native protocols, signatures, archive extraction and
+inventories passed. The downloaded bundles then passed local isolated native
+protocol checks. Fresh Pocket Calculator and Study Desk launch/About spot checks
+showed version 2.0.0; both apps were closed without calculation, editing or saving.
+These AppKit applications require macOS 26 ARM64 and are ad-hoc signed, without
+Developer ID signing or notarization. They are not Windows/Linux app ports.
+[Current application evidence](verification/2.0.0/generation-2/application-release.md)
+records the exact delivered bytes and the corrected local archive-inventory
+assertion; no application was abandoned.
 
-[Linux workflow 43480059478](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478)
-passed the complete native runtime, API, relocated HTTP, GTK and distribution
-suite on Ubuntu 24.04 x64. Its actual installer created a versioned prefix with
-spaces, and the installed compiler created, checked, built and ran a CLI project.
-All 563 downloaded SDK files and 260 native build inputs were verified. The ELF
-compiler SHA-256 is `06d518dda4d8aacaea4d8b131b39ee5d89317b863478413d4235ee379cfd9694`.
-Windows/Cygwin qualification remains pending.
+The rebuilt bundled VSIX and unchanged portable VSIX each passed all ten actual
+VS Code host checks with the new Mac compiler. The portable host selected a
+newly installed SDK through PATH, without a compiler override. Installation used
+HOME unset and a prefix with spaces.
+[Current editor and installer evidence](verification/2.0.0/generation-2/distribution.md)
+keeps those identities separate from earlier attempts. These full editor-host
+sessions were on macOS; the Windows result is the native CLI/LSP transport gate.
 
-The repository branch is `release/2.0.0-native`. Final distribution metadata,
-release assets and public download URLs will be recorded after the remaining
-gates and publication complete. The portfolio update is isolated from unrelated
-dirty site work and uses the existing signed-in Hostinger/GitHub deployment route.
-No successful release or portfolio publication is claimed here yet.
+The [preceding qualification snapshot](verification/2.0.0/generation-1-qualification.json),
+[SDK pins](verification/2.0.0/generation-1-sdk-assembly-inputs.json), old application
+archives and failed-attempt logs remain preserved. They are not relabeled as
+proof of the corrected compiler. No native build-input equality check was relaxed.
+
+The final SDKs retain each original compiler, library and build/source identity.
+Separate `ASSEMBLY-*` records describe later installer, documentation and
+qualification metadata. The reviewed freeze commit is the target of `v2.0.0`;
+subsequent delivery evidence records artifact hashes, actual public downloads and
+portfolio deployment without moving the tag or repacking tested payloads.
+
+The portfolio changes use an isolated clean worktree and the existing
+Hostinger Git deployment for `hamzaarya.com`. Public release and portfolio URLs
+will be recorded after their actual bytes and deployment are verified.

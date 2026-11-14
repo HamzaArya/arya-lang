@@ -83,8 +83,8 @@ startup rejection, not interactive CRUD; interaction is a separate GUI check.
 
 ## Release runner evidence
 
-The macOS job in [run 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848)
-passed the final self-hosted compiler, full core/API gates and direct GUI gate
+The earlier macOS job in [run 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848)
+passed its self-hosted compiler, full core/API gates and direct GUI gate
 on macOS 15 ARM64. The GUI gate includes the later missing-id validation and
 `native-gui` template, as well as real AppKit controls and action/lifetime
 checks. Its SDK compiler and generated-C identities are recorded in the
@@ -97,7 +97,12 @@ following public-language test initially removed the required Cygwin DLL search
 path; the harness now uses an empty POSIX PATH while Cygwin supplies its native
 DLL loader directory. That isolation probe passed on an actual Windows runner
 in [run 43478802288](https://github.com/HamzaArya/arya-lang/actions/runs/43478802288).
-The final public GUI and Windows distribution gates are still pending.
+The later [c871 Windows result](verification/2.0.0/windows-crypto-link-failure.json)
+passed bootstrap and eleven runtime gates, but byte-crypto application linking
+failed because the compiler omitted OpenSSL's required `crypt32` dependency.
+The downstream editor-transport and distribution stages did not run. The narrow
+linker repair required fresh SDK qualification; earlier artifacts remain historical
+evidence rather than the final release payload.
 
 The Linux independent fresh-source suite passed in
 [run 43474217260](https://github.com/HamzaArya/arya-lang/actions/runs/43474217260).
@@ -113,3 +118,21 @@ passed the same gates plus actual managed installation into a path containing
 spaces and an installed compiler creating, checking, building and running a
 new CLI project. Its SDK's 563 file checksums and all 260 selected native build
 inputs were verified after download.
+
+## Current SDK generation
+
+Fresh source `ce80487668e082ffd263c5239d737de7074e4dc4` passed the complete
+macOS, Linux and Windows native SDK jobs in
+[run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933),
+including direct platform widgets, byte-crypto linking, SDK relocation and
+managed installation. Windows also passed the native editor-transport gate.
+Cygwin runtime DLLs remain required; unavailable Cygwin sanitizers and file-size
+fault injection are recorded separately from passing tests.
+
+[Current editor/distribution evidence](verification/2.0.0/generation-2/distribution.md)
+identifies the rebuilt SDK and both actual macOS VS Code hosts.
+[Current application evidence](verification/2.0.0/generation-2/application-release.md)
+records the twelve fresh AppKit bundles from application run `43496335481`.
+The SDK minimum remains macOS 15, while those supplied applications require
+Apple Silicon macOS 26. Direct Windows/Linux GUI qualification does not port
+the separate AppKit application hosts to those platforms.

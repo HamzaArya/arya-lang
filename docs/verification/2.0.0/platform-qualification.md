@@ -270,5 +270,38 @@ also passed every fresh-source, core/profile, installed SDK, reference and
 native authentication HTTP integration gate on both macOS and Linux at that
 same source. Exact jobs, successful steps and complete official log hashes are
 preserved in [final-unix-independent-generation-2.json](final-unix-independent-generation-2.json).
-Windows is undergoing its own fresh qualification; the new Unix results do not
-substitute for that platform's remaining checks.
+Windows was qualified separately by the same desktop run, as recorded below.
+
+## Final Windows qualification
+
+Windows job `132128996419` in
+[desktop run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933/job/132128996419)
+completed successfully at `2026-11-13T21:05:25Z`, using exact source
+`ce80487668e082ffd263c5239d737de7074e4dc4`. The downloaded
+`windows-required-gates.txt` records `success` for **runtime, editor,
+distribution and dependencies**. The mandatory aggregate step and whole job
+also succeeded; displayed conclusions from collection steps are not used as
+substitutes for these actual outcomes.
+
+All thirteen runtime gates passed, including byte hashing and the expanded
+security/diagnostic checks after the Crypt32 link repair. Native Windows Node
+launched the real PE compiler and language server, passing Unicode/space paths,
+cross-file definition, hover and rename. The actual archive passed relocation,
+decimal and binary-crypto execution, Win32 GUI execution, managed installation
+and installed-compiler native project creation/building.
+
+Qualified SDK artifact `14076247106` has verified ZIP SHA-256
+`eb04e0c0d7f3e81568a4bf5be9b621a46c172a7bc81da1119037ca9840cbe9db`.
+All 581 SDK files and all 260 selected native build inputs matched; generated-C
+stages converged. Evidence artifact `14076097553` has verified ZIP SHA-256
+`f3744ff945e801822ac8e6e9b30e8813fea54145295b4822edbccc7d136919e9`.
+The exact compiler/archive/inventory/installer identities, thirteen gate
+results, four aggregate outcomes and hashes of all 32 raw evidence files are
+preserved in [windows-sdk-generation-2.json](windows-sdk-generation-2.json).
+
+This is native PE x64 software with an explicit Cygwin dependency. The actual
+Cygwin compiler lacked ASan/UBSan libraries; release/debug and GC stress passed.
+Cygwin also lacked the tested `RLIMIT_FSIZE` injection capability; byte and
+atomic-preservation checks remained enabled. The optional Python bridge rejects
+Cygwin explicitly. These measured limits are retained rather than counted as
+passing instrumentation or integration coverage.

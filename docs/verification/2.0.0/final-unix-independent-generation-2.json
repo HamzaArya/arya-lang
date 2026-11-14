@@ -4,7 +4,7 @@
   "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
   "workflowRun": 43495958819,
   "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958819",
-  "scope": "Fresh-source native build, core/profile tests and managed installer after the Cygwin Crypt32 compiler fix, followed by every independent reference and native authentication HTTP integration gate. Matching platform SDKs are separately qualified by desktop run43495958933.",
+  "scope": "Fresh-source native build, core/profile tests and managed installer after the Cygwin Crypt32 compiler fix, followed by every independent reference and native authentication HTTP integration gate. Matching platform SDKs are separately qualified by desktop run 43495958933.",
   "jobs": [
     {
       "platform": "macOS",

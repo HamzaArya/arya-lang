@@ -1,11 +1,12 @@
 {
   "version": "2.0.0",
-  "status": "qualification-in-progress",
+  "status": "qualified",
   "published": false,
   "nativeSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
   "qualifiedPlatforms": [
     "darwin-arm64",
-    "linux-x64"
+    "linux-x64",
+    "windows-cygwin-x64"
   ],
   "platforms": {
     "darwin-arm64": {
@@ -71,11 +72,36 @@
       "evidence": "docs/verification/2.0.0/linux-sdk-generation-2.json"
     },
     "windows-cygwin-x64": {
-      "status": "in-progress",
+      "status": "passed",
       "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+      "testedOS": "Windows Server 2025 Datacenter 10.0.26100",
+      "cygwin": "CYGWIN_NT-10.0-26100 3.6.12-1.x86_64 x86_64",
+      "nativeFormat": "PE32+ console executable, x86-64, MS Windows",
+      "compilerSHA256": "3da2905866f39e1999f9e158051c7ff494b0aa1aca1c8089a48055288b18dd6b",
+      "generatedCSHA256": "e8c1f2fdb4cd43e9771ec38bc79d47bca13b8628d991a5f4d2500c725913cb4e",
+      "stageTwoThreeCIdentical": true,
       "qualificationRun": 43495958933,
-      "note": "The corrected compiler is being freshly bootstrapped and qualified. The preceding run exposed a missing OpenSSL crypt32 dependency; complete runtime, editor, installed SDK and dependency gates remain required.",
-      "precedingFailureEvidence": "docs/verification/2.0.0/windows-crypto-link-failure.json"
+      "qualificationJob": 132128996419,
+      "sdkArtifact": 14076247106,
+      "sdkFilesVerified": 581,
+      "originalSDKArchiveSHA256": "2479f32d221924aae40c5ae09a0c9cc1dc01d9ebf955a591b4e38662f87928f7",
+      "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+      "matchedNativeBuildInputs": 260,
+      "requiredOutcomes": {
+        "runtime": "success",
+        "editor": "success",
+        "distribution": "success",
+        "dependencies": "success"
+      },
+      "gates": [
+        "fresh self-hosted PE SDK bootstrap",
+        "thirteen runtime/API/Win32/crypto gates",
+        "native Windows editor paths and LSP protocol",
+        "relocated SDK including binary crypto and GUI",
+        "managed installation and generated native GUI project build",
+        "dependency inspection and mandatory aggregate"
+      ],
+      "evidence": "docs/verification/2.0.0/windows-sdk-generation-2.json"
     }
   },
   "applications": {
@@ -100,7 +126,7 @@
     "macOS leak detection is not qualified.",
     "Cross-compilation and WebAssembly are not qualified."
   ],
-  "note": "The corrected compiler passed full macOS/Linux platform and independent qualification. All twelve applications were rebuilt and verified, and both actual macOS editor hosts passed with the new SDK. Windows qualification, final metadata assembly and publication remain pending. Preceding-generation results retain their separate identities.",
-  "candidateSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
-  "precedingGenerationEvidence": "docs/verification/2.0.0/generation-1-qualification.json"
+  "note": "All three corrected-source platform jobs and both Unix independent suites passed. All twelve applications and both actual macOS editor hosts passed with the new qualified SDK. published=false records the prepublication source snapshot used for final assembly; final artifact and public deployment evidence is added separately without moving the release tag or relabeling compiler origins.",
+  "precedingGenerationEvidence": "docs/verification/2.0.0/generation-1-qualification.json",
+  "releaseChannel": "stable"
 }

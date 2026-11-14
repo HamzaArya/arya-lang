@@ -1,0 +1,160 @@
+{
+  "status": "qualified",
+  "generation": 2,
+  "version": "2.0.0",
+  "platform": "Windows x64 with Cygwin",
+  "testedHost": {
+    "windows": "Windows Server 2025 Datacenter 10.0.26100",
+    "image": "windows-2025-vs2026 / 20261103.298.1",
+    "cygwin": "CYGWIN_NT-10.0-26100 3.6.12-1.x86_64 x86_64"
+  },
+  "sourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "workflowRun": 43495958933,
+  "job": 132128996419,
+  "url": "https://github.com/HamzaArya/arya-lang/actions/runs/43495958933/job/132128996419",
+  "completedAt": "2026-11-13T21:05:25Z",
+  "jobConclusion": "success",
+  "mandatoryAggregateConclusion": "success",
+  "requiredOutcomes": {
+    "runtime": "success",
+    "editor": "success",
+    "distribution": "success",
+    "dependencies": "success"
+  },
+  "requiredOutcomesFileSHA256": "10849683a57909114c2ca57631a6ca692384294c5814e028e33e60d89cd8c1f7",
+  "runtimeGates": [
+    {
+      "name": "run",
+      "status": "pass"
+    },
+    {
+      "name": "array-empty",
+      "status": "pass"
+    },
+    {
+      "name": "collection-mutation",
+      "status": "pass"
+    },
+    {
+      "name": "process-run",
+      "status": "pass"
+    },
+    {
+      "name": "python-platform",
+      "status": "pass"
+    },
+    {
+      "name": "bitwise32",
+      "status": "pass"
+    },
+    {
+      "name": "decimal-remainder",
+      "status": "pass"
+    },
+    {
+      "name": "security-bytes",
+      "status": "pass"
+    },
+    {
+      "name": "security-diagnostics",
+      "status": "pass"
+    },
+    {
+      "name": "editor-paths",
+      "status": "pass"
+    },
+    {
+      "name": "gui",
+      "status": "pass"
+    },
+    {
+      "name": "api-contracts",
+      "status": "pass"
+    },
+    {
+      "name": "web-relocation",
+      "status": "pass"
+    }
+  ],
+  "nativeWindowsEditorChecks": [
+    "Windows fsPath CLI check",
+    "Unicode/space paths",
+    "file URI workspace",
+    "cross-file definition",
+    "hover",
+    "rename file URIs"
+  ],
+  "distributionChecks": [
+    "Archive checksum and complete SDK file inventory",
+    "Relocated native compiler and decimal program",
+    "Relocated binary SHA-256 program with the Crypt32 link fix",
+    "Relocated public Win32 GUI program",
+    "Actual managed installer in a path containing spaces",
+    "Installed compiler creates and builds a native GUI project"
+  ],
+  "artifact": {
+    "id": 14076247106,
+    "name": "native-sdk-windows-cygwin-x64",
+    "sizeBytes": 8499251,
+    "sha256": "eb04e0c0d7f3e81568a4bf5be9b621a46c172a7bc81da1119037ca9840cbe9db",
+    "downloadVerified": true
+  },
+  "evidenceArtifact": {
+    "id": 14076097553,
+    "sizeBytes": 54126,
+    "sha256": "f3744ff945e801822ac8e6e9b30e8813fea54145295b4822edbccc7d136919e9",
+    "downloadVerified": true
+  },
+  "archiveSHA256": "2479f32d221924aae40c5ae09a0c9cc1dc01d9ebf955a591b4e38662f87928f7",
+  "compilerSHA256": "3da2905866f39e1999f9e158051c7ff494b0aa1aca1c8089a48055288b18dd6b",
+  "inventorySHA256": "ecd14bc344d1fdb71be27214a4855413955878e8624d17bad19f8841477985d3",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "fileCount": 581,
+  "binaryFormat": "PE32+ console executable, x86-64, MS Windows",
+  "generatedCSHA256": "e8c1f2fdb4cd43e9771ec38bc79d47bca13b8628d991a5f4d2500c725913cb4e",
+  "stageTwoCSHA256": "e8c1f2fdb4cd43e9771ec38bc79d47bca13b8628d991a5f4d2500c725913cb4e",
+  "stageTwoThreeCIdentical": true,
+  "matchedNativeBuildInputs": 260,
+  "officialJobLogSHA256": "757d89bcc3bae00f796f9448f0efbca3db412d05e7afc1b4462cf127811185b1",
+  "rawEvidenceFileSHA256": {
+    "windows-api-contracts.log": "b6ddb53c68bcec4d1ae9838f716d5d6f1a6bff09617a7bf1d1e16c869c0a8b1d",
+    "windows-archive-integrity.log": "4d800cc9edf98f8bba3fbfb49dc385336ec7e9c681e0eb5b5f9c1ec44abac8c7",
+    "windows-archive.txt": "41c17a465cea5ae6d748e25bba214b9c3569786d880ec147290aeb760b069fff",
+    "windows-array-empty.log": "a1e3f5e3fa2b7d394adfd27af68f41d2f56f8cec02526bd539433821f3a640b4",
+    "windows-bitwise32.log": "2a82a9301b832202b07971a032cfd0437ab6232100e04d5bd52b98fc3cb5f544",
+    "windows-bootstrap-capture.json": "1618c89feb2555bbca5b3f9da4be2d163c192d912aa438b7128b9c97334d81f0",
+    "windows-bootstrap.log": "9f21653b51b7799aa0c4ecdb7f151be609f9593d4134b81fa8b17ba9e0ba8aae",
+    "windows-checksum-formats.log": "fa2d59a974fceac6f23a2d0ba40c7193e7d033d3ce43eee881d44ba6e832a672",
+    "windows-collection-mutation.log": "78a55120a39648f6506e125ac9d9a2f7ff0e190325f1c42ec84d9085c828ab7c",
+    "windows-decimal-remainder.log": "960daa00f22e4d65f757e6cd881806e567e4470fd7846c18b6f3696d9c417c9e",
+    "windows-dependencies.txt": "af2b10347c7374b8c715464e327c7f969e9e475e4225428a1ae7b835af51c001",
+    "windows-editor-paths.log": "60ea6f53b6d9f5966c695d1ab17abb7b8167798c390f25e29b30212a2e22dca2",
+    "windows-gui.log": "aace4ae87801f0743b6c58552cf9ee62eac991aba69190fd24132f1ca13fd88e",
+    "windows-install.log": "f831fa86ba3c45e19711d94a306ade0e447a46d454bc024db7d1f0aef5d052db",
+    "windows-installed-create.log": "91d7f2f5290e42f8373b309cac944ec2de808811f2eed5e4577b4f654f8e6200",
+    "windows-installed-project.log": "30d3385a31082f4bcfefe5b670b3845dc26aa3ff4100c27693790b7f8a0b7768",
+    "windows-installed-version.txt": "6e731cb6baba6013dfb86a29e1b10536be030137fce4aa73b4a94804f8a48634",
+    "windows-native-actions.log": "dac4729e8ea299dc012bd78c0cfc070096796a0d7686087d365f0e2d8dbb9ff7",
+    "windows-path-isolation.log": "ec1fb4c53e134e0ac55a470963c68d19d710b844366a825c9d2c877770f1ae1c",
+    "windows-process-run.log": "a87e2f0e17a159fbde9c93a7ef5dd14d5e7fb2d5d2bb1ef9f92607719f8766fd",
+    "windows-python-platform.log": "7dceeb9e4a5d40f0da359e6efb9b621ce84077377f0e6140d8a4a993e0721748",
+    "windows-relocated-build.log": "314588f64e230e696318dba7751c61e1f32b6f32fa80db8992b41e22dfd696bc",
+    "windows-relocated-crypto-build.log": "3c454222e14aae5fa569a171e8948d378ee3e3e7710e41e592953040cf2c5340",
+    "windows-relocated-dependencies.txt": "78bd1062cb98eb4d3bff31dfd834f2513ee38f4606366f912b9b6ae43b033cb6",
+    "windows-relocated-gui-build.log": "b13a970feccdb461d60b0ec7dfe3953879fb445e4a2a00626fc874a5ffbeff8c",
+    "windows-relocated-gui.log": "9f174f09041d0c45089b282e5854b38cb08a48314e164ffc4ebc58acde285381",
+    "windows-required-gates.txt": "10849683a57909114c2ca57631a6ca692384294c5814e028e33e60d89cd8c1f7",
+    "windows-run.log": "58ead487e715ab85c0384a61b8edc2ac7cdb19fdca87bed5f54992d05d6e5fa9",
+    "windows-sanitizer-capability.log": "8f2508eaacdfa5ef499bf6e99d933d9f74aa766aa9aa47d63b55b50f59c130c5",
+    "windows-security-bytes.log": "edb5c0a593a111fae9a0e490f59fbc728dee5d94031962ef27193de815c9fad1",
+    "windows-security-diagnostics.log": "0311f387fb3c3e592b43dd31da55f1c35d141c78ed53cd2c5803f1ccc4be3e70",
+    "windows-web-relocation.log": "e3ee641a86f2cd331002c0f920ad9ad52afa1abc057b00e08b2d2445c6d57fb2"
+  },
+  "limitations": [
+    "Matching Cygwin runtime and GCC toolchain remain required; this is not a DLL-free MSVC or MinGW distribution.",
+    "Actual Cygwin GCC linker lacks ASan/UBSan libraries; release/debug builds and GC stress passed. Sanitizers were qualified separately on macOS/Linux.",
+    "Cygwin RLIMIT_FSIZE was unavailable; that write-size fault injection did not run. Atomic writes, byte fidelity, rejection and preservation checks passed.",
+    "Optional native Python bridge is unsupported on Cygwin and rejects entry with ARYA_PYTHON_PLATFORM; its five-path negative gate passed."
+  ],
+  "qualificationBasis": "All four recorded step outcomes, the mandatory aggregate step and the whole Windows job succeeded. Continue-on-error displayed conclusions alone are not used as passing proof."
+}

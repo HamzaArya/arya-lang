@@ -25,7 +25,7 @@ record, archive checksum and SDK `BUILD-INFO.txt` for the actual binary.
 | macOS Intel | Build on the target Mac; no Intel release qualification is claimed here. |
 | Linux x64 | Qualified on Ubuntu 24.04, including actual GTK controls, SDK installation and generated CLI check/build/run. Other libc/GTK distribution versions require their own checks. |
 | Linux ARM64 | Requires a native build and target checks; no ARM64 release qualification is claimed here. |
-| Windows x64 with Cygwin | Native Windows PE executables and Win32 controls implemented with explicit Cygwin runtime dependencies; release CI qualification is pending. |
+| Windows x64 with Cygwin | Qualified native Windows PE SDK, direct Win32 controls, relocation and Cygwin-shell installation; matching Cygwin runtime DLLs remain required. |
 | Windows MSVC or MinGW | No supported build or qualified SDK is supplied by these instructions. |
 
 These workflows build on the target platform. They do not supply cross-compilation,
@@ -190,15 +190,17 @@ It installs the actual `arya.exe` under a versioned `windows-cygwin` directory
 and creates a Cygwin command symlink. It prints the real Windows executable
 path for native editors. The archive does not bundle Cygwin DLLs; keep the
 matching Cygwin `bin` directory on the native Windows PATH. This is not an
-MSVC, standalone MinGW, or DLL-free installer. Qualification remains pending
-until the Windows release runner passes its installation/relocation gate.
+MSVC, standalone MinGW, or DLL-free installer. The Windows installation and
+relocation gate passed in [run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933).
 
 For native Windows VS Code, set `arya.compilerPath` to the actual Windows path
 of `arya.exe`, not a Cygwin-only symlink or `/cygdrive/...` path. In Cygwin,
 `cygpath -w "$PWD/.build/independent/arya.exe"` prints that Windows path.
 Keep required DLLs reachable by Windows and the Cygwin toolchain available for
-building applications. Native Windows editor integration remains subject to
-its release qualification checks. [Cygwin path conventions](https://www.cygwin.com/cygwin-ug-net/using.html#using-pathnames).
+building applications. The native Windows editor transport passed its release
+gate. Actual bundled and portable VS Code host sessions were qualified on macOS;
+that coverage does not imply a full Windows VS Code host run.
+[Cygwin path conventions](https://www.cygwin.com/cygwin-ug-net/using.html#using-pathnames).
 
 WSL is a separate Linux route: applications built there are Linux executables.
 It does not provide the native Windows target described above.

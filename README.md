@@ -2,7 +2,7 @@
 
 Arya is a native programming language with a self-hosted compiler, exact-decimal libraries and application tooling. Source compiles through C11 into executables. The compiler, formatter, checker, language server, test runner and project creator run without Node.js.
 
-The current source is **2.0.0**, undergoing stable release qualification. It adds direct native GUI widgets, binary filesystem operations, atomic file replacement and the reviewed compiler, runtime and editor improvements. Published platform support follows the [release qualification record](native/qualification/2.0.0.json).
+The current native version is **2.0.0 stable**, qualified for macOS ARM64, Linux x64 and Windows x64 with Cygwin. It adds direct native GUI widgets, binary filesystem operations, atomic file replacement and the reviewed compiler, runtime and editor improvements. Published platform support follows the [release qualification record](native/qualification/2.0.0.json).
 
 ## Start a project
 
@@ -33,7 +33,7 @@ print(JSON.stringify(settings))
 
 Fields evaluate left to right. Keys must be strings, spread accepts records only, and copies are shallow. Existing `let`, `const`, `fn`, `use`, pipelines and async syntax remain valid. Read the [language reference](docs/arya-language.md) for supported forms, typing, examples and differences from JavaScript.
 
-Use binary64 `number` for ordinary arithmetic and explicit decimal strings/values for exact money. The SDK has [28 public standard modules](docs/standard-library.md), including [accounting](docs/accounting-engine.md), [money/finance/CSV](docs/native-finance-data.md), [authentication and native biometrics](docs/native-auth.md), and [security/debugging](docs/native-security-debugging.md). Templates cover CLI, web, API, UI and optional macOS WebKit desktop projects. The new `gui` module uses AppKit, GTK 3 or Win32 controls directly.
+Use binary64 `number` for ordinary arithmetic and explicit decimal strings/values for exact money. The SDK has [28 public standard modules](docs/standard-library.md), including [accounting](docs/accounting-engine.md), [money/finance/CSV](docs/native-finance-data.md), [authentication and native biometrics](docs/native-auth.md), and [security/debugging](docs/native-security-debugging.md). Templates cover CLI, direct native GUI (`--template native-gui`), web, API, UI and optional macOS WebKit desktop projects. The new `gui` module uses AppKit, GTK 3 or Win32 controls directly.
 
 ## Native application collections
 

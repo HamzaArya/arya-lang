@@ -25,9 +25,9 @@ file; this example does not implement multi-process editing or autosave.
 
 | Backend | Build prerequisite | Qualification |
 | --- | --- | --- |
-| macOS AppKit | Xcode command-line tools, Cocoa system framework | Full native SDK and direct GUI gate passed on macOS 15 ARM64 in [run 43470021848](https://github.com/HamzaArya/arya-lang/actions/runs/43470021848) |
-| Linux GTK 3 | C11 compiler, `pkg-config`, GTK 3 development files (`libgtk-3-dev` on Debian/Ubuntu), graphical display | Full native SDK, managed installation and direct GTK widget/action gate passed on Ubuntu 24.04 x64 in [run 43480059478](https://github.com/HamzaArya/arya-lang/actions/runs/43480059478) |
-| Windows Win32 | Cygwin with `gcc-core`/`gcc-g++`; Windows system GUI libraries | Direct Win32 action probe and SDK bootstrap passed on Windows; full public GUI/distribution gates pending. Cygwin remains required |
+| macOS AppKit | Xcode command-line tools, Cocoa system framework | Current native SDK and direct GUI gate passed on macOS 15 ARM64 in [run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933) |
+| Linux GTK 3 | C11 compiler, `pkg-config`, GTK 3 development files (`libgtk-3-dev` on Debian/Ubuntu), graphical display | Current native SDK, managed installation and direct GTK widget/action gate passed on Ubuntu 24.04 x64 in [run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933) |
+| Windows Win32 | Cygwin with `gcc-core`/`gcc-g++`; Windows system GUI libraries | Current native SDK, public GUI/toolkit actions, relocation and managed installation passed in [run 43495958933](https://github.com/HamzaArya/arya-lang/actions/runs/43495958933). Cygwin remains required |
 
 `make native-sdk` includes the native GUI archive and platform linker flags.
 GTK applications need the matching GTK runtime libraries on the destination.

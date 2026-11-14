@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "status": "qualification-in-progress",
+  "status": "qualification-complete",
   "qualificationBranch": "release/2.0.0-native",
   "passed": [
     "Corrected-source macOS SDK bootstrap/core/API/HTTP/AppKit/distribution and independent fresh-source/reference/integration gates",
@@ -10,10 +10,10 @@
     "New bundled VSIX and retained portable VSIX: ten actual editor-host checks each against the new macOS SDK",
     "Current macOS installer with HOME unset, spaces in prefix and automatic installed-SDK editor discovery",
     "Earlier application repairs: twenty check/build/smoke suites and sixty storage-entry checks, retained with their original identities",
-    "Earlier binary TextVault oracle, numerical reference and relocated HTTP evidence, retained with their original identities"
+    "Earlier binary TextVault oracle, numerical reference and relocated HTTP evidence, retained with their original identities",
+    "Corrected Windows/Cygwin SDK: thirteen runtime gates, native editor transport, relocated crypto/GUI, managed installer and all four required aggregate outcomes"
   ],
   "pending": [
-    "Complete corrected Windows/Cygwin platform qualification",
     "Final artifact metadata/checksums and source archive",
     "Stable GitHub release and portfolio publication"
   ],
@@ -26,8 +26,9 @@
     "finalUnixPrecedingGeneration": "final-unix-independent.json",
     "currentUnixIndependent": "final-unix-independent-generation-2.json",
     "macosSDK": "generation-2/macos-sdk.json",
-    "linuxSDK": "linux-sdk-generation-2.json"
+    "linuxSDK": "linux-sdk-generation-2.json",
+    "windowsSDK": "windows-sdk-generation-2.json"
   },
-  "candidateSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
-  "note": "Current-source Unix SDK, application and editor results are separately recorded from the retained preceding generation. Windows and final assembly/publication remain pending."
+  "note": "All required platform, independent, application and editor gates are complete. This prepublication snapshot precedes final archive assembly and verified public deployment.",
+  "nativeSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4"
 }
