@@ -6,6 +6,13 @@ authorized including reviewed existing Arya changes in the release. Earlier proj
 reports retain their original evidence; new results identify their own source and
 binary snapshots.
 
+**Completed:** Arya 2.0.0 is published as a stable release, with installers,
+updated VSIX packages and native application downloads available on the
+[portfolio](https://hamzaarya.com/downloads/arya/) and
+[GitHub](https://github.com/HamzaArya/arya-lang/releases/tag/v2.0.0).
+The [final delivery report](verification/2.0.0/final-delivery/README.md) records
+all seventeen public file checks, source identity and deployment evidence.
+
 ## Resolved language and application findings
 
 | Reported problem | Implementation | Evidence |
@@ -116,11 +123,11 @@ language defects and are not reported as newly implemented.
 
 ## Release gates and publication
 
-Version: **2.0.0 stable**. Platform qualification is complete for macOS ARM64,
-Linux x64 and Windows x64 with Cygwin. Final archive assembly and public release
-are separate steps; this source snapshot does not claim publication before it
-occurs. The [machine-readable qualification](../native/qualification/2.0.0.json)
-records exact compiler identities and the publication state at assembly time.
+Version: **2.0.0 stable**, published on 2026-11-14 at 03:36:12 UTC. Platform
+qualification is complete for macOS ARM64, Linux x64 and Windows x64 with Cygwin.
+The [machine-readable qualification](../native/qualification/2.0.0.json) records
+exact compiler identities and the verified publication state. The immutable tag
+and packaged metadata retain their earlier prepublication assembly snapshot.
 
 The corrected native compiler/runtime/library source is
 `ce80487668e082ffd263c5239d737de7074e4dc4`.
@@ -177,5 +184,22 @@ subsequent delivery evidence records artifact hashes, actual public downloads an
 portfolio deployment without moving the tag or repacking tested payloads.
 
 The portfolio changes use an isolated clean worktree and the existing
-Hostinger Git deployment for `hamzaarya.com`. Public release and portfolio URLs
-will be recorded after their actual bytes and deployment are verified.
+Hostinger Git deployment for `hamzaarya.com`. The
+[live download page](https://hamzaarya.com/downloads/arya/) was verified against
+the exact built HTML, manifest and CSS. All seventeen linked release files were
+downloaded publicly and matched their expected bytes and SHA-256 hashes. The
+final portfolio commit is `e56ffbf56f14c16604a694879b51851c7bdb1bf5`; the original
+dirty portfolio worktree was untouched.
+
+Final inspection also found an obsolete IDE-page sentence saying upstream
+qualification was still in progress. The correction preserves that IDE's pinned
+development SDK identity and links the separately published stable SDK. Its
+first build hit a temporary disk-space shortage; the complete retry passed after
+space recovered without deleting files or terminating processes. Both attempts
+are retained in the [delivery evidence](verification/2.0.0/final-delivery/README.md).
+
+The complete qualified Mac SDK was also promoted into the local workspace.
+Its predecessor remains intact in a separate backup directory. Actual launcher
+check/build/run passed; this deployment is not described as a local bootstrap.
+No application was abandoned. Remaining platform, signing and optional-feature
+limits are documented above and in the qualification record.

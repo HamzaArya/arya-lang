@@ -1,0 +1,24 @@
+{
+  "status": "passed within observed desktop scope",
+  "recordedAtUTC": "2026-11-14T03:50:43.618093+00:00",
+  "browser": "Microsoft Edge, native macOS UI",
+  "url": "https://hamzaarya.com/downloads/arya/",
+  "observations": [
+    "Canonical HTTPS downloads page visibly rendered with Arya 2.0.0 stable description, release number, Apache 2.0 label and platform cards.",
+    "Accessibility tree exposed all nine artifact links with versioned GitHub release URLs, checksum disclosures, macOS/Linux/Windows requirements, source and VSIX entries.",
+    "Desktop screenshot showed readable header, hero, release number and beginning of two-column download layout.",
+    "Earlier /arya/ inspection exposed stable 2.0.0 and native SDK links; versioned GitHub installation guide was also observed."
+  ],
+  "notClaimed": [
+    "Mobile viewport visual validation",
+    "Manual activation of every download or checksum disclosure"
+  ],
+  "recovery": [
+    "One native browser action timed out; the UI session was reinitialized.",
+    "Native typeText dropped the leading h in a URL and opened search; pasting the exact canonical URL recovered navigation."
+  ],
+  "findingResolved": "The IDE page retained stale upstream qualification wording. Portfolio commit e56ffbf56f14c16604a694879b51851c7bdb1bf5 preserves the IDE pinned development SDK identity and links the separate stable Arya 2.0.0 release; final HTTPS verification confirms the correction.",
+  "assetByteVerification": "public-release-verification.json",
+  "deployedContentVerification": "portfolio-live-final-verification.json",
+  "screenshotRetention": "Screenshot was inspected in the tool conversation; no screenshot file is asserted by this record."
+}

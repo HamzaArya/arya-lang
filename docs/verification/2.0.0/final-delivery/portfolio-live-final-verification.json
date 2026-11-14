@@ -1,0 +1,80 @@
+{
+  "status": "passed",
+  "observedAtUTC": "2026-11-14T03:47:03.525929+00:00",
+  "portfolioCommit": "e56ffbf56f14c16604a694879b51851c7bdb1bf5",
+  "sourceAssemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+  "responses": [
+    {
+      "route": "/downloads/arya/",
+      "filename": "index.html",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/downloads/arya/",
+      "bytes": 11732,
+      "sha256": "c364e85dc7cc3e9730f4fa2a606964f739bebe5407244f66aafe131c4ef26f45",
+      "stderr": "",
+      "matchesBuild": true
+    },
+    {
+      "route": "/downloads/arya/manifest.json",
+      "filename": "manifest.json",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/downloads/arya/manifest.json",
+      "bytes": 8878,
+      "sha256": "2e34ab4a233b0978c1b6dbe80ba27b1412c8316f46b08542d55065a9bcbecf7a",
+      "stderr": "",
+      "matchesBuild": true
+    },
+    {
+      "route": "/downloads/arya/downloads.css",
+      "filename": "downloads.css",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/downloads/arya/downloads.css",
+      "bytes": 5019,
+      "sha256": "937c0009100894e8676cc6114445b92c512f8a49b45f7bde0129daec9c964847",
+      "stderr": "",
+      "matchesBuild": true
+    },
+    {
+      "route": "/arya/",
+      "filename": "arya.html",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/arya/",
+      "bytes": 63914,
+      "sha256": "8ec76b8c8fb02380fb0b3e62a1ecd3747d2240674ca78020e480ed33fc256ba4",
+      "stderr": ""
+    },
+    {
+      "route": "/privacy/",
+      "filename": "privacy.html",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/privacy/",
+      "bytes": 29920,
+      "sha256": "924da9b590fb6c7339de896ee65da3dbafa244aa014dc20d74d11c0bac9c4a3f",
+      "stderr": ""
+    },
+    {
+      "route": "/work/arya-ide/",
+      "filename": "arya-ide.html",
+      "exitCode": 0,
+      "status": 200,
+      "url": "https://hamzaarya.com/work/arya-ide/",
+      "bytes": 62145,
+      "sha256": "22e9b238f3afb2a3c57d313c6bff737e78b75ea2a3dcb2f7d65afaf37466ea18",
+      "stderr": ""
+    }
+  ],
+  "checks": {
+    "exactDownloadsHTMLManifestCSS": true,
+    "all17PublicDownloadURLs": true,
+    "mainPageStableVersionDocs": true,
+    "upstreamAryaCodeAndPrivacy": true,
+    "publishedManifest": true,
+    "idePinnedSnapshotAndStableLink": true
+  },
+  "note": "Unauthenticated canonical HTTPS responses; all17 linked payload/sidecar URLs match the separately byte-verified public release."
+}

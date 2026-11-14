@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "status": "qualified",
-  "published": false,
+  "published": true,
   "nativeSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
   "qualifiedPlatforms": [
     "darwin-arm64",
@@ -126,7 +126,12 @@
     "macOS leak detection is not qualified.",
     "Cross-compilation and WebAssembly are not qualified."
   ],
-  "note": "All three corrected-source platform jobs and both Unix independent suites passed. All twelve applications and both actual macOS editor hosts passed with the new qualified SDK. published=false records the prepublication source snapshot used for final assembly; final artifact and public deployment evidence is added separately without moving the release tag or relabeling compiler origins.",
+  "note": "All three corrected-source platform jobs, both Unix independent suites, twelve applications and both actual macOS editor hosts passed. The stable release is published and all 17 public assets were downloaded without authentication and byte/hash verified. The tag and packaged published=false flag retain the prepublication assembly snapshot at sourceFreezeCommit; this additive delivery record does not move the tag, repack payloads or relabel compiler origins.",
   "precedingGenerationEvidence": "docs/verification/2.0.0/generation-1-qualification.json",
-  "releaseChannel": "stable"
+  "releaseChannel": "stable",
+  "releaseURL": "https://github.com/HamzaArya/arya-lang/releases/tag/v2.0.0",
+  "publishedAt": "2026-11-14T03:36:12Z",
+  "sourceFreezeCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+  "deliveryEvidence": "docs/verification/2.0.0/final-delivery/README.md",
+  "portfolioURL": "https://hamzaarya.com/downloads/arya/"
 }

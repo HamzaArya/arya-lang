@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "published": true,
+  "artifactEntries": 9,
+  "downloadURLs": 17,
+  "directSidecarURLs": 8,
+  "exactBuiltHTTPResponses": [
+    {
+      "route": "/downloads/arya/",
+      "status": 200,
+      "bytes": 11732,
+      "sha256": "c364e85dc7cc3e9730f4fa2a606964f739bebe5407244f66aafe131c4ef26f45"
+    },
+    {
+      "route": "/downloads/arya/manifest.json",
+      "status": 200,
+      "bytes": 8878,
+      "sha256": "2e34ab4a233b0978c1b6dbe80ba27b1412c8316f46b08542d55065a9bcbecf7a"
+    },
+    {
+      "route": "/downloads/arya/downloads.css",
+      "status": 200,
+      "bytes": 5019,
+      "sha256": "937c0009100894e8676cc6114445b92c512f8a49b45f7bde0129daec9c964847"
+    }
+  ],
+  "mainPageStableAndCurrentDocs": true,
+  "upstreamAryaCode2AndPrivacyPreserved": true,
+  "publicReleaseProof": "public-release-verification.json",
+  "productionBuild": "passed",
+  "focusedTests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "prerenderTests": {
+    "passed": 16,
+    "failed": 0
+  },
+  "note": "Static HTTP/build verification; final live browser observations are separate."
+}

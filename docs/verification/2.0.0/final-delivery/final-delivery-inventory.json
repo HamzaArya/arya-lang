@@ -1,0 +1,173 @@
+{
+  "status": "passed; publication not yet performed",
+  "generation": 2,
+  "freeze": {
+    "commit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+    "tree": "b977290d155fe28ce56e5cd3e1408777f736c0f9",
+    "workingTree": "",
+    "atUTC": "2026-11-14T03:28:53.714161+00:00"
+  },
+  "after": {
+    "commit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+    "tree": "b977290d155fe28ce56e5cd3e1408777f736c0f9",
+    "workingTree": "",
+    "atUTC": "2026-11-14T03:29:37.937286+00:00"
+  },
+  "sdkArchives": [
+    {
+      "filename": "arya-native-2.0.0-darwin-arm64.tar.gz",
+      "bytes": 8442718,
+      "sha256": "5672cdf43307f4cd0c3e2bc914b88fa05f373dfa2b19f1d471719f5241e4f5eb",
+      "verifiedFiles": 603,
+      "fileInventorySHA256": "b1a10d385a9ce563e1f64e1c7d3748dcf75abf855231edb8f5b76e9dd88dbe71",
+      "platform": "darwin-arm64",
+      "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+      "originalSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+      "assemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+      "originalInventorySHA256": "6e1a02ded8ed665aa474eece92df6c7a15ff353e8465d24c1c660de01f663774",
+      "assembledInventorySHA256": "45beeac993d59f4c6201420d73a5694aedba7bfc5f0dc8ca13eda4be436d4753"
+    },
+    {
+      "filename": "arya-native-2.0.0-linux-x64.tar.gz",
+      "bytes": 9026174,
+      "sha256": "0dd3fc850e5efa753cce1daf7762fc01e8d9be16fdfe641a2eca3db33eff7d7e",
+      "verifiedFiles": 601,
+      "fileInventorySHA256": "8a9c7fabcedbd4d4019fa9b282a19da7a5f278ed85b5c1c4530f104abe550505",
+      "platform": "linux-x64",
+      "compilerSHA256": "13e39ee60c94e8a8b985d575c399ab6fe4031a47e04d5dbc5416b1b1197d01ff",
+      "originalSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+      "assemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+      "originalInventorySHA256": "8f2accbcd827f42fec1edfc4a9145274d881d2fad53377224e47f4115b5b9377",
+      "assembledInventorySHA256": "71d3712bf5cb86b19ead26060ef13d66f08c482f45ce600c4cd2b665bd86442f"
+    },
+    {
+      "filename": "arya-native-2.0.0-windows-cygwin-x64.tar.gz",
+      "bytes": 8784034,
+      "sha256": "ad0ad3468fba15ca0559c8be32ae58ab1cb1490ccb0ab6626f672d2fdccbcda2",
+      "verifiedFiles": 602,
+      "fileInventorySHA256": "7e13f65a88e548b6c693814fb474195b88eb7072fa7765a8ba3c783d02beb88c",
+      "platform": "windows-cygwin-x64",
+      "compilerSHA256": "3da2905866f39e1999f9e158051c7ff494b0aa1aca1c8089a48055288b18dd6b",
+      "originalSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+      "assemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+      "originalInventorySHA256": "ecd14bc344d1fdb71be27214a4855413955878e8624d17bad19f8841477985d3",
+      "assembledInventorySHA256": "556328514893b87c9391a01c982c202d6ba51db865c5531b0d83d22ea910a1de"
+    }
+  ],
+  "sourceArchiveBinding": "source-archive-binding.json",
+  "sourceArchive": {
+    "filename": "arya-native-2.0.0-source.tar.gz",
+    "bytes": 60422283,
+    "sha256": "ae61e456c7e2c1ec9d396fec7bc3f1bf377cc71491190389f92eae1738fd50f2",
+    "verifiedFiles": 907,
+    "fileInventorySHA256": "7111ac16ba6346377eb62e66880a2c12e2fbb261fc23b9da12a6ea88a22b3eb9"
+  },
+  "finalMacInstallerSmoke": {
+    "status": "passed",
+    "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+    "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+    "prefix": ".build/release-2.0.0/generation-2/final-mac-install/Mac's SDK prefix",
+    "managedLauncherTarget": ".build/release-2.0.0/generation-2/final-mac-install/Mac's SDK prefix/lib/arya/2.0.0-darwin-arm64",
+    "installedFiles": 603,
+    "sourceSHA256": "2857464ed1fa14a4f0b8d4e4898f10b683bf67089458560c9ab8e42cc525c208",
+    "executableSHA256": "7bc4b210da0fe6480c70a10050dd6c2097e70b6a49e58674a65f417b920f1946",
+    "outputs": [
+      "Total: 59.85\n",
+      "Total: 27021597764222979.03\n"
+    ],
+    "homeUnsetDuringInstall": true,
+    "compilerLibraryOverride": false,
+    "runtimePATH": "/nonexistent"
+  },
+  "uploadCount": 17,
+  "uploads": {
+    "arya-native-2.0.0-darwin-arm64.tar.gz": {
+      "sha256": "5672cdf43307f4cd0c3e2bc914b88fa05f373dfa2b19f1d471719f5241e4f5eb",
+      "mode": 420,
+      "bytes": 8442718
+    },
+    "arya-native-2.0.0-darwin-arm64.tar.gz.sha256": {
+      "sha256": "3866f203126b949540d2eadfab39a7cc52c976dfeb57acc48a04aa1053744f9f",
+      "mode": 420,
+      "bytes": 104
+    },
+    "arya-language-2.0.0-darwin-arm64.vsix": {
+      "sha256": "abea580d285bc593f08fe19a171de78e8b81be2009557b1316f2f51c9bc94491",
+      "mode": 420,
+      "bytes": 6837887
+    },
+    "arya-language-2.0.0-darwin-arm64.vsix.sha256": {
+      "sha256": "492b099e43ebf6a1e646e3265b27d175463171c153233029f6f7414c62a32888",
+      "mode": 420,
+      "bytes": 104
+    },
+    "arya-native-calculators-2.0.0-darwin-arm64.zip": {
+      "sha256": "e6df8bee4a913d13aa4eef7452f7c5784ee7d1065d4d20060045fcf339685b4b",
+      "mode": 420,
+      "bytes": 7485284
+    },
+    "arya-native-calculators-2.0.0-darwin-arm64.zip.sha256": {
+      "sha256": "75034a77cdc58cd9e5cbd85cd1bed7bc624540ef5c106aad9dddec297212160b",
+      "mode": 420,
+      "bytes": 113
+    },
+    "arya-native-desktop-apps-2.0.0-darwin-arm64.zip": {
+      "sha256": "7f13352eff70ee63c29dec965db8ca5fbae3106fc793b6162bf97af43b7b5c8e",
+      "mode": 420,
+      "bytes": 6948635
+    },
+    "arya-native-desktop-apps-2.0.0-darwin-arm64.zip.sha256": {
+      "sha256": "52f2b4a1519535c0abc8c930648adaeda473a5237a726e30a4dc4fc494cf62df",
+      "mode": 420,
+      "bytes": 114
+    },
+    "arya-native-2.0.0-linux-x64.tar.gz": {
+      "sha256": "0dd3fc850e5efa753cce1daf7762fc01e8d9be16fdfe641a2eca3db33eff7d7e",
+      "mode": 420,
+      "bytes": 9026174
+    },
+    "arya-native-2.0.0-linux-x64.tar.gz.sha256": {
+      "sha256": "5d42295127c0b25c0be652692c32f3265e4f397ae7924f1b0e9b09fa2e9bcb68",
+      "mode": 420,
+      "bytes": 101
+    },
+    "arya-native-2.0.0-windows-cygwin-x64.tar.gz": {
+      "sha256": "ad0ad3468fba15ca0559c8be32ae58ab1cb1490ccb0ab6626f672d2fdccbcda2",
+      "mode": 420,
+      "bytes": 8784034
+    },
+    "arya-native-2.0.0-windows-cygwin-x64.tar.gz.sha256": {
+      "sha256": "68882712611eecd175f903b1d5eeadbcb9da0cb35814fb913ae10463575f2b15",
+      "mode": 420,
+      "bytes": 110
+    },
+    "arya-language-2.0.0-portable.vsix": {
+      "sha256": "3f14e6cab04c0d50bd297906e0229bdc5dcf66ee2787bb78ef9d62548baef783",
+      "mode": 420,
+      "bytes": 668490
+    },
+    "arya-language-2.0.0-portable.vsix.sha256": {
+      "sha256": "c0a36bb2e55cf9b3937559aace8b21e0ba5cc82cbecc50155ade3dbb2cced111",
+      "mode": 420,
+      "bytes": 100
+    },
+    "arya-native-2.0.0-source.tar.gz": {
+      "sha256": "ae61e456c7e2c1ec9d396fec7bc3f1bf377cc71491190389f92eae1738fd50f2",
+      "mode": 420,
+      "bytes": 60422283
+    },
+    "arya-native-2.0.0-source.tar.gz.sha256": {
+      "sha256": "06262e5d7f8865417f39540aa689d3d7be65a197aad45e251567c77105dd0bea",
+      "mode": 420,
+      "bytes": 98
+    },
+    "SHA256SUMS": {
+      "sha256": "b904a599f2db2016a2ec549e8461fe1ed38d5350b7ce11770460ab6034215160",
+      "mode": 420,
+      "bytes": 844
+    }
+  },
+  "controllerSHA256": "66490d47571e1578963a4f19925c8f22d876eac8a1f123d71124a60f5c50c971",
+  "controller": ".build/release-2.0.0/generation-2/evidence/finalize-generation-2.py",
+  "note": "Tag v2.0.0 binds M1. Original CI compiler source identities are retained. Later M2 delivery evidence does not relabel payloads."
+}

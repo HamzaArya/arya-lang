@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "status": "qualification-complete",
+  "status": "complete",
   "qualificationBranch": "release/2.0.0-native",
   "passed": [
     "Corrected-source macOS SDK bootstrap/core/API/HTTP/AppKit/distribution and independent fresh-source/reference/integration gates",
@@ -11,12 +11,14 @@
     "Current macOS installer with HOME unset, spaces in prefix and automatic installed-SDK editor discovery",
     "Earlier application repairs: twenty check/build/smoke suites and sixty storage-entry checks, retained with their original identities",
     "Earlier binary TextVault oracle, numerical reference and relocated HTTP evidence, retained with their original identities",
-    "Corrected Windows/Cygwin SDK: thirteen runtime gates, native editor transport, relocated crypto/GUI, managed installer and all four required aggregate outcomes"
+    "Corrected Windows/Cygwin SDK: thirteen runtime gates, native editor transport, relocated crypto/GUI, managed installer and all four required aggregate outcomes",
+    "Final three-platform SDK assembly, full source archive binding to clean release commit, all archive inventories and SHA-256 sidecars",
+    "Final Mac SDK installation with HOME unset, spaces and apostrophe in prefix; exact 603 installed files and native CLI check/build/run",
+    "Published stable latest v2.0.0 GitHub release; all 17 public asset bytes and hashes verified without download authentication",
+    "Live Hostinger portfolio deployment, exact public downloads HTML/manifest/CSS and all 17 asset links; bounded desktop browser visual check",
+    "Paired qualified SDK promoted to workspace with full previous SDK backup; actual source launcher check/build/run"
   ],
-  "pending": [
-    "Final artifact metadata/checksums and source archive",
-    "Stable GitHub release and portfolio publication"
-  ],
+  "pending": [],
   "records": {
     "platforms": "platform-qualification.md",
     "applications": "generation-2/application-release.md",
@@ -27,8 +29,9 @@
     "currentUnixIndependent": "final-unix-independent-generation-2.json",
     "macosSDK": "generation-2/macos-sdk.json",
     "linuxSDK": "linux-sdk-generation-2.json",
-    "windowsSDK": "windows-sdk-generation-2.json"
+    "windowsSDK": "windows-sdk-generation-2.json",
+    "finalDelivery": "final-delivery/README.md"
   },
-  "note": "All required platform, independent, application and editor gates are complete. This prepublication snapshot precedes final archive assembly and verified public deployment.",
+  "note": "Release, installers, editor packages, application downloads and portfolio publication are complete. Final delivery evidence is additive to the immutable v2.0.0 source snapshot; platform and signing limits remain explicit.",
   "nativeSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4"
 }

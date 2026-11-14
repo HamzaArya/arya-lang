@@ -65,11 +65,11 @@ The core is deliberately small: the compiler, runtime, CLI, language service, an
 
 Main components:
 
-- [`packages/arya/src/compiler.ts`](../../src/compiler.ts) contains tokenization, parsing, static syntax checks, symbol collection, and JavaScript generation.
-- [`packages/arya/src/runtime.ts`](../../src/runtime.ts) defines Arya built-ins and the Python JSON bridge embedded in generated modules.
-- [`packages/arya/src/cli.ts`](../../src/cli.ts) implements `run`, `check`, and `build`.
-- [`packages/arya/src/language-service.ts`](../../src/language-service.ts) exposes parse analysis, completion data, and built-in hover information.
-- [`packages/arya/src/lsp.ts`](../../src/lsp.ts) provides portable diagnostics, completion, hover, and document symbols over LSP.
+- [`packages/arya/src/compiler.ts`](../../compat/node/src/compiler.ts) contains tokenization, parsing, static syntax checks, symbol collection, and JavaScript generation.
+- [`packages/arya/src/runtime.ts`](../../compat/node/src/runtime.ts) defines Arya built-ins and the Python JSON bridge embedded in generated modules.
+- [`packages/arya/src/cli.ts`](../../compat/node/src/cli.ts) implements `run`, `check`, and `build`.
+- [`packages/arya/src/language-service.ts`](../../compat/node/src/language-service.ts) exposes parse analysis, completion data, and built-in hover information.
+- [`packages/arya/src/lsp.ts`](../../compat/node/src/lsp.ts) provides portable diagnostics, completion, hover, and document symbols over LSP.
 - [`packages/services/src/language-runner.ts`](repository-extraction.md) integrates compilation and execution with AryaCode workspace trust, tool selection, and output containment.
 
 ## Lexical rules owned by Arya

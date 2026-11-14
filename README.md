@@ -4,6 +4,8 @@ Arya is a native programming language with a self-hosted compiler, exact-decimal
 
 The current native version is **2.0.0 stable**, qualified for macOS ARM64, Linux x64 and Windows x64 with Cygwin. It adds direct native GUI widgets, binary filesystem operations, atomic file replacement and the reviewed compiler, runtime and editor improvements. Published platform support follows the [release qualification record](native/qualification/2.0.0.json).
 
+[Download Arya 2.0.0](https://hamzaarya.com/downloads/arya/) for SDK installers, VSIX packages and native applications. The [stable GitHub release](https://github.com/HamzaArya/arya-lang/releases/tag/v2.0.0) contains the versioned files and checksums; [delivery verification](docs/verification/2.0.0/final-delivery/README.md) records the public download checks.
+
 ## Start a project
 
 From a complete source checkout or matching source snapshot:
@@ -41,7 +43,7 @@ The repository includes [six native desktop applications](native-desktop-project
 and [six native calculators](native-calculators/README.md), organized by the six
 developer tracks. Their AppKit interfaces and compiled Arya engines run without
 a browser, Node or Python. The supplied bundles target Apple Silicon macOS 26+;
-[application qualification](docs/verification/2.0.0/application-release.md) records
+[application qualification](docs/verification/2.0.0/generation-2/application-release.md) records
 their final archive hashes, tests and signing limits.
 
 The earlier [18 CLI, browser GUI and service projects](developer-projects/README.md)

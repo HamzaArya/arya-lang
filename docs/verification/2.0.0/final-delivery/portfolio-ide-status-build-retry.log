@@ -1,0 +1,80 @@
+
+> hamza-arya-portfolio@0.0.0 build
+> node scripts/verify-downloads.mjs && node scripts/verify-arya-downloads.mjs && node scripts/highlight.mjs && node scripts/ogcards.mjs && tsc -b && vite build && node scripts/copy-public.mjs && node scripts/prerender.mjs
+
+downloads: 6 configured artifacts available
+Arya downloads: 2.0.0, 9 assets, published=true
+highlight: 4 blocks (ts, css)
+ogcards: 3 note cards -> public/og/notes/, 13 page cards -> public/og/pages/, 11 project cards and the home card
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 2071 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               5.58 kB │ gzip:   1.72 kB
+dist/assets/export.worker-CanQYtP_.js        16.22 kB
+dist/assets/MotionExamples-Cg2Bz8W2.css      14.52 kB │ gzip:   3.28 kB
+dist/assets/motion-resources-BHP_PE31.css    27.95 kB │ gzip:   5.68 kB
+dist/assets/MotionStudio-CUSbDdi9.css        43.11 kB │ gzip:   8.41 kB
+dist/assets/index-0OT5wxc4.css              270.30 kB │ gzip:  50.07 kB
+dist/assets/x-D_UhY5eb.js                     0.14 kB │ gzip:   0.14 kB
+dist/assets/terminal-DL473wBN.js              0.15 kB │ gzip:   0.15 kB
+dist/assets/search-CfVfH6lR.js                0.16 kB │ gzip:   0.16 kB
+dist/assets/download-DgkeHWGM.js              0.22 kB │ gzip:   0.18 kB
+dist/assets/book-open-ja3vMn6v.js             0.27 kB │ gzip:   0.21 kB
+dist/assets/FilterButton-BI9ULq41.js          0.35 kB │ gzip:   0.25 kB
+dist/assets/sliders-horizontal-C9hFLBO7.js    0.41 kB │ gzip:   0.23 kB
+dist/assets/motion-resources-DuYh0EAl.js      0.58 kB │ gzip:   0.35 kB
+dist/assets/Reveal-Bjw35Grs.js                0.58 kB │ gzip:   0.36 kB
+dist/assets/SectionHeader-WEkfDmYE.js         0.58 kB │ gzip:   0.34 kB
+dist/assets/rolldown-runtime-CbXtAM7H.js      0.58 kB │ gzip:   0.36 kB
+dist/assets/MotionResourceNav-DMakE9qg.js     0.99 kB │ gzip:   0.44 kB
+dist/assets/skills-q6IQnimK.js                0.99 kB │ gzip:   0.54 kB
+dist/assets/ArrowLink-BKiMgyuJ.js             1.10 kB │ gzip:   0.53 kB
+dist/assets/SectionIntro-CtdtfpcL.js          1.14 kB │ gzip:   0.56 kB
+dist/assets/experience-NCURnTCd.js            1.25 kB │ gzip:   0.67 kB
+dist/assets/easing-CPgtdhHp.js                1.80 kB │ gzip:   0.92 kB
+dist/assets/aryaComparison-CmmjdUyU.js        1.82 kB │ gzip:   0.89 kB
+dist/assets/MotionTemplates-Ce9z7e7Y.js       1.98 kB │ gzip:   0.93 kB
+dist/assets/PageHeader-DYRoYdGM.js            3.24 kB │ gzip:   1.46 kB
+dist/assets/StudioSections-C_ZQ6HBV.js        3.86 kB │ gzip:   1.49 kB
+dist/assets/NotesPage-dR_aUhu3.js             4.13 kB │ gzip:   1.78 kB
+dist/assets/Plate-CScAEh4E.js                 4.52 kB │ gzip:   1.67 kB
+dist/assets/ProductWalkthrough-61Le1vHR.js    5.07 kB │ gzip:   2.01 kB
+dist/assets/CV-xz8ZJwdE.js                    5.15 kB │ gzip:   1.55 kB
+dist/assets/PrivacyPage-zsPiHfak.js           5.49 kB │ gzip:   2.25 kB
+dist/assets/EasingPlayground-YVoXiWso.js      5.53 kB │ gzip:   2.22 kB
+dist/assets/PinnedCaseStudy-CGqNIglE.js       5.54 kB │ gzip:   2.01 kB
+dist/assets/pages-LhfsoQjP.js                 5.64 kB │ gzip:   2.12 kB
+dist/assets/aryaShowcase-BakN_xOp.js          6.87 kB │ gzip:   2.96 kB
+dist/assets/exporters-BY_c6DbL.js             7.98 kB │ gzip:   3.35 kB
+dist/assets/AboutPage-DA6_KVfb.js             8.02 kB │ gzip:   2.53 kB
+dist/assets/webVitals-BE_SwhoJ.js             8.65 kB │ gzip:   3.38 kB
+dist/assets/MotionExamples-BH25Zeic.js        9.56 kB │ gzip:   3.12 kB
+dist/assets/ContactPage-Dr1kucEV.js           9.73 kB │ gzip:   3.72 kB
+dist/assets/WorkPage-Bi_tOuOk.js              9.94 kB │ gzip:   3.70 kB
+dist/assets/MotionProjectPage-BlpVTkc4.js    10.42 kB │ gzip:   3.37 kB
+dist/assets/MotionPreview-B-KzeaMb.js        11.66 kB │ gzip:   4.54 kB
+dist/assets/productTours-CuiMMn3V.js         12.62 kB │ gzip:   4.85 kB
+dist/assets/LabPage-l1rynPf_.js              12.69 kB │ gzip:   4.40 kB
+dist/assets/MotionDocs-UzIpjluQ.js           17.31 kB │ gzip:   6.91 kB
+dist/assets/Note-2yV2zJHI.js                 17.89 kB │ gzip:   3.73 kB
+dist/assets/AryaLang-DIGAt-i9.js             22.58 kB │ gzip:   6.16 kB
+dist/assets/manifest-dwqnQOev.js             22.88 kB │ gzip:   4.52 kB
+dist/assets/codeExcerpt-DcMJInAP.js          29.86 kB │ gzip:  11.62 kB
+dist/assets/Project-Dc1r9RHs.js              38.48 kB │ gzip:  11.43 kB
+dist/assets/MotionStudio-DZowd91B.js         58.63 kB │ gzip:  17.08 kB
+dist/assets/LearnArya-BCcEZIMO.js            62.28 kB │ gzip:  13.17 kB
+dist/assets/gsap-YSQomrMb.js                150.95 kB │ gzip:  59.20 kB
+dist/assets/react-Ddbo5Xt9.js               228.29 kB │ gzip:  73.05 kB
+dist/assets/index-B0XN5QzL.js               268.35 kB │ gzip:  88.16 kB
+dist/assets/sculpture-BxnZ01_z.js           544.44 kB │ gzip: 135.44 kB
+
+✓ built in 802ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+public: copied static assets and 0 installers
+prerender: 13 pages, 11 project pages, 3 notes, cv, sitemap (28 urls), robots.txt, feed.xml, feed.json

@@ -4,7 +4,9 @@ Arya's native SDK contains the compiler, standard libraries and application
 build tools. A compiled application runs directly without installing Arya or
 Node. Choose the archive for the destination OS and architecture from the
 [versioned release](https://github.com/HamzaArya/arya-lang/releases/tag/v2.0.0).
-Only assets actually published there are available downloads.
+The [portfolio downloads page](https://hamzaarya.com/downloads/arya/) groups the
+published SDKs, VSIX packages, source and native applications by platform and
+shows their checksums.
 
 | Goal | What to install or transfer |
 | --- | --- |

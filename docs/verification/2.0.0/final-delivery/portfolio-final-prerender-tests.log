@@ -1,0 +1,24 @@
+✔ every project has a prerendered page with its own metadata (7.154333ms)
+✔ every destination has a prerendered page with its own metadata (4.873875ms)
+✔ destination pages do not share a title, description or card (1.385583ms)
+✔ the work index page and a project page are different documents (0.481958ms)
+✔ project share images are distinct (1.598083ms)
+✔ every note has a prerendered page typed as an article (2.583791ms)
+✔ the site root keeps its own metadata (0.591584ms)
+✔ sitemap lists every route exactly once (0.934333ms)
+✔ robots.txt points at the sitemap (0.412959ms)
+✔ fonts are self-hosted, with no third-party request left (0.465834ms)
+✔ each note has its own generated share card (0.591916ms)
+✔ rss feed lists every note, newest first (8.722833ms)
+✔ json feed is valid and complete (0.577542ms)
+✔ index.html advertises both feeds for discovery (0.523541ms)
+✔ all built destinations contain readable React content and one main heading (7.964625ms)
+✔ the static 404 has an error page and noindex metadata (0.555959ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.676042

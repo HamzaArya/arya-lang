@@ -1,0 +1,42 @@
+{
+  "status": "published and live HTTP verified",
+  "recordedAtUTC": "2026-11-14T03:41:56.858502+00:00",
+  "repository": "HamzaArya/web-portfolio-hamza-upgrade",
+  "branch": "main",
+  "commit": "ffd052cf68541424d2f697438384a355c4f8217d",
+  "tree": "846501065d9fbf36a2bd8f414dab31a0cd77b128",
+  "previousPublishedMain": "a7b83d3fa85caf43c05c981ab6dc52c0c552fab4",
+  "update": "normal fast-forward push; no force push",
+  "worktree": "web-portfolio-arya-release; original dirty worktree untouched",
+  "workingTreeClean": true,
+  "hosting": "Existing signed-in Hostinger Git integration with main automatic deployment",
+  "publicURL": "https://hamzaarya.com/downloads/arya/",
+  "releaseURL": "https://github.com/HamzaArya/arya-lang/releases/tag/v2.0.0",
+  "nativeSourceTagCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+  "publishedManifest": true,
+  "downloadCount": 17,
+  "artifactCards": 9,
+  "sidecarLinks": 8,
+  "checks": {
+    "productionBuild": "passed",
+    "focusedTestsPassed": 20,
+    "prerenderTestsPassed": 16,
+    "staticHTTP": "passed",
+    "liveCanonicalHTTPS": "passed",
+    "publicAssetByteProof": "public-release-verification.json",
+    "liveBrowserVisual": "Recorded separately by root agent"
+  },
+  "evidence": [
+    "portfolio-rebase-a7.json",
+    "portfolio-final-static-verification.json",
+    "portfolio-live-verification.json",
+    "portfolio-final-build.log",
+    "portfolio-final-tests.log",
+    "portfolio-final-prerender-tests.log"
+  ],
+  "publicSourceFiles": {
+    "index.html": "c364e85dc7cc3e9730f4fa2a606964f739bebe5407244f66aafe131c4ef26f45",
+    "manifest.json": "2e34ab4a233b0978c1b6dbe80ba27b1412c8316f46b08542d55065a9bcbecf7a",
+    "downloads.css": "937c0009100894e8676cc6114445b92c512f8a49b45f7bde0129daec9c964847"
+  }
+}

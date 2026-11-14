@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "installerSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+  "prefix": ".build/release-2.0.0/generation-2/final-mac-install/Mac's SDK prefix",
+  "managedLauncherTarget": ".build/release-2.0.0/generation-2/final-mac-install/Mac's SDK prefix/lib/arya/2.0.0-darwin-arm64",
+  "installedFiles": 603,
+  "sourceSHA256": "2857464ed1fa14a4f0b8d4e4898f10b683bf67089458560c9ab8e42cc525c208",
+  "executableSHA256": "7bc4b210da0fe6480c70a10050dd6c2097e70b6a49e58674a65f417b920f1946",
+  "outputs": [
+    "Total: 59.85\n",
+    "Total: 27021597764222979.03\n"
+  ],
+  "homeUnsetDuringInstall": true,
+  "compilerLibraryOverride": false,
+  "runtimePATH": "/nonexistent"
+}

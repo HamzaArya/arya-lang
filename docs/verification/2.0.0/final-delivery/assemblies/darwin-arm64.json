@@ -1,0 +1,410 @@
+{
+  "status": "payload-preservation-passed",
+  "assembledAtUTC": "2026-11-14T03:28:58.222981+00:00",
+  "assemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+  "assemblyWorkingTreeStatus": [],
+  "platform": "darwin-arm64",
+  "executable": "arya",
+  "qualifiedSourceCommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "qualifiedRun": 43495958933,
+  "qualifiedJob": 132128996700,
+  "qualifiedArtifact": 14072747629,
+  "qualifiedArchiveSHA256": "54cfd82f7ed3f6476b75be994bd10457310b3aba8f49ba13637e586f46f58567",
+  "qualifiedSDK": {
+    "fileCount": 582,
+    "checksumInventorySHA256": "6e1a02ded8ed665aa474eece92df6c7a15ff353e8465d24c1c660de01f663774",
+    "executable": "arya",
+    "build": {
+      "assembledAtUtc": "2026-11-13T20:06:47Z",
+      "host": "Darwin 24.6.0 arm64",
+      "version": "2.0.0",
+      "compilerSha256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+      "generatedCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoCSha256": "af151d772a22a965c705eb3ce10036fe143395efd8a57a7e64090c1d8a65da22",
+      "stageTwoThreeCIdentical": "true"
+    }
+  },
+  "compilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "sourceIdentity": {
+    "matchedBuildInputs": 260,
+    "sourceInventorySHA256": "4bea38e1ee9c16d292805e9ee81a682f8db121910024cd504adfd5bd70b3be2e",
+    "nonBuildInputDifferences": [
+      {
+        "path": "native/manifest.json",
+        "qualifiedSHA256": "7ba0f7c07b6dbbbb0003095bed0b05b783c140754bf24c704fd12c110fa77a88",
+        "checkoutSHA256": "1a2bbb114da02ad6f2df95a855a3f2c9fb807a9bfd5306a4d8f7b19fe7630f6f"
+      }
+    ],
+    "note": "Tests, documentation and packaging metadata may differ; every selected compiler, runtime, library, vendor and native backend build input matches."
+  },
+  "protectedFiles": {
+    "decimal.arya": "72be53036c9e356c70ceae6152866fd29950cc515aabd2044e8d85b5ab723c05",
+    "arya": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+    "secure-service.arya": "625793094c6954d953f8d77ca81d7ca7cd593959b99ca7a8c6d00735a9dd6151",
+    "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624",
+    "stream-ledger.arya": "8d00f09068b3efe5404180968e4e62074dddc33721b1d94ce575a5c1dbd93ac7",
+    "journal-report.arya": "d1435494f6a6063c3673c898854ddcc1b62887ceb7d9119e93c8827ff7b4301c",
+    "README.txt": "066b8a114d0a2293cc5b59abfbf4bd6bfb21995c5f84e13dc70558bc10976caa",
+    "SOURCE-SHA256SUMS": "4bea38e1ee9c16d292805e9ee81a682f8db121910024cd504adfd5bd70b3be2e",
+    "BUILD-INFO.txt": "1652538b79e9ceea56c3d7b1e7514ff2377d5917e2a1c595756fbd11c2113bff",
+    "calculation-worker.arya": "fdfe8d929e2b62c522d3e38691ddbdf2103f8c0ad865d16d7b1d7f62b7191a02",
+    "examples/auth-local.arya": "12943febd2a549cca9d858a61649d8d73955a363f0904fb71dda18746cbe3180",
+    "examples/accounting-benchmark.arya": "7358afe3763273daaecb07f8d8d5ddb6972de894fed57195e6b763969634700d",
+    "examples/record-composition.arya": "7e9da8689eecb83eb6d5bfa7987de210209c84c9eca9c02641b0ac1731dcf623",
+    "examples/secure-service.arya": "625793094c6954d953f8d77ca81d7ca7cd593959b99ca7a8c6d00735a9dd6151",
+    "examples/auth-service.arya": "71da6d052ab9268ad0aedc1265d2fa4bbcfaabe496172ad0c4c355f8d253748a",
+    "examples/stream-ledger.arya": "8d00f09068b3efe5404180968e4e62074dddc33721b1d94ce575a5c1dbd93ac7",
+    "examples/journal-report.arya": "d1435494f6a6063c3673c898854ddcc1b62887ceb7d9119e93c8827ff7b4301c",
+    "examples/native-task-desk.arya": "f72ac8957f4c37fb2315c588bb96189b61fdc996bd8ff8661e0c6ccdca6236ee",
+    "examples/calculation-worker.arya": "fdfe8d929e2b62c522d3e38691ddbdf2103f8c0ad865d16d7b1d7f62b7191a02",
+    "lib/libcrypto.a": "1b56ffe0db2286ffdd23830d49d125602dfe46e875ca216af02730c747e20c76",
+    "lib/libllhttp.a": "50cd6907756a899973c1b096059ce8c477ca476d4863b1729726d07f0e1e7dba",
+    "lib/gui-link-flags": "47c6dd525cb6ccdedf7668b71e62755d1195446d521c19bb97805d430162cbff",
+    "lib/libarya-desktop.a": "01ebb7477e4b245b179c791b56a5dd606337c6de3bf8821cc39ae2aba84db1a7",
+    "lib/libpcre2-16.a": "17d09ca3efe6cddef64f2815007b7e72a52ea901ac90a3a41c305a98159c2058",
+    "lib/libmpdec.a": "f7e7be0961858056d31acc3ad42ca2257f8978b6a687c05840699d1f15684a4f",
+    "lib/libarya-gui.a": "d8f3d729335bf413007324df253941995de4056abfb1b0148256831bf4503e98",
+    "lib/libada.a": "616a0f267eda1266913faa66a1b3a33c0c77857b8742651c18489353791e837f",
+    "lib/openssl-source.sha256": "4b8426d2d0ea17f2394a922327fbbb295cf3b7dcf7c053c4774b896a22682df3",
+    "lib/mpdecimal.h": "0670bcbafbdc502c32781725ddcbb32de2a1acfe5057d56aeb3814be599b8c7f",
+    "lib/libarya-auth.a": "d8b4101a2e0ffc048d66f8da5d16532c219854bb7bc31ce7f210ef0b03e9d0ef",
+    "stdlib/python.arya": "5f23b243f20634e0cc0b2f0cc5c40f754b861c3d7c212990385ce62d2057a797",
+    "stdlib/finance.arya": "ab9f10436abda1d1d41a15ac56d35d8c8650cbd62395e91c8eb3d01f2ce62726",
+    "stdlib/auth.arya": "8f5cc0b0a896c8bf9f4ce8d5f7eb6c60b13b54796cbb28789ba769c82d50c757",
+    "stdlib/glob.arya": "455349c9d995acc8911e53893a64a50ed59cf56860488f49d276fba36fca24d3",
+    "stdlib/ui.arya": "d6776684da6fa2d5b7517d80d93a310e43a517d9cf3003744862ef6f3f0a6d27",
+    "stdlib/web.arya": "360aa7999475aeee7b373dcb983d4b94dbe406b5aae56db57930b7a7ede06c84",
+    "stdlib/accounting.arya": "3e5fb94118861609937fa40e7954467ea2c7ac83a3f0381c2f42fa4bf77e01f8",
+    "stdlib/mysql.arya": "fd5a4774e43b22573329725aac535ff0e5fabd53b28992bb80ad3364db3c664b",
+    "stdlib/money.arya": "d1e5e7cab47d0de46a3a887242a542b31de3fe3011d078322b4905af1ee8888b",
+    "stdlib/testing.arya": "c221c716596c29679931d26218edf85c771d0663fdec32b3fdf51d1b4e0c6938",
+    "stdlib/path.arya": "5e911e95ea5b21d068a699f62f9960d705dc68072e541dfc300a1de89b2e24ce",
+    "stdlib/csv.arya": "e7bc46829076adeebf7bebf799d5b1231e90de99c45b2fb45bb1fa572be00661",
+    "lib/include/ada_c.h": "75641082708f01f61f4a8924ae6df19e172e737ced7265965b01a83ebec14f7c",
+    "lib/include/llhttp.h": "5bc82fa51b19aa8bee7d921038393fbfc74e8cc9bae0844c2d82c102fb8cfd68",
+    "lib/include/pcre2.h": "19756397bb6c402d43f74ba827c55acd26c21d078eead9ed5d49f582e4c506d8",
+    "lib/include/openssl/pem2.h": "5bd104c872bbfee2d16f5af88c01b0aeee9f177ecc88c0dd237c9c9948eeedc6",
+    "lib/include/openssl/kdf.h": "a4a7c722598b9b5b5fa6e4d659a7c8cf659c5db60c7396ed021d434c45e552c6",
+    "lib/include/openssl/pem.h": "9098124ff7a21c8f1db5ddead59b1cf092f88c9f44bf88dacd3c8de9c67ade76",
+    "lib/include/openssl/asyncerr.h": "eb6ea0f0389aa7846ea5b8f5b7b8d2a82a7b52e7dbfa105bc137e52be1399a69",
+    "lib/include/openssl/md2.h": "a8eb0a1cdd0ced053d0f5dc5d1f63fe67f96a83c1cc37b6bf7adde85a567a631",
+    "lib/include/openssl/ssl3.h": "f98e0eb1702bf99614e92e2d09f1af5b59309e156441e40ab711df7d661536aa",
+    "lib/include/openssl/ossl_typ.h": "8d430751bbcd1d9695f3dd85b16958fd6255dfbf55775207923f67cba1754548",
+    "lib/include/openssl/dtls1.h": "3477022a712ecbb2bfb61b297c57026f1c354d52c638dfb22292183bd68d2e8f",
+    "lib/include/openssl/err.h": "0d673984ff62d55d1fb4534d8136b7325e5264efeeb0b911cc94a4922681e080",
+    "lib/include/openssl/bn.h": "da179e5d98e8351e3e29f148bd88b42cba84fe60c7927a584f213bf2d09c38ed",
+    "lib/include/openssl/blowfish.h": "97064924914f71425e48f5d53893abca0f07f329dde7a8b93b581dc9ee2e837a",
+    "lib/include/openssl/cms.h": "9cb17307e4cdcc31a31464fd6ed22c79362c06858c5464191fece5c4c35e6ab9",
+    "lib/include/openssl/engine.h": "185311cc9702aa00fcafefad6f83ca1f597659d5075b66100c61053e1be5f47d",
+    "lib/include/openssl/conf_api.h": "38dce9e9e0a438fcaf1d173c26e61c821bfd3756e221e3be76cf010580ac52f7",
+    "lib/include/openssl/esserr.h": "9ab984787cce1224e1426be57987e7726d8c5d38651dd96802a7d433c5288ae4",
+    "lib/include/openssl/core.h": "4d4e63e2e01d06530515adbbe3c93601c5f0f5e1a96754d34d3470bccfcbdbc3",
+    "lib/include/openssl/x509.h": "bea10233b5b214f382f1939d507944157a42683bb1c3c2bed5a501fd6f092a8b",
+    "lib/include/openssl/objectserr.h": "fc14e6c9e71fb550363394f912cb72e6078dd11e300bdddfdd17ec118c88dc4b",
+    "lib/include/openssl/params.h": "b76d73449d8d44d14a7da9918caf3d1feee85b384e2d62ace73a8a1126152702",
+    "lib/include/openssl/cmserr.h": "1cfc091ae52fe85c79bccfe1cc2d0e2979afff511e6a91fd04142596a65ac31a",
+    "lib/include/openssl/http.h": "1f8d65d9633d54a74e8477396f2e3d34f5cdafc753fa8d56a5ee31753f5b734f",
+    "lib/include/openssl/ui.h": "36037e610f1e6b524a975c43af62a898af2728cd60de27ad13fa2059ffc8cfc4",
+    "lib/include/openssl/sha.h": "7e006accd6565cc97dee672c097acc5e38482be7cd4fa1e0c316bf466425b895",
+    "lib/include/openssl/byteorder.h": "f062018f5fbe9f8459967dffaaa8e27f34596fb0da21fc011d0d556384a0305c",
+    "lib/include/openssl/symhacks.h": "2b54552189bfbf4204c28c6a421b21702a3cd3dba37570dbcdadb7ee648f155b",
+    "lib/include/openssl/asn1.h": "618ee07e1ff762b719438b616262bb833a8f679fb81944404f87f683dd22a0fd",
+    "lib/include/openssl/bioerr.h": "fe1bf57251e4eaab30d2a6aa2048ee93deb1f0f15ef6634f61093b4d405586c6",
+    "lib/include/openssl/opensslconf.h": "7f4b522c049d0bd0d651e6f6ebe71d6df0c37231a94e32524da3f4642ebda3be",
+    "lib/include/openssl/bio.h": "50bec794dce14d97fd69be38e9335c016be917b7fbd2ecdf50760fedc412b718",
+    "lib/include/openssl/rc2.h": "b86a429de0c73aca6e0504b8833c1dcd9e8c7cdf65c2b31b38d0d0c7b19cc5e9",
+    "lib/include/openssl/types.h": "de5422d2e621df11c17ab18473ea4f2368ecc64b1e45311c4890cc62b31f81c5",
+    "lib/include/openssl/dh.h": "25080c32c48d5a88053c4b83c326e8f024b68249a0ef65d3c45af4f9aab6e0c6",
+    "lib/include/openssl/cryptoerr_legacy.h": "985664cb71a62441b2822028340bb4ad5e3f98d6c74ba4c1bc7c997e188b97d3",
+    "lib/include/openssl/proverr.h": "3aaec27b2bf592b5861a3524b6f03a541d7de34e6dfcbcabc2b6bc40221bc743",
+    "lib/include/openssl/x509v3.h": "c13e0565e8ebf6facab31bd440b7295136efa2c3f0a89b05861ed3fbb4871991",
+    "lib/include/openssl/core_object.h": "e8fa8c62ad1367bd325d59d721214d1a7afd5423205134152f60cc39a8590c8a",
+    "lib/include/openssl/decodererr.h": "c6818c667bdf8c37c5423580e0551359c69efc884198d28675db23e9fc70946e",
+    "lib/include/openssl/param_build.h": "f078c5549e172b49da9993ef68c7b7fedafd66b05255c9bf8a37154f0a40bdb7",
+    "lib/include/openssl/conf.h": "f3683f0a76ee08dc2acde2eef61a6bc7305b08b1418e8c3bc250c042edd3e972",
+    "lib/include/openssl/ml_kem.h": "58ecec9d4d95ab5172290a4c5725b7b6940149ecdbff5a33b93cc67ede1b25f7",
+    "lib/include/openssl/conftypes.h": "496997cc0f4c32b840677eeefd3ecb488453254be6e228b8cd34d4a4061a9e28",
+    "lib/include/openssl/md5.h": "e22e567d09253eebf2c17f620783808f407bc7b969aa90bf3b44ac9001f6d329",
+    "lib/include/openssl/decoder.h": "72dbf52e4dc4efbfaddbf31ab6f2bec3e9a5c22eed865d057b960a014a4b9ec8",
+    "lib/include/openssl/pemerr.h": "18c1dbdde2452416b1d49c7512b7c4b8bf26ac7b83f5c0ee5e27e9bec454d2fb",
+    "lib/include/openssl/crmferr.h": "9f2ff7a468b5048d543fef0324b39abdea63fa07bc915f62ff42a1937d7258c2",
+    "lib/include/openssl/x509_vfy.h": "687172bea7a31c612ae0cd27dda840cb7485a40313b7b36c735f76489cd09bea",
+    "lib/include/openssl/txt_db.h": "cbd03be764d6d12e12895703756fbe5f2b7611d4cd55d343837d48e8e6e60523",
+    "lib/include/openssl/cmp.h": "422b61f9e4fe15a4d16be9950d0a0ba9d961e2ce9de320f7c9125a26250807e7",
+    "lib/include/openssl/comperr.h": "03faa7ac9cf7ec99350a55758a685056dae8f75992887e0411c23b0d8c5d83b0",
+    "lib/include/openssl/cterr.h": "26d971ab2166ba4473864506dcd933290fa6c321956ef46220eb61fb33a04c89",
+    "lib/include/openssl/self_test.h": "4bb6ecb6d55e5e1bee6ef79c24bc8691174ad1b5c160f7d3daea150c140d3abb",
+    "lib/include/openssl/safestack.h": "035ba71924b731f3d269b64f6971cd126c1217d7f78bf0594c882ca77ce6d9f1",
+    "lib/include/openssl/configuration.h": "9e617cf5850d18cc79521039670bd73286e10af635ef8812ace0d01c8abd5cbb",
+    "lib/include/openssl/fips_names.h": "95f0ddd1271d1bb609acbe42924e903a2dda8e224cced9eb56f5680a6ae75a8e",
+    "lib/include/openssl/ecdsa.h": "5b99fdd1dfea38640ed8a506fb9b66db381cc26a1254448a81cc6b161e41850f",
+    "lib/include/openssl/sslerr.h": "7a9dab7a198ea5c17fe5cf8e1905a54ae88c0044a86c1accf1e7cc9e7de374e2",
+    "lib/include/openssl/prov_ssl.h": "23b96759ae94e17c7c0e7ee32a531676be2a276a6d9802828e80268e20f224fd",
+    "lib/include/openssl/fipskey.h": "431def1c0cb44c23a7aca349cf39ee427d6b8f541ca9e2246241ce13eee5296d",
+    "lib/include/openssl/rc5.h": "dd71ab468383a2a8ca4ff34f9273b481c1ed518c380da6d1ab82e9ca6b7edbd9",
+    "lib/include/openssl/uierr.h": "a21be118ee97343a03dc28256370839e5751c82a2a7bcb4c60fcbd97a9e2bef5",
+    "lib/include/openssl/x509_acert.h": "da23db5886b62ce21d9ea63bed192b0f04392c6690da73d71e8ca927a07132aa",
+    "lib/include/openssl/x509v3err.h": "b9be8b0429bfaefb973531e81d598e40779b3788e129c4cc9e33651d2308b990",
+    "lib/include/openssl/objects.h": "b6227db488aa39ed20a29e67d48fe8fefb2f649a1afcc3149cba22ac26510057",
+    "lib/include/openssl/pkcs12.h": "159c2b2b814ccc73574ec7370272dbba0d76b7d24458e9f43bceafff3f9187b8",
+    "lib/include/openssl/crypto.h": "66cde8a67892b3d1a145556d873652b27a8340c2377e05f04ecbca062c853e5e",
+    "lib/include/openssl/crmf.h": "61da3cd2c8b6af1e5e6ccb3c29cfe3bb27837da35782427b99b903d02a284a3c",
+    "lib/include/openssl/cmp_util.h": "16c51c48c83c930b018ff711553e107f1870f1cedd32d94c06f15709b080c321",
+    "lib/include/openssl/opensslv.h": "d7e5872676ab04f63ae7627f8408164b64a92318fd815bb2535c5ff7c72e8241",
+    "lib/include/openssl/evperr.h": "ee0a462f1985667434a2b8a91d5df67ce2ee74e4ad9246f660dece5fafcf4474",
+    "lib/include/openssl/pkcs7.h": "86ce19ac2afbc353bf95f6ea6dad85b26a15cab2c9c9b775dea2e3bd986aa64e",
+    "lib/include/openssl/obj_mac.h": "d51cb3f619888a0485ba46ad886f76ac605ce78a3cfbc080460947ab2dbb3a02",
+    "lib/include/openssl/ct.h": "d44c1025531410551d612b40bf4572c0efc66f832d03ba779570f2d24bc7463d",
+    "lib/include/openssl/async.h": "708d52ecd7bb5ca83d243ddecb132db0693b0809f65c093eabda549156934030",
+    "lib/include/openssl/buffer.h": "c7b9803f89bb492176a1e2738999dad86195ab8048a26e8ec9ef6948b8882e8a",
+    "lib/include/openssl/ssl.h": "86008cc8b405b33b05f1a0b5108af65ab01fdfb406941cbfa928c52e2ac76023",
+    "lib/include/openssl/srp.h": "2281f6eb07410fa397ba66538806defb39d69e2bc0231b4be0c438a1b35d171b",
+    "lib/include/openssl/camellia.h": "e03acf0f3406032e5322e4f3368e8e48e5b73e8846955c3bcb3a4f1cb54d2ebc",
+    "lib/include/openssl/httperr.h": "56b740a25198f30d19c8ed57b36679bbb32f8f2d97291155d4b3091c347ae423",
+    "lib/include/openssl/thread.h": "583716b74d6aa0596c1d1b06cb16f657d4d9fb9c13cf30505ec0327046af6baf",
+    "lib/include/openssl/hpke.h": "58f81dab37eddc03b86db9dd640980fca872ddf19f4477482826a64f20454cb9",
+    "lib/include/openssl/dherr.h": "70f9e260865a9aae4c5f9a72d42d878e4dc216c906709245a8da2cceb79c3a14",
+    "lib/include/openssl/evp.h": "41b42c68adfd98b9d8a80fb2d78bbdaf1094f43dd02be045c7d8605edf36a706",
+    "lib/include/openssl/e_os2.h": "d7300e16ec04f764e8fd45ae5288c37ab5af09dd1ea204d17c54c0155c69921c",
+    "lib/include/openssl/trace.h": "5b7f86a453e6b404ff019e23e84de856c2a25b8243d4bfb92c92471a3735e332",
+    "lib/include/openssl/md4.h": "75d0ff7b22daa2ab31a0cd03ce9ca10cef64f431d32c49def33d0f0164e36f0d",
+    "lib/include/openssl/core_names.h": "a9ca1452fd74ee8a6fd57ec28622d2d5ca5c559e44d8ffa95b4cd4a00e05abd4",
+    "lib/include/openssl/hmac.h": "9caf0b993c6ae2b3c75b9b585c8539dd358ca5f4edc42447295f87fc504eb1b9",
+    "lib/include/openssl/provider.h": "dac4bfad226a8e5513cecf472e41e0b7ed93c95374a0ec3fd56f7b046e0aeff1",
+    "lib/include/openssl/aes.h": "130e304c466bda5db6de2fdbca3a970905070ab935d702e61c8371334851ea27",
+    "lib/include/openssl/engineerr.h": "2732c698916f320ba12ba690a80c1ef0651112015c5eac6141b1c3c315d1f5fc",
+    "lib/include/openssl/comp.h": "3f95492b4054a8064bc75f770766aa6c8c0866cbd267939460786e13092a053e",
+    "lib/include/openssl/macros.h": "dc27bc9e94abbb9e49bbcb604da5c061a65145586ac388c3fb4fc311daaccf96",
+    "lib/include/openssl/pkcs12err.h": "fbf4142e0ee58b6c6841890d873f07ba0362e21ad74702d70552122e01c096e9",
+    "lib/include/openssl/encoder.h": "73459b25f863cf9bbb3de66f04ffe7ddaf9450f3c26afb1d5827325fa0a89fd9",
+    "lib/include/openssl/cast.h": "4fafc375a53d88fe4c709d8ee5fb74dc0fcaf91915837c3c6b4df0d916b07f0a",
+    "lib/include/openssl/sslerr_legacy.h": "988c235994713d83d73ee904804f7edb4f6e321b4ab94c5aa5a9a0c7134fb499",
+    "lib/include/openssl/indicator.h": "4be987d4fe4a4b39feac27c2ee85000e1b6ca7188d8ca9f75689a8205c2b4563",
+    "lib/include/openssl/rc4.h": "1bb4fa9d14861cdcf0a721d8d1026be80ce019da459ffdd8b5c1d12365110e78",
+    "lib/include/openssl/stack.h": "c81fbb17b5476dca609b96eb11372d1d246a49096838c2cf7e81ad6b25f69316",
+    "lib/include/openssl/des.h": "420afefcf27f28046912c5f156bc9e93d71a2c8a47bf0f605695a13f391cd5f9",
+    "lib/include/openssl/ocsp.h": "cd2261939d14bf5cadea5984c8c61259b412501ec2d7623ff6110d015b8905cb",
+    "lib/include/openssl/ec.h": "2cc0edb6a18c4c1199bfce6799ca56362a6c27d41dfdfee62177a3d53a8c9a65",
+    "lib/include/openssl/ecdh.h": "5b99fdd1dfea38640ed8a506fb9b66db381cc26a1254448a81cc6b161e41850f",
+    "lib/include/openssl/rand.h": "cb240ffedfd9516ec7a8cd0796951d46a4707c0460f940371620c83f7bafd037",
+    "lib/include/openssl/ecerr.h": "c072432649cd1e4bd1eb8c1f636bc2b57045d6f620d69d61c85f589d1c6b63e3",
+    "lib/include/openssl/ts.h": "3de4eecd9a731d9a05a1b7baab18cb1c62f59f8a9f9e5ed049525a8ada9207b8",
+    "lib/include/openssl/core_dispatch.h": "877d786bd366e80baa763d2c6c0b94e1d91c92cb0b6fa26d4004e6b0c3e6dd81",
+    "lib/include/openssl/cryptoerr.h": "c457c0591449551657a69ff9727784a79cc1afd899ac733c682c1a41fefdaa19",
+    "lib/include/openssl/storeerr.h": "e13ecdf3c46b4dde5d857f8a7a3e2c0a444e309aa05d789bf99d73ecefab87aa",
+    "lib/include/openssl/buffererr.h": "4dea6e8ec7f09bfbdaa85fa3e75572b95d2ea62a813e7420a04f5f56ee7ccdfd",
+    "lib/include/openssl/seed.h": "75a00b017f40beba051fdaad04876e18d3c80d1b1f1c21d78fafc69ae8e3b034",
+    "lib/include/openssl/modes.h": "8ea97ace0601cdce6a12d0e1e92aefec062c299d0fcb5ff6477e3d752a9b9763",
+    "lib/include/openssl/ssl2.h": "d33dc2afbcdee20f20ffcdd5cda6777c5e49a7cc37d513e4618b71a99129af20",
+    "lib/include/openssl/tserr.h": "27e66bf494926dea06d8c3800823f2485cf1a7f8f41f5628ff4a443f9bcceb87",
+    "lib/include/openssl/rsa.h": "2c9780f9b4b35c3f14271962938e16b8505e9f5d38566c104bce9a82be23a0e1",
+    "lib/include/openssl/ripemd.h": "4457b36942bc0e298c993b48468ef8f3f00331a9d67bd0b894dd5bc5f58ab35d",
+    "lib/include/openssl/whrlpool.h": "d38ef40783400956d571e442d4f459e9c611239d719eb128e19bc64982d01922",
+    "lib/include/openssl/encodererr.h": "d010ca78b1df89c7fe3410d2aa5674179bf6750a445382ab8a0314c20a5b9799",
+    "lib/include/openssl/cmperr.h": "220d1a903b66e25fa1de92f3ee8b3f5ef27de6dface0a4ea68e683a19e3549a7",
+    "lib/include/openssl/tls1.h": "f075f51b48cdc3503e40b8f81fb2b760ba2d4f315d2844759d9089ffb10613dc",
+    "lib/include/openssl/rsaerr.h": "b4f87b5dddc672b81de0dfd7f3c4e6409887bd08b286c99ded8f1255e5836804",
+    "lib/include/openssl/randerr.h": "a6acbb47da2f26fe5e572f232eb9d9ebcd65bb7c01d5984ab26229e5bf0bd45e",
+    "lib/include/openssl/mdc2.h": "740c2361d9b0ab5330ae0054e368f573416c401cb3855b72323967b29232421f",
+    "lib/include/openssl/ocsperr.h": "51b319980fb406b70ff0aee9c145c260553f4ff6516305b9c2864643096cc30c",
+    "lib/include/openssl/x509err.h": "be93ee6c9d58aadb5f836d5e293ec93c94ffc603c46a1d8d1c8b31cf83959fb9",
+    "lib/include/openssl/pkcs7err.h": "717e017e7d0981928b33820660e19d5c264a06a5e824b94194036a8be92be07c",
+    "lib/include/openssl/dsa.h": "dac47d9779f83eb4e5a4f57c234e6eb25277cea68001384360e16c8859c38338",
+    "lib/include/openssl/kdferr.h": "cbf4bd667f0a53459163f546920c2c98ce6d10b0db99176c779d8bf32f04e8b7",
+    "lib/include/openssl/srtp.h": "6efa8edb1f040ba35cb05a671efc74c1494b9d4badc32d47cd5bb99e1a9cda38",
+    "lib/include/openssl/asn1t.h": "f29f6b0a1e02cfe8357f3dd377c0f88e303856f4615fb46a0a425dc9612cbdb9",
+    "lib/include/openssl/e_ostime.h": "0528cffa1548778b3ad52d4abb527e5f31590fb1bab4b0f55aad391efd79fd68",
+    "lib/include/openssl/dsaerr.h": "b8fb8dae664d18298ae4b0c5444378e3f5c5d095256acb50764230159b1a15d6",
+    "lib/include/openssl/bnerr.h": "beeb78746fbcc2c09e1f833f4c2ea72e845e757390aad7dc8699f7787b580204",
+    "lib/include/openssl/conferr.h": "ea9346e399d5dd1fbcca4f34078e1acb5039333602ecaf72faa04e32cdd55484",
+    "lib/include/openssl/cmac.h": "048677b08aab6fd862d2b8b15556db8355d2142b93a9431ffba1d75a25912847",
+    "lib/include/openssl/ebcdic.h": "f50d3c91cb24772cf3155fe6464d811219b8f7c65ea3d4f974f58c03c3f27ab5",
+    "lib/include/openssl/store.h": "0fd665a474792f49055d7bd6e2bebed1449fb2dfd21ac042aa2cbc4cb6c8c66e",
+    "lib/include/openssl/idea.h": "d114cb69e2e820008c508b7ad9002586806d82e3006e88162bd4a7c2dcd1e801",
+    "lib/include/openssl/lhash.h": "ba50a0dc4caa9662e138f913566c44454a68f6e59c405c761c1f387f58855af4",
+    "lib/include/openssl/ess.h": "756d62d1f6db23b18112a899b02e97f935a527c62ca5be1287872ba0d01a8c15",
+    "lib/include/openssl/asn1err.h": "9d60638b3d0c52170d390fe566c0b96a6381590590cc3dd71339eb85140fe1d6",
+    "lib/include/openssl/quic.h": "a80af6c42394132eaad8de7177c6b0b3f747711730e8dd687acdc34284b3c2f8",
+    "examples/learner-review/starter.arya": "c2da77fef952b9c34386e630beabbb6d28d12742bfb48cee59e6817983637c31"
+  },
+  "installerIdentity": {
+    "qualifiedSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+    "assembledSHA256": "1ae1e0fa3f093e9216ce4f4c24cfc43705186fabf3910957938365fd1f94e2df",
+    "matchesQualified": true,
+    "qualifiedMatchRequired": false
+  },
+  "metadataChanges": [
+    {
+      "path": "ASSEMBLY-SOURCE-SHA256SUMS",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "75269b3f00bdd0af27d41502aa968724dcfa7a9e5620adcac27bd7de7a110c70"
+    },
+    {
+      "path": "docs/arya-language.md",
+      "qualifiedSHA256": "a6ceb47a19fb6a6db43e9ce94b7621b1736fd2146b17df30612d2766a4ae24be",
+      "assembledSHA256": "5cc5b7e5d941419011d21b5b9c8c4b479d5ed6216ca7b8e144bbe04e738fa664"
+    },
+    {
+      "path": "docs/installing.md",
+      "qualifiedSHA256": "8cc95bad79efe64a8625dd4b00b5640885308508feedad64d5d566b744c0e3da",
+      "assembledSHA256": "c4633bd12380c3130208370fe7543827e23a33cdb60c345f3525fcefe5f81c7c"
+    },
+    {
+      "path": "docs/native-gui-report.md",
+      "qualifiedSHA256": "2b6450755cff7cc7ba9a41229e28ba2387f55f54b845711eefeb81dc353f9e2c",
+      "assembledSHA256": "0fb28b5e443750fe7d15902a2a9775b2e0dcd1911500e9aa7cb0101fd6d7d8ba"
+    },
+    {
+      "path": "docs/native-gui.md",
+      "qualifiedSHA256": "67d85b9030d8a3137a7da04c6fe96b6387f7960e3f1e238268b43a5367f16884",
+      "assembledSHA256": "3e205905752081c03aa73cbe6bf9e82d802c1799a762a4dfa2f05f72f7a6f265"
+    },
+    {
+      "path": "docs/native-profile.md",
+      "qualifiedSHA256": "a8169cc97625a8aa1b28fab41eff5257f9437b4fd804638ff465e107b79006cc",
+      "assembledSHA256": "7e69ae20065bdd53ff78aa0b16f67904c650dc33600e9229d2292a20ffbf0619"
+    },
+    {
+      "path": "docs/native-release-2.0.0.md",
+      "qualifiedSHA256": "d88b049eaebcaef753bdedf5ba2f26d4c0711398adc419efa137858d736677da",
+      "assembledSHA256": "e0e0d6df7e5c29c0b8a6eea60c87fdb70022bfb6dfbc2ac708be4679fe6dac20"
+    },
+    {
+      "path": "docs/verification/2.0.0/README.md",
+      "qualifiedSHA256": "ddd8357574d9aa87c3ba000d23e2e42452cb792bfdb5c099f043f852b4861e23",
+      "assembledSHA256": "63e6a96dfcb9d717e090f0bd4b11c9b8d27bf78a08ba7a5559655bcd8bfb7151"
+    },
+    {
+      "path": "docs/verification/2.0.0/final-unix-independent-generation-2.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "5ee9c808c21b97ec11066a48e129afd1e980fcf03de9a542a17a4d687579b3ec"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-1-qualification.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "9caf0bdc0769a87df2cd81c6d1e43c2d24f7442390bd5bbb85f6481b379b874d"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-1-sdk-assembly-inputs.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "17fa95e7b58f6713ee578157ee470c3e8d0de21f75d663566fd15729d335b237"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/application-downloads.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "20be75bbc0c5ef294d2ee156ba097a2867eb3eed46494337593431c7edef6acc"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/application-release.md",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "b0c4402534f14564d93e85bb6061c099317d356a03fdb555b76771cf1615f218"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/local-verification-attempt1-failure.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "39ce551209f0089d1cc891b3fa1595ae99f7464f54eba26b10b8b8e176cd8f04"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/local-verification.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "ecc3c9cb7fd55d99dfe057842cc17058e4ecda28ee48cadd6d37a1f7794c0665"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/manual-ui.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "f6707a72602d56d277f2a2f01a9118a20cde2890cc39cd32e80c3738b762eb9c"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/native-calculators-build.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "cba2be73201f2ec3a0cfe4579f25f37bb545d8d02db47aa2aaa01445edb3c9e0"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/native-calculators-bundles.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "0d863d65cc2b3c346c385cc95f7f76f456db3c9c4ee05cdb4c6f370c9f9ae5d8"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/native-desktop-projects-build.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "dcd5bfd3743659c0b0538e8f4b35d7e28731f9859a7f4f65c0f19210035c7ff6"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/native-desktop-projects-bundles.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "60252bd1dcd7f330700e28d78a9667b7503679ee818731767f5ef96e6143a2f4"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/applications/release-apps.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "f416d1e4ac5bb7e9dc8746d51c39c7cf26796a6a55774ab6cd4c4738d248e68d"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/distribution.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "a490ed6c106d7b9827795ef312449d03a8abe2f8a48dc5275aa2edbf913adb98"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/distribution.md",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "225a0f8a29bafbb9c6f17596e1c028a6f4128be9f9260a2c581992cd4945fa37"
+    },
+    {
+      "path": "docs/verification/2.0.0/generation-2/macos-sdk.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "eec44dc24764062dd490f9be6d801b610e2e4bffe7b130832c8f9c43ed6cf2cc"
+    },
+    {
+      "path": "docs/verification/2.0.0/linux-sdk-generation-2.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "8586f5593932081b0357f5bf941735e80c12719d078fb8623ec118ca707988d0"
+    },
+    {
+      "path": "docs/verification/2.0.0/platform-qualification.md",
+      "qualifiedSHA256": "706d806b5945baf0c166f7ea0e376e5c3729a816a63729e0cc8d5a412069c6e3",
+      "assembledSHA256": "89e9e41022d149f0abb4189157b4296e3199dab045f2e83921da9501ad0ea961"
+    },
+    {
+      "path": "docs/verification/2.0.0/progress.json",
+      "qualifiedSHA256": "8e27db088d7504c4c8bae435e608fa2aaf29d0b217c99a03ccbe1c5392e14eee",
+      "assembledSHA256": "f481dfd56018e25a35b3626db71682db6fa41532863bc9b452994823a9a167d5"
+    },
+    {
+      "path": "docs/verification/2.0.0/release-finalization.md",
+      "qualifiedSHA256": "04cd61d8316704ca4eeefb6c71465ceea4ed3ae25768e0db8bc21175e1cd0e02",
+      "assembledSHA256": "4b9473af9a9485221767a81954c7039ff5fdba4e430ac12ba8a8b329fb2d192f"
+    },
+    {
+      "path": "docs/verification/2.0.0/sdk-assembly-inputs.json",
+      "qualifiedSHA256": "17fa95e7b58f6713ee578157ee470c3e8d0de21f75d663566fd15729d335b237",
+      "assembledSHA256": "ca44d12ef02e4720d429c9621468bb34731ff3841148404ebec3306e89b8df27"
+    },
+    {
+      "path": "docs/verification/2.0.0/windows-crypto-link-failure.json",
+      "qualifiedSHA256": "d11a744f4e24c6d1d59b7b25b0c9a030ae65bd63d59fa3e5048c7f5d8b1ad241",
+      "assembledSHA256": "5e17440181fbdfffc3cb562733a59cb987f918f9e574c8a189a09b57c92556ea"
+    },
+    {
+      "path": "docs/verification/2.0.0/windows-sdk-generation-2.json",
+      "qualifiedSHA256": null,
+      "assembledSHA256": "e6060f7a4ff565f7b0e8afde9e179dea85193e03a976e8964ecfcd6fc752da66"
+    },
+    {
+      "path": "manifest.json",
+      "qualifiedSHA256": "7ba0f7c07b6dbbbb0003095bed0b05b783c140754bf24c704fd12c110fa77a88",
+      "assembledSHA256": "1a2bbb114da02ad6f2df95a855a3f2c9fb807a9bfd5306a4d8f7b19fe7630f6f"
+    },
+    {
+      "path": "qualification/2.0.0.json",
+      "qualifiedSHA256": "e6275d84c369b6b9f0a4c1acb798d30623f74d559c0a7303666b77e68a8574e8",
+      "assembledSHA256": "e0bca9adea91d47872464b69dbfd57c958d3adb61229b447666bf75060d53e03"
+    },
+    {
+      "path": "qualification/README.txt",
+      "qualifiedSHA256": "24b227041a2cd729d46322039c4f41c99e643549c8bd4f8fb4a80d784fc7feef",
+      "assembledSHA256": "e9b41be62e758bbe08810471b5836ccef1f5f4235807c8a21bf29363c0aad918"
+    }
+  ],
+  "assemblySourceInventorySHA256": "75269b3f00bdd0af27d41502aa968724dcfa7a9e5620adcac27bd7de7a110c70",
+  "note": "Compiler, libraries, standard libraries, examples and original build/source identities are byte-preserved. Only installer, qualification and documentation metadata are refreshed. The assembly commit is not the compiler build commit. Native installer smoke and archive qualification are recorded separately and are not claimed by this controller."
+}

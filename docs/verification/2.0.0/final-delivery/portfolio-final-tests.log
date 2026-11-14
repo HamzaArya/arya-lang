@@ -1,0 +1,28 @@
+✔ release metadata hashes actual files and only enables published links (8.824833ms)
+✔ invalid assets and unsupported platform claims are rejected (2.917167ms)
+✔ checksum downloads identify the exact binary payload and stay disabled until publication (3.387042ms)
+✔ only a matching public release enables Mac, preserves legacy packages and leaves Windows without a URL (157.276209ms)
+✔ mismatched local artifact hashes cannot replace the published manifest (76.210583ms)
+✔ unverified signatures and source provenance cannot enable a download (90.08825ms)
+✔ an unverified public digest or unavailable download cannot change publication state (104.163375ms)
+✔ dirty application source and a mismatched hosted version are refused (101.629833ms)
+✔ optional full remote verification refuses different bytes despite matching public metadata (83.005917ms)
+✔ Windows is enabled only after ZIP checksum and executable smoke evidence both match (131.278958ms)
+✔ a concurrent source edit during remote verification leaves the published manifest unchanged (112.154875ms)
+✔ desktop sync imports the current formatter and preserves it when generated build output is absent (178.23275ms)
+✔ formatter import rejects an archive whose internal package version differs from its filename (95.912625ms)
+✔ legacy hosted-URL updates retain the verified formatter metadata and checksum (163.219833ms)
+✔ published Arya packages match the offered bytes and checksums (24.243917ms)
+✔ the current Prettier plugin is downloadable separately from legacy language packages (13.677ms)
+✔ an unfinished desktop installer never has a download URL (0.947917ms)
+✔ every offered Arya guide is bundled with the portfolio (2.179541ms)
+✔ the app privacy URL renders its notice with account, telemetry and support information (1368.512042ms)
+✔ a clean hosting checkout builds downloads without the externally hosted DMG (166.376709ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1495.948333

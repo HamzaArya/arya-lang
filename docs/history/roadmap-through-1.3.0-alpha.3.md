@@ -128,7 +128,7 @@ The first red test should require only correct lines. Column precision becomes a
 
 ### M1.2 · Define the compiler output contract
 
-Extend the compile contract in [`packages/arya/src/compiler.ts`](../../src/compiler.ts) so compilation receives the original source filename and intended generated filename, then returns source-map data with the generated code. The intended shape is conceptually:
+Extend the compile contract in [`packages/arya/src/compiler.ts`](../../compat/node/src/compiler.ts) so compilation receives the original source filename and intended generated filename, then returns source-map data with the generated code. The intended shape is conceptually:
 
 ```ts
 interface CompileOptions {
@@ -186,7 +186,7 @@ If fragment composition begins reproducing a parser tree indirectly or becomes d
 ### M1.4 · Write map artifacts in every build path
 
 - [x] Determine and validate the output path before compilation, then pass its generated filename into the compile contract.
-- [x] In [`packages/arya/src/cli.ts`](../../src/cli.ts), write `<output>.map` beside the generated `.mjs` for both `build` and `run`.
+- [x] In [`packages/arya/src/cli.ts`](../../compat/node/src/cli.ts), write `<output>.map` beside the generated `.mjs` for both `build` and `run`.
 - [x] In [`packages/services/src/language-runner.ts`](repository-extraction.md), write the map inside the same fingerprinted `.arya/run` directory as `program.mjs`.
 - [x] Apply existing `containedPath` checks separately to the map path in AryaCode.
 - [x] Write code and map only after compilation succeeds so a syntax failure cannot create a partially updated pair.

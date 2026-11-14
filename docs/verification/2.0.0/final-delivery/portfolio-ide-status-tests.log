@@ -1,0 +1,13 @@
+✔ published Arya packages match the offered bytes and checksums (24.817417ms)
+✔ the current Prettier plugin is downloadable separately from legacy language packages (15.756584ms)
+✔ an unfinished desktop installer never has a download URL (1.134375ms)
+✔ every offered Arya guide is bundled with the portfolio (1.8665ms)
+✔ the app privacy URL renders its notice with account, telemetry and support information (1385.299125ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1555.525042

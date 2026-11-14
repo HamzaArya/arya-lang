@@ -1,0 +1,22 @@
+
+> hamza-arya-portfolio@0.0.0 build
+> node scripts/verify-downloads.mjs && node scripts/verify-arya-downloads.mjs && node scripts/highlight.mjs && node scripts/ogcards.mjs && tsc -b && vite build && node scripts/copy-public.mjs && node scripts/prerender.mjs
+
+downloads: 6 configured artifacts available
+Arya downloads: 2.0.0, 9 assets, published=true
+highlight: 4 blocks (ts, css)
+node:internal/fs/promises:640
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOSPC: no space left on device, open '/Users/hamza/Projects/github-repo/web-portfolio-arya-release/public/og/pages/about.png'
+    at async open (node:internal/fs/promises:640:25)
+    at async writeFile (node:internal/fs/promises:1257:14)
+    at async file:///Users/hamza/Projects/github-repo/web-portfolio-arya-release/scripts/ogcards.mjs:160:3 {
+  errno: -28,
+  code: 'ENOSPC',
+  syscall: 'open',
+  path: '/Users/hamza/Projects/github-repo/web-portfolio-arya-release/public/og/pages/about.png'
+}
+
+Node.js v24.16.0

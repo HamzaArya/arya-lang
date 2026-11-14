@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "sourceSDK": ".build/release-2.0.0/generation-2/assembled/arya-native-2.0.0-darwin-arm64",
+  "originalCICommit": "ce80487668e082ffd263c5239d737de7074e4dc4",
+  "assemblyCommit": "d9669bff18e035b06c2d775be703e9a2d798bd1b",
+  "backup": ".build/release-2.0.0/generation-1-workspace-independent-backup",
+  "version": "Arya native 2.0.0 (self-hosted)\n",
+  "checkOutput": "{\"ok\":true,\"command\":\"check\",\"file\":\"/Users/hamza/Projects/github-repo/arya-lang/.build/release-2.0.0/generation-2/final-mac-install/CLI project with spaces/main.arya\",\"target\":\"native\",\"diagnostics\":[]}\n",
+  "nativeOutput": "Total: 59.85\n",
+  "note": "Deployed the paired qualified CI SDK; preserved the complete preceding directory by same-volume rename. This is not a local compiler bootstrap; no old generated C was copied into the new deployment.",
+  "oldCompilerSHA256": "c5515eab20cb4a4a81b4a9d560f195108e6b916b05c72d491ccb7a0390ef71ee",
+  "newCompilerSHA256": "06d9dd9ce6d7447f3ce1ba15945538c9148ff896c7d09932f90fdad6b2c53c94",
+  "oldFileCount": 208,
+  "newFileCount": 603,
+  "fullLocalEvidence": ".build/release-2.0.0/generation-2/evidence/workspace-sdk-promotion.json",
+  "fullLocalEvidenceSHA256": "613665e8e221f60681bac581fe24949390c6ff98fd6b0075828332daf401c8f9"
+}
